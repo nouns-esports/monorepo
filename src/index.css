@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  font-family: Roboto;
+}
+
+body {
+  background-color: #101010;
+  overflow-x: hidden;
+}
+/* 
+.curve-test:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 50%;
+  width: 100%;
+  height: 100%;
+  border-radius: 100%;
+  box-shadow: 0px 3000px 0px 300px #e93737;
+} */
