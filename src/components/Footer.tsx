@@ -1,4 +1,5 @@
 import { JSX } from "solid-js/jsx-runtime";
+import { Twitch, Twitter, Youtube, Discord } from "./Icons";
 import Logo from "./Logo";
 
 export default function Footer() {
@@ -32,11 +33,11 @@ export default function Footer() {
           <Link name="Pod" href="/pod" />
         </Section>
       </div>
-      <div class="flex flex-col gap-4 text-white">
-        <p>Twitter</p>
-        <p>Twitch</p>
-        <p>Youtube</p>
-        <p>TikTok</p>
+      <div class="flex flex-col gap-4 justify-center text-white">
+        <Twitch />
+        <Twitter />
+        <Youtube />
+        <Discord />
       </div>
     </footer>
   );

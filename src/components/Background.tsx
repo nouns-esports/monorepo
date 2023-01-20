@@ -18,6 +18,9 @@ export default function Canvas() {
   function resizeCanvas() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+
+    // Redraw the canvas
+    setScrollOffset(scrollOffset() + 0.00001);
   }
 
   function resetCanvas() {
@@ -75,7 +78,7 @@ export default function Canvas() {
         context.translate(16, 0);
 
         // Move on scroll
-        context.translate(-scrollOffset(), 0);
+        context.translate(-scrollOffset() / 4, 0);
 
         for (let col = 1; col < noggleCountX + 1; col++) {
           paintNoggle(noggle, noggleWidth, noggleHeight);
@@ -88,7 +91,7 @@ export default function Canvas() {
         context.translate(backgroundWidth - noggleWidth + 16, 0);
 
         // Move on scroll
-        context.translate(scrollOffset(), 0);
+        context.translate(scrollOffset() / 4, 0);
 
         for (let col = 1; col < noggleCountX + 2; col++) {
           paintNoggle(noggle, noggleWidth, noggleHeight);
