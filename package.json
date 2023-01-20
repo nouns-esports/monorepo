@@ -1,5 +1,5 @@
 {
-  "name": "vite-template-solid",
+  "name": "@nouns-gg/website",
   "version": "0.0.0",
   "description": "",
   "scripts": {
@@ -7,7 +7,7 @@
     "build": "vite build",
     "serve": "vite preview"
   },
-  "license": "MIT",
+  "license": "CC0",
   "devDependencies": {
     "autoprefixer": "^10.4.13",
     "postcss": "^8.4.20",
