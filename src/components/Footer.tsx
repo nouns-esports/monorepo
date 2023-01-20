@@ -6,7 +6,7 @@ export default function Footer() {
   return (
     <footer class="flex justify-between items-center p-8 bg-black border-t-4 border-red">
       <div class="flex flex-col gap-4">
-        <div class="flex items-center gap-3 text-white text-3xl font-londrina">
+        <div class="flex items-center gap-3 text-white text-3xl font-londrina select-none">
           <Logo size={40} />
           Nouns
         </div>
@@ -46,7 +46,7 @@ export default function Footer() {
 function Section(props: { name: string; children: JSX.Element }) {
   return (
     <div class="flex flex-col gap-4">
-      <h3 class="text-xl text-white font-bebas">{props.name}</h3>
+      <h3 class="text-xl text-white font-bebas select-none">{props.name}</h3>
       <ul class="flex flex-col gap-2">{props.children}</ul>
     </div>
   );
@@ -55,7 +55,11 @@ function Section(props: { name: string; children: JSX.Element }) {
 function Link(props: { name: string; href: string }) {
   return (
     <li>
-      <a href={props.href} class="text-grey hover:text-white cursor-pointer">
+      <a
+        href={props.href}
+        draggable={false}
+        class="text-grey hover:text-white cursor-pointer select-none"
+      >
         {props.name}
       </a>
     </li>

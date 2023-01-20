@@ -3,8 +3,8 @@ import Logo from "./Logo";
 
 export default function Header() {
   return (
-    <header class="fixed w-full flex items-center justify-between p-8">
-      <div class="flex gap-3 items-center text-white font-londrina text-3xl pointer-events-auto cursor-default">
+    <header class="fixed w-full flex items-center justify-between p-8 z-10">
+      <div class="flex gap-3 items-center text-white font-londrina text-3xl pointer-events-auto cursor-default select-none">
         <Logo size={40} />
         Nouns
       </div>
@@ -25,7 +25,8 @@ function Link(props: { name: string; href: string }) {
   return (
     <a
       href={props.href}
-      class="text-grey text-[17px] hover:text-white cursor-pointer"
+      draggable={false}
+      class="text-grey text-[17px] hover:text-white cursor-pointer select-none"
     >
       {props.name}
     </a>

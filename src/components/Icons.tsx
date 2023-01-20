@@ -1,7 +1,11 @@
 import { JSXElement } from "solid-js";
 
 function Icon(props: { href: string; children: JSXElement }) {
-  return <a href={props.href}>{props.children}</a>;
+  return (
+    <a href={props.href} draggable={false}>
+      {props.children}
+    </a>
+  );
 }
 
 export function Twitch() {

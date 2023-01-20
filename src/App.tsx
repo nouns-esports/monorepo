@@ -12,7 +12,7 @@ export default function App() {
         <Header />
         <div class="w-full h-[100vh] flex gap-16 items-center justify-center p-8">
           <div class="flex flex-col gap-8">
-            <h1 class="text-white font-londrina text-6xl w-[500px] cursor-default">
+            <h1 class="text-white font-londrina text-6xl w-[500px] cursor-default select-none">
               Driving innovation at the intersection of{" "}
               <span class="text-red font-londrina">web3</span> and{" "}
               <span class="text-red font-londrina">gaming</span>
@@ -31,7 +31,8 @@ export default function App() {
           <img
             src="graphic.svg"
             alt="Nouns Esports"
-            class="w-[45vw] drop-shadow-2xl"
+            draggable={false}
+            class="w-[45vw]"
           />
         </div>
         <div class="h-[100vh]" />
