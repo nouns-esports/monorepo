@@ -25,27 +25,6 @@ export default function App() {
                 <Youtube />
                 <Discord />
               </div>
-
-              {/* <SocialIcon
-                href="https://www.twitch.tv/nounsesports"
-                src="twitch.svg"
-                alt="Watch Nouns Esports on Twitch"
-              />
-              <SocialIcon
-                href="https://twitter.com/nounsesports"
-                src="twitter.svg"
-                alt="Follow Nouns Esports on Twitter"
-              />
-              <SocialIcon
-                href="https://www.youtube.com/@nounsesports"
-                src="youtube.svg"
-                alt="Watch Nouns Esports on YouTube"
-              />
-              <SocialIcon
-                href="https://discord.gg/nounsesports"
-                src="discord.svg"
-                alt="Join the Nouns Esports Discord"
-              /> */}
             </div>
           </div>
 

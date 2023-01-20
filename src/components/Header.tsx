@@ -15,7 +15,7 @@ export default function Header() {
           <Link name="About" href="#about" />
           <Link name="Shop" href="#shop" />
         </nav>
-        <Button href="">JOIN</Button>
+        <Button href="https://discord.gg/nounsesports">JOIN</Button>
       </div>
     </header>
   );
@@ -23,7 +23,10 @@ export default function Header() {
 
 function Link(props: { name: string; href: string }) {
   return (
-    <a href={props.href} class="text-grey hover:text-white cursor-pointer">
+    <a
+      href={props.href}
+      class="text-grey text-[17px] hover:text-white cursor-pointer"
+    >
       {props.name}
     </a>
   );
