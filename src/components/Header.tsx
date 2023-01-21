@@ -12,7 +12,9 @@ export const observer = new IntersectionObserver(
         : previousEntry
     );
 
-    setCurrentSection(highestRatioEntry.target.id);
+    if (highestRatioEntry.isIntersecting) {
+      setCurrentSection(highestRatioEntry.target.id);
+    }
   },
   { threshold: 0.5 }
 );
