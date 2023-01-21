@@ -35,7 +35,30 @@ export default function App() {
             class="w-[45vw]"
           />
         </div>
-        <div class="h-[100vh]" />
+        <div
+          id="teams"
+          class="h-[100vh] flex items-center justify-center text-white font-londrina text-4xl"
+        >
+          Teams
+        </div>
+        <div
+          id="schedule"
+          class="h-[100vh] flex items-center justify-center text-white font-londrina text-4xl"
+        >
+          Schedule
+        </div>
+        <div
+          id="about"
+          class="h-[100vh] flex items-center justify-center text-white font-londrina text-4xl"
+        >
+          About
+        </div>
+        <div
+          id="shop"
+          class="h-[100vh] flex items-center justify-center text-white font-londrina text-4xl"
+        >
+          Shop
+        </div>
         <Footer />
       </div>
     </div>
