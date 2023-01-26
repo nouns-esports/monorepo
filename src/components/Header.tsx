@@ -33,10 +33,13 @@ export default function Header() {
 
   return (
     <header class="fixed w-full flex items-center justify-between p-8 z-10">
-      <div class="flex gap-3 items-center text-white font-londrina text-3xl pointer-events-auto cursor-default select-none">
+      <a
+        href="/"
+        class="flex gap-3 group items-center text-white font-londrina text-3xl pointer-events-auto cursor-pointer select-none"
+      >
         <Logo size={40} />
         Nouns
-      </div>
+      </a>
       <div class="flex gap-8">
         <nav class="flex items-center gap-6 pointer-events-auto">
           <Link name="Teams" href="#teams" />

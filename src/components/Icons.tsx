@@ -12,7 +12,7 @@ export function Twitch() {
   return (
     <Icon href="https://www.twitch.tv/nounsesports">
       <svg
-        class="fill-white hover:fill-red cursor-pointer"
+        class="fill-white hover:fill-[#9146FF] cursor-pointer"
         width="28"
         height="33"
         viewBox="0 0 28 33"
@@ -29,7 +29,7 @@ export function Twitter() {
   return (
     <Icon href="https://twitter.com/nounsesports">
       <svg
-        class="fill-white hover:fill-red cursor-pointer"
+        class="fill-white hover:fill-[#00acee] cursor-pointer"
         width="33"
         height="27"
         viewBox="0 0 33 27"
@@ -46,7 +46,7 @@ export function Youtube() {
   return (
     <Icon href="https://www.youtube.com/@nounsesports">
       <svg
-        class="fill-white hover:fill-red cursor-pointer"
+        class="fill-white hover:fill-[red] cursor-pointer"
         width="35"
         height="25"
         viewBox="0 0 35 25"
@@ -63,7 +63,7 @@ export function Discord() {
   return (
     <Icon href="https://discord.gg/nounsesports">
       <svg
-        class="fill-white hover:fill-red cursor-pointer"
+        class="fill-white hover:fill-[#7289da] cursor-pointer"
         width="35"
         height="27"
         viewBox="0 0 35 27"

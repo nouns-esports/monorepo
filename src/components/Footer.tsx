@@ -6,31 +6,31 @@ export default function Footer() {
   return (
     <footer class="flex justify-between items-center p-8 bg-black border-t-4 border-red">
       <div class="flex flex-col gap-4">
-        <div class="flex items-center gap-3 text-white text-3xl font-londrina select-none">
+        <a class="flex w-fit items-center group cursor-pointer gap-3 text-white text-3xl font-londrina select-none">
           <Logo size={40} />
           Nouns
-        </div>
+        </a>
         <p class="text-grey w-48">
           Driving innovation at the intersection of web3 and gaming.
         </p>
       </div>
       <div class="flex gap-20">
         <Section name="EXPLORE">
-          <Link name="Teams" href="#teams" />
-          <Link name="Schedule" href="#schedule" />
-          <Link name="About" href="#about" />
-          <Link name="Shop" href="#shop" />
+          <Link href="#teams">Teams</Link>
+          <Link href="#schedule">Schedule</Link>
+          <Link href="#about">About</Link>
+          <Link href="#shop">Shop</Link>
         </Section>
         <Section name="TEAMS">
-          <Link name="Dota" href="/teams/dota" />
-          <Link name="Smash Melee" href="/teams/smash-melee" />
-          <Link name="Pokémon Unite" href="/teams/pokemon-unite" />
-          <Link name="CSGO" href="/teams/csgo" />
+          <Link href="/teams/dota">Dota</Link>
+          <Link href="/teams/smash-melee">Smash Melee</Link>
+          <Link href="/teams/pokemon-unite">Pokémon Unite</Link>
+          <Link href="/teams/csgo">CSGO</Link>
         </Section>
         <Section name="NOUNS">
-          <Link name="Nouns.wtf" href="https://nouns.wtf" />
-          <Link name="Proposals" href="https://nouns.wtf/proposals" />
-          <Link name="Pod" href="/pod" />
+          <Link href="https://nouns.wtf">Nouns.wtf</Link>
+          <Link href="https://nouns.wtf/proposals">Proposals</Link>
+          <Link href="/pod">Pod</Link>
         </Section>
       </div>
       <div class="flex flex-col gap-4 justify-center text-white">
@@ -52,7 +52,7 @@ function Section(props: { name: string; children: JSX.Element }) {
   );
 }
 
-function Link(props: { name: string; href: string }) {
+function Link(props: { children: string; href: string }) {
   return (
     <li>
       <a
@@ -60,7 +60,7 @@ function Link(props: { name: string; href: string }) {
         draggable={false}
         class="text-grey hover:text-white cursor-pointer select-none"
       >
-        {props.name}
+        {props.children}
       </a>
     </li>
   );

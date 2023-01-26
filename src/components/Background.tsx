@@ -1,52 +1,13 @@
 import { createEffect, createSignal, onMount } from "solid-js";
+import { scrollOffset, setScrollOffset } from "../App";
+import resetCanvas from "../utils/resetCanvas";
+import resizeCanvas from "../utils/resizeCanvas";
 
 export default function Canvas() {
-  const [scrollOffset, setScrollOffset] = createSignal(0);
-
   let canvas: HTMLCanvasElement;
 
-  onMount(() => {
-    resizeCanvas();
-
-    window.addEventListener("resize", resizeCanvas);
-
-    document.addEventListener("scroll", () => {
-      setScrollOffset(window.scrollY);
-    });
-  });
-
-  function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    // Redraw the canvas
-    setScrollOffset(scrollOffset() + 0.00001);
-  }
-
-  function resetCanvas() {
-    const context = canvas.getContext("2d");
-
-    context.setTransform(1, 0, 0, 1, 0, 0);
-    context.clearRect(0, 0, canvas.width, canvas.height);
-  }
-
-  function paintNoggle(
-    noggle: Path2D,
-    noggleWidth: number,
-    noggleHeight: number
-  ) {
-    const context = canvas.getContext("2d");
-
-    context.save();
-    context.fillStyle = "#0C0C0C";
-    context.scale(noggleWidth / 16, noggleHeight / 6);
-    context.fill(noggle);
-    context.restore();
-  }
-
-  createEffect(() => {
-    resetCanvas();
-
+  function draw() {
+    resetCanvas(canvas);
     const context = canvas.getContext("2d");
 
     const noggle = new Path2D("M3 3V6H9V3H10V6H16V0H10V2H9V0H3V2H0V5H1V3H3Z");
@@ -106,7 +67,29 @@ export default function Canvas() {
       // setTransform unwantedly resets angle
       context.rotate(angle);
     }
+  }
+
+  function paintNoggle(
+    noggle: Path2D,
+    noggleWidth: number,
+    noggleHeight: number
+  ) {
+    const context = canvas.getContext("2d");
+
+    context.save();
+    context.fillStyle = "#0C0C0C";
+    context.scale(noggleWidth / 16, noggleHeight / 6);
+    context.fill(noggle);
+    context.restore();
+  }
+
+  onMount(() => {
+    resizeCanvas(canvas, draw);
+
+    window.addEventListener("resize", () => resizeCanvas(canvas, draw));
   });
+
+  createEffect(draw);
 
   return <canvas ref={canvas} class="fixed w-[100vw] h-[100vh] bg-black" />;
 }
