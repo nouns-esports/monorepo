@@ -92,5 +92,5 @@ export default function Canvas() {
 
   createEffect(draw);
 
-  return <canvas ref={canvas} class="fixed w-[100vw] h-[100vh] bg-black" />;
+  return <canvas ref={canvas} class="fixed w-[110vw] h-[100vh] bg-black" />;
 }
