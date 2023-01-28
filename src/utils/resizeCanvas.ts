@@ -3,7 +3,8 @@ export default function resizeCanvas(
   draw: Function
 ) {
   canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+  //   canvas.height = window.innerHeight;
+  canvas.height = window.screen.availHeight;
 
   draw();
 }
