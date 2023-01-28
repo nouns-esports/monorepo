@@ -57,10 +57,10 @@ export default function App() {
         <Schedule />
         <div
           id="about"
-          class="flex h-[100vh] flex-col justify-center px-16 gap-6 max-lg:px-8"
+          class="flex h-[100vh] flex-col justify-center px-16 gap-6 max-lg:px-8 max-md:items-center"
         >
           <h2 class="text-white font-londrina text-6xl select-none">About</h2>
-          <p class="text-grey selection:bg-red selection:text-white">
+          <p class="text-grey selection:bg-red selection:text-white max-md:text-center">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
             ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut

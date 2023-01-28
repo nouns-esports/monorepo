@@ -80,7 +80,11 @@ export default function Schedule() {
           <Show when={query.isSuccess}>
             <img
               style={{
-                opacity: canScrollLeft() ? "80%" : "20%",
+                opacity: canScrollLeft()
+                  ? window.innerWidth < 1000
+                    ? "100%"
+                    : "80%"
+                  : "20%",
                 cursor: canScrollLeft() ? "pointer" : "default",
               }}
               class="w-10 rotate-180 cursor-pointer hover:opacity-100 transition-opacity duration-300 max-lg:opacity-100"
@@ -92,7 +96,11 @@ export default function Schedule() {
             />
             <img
               style={{
-                opacity: canScrollRight() ? "80%" : "20%",
+                opacity: canScrollRight()
+                  ? window.innerWidth < 1000
+                    ? "100%"
+                    : "80%"
+                  : "20%",
                 cursor: canScrollRight() ? "pointer" : "default",
               }}
               class="w-10 cursor-pointer opacity-[85%] hover:opacity-100 transition-opacity duration-300 max-lg:opacity-100"
