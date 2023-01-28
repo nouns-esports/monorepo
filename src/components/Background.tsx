@@ -12,7 +12,7 @@ export default function Canvas() {
 
     const noggle = new Path2D("M3 3V6H9V3H10V6H16V0H10V2H9V0H3V2H0V5H1V3H3Z");
     // const noggleWidth = canvas.width * 0.085;
-    const noggleWidth = 90 + 4 * (canvas.width / 400);
+    const noggleWidth = 90 + 6 * (canvas.width / 400);
     const noggleHeight = noggleWidth * 0.375;
 
     const angle = -12 * (Math.PI / 180);
@@ -40,7 +40,7 @@ export default function Canvas() {
         context.translate(16, 0);
 
         // Move on scroll
-        context.translate(-scrollOffset() / 4 - noggleWidth / 2, 0);
+        context.translate(-scrollOffset() / 4 - canvas.width * 0.08, 0);
 
         for (let col = 1; col < noggleCountX + 1; col++) {
           paintNoggle(noggle, noggleWidth, noggleHeight);
