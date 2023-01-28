@@ -57,10 +57,10 @@ export default function App() {
         <Schedule />
         <div
           id="about"
-          class="flex flex-col justify-center px-16 gap-6 max-lg:px-8"
+          class="flex h-[100vh] flex-col justify-center px-16 gap-6 max-lg:px-8"
         >
           <h2 class="text-white font-londrina text-6xl select-none">About</h2>
-          <p class="text-grey">
+          <p class="text-grey selection:bg-red selection:text-white">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
             ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
@@ -75,9 +75,10 @@ export default function App() {
         </div>
         <div
           id="shop"
-          class="h-[100vh] flex items-center justify-center text-white font-londrina text-4xl"
+          class="h-[100vh] flex flex-col gap-8 items-center justify-center "
         >
-          Shop
+          <h2 class="text-white font-londrina text-6xl">Apparel</h2>
+          <Button href="https://shop.nouns.gg">Shop</Button>
         </div>
         <Footer />
       </div>

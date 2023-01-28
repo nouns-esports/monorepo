@@ -1,5 +1,5 @@
 import { createQuery } from "@tanstack/solid-query";
-import { createEffect, For, JSX, Show } from "solid-js";
+import { createEffect, createSignal, For, JSX, onMount, Show } from "solid-js";
 
 type Event = {
   id: string;
@@ -38,48 +38,90 @@ export default function Schedule() {
             maxResults: "10",
             key: import.meta.env.VITE_GOOGLE,
           })
-
-        // `https://www.googleapis.com/calendar/v3/calendars/2gl6iku9kcb2qjdrtgdthgng3s@group.calendar.google.com/events?q=smash&singleEvents=true&orderBy=startTime&maxResults=5&key=${
-        //   import.meta.env.VITE_GOOGLE
-        // }`
       );
-
       return events.json();
     }
   );
 
-  createEffect(() => {
-    if (query.data) {
-      console.log(query.data);
-    }
-  });
+  const [canScrollLeft, setCanScrollLeft] = createSignal(false);
+  const [canScrollRight, setCanScrollRight] = createSignal(true);
+
+  onMount(() =>
+    events.addEventListener("scroll", () => {
+      if (events.scrollLeft === 0 && canScrollLeft()) {
+        return setCanScrollLeft(false);
+      }
+
+      if (events.scrollLeft > 0 && !canScrollLeft()) {
+        return setCanScrollLeft(true);
+      }
+
+      if (
+        events.scrollWidth - events.scrollLeft - window.innerWidth === 0 &&
+        canScrollRight()
+      ) {
+        return setCanScrollRight(false);
+      }
+
+      if (events.scrollWidth - events.scrollLeft - window.innerWidth > 0) {
+        return setCanScrollRight(true);
+      }
+    })
+  );
 
   return (
     <div
       id="schedule"
-      class="h-[100vh] flex flex-col text-white font-londrina text-lg gap-8"
+      class="h-[100vh] flex flex-col justify-center text-white font-londrina text-lg gap-8"
     >
       <div class="flex items-center justify-between px-16 max-lg:px-8">
         <h2 class="font-londrina text-6xl select-none">Schedule</h2>
         <div class="flex gap-4 max-md:gap-2">
-          <img
-            class="w-10 rotate-180 cursor-pointer opacity-[85%] hover:opacity-100 transition-opacity duration-300 max-lg:opacity-100"
-            src="arrow.svg"
-            draggable={false}
-            onClick={() => events.scrollBy({ left: -1, behavior: "smooth" })}
-          />
-          <img
-            class="w-10 cursor-pointer opacity-[85%] hover:opacity-100 transition-opacity duration-300 max-lg:opacity-100"
-            src="arrow.svg"
-            draggable={false}
-            onClick={() => events.scrollBy({ left: 1, behavior: "smooth" })}
-          />
+          <Show when={query.isSuccess}>
+            <img
+              style={{
+                opacity: canScrollLeft() ? "80%" : "20%",
+                cursor: canScrollLeft() ? "pointer" : "default",
+              }}
+              class="w-10 rotate-180 cursor-pointer hover:opacity-100 transition-opacity duration-300 max-lg:opacity-100"
+              src="arrow.svg"
+              draggable={false}
+              onClick={() =>
+                events.scrollBy({ left: -375, behavior: "smooth" })
+              }
+            />
+            <img
+              style={{
+                opacity: canScrollRight() ? "80%" : "20%",
+                cursor: canScrollRight() ? "pointer" : "default",
+              }}
+              class="w-10 cursor-pointer opacity-[85%] hover:opacity-100 transition-opacity duration-300 max-lg:opacity-100"
+              src="arrow.svg"
+              draggable={false}
+              onClick={() => events.scrollBy({ left: 375, behavior: "smooth" })}
+            />
+          </Show>
         </div>
       </div>
-      <Show when={query.isSuccess}>
-        <div
-          ref={events}
-          class="flex flex-row gap-6 overflow-x-scroll snap-x scroll-px-16 max-lg:scroll-px-16 scrollbar-hidden"
+
+      <div
+        ref={events}
+        style={{
+          "overflow-x": query.isSuccess ? "scroll" : "hidden",
+        }}
+        class="flex flex-row gap-6 snap-x scroll-px-16 max-lg:scroll-px-16 scrollbar-hidden"
+      >
+        <Show
+          when={query.isSuccess}
+          fallback={
+            <For each={new Array(8)}>
+              {() => (
+                <div class="rounded-xl bg-black border-[#161616] border-2 min-w-[375px] h-[450px] overflow-hidden">
+                  <div class="w-full h-full animate-pulse bg-white/10 duration-300" />
+                </div>
+              )}
+            </For>
+          }
         >
           <For each={query.data.items}>
             {(event, index) => (
@@ -90,19 +132,19 @@ export default function Schedule() {
               />
             )}
           </For>
-        </div>
-      </Show>
+        </Show>
+      </div>
     </div>
   );
 }
 
-function Card(props: { event: Event; first: boolean; last: boolean }) {
+function Card(props: { event: Event; first?: boolean; last: boolean }) {
   const description = () => {
     return props.event.description;
   };
 
   const tags = () => {
-    return ["Melee"];
+    return ["Melee", "Aklo"];
   };
 
   return (
@@ -111,14 +153,14 @@ function Card(props: { event: Event; first: boolean; last: boolean }) {
       target="_blank"
       rel="noopener noreferrer"
       draggable={false}
-      class="relative snap-start w-fit h-fit"
+      class="relative snap-start w-fit h-fit overflow-y-visible"
       style={{
         "margin-left": props.first ? "4rem" : 0,
         "margin-right": props.last ? "4rem" : 0,
       }}
     >
       <div class="absolute w-full h-full bg-red rounded-xl" />
-      <div class="relative hover:translate-x-1 hover:-translate-y-1 duration-300 rounded-xl bg-black border-[#161616] border-2 overflow-hidden min-w-[28vw] max-w-[28vw] h-[32vw]">
+      <div class="relative hover:translate-x-1 hover:-translate-y-1 duration-300 rounded-xl bg-black border-[#161616] overflow-hidden border-2 w-[375px] h-[450px]">
         <img
           src="smash.png"
           alt={props.event.summary}
@@ -127,10 +169,10 @@ function Card(props: { event: Event; first: boolean; last: boolean }) {
         />
         <div class="flex flex-col gap-2 p-4">
           <h3 class="font-bebas text-2xl">{props.event.summary}</h3>
-          <p class="text-grey text-base leading-normal overflow-ellipsis overflow-hidden">
+          <p class="text-grey text-base leading-normal overflow-ellipsis overflow-hidden selection:bg-red selection:text-white">
             {description()}
           </p>
-          <ul>
+          <ul class="flex gap-2">
             <For each={tags()}>{(tag) => <Tag>{tag}</Tag>}</For>
           </ul>
         </div>

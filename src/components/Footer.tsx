@@ -10,7 +10,7 @@ export default function Footer() {
           <Logo size={40} />
           Nouns
         </a>
-        <p class="text-grey w-48">
+        <p class="text-grey w-48 selection:bg-red selection:text-white">
           Driving innovation at the intersection of web3 and gaming.
         </p>
       </div>
