@@ -112,30 +112,5 @@ export default function Graphic() {
 
   createEffect(draw);
 
-  return <canvas ref={canvas} class="fixed" />;
+  return <canvas ref={canvas} class="fixed max-lg:hidden" />;
 }
-
-//   const width = window.innerWidth * 0.2;
-
-// <>
-//   <img
-//     src="smash.png"
-//     style={{
-//       height: `${window.innerHeight + width}px`,
-//       width: `${width}px`,
-//       top: `-${scrollOffset() * 1.75 + width / 2}px`,
-//     }}
-//     class="fixed right-48 object-cover rounded-full"
-//   />
-
-//   <img
-//     src="pokemon.png"
-//     class="fixed rounded-full -rotate-45 object-cover"
-//     style={{
-//       right: `${scrollOffset() - width}px`,
-//       top: `${window.innerHeight / 2 - width / 2 - scrollOffset()}px`,
-//       width: `${window.innerHeight + width}px`,
-//       height: `${width}px`,
-//     }}
-//   />
-// </>

@@ -23,14 +23,14 @@ export default function App() {
       <Graphic />
       <div class="overflow-x-hidden relative">
         <Header />
-        <div class="w-[50vw] h-[100vh] flex items-center justify-center p-8">
+        <div class="w-[50vw] max-lg:w-full h-[100vh] flex items-center justify-center p-8">
           <div class="flex flex-col gap-8">
-            <h1 class="text-white font-londrina text-6xl w-[500px] cursor-default select-none">
+            <h1 class="text-white font-londrina text-6xl w-[500px] max-[600px]:w-auto max-[600px]:text-5xl max-[450px]:text-4xl cursor-default select-none max-lg:text-center">
               Driving innovation at the intersection of{" "}
               <span class="text-red font-londrina">web3</span> and{" "}
               <span class="text-red font-londrina">gaming</span>
             </h1>
-            <div class="flex gap-8 items-center">
+            <div class="flex gap-8 items-center max-lg:justify-center max-[450px]:flex-col">
               <Button href="">LEARN MORE</Button>
               <div class="flex items-center gap-4">
                 <Twitch />
@@ -55,7 +55,10 @@ export default function App() {
           Teams
         </div>
         <Schedule />
-        <div id="about" class="flex flex-col justify-center px-16 gap-6">
+        <div
+          id="about"
+          class="flex flex-col justify-center px-16 gap-6 max-lg:px-8"
+        >
           <h2 class="text-white font-londrina text-6xl select-none">About</h2>
           <p class="text-grey">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do

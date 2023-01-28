@@ -59,17 +59,17 @@ export default function Schedule() {
       id="schedule"
       class="h-[100vh] flex flex-col text-white font-londrina text-lg gap-8"
     >
-      <div class="flex items-center justify-between px-16">
+      <div class="flex items-center justify-between px-16 max-lg:px-8">
         <h2 class="font-londrina text-6xl select-none">Schedule</h2>
-        <div class="flex gap-4">
+        <div class="flex gap-4 max-md:gap-2">
           <img
-            class="w-10 rotate-180 cursor-pointer opacity-[85%] hover:opacity-100 transition-opacity duration-300"
+            class="w-10 rotate-180 cursor-pointer opacity-[85%] hover:opacity-100 transition-opacity duration-300 max-lg:opacity-100"
             src="arrow.svg"
             draggable={false}
             onClick={() => events.scrollBy({ left: -1, behavior: "smooth" })}
           />
           <img
-            class="w-10 cursor-pointer opacity-[85%] hover:opacity-100 transition-opacity duration-300"
+            class="w-10 cursor-pointer opacity-[85%] hover:opacity-100 transition-opacity duration-300 max-lg:opacity-100"
             src="arrow.svg"
             draggable={false}
             onClick={() => events.scrollBy({ left: 1, behavior: "smooth" })}
@@ -79,7 +79,7 @@ export default function Schedule() {
       <Show when={query.isSuccess}>
         <div
           ref={events}
-          class="flex flex-row gap-6 overflow-x-scroll snap-x scroll-px-16 scrollbar-hidden"
+          class="flex flex-row gap-6 overflow-x-scroll snap-x scroll-px-16 max-lg:scroll-px-16 scrollbar-hidden"
         >
           <For each={query.data.items}>
             {(event, index) => (

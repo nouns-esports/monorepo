@@ -11,7 +11,8 @@ export default function Canvas() {
     const context = canvas.getContext("2d");
 
     const noggle = new Path2D("M3 3V6H9V3H10V6H16V0H10V2H9V0H3V2H0V5H1V3H3Z");
-    const noggleWidth = canvas.width * 0.085;
+    // const noggleWidth = canvas.width * 0.085;
+    const noggleWidth = 100;
     const noggleHeight = noggleWidth * 0.375;
 
     const angle = -12 * (Math.PI / 180);
