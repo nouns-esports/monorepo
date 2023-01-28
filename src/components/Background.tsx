@@ -40,7 +40,7 @@ export default function Canvas() {
         context.translate(16, 0);
 
         // Move on scroll
-        context.translate(-scrollOffset() / 4, 0);
+        context.translate(-scrollOffset() / 4 - noggleWidth / 2, 0);
 
         for (let col = 1; col < noggleCountX + 1; col++) {
           paintNoggle(noggle, noggleWidth, noggleHeight);
@@ -55,7 +55,7 @@ export default function Canvas() {
         // Move on scroll
         context.translate(scrollOffset() / 4, 0);
 
-        for (let col = 1; col < noggleCountX + 2; col++) {
+        for (let col = 1; col < noggleCountX + 3; col++) {
           paintNoggle(noggle, noggleWidth, noggleHeight);
 
           // Move to the next noggle position in the row
