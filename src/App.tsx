@@ -31,7 +31,7 @@ export default function App() {
               <span class="text-red font-londrina">gaming</span>
             </h1>
             <div class="flex gap-8 items-center max-lg:justify-center max-[450px]:flex-col">
-              <Button href="">LEARN MORE</Button>
+              <Button href="/about">LEARN MORE</Button>
               <div class="flex items-center gap-4">
                 <Twitch />
                 <Twitter />
@@ -57,18 +57,43 @@ export default function App() {
         <Schedule />
         <div
           id="about"
-          class="flex h-[100vh] flex-col justify-center px-16 gap-6 max-lg:px-8 max-md:items-center"
+          class="flex h-[100vh] flex-col justify-center px-16 gap-12 max-lg:px-8 max-md:items-center"
         >
-          <h2 class="text-white font-londrina text-6xl select-none">About</h2>
-          <p class="text-grey selection:bg-red selection:text-white max-md:text-center">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
-          </p>
+          <h2 class="text-white font-londrina text-6xl select-none">
+            Our Mission
+          </h2>
+          <ul class="flex gap-8  text-grey selection:bg-red selection:text-white ">
+            <li class="flex flex-col gap-2 w-full ">
+              <strong class="text-white text-2xl font-londrina">
+                Help players create fond memories
+              </strong>
+              <p>
+                Nouns are here to do good, we offer premium care and compassion
+                to our favorite players in our favorite games.
+              </p>
+            </li>
+            <li class="flex flex-col gap-2 w-full">
+              <strong class="text-white text-2xl font-londrina">
+                Create entry-level opportunities for contributors
+              </strong>
+              <p>
+                Not everyone can quit their job and work in esports full-time,
+                nor should they. We aim to enable contributors to work on what
+                interests them and develop our organization organically.
+              </p>
+            </li>
+            <li class="flex flex-col gap-2 w-full">
+              <strong class="text-white text-2xl font-londrina">
+                Build in the open
+              </strong>
+              <p>
+                Nouns believe that building in the open enables collaboration
+                and protects us from corruption. Meetings, proposals, assets,
+                and finances are all publicly available for anyone who has taken
+                an interest in our project.
+              </p>
+            </li>
+          </ul>
           <div class="max-w-fit">
             <Button href="/about">Learn more</Button>
           </div>

@@ -72,10 +72,10 @@ export default function Schedule() {
   return (
     <div
       id="schedule"
-      class="h-[100vh] flex flex-col justify-center text-white font-londrina text-lg gap-8"
+      class="h-[100vh] flex flex-col justify-center text-white font-londrina text-lg gap-12"
     >
       <div class="flex items-center justify-between px-16 max-lg:px-8">
-        <h2 class="font-londrina text-6xl select-none">Schedule</h2>
+        <h2 class="font-londrina text-6xl select-none">Upcoming Events</h2>
         <div class="flex gap-4 max-md:gap-2">
           <Show when={query.isSuccess}>
             <img
@@ -87,7 +87,7 @@ export default function Schedule() {
                   : "20%",
                 cursor: canScrollLeft() ? "pointer" : "default",
               }}
-              class="w-10 rotate-180 cursor-pointer hover:opacity-100 transition-opacity duration-300 max-lg:opacity-100"
+              class="w-10 rotate-180 cursor-pointer hover:opacity-100 transition-opacity duration-300 select-none"
               src="arrow.svg"
               draggable={false}
               onClick={() =>
@@ -103,7 +103,7 @@ export default function Schedule() {
                   : "20%",
                 cursor: canScrollRight() ? "pointer" : "default",
               }}
-              class="w-10 cursor-pointer opacity-[85%] hover:opacity-100 transition-opacity duration-300 max-lg:opacity-100"
+              class="w-10 cursor-pointer opacity-[85%] hover:opacity-100 transition-opacity duration-300 max-lg:opacity-100 select-none"
               src="arrow.svg"
               draggable={false}
               onClick={() => events.scrollBy({ left: 375, behavior: "smooth" })}
@@ -173,11 +173,11 @@ function Card(props: { event: Event; first?: boolean; last: boolean }) {
           src="smash.png"
           alt={props.event.summary}
           draggable={false}
-          class="h-40 object-cover"
+          class="h-40 object-cover select-none"
         />
         <div class="flex flex-col gap-2 p-4">
-          <h3 class="font-bebas text-2xl">{props.event.summary}</h3>
-          <p class="text-grey text-base leading-normal overflow-ellipsis overflow-hidden selection:bg-red selection:text-white">
+          <h3 class="font-bebas text-2xl select-none">{props.event.summary}</h3>
+          <p class="text-grey text-base leading-normal overflow-ellipsis overflow-hidden select-none">
             {description()}
           </p>
           <ul class="flex gap-2">

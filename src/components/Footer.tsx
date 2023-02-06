@@ -6,7 +6,10 @@ export default function Footer() {
   return (
     <footer class="flex justify-between items-center p-8 bg-black border-t-4 border-red">
       <div class="flex flex-col gap-4">
-        <a class="flex w-fit items-center group cursor-pointer gap-3 text-white text-3xl font-londrina select-none">
+        <a
+          draggable={false}
+          class="flex w-fit items-center group cursor-pointer gap-3 text-white text-3xl font-londrina select-none"
+        >
           <Logo size={40} />
           Nouns
         </a>

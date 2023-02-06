@@ -33,7 +33,11 @@ export default function Header() {
 
   return (
     <header class="fixed w-full flex items-center justify-between p-8 z-10">
-      <a href="/" class="flex gap-3 group items-center cursor-pointer ">
+      <a
+        href="/"
+        draggable={false}
+        class="flex gap-3 group items-center cursor-pointer"
+      >
         <Logo size={40} />
         <p class="text-white font-londrina text-3xl select-none max-[300px]:hidden">
           Nouns
