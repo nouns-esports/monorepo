@@ -1,5 +1,5 @@
-import { createEffect, createSignal, onMount } from "solid-js";
-import { scrollOffset, setScrollOffset } from "../App";
+import { createEffect, onMount } from "solid-js";
+import { scrollOffset } from "../App";
 import resetCanvas from "../utils/resetCanvas";
 import resizeCanvas from "../utils/resizeCanvas";
 
@@ -92,5 +92,5 @@ export default function Canvas() {
 
   createEffect(draw);
 
-  return <canvas ref={canvas} class="fixed w-[100vw] h-[100vh] bg-black" />;
+  return <canvas ref={canvas} class="fixed w-screen h-screen bg-black" />;
 }

@@ -1,9 +1,13 @@
-export default function Button(props: { children: string; href: string }) {
+export default function Button(props: {
+  children: string;
+  href: string;
+  newTab?: boolean;
+}) {
   return (
     <a
       href={props.href}
-      target="_blank"
-      rel="noopener noreferrer"
+      target={props.newTab && "_blank"}
+      rel={props.newTab && "noopener noreferrer"}
       class="relative"
       draggable={false}
     >

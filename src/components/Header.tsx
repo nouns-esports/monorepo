@@ -1,6 +1,7 @@
 import { createSignal, onMount } from "solid-js";
 import Button from "./Button";
 import Logo from "./Logo";
+import { useLocation } from "@solidjs/router";
 
 const [currentSection, setCurrentSection] = createSignal("");
 
@@ -20,15 +21,19 @@ export const observer = new IntersectionObserver(
 );
 
 export default function Header() {
+  const location = useLocation();
+
   onMount(() => {
-    document.addEventListener("scroll", () => {
-      if (
-        window.scrollY <
-        document.getElementById("teams").getBoundingClientRect().top / 2
-      ) {
-        setCurrentSection("");
-      }
-    });
+    if (location.pathname === "/") {
+      document.addEventListener("scroll", () => {
+        if (
+          window.scrollY <
+          document.getElementById("teams").getBoundingClientRect().top / 2
+        ) {
+          setCurrentSection("");
+        }
+      });
+    }
   });
 
   return (
@@ -36,7 +41,7 @@ export default function Header() {
       <a
         href="/"
         draggable={false}
-        class="flex gap-3 group items-center cursor-pointer"
+        class="flex gap-3 group items-center cursor-pointer select-none"
       >
         <Logo size={40} />
         <p class="text-white font-londrina text-3xl select-none max-[300px]:hidden">
@@ -45,10 +50,10 @@ export default function Header() {
       </a>
       <div class="flex gap-8">
         <nav class="flex items-center gap-6  max-md:hidden">
-          <Link name="Teams" href="#teams" />
-          <Link name="Schedule" href="#schedule" />
-          <Link name="About" href="#about" />
-          <Link name="Shop" href="#shop" />
+          <Link name="Teams" />
+          <Link name="Schedule" />
+          <Link name="About" />
+          <Link name="Shop" />
         </nav>
         <Button href="https://discord.gg/nounsesports">JOIN</Button>
       </div>
@@ -56,17 +61,34 @@ export default function Header() {
   );
 }
 
-function Link(props: { name: string; href: string }) {
+function Link(props: { name: string }) {
+  const location = useLocation();
+
+  const isHome = () => location.pathname === "/";
+  const isShop = () => props.name.toLowerCase() === "shop";
+
+  const href = () => {
+    if (isHome()) return `#${props.name.toLowerCase()}`;
+    if (isShop()) return "https://shop.nouns.gg";
+
+    return `/${props.name.toLowerCase()}`;
+  };
+
   onMount(() => {
-    observer.observe(document.getElementById(props.name.toLowerCase()));
+    if (location.pathname === "/") {
+      observer.observe(document.getElementById(props.name.toLowerCase()));
+    }
   });
 
   return (
     <a
-      href={props.href}
+      href={href()}
+      target={isShop() && !isHome() ? "_blank" : ""}
+      rel={isShop() && !isHome() ? "noopener noreferrer" : ""}
       draggable={false}
       class={`${
-        currentSection() === props.name.toLowerCase()
+        currentSection() === props.name.toLowerCase() ||
+        location.pathname === `/${props.name.toLowerCase()}`
           ? "text-white"
           : "text-grey"
       } text-[17px] cursor-pointer hover:text-white select-none transition-colors duration-300`}

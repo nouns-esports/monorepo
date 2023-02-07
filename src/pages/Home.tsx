@@ -1,28 +1,59 @@
+import { For, Show, createSignal, onMount } from "solid-js";
+import Button from "../components/Button";
+import { Twitch, Twitter, Youtube, Discord } from "../components/Icons";
 import { createQuery } from "@tanstack/solid-query";
-import { createEffect, createSignal, For, JSX, onMount, Show } from "solid-js";
+import type { Events } from "../types";
+import EventCard from "../components/EventCard";
+import Graphic from "../components/Graphic";
 
-type Event = {
-  id: string;
-  status: string;
-  htmlLink: string;
-  location: string;
-  summary: string;
-  description: string;
-  start: {
-    dateTime: string;
-    timeZone: string;
-  };
-  end: {
-    dateTime: string;
-    timeZone: string;
-  };
-};
+export default function Home() {
+  return (
+    <>
+      <Graphic />
+      <Landing />
+      <Teams />
+      <Schedule />
+      <About />
+      <Shop />
+    </>
+  );
+}
 
-type Events = {
-  items: Array<Event>;
-};
+function Landing() {
+  return (
+    <div class="w-[50vw] max-lg:w-full h-[100vh] flex items-center justify-center p-8">
+      <div class="flex flex-col gap-8">
+        <h1 class="text-white font-londrina text-6xl w-[500px] max-[600px]:w-auto max-[600px]:text-5xl max-[450px]:text-4xl cursor-default select-none max-lg:text-center">
+          Driving innovation at the intersection of{" "}
+          <span class="text-red font-londrina">web3</span> and{" "}
+          <span class="text-red font-londrina">gaming</span>
+        </h1>
+        <div class="flex gap-8 items-center max-lg:justify-center max-[450px]:flex-col">
+          <Button href="/about">LEARN MORE</Button>
+          <div class="flex items-center gap-4">
+            <Twitch />
+            <Twitter />
+            <Youtube />
+            <Discord />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
-export default function Schedule() {
+function Teams() {
+  return (
+    <div
+      id="teams"
+      class="h-[100vh] flex items-center justify-center text-white font-londrina text-4xl"
+    >
+      Teams
+    </div>
+  );
+}
+
+function Schedule() {
   let events: HTMLDivElement;
 
   const query = createQuery<Events>(
@@ -133,7 +164,7 @@ export default function Schedule() {
         >
           <For each={query.data.items}>
             {(event, index) => (
-              <Card
+              <EventCard
                 event={event}
                 first={index() === 0}
                 last={index() === query.data.items.length - 1}
@@ -146,53 +177,60 @@ export default function Schedule() {
   );
 }
 
-function Card(props: { event: Event; first?: boolean; last: boolean }) {
-  const description = () => {
-    return props.event.description;
-  };
-
-  const tags = () => {
-    return ["Melee", "Aklo"];
-  };
-
+function About() {
   return (
-    <a
-      href={props.event.location || props.event.htmlLink}
-      target="_blank"
-      rel="noopener noreferrer"
-      draggable={false}
-      class="relative snap-start w-fit h-fit overflow-y-visible"
-      style={{
-        "margin-left": props.first ? "4rem" : 0,
-        "margin-right": props.last ? "4rem" : 0,
-      }}
+    <div
+      id="about"
+      class="flex h-[100vh] flex-col justify-center px-16 gap-12 max-lg:px-8 max-md:items-center"
     >
-      <div class="absolute w-full h-full bg-red rounded-xl" />
-      <div class="relative hover:translate-x-1 hover:-translate-y-1 duration-300 rounded-xl bg-black border-[#161616] overflow-hidden border-2 w-[375px] h-[450px]">
-        <img
-          src="smash.png"
-          alt={props.event.summary}
-          draggable={false}
-          class="h-40 object-cover select-none"
-        />
-        <div class="flex flex-col gap-2 p-4">
-          <h3 class="font-bebas text-2xl select-none">{props.event.summary}</h3>
-          <p class="text-grey text-base leading-normal overflow-ellipsis overflow-hidden select-none">
-            {description()}
+      <h2 class="text-white font-londrina text-6xl select-none">Our Mission</h2>
+      <ul class="flex gap-8  text-grey selection:bg-red selection:text-white">
+        <li class="flex flex-col gap-2 w-full">
+          <strong class="text-white text-2xl font-londrina">
+            Help players create fond memories
+          </strong>
+          <p>
+            Nouns are here to do good, we offer premium care and compassion to
+            our favorite players in our favorite games.
           </p>
-          <ul class="flex gap-2">
-            <For each={tags()}>{(tag) => <Tag>{tag}</Tag>}</For>
-          </ul>
-        </div>
+        </li>
+        <li class="flex flex-col gap-2 w-full">
+          <strong class="text-white text-2xl font-londrina">
+            Create entry-level opportunities for contributors
+          </strong>
+          <p>
+            Not everyone can quit their job and work in esports full-time, nor
+            should they. We aim to enable contributors to work on what interests
+            them and develop our organization organically.
+          </p>
+        </li>
+        <li class="flex flex-col gap-2 w-full">
+          <strong class="text-white text-2xl font-londrina">
+            Build in the open
+          </strong>
+          <p>
+            Nouns believe that building in the open enables collaboration and
+            protects us from corruption. Meetings, proposals, assets, and
+            finances are all publicly available for anyone who has taken an
+            interest in our project.
+          </p>
+        </li>
+      </ul>
+      <div class="max-w-fit">
+        <Button href="/about">Learn more</Button>
       </div>
-    </a>
+    </div>
   );
 }
 
-function Tag(props: { children: string }) {
+function Shop() {
   return (
-    <li class="bg-red font-semibold px-2 py-0.5 rounded-lg text-sm w-fit select-none cursor-pointer">
-      {props.children}
-    </li>
+    <div
+      id="shop"
+      class="h-[100vh] flex flex-col gap-8 items-center justify-center "
+    >
+      <h2 class="text-white font-londrina text-6xl">Apparel</h2>
+      <Button href="https://shop.nouns.gg">Shop</Button>
+    </div>
   );
 }

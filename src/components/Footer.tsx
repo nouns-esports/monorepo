@@ -19,10 +19,10 @@ export default function Footer() {
       </div>
       <div class="flex gap-20">
         <Section name="EXPLORE">
-          <Link href="#teams">Teams</Link>
-          <Link href="#schedule">Schedule</Link>
-          <Link href="#about">About</Link>
-          <Link href="#shop">Shop</Link>
+          <Link href="/teams">Teams</Link>
+          <Link href="/schedule">Schedule</Link>
+          <Link href="/about">About</Link>
+          <Link href="https://shop.nouns.gg">Shop</Link>
         </Section>
         <Section name="TEAMS">
           <Link href="/teams/dota">Dota</Link>
