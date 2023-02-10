@@ -22,14 +22,16 @@ export default function Graphic() {
     resetCanvas(canvas);
 
     const context = canvas.getContext("2d");
-    const angle = 40 * (Math.PI / 180);
+
     const width = 300;
-    const angledHeight = width / Math.cos(angle) / 1.25;
-    const angledWidth = width / Math.sin(angle);
-    const startX = canvas.width * 0.69;
+    // const angledHeight = width / Math.cos(angle) / 1.25;
+    // const angledWidth = width / Math.sin(angle);
+
     const rate = 1.75;
 
     if (isSmashLoaded()) {
+      const startX = canvas.width * 0.69;
+
       const points = {
         topLeft: { x: startX, y: 0 },
         topRight: { x: startX + width, y: -width / 2 },
@@ -102,32 +104,68 @@ export default function Graphic() {
     }
 
     if (isPokemonLoaded()) {
+      const angle = 50 * (Math.PI / 180);
+      const startY = canvas.height / 4;
       const points = {
+        // topLeft: {
+        //   x: canvas.width + scrollOffset(),
+        //   y: canvas.height / 4 - scrollOffset(),
+        // },
+        // topRight: {
+        //   x: canvas.width + scrollOffset(),
+        //   y: canvas.height / 4 + angledHeight - scrollOffset(),
+        // },
+        // bottomRight: {
+        //   x: canvas.width / 1.5 + scrollOffset(),
+        //   y: canvas.height - scrollOffset(),
+        // },
+        // bottomLeft: {
+        //   x: canvas.width / 1.5 - angledWidth + scrollOffset(),
+        //   y: canvas.height - scrollOffset(),
+        // },
         topLeft: {
-          x: canvas.width + scrollOffset(),
-          y: canvas.height / 4 - scrollOffset(),
+          x: canvas.width,
+          y: startY,
         },
         topRight: {
-          x: canvas.width + scrollOffset(),
-          y: canvas.height / 4 + angledHeight - scrollOffset(),
+          x: canvas.width,
+          y: startY + width / Math.sin(angle),
         },
         bottomRight: {
-          x: canvas.width / 1.5 + scrollOffset(),
-          y: canvas.height - scrollOffset(),
+          x:
+            canvas.width -
+            width * Math.cos(angle) -
+            (canvas.height - startY - width / Math.sin(angle)) /
+              Math.cos(Math.PI / 2 - angle) +
+            width * Math.cos(angle),
+          // - width * Math.sin(Math.PI / 2 - angle)
+          y: canvas.height,
+          // + width * Math.cos(Math.PI / 2 - angle)
         },
         bottomLeft: {
-          x: canvas.width / 1.5 - angledWidth + scrollOffset(),
+          x:
+            canvas.width -
+            width / Math.sin(Math.PI / 2 - angle) -
+            (canvas.height - startY - width / Math.sin(angle)) /
+              Math.cos(Math.PI / 2 - angle),
           y: canvas.height,
         },
       };
 
-      console.log(canvas.height);
-
       context.save();
       context.beginPath();
-      context.moveTo(points.topLeft.x, points.topLeft.y);
-      context.lineTo(points.topRight.x, points.topRight.y);
-      context.lineTo(points.bottomRight.x, points.bottomRight.y);
+      context.moveTo(
+        points.topLeft.x + scrollOffset(),
+        points.topLeft.y - scrollOffset()
+      );
+      context.lineTo(
+        points.topRight.x + scrollOffset(),
+        points.topRight.y - scrollOffset()
+      );
+      context.lineTo(
+        points.bottomRight.x + scrollOffset(),
+        points.bottomRight.y - scrollOffset()
+      );
       // context.arc(
       //   points.bottomRight.x,
       //   points.bottomRight.y,
@@ -135,11 +173,17 @@ export default function Graphic() {
       //   0,
       //   Math.PI / 2
       // );
-      context.lineTo(points.bottomLeft.x, points.bottomLeft.y);
-      context.lineTo(points.topLeft.x, points.topLeft.y);
+      context.lineTo(
+        points.bottomLeft.x + scrollOffset(),
+        points.bottomLeft.y - scrollOffset()
+      );
+      context.lineTo(
+        points.topLeft.x + scrollOffset(),
+        points.topLeft.y - scrollOffset()
+      );
       context.clip();
 
-      context.drawImage(pokemon, points.bottomLeft.x - scrollOffset(), 100);
+      context.drawImage(pokemon, points.bottomLeft.x, 100);
       context.restore();
     }
   }
