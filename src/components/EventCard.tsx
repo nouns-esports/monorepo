@@ -50,7 +50,7 @@ export default function EventCard(props: {
           <ul class="flex gap-2">
             <For each={tags()}>
               {(tag) => (
-                <li class="bg-red font-semibold px-2 py-0.5 rounded-lg text-sm w-fit select-none cursor-pointer">
+                <li class="bg-red hover:bg-[#eb5050] font-semibold px-2 py-0.5 rounded-lg text-sm w-fit select-none cursor-pointer">
                   {tag}
                 </li>
               )}
