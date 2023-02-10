@@ -27,18 +27,26 @@ export default function EventCard(props: {
       }}
     >
       <div class="absolute w-full h-full bg-red rounded-xl" />
-      <div class="relative hover:translate-x-1 hover:-translate-y-1 duration-300 rounded-xl bg-black border-[#161616] overflow-hidden border-2 w-[375px] h-[450px]">
+      <div class="flex flex-col relative hover:translate-x-1 hover:-translate-y-1 duration-300 rounded-xl bg-black border-[#161616] overflow-hidden border-2 w-[375px] h-[450px]">
         <img
           src="smash.png"
           alt={props.event.summary}
           draggable={false}
           class="h-40 object-cover select-none"
         />
-        <div class="flex flex-col gap-2 p-4">
-          <h3 class="font-bebas text-2xl select-none">{props.event.summary}</h3>
-          <p class="text-grey text-base leading-normal overflow-ellipsis overflow-hidden select-none">
-            {description()}
-          </p>
+        <div class="flex flex-col flex-1 justify-between gap-2 p-4">
+          <div>
+            <h3 class="font-bebas text-2xl select-none">
+              {props.event.summary}
+            </h3>
+            <p class="text-grey text-base leading-normal overflow-ellipsis overflow-hidden select-none">
+              {/* {description()} */}
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+              enim ad minim veniam.
+            </p>
+          </div>
+
           <ul class="flex gap-2">
             <For each={tags()}>
               {(tag) => (
