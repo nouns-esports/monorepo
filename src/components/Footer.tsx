@@ -1,18 +1,20 @@
 import { JSX } from "solid-js/jsx-runtime";
 import { Twitch, Twitter, Youtube, Discord } from "./Icons";
 import Logo from "./Logo";
+import { A } from "@solidjs/router";
 
 export default function Footer() {
   return (
-    <footer class="flex justify-between items-center p-8 bg-black border-t-4 border-red">
+    <footer class="flex justify-between items-center p-8 bg-black border-t-4 border-red relative z-20">
       <div class="flex flex-col gap-4">
-        <a
+        <A
+          href="/"
           draggable={false}
           class="flex w-fit items-center group cursor-pointer gap-3 text-white text-3xl font-londrina select-none"
         >
           <Logo size={40} />
           Nouns
-        </a>
+        </A>
         <p class="text-grey w-48 selection:bg-red selection:text-white">
           Driving innovation at the intersection of web3 and gaming.
         </p>

@@ -1,7 +1,7 @@
 import { createSignal, onMount } from "solid-js";
 import Button from "./Button";
 import Logo from "./Logo";
-import { useLocation } from "@solidjs/router";
+import { A, useLocation } from "@solidjs/router";
 
 const [currentSection, setCurrentSection] = createSignal("");
 
@@ -37,8 +37,8 @@ export default function Header() {
   });
 
   return (
-    <header class="fixed w-full flex items-center justify-between p-8 z-10">
-      <a
+    <header class="fixed w-full flex items-center justify-between p-8 z-20">
+      <A
         href="/"
         draggable={false}
         class="flex gap-3 group items-center cursor-pointer select-none"
@@ -47,7 +47,7 @@ export default function Header() {
         <p class="text-white font-londrina text-3xl select-none max-[300px]:hidden">
           Nouns
         </p>
-      </a>
+      </A>
       <div class="flex gap-8">
         <nav class="flex items-center gap-6  max-md:hidden">
           <Link name="Teams" />

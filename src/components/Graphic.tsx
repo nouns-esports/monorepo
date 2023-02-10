@@ -117,34 +117,31 @@ export default function Graphic() {
         },
         bottomLeft: {
           x: canvas.width / 1.5 - angledWidth + scrollOffset(),
-          y: canvas.height - scrollOffset(),
+          y: canvas.height,
         },
       };
+
+      console.log(canvas.height);
 
       context.save();
       context.beginPath();
       context.moveTo(points.topLeft.x, points.topLeft.y);
       context.lineTo(points.topRight.x, points.topRight.y);
       context.lineTo(points.bottomRight.x, points.bottomRight.y);
-      context.arcTo(
-        points.bottomRight.x,
-        points.bottomRight.y,
-        points.bottomLeft.x,
-        points.bottomLeft.y,
-        angledWidth / 2
-      );
-
+      // context.arc(
+      //   points.bottomRight.x,
+      //   points.bottomRight.y,
+      //   angledWidth,
+      //   0,
+      //   Math.PI / 2
+      // );
+      context.lineTo(points.bottomLeft.x, points.bottomLeft.y);
       context.lineTo(points.topLeft.x, points.topLeft.y);
       context.clip();
 
-      context.drawImage(pokemon, points.bottomLeft.x - scrollOffset(), 0);
+      context.drawImage(pokemon, points.bottomLeft.x - scrollOffset(), 100);
       context.restore();
     }
-
-    // context.globalCompositeOperation = "copy";
-    // context.drawImage(canvas, 0, -scrollOffset());
-    // // reset back to normal for subsequent operations.
-    // context.globalCompositeOperation = "source-over";
   }
 
   onMount(() => {
@@ -156,5 +153,5 @@ export default function Graphic() {
 
   createEffect(draw);
 
-  return <canvas ref={canvas} class="fixed max-lg:hidden" />;
+  return <canvas ref={canvas} class="fixed max-lg:hidden z-0" />;
 }

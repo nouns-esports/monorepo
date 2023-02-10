@@ -1,10 +1,12 @@
+import { A } from "@solidjs/router";
+
 export default function Button(props: {
   children: string;
   href: string;
   newTab?: boolean;
 }) {
   return (
-    <a
+    <A
       href={props.href}
       target={props.newTab && "_blank"}
       rel={props.newTab && "noopener noreferrer"}
@@ -15,6 +17,6 @@ export default function Button(props: {
       <div class="relative select-none hover:translate-x-1 hover:-translate-y-1 duration-300 py-3 px-[22px] text-xl bg-white rounded-full flex items-center justify-center leading-none font-bebas whitespace-nowrap">
         {props.children}
       </div>
-    </a>
+    </A>
   );
 }
