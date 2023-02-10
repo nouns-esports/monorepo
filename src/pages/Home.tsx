@@ -185,7 +185,7 @@ function Schedule() {
         style={{
           "overflow-x": query.isSuccess ? "scroll" : "hidden",
         }}
-        class="flex flex-row gap-6 snap-x scroll-px-16 max-lg:scroll-px-16 scrollbar-hidden"
+        class="flex flex-row gap-6 snap-x scroll-px-16 max-lg:scroll-px-16 scrollbar-hidden pt-1"
       >
         <Show
           when={query.isSuccess}

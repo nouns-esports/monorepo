@@ -20,7 +20,7 @@ export default function EventCard(props: {
       target="_blank"
       rel="noopener noreferrer"
       draggable={false}
-      class="relative snap-start w-fit h-fit overflow-y-visible"
+      class="relative snap-start"
       style={{
         "margin-left": props.first ? "4rem" : 0,
         "margin-right": props.last ? "4rem" : 0,
