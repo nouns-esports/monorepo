@@ -26,7 +26,7 @@ function Landing() {
   return (
     <div class="w-[50vw] max-lg:w-full h-[100vh] flex items-center justify-center p-8">
       <div class="flex flex-col gap-8">
-        <h1 class="text-white font-londrina text-6xl w-[500px] max-[600px]:w-auto max-[600px]:text-5xl max-[450px]:text-4xl cursor-default select-none max-lg:text-center">
+        <h1 class="font-londrina text-6xl w-[500px] max-[600px]:w-auto max-[600px]:text-5xl max-[450px]:text-4xl max-lg:text-center">
           Driving innovation at the intersection of{" "}
           <span class="text-red font-londrina">web3</span> and{" "}
           <span class="text-red font-londrina">gaming</span>
@@ -140,10 +140,10 @@ function Schedule() {
   return (
     <div
       id="schedule"
-      class="h-[100vh] flex flex-col justify-center text-white font-londrina text-lg gap-12"
+      class="h-[100vh] flex flex-col justify-center font-londrina text-lg gap-12"
     >
       <div class="flex items-center justify-between px-16 max-lg:px-8">
-        <h2 class="font-londrina text-6xl select-none">Upcoming Events</h2>
+        <h2 class="font-londrina text-6xl">Upcoming Events</h2>
         <div class="flex gap-4 max-md:gap-2">
           <Show when={query.isSuccess}>
             <img
@@ -220,8 +220,8 @@ function About() {
       id="about"
       class="flex h-[100vh] flex-col justify-center px-16 gap-12 max-lg:px-8 max-md:items-center"
     >
-      <h2 class="text-white font-londrina text-6xl select-none">Our Mission</h2>
-      <ul class="flex gap-8  text-grey selection:bg-red selection:text-white">
+      <h2 class="text-white font-londrina text-6xl">Our Mission</h2>
+      <ul class="flex gap-8  ">
         <li class="flex flex-col gap-2 w-full">
           <strong class="text-white text-2xl font-londrina">
             Help players create fond memories

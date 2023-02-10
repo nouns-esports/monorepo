@@ -6,6 +6,11 @@
   font-family: Roboto;
 }
 
+*::selection {
+  background-color: #e93737;
+  color: white;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -13,4 +18,17 @@ html {
 body {
   background-color: #101010;
   overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: white;
+}
+
+p {
+  color: #858585;
 }

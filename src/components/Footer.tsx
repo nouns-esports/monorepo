@@ -15,7 +15,7 @@ export default function Footer() {
           <Logo size={40} />
           Nouns
         </A>
-        <p class="text-grey w-48 selection:bg-red selection:text-white">
+        <p class="w-48">
           Driving innovation at the intersection of web3 and gaming.
         </p>
       </div>
@@ -51,7 +51,7 @@ export default function Footer() {
 function Section(props: { name: string; children: JSX.Element }) {
   return (
     <div class="flex flex-col gap-4">
-      <h3 class="text-xl text-white font-bebas select-none">{props.name}</h3>
+      <h3 class="text-xl font-bebas">{props.name}</h3>
       <ul class="flex flex-col gap-2">{props.children}</ul>
     </div>
   );

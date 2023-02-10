@@ -39,7 +39,7 @@ export default function EventCard(props: {
             <h3 class="font-bebas text-2xl select-none">
               {props.event.summary}
             </h3>
-            <p class="text-grey text-base leading-normal overflow-ellipsis overflow-hidden select-none">
+            <p class="text-base leading-normal overflow-ellipsis overflow-hidden select-none">
               {/* {description()} */}
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
@@ -50,7 +50,7 @@ export default function EventCard(props: {
           <ul class="flex gap-2">
             <For each={tags()}>
               {(tag) => (
-                <li class="bg-red hover:bg-[#eb5050] font-semibold px-2 py-0.5 rounded-lg text-sm w-fit select-none cursor-pointer">
+                <li class="bg-red text-white hover:bg-[#eb5050] font-semibold px-2 py-0.5 rounded-lg text-sm w-fit select-none cursor-pointer">
                   {tag}
                 </li>
               )}
