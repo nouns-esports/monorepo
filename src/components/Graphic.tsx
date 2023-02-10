@@ -183,7 +183,11 @@ export default function Graphic() {
       );
       context.clip();
 
-      context.drawImage(pokemon, points.bottomLeft.x, 100);
+      context.drawImage(
+        pokemon,
+        points.bottomLeft.x + scrollOffset(),
+        100 - scrollOffset()
+      );
       context.restore();
     }
   }
