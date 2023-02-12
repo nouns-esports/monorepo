@@ -24,10 +24,8 @@ export default function Graphic() {
     const context = canvas.getContext("2d");
 
     const width = 300;
-    // const angledHeight = width / Math.cos(angle) / 1.25;
-    // const angledWidth = width / Math.sin(angle);
 
-    const rate = 1.75;
+    const rate = 1.5;
 
     if (isSmashLoaded()) {
       const startX = canvas.width * 0.69;
@@ -40,7 +38,6 @@ export default function Graphic() {
           x: startX + width / 2,
           y: canvas.height,
         },
-        bottomLeft: { x: startX, y: canvas.height },
       };
 
       context.save();
@@ -105,24 +102,9 @@ export default function Graphic() {
 
     if (isPokemonLoaded()) {
       const angle = 50 * (Math.PI / 180);
-      const startY = canvas.height / 4;
+      const startY = canvas.height / 6;
+      const rate = 1.75;
       const points = {
-        // topLeft: {
-        //   x: canvas.width + scrollOffset(),
-        //   y: canvas.height / 4 - scrollOffset(),
-        // },
-        // topRight: {
-        //   x: canvas.width + scrollOffset(),
-        //   y: canvas.height / 4 + angledHeight - scrollOffset(),
-        // },
-        // bottomRight: {
-        //   x: canvas.width / 1.5 + scrollOffset(),
-        //   y: canvas.height - scrollOffset(),
-        // },
-        // bottomLeft: {
-        //   x: canvas.width / 1.5 - angledWidth + scrollOffset(),
-        //   y: canvas.height - scrollOffset(),
-        // },
         topLeft: {
           x: canvas.width,
           y: startY,
@@ -137,10 +119,24 @@ export default function Graphic() {
             width * Math.cos(angle) -
             (canvas.height - startY - width / Math.sin(angle)) /
               Math.cos(Math.PI / 2 - angle) +
-            width * Math.cos(angle),
-          // - width * Math.sin(Math.PI / 2 - angle)
-          y: canvas.height,
-          // + width * Math.cos(Math.PI / 2 - angle)
+            width * Math.cos(angle) -
+            (width * Math.sin(angle)) / Math.tan(Math.PI / 2 - angle),
+          y: canvas.height + width * Math.sin(angle),
+        },
+        bottomCenter: {
+          x:
+            canvas.width -
+            width * Math.cos(angle) -
+            (canvas.height - startY - width / Math.sin(angle)) /
+              Math.cos(Math.PI / 2 - angle) +
+            width * Math.cos(angle) -
+            (width * Math.sin(angle)) / Math.tan(Math.PI / 2 - angle) -
+            (width / 2) * Math.sin(angle),
+          // sin(angle) = op/width/2
+          y:
+            canvas.height +
+            width * Math.sin(angle) -
+            (width / 2) * Math.cos(angle),
         },
         bottomLeft: {
           x:
@@ -155,40 +151,67 @@ export default function Graphic() {
       context.save();
       context.beginPath();
       context.moveTo(
-        points.topLeft.x + scrollOffset(),
-        points.topLeft.y - scrollOffset()
+        points.topLeft.x + scrollOffset() * rate,
+        points.topLeft.y - scrollOffset() * rate
       );
       context.lineTo(
-        points.topRight.x + scrollOffset(),
-        points.topRight.y - scrollOffset()
+        points.topRight.x + scrollOffset() * rate,
+        points.topRight.y - scrollOffset() * rate
       );
       context.lineTo(
-        points.bottomRight.x + scrollOffset(),
-        points.bottomRight.y - scrollOffset()
+        points.bottomRight.x + scrollOffset() * rate,
+        points.bottomRight.y - scrollOffset() * rate
       );
-      // context.arc(
-      //   points.bottomRight.x,
-      //   points.bottomRight.y,
-      //   angledWidth,
-      //   0,
-      //   Math.PI / 2
-      // );
-      context.lineTo(
-        points.bottomLeft.x + scrollOffset(),
-        points.bottomLeft.y - scrollOffset()
+      context.arc(
+        points.bottomCenter.x + 14.5 + scrollOffset() * rate,
+        points.bottomCenter.y - 15.5 - scrollOffset() * rate,
+        width / 2,
+        0,
+        2 * Math.PI
       );
       context.lineTo(
-        points.topLeft.x + scrollOffset(),
-        points.topLeft.y - scrollOffset()
+        points.bottomLeft.x + scrollOffset() * rate,
+        points.bottomLeft.y - scrollOffset() * rate
+      );
+      context.lineTo(
+        points.topLeft.x + scrollOffset() * rate,
+        points.topLeft.y - scrollOffset() * rate
       );
       context.clip();
 
       context.drawImage(
         pokemon,
-        points.bottomLeft.x + scrollOffset(),
-        100 - scrollOffset()
+        points.bottomCenter.x - width / 2 + scrollOffset() * rate,
+        points.bottomCenter.y +
+          width / 2 -
+          canvas.height -
+          scrollOffset() * rate
       );
       context.restore();
+      // context.save();
+      // context.fillStyle = "red";
+
+      // context.fillRect(0, 0, 100, 100);
+      // context.beginPath();
+      // context.moveTo(0, 0);
+      // context.lineTo(100, 0);
+      // context.lineTo(100, 100);
+      // // context.lineTo(0, 100);
+      // context.arcTo(50, 150, -1, 100, 50);
+      // context.lineTo(0, 0);
+
+      // context.arc(
+      //   points.bottomCenter.x + scrollOffset(),
+      //   points.bottomCenter.y - scrollOffset(),
+      //   width / 2,
+      //   0,
+      //   2 * Math.PI
+      //   // (3 * Math.PI) / 2 - angle,
+      //   // Math.PI / 2 - angle
+      // );
+
+      // context.fill();
+      // context.restore();
     }
   }
 

@@ -60,13 +60,13 @@ function Section(props: { name: string; children: JSX.Element }) {
 function Link(props: { children: string; href: string }) {
   return (
     <li>
-      <a
+      <A
         href={props.href}
         draggable={false}
         class="text-grey hover:text-white cursor-pointer select-none"
       >
         {props.children}
-      </a>
+      </A>
     </li>
   );
 }

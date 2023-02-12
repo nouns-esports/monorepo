@@ -6,12 +6,13 @@ import type { Events } from "../types";
 import EventCard from "../components/EventCard";
 import Graphic from "../components/Graphic";
 import { A } from "@solidjs/router";
+import TeamsWidget from "../components/TeamsWidget";
 
 export default function Home() {
   return (
     <div class="relative w-full">
       <Graphic />
-      <div class="w-full relative z-10">
+      <div class="w-full relative flex flex-col gap-80 mb-80 z-10">
         <Landing />
         <Teams />
         <Schedule />
@@ -47,45 +48,8 @@ function Landing() {
 
 function Teams() {
   return (
-    <div id="teams" class="w-full flex h-screen items-center">
-      <div class="flex w-full h-3/4">
-        <A
-          href="/teams/dota"
-          class="group flex items-center justify-center bg-[url('/dota.png')] bg-cover bg-center flex-1 object-cover relative hover:flex-grow-[3] overflow-hidden cursor-pointer transition-all ease-in-out duration-500 saturate-0 brightness-[20%] hover:saturate-100 hover:brightness-100"
-        >
-          <img
-            src="dota-logo.png"
-            class="w-[50%] opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-          />
-        </A>
-        <A
-          href="/teams/melee"
-          class="group flex items-center justify-center bg-[url('/melee.png')] bg-cover bg-center flex-1 object-cover relative hover:flex-grow-[3] overflow-hidden cursor-pointer transition-all ease-in-out duration-500 saturate-0 brightness-[15%] hover:saturate-100 hover:brightness-100"
-        >
-          <img
-            src="melee-logo.webp"
-            class="w-[50%] opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-          />
-        </A>
-        <A
-          href="/teams/pokemon"
-          class="group flex items-center justify-center bg-[url('/pokemon-unite.png')] bg-cover bg-center flex-1 object-cover relative hover:flex-grow-[3] overflow-hidden cursor-pointer transition-all ease-in-out duration-500 saturate-0 brightness-[10%] hover:saturate-100 hover:brightness-100"
-        >
-          <img
-            src="pokemon-unite-logo.png"
-            class="w-[50%] opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-          />
-        </A>
-        <A
-          href="/teams/csgo"
-          class="group flex items-center justify-center bg-[url('/csgo.png')] bg-cover bg-center flex-1 object-cover relative hover:flex-grow-[3] overflow-hidden cursor-pointer transition-all ease-in-out duration-500 saturate-0 brightness-[30%] hover:saturate-100 hover:brightness-100"
-        >
-          <img
-            src="csgo-logo.png"
-            class="w-[50%] opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-          />
-        </A>
-      </div>
+    <div id="teams" class="w-full flex items-center">
+      <TeamsWidget class="flex w-full h-[75vh]" />
     </div>
   );
 }
@@ -140,43 +104,48 @@ function Schedule() {
   return (
     <div
       id="schedule"
-      class="h-[100vh] flex flex-col justify-center font-londrina text-lg gap-12"
+      class="flex flex-col justify-center font-londrina text-lg gap-12"
     >
       <div class="flex items-center justify-between px-16 max-lg:px-8">
         <h2 class="font-londrina text-6xl">Upcoming Events</h2>
-        <div class="flex gap-4 max-md:gap-2">
-          <Show when={query.isSuccess}>
-            <img
-              style={{
-                opacity: canScrollLeft()
-                  ? window.innerWidth < 1000
-                    ? "100%"
-                    : "80%"
-                  : "20%",
-                cursor: canScrollLeft() ? "pointer" : "default",
-              }}
-              class="w-10 rotate-180 cursor-pointer hover:opacity-100 transition-opacity duration-300 select-none"
-              src="arrow.svg"
-              draggable={false}
-              onClick={() =>
-                events.scrollBy({ left: -375, behavior: "smooth" })
-              }
-            />
-            <img
-              style={{
-                opacity: canScrollRight()
-                  ? window.innerWidth < 1000
-                    ? "100%"
-                    : "80%"
-                  : "20%",
-                cursor: canScrollRight() ? "pointer" : "default",
-              }}
-              class="w-10 cursor-pointer opacity-[85%] hover:opacity-100 transition-opacity duration-300 max-lg:opacity-100 select-none"
-              src="arrow.svg"
-              draggable={false}
-              onClick={() => events.scrollBy({ left: 375, behavior: "smooth" })}
-            />
-          </Show>
+        <div class="flex gap-8 items-center">
+          <Button href="/schedule">ALL EVENTS</Button>
+          <div class="flex gap-4 max-md:gap-2">
+            <Show when={query.isSuccess}>
+              <img
+                style={{
+                  opacity: canScrollLeft()
+                    ? window.innerWidth < 1000
+                      ? "100%"
+                      : "80%"
+                    : "20%",
+                  cursor: canScrollLeft() ? "pointer" : "default",
+                }}
+                class="w-10 rotate-180 cursor-pointer hover:opacity-100 transition-opacity duration-300 select-none"
+                src="arrow.svg"
+                draggable={false}
+                onClick={() =>
+                  events.scrollBy({ left: -375, behavior: "smooth" })
+                }
+              />
+              <img
+                style={{
+                  opacity: canScrollRight()
+                    ? window.innerWidth < 1000
+                      ? "100%"
+                      : "80%"
+                    : "20%",
+                  cursor: canScrollRight() ? "pointer" : "default",
+                }}
+                class="w-10 cursor-pointer opacity-[85%] hover:opacity-100 transition-opacity duration-300 max-lg:opacity-100 select-none"
+                src="arrow.svg"
+                draggable={false}
+                onClick={() =>
+                  events.scrollBy({ left: 375, behavior: "smooth" })
+                }
+              />
+            </Show>
+          </div>
         </div>
       </div>
 
@@ -218,7 +187,7 @@ function About() {
   return (
     <div
       id="about"
-      class="flex h-[100vh] flex-col justify-center px-16 gap-12 max-lg:px-8 max-md:items-center"
+      class="flex  flex-col justify-center px-16 gap-12 max-lg:px-8 max-md:items-center"
     >
       <h2 class="text-white font-londrina text-6xl">Our Mission</h2>
       <ul class="flex gap-8  ">
@@ -262,10 +231,7 @@ function About() {
 
 function Shop() {
   return (
-    <div
-      id="shop"
-      class="h-[100vh] flex flex-col gap-8 items-center justify-center "
-    >
+    <div id="shop" class="flex flex-col gap-8 items-center justify-center">
       <h2 class="text-white font-londrina text-6xl">Apparel</h2>
       <Button href="https://shop.nouns.gg">Shop</Button>
     </div>
