@@ -132,7 +132,6 @@ export default function Graphic() {
             width * Math.cos(angle) -
             (width * Math.sin(angle)) / Math.tan(Math.PI / 2 - angle) -
             (width / 2) * Math.sin(angle),
-          // sin(angle) = op/width/2
           y:
             canvas.height +
             width * Math.sin(angle) -
@@ -181,11 +180,13 @@ export default function Graphic() {
 
       context.drawImage(
         pokemon,
-        points.bottomCenter.x - width / 2 + scrollOffset() * rate,
-        points.bottomCenter.y +
+        points.bottomCenter.x - width / 2 - 250 + scrollOffset() * rate,
+        points.bottomCenter.y -
           width / 2 -
           canvas.height -
-          scrollOffset() * rate
+          scrollOffset() * rate,
+        pokemon.width * 1.25,
+        pokemon.height * 1.25
       );
       context.restore();
       // context.save();
