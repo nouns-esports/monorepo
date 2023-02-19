@@ -8,39 +8,59 @@ const { title } = Astro.props;
 
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg" href="/logo.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Nouns Esports {title ? "-" : ""} {title}</title>
-	</head>
-	
-	<body class="bg-black text-grey font-cabin overflow-x-hidden selection:text-white selection:bg-red">
-		<Background client:load />
-		<Alert client:load message="Nouns.gg is currently under development"/>
-		<Header />
-		<slot />
-		<Footer />
-	</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link
+      rel="preload"
+      href="/fonts/BebasNeue.ttf"
+      as="font"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="preload"
+      href="/fonts/Cabin.ttf"
+      as="font"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="preload"
+      href="/fonts/LuckiestGuy.ttf"
+      as="font"
+      crossorigin="anonymous"
+    />
+    <link rel="icon" type="image/svg" href="/logo.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Nouns Esports {title ? "-" : ""} {title}</title>
+  </head>
+
+  <body
+    class="bg-black text-grey font-cabin overflow-x-hidden selection:text-white selection:bg-red"
+  >
+    <Background client:load />
+    <Alert client:load message="Nouns.gg is currently under development" />
+    <Header />
+    <slot />
+    <Footer />
+  </body>
 </html>
 
 <style>
-	@font-face {
-		font-family: Luckiest Guy;
-		font-weight: 400;
-		src: url(/fonts/LuckiestGuy.ttf) format("truetype");
-	}
+  @font-face {
+    font-family: Luckiest Guy;
+    font-weight: 400;
+    src: url(/fonts/LuckiestGuy.ttf) format("truetype");
+  }
 
-	@font-face {
-		font-family: Bebas Neue;
-		font-weight: 400;
-		src: url(/fonts/BebasNeue.ttf) format("truetype");
-	}
+  @font-face {
+    font-family: Bebas Neue;
+    font-weight: 400;
+    src: url(/fonts/BebasNeue.ttf) format("truetype");
+  }
 
-	@font-face {
-		font-family: Cabin;
-		font-weight: 400;
-		src: url(/fonts/Cabin.ttf) format("truetype");
-	}
+  @font-face {
+    font-family: Cabin;
+    font-weight: 400;
+    src: url(/fonts/Cabin.ttf) format("truetype");
+  }
 </style>
