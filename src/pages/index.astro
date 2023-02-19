@@ -1,0 +1,74 @@
+---
+import Button from '../components/Button.astro';
+import EventCard from '../components/EventCard.astro';
+import Graphic from '../components/Graphic';
+import Teams from '../components/Teams.astro';
+import Discord from '../components/icons/Discord.astro';
+import Twitch from '../components/icons/Twitch.astro';
+import Twitter from '../components/icons/Twitter.astro';
+import Youtube from '../components/icons/Youtube.astro';
+import Layout from '../layouts/Layout.astro';
+import getSchedule from '../utils/getSchedule';
+
+const events = await getSchedule();
+
+---
+
+<Layout>
+	<Graphic client:load />
+	<div class="relative z-10 mt-[-72px] ">
+	<div class="w-[50vw] max-lg:w-full h-screen flex items-center justify-center p-8">
+		<div class="flex flex-col gap-8">
+		  <h1 class="font-luckiest-guy text-white text-6xl w-[600px]">
+			Driving innovation at the intersection of{" "}
+			<span class="text-red font-luckiest-guy">web3</span> and{" "}
+			<span class="text-red font-luckiest-guy">gaming</span>
+		  </h1>
+		  <div class="flex gap-8 items-center max-lg:justify-center max-[450px]:flex-col">
+			<Button href="https://discord.gg/nounsesports">JOIN US</Button>
+			<div class="flex items-center gap-4">
+				<Twitch class="h-8" />
+				<Twitter class="h-7" />
+				<Youtube class="h-[26px]"/>
+				<Discord class="h-[29px]" />
+			</div>
+		  </div>
+		  <!-- <p class="text-red font-semibold cursor-pointer">Subscribe to our newsletter</p> -->
+		</div>
+	  </div>
+	  <Teams class="flex w-full h-[75vh]" />
+	  <div
+    class="flex flex-col justify-center font-londrina text-lg gap-12"
+>
+    <div class="flex items-center justify-between px-16 max-lg:px-8">
+        <h2 class="font-luckiest-guy text-6xl text-white">Upcoming Events</h2>
+        <div class="flex gap-8 items-center">
+            <Button href="/schedule">ALL EVENTS</Button>
+            <div class="flex gap-4 max-md:gap-2">
+                <img
+                class="w-10 rotate-180 cursor-pointer hover:opacity-100 transition-opacity duration-300 select-none"
+                src="/icons/arrow.svg"
+                draggable={false}
+                />
+                <img
+                class="w-10 cursor-pointer opacity-[85%] hover:opacity-100 transition-opacity duration-300 max-lg:opacity-100 select-none"
+                src="/icons/arrow.svg"
+                draggable={false}
+                />
+                </div>
+            </div>
+        </div>
+    <div
+        class="flex flex-row gap-6 snap-x scroll-px-16 max-lg:scroll-px-16 scrollbar-hidden pt-1"
+        >
+        
+                {events.map((event) => (
+                    <EventCard
+                    event={event}
+                    
+                    />
+                ))}
+    </div>
+</div>
+	</div>
+</Layout>
