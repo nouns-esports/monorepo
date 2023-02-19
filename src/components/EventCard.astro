@@ -2,54 +2,59 @@
 import type { Event } from "../utils/getSchedule";
 
 type Props = {
-    event: Event;
-}
-const {event} = Astro.props
+  event: Event;
+};
+const { event } = Astro.props;
 
 const description = () => {
-return event.description;
+  return event.description;
 };
 
 const tags = () => {
-return ["Melee", "Aklo"];
+  return ["Melee", "Aklo"];
 };
 ---
 
 <a
-      href={event.location || event.htmlLink}
-      target="_blank"
-      rel="noopener noreferrer"
+  href={event.location || event.htmlLink}
+  target="_blank"
+  rel="noopener noreferrer"
+  draggable={false}
+  class="relative snap-start first:ml-16 last:mr-16"
+>
+  <div class="absolute w-full h-full bg-red rounded-xl"></div>
+  <div
+    class="flex flex-col relative hover:translate-x-1 hover:-translate-y-1 duration-300 rounded-xl bg-black border-[#161616] overflow-hidden border-2 w-[375px] h-[450px]"
+  >
+    <img
+      src="smash.webp"
+      alt={event.summary}
       draggable={false}
-      class="relative snap-start first:ml-16 last:mr-16"
-    >
-      <div class="absolute w-full h-full bg-red rounded-xl" />
-      <div class="flex flex-col relative hover:translate-x-1 hover:-translate-y-1 duration-300 rounded-xl bg-black border-[#161616] overflow-hidden border-2 w-[375px] h-[450px]">
-        <img
-          src="smash.png"
-          alt={event.summary}
-          draggable={false}
-          class="h-40 object-cover select-none"
-        />
-        <div class="flex flex-col flex-1 justify-between gap-2 p-4">
-          <div>
-            <h3 class="font-bebas text-2xl select-none">
-              {event.summary}
-            </h3>
-            <p class="text-base leading-normal overflow-ellipsis overflow-hidden select-none">
-              {/* {description()} */}
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam.
-            </p>
-          </div>
-
-          <ul class="flex gap-2">
-            {tags().map((tag) => (
-                <li class="bg-red text-white hover:bg-[#eb5050] font-semibold px-2 py-0.5 rounded-lg text-sm w-fit select-none cursor-pointer">
-                  {tag}
-                </li>
-              ))}
-          </ul>
-        </div>
+      class="h-40 object-cover select-none"
+    />
+    <div class="flex flex-col flex-1 justify-between gap-2 p-4">
+      <div>
+        <h3 class="font-bebas text-2xl select-none">
+          {event.summary}
+        </h3>
+        <p
+          class="text-base leading-normal overflow-ellipsis overflow-hidden select-none"
+        >
+          {/* {description()} */}
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
+        </p>
       </div>
-    </a>
+
+      <ul class="flex gap-2">
+        {
+          tags().map((tag) => (
+            <li class="bg-red text-white hover:bg-[#eb5050] font-semibold px-2 py-0.5 rounded-lg text-sm w-fit select-none cursor-pointer">
+              {tag}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</a>

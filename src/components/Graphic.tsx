@@ -11,11 +11,11 @@ export default function Graphic() {
   const [isPokemonLoaded, setIsPokemonLoaded] = createSignal(false);
 
   const smash = new Image();
-  smash.src = "smash.png";
+  smash.src = "smash.webp";
   smash.onload = () => setIsSmashLoaded(true);
 
   const pokemon = new Image();
-  pokemon.src = "pokemon.png";
+  pokemon.src = "pokemon.webp";
   pokemon.onload = () => setIsPokemonLoaded(true);
 
   function draw() {
