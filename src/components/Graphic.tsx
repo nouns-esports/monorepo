@@ -91,7 +91,7 @@ export default function Graphic() {
     <canvas
       //@ts-ignore
       ref={canvas}
-      class="fixed top-0 max-lg:hidden"
+      class="fixed top-0 max-xl:hidden"
     />
   );
 }

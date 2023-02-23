@@ -3,56 +3,109 @@ import Discord from "./icons/Discord.astro";
 import Twitch from "./icons/Twitch.astro";
 import Twitter from "./icons/Twitter.astro";
 import Youtube from "./icons/Youtube.astro";
-
 ---
 
-<footer class="flex justify-between items-center p-8 bg-black border-t-4 border-red relative z-20">
-    <div class="flex flex-col gap-4">
-        <a
-        href="/"
+<footer
+  class="flex max-sm:flex-col max-sm:gap-16 justify-between items-center p-8 bg-black border-t-4 border-red relative z-20"
+>
+  <div class="flex flex-col gap-4 max-sm:items-center">
+    <a
+      href="/"
+      draggable={false}
+      class="flex gap-4 group items-center cursor-pointer select-none"
+    >
+      <img
+        src="logo.svg"
+        alt="Nouns Esports Logo"
         draggable={false}
-        class="flex gap-4 group items-center cursor-pointer select-none"
+        class="group-hover:rotate-[14deg] w-10 transition-transform duration-150 delay-0"
+      />
+      <p
+        class="text-white font-luckiest-guy text-3xl select-none max-[300px]:hidden"
       >
-        <img
-          src="logo.svg"
-          alt="Nouns Esports Logo"
-          draggable={false}
-          class="group-hover:rotate-[14deg] w-10 transition-transform duration-150 delay-0"
-        />
-        <p class="text-white font-luckiest-guy text-3xl select-none max-[300px]:hidden">
-          Nouns
-        </p>
-      </a>
-      <p class="w-48">
-        Driving innovation at the intersection of web3 and gaming
+        Nouns
       </p>
+    </a>
+    <p class="w-48 max-sm:w-full max-sm:text-center">
+      Driving innovation at the intersection of web3 and gaming
+    </p>
+  </div>
+  <div
+    class="flex gap-40 max-sm:w-full max-sm:justify-between max-md:gap-8 max-lg:gap-16 max-xl:gap-20"
+  >
+    <div class="flex flex-col gap-2 select-none">
+      <h3 class="text-2xl font-bebas-neue text-white">EXPLORE</h3>
+      <a
+        href="/teams"
+        draggable={false}
+        class="hover:text-white transition-colors duration-300">Teams</a
+      >
+      <a
+        href="/schedule"
+        draggable={false}
+        class="hover:text-white transition-colors duration-300">Schedule</a
+      >
+      <a
+        href="/about"
+        draggable={false}
+        class="hover:text-white transition-colors duration-300">About</a
+      >
+      <a href="https://shop.nouns.gg" draggable={false} class="hover:text-white"
+        >Shop</a
+      >
     </div>
-    <div class="flex gap-40">
-      <div class="flex flex-col gap-2 select-none">
-        <h3 class="text-2xl font-bebas-neue text-white">EXPLORE</h3>
-        <a href="/teams" draggable={false} class="hover:text-white transition-colors duration-300 ">Teams</a>
-        <a href="/schedule" draggable={false} class="hover:text-white transition-colors duration-300 ">Schedule</a>
-        <a href="/about" draggable={false} class="hover:text-white transition-colors duration-300 ">About</a>
-        <a href="https://shop.nouns.gg" draggable={false} class="hover:text-white">Shop</a>
-      </div>
-      <div class="flex flex-col gap-2 select-none">
-        <h3 class="text-2xl font-bebas-neue text-white transition-colors duration-300 ">TEAMS</h3>
-        <a href="/teams/dota" draggable={false} class="hover:text-white transition-colors duration-300 ">Dota</a>
-        <a href="/teams/smash-melee" draggable={false} class="hover:text-white transition-colors duration-300 ">Smash Melee</a>
-        <a href="/teams/pokemon-unite" draggable={false} class="hover:text-white transition-colors duration-300 ">Pokémon Unite</a>
-        <a href="/teams/csgo" draggable={false} class="hover:text-white transition-colors duration-300 ">CSGO</a>
-      </div>
-      <div class="flex flex-col gap-2 select-none">
-        <h3 class="text-2xl font-bebas-neue text-white mb-2">NOUNS</h3>
-        <a href="https://nouns.wtf" draggable={false} class="hover:text-white transition-colors duration-300 ">Nouns.wtf</a>
-        <a href="https://nouns.wtf/proposals" draggable={false} class="hover:text-white transition-colors duration-300 ">Proposals</a>
-        <a href="/pod" draggable={false} class="hover:text-white transition-colors duration-300 ">Pod</a>
-      </div>
+    <div class="flex flex-col gap-2 select-none">
+      <h3
+        class="text-2xl font-bebas-neue text-white transition-colors duration-300"
+      >
+        TEAMS
+      </h3>
+      <a
+        href="/teams/dota"
+        draggable={false}
+        class="hover:text-white transition-colors duration-300">Dota</a
+      >
+      <a
+        href="/teams/smash-melee"
+        draggable={false}
+        class="hover:text-white transition-colors duration-300">Smash Melee</a
+      >
+      <a
+        href="/teams/pokemon-unite"
+        draggable={false}
+        class="hover:text-white transition-colors duration-300">Pokémon Unite</a
+      >
+      <a
+        href="/teams/csgo"
+        draggable={false}
+        class="hover:text-white transition-colors duration-300">CSGO</a
+      >
     </div>
-    <div class="flex flex-col gap-4 items-center justify-center text-white">
-      <Twitch class="w-6" />
-      <Twitter class="w-7" />
-      <Youtube class="w-7" />
-      <Discord class="w-7"/>
+    <div class="flex flex-col gap-2 select-none">
+      <h3 class="text-2xl font-bebas-neue text-white mb-2">NOUNS</h3>
+      <a
+        href="https://nouns.wtf"
+        draggable={false}
+        class="hover:text-white transition-colors duration-300">Nouns.wtf</a
+      >
+      <a
+        href="https://nouns.wtf/proposals"
+        draggable={false}
+        class="hover:text-white transition-colors duration-300">Proposals</a
+      >
+      <a
+        href="/pod"
+        draggable={false}
+        class="hover:text-white transition-colors duration-300">Pod</a
+      >
     </div>
-  </footer>
+  </div>
+  <div
+    class="flex flex-col max-sm:flex-row gap-4 items-center justify-center text-white"
+  >
+    <Twitch class="w-6" />
+    <Twitter class="w-7" />
+    <Youtube class="w-7" />
+    <Discord class="w-7" />
+  </div>
+</footer>
