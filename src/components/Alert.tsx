@@ -15,11 +15,13 @@ export default function Alert(props: { message: string; href: string }) {
           class="w-full whitespace-nowrap flex items-center justify-center"
         >
           {props.message}
-          <span class="ml-2">{"🠊"}</span>
+          <img src="icons/arrow2.svg" class="ml-2 w-3" />
         </a>
-        <span class="cursor-pointer" onClick={(e) => setVisible(false)}>
-          {"\u{1F7AE}"}
-        </span>
+        <img
+          src="icons/close.svg"
+          class="cursor-pointer w-3"
+          onClick={(e) => setVisible(false)}
+        />
       </div>
     </Show>
   );
