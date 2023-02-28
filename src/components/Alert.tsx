@@ -2,11 +2,12 @@ import { Show, createSignal } from "solid-js";
 
 export default function Alert(props: { message: string; href: string }) {
   const [visible, setVisible] = createSignal(true);
+
   return (
     <Show when={visible()}>
       <div
         id="alert"
-        class="flex relative w-full z-50 p-2 bg-red text-white text-sm  font-semibold items-center justify-center"
+        class="flex relative w-full z-40 p-2 bg-red text-white text-sm  font-semibold items-center justify-center"
       >
         <a
           href={props.href}
