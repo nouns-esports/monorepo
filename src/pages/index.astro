@@ -76,31 +76,44 @@ const events = await getSchedule();
           {events.map((event) => <EventCard event={event} />)}
         </div>
       </div>
-      <div class="flex flex-col mx-16 gap-32 my-32 max-sm:mx-4">
-        <div class="flex gap-32">
+      <div class="flex flex-col mx-16 gap-64 my-32 max-sm:mx-4">
+        <div class="flex items-center justify-center gap-64 mt-20">
           <div
-            class="flex flex-col max-lg:items-center max-lg:w-full justify-center gap-8 w-[50vw]"
+            class="flex flex-col max-lg:items-center max-lg:w-full justify-center gap-8"
           >
             <h2 class="font-luckiest-guy text-6xl text-white max-sm:text-5xl">
               About Us
             </h2>
-            <p class="max-lg:text-center">
+            <p class="max-lg:text-center max-lg:max-w-2xl">
               Driving innovation at the intersection of web3 and gaming. Nouns
               is a decentralized esports organization where anyone, anywhere can
               contribute towards its growth and success!
             </p>
             <Button href="/about">LEARN MORE</Button>
           </div>
-          <div class="relative max-lg:hidden">
+          <div class="relative w-[800px] max-lg:hidden">
+            <img
+              src="noggle-cup.png"
+              class="w-[300px] -top-16 left-96 absolute rounded-2xl"
+            />
+            <img
+              src="noggles.jpg"
+              class="w-[500px] absolute left-72 top-40 rounded-2xl"
+            />
+
             <img src="championship.JPG" class="w-[500px] rounded-2xl" />
-            <img src="noggles.jpg" class="w-[500px] rounded-2xl" />
           </div>
         </div>
         <div class="flex flex-col justify-center items-center gap-12">
           <h2 class="font-luckiest-guy text-6xl text-white max-sm:text-5xl">
             Apparel
           </h2>
-          <Button href="https://shop.nouns.gg" newTab>SHOP</Button>
+          <div
+            class="cursor-default select-none py-3 px-[22px] text-black font-bebas-neue text-xl justify-center leading-none bg-white rounded-full flex items-center"
+          >
+            Coming Soon!
+          </div>
+          <!-- <Button href="https://shop.nouns.gg" newTab>SHOP</Button> -->
         </div>
       </div>
     </div>
