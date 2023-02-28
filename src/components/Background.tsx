@@ -8,6 +8,8 @@ export default function Background() {
   let canvas: HTMLCanvasElement;
 
   function draw() {
+    alert(getComputedStyle(document.documentElement).getPropertyValue("--sat"));
+
     resetCanvas(canvas);
 
     const context = canvas.getContext("2d");
