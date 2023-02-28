@@ -106,7 +106,7 @@ export default function Background() {
     <canvas
       //@ts-ignore
       ref={canvas}
-      class="fixed w-screen h-screen bg-black"
+      class="fixed bg-black"
     />
   );
 }
