@@ -6,7 +6,7 @@ export default function MobileNav() {
   return (
     <div class="max-sm:flex hidden">
       <img
-        src="icons/menu.svg"
+        src="/icons/menu.svg"
         class="w-7 cursor-pointer"
         onClick={() => {
           const alert = document.getElementById("alert");
@@ -34,7 +34,7 @@ export default function MobileNav() {
             class="flex gap-4 group items-center cursor-pointer select-none"
           >
             <img
-              src="logo.svg"
+              src="/logo.svg"
               alt="Nouns Esports Logo"
               draggable={false}
               class="group-hover:rotate-[14deg] w-10 transition-transform duration-150 delay-0"
@@ -44,7 +44,7 @@ export default function MobileNav() {
             </p>
           </a>
           <img
-            src="icons/close.svg"
+            src="/icons/close.svg"
             class="cursor-pointer"
             onClick={() => {
               document.documentElement.style.overflowY = "scroll";

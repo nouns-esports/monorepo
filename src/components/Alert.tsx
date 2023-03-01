@@ -16,10 +16,10 @@ export default function Alert(props: { message: string; href: string }) {
           class="w-full whitespace-nowrap flex items-center justify-center"
         >
           {props.message}
-          <img src="icons/arrow2.svg" class="ml-2 w-3" />
+          <img src="/icons/arrow2.svg" class="ml-2 w-3" />
         </a>
         <img
-          src="icons/close.svg"
+          src="/icons/close.svg"
           class="cursor-pointer w-3"
           onClick={(e) => setVisible(false)}
         />

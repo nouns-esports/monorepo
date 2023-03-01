@@ -77,32 +77,27 @@ const events = await getSchedule();
         </div>
       </div>
       <div class="flex flex-col mx-16 gap-64 my-32 max-sm:mx-4">
-        <div class="flex items-center justify-center gap-64 mt-20">
+        <div
+          class="flex items-center justify-center max-xl:gap-32 gap-64 mt-20"
+        >
           <div
             class="flex flex-col max-lg:items-center max-lg:w-full justify-center gap-8"
           >
             <h2 class="font-luckiest-guy text-6xl text-white max-sm:text-5xl">
               About Us
             </h2>
-            <p class="max-lg:text-center max-lg:max-w-2xl max-lg:px-4">
+            <p class="max-lg:text-center max-w-lg max-lg:px-4">
               Driving innovation at the intersection of web3 and gaming. Nouns
               is a decentralized esports organization where anyone, anywhere can
               contribute towards its growth and success!
             </p>
             <Button href="/about">LEARN MORE</Button>
           </div>
-          <div class="relative w-[800px] max-lg:hidden">
-            <img
-              src="noggle-cup.png"
-              class="w-[300px] -top-16 left-96 absolute rounded-2xl"
-            />
-            <img
-              src="noggles.jpg"
-              class="w-[500px] absolute left-72 top-40 rounded-2xl"
-            />
-
-            <img src="championship.JPG" class="w-[500px] rounded-2xl" />
-          </div>
+          <img
+            src="championship.JPG"
+            draggable={false}
+            class="w-[550px] rounded-2xl select-none max-xl:w-[400px] max-lg:hidden"
+          />
         </div>
         <div class="flex flex-col justify-center items-center gap-12">
           <h2 class="font-luckiest-guy text-6xl text-white max-sm:text-5xl">
