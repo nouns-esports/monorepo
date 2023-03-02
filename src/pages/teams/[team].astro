@@ -1,0 +1,40 @@
+---
+import Layout from "../../layouts/Layout.astro";
+const { team } = Astro.params;
+
+function paramToTitle(param: string) {
+  let title = "";
+  const words = param.split("-");
+
+  for (const word of words) {
+    title += `${word[0].toUpperCase()}${word.substring(1)} `;
+  }
+
+  return title;
+}
+
+function paramToImage(param: string) {
+  switch (param) {
+    case "dota":
+      return "/dota-players.jpg";
+    case "smash-melee":
+      return "/aklo.png";
+    case "pokemon-unite":
+      return "/pokemon-players.png";
+    case "csgo":
+      return "/semphis.png";
+  }
+}
+---
+
+<Layout title={paramToTitle(team || "")}>
+  <div class="h-screen flex flex-col items-center justify-center gap-16">
+    <h1 class="text-6xl text-white font-luckiest-guy">
+      {paramToTitle(team || "")}
+    </h1>
+    <img
+      src={paramToImage(team || "")}
+      class="w-[50vw] max-md:w-full max-md:px-8"
+    />
+  </div>
+</Layout>
