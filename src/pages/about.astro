@@ -1,5 +1,28 @@
 ---
+import Button from "../components/Button.astro";
 import Layout from "../layouts/Layout.astro";
 ---
 
-<Layout title="About" />
+<Layout title="About">
+  <div
+    class="flex h-screen items-center justify-center max-xl:gap-32 gap-64 mt-20"
+  >
+    <div
+      class="flex flex-col max-lg:items-center max-lg:w-full justify-center gap-8"
+    >
+      <h2 class="font-luckiest-guy text-6xl text-white max-sm:text-5xl">
+        About Us
+      </h2>
+      <p class="max-lg:text-center max-w-lg max-lg:px-4">
+        Driving innovation at the intersection of web3 and gaming. Nouns is a
+        decentralized esports organization where anyone, anywhere can contribute
+        towards its growth and success!
+      </p>
+    </div>
+    <img
+      src="/championship.webp"
+      draggable={false}
+      class="w-[550px] rounded-2xl select-none max-xl:w-[400px] max-lg:hidden"
+    />
+  </div>
+</Layout>

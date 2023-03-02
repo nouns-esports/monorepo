@@ -2,6 +2,7 @@
 import Button from "../components/Button.astro";
 import EventCard from "../components/EventCard.astro";
 import Graphic from "../components/Graphic";
+import ScrollEventButtons from "../components/ScrollEventButtons";
 import Teams from "../components/Teams.astro";
 import Discord from "../components/icons/Discord.astro";
 import Twitch from "../components/icons/Twitch.astro";
@@ -13,9 +14,9 @@ import getSchedule from "../utils/getSchedule";
 const events = await getSchedule();
 ---
 
-<Layout>
+<Layout title="">
   <Graphic client:load />
-  <div class="relative z-10 mt-[-72px]">
+  <div class="mt-[-72px] relative z-10">
     <div
       class="w-[50vw] max-2xl:w-full max-2xl:justify-start max-xl:justify-center h-screen flex items-center justify-center max-sm:p-4 p-8"
     >
@@ -58,22 +59,12 @@ const events = await getSchedule();
             class="flex gap-8 items-center max-md:justify-center max-md:w-full"
           >
             <Button href="/schedule">ALL EVENTS</Button>
-            <div class="flex gap-4 max-md:gap-2">
-              <img
-                class="w-10 rotate-180 cursor-pointer hover:opacity-100 transition-opacity duration-300 select-none"
-                src="/icons/arrow.svg"
-                draggable={false}
-              />
-              <img
-                class="w-10 cursor-pointer opacity-[85%] hover:opacity-100 transition-opacity duration-300 max-lg:opacity-100 select-none"
-                src="/icons/arrow.svg"
-                draggable={false}
-              />
-            </div>
+            <ScrollEventButtons client:idle />
           </div>
         </div>
         <div
-          class="flex flex-row gap-6 snap-x scroll-px-16 max-lg:scroll-px-16 scrollbar-hidden pt-1"
+          id="upcoming-events"
+          class="flex flex-row overflow-x-scroll gap-6 snap-x max-xs:scroll-px-0 scroll-px-16 max-lg:scroll-px-8 scrollbar-hidden pt-1"
         >
           {events.map((event) => <EventCard event={event} />)}
         </div>
@@ -96,7 +87,7 @@ const events = await getSchedule();
             <Button href="/about">LEARN MORE</Button>
           </div>
           <img
-            src="championship.JPG"
+            src="/championship.webp"
             draggable={false}
             class="w-[550px] rounded-2xl select-none max-xl:w-[400px] max-lg:hidden"
           />

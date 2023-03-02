@@ -21,25 +21,27 @@ const tags = () => {
   target="_blank"
   rel="noopener noreferrer"
   draggable={false}
-  class="relative snap-start first:ml-16 last:mr-16"
+  class="relative snap-start max-xs:snap-center first:ml-16 max-lg:first:ml-8 last:mr-16 max-lg:last:mr-8"
 >
   <div class="absolute w-full h-full bg-red rounded-xl"></div>
   <div
-    class="flex flex-col relative hover:translate-x-1 hover:-translate-y-1 duration-300 rounded-xl bg-black border-[#161616] overflow-hidden border-2 w-[375px] h-[450px]"
+    class="flex flex-col relative hover:translate-x-1 hover:-translate-y-1 duration-300 rounded-xl bg-black border-[#161616] overflow-hidden border-2 w-[375px] h-[450px] max-lg:w-[300px] max-lg:h-[360px] max-xs:w-[80vw] max-xs:h-[100vw]"
   >
     <img
       src="smash.webp"
       alt={event.summary}
       draggable={false}
-      class="h-40 object-cover select-none"
+      class="h-40 max-lg:h-[128px] max-xs:h-[32vw] object-cover select-none"
     />
-    <div class="flex flex-col flex-1 justify-between gap-2 p-4">
+    <div class="flex flex-col flex-1 justify-between gap-2 p-4 max-xs:p-3">
       <div>
-        <h3 class="font-bebas-neue text-white text-2xl select-none">
+        <h3
+          class="font-bebas-neue text-white text-2xl max-lg:text-xl select-none"
+        >
           {event.summary}
         </h3>
         <p
-          class="text-base leading-normal overflow-ellipsis overflow-hidden select-none"
+          class="text-base max-lg:text-sm leading-normal overflow-ellipsis overflow-hidden select-none"
         >
           {description()}
         </p>

@@ -15,6 +15,9 @@ module.exports = {
       grey: "#858585",
     },
     extend: {
+      screens: {
+        xs: "450px",
+      },
       fontFamily: {
         "luckiest-guy": ["Luckiest Guy"],
         "bebas-neue": ["Bebas Neue"],
