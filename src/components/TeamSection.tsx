@@ -19,7 +19,7 @@ export default function TeamSection() {
 
   onMount(() => {
     observer.observe(document.getElementById("dota") as HTMLAnchorElement);
-    observer.observe(document.getElementById("smash") as HTMLAnchorElement);
+    observer.observe(document.getElementById("melee") as HTMLAnchorElement);
     observer.observe(document.getElementById("unite") as HTMLAnchorElement);
     observer.observe(document.getElementById("csgo") as HTMLAnchorElement);
 
@@ -49,11 +49,11 @@ export default function TeamSection() {
         </p>
       </a>
       <a
-        id="smash"
+        id="melee"
         href="/teams/smash-melee"
         style={{
           filter: mobile()
-            ? currentTeam() === "smash"
+            ? currentTeam() === "melee"
               ? "saturate(100%) brightness(100%)"
               : "saturate(0%) brightness(15%)"
             : "",
