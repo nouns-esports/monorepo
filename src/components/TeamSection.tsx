@@ -19,8 +19,8 @@ export default function TeamSection() {
 
   onMount(() => {
     observer.observe(document.getElementById("dota") as HTMLAnchorElement);
-    observer.observe(document.getElementById("melee") as HTMLAnchorElement);
-    observer.observe(document.getElementById("unite") as HTMLAnchorElement);
+    observer.observe(document.getElementById("smash") as HTMLAnchorElement);
+    observer.observe(document.getElementById("pokemon") as HTMLAnchorElement);
     observer.observe(document.getElementById("csgo") as HTMLAnchorElement);
 
     window.addEventListener("resize", () => {
@@ -49,11 +49,11 @@ export default function TeamSection() {
         </p>
       </a>
       <a
-        id="melee"
+        id="smash"
         href="/teams/smash-melee"
         style={{
           filter: mobile()
-            ? currentTeam() === "melee"
+            ? currentTeam() === "smash"
               ? "saturate(100%) brightness(100%)"
               : "saturate(0%) brightness(15%)"
             : "",
@@ -65,11 +65,11 @@ export default function TeamSection() {
         </p>
       </a>
       <a
-        id="unite"
+        id="pokemon"
         href="/teams/pokemon-unite"
         style={{
           filter: mobile()
-            ? currentTeam() === "unite"
+            ? currentTeam() === "pokemon"
               ? "saturate(100%) brightness(100%)"
               : "saturate(0%) brightness(10%)"
             : "",
