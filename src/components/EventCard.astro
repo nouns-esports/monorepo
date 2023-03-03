@@ -6,30 +6,59 @@ type Props = {
 };
 const { event } = Astro.props;
 
-const description = () => {
-  return event.description;
-};
+const parsed = () => {
+  const type = event.summary?.split(" ")[0].replace("[", "").replace("]", "");
+  let color = "#E93737";
+  let image = "/smash.webp";
 
-const tags = () => {
-  // return ["Melee", "Aklo"];
-  return [];
+  switch (type.toLowerCase()) {
+    case "csgo":
+      color = "#71C5E8";
+      image = "/csgo.webp";
+      break;
+    case "dota":
+      color = "#E83737";
+      image = "/dota.webp";
+      break;
+    case "melee":
+      color = "#ACDAA9";
+      break;
+    case "pokemon":
+      color = "#FF4601";
+      image = "/pokemon.webp";
+      break;
+  }
+
+  return {
+    summary: event.summary?.split(" ").slice(1).join(" "),
+    description: event.description,
+    image,
+    color,
+    location: event.location,
+    htmlLink: event.htmlLink,
+    tags: [type],
+  };
 };
 ---
 
 <a
-  href={event.location || event.htmlLink}
+  href={parsed().location || parsed().htmlLink}
   target="_blank"
   rel="noopener noreferrer"
   draggable={false}
   class="relative snap-start max-xs:snap-center first:ml-16 max-lg:first:ml-8 last:mr-16 max-lg:last:mr-8"
 >
-  <div class="absolute w-full h-full bg-red rounded-xl"></div>
+  <div
+    style={{ "background-color": parsed().color }}
+    class="absolute w-full h-full rounded-xl"
+  >
+  </div>
   <div
     class="flex flex-col relative hover:translate-x-1 hover:-translate-y-1 duration-300 rounded-xl bg-black border-[#161616] overflow-hidden border-2 w-[375px] h-[450px] max-lg:w-[300px] max-lg:h-[360px] max-xs:w-[80vw] max-xs:h-[100vw]"
   >
     <img
-      src="smash.webp"
-      alt={event.summary}
+      src={parsed().image}
+      alt={parsed().summary}
       draggable={false}
       class="h-40 max-lg:h-[128px] max-xs:h-[32vw] object-cover select-none"
     />
@@ -38,19 +67,22 @@ const tags = () => {
         <h3
           class="font-bebas-neue text-white text-2xl max-lg:text-xl select-none"
         >
-          {event.summary}
+          {parsed().summary}
         </h3>
         <p
           class="text-base max-lg:text-sm leading-normal overflow-ellipsis overflow-hidden select-none"
         >
-          {description()}
+          {parsed().description}
         </p>
       </div>
 
       <ul class="flex gap-2">
         {
-          tags().map((tag) => (
-            <li class="bg-red text-white hover:bg-[#eb5050] font-semibold px-2 py-0.5 rounded-lg text-sm w-fit select-none cursor-pointer">
+          parsed().tags.map((tag) => (
+            <li
+              style={{ "background-color": parsed().color }}
+              class=" text-white hover:bg-[#eb5050] font-semibold px-2 py-0.5 rounded-lg text-sm w-fit select-none cursor-pointer"
+            >
               {tag}
             </li>
           ))
