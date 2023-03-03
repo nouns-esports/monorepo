@@ -1,10 +1,50 @@
 ---
-import Teams from "../../components/Teams.astro";
 import Layout from "../../layouts/Layout.astro";
 ---
 
 <Layout title="Teams">
   <div class="w-full h-screen -mt-28">
-    <Teams class="flex w-full h-full max-lg:flex-col" />
+    <div class="flex w-full h-full max-lg:flex-col">
+      <a
+        href="/teams/dota"
+        class="group flex items-center justify-center bg-[url('/dota.webp')] bg-cover bg-center flex-1 object-cover relative hover:flex-grow-[3] overflow-hidden cursor-pointer transition-all ease-in-out duration-500 saturate-0 brightness-[25%] hover:saturate-100 hover:brightness-100"
+      >
+        <p
+          class="text-white max-md:text-5xl whitespace-nowrap font-luckiest-guy text-6xl drop-shadow-[0_16px_16px_rgba(0,0,0,1)]"
+        >
+          Dota 2
+        </p>
+      </a>
+      <a
+        href="/teams/smash-melee"
+        class="group flex items-center justify-center bg-[url('/smash.webp')] bg-cover bg-center flex-1 object-cover relative hover:flex-grow-[3] overflow-hidden cursor-pointer transition-all ease-in-out duration-500 saturate-0 brightness-[15%] hover:saturate-100 hover:brightness-100"
+      >
+        <p
+          class="text-white max-md:text-5xl whitespace-nowrap font-luckiest-guy text-6xl drop-shadow-[0_16px_16px_rgba(0,0,0,1)]"
+        >
+          Smash Melee
+        </p>
+      </a>
+      <a
+        href="/teams/pokemon-unite"
+        class="group flex items-center justify-center bg-[url('/pokemon.webp')] bg-cover bg-center flex-1 object-cover relative hover:flex-grow-[3] overflow-hidden cursor-pointer transition-all ease-in-out duration-500 saturate-0 brightness-[10%] hover:saturate-100 hover:brightness-100"
+      >
+        <p
+          class="text-white max-md:text-5xl whitespace-nowrap font-luckiest-guy text-6xl drop-shadow-[0_32px_32px_rgba(0,0,0,1)]"
+        >
+          Pokemon Unite
+        </p>
+      </a>
+      <a
+        href="/teams/csgo"
+        class="group flex items-center justify-center bg-[url('/csgo.webp')] bg-cover bg-center flex-1 object-cover relative hover:flex-grow-[3] overflow-hidden cursor-pointer transition-all ease-in-out duration-500 saturate-0 brightness-[20%] hover:saturate-100 hover:brightness-100"
+      >
+        <p
+          class="text-white max-md:text-5xl whitespace-nowrap font-luckiest-guy text-6xl drop-shadow-[0_32px_32px_rgba(0,0,0,1)]"
+        >
+          CSGO
+        </p>
+      </a>
+    </div>
   </div>
 </Layout>

@@ -3,7 +3,7 @@ import Button from "../components/Button.astro";
 import EventCard from "../components/EventCard.astro";
 import Graphic from "../components/Graphic";
 import ScrollEventButtons from "../components/ScrollEventButtons";
-import Teams from "../components/Teams.astro";
+import TeamSection from "../components/TeamSection";
 import Discord from "../components/icons/Discord.astro";
 import Twitch from "../components/icons/Twitch.astro";
 import Twitter from "../components/icons/Twitter.astro";
@@ -42,9 +42,7 @@ const events = await getSchedule();
         <!-- <p class="text-red font-semibold cursor-pointer">Subscribe to our newsletter</p> -->
       </div>
     </div>
-    <Teams
-      class="flex max-lg:flex-col w-full h-[75vh] border-y-2 border-[#161616]"
-    />
+    <TeamSection client:idle />
     <div>
       <div class="flex flex-col justify-center gap-12 mt-32">
         <div
