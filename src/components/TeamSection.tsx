@@ -1,15 +1,18 @@
 import { createSignal, onMount } from "solid-js";
 
 export default function TeamSection() {
+  const [mobile, setMobile] = createSignal(false);
   const [currentTeam, setCurrentTeam] = createSignal("");
 
   const observer = new IntersectionObserver(
     (entries) => {
-      for (const entry of entries) {
-        if (entry.isIntersecting) {
-          setCurrentTeam(entry.target.id);
+      if (mobile()) {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setCurrentTeam(entry.target.id);
+          }
         }
-      }
+      } else setCurrentTeam("");
     },
     { rootMargin: "-50% 0% -50% 0%", threshold: 0 }
   );
@@ -19,6 +22,12 @@ export default function TeamSection() {
     observer.observe(document.getElementById("smash") as HTMLAnchorElement);
     observer.observe(document.getElementById("pokemon") as HTMLAnchorElement);
     observer.observe(document.getElementById("csgo") as HTMLAnchorElement);
+
+    window.addEventListener("resize", () => {
+      if (window.innerWidth < 1024) {
+        setMobile(true);
+      } else setMobile(false);
+    });
   });
 
   return (
@@ -27,10 +36,11 @@ export default function TeamSection() {
         id="dota"
         href="/teams/dota"
         style={{
-          filter:
-            currentTeam() === "dota"
+          filter: mobile()
+            ? currentTeam() === "dota"
               ? "saturate(100%) brightness(100%)"
-              : "saturate(0%) brightness(25%)",
+              : "saturate(0%) brightness(25%)"
+            : "",
         }}
         class="group flex items-center justify-center bg-[url('/dota.webp')] bg-cover bg-center flex-1 object-cover relative hover:flex-grow-[3] overflow-hidden cursor-pointer transition-all ease-in-out duration-500 saturate-0 brightness-[25%] hover:saturate-100 hover:brightness-100"
       >
@@ -42,10 +52,11 @@ export default function TeamSection() {
         id="smash"
         href="/teams/smash-melee"
         style={{
-          filter:
-            currentTeam() === "smash"
+          filter: mobile()
+            ? currentTeam() === "smash"
               ? "saturate(100%) brightness(100%)"
-              : "saturate(0%) brightness(15%)",
+              : "saturate(0%) brightness(15%)"
+            : "",
         }}
         class="group flex items-center justify-center bg-[url('/smash.webp')] bg-cover bg-center flex-1 object-cover relative hover:flex-grow-[3] overflow-hidden cursor-pointer transition-all ease-in-out duration-500 saturate-0 brightness-[15%] hover:saturate-100 hover:brightness-100"
       >
@@ -57,10 +68,11 @@ export default function TeamSection() {
         id="pokemon"
         href="/teams/pokemon-unite"
         style={{
-          filter:
-            currentTeam() === "pokemon"
+          filter: mobile()
+            ? currentTeam() === "pokemon"
               ? "saturate(100%) brightness(100%)"
-              : "saturate(0%) brightness(10%)",
+              : "saturate(0%) brightness(10%)"
+            : "",
         }}
         class="group flex items-center justify-center bg-[url('/pokemon.webp')] bg-cover bg-center flex-1 object-cover relative hover:flex-grow-[3] overflow-hidden cursor-pointer transition-all ease-in-out duration-500 saturate-0 brightness-[10%] hover:saturate-100 hover:brightness-100"
       >
@@ -72,10 +84,11 @@ export default function TeamSection() {
         id="csgo"
         href="/teams/csgo"
         style={{
-          filter:
-            currentTeam() === "csgo"
+          filter: mobile()
+            ? currentTeam() === "csgo"
               ? "saturate(100%) brightness(100%)"
-              : "saturate(0%) brightness(20%)",
+              : "saturate(0%) brightness(20%)"
+            : "",
         }}
         class="group flex items-center justify-center bg-[url('/csgo.webp')] bg-cover bg-center flex-1 object-cover relative hover:flex-grow-[3] overflow-hidden cursor-pointer transition-all ease-in-out duration-500 saturate-0 brightness-[20%] hover:saturate-100 hover:brightness-100"
       >
