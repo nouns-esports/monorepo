@@ -5,16 +5,10 @@ export default function TeamSection() {
 
   const observer = new IntersectionObserver(
     (entries) => {
-      console.log(entries);
-
-      const highestRatioEntry = entries.reduce((previousEntry, currentEntry) =>
-        currentEntry.intersectionRatio > previousEntry.intersectionRatio
-          ? currentEntry
-          : previousEntry
-      );
-
-      if (highestRatioEntry.isIntersecting) {
-        setCurrentTeam(highestRatioEntry.target.id);
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          setCurrentTeam(entry.target.id);
+        }
       }
     },
     { rootMargin: "-50% 0% -50% 0%", threshold: 0 }
