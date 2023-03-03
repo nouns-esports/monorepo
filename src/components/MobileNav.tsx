@@ -7,7 +7,7 @@ export default function MobileNav() {
     <div class="max-sm:flex hidden">
       <img
         src="/icons/menu.svg"
-        class="w-7 cursor-pointer"
+        class="w-7 cursor-pointer select-none"
         onClick={() => {
           const alert = document.getElementById("alert");
 
@@ -45,7 +45,7 @@ export default function MobileNav() {
           </a>
           <img
             src="/icons/close.svg"
-            class="cursor-pointer"
+            class="cursor-pointer select-none"
             onClick={() => {
               document.documentElement.style.overflowY = "scroll";
               setOpen(false);

@@ -65,11 +65,11 @@ export default function TeamSection() {
         </p>
       </a>
       <a
-        id="pokemon"
+        id="unite"
         href="/teams/pokemon-unite"
         style={{
           filter: mobile()
-            ? currentTeam() === "pokemon"
+            ? currentTeam() === "unite"
               ? "saturate(100%) brightness(100%)"
               : "saturate(0%) brightness(10%)"
             : "",
