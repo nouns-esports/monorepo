@@ -1,25 +1,25 @@
 import { createSignal, onMount } from "solid-js";
 
-const [currentTeam, setCurrentTeam] = createSignal("");
-
-const observer = new IntersectionObserver(
-  (entries) => {
-    console.log(entries);
-
-    const highestRatioEntry = entries.reduce((previousEntry, currentEntry) =>
-      currentEntry.intersectionRatio > previousEntry.intersectionRatio
-        ? currentEntry
-        : previousEntry
-    );
-
-    if (highestRatioEntry.isIntersecting) {
-      setCurrentTeam(highestRatioEntry.target.id);
-    }
-  },
-  { rootMargin: "-50% 0% -50% 0%", threshold: 0 }
-);
-
 export default function TeamSection() {
+  const [currentTeam, setCurrentTeam] = createSignal("");
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      console.log(entries);
+
+      const highestRatioEntry = entries.reduce((previousEntry, currentEntry) =>
+        currentEntry.intersectionRatio > previousEntry.intersectionRatio
+          ? currentEntry
+          : previousEntry
+      );
+
+      if (highestRatioEntry.isIntersecting) {
+        setCurrentTeam(highestRatioEntry.target.id);
+      }
+    },
+    { rootMargin: "-50% 0% -50% 0%", threshold: 0 }
+  );
+
   onMount(() => {
     observer.observe(document.getElementById("dota") as HTMLAnchorElement);
     observer.observe(document.getElementById("smash") as HTMLAnchorElement);
