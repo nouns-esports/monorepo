@@ -20,7 +20,7 @@ export default function TeamSection() {
   onMount(() => {
     observer.observe(document.getElementById("dota") as HTMLAnchorElement);
     observer.observe(document.getElementById("smash") as HTMLAnchorElement);
-    observer.observe(document.getElementById("pokemon") as HTMLAnchorElement);
+    observer.observe(document.getElementById("unite") as HTMLAnchorElement);
     observer.observe(document.getElementById("csgo") as HTMLAnchorElement);
 
     window.addEventListener("resize", () => {
