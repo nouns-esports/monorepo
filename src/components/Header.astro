@@ -1,5 +1,7 @@
 ---
 import MobileNav from "./MobileNav";
+
+const path = Astro.url.pathname;
 ---
 
 <header
@@ -14,20 +16,21 @@ import MobileNav from "./MobileNav";
       src="/logo.svg"
       alt="Nouns Esports Logo"
       draggable={false}
-      class="group-hover:rotate-[14deg] w-10 transition-transform duration-150 delay-0"
+      class="group-hover:rotate-[14deg] w-12 max-3xl:w-10 transition-transform duration-150 delay-0"
     />
     <p
-      class="text-white font-luckiest-guy text-3xl select-none max-[300px]:hidden"
+      class="text-white font-luckiest-guy text-4xl max-3xl:text-3xl select-none max-[300px]:hidden"
     >
       Nouns
     </p>
   </a>
   <nav
-    class="flex items-center gap-6 cursor-pointer text-lg font-medium select-none max-sm:hidden"
+    class="flex items-center gap-6 cursor-pointer text-xl max-3xl:text-lg font-medium select-none max-sm:hidden"
   >
     <a
       href="/teams"
       draggable={false}
+      style={{ color: path === "/teams" ? "white" : "auto" }}
       class="hover:text-white transition-colors duration-300"
     >
       Teams
@@ -35,6 +38,7 @@ import MobileNav from "./MobileNav";
     <a
       href="/schedule"
       draggable={false}
+      style={{ color: path === "/schedule" ? "white" : "auto" }}
       class="hover:text-white transition-colors duration-300"
     >
       Schedule
@@ -42,6 +46,7 @@ import MobileNav from "./MobileNav";
     <a
       href="/about"
       draggable={false}
+      style={{ color: path === "/about" ? "white" : "auto" }}
       class="hover:text-white transition-colors duration-300"
     >
       About

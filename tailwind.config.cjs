@@ -17,6 +17,7 @@ module.exports = {
     extend: {
       screens: {
         xs: "450px",
+        "3xl": "1921px",
       },
       fontFamily: {
         "luckiest-guy": ["Luckiest Guy"],
