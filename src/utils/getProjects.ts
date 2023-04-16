@@ -2,6 +2,7 @@ import type { Client } from "@notionhq/client";
 import downloadImage from "./downloadImage";
 import type { Contributor } from "./getContributors";
 import getContributors from "./getContributors";
+import validateData from "./validateData";
 
 export type Project = {
   name: string;
@@ -31,7 +32,7 @@ export default async function getProjects(notion: Client) {
   const results = response.results as unknown as ProjectResult[];
 
   for (const result of results) {
-    const project = {
+    const project = validateData("project", {
       name: result.properties.Name.title[0]?.plain_text,
       url: result.url,
       image: await downloadImage(result.properties.Image.files[0].file?.url),
@@ -40,7 +41,7 @@ export default async function getProjects(notion: Client) {
         notion,
         result.properties.Leaders.people.map((person) => person.id)
       ),
-    };
+    });
 
     projects.push(project);
   }

@@ -15,17 +15,17 @@ import getProjects from "../utils/getProjects";
 import getSchedule from "../utils/getSchedule";
 import getTeams from "../utils/getTeams";
 import getMetadata from "../utils/getMetadata";
+import getTalent from "../utils/getTalent";
 
 const notion = new Client({ auth: import.meta.env.VITE_NOTION });
 
-const [schedule, metadata, projects, teams] = await Promise.all([
+const [schedule, metadata, projects, teams, talent] = await Promise.all([
   getSchedule(),
   getMetadata(notion),
   getProjects(notion),
   getTeams(notion),
+  getTalent(notion),
 ]);
-
-console.log(projects);
 ---
 
 <!DOCTYPE html>
