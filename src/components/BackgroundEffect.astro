@@ -1,21 +1,26 @@
-import { createEffect, createSignal, onMount } from "solid-js";
-import resetCanvas from "../utils/resetCanvas";
-import resizeCanvas from "../utils/resizeCanvas";
+<script>
+  const canvas = document.getElementById(
+    "background-effect"
+  ) as HTMLCanvasElement;
 
-const [scrollOffset, setScrollOffset] = createSignal(0);
-
-export default function Background() {
-  let canvas: HTMLCanvasElement;
+  window.addEventListener("resize", draw);
+  document.addEventListener("scroll", draw);
+  draw();
 
   function draw() {
-    resetCanvas(canvas);
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
     const context = canvas.getContext("2d");
 
     if (context) {
+      // Reset canvas
+      context.setTransform(1, 0, 0, 1, 0, 0);
+      context.clearRect(0, 0, canvas.width, canvas.height);
+
       const noggle = new Path2D("M3 3V6H9V3H10V6H16V0H10V2H9V0H3V2H0V5H1V3H3Z");
 
-      const noggleWidth = 90 + 6 * (canvas.width / 400);
+      const noggleWidth = 90 + 6 * (window.innerWidth / 400);
       const noggleHeight = noggleWidth * 0.375;
 
       const angle = -12 * (Math.PI / 180);
@@ -24,16 +29,16 @@ export default function Background() {
       context.translate(16, 16);
 
       const backgroundWidth =
-        canvas.width * Math.cos(12 * (Math.PI / 180)) +
-        canvas.height * Math.sin(12 * (Math.PI / 180));
+        window.innerWidth * Math.cos(12 * (Math.PI / 180)) +
+        window.innerHeight * Math.sin(12 * (Math.PI / 180));
 
       const backgroundHeight =
-        canvas.height * Math.cos(12 * (Math.PI / 180)) +
-        canvas.width * Math.sin(12 * (Math.PI / 180));
+        window.innerHeight * Math.cos(12 * (Math.PI / 180)) +
+        window.innerWidth * Math.sin(12 * (Math.PI / 180));
 
       const noggleCountX =
         Math.ceil(backgroundWidth / (noggleWidth + 16)) +
-        Math.ceil(scrollOffset() / noggleWidth);
+        Math.ceil(window.scrollY / noggleWidth);
 
       const noggleCountY = Math.ceil(backgroundHeight / (noggleHeight + 16));
 
@@ -43,7 +48,7 @@ export default function Background() {
           context.translate(16, 0);
 
           // Move on scroll
-          context.translate(-scrollOffset() / 4 - canvas.width * 0.08, 0);
+          context.translate(-window.scrollY / 4 - window.innerWidth * 0.08, 0);
 
           for (let col = 1; col < noggleCountX + 1; col++) {
             paintNoggle(noggle, noggleWidth, noggleHeight);
@@ -56,7 +61,7 @@ export default function Background() {
           context.translate(backgroundWidth - noggleWidth + 16, 0);
 
           // Move on scroll
-          context.translate(scrollOffset() / 4, 0);
+          context.translate(window.scrollY / 4, 0);
 
           for (let col = 1; col < noggleCountX + 3; col++) {
             paintNoggle(noggle, noggleWidth, noggleHeight);
@@ -83,30 +88,12 @@ export default function Background() {
 
     if (context) {
       context.save();
-      context.fillStyle = "#0C0C0C";
+      context.fillStyle = "#040404";
       context.scale(noggleWidth / 16, noggleHeight / 6);
       context.fill(noggle);
       context.restore();
     }
   }
+</script>
 
-  onMount(() => {
-    resizeCanvas(canvas, draw);
-    setTimeout(() => resizeCanvas(canvas, draw), 10);
-    window.addEventListener("resize", () => resizeCanvas(canvas, draw));
-
-    document.addEventListener("scroll", () => {
-      setScrollOffset(window.scrollY);
-    });
-  });
-
-  createEffect(draw);
-
-  return (
-    <canvas
-      //@ts-ignore
-      ref={canvas}
-      class="fixed bg-black"
-    />
-  );
-}
+<canvas id="background-effect" class="fixed bg-black"></canvas>

@@ -10,14 +10,15 @@
 		"astro": "astro"
 	},
 	"dependencies": {
-		"@astrojs/solid-js": "^2.0.2",
 		"@astrojs/tailwind": "^3.0.1",
 		"@astrojs/vercel": "^3.1.2",
+		"@notionhq/client": "^2.2.4",
 		"astro": "^2.0.14",
 		"solid-js": "^1.6.10",
 		"tailwindcss": "^3.2.6"
 	},
 	"devDependencies": {
+		"@types/uuid": "^9.0.1",
 		"prettier": "^2.8.4",
 		"prettier-plugin-astro": "^0.8.0"
 	}

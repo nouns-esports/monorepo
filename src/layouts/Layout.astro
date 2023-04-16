@@ -1,14 +1,31 @@
 ---
-import Background from "../components/Background";
+import BackgroundEffect from "../components/BackgroundEffect.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
-import Alert from "../components/Alert";
 
 type Props = {
   title: string;
 };
 
 const { title } = Astro.props;
+
+import { Client } from "@notionhq/client";
+
+import getProjects from "../utils/getProjects";
+import getSchedule from "../utils/getSchedule";
+import getTeams from "../utils/getTeams";
+import getMetadata from "../utils/getMetadata";
+
+const notion = new Client({ auth: import.meta.env.VITE_NOTION });
+
+const [schedule, metadata, projects, teams] = await Promise.all([
+  getSchedule(),
+  getMetadata(notion),
+  getProjects(notion),
+  getTeams(notion),
+]);
+
+console.log(projects);
 ---
 
 <!DOCTYPE html>
@@ -38,16 +55,6 @@ const { title } = Astro.props;
       as="font"
       crossorigin="anonymous"
     />
-    {
-      title === "" ? (
-        <>
-          <link rel="preload" href="/pokemon.webp" as="image" />
-          <link rel="preload" href="/smash.webp" as="image" />
-        </>
-      ) : (
-        ""
-      )
-    }
     <link rel="icon" type="image/svg" href="/logo.svg" />
     <meta name="generator" content={Astro.generator} />
     <title>Nouns Esports {title ? "-" : ""} {title}</title>
@@ -62,19 +69,7 @@ const { title } = Astro.props;
   <body
     class="bg-black text-grey font-cabin w-full selection:text-white selection:bg-red"
   >
-    <Background client:load />
-    {
-      title === "" ? (
-        <Alert
-          client:load
-          message="Check out our latest proposal 263"
-          href="https://nouns.wtf/vote/263"
-        />
-      ) : (
-        ""
-      )
-    }
-
+    <BackgroundEffect />
     <Header />
     <div class="relative z-10">
       <slot />
@@ -100,9 +95,5 @@ const { title } = Astro.props;
     font-family: Cabin;
     font-weight: 400;
     src: url(/fonts/Cabin.ttf) format("truetype");
-  }
-
-  :root {
-    --sab: env(safe-area-inset-bottom);
   }
 </style>

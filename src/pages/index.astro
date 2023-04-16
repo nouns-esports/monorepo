@@ -1,119 +1,14 @@
 ---
-import Button from "../components/Button.astro";
-import EventCard from "../components/EventCard.astro";
-import Graphic from "../components/Graphic";
-import ScrollEventButtons from "../components/ScrollEventButtons";
-import TeamSection from "../components/TeamSection";
-import Discord from "../components/icons/Discord.astro";
-import Twitch from "../components/icons/Twitch.astro";
-import Twitter from "../components/icons/Twitter.astro";
-import Youtube from "../components/icons/Youtube.astro";
-import Layout from "../layouts/Layout.astro";
-import getSchedule from "../utils/getSchedule";
+import Banner from "../components/Banner.astro";
+import NewLayout from "../layouts/Layout.astro";
 
-const events = await getSchedule();
+const banner = {
+  title: "Check out our latest proposal 263",
+  href: "https://nouns.wtf/vote/263",
+};
 ---
 
-<Layout title="">
-  <Graphic client:load />
-  <div class="mt-[-72px] relative z-10">
-    <div
-      class="w-[50vw] max-2xl:w-full max-2xl:justify-start max-xl:justify-center h-screen flex items-center justify-center -max-sm:p-4 p-8"
-    >
-      <div class="flex flex-col gap-8">
-        <div class="flex flex-col max-[1280px]:items-center gap-3">
-          <a
-            href="https://paragraph.xyz/@nounsesports/subscribe"
-            class="text-white px-3 py-1 select-none flex gap-2 font-medium text-sm bg-red w-fit whitespace-nowrap rounded-full"
-          >
-            <img src="/icons/mail.svg" />Get the newsletter!
-          </a>
-          <h1
-            class="font-luckiest-guy text-white text-6xl w-[600px] max-lg:w-full max-[1280px]:text-center max-md:text-5xl max-sm:text-4xl"
-          >
-            Driving innovation at the intersection of{" "}
-            <span class="text-red font-luckiest-guy">crypto</span> and{" "}
-            <span class="text-red font-luckiest-guy">gaming</span>
-          </h1>
-        </div>
-
-        <div
-          class="flex gap-8 items-center max-xl:justify-center max-[450px]:flex-col"
-        >
-          <Button href="https://discord.gg/nounsesports">JOIN US</Button>
-          <div class="flex items-center gap-4">
-            <Twitch class="w-7" />
-            <Twitter class="w-[34px]" />
-            <Youtube class="w-9" />
-            <Discord class="w-9" />
-          </div>
-        </div>
-        <!-- <p class="text-red font-semibold cursor-pointer">Subscribe to our newsletter</p> -->
-      </div>
-    </div>
-    <TeamSection client:idle />
-    <div>
-      <div class="flex flex-col justify-center gap-12 mt-32">
-        <div
-          class="flex items-center justify-between px-16 max-lg:px-8 max-md:flex-col max-md:gap-8"
-        >
-          <h2
-            class="font-luckiest-guy text-6xl max-md:text-center text-white max-lg:text-5xl"
-          >
-            Upcoming Events
-          </h2>
-          <div
-            class="flex gap-8 items-center max-md:justify-center max-md:w-full"
-          >
-            <Button
-              href="https://calendar.google.com/calendar/u/0?cid=MmdsNmlrdTlrY2IycWpkcnRnZHRoZ25nM3NAZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ"
-            >
-              ALL EVENTS
-            </Button>
-            <ScrollEventButtons client:idle />
-          </div>
-        </div>
-        <div
-          id="upcoming-events"
-          class="flex flex-row overflow-x-scroll gap-6 snap-x max-xs:scroll-px-0 scroll-px-16 max-lg:scroll-px-8 scrollbar-hidden pt-1"
-        >
-          {events.map((event) => <EventCard event={event} />)}
-        </div>
-      </div>
-      <div class="flex flex-col mx-16 gap-64 my-32 max-sm:mx-4">
-        <div
-          class="flex items-center justify-center max-xl:gap-32 gap-64 mt-20"
-        >
-          <div
-            class="flex flex-col max-lg:items-center max-lg:w-full justify-center gap-8"
-          >
-            <h2 class="font-luckiest-guy text-6xl text-white max-sm:text-5xl">
-              About Us
-            </h2>
-            <p class="max-lg:text-center max-w-lg max-lg:px-4">
-              Driving innovation at the intersection of web3 and gaming. Nouns
-              is a decentralized esports organization where anyone, anywhere can
-              contribute towards its growth and success!
-            </p>
-            <Button href="/about">LEARN MORE</Button>
-          </div>
-          <img
-            src="/championship.webp"
-            draggable={false}
-            class="w-[550px] rounded-2xl select-none max-xl:w-[400px] max-lg:hidden"
-          />
-        </div>
-        <!-- <div class="flex flex-col justify-center items-center gap-12">
-          <h2 class="font-luckiest-guy text-6xl text-white max-sm:text-5xl">
-            Apparel
-          </h2>
-          <div
-            class="cursor-default select-none py-3 px-[22px] text-black font-bebas-neue text-xl justify-center leading-none bg-white rounded-full flex items-center"
-          >
-            Coming Soon!
-          </div>
-          <!-- <Button href="https://shop.nouns.gg" newTab>SHOP</Button> -->
-      </div>
-    </div>
-  </div>
-</Layout>
+{banner ? <Banner href={banner.href}>{banner.title}</Banner> : ""}
+<NewLayout title="">
+  <div class="h-screen"></div>
+</NewLayout>

@@ -1,4 +1,4 @@
-export type Event = {
+export type ScheduleEvent = {
   id: string;
   status: string;
   htmlLink: string;
@@ -15,23 +15,22 @@ export type Event = {
   };
 };
 
-export type Calendar = {
-  items: Array<Event>;
+export type Schedule = {
+  items: Array<ScheduleEvent>;
 };
 
 export default async function getSchedule() {
   const response = await fetch(
     "https://www.googleapis.com/calendar/v3/calendars/2gl6iku9kcb2qjdrtgdthgng3s@group.calendar.google.com/events?" +
       new URLSearchParams({
-        // q: "dota",
         singleEvents: "true",
         orderBy: "startTime",
         timeMin: new Date().toISOString(),
-        maxResults: "10",
+        maxResults: "5",
         key: import.meta.env.VITE_GOOGLE,
       })
   );
-  const calendar: Calendar = await response.json();
+  const calendar: Schedule = await response.json();
 
   return calendar.items || [];
 }

@@ -3,6 +3,35 @@ import Discord from "./icons/Discord.astro";
 import Twitch from "./icons/Twitch.astro";
 import Twitter from "./icons/Twitter.astro";
 import Youtube from "./icons/Youtube.astro";
+
+const links = [
+  {
+    title: "EXPLORE",
+    links: [
+      { title: "Teams", href: "/teams" },
+      { title: "Schedule", href: "/schedule" },
+      { title: "About", href: "/about" },
+      // { title: "Shop", href: "https://shop.nouns.gg" },
+    ],
+  },
+  {
+    title: "TEAMS",
+    links: [
+      { title: "Dota 2", href: "/teams/dota" },
+      { title: "Smash Melee", href: "/teams/smash-melee" },
+      { title: "Pokémon Unite", href: "/teams/pokemon-unite" },
+      { title: "CSGO", href: "/teams/csgo" },
+    ],
+  },
+  {
+    title: "NOUNS",
+    links: [
+      { title: "Nouns.wtf", href: "https://nouns.wtf" },
+      { title: "Proposals", href: "https://nouns.wtf/proposals" },
+      // { title: "Pod", href: "/pod" },
+    ],
+  },
+];
 ---
 
 <footer
