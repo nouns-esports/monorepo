@@ -7,6 +7,9 @@ module.exports = {
     hoverOnlyWhenSupported: true,
   },
   theme: {
+    transitionDuration: {
+      DEFAULT: "300ms",
+    },
     colors: {
       white: "white",
       black: "#090909",

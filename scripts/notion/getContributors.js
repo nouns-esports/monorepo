@@ -1,15 +1,5 @@
-import type { Client } from "@notionhq/client";
-
-export type Contributor = {
-  name: string;
-  image: string;
-};
-
-export default async function getContributors(
-  notion: Client,
-  people: string[]
-) {
-  const contributors: Contributor[] = [];
+export default async function getContributors(notion, people) {
+  const contributors = [];
 
   for (const person of people) {
     const userResponse = await notion.users.retrieve({

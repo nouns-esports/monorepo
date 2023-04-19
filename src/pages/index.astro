@@ -1,14 +1,7 @@
 ---
-import Banner from "../components/Banner.astro";
 import NewLayout from "../layouts/Layout.astro";
-
-const banner = {
-  title: "Check out our latest proposal 263",
-  href: "https://nouns.wtf/vote/263",
-};
 ---
 
-{banner ? <Banner href={banner.href}>{banner.title}</Banner> : ""}
 <NewLayout title="">
   <div class="h-screen"></div>
 </NewLayout>

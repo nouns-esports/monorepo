@@ -3,9 +3,7 @@ import path from "path";
 import fetch from "node-fetch";
 import crypto from "crypto";
 
-export default async function downloadImage(url: string) {
-  if (process.env.NODE_ENV === "development") return url;
-
+export default async function downloadImage(url) {
   const response = await fetch(url);
 
   if (!response.ok) {
@@ -25,10 +23,13 @@ export default async function downloadImage(url: string) {
 
   const buffer = await response.buffer();
 
-  fs.writeFileSync(
-    path.join(process.cwd(), "dist", `${filename}.${extension}`),
-    buffer
-  );
+  // Make sure the cache/images directory exists
+  const directory = path.join(process.cwd(), "cache", "images");
+  if (!fs.existsSync(directory)) {
+    fs.mkdirSync(directory, { recursive: true });
+  }
 
-  return `${filename}.${extension}`;
+  fs.writeFileSync(path.join(directory, `${filename}.${extension}`), buffer);
+
+  return `cache/images/${filename}.${extension}`;
 }

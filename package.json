@@ -1,25 +1,28 @@
 {
-	"name": "",
-	"type": "module",
-	"version": "0.0.1",
-	"scripts": {
-		"dev": "astro dev",
-		"start": "astro dev",
-		"build": "astro build",
-		"preview": "astro preview",
-		"astro": "astro"
-	},
-	"dependencies": {
-		"@astrojs/tailwind": "^3.0.1",
-		"@astrojs/vercel": "^3.1.2",
-		"@notionhq/client": "^2.2.4",
-		"astro": "^2.0.14",
-		"solid-js": "^1.6.10",
-		"tailwindcss": "^3.2.6"
-	},
-	"devDependencies": {
-		"@types/uuid": "^9.0.1",
-		"prettier": "^2.8.4",
-		"prettier-plugin-astro": "^0.8.0"
-	}
+  "name": "@nouns-esports/website",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "astro": "astro",
+    "cache": "node ./scripts/cache.js",
+    "dev": "npm run cache && astro dev",
+    "build": "npm run cache && astro build && copyfiles cache/images/**/*.* dist"
+  },
+  "dependencies": {
+    "@astrojs/tailwind": "^3.0.1",
+    "@astrojs/vercel": "^3.1.2",
+    "@notionhq/client": "^2.2.4",
+    "astro": "^2.0.14",
+    "dotenv": "^16.0.3",
+    "solid-js": "^1.6.10",
+    "tailwindcss": "^3.2.6"
+  },
+  "devDependencies": {
+    "@types/uuid": "^9.0.1",
+    "copyfiles": "^2.4.1",
+    "prettier": "^2.8.4",
+    "prettier-plugin-astro": "^0.8.0",
+    "rollup-plugin-copy": "^3.4.0",
+    "serve-static": "^1.15.0"
+  }
 }

@@ -1,6 +1,8 @@
 ---
 // import MobileNav from "./MobileNav";
 
+import NavLink from "./NavLink.astro";
+
 const path = Astro.url.pathname;
 ---
 
@@ -24,39 +26,14 @@ const path = Astro.url.pathname;
       Nouns
     </p>
   </a>
-  <nav
-    class="flex items-center gap-6 cursor-pointer text-xl max-3xl:text-lg font-medium select-none max-sm:hidden"
-  >
-    <a
-      href="/teams"
-      draggable={false}
-      style={{ color: path === "/teams" ? "white" : "auto" }}
-      class="hover:text-white transition-colors duration-300"
-    >
-      Teams
-    </a>
-    <a
-      href="/schedule"
-      draggable={false}
-      style={{ color: path === "/schedule" ? "white" : "auto" }}
-      class="hover:text-white transition-colors duration-300"
+  <nav class="flex items-center gap-6 cursor-pointer text-xl font-medium">
+    <NavLink
+      href="https://calendar.google.com/calendar/embed?src=2gl6iku9kcb2qjdrtgdthgng3s%40group.calendar.google.com"
     >
       Schedule
-    </a>
-    <a
-      href="https://pog.nouns.gg"
-      draggable={false}
-      class="hover:text-white transition-colors duration-300"
-    >
-      POG
-    </a>
-    <!-- <a
-      href="https://shop.nouns.gg"
-      draggable={false}
-      class="hover:text-white transition-colors duration-300"
-    >
-      Shop
-    </a> -->
+    </NavLink>
+    <NavLink href="/about">About</NavLink>
+    <NavLink href="pog.nouns.gg">POG</NavLink>
+    <NavLink href="https://shop.nouns.gg">Shop</NavLink>
   </nav>
-  <!-- <MobileNav client:load /> -->
 </header>

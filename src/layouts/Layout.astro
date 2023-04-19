@@ -2,6 +2,8 @@
 import BackgroundEffect from "../components/BackgroundEffect.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import Banner from "../components/Banner.astro";
+import fetchCache from "../utils/fetchCache";
 
 type Props = {
   title: string;
@@ -9,23 +11,7 @@ type Props = {
 
 const { title } = Astro.props;
 
-import { Client } from "@notionhq/client";
-
-import getProjects from "../utils/getProjects";
-import getSchedule from "../utils/getSchedule";
-import getTeams from "../utils/getTeams";
-import getMetadata from "../utils/getMetadata";
-import getTalent from "../utils/getTalent";
-
-const notion = new Client({ auth: import.meta.env.VITE_NOTION });
-
-const [schedule, metadata, projects, teams, talent] = await Promise.all([
-  getSchedule(),
-  getMetadata(notion),
-  getProjects(notion),
-  getTeams(notion),
-  getTalent(notion),
-]);
+const { schedule, metadata, projects, teams, talent } = fetchCache();
 ---
 
 <!DOCTYPE html>
@@ -58,19 +44,22 @@ const [schedule, metadata, projects, teams, talent] = await Promise.all([
     <link rel="icon" type="image/svg" href="/logo.svg" />
     <meta name="generator" content={Astro.generator} />
     <title>Nouns Esports {title ? "-" : ""} {title}</title>
-    <meta
-      name="description"
-      content="Driving innovation at the intersection of web3 and gaming. Nouns is a
-    decentralized esports organization where anyone, anywhere can contribute
-    towards its growth and success!"
-    />
+    <meta name="description" content={metadata.tagline} />
   </head>
 
   <body
-    class="bg-black text-grey font-cabin w-full selection:text-white selection:bg-red"
+    class="bg-black text-grey font-cabin selection:text-white selection:bg-red"
   >
     <BackgroundEffect />
+    {
+      metadata.banner ? (
+        <Banner href={metadata.banner.url}>{metadata.banner.message}</Banner>
+      ) : (
+        ""
+      )
+    }
     <Header />
+
     <div class="relative z-10">
       <slot />
     </div>

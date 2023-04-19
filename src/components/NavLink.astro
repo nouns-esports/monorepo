@@ -1,0 +1,15 @@
+---
+type Props = {
+  href: string;
+};
+
+const { href } = Astro.props;
+---
+
+<a
+  href={href}
+  draggable={false}
+  class="hover:text-white transition-colors select-none"
+>
+  <slot />
+</a>
