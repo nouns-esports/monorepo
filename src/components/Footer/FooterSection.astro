@@ -1,0 +1,12 @@
+---
+type Props = {
+  title: string;
+};
+
+const { title } = Astro.props;
+---
+
+<div class="flex flex-col gap-2 select-none">
+  <h3 class="text-2xl font-bebas-neue text-white">{title}</h3>
+  <slot />
+</div>

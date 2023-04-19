@@ -1,7 +1,7 @@
 ---
 import BackgroundEffect from "../components/BackgroundEffect.astro";
-import Header from "../components/Header.astro";
-import Footer from "../components/Footer.astro";
+import Header from "../components/Header/index.astro";
+import Footer from "../components/Footer/index.astro";
 import Banner from "../components/Banner.astro";
 import fetchCache from "../utils/fetchCache";
 
@@ -11,7 +11,17 @@ type Props = {
 
 const { title } = Astro.props;
 
-const { schedule, metadata, projects, teams, talent } = fetchCache();
+export const { schedule, metadata, projects, teams, talent } = fetchCache();
+
+export const navigation = [
+  {
+    name: "Schedule",
+    url: "https://calendar.google.com/calendar/embed?src=2gl6iku9kcb2qjdrtgdthgng3s%40group.calendar.google.com",
+  },
+  { name: "About", url: "/about" },
+  { name: "POG", url: "https://pog.nouns.gg" },
+  { name: "Shop", url: "https://shop.nouns.gg" },
+];
 ---
 
 <!DOCTYPE html>
@@ -51,13 +61,7 @@ const { schedule, metadata, projects, teams, talent } = fetchCache();
     class="bg-black text-grey font-cabin selection:text-white selection:bg-red"
   >
     <BackgroundEffect />
-    {
-      metadata.banner ? (
-        <Banner href={metadata.banner.url}>{metadata.banner.message}</Banner>
-      ) : (
-        ""
-      )
-    }
+    {metadata.banner ? <Banner /> : ""}
     <Header />
 
     <div class="relative z-10">

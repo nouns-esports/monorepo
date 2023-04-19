@@ -1,12 +1,12 @@
 import fs from "fs";
 import path from "path";
 
-export type Contributor = {
+type Contributor = {
   name: string;
   image: string;
 };
 
-export type Project = {
+type Project = {
   name: string;
   image: string;
   description: string;
@@ -14,7 +14,7 @@ export type Project = {
   url: string;
 };
 
-export type Talent = {
+type Talent = {
   id: string;
   name: string;
   team: string;
@@ -22,7 +22,7 @@ export type Talent = {
   role: string[];
 };
 
-export type Person = {
+type Person = {
   id: string;
   name: string;
   team: Team;
@@ -30,7 +30,7 @@ export type Person = {
   role: string[];
 };
 
-export type Team = {
+type Team = {
   id: string;
   url: string;
   name: string;
@@ -41,7 +41,7 @@ export type Team = {
   members: string[];
 };
 
-export type ScheduleEvent = {
+type ScheduleEvent = {
   id: string;
   status: string;
   htmlLink: string;
@@ -58,11 +58,11 @@ export type ScheduleEvent = {
   };
 };
 
-export type Schedule = {
+type Schedule = {
   items: Array<ScheduleEvent>;
 };
 
-type Cache = {
+export type Cache = {
   schedule: Schedule;
   projects: Project[];
   teams: Team[];

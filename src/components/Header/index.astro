@@ -1,0 +1,28 @@
+---
+import Button from "../Button.astro";
+import NavLink from "./HeaderLink.astro";
+
+import { navigation } from "../../layouts/Layout.astro";
+---
+
+<header
+  class="sticky top-0 w-full flex items-center justify-between gap-16 p-8 z-20"
+>
+  <a
+    href="/"
+    draggable={false}
+    class="flex gap-4 group items-center cursor-pointer select-none"
+  >
+    <img
+      src="/logo.svg"
+      alt="Nouns Esports Logo"
+      draggable={false}
+      class="group-hover:rotate-[14deg] w-12 transition-transform duration-150"
+    />
+    <p class="text-white font-luckiest-guy text-4xl select-none">Nouns</p>
+  </a>
+  <nav class="flex items-center gap-6 cursor-pointer">
+    {navigation.map(({ url, name }) => <NavLink href={url}>{name}</NavLink>)}
+    <Button href="">Join Us</Button>
+  </nav>
+</header>

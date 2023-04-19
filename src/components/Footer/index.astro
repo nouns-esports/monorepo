@@ -1,0 +1,57 @@
+---
+import Discord from "../icons/Discord.astro";
+import Twitch from "../icons/Twitch.astro";
+import Twitter from "../icons/Twitter.astro";
+import Youtube from "../icons/Youtube.astro";
+import FooterSection from "./FooterSection.astro";
+import FooterLink from "./FooterLink.astro";
+
+import { navigation, metadata, teams } from "../../layouts/Layout.astro";
+---
+
+<footer
+  class="flex max-sm:flex-col max-sm:gap-16 justify-between items-center p-8 bg-black border-t-4 border-red relative z-20"
+>
+  <div class="flex flex-col gap-4">
+    <a
+      href="/"
+      draggable={false}
+      class="flex gap-4 group items-center cursor-pointer select-none"
+    >
+      <img
+        src="/logo.svg"
+        alt="Nouns Esports Logo"
+        draggable={false}
+        class="group-hover:rotate-[14deg] w-10 transition-transform duration-150"
+      />
+      <p class="text-white font-luckiest-guy text-3xl select-none">Nouns</p>
+    </a>
+    <p class="w-48">
+      {metadata.tagline}
+    </p>
+  </div>
+  <div class="flex gap-40">
+    <FooterSection title="EXPLORE">
+      {
+        navigation.map(({ url, name }) => (
+          <FooterLink url={url}>{name}</FooterLink>
+        ))
+      }
+    </FooterSection>
+    <FooterSection title="TEAMS">
+      {teams.map(({ url, name }) => <FooterLink url={url}>{name}</FooterLink>)}
+    </FooterSection>
+    <FooterSection title="NOUNS">
+      <FooterLink url="https://nouns.wtf">Nouns</FooterLink>
+      <FooterLink url="https://nouns.wtf/proposals">Proposals</FooterLink>
+    </FooterSection>
+  </div>
+  <div
+    class="flex flex-col max-sm:flex-row gap-4 items-center justify-center text-white"
+  >
+    <Twitch class="w-6" />
+    <Twitter class="w-7" />
+    <Youtube class="w-7" />
+    <Discord class="w-7" />
+  </div>
+</footer>

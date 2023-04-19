@@ -1,0 +1,11 @@
+---
+type Props = {
+  url: string;
+};
+
+const { url } = Astro.props;
+---
+
+<a href={url} draggable={false} class="hover:text-white transition-colors">
+  <slot />
+</a>

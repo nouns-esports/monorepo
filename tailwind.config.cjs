@@ -7,9 +7,6 @@ module.exports = {
     hoverOnlyWhenSupported: true,
   },
   theme: {
-    transitionDuration: {
-      DEFAULT: "300ms",
-    },
     colors: {
       white: "white",
       black: "#090909",
@@ -17,29 +14,21 @@ module.exports = {
       transparent: "transparent",
       grey: "#858585",
     },
-    extend: {
-      screens: {
-        xs: "450px",
-        "3xl": "1921px",
-      },
-      fontFamily: {
-        "luckiest-guy": ["Luckiest Guy"],
-        "bebas-neue": ["Bebas Neue"],
-        cabin: ["Cabin"],
-      },
+    fontFamily: {
+      "luckiest-guy": ["Luckiest Guy"],
+      "bebas-neue": ["Bebas Neue"],
+      cabin: ["Cabin"],
+    },
+    transitionDuration: {
+      DEFAULT: "300ms",
     },
   },
   plugins: [
     plugin(function ({ addUtilities }) {
       addUtilities({
         ".scrollbar-hidden": {
-          /* IE and Edge */
           "-ms-overflow-style": "none",
-
-          /* Firefox */
           "scrollbar-width": "none",
-
-          /* Safari and Chrome */
           "&::-webkit-scrollbar": {
             display: "none",
           },
