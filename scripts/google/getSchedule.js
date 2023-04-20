@@ -7,7 +7,7 @@ export default async function getSchedule() {
         singleEvents: "true",
         orderBy: "startTime",
         timeMin: new Date().toISOString(),
-        maxResults: "5",
+        maxResults: "3",
         key: process.env.GOOGLE,
       })
   );

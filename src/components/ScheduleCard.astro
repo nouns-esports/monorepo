@@ -1,0 +1,34 @@
+---
+import type { schedule } from "../layouts/Layout.astro";
+import { teams } from "../layouts/Layout.astro";
+
+type Props = {
+  event: (typeof schedule)[number];
+};
+
+const { event } = Astro.props;
+
+const type = event.summary?.split(" ")[0].replace("[", "").replace("]", "");
+
+const team = teams.find((team) => team.name.includes(type));
+---
+
+<a
+  href={event.htmlLink}
+  target="_blank"
+  rel="noopener noreferrer"
+  class="relative overflow-hidden h-80 w-full rounded-xl group drop-shadow-2xl"
+>
+  <img
+    src={team?.image || "/landing.png"}
+    alt=""
+    class="object-cover object-center group-hover:scale-110 transition-transform absolute top-0 w-full h-full"
+  />
+  <div
+    class="relative z-10 grid place-items-center w-full h-full shadow-[inset_-20px_-20px_80px_black,inset_20px_20px_80px_black]"
+  >
+    <p class="drop-shadow-2xl text-4xl font-bebas-neue">
+      {event.summary?.replace(`[${type}]`, "")}
+    </p>
+  </div>
+</a>

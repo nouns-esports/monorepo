@@ -19,14 +19,14 @@ module.exports = {
       "bebas-neue": ["Bebas Neue"],
       cabin: ["Cabin"],
     },
-    transitionDuration: {
-      DEFAULT: "300ms",
+    extend: {
+      transitionDuration: {
+        DEFAULT: "300ms",
+      },
+      backgroundSize: {
+        grow: "125%",
+      },
     },
-    // extend: {
-    //   boxShadow: {
-    //     inner: "inset -80px -80px 100px black, inset 80px 80px 100px black",
-    //   },
-    // },
   },
   plugins: [
     plugin(function ({ addUtilities }) {

@@ -41,7 +41,7 @@ type Team = {
   members: string[];
 };
 
-type ScheduleEvent = {
+type Event = {
   id: string;
   status: string;
   htmlLink: string;
@@ -58,12 +58,8 @@ type ScheduleEvent = {
   };
 };
 
-type Schedule = {
-  items: Array<ScheduleEvent>;
-};
-
 export type Cache = {
-  schedule: Schedule;
+  schedule: Event[];
   projects: Project[];
   teams: Team[];
   talent: Talent[];
