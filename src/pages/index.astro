@@ -1,5 +1,10 @@
 ---
 import Button from "../components/Button.astro";
+import Discord from "../components/Icons/Discord.astro";
+import Twitch from "../components/Icons/Twitch.astro";
+import Twitter from "../components/Icons/Twitter.astro";
+import Twitter from "../components/Icons/Twitter.astro";
+import Youtube from "../components/Icons/Youtube.astro";
 import ProjectCard from "../components/ProjectCard.astro";
 import ScheduleCard from "../components/ScheduleCard.astro";
 import TeamCard from "../components/TeamCard.astro";
@@ -17,7 +22,7 @@ function highlight(text: string, words: string[]) {
 
 <NewLayout title="">
   <div
-    class="h-screen bg-cover grid place-items-center shadow-[inset_-100px_-100px_100px_black,inset_100px_100px_100px_black]"
+    class="h-screen bg-cover flex flex-col justify-center items-center gap-8 shadow-[inset_-100px_-100px_100px_black,inset_100px_100px_100px_black]"
   >
     <img
       src="landing.png"
@@ -27,6 +32,15 @@ function highlight(text: string, words: string[]) {
       class="text-white text-6xl w-1/2 text-center font-luckiest-guy"
       set:html={highlight(metadata.tagline, ["esports", "onchain"])}
     />
+    <div class="flex gap-8">
+      <Button href="/about">Learn More</Button>
+      <div class="flex gap-4 items-center">
+        <Twitch class="h-8" />
+        <Twitter class="h-7" />
+        <Youtube class="h-7" />
+        <Discord class="h-7" />
+      </div>
+    </div>
     <div
       class="h-8 w-full bg-gradient-to-b from-[black] to-transparent absolute -bottom-8"
     >
