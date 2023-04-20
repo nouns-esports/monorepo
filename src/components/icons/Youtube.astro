@@ -1,9 +1,15 @@
 ---
+type Props = {
+  class: string;
+};
+
 const props = Astro.props;
+
+import { socials } from "../../layouts/Layout.astro";
 ---
 
 <a
-  href="https://www.youtube.com/@nounsesports"
+  href={socials.youtube}
   target="_blank"
   rel="noopener noreferrer"
   class={`cursor-pointer group ${props.class}`}

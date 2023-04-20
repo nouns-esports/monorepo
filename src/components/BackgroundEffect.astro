@@ -88,7 +88,7 @@
 
     if (context) {
       context.save();
-      context.fillStyle = "#040404";
+      context.fillStyle = "black";
       context.scale(noggleWidth / 16, noggleHeight / 6);
       context.fill(noggle);
       context.restore();
@@ -96,4 +96,4 @@
   }
 </script>
 
-<canvas id="background-effect" class="fixed bg-black"></canvas>
+<canvas id="background-effect" class="fixed bg-black -z-10"></canvas>

@@ -1,8 +1,8 @@
 ---
-import Discord from "../icons/Discord.astro";
-import Twitch from "../icons/Twitch.astro";
-import Twitter from "../icons/Twitter.astro";
-import Youtube from "../icons/Youtube.astro";
+import Discord from "../Icons/Discord.astro";
+import Twitch from "../Icons/Twitch.astro";
+import Twitter from "../Icons/Twitter.astro";
+import Youtube from "../Icons/Youtube.astro";
 import FooterSection from "./FooterSection.astro";
 import FooterLink from "./FooterLink.astro";
 
@@ -39,7 +39,19 @@ import { navigation, metadata, teams } from "../../layouts/Layout.astro";
       }
     </FooterSection>
     <FooterSection title="TEAMS">
-      {teams.map(({ url, name }) => <FooterLink url={url}>{name}</FooterLink>)}
+      {
+        teams.map(({ name }) => (
+          <FooterLink
+            url={`/${name
+              .normalize("NFD")
+              .replace(/[\u0300-\u036f]/g, "")
+              .toLowerCase()
+              .replace(/ /g, "-")}`}
+          >
+            {name}
+          </FooterLink>
+        ))
+      }
     </FooterSection>
     <FooterSection title="NOUNS">
       <FooterLink url="https://nouns.wtf">Nouns</FooterLink>

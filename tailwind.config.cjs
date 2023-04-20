@@ -9,7 +9,7 @@ module.exports = {
   theme: {
     colors: {
       white: "white",
-      black: "#090909",
+      black: "#020202",
       red: "#E93737",
       transparent: "transparent",
       grey: "#858585",
@@ -22,6 +22,11 @@ module.exports = {
     transitionDuration: {
       DEFAULT: "300ms",
     },
+    // extend: {
+    //   boxShadow: {
+    //     inner: "inset -80px -80px 100px black, inset 80px 80px 100px black",
+    //   },
+    // },
   },
   plugins: [
     plugin(function ({ addUtilities }) {

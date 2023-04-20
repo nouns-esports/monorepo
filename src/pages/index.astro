@@ -1,7 +1,43 @@
 ---
 import NewLayout from "../layouts/Layout.astro";
+
+import { metadata } from "../layouts/Layout.astro";
+
+function highlight(text: string, words: string[]) {
+  for (const word of words) {
+    text = text.split(word).join(`<span class="text-red">${word}</span>`);
+  }
+  return text;
+}
 ---
 
 <NewLayout title="">
+  <div
+    class="h-screen bg-cover grid place-items-center shadow-[inset_-100px_-100px_100px_black,inset_100px_100px_100px_black]"
+  >
+    <img
+      src="landing.png"
+      class="absolute top-0 w-full h-full object-cover object-top -z-10"
+    />
+    <h1
+      class="text-white text-6xl w-1/2 text-center font-luckiest-guy"
+      set:html={highlight(metadata.tagline, ["esports", "onchain"])}
+    />
+    <div
+      class="h-16 w-full bg-gradient-to-b from-[black] to-transparent absolute -bottom-16"
+    >
+    </div>
+  </div>
+  <div
+    class="p-16 text-white text-5xl font-luckiest-guy flex flex-col gap-8 items-center"
+  >
+    Our Games
+    <div class="grid grid-cols-4 gap-32 w-full">
+      <div class="h-full w-full bg-red">a</div>
+      <div class="h-full w-full bg-red">a</div>
+      <div class="h-full w-full bg-red">a</div>
+      <div class="h-full w-full bg-red">a</div>
+    </div>
+  </div>
   <div class="h-screen"></div>
 </NewLayout>
