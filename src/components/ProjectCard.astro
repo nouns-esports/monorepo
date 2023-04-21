@@ -10,18 +10,20 @@ const { project } = Astro.props;
 
 <a
   href={project.url}
+  target="_blank"
+  rel="noopener noreferrer"
   class="relative overflow-hidden h-48 w-full rounded-xl group drop-shadow-2xl"
 >
   <img
     src={project.image}
     alt=""
-    class="object-cover object-center group-hover:scale-110 transition-transform absolute top-0 w-full h-full"
+    class="object-cover object-center group-hover:scale-110 brightness-[85%] transition-transform absolute top-0 w-full h-full"
   />
   <div
     class="relative z-10 grid place-items-center w-full h-full shadow-[inset_-20px_-20px_80px_black,inset_20px_20px_80px_black]"
   >
-    <p class="drop-shadow-2xl text-4xl font-bebas-neue">
+    <h3 class="text-4xl font-bebas-neue [text-shadow:black_0_0_30px]">
       {project.name}
-    </p>
+    </h3>
   </div>
 </a>

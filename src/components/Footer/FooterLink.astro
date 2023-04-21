@@ -4,8 +4,16 @@ type Props = {
 };
 
 const { url } = Astro.props;
+
+const offsite = url.includes("://");
 ---
 
-<a href={url} draggable={false} class="hover:text-white transition-colors">
+<a
+  href={url}
+  target={offsite ? "_blank" : "_self"}
+  rel={offsite ? "noopener noreferrer" : ""}
+  draggable={false}
+  class="hover:text-white transition-colors"
+>
   <slot />
 </a>

@@ -4,6 +4,7 @@ import NavLink from "./HeaderLink.astro";
 
 import { navigation, metadata } from "../../layouts/Layout.astro";
 import Banner from "../Banner.astro";
+import Logo from "../Logo.astro";
 ---
 
 {metadata.banner ? <Banner /> : ""}
@@ -16,11 +17,8 @@ import Banner from "../Banner.astro";
       draggable={false}
       class="flex gap-4 group items-center cursor-pointer select-none"
     >
-      <img
-        src="/logo.svg"
-        alt="Nouns Esports Logo"
-        draggable={false}
-        class="group-hover:rotate-[14deg] w-12 transition-transform duration-150"
+      <Logo
+        class="text-[var(--primaryColor)] group-hover:rotate-[14deg] w-12 transition-transform duration-150"
       />
       <p class="text-white font-luckiest-guy text-4xl select-none">Nouns</p>
     </a>

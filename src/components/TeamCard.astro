@@ -9,7 +9,7 @@ const { team } = Astro.props;
 ---
 
 <a
-  href={`/${team.name
+  href={`/teams/${team.name
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase()
@@ -20,11 +20,15 @@ const { team } = Astro.props;
   <img
     src={team.image}
     alt=""
-    class="object-cover object-center absolute w-full top-0 h-full group-hover:scale-110 transition-transform"
+    class="object-cover object-center absolute w-full top-0 h-full brightness-[85%] group-hover:scale-110 transition-transform"
   />
   <div
     class="relative z-10 w-full h-full grid place-items-center shadow-[inset_-20px_-20px_80px_black,inset_20px_20px_80px_black]"
   >
-    <p class="drop-shadow-2xl text-5xl font-bebas-neue">{team.name}</p>
+    <h3
+      class="drop-shadow-2xl text-5xl font-bebas-neue [text-shadow:black_0_0_30px]"
+    >
+      {team.name}
+    </h3>
   </div>
 </a>

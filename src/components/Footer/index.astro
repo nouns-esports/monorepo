@@ -1,16 +1,17 @@
 ---
-import Discord from "../Icons/Discord.astro";
-import Twitch from "../Icons/Twitch.astro";
-import Twitter from "../Icons/Twitter.astro";
-import Youtube from "../Icons/Youtube.astro";
+import Discord from "../SocialIcons/Discord.astro";
+import Twitch from "../SocialIcons/Twitch.astro";
+import Twitter from "../SocialIcons/Twitter.astro";
+import Youtube from "../SocialIcons/Youtube.astro";
 import FooterSection from "./FooterSection.astro";
 import FooterLink from "./FooterLink.astro";
 
 import { navigation, metadata, teams } from "../../layouts/Layout.astro";
+import Logo from "../Logo.astro";
 ---
 
 <footer
-  class="flex max-sm:flex-col max-sm:gap-16 justify-between items-center p-8 bg-black border-t-4 border-red relative z-20"
+  class="flex max-sm:flex-col max-sm:gap-16 border-[var(--primaryColor)] justify-between items-center p-8 bg-black border-t-4 relative z-20"
 >
   <div class="flex flex-col gap-4">
     <a
@@ -18,11 +19,8 @@ import { navigation, metadata, teams } from "../../layouts/Layout.astro";
       draggable={false}
       class="flex gap-4 group items-center cursor-pointer select-none"
     >
-      <img
-        src="/logo.svg"
-        alt="Nouns Esports Logo"
-        draggable={false}
-        class="group-hover:rotate-[14deg] w-10 transition-transform duration-150"
+      <Logo
+        class="text-[var(--primaryColor)] group-hover:rotate-[14deg] w-10 transition-transform duration-150"
       />
       <p class="text-white font-luckiest-guy text-3xl select-none">Nouns</p>
     </a>
@@ -42,7 +40,7 @@ import { navigation, metadata, teams } from "../../layouts/Layout.astro";
       {
         teams.map(({ name }) => (
           <FooterLink
-            url={`/${name
+            url={`/teams/${name
               .normalize("NFD")
               .replace(/[\u0300-\u036f]/g, "")
               .toLowerCase()

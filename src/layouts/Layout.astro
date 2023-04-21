@@ -7,9 +7,12 @@ import fetchCache from "../utils/fetchCache";
 
 type Props = {
   title: string;
+  primaryColor?: string;
 };
 
-const { title } = Astro.props;
+const { title, primaryColor } = Astro.props;
+
+console.log(primaryColor);
 
 export const { schedule, metadata, projects, teams, talent } = fetchCache();
 
@@ -65,7 +68,7 @@ export const socials = {
   </head>
 
   <body
-    class="bg-black text-grey font-cabin selection:text-white selection:bg-red"
+    class="bg-black text-grey font-cabin selection:text-white selection:bg-[var(--primaryColor)]"
   >
     <BackgroundEffect />
     <Header />
@@ -76,7 +79,7 @@ export const socials = {
   </body>
 </html>
 
-<style>
+<style define:vars={{ primaryColor: primaryColor || "#E93737" }}>
   @font-face {
     font-family: Luckiest Guy;
     font-weight: 400;

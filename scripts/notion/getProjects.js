@@ -14,7 +14,7 @@ export default async function getProjects(notion) {
   for (const result of results) {
     const project = validateData("project", {
       name: result.properties.Name.title[0]?.plain_text,
-      url: result.url,
+      url: result.properties.URL?.url,
       image: await downloadImage(result.properties.Image.files[0].file?.url),
       description: result.properties.Description.rich_text[0]?.plain_text,
       leaders: await getContributors(

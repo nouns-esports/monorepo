@@ -11,6 +11,8 @@ const { event } = Astro.props;
 const type = event.summary?.split(" ")[0].replace("[", "").replace("]", "");
 
 const team = teams.find((team) => team.name.includes(type));
+
+const date = new Date(event.start.dateTime);
 ---
 
 <a
@@ -25,10 +27,24 @@ const team = teams.find((team) => team.name.includes(type));
     class="object-cover object-center group-hover:scale-110 transition-transform absolute top-0 w-full h-full"
   />
   <div
-    class="relative z-10 grid place-items-center w-full h-full shadow-[inset_-20px_-20px_80px_black,inset_20px_20px_80px_black]"
+    class="relative z-10 flex flex-col-reverse pb-4 pl-6 w-full h-full shadow-[inset_-20px_-20px_80px_black,inset_20px_20px_80px_black]"
   >
-    <p class="drop-shadow-2xl text-4xl font-bebas-neue">
-      {event.summary?.replace(`[${type}]`, "")}
+    <p class="text-grey text-base font-cabin">
+      {date.toLocaleDateString([], { dateStyle: "medium" })} -
+      {
+        date.toLocaleTimeString([], {
+          timeStyle: "short",
+        })
+      }
     </p>
+    <h3 class="drop-shadow-2xl text-4xl font-bebas-neue">
+      {event.summary?.replace(`[${type}]`, "")}
+    </h3>
+    <div
+      style={{ backgroundColor: team?.color || "#E93737" }}
+      class="text-xs font-cabin font-semibold px-2 py-1 rounded-full w-min mb-2"
+    >
+      {type}
+    </div>
   </div>
 </a>

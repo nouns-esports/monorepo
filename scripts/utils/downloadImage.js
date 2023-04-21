@@ -31,5 +31,5 @@ export default async function downloadImage(url) {
 
   fs.writeFileSync(path.join(directory, `${filename}.${extension}`), buffer);
 
-  return `cache/images/${filename}.${extension}`;
+  return `/cache/images/${filename}.${extension}`;
 }

@@ -1,0 +1,43 @@
+---
+import Layout, { teams } from "../../layouts/Layout.astro";
+
+export function getStaticPaths() {
+  return teams.map((team) => ({
+    params: {
+      team: team.name
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .replace(/ /g, "-"),
+    },
+    props: {
+      team,
+    },
+  }));
+}
+
+type Props = {
+  team: (typeof teams)[number];
+};
+
+const { team } = Astro.props;
+---
+
+<Layout title={team.name} primaryColor={team.color}>
+  <div class="relative grid place-items-center h-[500px]">
+    <img
+      src={team.image}
+      alt=""
+      class="absolute top-0 w-full h-full object-cover object-center -z-10 //grayscale brightness-50"
+    />
+    <div
+      class="w-full h-full grid place-items-center shadow-[inset_-60px_-60px_100px_black,inset_60px_60px_100px_black]"
+    >
+      <h1 class="text-white text-8xl font-luckiest-guy">{team.name}</h1>
+    </div>
+  </div>
+  <div
+    class="bg-[black] border-t-4 border-t-[var(--primaryColor)] rounded-t-[4rem] -mt-16 h-screen relative z-10"
+  >
+  </div>
+</Layout>

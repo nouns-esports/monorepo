@@ -1,10 +1,9 @@
 ---
 import Button from "../components/Button.astro";
-import Discord from "../components/Icons/Discord.astro";
-import Twitch from "../components/Icons/Twitch.astro";
-import Twitter from "../components/Icons/Twitter.astro";
-import Twitter from "../components/Icons/Twitter.astro";
-import Youtube from "../components/Icons/Youtube.astro";
+import Discord from "../components/SocialIcons/Discord.astro";
+import Twitch from "../components/SocialIcons/Twitch.astro";
+import Twitter from "../components/SocialIcons/Twitter.astro";
+import Youtube from "../components/SocialIcons/Youtube.astro";
 import ProjectCard from "../components/ProjectCard.astro";
 import ScheduleCard from "../components/ScheduleCard.astro";
 import TeamCard from "../components/TeamCard.astro";
@@ -60,11 +59,13 @@ function highlight(text: string, words: string[]) {
     <img
       src="/clips.png"
       alt=""
-      class="absolute top-0 w-full h-full object-cover object-center -z-10 brightness-[30%]"
+      class="absolute top-0 w-full h-full object-cover object-center -z-10 brightness-[40%]"
     />
     <div class="grid place-items-center gap-10">
       <h2 class="text-white font-luckiest-guy text-8xl">POG</h2>
-      <p class="max-w-[500px] text-center text-[#AAAAAA] text-lg leading-tight">
+      <p
+        class="max-w-[500px] text-center text-[#AAAAAA] text-lg leading-tight [text-shadow:black_0_0_30px]"
+      >
         POG is a platform by Nouns Esports that lets anyone showcase their clips
         from any multiplayer game and earn real money in the process.
       </p>
