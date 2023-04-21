@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "https://api.vercel.com/v1/integrations/deploy/prj_WrvSEEc1Vtx2kt8oL0yRd4VBQHan/lz39e1rsf9",
+      "schedule": "*/15 * * * *"
+    }
+  ]
+}
