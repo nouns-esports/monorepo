@@ -11,8 +11,6 @@ const { event } = Astro.props;
 const type = event.summary?.split(" ")[0].replace("[", "").replace("]", "");
 
 const team = teams.find((team) => team.name.includes(type));
-
-const date = new Date(event.start.dateTime);
 ---
 
 <a
@@ -29,14 +27,11 @@ const date = new Date(event.start.dateTime);
   <div
     class="relative z-10 flex flex-col-reverse pb-4 pl-6 w-full h-full shadow-[inset_-20px_-20px_80px_black,inset_20px_20px_80px_black]"
   >
-    <p class="text-grey text-base font-cabin">
-      {date.toLocaleDateString([], { dateStyle: "medium" })} -
-      {
-        date.toLocaleTimeString([], {
-          timeStyle: "short",
-        })
-      }
-    </p>
+    <event-date
+      data-date={event.start.dateTime}
+      class="text-grey text-base font-cabin"
+    >
+    </event-date>
     <h3 class="drop-shadow-2xl text-4xl font-bebas-neue">
       {event.summary?.replace(`[${type}]`, "")}
     </h3>
@@ -48,3 +43,24 @@ const date = new Date(event.start.dateTime);
     </div>
   </div>
 </a>
+
+<script>
+  class EventDate extends HTMLElement {
+    constructor() {
+      super();
+
+      if (this.dataset.date) {
+        const date = new Date(this.dataset.date);
+
+        this.innerHTML = `${date.toLocaleDateString([], {
+          dateStyle: "medium",
+        })} -
+        ${date.toLocaleTimeString([], {
+          timeStyle: "short",
+        })}`;
+      }
+    }
+  }
+
+  customElements.define("event-date", EventDate);
+</script>
