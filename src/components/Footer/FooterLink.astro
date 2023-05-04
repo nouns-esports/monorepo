@@ -13,7 +13,7 @@ const offsite = url.includes("://");
   target={offsite ? "_blank" : "_self"}
   rel={offsite ? "noopener noreferrer" : ""}
   draggable={false}
-  class="hover:text-white transition-colors"
+  class="hover:text-white transition-colors max-md:text-center"
 >
   <slot />
 </a>

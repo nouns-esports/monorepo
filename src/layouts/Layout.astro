@@ -2,8 +2,9 @@
 import BackgroundEffect from "../components/BackgroundEffect.astro";
 import Header from "../components/Header/index.astro";
 import Footer from "../components/Footer/index.astro";
-import Banner from "../components/Banner.astro";
 import fetchCache from "../utils/fetchCache";
+import dotenv from "dotenv";
+dotenv.config();
 
 type Props = {
   title: string;
@@ -12,16 +13,15 @@ type Props = {
 
 const { title, primaryColor } = Astro.props;
 
-console.log(primaryColor);
-
-export const { schedule, metadata, projects, teams, talent } = fetchCache();
+export const { schedule, metadata, projects, teams, talent, balance } =
+  fetchCache();
 
 export const navigation = [
   {
     name: "Schedule",
     url: "https://calendar.google.com/calendar/embed?src=2gl6iku9kcb2qjdrtgdthgng3s%40group.calendar.google.com",
   },
-  { name: "POG", url: "https://pog.nouns.gg" },
+
   { name: "About", url: "/about" },
   { name: "Shop", url: "https://shop.nouns.gg" },
 ];

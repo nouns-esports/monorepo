@@ -2,29 +2,68 @@
 import Button from "../Button.astro";
 import NavLink from "./HeaderLink.astro";
 
-import { navigation, metadata } from "../../layouts/Layout.astro";
+import {
+  navigation,
+  metadata,
+  socials,
+  balance,
+} from "../../layouts/Layout.astro";
 import Banner from "../Banner.astro";
 import Logo from "../Logo.astro";
 ---
 
 {metadata.banner ? <Banner /> : ""}
 <header class="sticky top-0 w-full z-20">
-  <div
-    class="absolute top-0 w-full flex items-center justify-between gap-16 p-8"
-  >
-    <a
-      href="/"
-      draggable={false}
-      class="flex gap-4 group items-center cursor-pointer select-none"
-    >
-      <Logo
-        class="text-[var(--primaryColor)] group-hover:rotate-[14deg] w-12 transition-transform duration-150"
-      />
-      <p class="text-white font-luckiest-guy text-4xl select-none">Nouns</p>
-    </a>
-    <nav class="flex items-center gap-6 cursor-pointer">
-      {navigation.map(({ url, name }) => <NavLink href={url}>{name}</NavLink>)}
-      <Button href="">Join Us</Button>
+  <div class="absolute top-0 w-full flex items-center justify-between p-8">
+    <div class="flex items-center gap-8">
+      <a
+        href="/"
+        draggable={false}
+        class="flex gap-4 group items-center cursor-pointer select-none"
+      >
+        <Logo
+          class="text-[var(--primaryColor)] group-hover:rotate-[14deg] w-12 transition-transform duration-150"
+        />
+        <p class="text-white font-luckiest-guy text-4xl select-none">Nouns</p>
+      </a>
+      <a
+        href={`https://app.safe.global/balances?safe=eth:${process.env.MULTISIG}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="bg-[#252525]/75 hover:bg-[#252525] transition-colors gap-2 rounded-full flex items-center px-3 py-1.5 max-[500px]:hidden"
+      >
+        <img src="/icons/funds.svg" class="w-4" />
+        {
+          new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: "USD",
+            maximumFractionDigits: 0,
+          }).format(balance as number)
+        }
+      </a>
+    </div>
+    <nav class="flex items-center gap-8 cursor-pointer">
+      <div class="flex gap-6 max-lg:hidden">
+        {
+          navigation.map(({ url, name }) => (
+            <NavLink href={url}>{name}</NavLink>
+          ))
+        }
+      </div>
+      <a
+        href="https://pog.nouns.gg"
+        class="flex gap-2 items-center group max-sm:hidden"
+      >
+        <img
+          src="/logo-white.svg"
+          alt="POG logo"
+          class="w-6 group-hover:rotate-[14deg] transition-transform duration-150"
+        /><p class="text-white font-luckiest-guy text-xl">POG</p>
+      </a>
+      <div class="max-sm:hidden">
+        <Button href={socials.discord}>Join Us</Button>
+      </div>
+      <img src="/icons/menu.svg" alt="" class="w-8 h-8" />
     </nav>
   </div>
 </header>

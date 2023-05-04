@@ -28,10 +28,10 @@ function highlight(text: string, words: string[]) {
       class="absolute top-0 w-full h-full object-cover object-top -z-10"
     />
     <h1
-      class="text-white text-6xl w-1/2 text-center font-luckiest-guy"
+      class="text-white text-6xl w-1/2 text-center font-luckiest-guy max-lg:w-full max-lg:px-16 max-sm:px-8 max-md:text-5xl max-[450px]:text-4xl"
       set:html={highlight(metadata.tagline, ["esports", "onchain"])}
     />
-    <div class="flex gap-8">
+    <div class="flex gap-8 max-md:flex-col items-center">
       <Button href="/about">Learn More</Button>
       <div class="flex gap-4 items-center">
         <Twitch class="h-8" />
@@ -46,10 +46,12 @@ function highlight(text: string, words: string[]) {
     </div>
   </div>
   <div
-    class="px-16 py-32 text-white text-5xl font-luckiest-guy flex flex-col gap-20 items-center"
+    class="px-16 py-32 text-white text-5xl font-luckiest-guy flex flex-col gap-20 items-center max-sm:px-8"
   >
     Our Games
-    <div class="grid grid-cols-4 gap-16 w-full">
+    <div
+      class="grid grid-cols-4 gap-16 w-full max-lg:grid-cols-2 max-sm:grid-cols-1 max-xl:gap-8"
+    >
       {teams.map((team) => <TeamCard team={team} />)}
     </div>
   </div>
@@ -64,7 +66,7 @@ function highlight(text: string, words: string[]) {
     <div class="grid place-items-center gap-10">
       <h2 class="text-white font-luckiest-guy text-8xl">POG</h2>
       <p
-        class="max-w-[500px] text-center text-[#AAAAAA] text-lg leading-tight [text-shadow:black_0_0_30px]"
+        class="max-w-[500px] px-8 text-center text-[#AAAAAA] text-lg leading-tight [text-shadow:black_0_0_30px]"
       >
         POG is a platform by Nouns Esports that lets anyone showcase their clips
         from any multiplayer game and earn real money in the process.
@@ -74,18 +76,22 @@ function highlight(text: string, words: string[]) {
   </div>
 
   <div
-    class="px-16 py-32 text-white text-5xl font-luckiest-guy flex flex-col gap-20 items-center"
+    class="px-16 max-sm:px-8 py-32 text-white text-5xl text-center font-luckiest-guy flex flex-col gap-20 items-center"
   >
     Upcoming Events
-    <div class="grid grid-cols-3 gap-16 w-full">
+    <div
+      class="grid grid-cols-3 max-xl:grid-cols-2 max-md:grid-cols-1 gap-16 max-2xl:gap-8 w-full"
+    >
       {schedule.map((event) => <ScheduleCard event={event} />)}
     </div>
   </div>
   <div
-    class="px-16 pb-32 text-white text-5xl font-luckiest-guy flex flex-col gap-20 items-center"
+    class="px-16 max-sm:px-8 pb-32 text-white text-5xl font-luckiest-guy flex flex-col gap-20 items-center"
   >
     Projects
-    <div class="grid grid-cols-4 gap-16 w-full">
+    <div
+      class="grid grid-cols-4 max-2xl:grid-cols-2 max-sm:grid-cols-1 gap-16 max-2xl:gap-8 w-full"
+    >
       {projects.map((project) => <ProjectCard project={project} />)}
     </div>
   </div>

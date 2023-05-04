@@ -17,10 +17,10 @@ const team = teams.find((team) => team.name.includes(type));
   href={event.htmlLink}
   target="_blank"
   rel="noopener noreferrer"
-  class="relative overflow-hidden h-80 w-full rounded-xl group drop-shadow-2xl"
+  class="relative overflow-hidden aspect-video w-full rounded-xl group drop-shadow-2xl"
 >
   <img
-    src={team?.image || "/landing.png"}
+    src={team?.image || "/contributors.jpg"}
     alt=""
     class="object-cover object-center group-hover:scale-110 transition-transform absolute top-0 w-full h-full"
   />

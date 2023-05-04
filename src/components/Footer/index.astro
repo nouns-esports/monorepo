@@ -11,9 +11,9 @@ import Logo from "../Logo.astro";
 ---
 
 <footer
-  class="flex max-sm:flex-col max-sm:gap-16 border-[var(--primaryColor)] justify-between items-center p-8 bg-black border-t-4 relative z-20"
+  class="flex max-md:flex-col max-md:gap-16 border-[var(--primaryColor)] justify-between items-center p-8 bg-black border-t-4 relative z-20"
 >
-  <div class="flex flex-col gap-4">
+  <div class="flex flex-col gap-4 max-md:items-center">
     <a
       href="/"
       draggable={false}
@@ -24,11 +24,13 @@ import Logo from "../Logo.astro";
       />
       <p class="text-white font-luckiest-guy text-3xl select-none">Nouns</p>
     </a>
-    <p class="w-48">
+    <p class="w-48 max-md:text-center">
       {metadata.tagline}
     </p>
   </div>
-  <div class="flex gap-40">
+  <div
+    class="flex gap-40 max-lg:gap-20 max-[500px]:gap-8 max-[300px]:flex-col max-[300px]:gap-16"
+  >
     <FooterSection title="EXPLORE">
       {
         navigation.map(({ url, name }) => (
@@ -57,7 +59,7 @@ import Logo from "../Logo.astro";
     </FooterSection>
   </div>
   <div
-    class="flex flex-col max-sm:flex-row gap-4 items-center justify-center text-white"
+    class="flex flex-col max-md:flex-row gap-4 items-center justify-center text-white"
   >
     <Twitch class="w-6" />
     <Twitter class="w-7" />

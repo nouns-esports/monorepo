@@ -15,7 +15,8 @@
     "astro": "^2.0.14",
     "dotenv": "^16.0.3",
     "solid-js": "^1.6.10",
-    "tailwindcss": "^3.2.6"
+    "tailwindcss": "^3.2.6",
+    "viem": "^0.3.11"
   },
   "devDependencies": {
     "@types/uuid": "^9.0.1",

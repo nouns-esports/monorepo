@@ -63,6 +63,7 @@ export type Cache = {
   teams: Team[];
   talent: Talent[];
   metadata: { banner: { message: string; url: string }; tagline: string };
+  balance: Number;
 };
 
 export default function fetchCache() {
