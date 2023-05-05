@@ -1,6 +1,6 @@
 ---
 import Button from "../Button.astro";
-import NavLink from "./HeaderLink.astro";
+import HeaderLink from "./HeaderLink.astro";
 import Menu from "../Menu/index.astro";
 import {
   navigation,
@@ -46,13 +46,13 @@ import Logo from "../Logo.astro";
       <div class="flex gap-6 max-lg:hidden">
         {
           navigation.map(({ url, name }) => (
-            <NavLink href={url}>{name}</NavLink>
+            <HeaderLink href={url}>{name}</HeaderLink>
           ))
         }
       </div>
       <a
         href="https://pog.nouns.gg"
-        class="flex gap-2 items-center group max-sm:hidden"
+        class="flex gap-2 items-center group max-[700px]:hidden"
       >
         <img
           src="/logo-white.svg"
@@ -60,7 +60,7 @@ import Logo from "../Logo.astro";
           class="w-6 group-hover:rotate-[14deg] transition-transform duration-150"
         /><p class="text-white font-luckiest-guy text-xl">POG</p>
       </a>
-      <div class="max-sm:hidden">
+      <div class="max-[700px]:hidden">
         <Button href={socials.discord}>Join Us</Button>
       </div>
       <Menu />
