@@ -30,8 +30,14 @@ import MenuLink from "./MenuLink.astro";
       <img id="closeButton" src="/icons/close.svg" alt="" class="w-4 h-4" />
     </div>
   </div>
-  <div class="h-full flex flex-col items-center justify-evenly">
-    {navigation.map(({ url, name }) => <MenuLink href={url}>{name}</MenuLink>)}
+  <div class="h-full flex justify-center">
+    <div class="h-full flex flex-col justify-center items-center gap-16">
+      {
+        navigation.map(({ url, name }) => (
+          <MenuLink href={url}>{name}</MenuLink>
+        ))
+      }
+    </div>
   </div>
 </div>
 
