@@ -1,7 +1,7 @@
 ---
 import Button from "../Button.astro";
 import NavLink from "./HeaderLink.astro";
-
+import Menu from "../Menu/index.astro";
 import {
   navigation,
   metadata,
@@ -63,7 +63,7 @@ import Logo from "../Logo.astro";
       <div class="max-sm:hidden">
         <Button href={socials.discord}>Join Us</Button>
       </div>
-      <img src="/icons/menu.svg" alt="" class="w-8 h-8" />
+      <Menu />
     </nav>
   </div>
 </header>
