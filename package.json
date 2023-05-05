@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "astro": "astro",
-    "cache": "node ./scripts/cache.js",
+    "cache": "rimraf ./cache && node ./scripts/cache.js",
     "dev": "npm run cache && astro dev",
     "build": "npm run cache && astro build && copyfiles cache/images/**/*.* dist"
   },
@@ -23,6 +23,7 @@
     "copyfiles": "^2.4.1",
     "prettier": "^2.8.4",
     "prettier-plugin-astro": "^0.8.0",
+    "rimraf": "^5.0.0",
     "rollup-plugin-copy": "^3.4.0",
     "serve-static": "^1.15.0"
   }
