@@ -9,6 +9,8 @@ const { href } = Astro.props;
 <a
   href={href}
   draggable={false}
+  target="_blank"
+  rel="noopener noreferrer"
   class="hover:text-white transition-colors select-none text-lg font-medium"
 >
   <slot />
