@@ -1,10 +1,11 @@
 ---
 type Props = {
   href: string;
-  newTab?: boolean;
 };
 
-const { href, newTab } = Astro.props;
+const { href } = Astro.props;
+
+const newTab = href.includes("://");
 ---
 
 <a
