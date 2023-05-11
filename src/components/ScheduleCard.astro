@@ -11,8 +11,6 @@ const { event } = Astro.props;
 const type = event.summary?.split(" ")[0].replace("[", "").replace("]", "");
 
 const team = teams.find((team) => team.name.includes(type));
-
-const contributor = teams.find((team) => team.name.includes("Dota 2"))?.image;
 ---
 
 <a
@@ -22,7 +20,7 @@ const contributor = teams.find((team) => team.name.includes("Dota 2"))?.image;
   class="relative overflow-hidden select-none aspect-video w-full text-left rounded-xl group drop-shadow-2xl"
 >
   <img
-    src={team?.image || contributor || "/landing.webp"}
+    src={team?.image || "/contributor.webp"}
     alt=""
     class="object-cover object-center group-hover:scale-110 transition-transform absolute top-0 w-full h-full"
   />
