@@ -9,8 +9,6 @@ type Contributor = {
 type Project = {
   name: string;
   image: string;
-  description: string;
-  leaders: Contributor[];
   url: string;
 };
 
@@ -63,7 +61,7 @@ export type Cache = {
   teams: Team[];
   talent: Talent[];
   metadata: { banner: { message: string; url: string }; tagline: string };
-  balance: Number;
+  balance: number;
 };
 
 export default function fetchCache() {

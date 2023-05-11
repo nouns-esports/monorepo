@@ -19,7 +19,7 @@ const contributor = teams.find((team) => team.name.includes("Dota 2"))?.image;
   href={event.htmlLink}
   target="_blank"
   rel="noopener noreferrer"
-  class="relative overflow-hidden aspect-video w-full text-left rounded-xl group drop-shadow-2xl"
+  class="relative overflow-hidden select-none aspect-video w-full text-left rounded-xl group drop-shadow-2xl"
 >
   <img
     src={team?.image || contributor || "/landing.webp"}

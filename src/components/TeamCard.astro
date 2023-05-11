@@ -15,7 +15,7 @@ const { team } = Astro.props;
     .toLowerCase()
     .replace(/ /g, "-")}`}
   style={{ backgroundImage: `url(${team.image})` }}
-  class="relative w-full rounded-xl aspect-square group overflow-hidden"
+  class="relative w-full rounded-xl select-none aspect-square group overflow-hidden"
 >
   <img
     src={team.image}

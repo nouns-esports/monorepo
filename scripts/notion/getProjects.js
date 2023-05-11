@@ -1,5 +1,4 @@
 import downloadImage from "../utils/downloadImage.js";
-import getContributors from "./getContributors.js";
 import validateData from "../utils/validateData.js";
 
 export default async function getProjects(notion) {
@@ -16,11 +15,6 @@ export default async function getProjects(notion) {
       name: result.properties.Name.title[0]?.plain_text,
       url: result.properties.URL?.url,
       image: await downloadImage(result.properties.Image.files[0].file?.url),
-      description: result.properties.Description.rich_text[0]?.plain_text,
-      leaders: await getContributors(
-        notion,
-        result.properties.Leaders.people.map((person) => person.id)
-      ),
     });
 
     projects.push(project);
