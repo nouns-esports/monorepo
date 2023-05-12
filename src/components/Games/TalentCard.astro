@@ -1,0 +1,30 @@
+---
+import type { games, talent } from "../../layouts/Layout.astro";
+
+type Props = {
+  game: (typeof games)[number];
+  person: (typeof talent)[number];
+};
+
+const { game, person } = Astro.props;
+---
+
+<div
+  class="relative w-full flex rounded-xl border-fix group cursor-pointer overflow-hidden"
+  style={`background-color:${game.color};`}
+>
+  <img
+    src={person.image}
+    class="aspect-[21/30] pt-8 object-contain z-10 group-hover:translate-y-[4.5rem] transition-transform"
+  />
+  <div class="absolute top-6 w-full text-center">
+    <h3 class="font-luckiest-guy text-4xl text-white">
+      {person.name}
+    </h3>
+    <p class="font-cabin text-white font-semibold">{person.role}</p>
+  </div>
+  <div
+    class="absolute h-full w-full bg-black rounded-[0.6rem] group-hover:opacity-0 opacity-1 transition-opacity"
+  >
+  </div>
+</div>

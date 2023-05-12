@@ -38,6 +38,10 @@ module.exports = {
             display: "none",
           },
         },
+        ".border-fix": {
+          "background-clip": "content-box",
+          padding: "1px",
+        },
       });
     }),
   ],

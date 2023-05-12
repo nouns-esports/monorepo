@@ -5,9 +5,9 @@ import Twitter from "../SocialIcons/Twitter.astro";
 import Youtube from "../SocialIcons/Youtube.astro";
 import FooterSection from "./FooterSection.astro";
 import FooterLink from "./FooterLink.astro";
-
-import { navigation, metadata, teams } from "../../layouts/Layout.astro";
 import Logo from "../Logo.astro";
+
+import { navigation, metadata, games } from "../../layouts/Layout.astro";
 ---
 
 <footer
@@ -38,11 +38,11 @@ import Logo from "../Logo.astro";
         ))
       }
     </FooterSection>
-    <FooterSection title="TEAMS">
+    <FooterSection title="GAMES">
       {
-        teams.map(({ name }) => (
+        games.map(({ name }) => (
           <FooterLink
-            url={`/teams/${name
+            url={`/games/${name
               .normalize("NFD")
               .replace(/[\u0300-\u036f]/g, "")
               .toLowerCase()

@@ -14,7 +14,7 @@ export default async function getTalent(notion) {
     const talent = validateData("talent", {
       id: result.id,
       name: result.properties.Name.title[0]?.plain_text,
-      team: result.properties.Team.relation[0]?.id,
+      game: result.properties.Game.relation[0]?.id,
       image: await downloadImage(result.properties.Image.files[0]?.file?.url),
       role: result.properties.Role.multi_select.map((role) => role.name),
     });

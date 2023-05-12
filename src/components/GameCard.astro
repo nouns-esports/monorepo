@@ -1,24 +1,24 @@
 ---
-import type { teams } from "../layouts/Layout.astro";
+import type { games } from "../layouts/Layout.astro";
 
 type Props = {
-  team: (typeof teams)[number];
+  game: (typeof games)[number];
 };
 
-const { team } = Astro.props;
+const { game } = Astro.props;
 ---
 
 <a
-  href={`/teams/${team.name
+  href={`/games/${game.name
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase()
     .replace(/ /g, "-")}`}
-  style={{ backgroundImage: `url(${team.image})` }}
+  style={{ backgroundImage: `url(${game.image})` }}
   class="relative w-full rounded-xl select-none aspect-square group overflow-hidden"
 >
   <img
-    src={team.image}
+    src={game.image}
     alt=""
     class="object-cover object-center absolute w-full top-0 h-full brightness-[85%] group-hover:scale-110 transition-transform"
   />
@@ -28,7 +28,7 @@ const { team } = Astro.props;
     <h3
       class="drop-shadow-2xl text-center p-4 text-5xl max-2xl:text-4xl max-sm:text-3xl font-bebas-neue [text-shadow:black_0_0_30px]"
     >
-      {team.name}
+      {game.name}
     </h3>
   </div>
 </a>

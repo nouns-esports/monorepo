@@ -15,27 +15,19 @@ type Project = {
 type Talent = {
   id: string;
   name: string;
-  team: string;
+  game: string;
   image: string;
   role: string[];
 };
 
-type Person = {
-  id: string;
-  name: string;
-  team: Team;
-  image: string;
-  role: string[];
-};
-
-type Team = {
+type Game = {
   id: string;
   name: string;
   image: string;
   description: string;
   color: string;
   liquipedia: string;
-  members: string[];
+  talent: string[];
 };
 
 type Event = {
@@ -58,7 +50,7 @@ type Event = {
 export type Cache = {
   schedule: Event[];
   projects: Project[];
-  teams: Team[];
+  games: Game[];
   talent: Talent[];
   metadata: { banner: { message: string; url: string }; tagline: string };
   balance: number;

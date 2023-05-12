@@ -1,6 +1,6 @@
 ---
 import type { schedule } from "../layouts/Layout.astro";
-import { teams } from "../layouts/Layout.astro";
+import { games } from "../layouts/Layout.astro";
 
 type Props = {
   event: (typeof schedule)[number];
@@ -10,7 +10,7 @@ const { event } = Astro.props;
 
 const type = event.summary?.split(" ")[0].replace("[", "").replace("]", "");
 
-const team = teams.find((team) => team.name.includes(type));
+const game = games.find((game) => game.name.includes(type));
 ---
 
 <a
@@ -20,7 +20,7 @@ const team = teams.find((team) => team.name.includes(type));
   class="relative overflow-hidden select-none aspect-video w-full text-left rounded-xl group drop-shadow-2xl"
 >
   <img
-    src={team?.image || "/contributor.webp"}
+    src={game?.image || "/contributor.webp"}
     alt=""
     class="object-cover object-center group-hover:scale-110 transition-transform absolute top-0 w-full h-full"
   />
@@ -36,7 +36,7 @@ const team = teams.find((team) => team.name.includes(type));
       {event.summary?.replace(`[${type}]`, "")}
     </h3>
     <div
-      style={{ backgroundColor: team?.color || "#E93737" }}
+      style={{ backgroundColor: game?.color || "#E93737" }}
       class="text-xs font-cabin font-semibold px-2 py-1 rounded-full w-min mb-2"
     >
       {type}

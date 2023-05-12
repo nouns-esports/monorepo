@@ -6,10 +6,10 @@ import Twitter from "../components/SocialIcons/Twitter.astro";
 import Youtube from "../components/SocialIcons/Youtube.astro";
 import ProjectCard from "../components/ProjectCard.astro";
 import ScheduleCard from "../components/ScheduleCard.astro";
-import TeamCard from "../components/TeamCard.astro";
+import GameCard from "../components/GameCard.astro";
 import NewLayout, { projects } from "../layouts/Layout.astro";
 
-import { metadata, teams, schedule } from "../layouts/Layout.astro";
+import { metadata, games, schedule } from "../layouts/Layout.astro";
 
 function highlight(text: string, words: string[]) {
   for (const word of words) {
@@ -52,7 +52,7 @@ function highlight(text: string, words: string[]) {
     <div
       class="grid grid-cols-4 gap-16 w-full max-lg:grid-cols-2 max-sm:grid-cols-1 max-xl:gap-8"
     >
-      {teams.map((team) => <TeamCard team={team} />)}
+      {games.map((game) => <GameCard game={game} />)}
     </div>
   </div>
   <div
