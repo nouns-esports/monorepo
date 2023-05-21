@@ -1,5 +1,4 @@
 ---
-import BackgroundEffect from "../components/BackgroundEffect.astro";
 import Header from "../components/Header/index.astro";
 import Footer from "../components/Footer/index.astro";
 import fetchCache from "../utils/fetchCache";
@@ -68,9 +67,8 @@ export const socials = {
   </head>
 
   <body
-    class="bg-black text-grey font-cabin selection:text-white selection:bg-[var(--primaryColor)]"
+    class="bg-black text-lightgrey font-cabin selection:text-white selection:bg-[var(--primaryColor)] overflow-x-hidden"
   >
-    <BackgroundEffect />
     <Header />
     <div style={{ marginTop: metadata.banner ? "-2.25rem" : "" }}>
       <slot />

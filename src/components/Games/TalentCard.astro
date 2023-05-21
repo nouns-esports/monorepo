@@ -7,15 +7,19 @@ type Props = {
 };
 
 const { game, person } = Astro.props;
+
+const limitWidth = game.talent.length < 5;
 ---
 
 <div
-  class="relative w-full flex rounded-xl border-fix group cursor-pointer overflow-hidden"
-  style={`background-color:${game.color};`}
+  class="relative aspect-[21/30] w-full flex max-xl:w-60 max-xl:flex-shrink-0 rounded-xl border-fix group cursor-pointer overflow-hidden"
+  style={`background-color:${game.color}; max-width:${
+    limitWidth ? "18rem" : "100%"
+  }`}
 >
   <img
     src={person.image}
-    class="aspect-[21/30] pt-8 object-contain z-10 group-hover:translate-y-[4.5rem] transition-transform"
+    class="w-full pt-8 object-contain z-10 group-hover:translate-y-[4.5rem] max-xl:translate-y-[4.5rem] transition-transform"
   />
   <div class="absolute top-6 w-full text-center">
     <h3 class="font-luckiest-guy text-4xl text-white">
@@ -24,7 +28,7 @@ const { game, person } = Astro.props;
     <p class="font-cabin text-white font-semibold">{person.role}</p>
   </div>
   <div
-    class="absolute h-full w-full bg-black rounded-[0.6rem] group-hover:opacity-0 opacity-1 transition-opacity"
+    class="absolute h-full w-full bg-darkgrey rounded-[0.6rem] group-hover:opacity-0 opacity-1 max-xl:opacity-0 transition-opacity"
   >
   </div>
 </div>

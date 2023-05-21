@@ -8,7 +8,7 @@ type Props = {
 
 const { event } = Astro.props;
 
-const type = event.summary?.split(" ")[0].replace("[", "").replace("]", "");
+const type = event.summary?.split("]")[0].replace("[", "");
 
 const game = games.find((game) => game.name.includes(type));
 ---
@@ -29,7 +29,7 @@ const game = games.find((game) => game.name.includes(type));
   >
     <event-date
       data-date={event.start.dateTime}
-      class="text-grey text-base font-cabin"
+      class="text-lightgrey text-base font-cabin"
     >
     </event-date>
     <h3 class="drop-shadow-2xl text-4xl font-bebas-neue">

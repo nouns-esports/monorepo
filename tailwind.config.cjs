@@ -9,10 +9,11 @@ module.exports = {
   theme: {
     colors: {
       white: "white",
-      black: "#060606",
+      black: "black",
       red: "#E93737",
       transparent: "transparent",
-      grey: "#858585",
+      lightgrey: "#858585",
+      darkgrey: "#0A0A0A",
     },
     fontFamily: {
       "luckiest-guy": ["Luckiest Guy"],
@@ -31,13 +32,6 @@ module.exports = {
   plugins: [
     plugin(function ({ addUtilities }) {
       addUtilities({
-        ".scrollbar-hidden": {
-          "-ms-overflow-style": "none",
-          "scrollbar-width": "none",
-          "&::-webkit-scrollbar": {
-            display: "none",
-          },
-        },
         ".border-fix": {
           "background-clip": "content-box",
           padding: "1px",

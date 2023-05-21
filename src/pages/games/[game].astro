@@ -24,7 +24,9 @@ type Props = {
 
 const { game } = Astro.props;
 
-const talents = talent.filter((person) => game.talent.includes(person.id));
+const talents = game.talent.map(
+  (id) => talent.find((person) => person.id === id) as (typeof talent)[number]
+);
 ---
 
 <Layout title={game.name} primaryColor={game.color}>
@@ -37,11 +39,15 @@ const talents = talent.filter((person) => game.talent.includes(person.id));
     <div
       class="w-full h-full grid place-items-center shadow-[inset_-60px_-60px_100px_black,inset_60px_60px_100px_black]"
     >
-      <h1 class="text-white text-8xl font-luckiest-guy">{game.name}</h1>
+      <h1
+        class="text-white text-8xl max-lg:text-6xl max-md:text-5xl max-[500px]:text-4xl font-luckiest-guy"
+      >
+        {game.name}
+      </h1>
     </div>
   </div>
   <div
-    class="bg-[black] p-16 gap-16 flex flex-col border-t-4 border-t-[var(--primaryColor)] rounded-t-[4rem] -mt-16 h-screen relative z-10"
+    class="bg-black p-16 max-lg:p-8 gap-16 max-lg:gap-8 flex flex-col border-t-4 border-t-[var(--primaryColor)] rounded-t-[4rem] max-lg:rounded-t-[2rem] -mt-16 relative z-10"
   >
     <GameSection title="ABOUT">
       Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
@@ -52,8 +58,11 @@ const talents = talent.filter((person) => game.talent.includes(person.id));
       cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
       est laborum.
     </GameSection>
+
     <GameSection title="TALENT">
-      <div class="flex gap-8">
+      <div
+        class="flex -mx-16 max-lg:-mx-8 px-16 max-lg:px-8 gap-8 w-[calc(100%_+_8rem)] max-lg:w-[calc(100%_+_4rem)] max-xl:overflow-x-scroll"
+      >
         {talents.map((person) => <TalentCard game={game} person={person} />)}
       </div>
     </GameSection>
