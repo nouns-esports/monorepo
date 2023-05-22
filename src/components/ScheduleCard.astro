@@ -21,7 +21,7 @@ const game = games.find((game) => game.name.includes(type));
 >
   <img
     src={game?.image || "/contributor.webp"}
-    alt=""
+    alt={event.summary}
     class="object-cover object-center group-hover:scale-110 transition-transform absolute top-0 w-full h-full"
   />
   <div
