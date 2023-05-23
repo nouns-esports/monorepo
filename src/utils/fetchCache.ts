@@ -28,6 +28,7 @@ type Game = {
   color: string;
   liquipedia: string;
   talent: string[];
+  video: string;
 };
 
 type Event = {
