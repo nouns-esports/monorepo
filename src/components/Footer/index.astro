@@ -40,18 +40,23 @@ import { navigation, games, tagline } from "../../layouts/Layout.astro";
     </FooterSection>
     <FooterSection title="GAMES">
       {
-        games.map(({ name }) => (
-          <FooterLink
-            url={`/games/${name
-              .normalize("NFD")
-              .replace(/[\u0300-\u036f]/g, "")
-              .toLowerCase()
-              .replace(/ /g, "-")}`}
-          >
-            {name}
-          </FooterLink>
-        ))
+        games.map(({ name }, index) =>
+          index < 3 ? (
+            <FooterLink
+              url={`/games/${name
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .toLowerCase()
+                .replace(/ /g, "-")}`}
+            >
+              {name}
+            </FooterLink>
+          ) : (
+            ""
+          )
+        )
       }
+      {games.length > 3 ? <FooterLink url="/#games">All</FooterLink> : ""}
     </FooterSection>
     <FooterSection title="CONTRIBUTORS">
       <FooterLink

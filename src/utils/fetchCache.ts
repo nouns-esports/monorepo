@@ -17,7 +17,7 @@ type Talent = {
   name: string;
   game: string;
   image: string;
-  role: string[];
+  role: string;
 };
 
 type Game = {
@@ -26,7 +26,7 @@ type Game = {
   image: string;
   description: string;
   color: string;
-  liquipedia: string;
+  link: string;
   talent: string[];
   video: string;
 };

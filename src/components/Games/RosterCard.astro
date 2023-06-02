@@ -12,7 +12,7 @@ const limitWidth = game.talent.length < 5;
 ---
 
 <div
-  class="relative aspect-video w-full flex max-lg:w-60 max-lg:flex-shrink-0 rounded-xl border-fix group cursor-pointer overflow-hidden"
+  class="relative aspect-[21/30] w-full flex max-lg:w-60 max-lg:flex-shrink-0 rounded-xl border-fix group cursor-pointer overflow-hidden"
   style={`background-color:${game.color}; max-width:${
     limitWidth ? "18rem" : "100%"
   }`}
@@ -20,11 +20,9 @@ const limitWidth = game.talent.length < 5;
   <img
     src={person.image}
     alt={person.name}
-    class="w-full pt-8 object-contain z-10 group-hover:-translate-x-[4.5rem] max-lg:translate-x-[4.5rem] transition-transform"
+    class="w-full pt-8 object-contain z-10 group-hover:translate-y-[4.5rem] max-lg:translate-y-[4.5rem] transition-transform"
   />
-  <div
-    class="absolute flex flex-col right-6 justify-center items-center h-full w-1/2 text-center"
-  >
+  <div class="absolute top-6 w-full text-center">
     <h3 class="font-luckiest-guy text-4xl text-white">
       {person.name}
     </h3>

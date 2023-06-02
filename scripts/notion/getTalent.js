@@ -16,7 +16,7 @@ export default async function getTalent(notion) {
       name: result.properties.Name.title[0]?.plain_text,
       game: result.properties.Game.relation[0]?.id,
       image: await downloadImage(result.properties.Image.files[0]?.file?.url),
-      role: result.properties.Role.multi_select.map((role) => role.name),
+      role: result.properties.Role.multi_select[0].name,
     });
 
     talents.push(talent);

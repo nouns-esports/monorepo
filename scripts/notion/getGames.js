@@ -18,7 +18,7 @@ export default async function getGames(notion) {
       description: result.properties.Description.rich_text[0]?.plain_text,
       color: result.properties.Color.rich_text[0]?.plain_text,
       talent: result.properties.Talent?.relation.map((talent) => talent.id),
-      liquipedia: result.properties.Liquipedia?.url,
+      link: result.properties.Link?.url,
       video: result.properties.Video?.url,
     });
 
