@@ -12,8 +12,7 @@ type Props = {
 
 const { title, primaryColor } = Astro.props;
 
-export const { schedule, metadata, projects, games, talent, balance } =
-  fetchCache();
+export const { schedule, projects, games, talent, balance } = fetchCache();
 
 export const navigation = [
   {
@@ -24,6 +23,14 @@ export const navigation = [
   { name: "About", url: "/about" },
   { name: "Shop", url: "http://shop.nouns.gg" },
 ];
+
+export const banner = {
+  message: "Want funding to host or compete in a tournament?",
+  url: "https://prop.house/nouns-esports/",
+};
+
+export const tagline =
+  "Immortalizing esports through the infinite onchain frontier";
 
 export const socials = {
   twitter: "https://twitter.com/nounsesports",
@@ -63,14 +70,14 @@ export const socials = {
     <link rel="icon" type="image/svg" href="/logo.svg" />
     <meta name="generator" content={Astro.generator} />
     <title>Nouns Esports {title ? "-" : ""} {title}</title>
-    <meta name="description" content={metadata.tagline} />
+    <meta name="description" content={tagline} />
   </head>
 
   <body
-    class="bg-black text-lightgrey font-cabin selection:text-white selection:bg-[var(--primaryColor)] overflow-x-hidden"
+    class="bg-black text-lightgrey font-cabin selection:text-white selection:bg-[var(--primaryColor)] //BREAKS_STICKY_HEADERoverflow-x-hidden"
   >
     <Header />
-    <div style={{ marginTop: metadata.banner ? "-2.25rem" : "" }}>
+    <div style={{ marginTop: banner ? "-2.25rem" : "" }}>
       <slot />
     </div>
     <Footer />

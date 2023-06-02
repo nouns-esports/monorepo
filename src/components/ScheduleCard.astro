@@ -10,14 +10,16 @@ const { event } = Astro.props;
 
 const type = event.summary?.split("]")[0].replace("[", "");
 
-const game = games.find((game) => game.name.includes(type));
+const game = games.find((game) =>
+  game.name.toLowerCase().includes(type.toLowerCase())
+);
 ---
 
 <a
   href={event.htmlLink}
   target="_blank"
   rel="noopener noreferrer"
-  class="relative overflow-hidden select-none aspect-video w-full text-left rounded-xl group drop-shadow-2xl"
+  class="relative w-[calc(33.33%_-_2.67rem)] max-xl:w-[calc(33.33%_-_2.67rem)] max-sm:first:ml-8 max-sm:last:mr-8 max-sm:min-w-[calc(100%_-_6rem)] min-w-[24rem] overflow-hidden select-none aspect-video text-left rounded-xl group drop-shadow-2xl"
 >
   <img
     src={game?.image || "/contributor.webp"}
@@ -25,19 +27,21 @@ const game = games.find((game) => game.name.includes(type));
     class="object-cover object-center group-hover:scale-110 transition-transform absolute top-0 w-full h-full"
   />
   <div
-    class="relative z-10 flex flex-col-reverse pb-4 pl-6 w-full h-full shadow-[inset_-20px_-20px_80px_black,inset_20px_20px_80px_black]"
+    class="relative z-10 flex flex-col-reverse py-4 px-6 max-sm:py-3.5 max-sm:px-5 w-full h-full shadow-[inset_-20px_-20px_80px_black,inset_20px_20px_80px_black]"
   >
     <event-date
       data-date={event.start.dateTime}
       class="text-lightgrey text-base font-cabin"
     >
     </event-date>
-    <h3 class="drop-shadow-2xl text-4xl font-bebas-neue">
+    <h3
+      class="drop-shadow-2xl text-4xl font-bebas-neue max-[500px]:text-2xl max-[350px]:text-xl"
+    >
       {event.summary?.replace(`[${type}]`, "")}
     </h3>
     <div
       style={{ backgroundColor: game?.color || "#E93737" }}
-      class="text-xs font-cabin font-semibold px-2 py-1 rounded-full w-min mb-2"
+      class="text-xs font-cabin font-semibold px-2 py-1 rounded-full w-min mb-2 max-[500px]:mb-1"
     >
       {type}
     </div>

@@ -4,15 +4,15 @@ import HeaderLink from "./HeaderLink.astro";
 import Menu from "../Menu/index.astro";
 import {
   navigation,
-  metadata,
   socials,
+  banner,
   balance,
 } from "../../layouts/Layout.astro";
 import Banner from "../Banner.astro";
 import Logo from "../Logo.astro";
 ---
 
-{metadata.banner ? <Banner /> : ""}
+{banner ? <Banner /> : ""}
 <header class="sticky top-0 w-full z-20">
   <div class="absolute top-0 w-full flex items-center justify-between p-8">
     <div class="flex items-center gap-8">

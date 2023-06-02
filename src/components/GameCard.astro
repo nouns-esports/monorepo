@@ -15,7 +15,7 @@ const { game } = Astro.props;
     .toLowerCase()
     .replace(/ /g, "-")}`}
   style={{ backgroundImage: `url(${game.image})` }}
-  class="relative w-full rounded-xl select-none aspect-square group overflow-hidden"
+  class="relative w-[calc(25%_-_3rem)] max-xl:w-[calc(25%_-_1.5rem)] max-sm:first:ml-8 max-sm:last:mr-8 max-sm:min-w-[calc(100%_-_6rem)] min-w-[12rem] rounded-xl select-none aspect-square group overflow-hidden"
 >
   <img
     src={game.image}

@@ -7,7 +7,7 @@ import FooterSection from "./FooterSection.astro";
 import FooterLink from "./FooterLink.astro";
 import Logo from "../Logo.astro";
 
-import { navigation, metadata, games } from "../../layouts/Layout.astro";
+import { navigation, games, tagline } from "../../layouts/Layout.astro";
 ---
 
 <footer
@@ -17,7 +17,7 @@ import { navigation, metadata, games } from "../../layouts/Layout.astro";
     <a
       href="/"
       draggable={false}
-      class="flex gap-4 group items-center cursor-pointer select-none"
+      class="flex gap-3 group items-center cursor-pointer select-none"
     >
       <Logo
         class="text-[var(--primaryColor)] group-hover:rotate-[14deg] w-10 transition-transform duration-150"
@@ -25,7 +25,7 @@ import { navigation, metadata, games } from "../../layouts/Layout.astro";
       <p class="text-white font-luckiest-guy text-3xl select-none">Nouns</p>
     </a>
     <p class="w-48 max-md:text-center">
-      {metadata.tagline}
+      {tagline}
     </p>
   </div>
   <div
@@ -53,9 +53,22 @@ import { navigation, metadata, games } from "../../layouts/Layout.astro";
         ))
       }
     </FooterSection>
-    <FooterSection title="NOUNS">
-      <FooterLink url="https://nouns.wtf">Nouns</FooterLink>
-      <FooterLink url="https://nouns.wtf/proposals">Proposals</FooterLink>
+    <FooterSection title="CONTRIBUTORS">
+      <FooterLink
+        url="https://nouns-esports.notion.site/Contributor-Dashboard-776148bfb6164afea843ee59ff559236"
+      >
+        Dashboard
+      </FooterLink>
+      <FooterLink
+        url="https://nouns-esports.notion.site/95a06dc09ca34c93aa945bcb4392b445?v=5782f93244024a64bf04c2284a5ccba4"
+      >
+        Proposals
+      </FooterLink>
+      <FooterLink
+        url="https://app.safe.global/eth:0x8b45D1CACcb3593E9F1015BA8e97AFB68DE3a0d1/balances"
+      >
+        Multisig
+      </FooterLink>
     </FooterSection>
   </div>
   <div

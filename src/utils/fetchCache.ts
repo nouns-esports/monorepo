@@ -53,7 +53,6 @@ export type Cache = {
   projects: Project[];
   games: Game[];
   talent: Talent[];
-  metadata: { banner: { message: string; url: string }; tagline: string };
   balance: number;
 };
 

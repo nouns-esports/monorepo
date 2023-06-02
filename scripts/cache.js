@@ -1,6 +1,5 @@
 import { Client } from "@notionhq/client";
 import getSchedule from "./google/getSchedule.js";
-import getMetadata from "./notion/getMetadata.js";
 import getProjects from "./notion/getProjects.js";
 import getGames from "./notion/getGames.js";
 import getTalent from "./notion/getTalent.js";
@@ -24,19 +23,16 @@ const client = createPublicClient({
   transport: http(),
 });
 
-const [schedule, metadata, projects, games, talent, balance] =
-  await Promise.all([
-    getSchedule(),
-    getMetadata(notion),
-    getProjects(notion),
-    getGames(notion),
-    getTalent(notion),
-    // getBalance(client),
-  ]);
+const [schedule, projects, games, talent, balance] = await Promise.all([
+  getSchedule(),
+  getProjects(notion),
+  getGames(notion),
+  getTalent(notion),
+  // getBalance(client),
+]);
 
 const output = {
   schedule,
-  metadata,
   projects,
   games,
   talent,
