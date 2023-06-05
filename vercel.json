@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    {
+      "source": "/shop",
+      "destination": "https://raven.gg/stores/nounsesports/",
+      "permanent": true
+    }
+  ]
+}
