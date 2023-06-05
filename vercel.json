@@ -4,6 +4,16 @@
       "source": "/shop",
       "destination": "https://raven.gg/stores/nounsesports/",
       "permanent": true
+    },
+    {
+      "source": "/prophouse",
+      "destination": "https://prop.house/nouns-esports",
+      "permanent": true
+    },
+    {
+      "source": "/build",
+      "destination": "https://nouns-esports.notion.site/Contributor-Dashboard-776148bfb6164afea843ee59ff559236",
+      "permanent": true
     }
   ]
 }
