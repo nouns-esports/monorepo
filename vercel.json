@@ -1,18 +1,23 @@
 {
   "redirects": [
     {
-      "source": "/shop",
-      "destination": "https://raven.gg/stores/nounsesports/",
-      "permanent": true
-    },
-    {
-      "source": "/prophouse",
+      "source": "/getfunded",
       "destination": "https://prop.house/nouns-esports",
       "permanent": true
     },
     {
       "source": "/build",
       "destination": "https://nouns-esports.notion.site/Contributor-Dashboard-776148bfb6164afea843ee59ff559236",
+      "permanent": true
+    },
+    {
+      "source": "/mint",
+      "destination": "https://zora.co/collect/0x298e7881bd9fd35d3b1d860701560364947c4e02",
+      "permanent": true
+    },
+    {
+      "source": "/funds",
+      "destination": "https://nouns-esports.notion.site/nouns-esports/8d8d70a0128541ad945daa1daaf8008d?v=24419ddf3932475bac265fcaa73e9954",
       "permanent": true
     }
   ]
