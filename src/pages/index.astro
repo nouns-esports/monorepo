@@ -7,7 +7,7 @@ import Youtube from "../components/SocialIcons/Youtube.astro";
 import ProjectCard from "../components/ProjectCard.astro";
 import ScheduleCard from "../components/ScheduleCard.astro";
 import GameCard from "../components/GameCard.astro";
-import NewLayout, { projects } from "../layouts/Layout.astro";
+import Layout, { projects } from "../layouts/Layout.astro";
 
 import { games, tagline, schedule } from "../layouts/Layout.astro";
 
@@ -19,7 +19,7 @@ function highlight(text: string, words: string[]) {
 }
 ---
 
-<NewLayout title="">
+<Layout title="">
   <div
     class="h-screen bg-cover flex flex-col justify-center items-center gap-8 shadow-[inset_-100px_-100px_100px_black,inset_100px_100px_100px_black] max-sm:shadow-[inset_-40px_-40px_40px_black,inset_40px_40px_40px_black]"
   >
@@ -101,4 +101,4 @@ function highlight(text: string, words: string[]) {
       {projects.map((project) => <ProjectCard project={project} />)}
     </div>
   </div>
-</NewLayout>
+</Layout>

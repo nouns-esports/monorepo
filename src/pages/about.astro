@@ -1,11 +1,44 @@
 ---
+import Button from "../components/Button.astro";
 import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout title="About">
-  <h1
-    class="flex h-screen w-full justify-center items-center font-luckiest-guy text-6xl text-white"
-  >
-    About
-  </h1>
+  <div class="max-w-[1920px] mt-64 mb-32 flex flex-col items-center gap-16">
+    <h1 class="font-luckiest-guy text-6xl text-white">
+      Welcome to Nouns Esports!
+    </h1>
+    <p class="max-w-[50vw] text-center">
+      With a growing fan base and passionate supporters, we have established
+      ourselves as a prominent force in the esports industry. Our teams and
+      players have achieved remarkable success, competing in top-tier
+      tournaments and showcasing their skills to audiences worldwide.
+    </p>
+
+    <h2 class="font-bebas-neue text-4xl text-white">What is Nouns?</h2>
+    <p class="max-w-[50vw] text-center">
+      Nouns is a community-driven brand that leverages its open-source IP to
+      support ambitious dreams and business ideas. Nouns serves as a brand
+      ambassador for innovative ventures, ranging from clothing brands to
+      extreme sports clubs. By integrating esports into the Nouns ecosystem,
+      Nouns Esports aims to cultivate a globally recognized brand in the
+      competitive gaming industry.
+    </p>
+    <h2 class="font-bebas-neue text-4xl text-white">
+      Want to help us grow Nouns Esports?
+    </h2>
+    <p class="max-w-[50vw] text-center">
+      We believe that esports is about more than just competition; it's about
+      the shared experience and the sense of belonging within a vibrant
+      community. Our team embodies this ethos, fostering camaraderie and
+      sportsmanship while striving for excellence. As a forward-thinking
+      organization, we are constantly exploring new opportunities to grow and
+      expand our reach. Whether it's through merchandise, partnerships, or
+      groundbreaking platforms, we are dedicated to shaping the future of
+      esports and leaving a lasting legacy. Join us on this thrilling journey as
+      we redefine what it means to be an esports organization and embrace the
+      limitless possibilities of the blockchain.
+    </p>
+    <Button href="https://discord.gg/nounsesports">Join us</Button>
+  </div>
 </Layout>
