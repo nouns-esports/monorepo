@@ -1,11 +1,10 @@
 import {
   parseCover,
-  parseId,
   parseSelect,
   parseSingleRelation,
   parseTitle,
   parseUrl,
-} from "./utils/parseProperties";
+} from "./utils/parseProperties.js";
 
 export type Socials = {
   twitch: string;
@@ -25,8 +24,8 @@ export type Talent = {
   socials: Socials;
 };
 
-export default async function getTalent(notion: any) {
-  const talents: Talent[] = [];
+export default async function getRosters(notion: any) {
+  const rosters: Talent[] = [];
 
   const response = await notion.databases.query({
     database_id: "647f146393df41018183ee9a3bebd37f",
@@ -45,8 +44,8 @@ export default async function getTalent(notion: any) {
       Instagram,
     } = properties;
 
-    talents.push({
-      id: parseId(id),
+    rosters.push({
+      id,
       name: parseTitle(Name),
       game: parseSingleRelation(Game),
       image: await parseCover(cover),
@@ -62,5 +61,5 @@ export default async function getTalent(notion: any) {
     });
   }
 
-  return talents;
+  return rosters;
 }

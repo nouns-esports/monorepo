@@ -1,14 +1,15 @@
 ---
-import type { games, talent } from "../../layouts/Layout.astro";
+import { Game } from "../../../scripts/notion/getGames";
+import { Talent } from "../../../scripts/notion/getRosters";
 
 type Props = {
-  game: (typeof games)[number];
-  person: (typeof talent)[number];
+  game: Game;
+  person: Talent;
 };
 
 const { game, person } = Astro.props;
 
-const limitWidth = game.talent.length < 5;
+const limitWidth = game.roster.length < 5;
 ---
 
 <div

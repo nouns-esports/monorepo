@@ -1,10 +1,9 @@
 import {
   parseCover,
-  parseId,
   parseRelation,
   parseTitle,
   parseUrl,
-} from "./utils/parseProperties";
+} from "./utils/parseProperties.js";
 
 export type Project = {
   id: string;
@@ -25,7 +24,7 @@ export default async function getProjects(notion: any) {
     const { Name, Link, Leaders } = properties;
 
     projects.push({
-      id: parseId(id),
+      id,
       name: parseTitle(Name),
       url: parseUrl(Link),
       image: await parseCover(cover),

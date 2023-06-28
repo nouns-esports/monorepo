@@ -1,11 +1,10 @@
 import {
   parseCover,
-  parseId,
   parseRelation,
   parseText,
   parseTitle,
   parseUrl,
-} from "./utils/parseProperties";
+} from "./utils/parseProperties.js";
 
 export type Game = {
   id: string;
@@ -26,15 +25,15 @@ export default async function getGames(notion: any) {
   });
 
   for (const { id, cover, properties } of response.results) {
-    const { Name, Description, Color, Talent, Liquipedia, Video } = properties;
+    const { Name, Description, Color, Roster, Liquipedia, Video } = properties;
 
     games.push({
-      id: parseId(id),
+      id,
       name: parseTitle(Name),
       image: await parseCover(cover),
       description: parseText(Description),
       color: parseText(Color),
-      roster: parseRelation(Talent),
+      roster: parseRelation(Roster),
       liquipedia: parseUrl(Liquipedia),
       video: parseUrl(Video),
     });
