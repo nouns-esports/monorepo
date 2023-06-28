@@ -24,32 +24,6 @@ type Props = {
 };
 
 const { game } = Astro.props;
-
-const { roster, talents } = (() => {
-  const roster = [];
-  const talents = [];
-
-  for (const person of talent) {
-    if (person.game === game.id) {
-      if (["Player", "Coach"].includes(person.role)) {
-        roster.push(person);
-      } else talents.push(person);
-    }
-  }
-
-  return { roster, talents };
-})();
-
-const description = (() => {
-  return `Our ${game.name} team consists of ${
-    talents.length
-  } players: ${talents.map((player) => {
-    if (player === talents[talents.length - 1]) return ` and ${player.name}.`;
-    return ` ${player.name}`;
-  })}`;
-})();
-
-console.log(talents);
 ---
 
 <Layout title={game.name} primaryColor={game.color}>
@@ -74,7 +48,7 @@ console.log(talents);
   >
     <div class="flex gap-16 max-lg:gap-8 max-lg:flex-col">
       <GameSection title="ABOUT" href={game.link}>
-        {description}
+        {game.description}
         <!-- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
         veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
@@ -93,24 +67,11 @@ console.log(talents);
       </GameSection>
     </div>
     {
-      roster.length > 0 ? (
+      game.roster.length > 0 ? (
         <GameSection title="ROSTER">
           <div class="flex -mx-16 max-xl:-mx-8 px-16 max-xl:px-8 gap-8 max-xl:gap-4 w-[calc(100%_+_8rem)] max-xl:w-[calc(100%_+_4rem)] max-xl:overflow-x-scroll">
-            {roster.map((person) => (
+            {game.roster.map((person) => (
               <RosterCard game={game} person={person} />
-            ))}
-          </div>
-        </GameSection>
-      ) : (
-        ""
-      )
-    }
-    {
-      talents.length > 0 ? (
-        <GameSection title="TALENT">
-          <div class="flex -mx-16 max-xl:-mx-8 px-16 max-xl:px-8 gap-8 max-xl:gap-4 w-[calc(100%_+_8rem)] max-xl:w-[calc(100%_+_4rem)] max-xl:overflow-x-scroll">
-            {talents.map((person) => (
-              <TalentCard game={game} person={person} />
             ))}
           </div>
         </GameSection>

@@ -3,7 +3,7 @@ import path from "path";
 import fetch from "node-fetch";
 import crypto from "crypto";
 
-export default async function downloadImage(url) {
+export default async function downloadImage(url: string) {
   const response = await fetch(url);
 
   if (!response.ok) {
