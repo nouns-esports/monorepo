@@ -89,8 +89,11 @@ export const socials = {
     constructor() {
       super();
 
+      console.log(window.location.host);
+
       const language =
-        window.location.host === "localhost:3000" || "nouns"
+        window.location.host === "localhost:3000" ||
+        window.location.host.split(".")[0] === "nouns"
           ? "en"
           : window.location.host.split(".")[0];
 
