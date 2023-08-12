@@ -1,6 +1,6 @@
 import fetch from "node-fetch";
 
-type Event = {
+export type Event = {
   id: string;
   status: string;
   htmlLink: string;
