@@ -1,0 +1,27 @@
+---
+import crypto from "crypto";
+
+type Languages = "en" | "br";
+
+type Props = Record<Languages, string>;
+
+const props = Astro.props;
+
+const id = `mlt:${crypto.randomBytes(5).toString("base64").slice(0, 5)}`;
+---
+
+<span id={id}></span>
+
+<script data-id={id} data-lang={JSON.stringify(props)}>
+  const lang =
+    window.location.host === "localhost:3000" ||
+    window.location.host.split(".")[0] === "nouns"
+      ? "en"
+      : window.location.host.split(".")[0];
+
+  const element = document.getElementById(document.currentScript.dataset.id);
+
+  if (element) {
+    element.innerText = JSON.parse(document.currentScript.dataset.lang)[lang];
+  }
+</script>

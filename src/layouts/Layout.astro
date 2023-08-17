@@ -84,26 +84,6 @@ export const socials = {
   </body>
 </html>
 
-<script>
-  class LocaleText extends HTMLElement {
-    constructor() {
-      super();
-
-      console.log(window.location.host);
-
-      const language =
-        window.location.host === "localhost:3000" ||
-        window.location.host.split(".")[0] === "nouns"
-          ? "en"
-          : window.location.host.split(".")[0];
-
-      this.innerHTML = this.dataset[language] ?? "";
-    }
-  }
-
-  customElements.define("locale-text", LocaleText);
-</script>
-
 <style define:vars={{ primaryColor: primaryColor || "#E93737" }}>
   @font-face {
     font-family: Luckiest Guy;

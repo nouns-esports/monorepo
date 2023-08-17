@@ -10,6 +10,7 @@ import GameCard from "../components/GameCard.astro";
 import Layout, { projects } from "../layouts/Layout.astro";
 
 import { games, tagline, schedule } from "../layouts/Layout.astro";
+import MultiLangText from "../components/MultiLangText.astro";
 
 function highlight(text: string, words: string[]) {
   for (const word of words) {
@@ -74,8 +75,10 @@ function highlight(text: string, words: string[]) {
       <p
         class="max-w-[500px] px-8 text-center text-[#AAAAAA] text-lg max-sm:text-base leading-tight [text-shadow:black_0_0_30px]"
       >
-        POG is a platform by Nouns Esports that lets anyone showcase their clips
-        from any multiplayer game and earn real money in the process.
+        <MultiLangText
+          en="POG is a platform by Nouns Esports that lets anyone showcase their clips from any multiplayer game and earn real money in the process."
+          br="POG é uma plataforma da Nouns Esports que permite que qualquer pessoa"
+        />
       </p>
       <Button href="https://pog.nouns.gg">Explore</Button>
     </div>
