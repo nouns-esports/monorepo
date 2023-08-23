@@ -17,7 +17,7 @@
     },
     {
       "source": "/mint",
-      "destination": "https://zora.co/collect/0x298e7881bd9fd35d3b1d860701560364947c4e02",
+      "destination": "https://zora.co/collect/base:0xbd627052c6699bd873de44b019ea04b1a191f3fc/1",
       "permanent": true
     },
     {
