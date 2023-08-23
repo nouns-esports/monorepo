@@ -10,7 +10,7 @@ const props = Astro.props;
 const id = `mlt:${crypto.randomBytes(5).toString("base64").slice(0, 5)}`;
 ---
 
-<span id={id}></span>
+<span id={id}>{props.en}</span>
 
 <script data-id={id} data-lang={JSON.stringify(props)}>
   const lang =

@@ -1,7 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
-    // Astro
     "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "node",
@@ -11,12 +10,11 @@
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-
-    // Strict
-    "strict": true
-    // "verbatimModuleSyntax": true
+    "strict": true,
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js"
   },
   "ts-node": {
-    "esm": true // «———— enabling ESM for ts-node
+    "esm": true
   }
 }

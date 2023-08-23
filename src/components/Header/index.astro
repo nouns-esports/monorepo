@@ -10,6 +10,8 @@ import {
 } from "../../layouts/Layout.astro";
 import Banner from "../Banner.astro";
 import Logo from "../Logo.astro";
+import getLanguage from "../../utils/getLanguage";
+import LanguageButton from "./LanguageButton";
 ---
 
 {banner ? <Banner /> : ""}
@@ -26,21 +28,7 @@ import Logo from "../Logo.astro";
         />
         <p class="text-white font-luckiest-guy text-4xl select-none">Nouns</p>
       </a>
-      <!-- <a
-        href={`https://app.safe.global/balances?safe=eth:${process.env.MULTISIG}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="bg-[#252525]/75 hover:bg-[#252525] transition-colors gap-2 rounded-full flex items-center px-3 py-1.5 max-[500px]:hidden"
-      >
-        <img src="/icons/funds.svg" class="w-4" />
-        {
-          new Intl.NumberFormat("en-US", {
-            style: "currency",
-            currency: "USD",
-            maximumFractionDigits: 0,
-          }).format(balance as number)
-        }
-      </a> -->
+      <LanguageButton client:only />
     </div>
     <nav class="flex items-center gap-8 cursor-pointer">
       <div class="flex gap-6 max-lg:hidden">
@@ -58,7 +46,8 @@ import Logo from "../Logo.astro";
           src="/logo-white.svg"
           alt="POG logo"
           class="w-6 h-6 group-hover:rotate-[14deg] transition-transform duration-150"
-        /><p class="text-white font-luckiest-guy text-xl">POG</p>
+        />
+        <p class="text-white font-luckiest-guy text-xl">POG</p>
       </a>
       <div class="max-[700px]:hidden">
         <Button href={socials.discord}>Join Us</Button>

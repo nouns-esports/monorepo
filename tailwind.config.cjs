@@ -36,6 +36,11 @@ module.exports = {
           "background-clip": "content-box",
           padding: "1px",
         },
+        ".hide-select-arrow": {
+          "-webkit-appearance": "none",
+          "-moz-appearance": "none",
+          appearance: "none",
+        },
       });
     }),
   ],

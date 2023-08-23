@@ -43,6 +43,11 @@ export const socials = {
   twitch: "https://twitch.tv/nounsesports",
   youtube: "https://youtube.com/@nounsesports",
 };
+
+const host = Astro.request.headers.get("host");
+
+console.log(host)
+
 ---
 
 <!DOCTYPE html>

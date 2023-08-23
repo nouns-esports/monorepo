@@ -8,9 +8,8 @@ import ProjectCard from "../components/ProjectCard.astro";
 import ScheduleCard from "../components/ScheduleCard.astro";
 import GameCard from "../components/GameCard.astro";
 import Layout, { projects } from "../layouts/Layout.astro";
-
 import { games, tagline, schedule } from "../layouts/Layout.astro";
-import MultiLangText from "../components/MultiLangText.astro";
+import MultiLangText from "../components/MultiLangText/MultiLangText";
 
 function highlight(text: string, words: string[]) {
   for (const word of words) {
@@ -34,13 +33,22 @@ function highlight(text: string, words: string[]) {
       set:html={highlight(tagline, ["esports", "onchain"])}
     />
     <div class="flex gap-8 max-md:flex-col items-center">
-      <Button href="/about">Learn More</Button>
-      <div class="flex gap-4 w-fit items-center">
-        <Twitch class="w-[26px]" />
-        <Twitter class="w-[34px]" />
-        <Youtube class="w-9" />
-        <Discord class="w-9" />
-      </div>
+      <Button href="/about">
+        <MultiLangText en="Learn more" br="Saber mais" client:only />
+      </Button>
+      <a
+        href="https://www.youtube.com/watch?v=SAXzMQ8pPvE"
+        rel="noopener noreferrer"
+        target="_blank"
+        class="text-white font-cabin hover:underline flex gap-2 items-center"
+        ><img src="/icons/video.svg" class="w-6 h-6" />Watch the video</a
+      >
+    </div>
+    <div class="flex gap-4 w-fit items-center">
+      <Twitch class="w-[26px]" />
+      <Twitter class="w-[34px]" />
+      <Youtube class="w-9" />
+      <Discord class="w-9" />
     </div>
     <div
       class="h-8 w-full bg-gradient-to-b from-black to-transparent absolute -bottom-8"
@@ -51,7 +59,7 @@ function highlight(text: string, words: string[]) {
     id="games"
     class="px-16 max-sm:px-0 py-32 max-sm:py-16 text-center text-white text-5xl font-luckiest-guy flex flex-col gap-20 max-sm:gap-10 items-center"
   >
-    Our Games
+    <MultiLangText en="Our Games" br="Nossos Jogos" client:only />
     <div
       class="flex flex-wrap max-sm:flex-nowrap max-sm:overflow-x-scroll max-sm:justify-start justify-center max-w-[1920px] gap-16 w-full max-2xl:gap-8"
     >
@@ -77,7 +85,8 @@ function highlight(text: string, words: string[]) {
       >
         <MultiLangText
           en="POG is a platform by Nouns Esports that lets anyone showcase their clips from any multiplayer game and earn real money in the process."
-          br="POG é uma plataforma da Nouns Esports que permite que qualquer pessoa"
+          br="POG é uma plataforma da Nouns Esports que permite que qualquer pessoa mostre seus clipes de qualquer jogo multijogador e ganhe dinheiro real no processo."
+          client:only
         />
       </p>
       <Button href="https://pog.nouns.gg">Explore</Button>
@@ -87,7 +96,7 @@ function highlight(text: string, words: string[]) {
   <div
     class="px-16 max-sm:px-0 py-32 max-sm:py-16 text-white text-5xl text-center font-luckiest-guy flex flex-col gap-20 max-sm:gap-10 items-center"
   >
-    Upcoming Events
+    <MultiLangText en="Upcoming Events" br="Próximos Eventos" client:only />
     <div
       class="flex flex-wrap max-sm:flex-nowrap max-sm:overflow-x-scroll max-sm:justify-start justify-center max-w-[1920px] gap-16 w-full max-2xl:gap-8"
     >
@@ -97,7 +106,7 @@ function highlight(text: string, words: string[]) {
   <div
     class="px-16 max-sm:px-0 pb-32 max-sm:pb-16 text-white text-5xl font-luckiest-guy flex flex-col gap-20 max-sm:gap-10 items-center"
   >
-    Projects
+    <MultiLangText en="Projects" br="Projetos" client:only />
     <div
       class="flex flex-wrap max-sm:flex-nowrap max-sm:overflow-x-scroll max-sm:justify-start justify-center max-w-[1920px] gap-16 w-full max-2xl:gap-8"
     >
