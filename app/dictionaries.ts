@@ -1,8 +1,6 @@
-import "server-only";
-
 export type Locale = "en" | "pt";
 
-export const dictionary = {
+const dictionary = {
   // Home
   banner: {
     en: "Celebrate esports summer with us!",
@@ -31,6 +29,19 @@ export const dictionary = {
   redefineEsports: {
     en: "Lets redefine esports together!",
     pt: "Vamos redefinir os esportes eletrônicos juntos!",
+  },
+  // Header
+  getFunded: {
+    en: "Get Funded",
+    pt: "Seja financiado",
+  },
+  about: {
+    en: "About",
+    pt: "Sobre",
+  },
+  shop: {
+    en: "Shop",
+    pt: "Comprar",
   },
 } as const;
 

@@ -19,11 +19,6 @@
       "source": "/mint",
       "destination": "https://shorturl.at/jsMXY",
       "permanent": true
-    },
-    {
-      "source": "/funds",
-      "destination": "https://nouns-esports.notion.site/nouns-esports/8d8d70a0128541ad945daa1daaf8008d?v=24419ddf3932475bac265fcaa73e9954",
-      "permanent": true
     }
   ]
 }

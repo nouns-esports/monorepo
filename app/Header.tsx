@@ -1,6 +1,11 @@
+import currentLocale from "next-i18n-router/dist/currentLocale";
 import Button from "./Button";
+import { getDictionary } from "./dictionaries";
+import Link from "next/link";
 
 export default function Header() {
+  const dictionary = getDictionary(currentLocale());
+
   return (
     <>
       <Banner />
@@ -22,7 +27,13 @@ export default function Header() {
             </a>
           </div>
           <nav className="flex items-center gap-8 cursor-pointer">
-            <div className="flex gap-6 max-lg:hidden"></div>
+            <div className="flex gap-6 max-lg:hidden">
+              <HeaderLink href="/getfunded">
+                {dictionary("getFunded")}
+              </HeaderLink>
+              <HeaderLink href="/about">{dictionary("about")}</HeaderLink>
+              <HeaderLink href="/shop">{dictionary("shop")}</HeaderLink>
+            </div>
             <a
               href="https://pog.nouns.gg"
               className="flex gap-2 items-center group max-[700px]:hidden"
@@ -35,7 +46,7 @@ export default function Header() {
               <p className="text-white font-luckiest-guy text-xl">POG</p>
             </a>
             <div className="max-[700px]:hidden">
-              <Button href={"https://nouns.wtf"}>Join Us</Button>
+              <Button href={"https://nouns.wtf"}>{dictionary("joinUs")}</Button>
             </div>
           </nav>
         </div>
@@ -52,8 +63,9 @@ function Banner() {
 
   //   const live = Date.now() > start.getTime() && Date.now() < end.getTime();
   return (
-    <a
-      //   href={live ? schedule[0].htmlLink : banner.url}
+    <Link
+      href="/mint"
+      // href={live ? schedule[0].htmlLink : banner.url}
       target="_blank"
       rel="noopener noreferrer"
       className="relative z-20 h-9 bg-red hover:brightness-[85%] transition-all text-white text-sm font-semibold w-full whitespace-nowrap flex items-center justify-center"
@@ -72,6 +84,23 @@ function Banner() {
         : banner.message} */}
       Celebrate esports summer with us!
       <img src="/icons/arrow2.svg" className="ml-2 w-3 h-3" alt="Arrow icon" />
-    </a>
+    </Link>
+  );
+}
+
+function HeaderLink(props: { href: string; children: React.ReactNode }) {
+  const newTab =
+    props.href.includes("://") || ["/shop", "/getfunded"].includes(props.href);
+
+  return (
+    <Link
+      href={props.href}
+      draggable={false}
+      target={newTab ? "_blank" : ""}
+      rel={newTab ? "noopener noreferrer" : ""}
+      className="hover:text-white transition-colors select-none text-lg font-medium"
+    >
+      {props.children}
+    </Link>
   );
 }

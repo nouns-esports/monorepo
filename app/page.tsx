@@ -3,6 +3,8 @@ import Button from "./Button";
 import Marquee from "react-fast-marquee";
 import { currentLocale } from "next-i18n-router";
 import { Locale, getDictionary } from "./dictionaries";
+import Line from "./Line";
+import { Horse, Heart, Cube } from "@phosphor-icons/react";
 
 export default async function Home() {
   const dictionary = getDictionary(currentLocale());
@@ -25,10 +27,7 @@ export default async function Home() {
       if (words[(currentLocale() as Locale) || "en"] === word) {
         return (
           <span className="text-[#51D06D] relative">
-            <img
-              src="/line.svg"
-              className="absolute -bottom-3 -left-1.5 w-full"
-            />
+            <Line />
             {word}{" "}
           </span>
         );
@@ -71,6 +70,7 @@ export default async function Home() {
           </a>
         </div>
         <div className="flex gap-4 w-fit items-center">
+          {/* <Heart color="#AE2983" weight="fill" size={32} /> */}
           {/* <Twitch class="w-[26px]" />
       <Twitter class="w-[34px]" />
       <Youtube class="w-9" />
@@ -83,9 +83,18 @@ export default async function Home() {
           {dictionary("marquee")}
         </p>
       </Marquee>
-      <div className="h-screen">
+      <h2 className="flex items-center py-8 text-white font-luckiest-guy text-6xl">
+        Funded So Far
+      </h2>
+      <div className="flex gap-4 items-center justify-center py-32">
+        <p className="text-white font-luckiest-guy text-6xl">$1,234,567 x</p>
+        <img src="/coin.gif" className="w-16 h-16" />
+      </div>
+
+      <div className="h-screen ">
         {/* 
         We have funded x amount of (players, teams, projects) section so far (the number animates ticking up to the amount)
+        - Maybe like retro mario style and incorporate the coins as the amount
 
         Nouns esports is 
         - transparent
@@ -102,12 +111,11 @@ export default async function Home() {
         </h2>
         <Button href="">{dictionary("joinUs")}</Button>
       </div>
-      <div className="relative">
+      <div className="relative mb-8">
         <img src="/pokemon.jpg" className="w-full" />
         <div className="from-black via-black/70 to-transparent bg-gradient-to-b h-64 w-full top-0 absolute"></div>
         <div className="from-transparent to-black bg-gradient-to-b h-64 w-full bottom-0 absolute"></div>
       </div>
-      <div className="h-96"></div>
     </main>
   );
 }
