@@ -24,7 +24,11 @@ export default function Home() {
   function highlightTagline(text: string, words: Record<Locale, string[]>) {
     return text.split(" ").map((word) => {
       if (words[locale || "en"].includes(word)) {
-        return <span className="text-red">{word} </span>;
+        return (
+          <span key={word} className="text-red">
+            {word}{" "}
+          </span>
+        );
       }
 
       return `${word} `;
@@ -38,7 +42,7 @@ export default function Home() {
     return text.split(" ").map((word) => {
       if (words[locale || "en"] === word) {
         return (
-          <span className="text-[#51D06D] relative">
+          <span key={word} className="text-[#51D06D] relative">
             <Line />
             {word}{" "}
           </span>
