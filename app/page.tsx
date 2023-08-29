@@ -171,11 +171,11 @@ export default function Home() {
       >
         {dictionary("ourGames")}
         <div className="flex flex-wrap max-sm:flex-nowrap max-sm:overflow-x-scroll max-sm:justify-start justify-center max-w-[1920px] gap-16 w-full max-2xl:gap-8">
-          {games
+          {/* {games
             .sort((a, b) => a.name.localeCompare(b.name))
             .map((game) => (
               <GameCard game={game} />
-            ))}
+            ))} */}
         </div>
       </div>
       <div className="relative py-32 max-sm:py-20">
@@ -208,9 +208,9 @@ export default function Home() {
       <div className="px-16 max-sm:px-0 pb-32 max-sm:pb-16 text-white text-5xl font-luckiest-guy flex flex-col gap-20 max-sm:gap-10 items-center">
         {dictionary("projects")}
         <div className="flex flex-wrap max-sm:flex-nowrap max-sm:overflow-x-scroll max-sm:justify-start justify-center max-w-[1920px] gap-16 w-full max-2xl:gap-8">
-          {projects.map((project) => (
+          {/* {projects.map((project) => (
             <ProjectCard project={project} />
-          ))}
+          ))} */}
         </div>
       </div>
       <div className="flex flex-col gap-12 items-center justify-center ">
