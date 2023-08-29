@@ -19,6 +19,7 @@ const config: Config = {
       "luckiest-guy": ["var(--font-luckiest-guy)"],
       "bebas-neue": ["var(--font-bebas-neue)"],
       cabin: ["var(--font-cabin)"],
+      "londrina-solid": ["var(--font-londrina-solid)"],
     },
     extend: {
       transitionDuration: {
