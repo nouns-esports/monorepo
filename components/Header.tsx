@@ -135,6 +135,7 @@ function SelectLanguage(props: { locale: Locale }) {
           (locale) =>
             locale !== props.locale && (
               <Link
+                key={locale}
                 href={`/${locale}`}
                 scroll={false}
                 className="flex gap-3 px-2 py-1 first:pt-2 last:pb-2"
