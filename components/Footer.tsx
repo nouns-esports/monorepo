@@ -1,9 +1,4 @@
-"use client";
-
 import Link from "next/link";
-import { useDictionary } from "../lang/dictionaries";
-import { useMouse } from "@uidotdev/usehooks";
-import { useEffect, useState } from "react";
 import {
   TwitchLogo,
   TwitterLogo,
@@ -11,20 +6,14 @@ import {
   TiktokLogo,
   DiscordLogo,
   InstagramLogo,
-} from "@phosphor-icons/react";
+} from "phosphor-react-sc";
+import Text from "@/components/Text";
+import ANounsThing from "./ANounsThing";
+import fetchGames from "@/utils/fetchGames";
+import Logo from "./Logo";
 
-export default function Footer() {
-  const { dictionary } = useDictionary();
-
-  const [mouse, ref] = useMouse();
-
-  const [rotate, setRotate] = useState(0);
-
-  useEffect(() => {
-    setRotate(
-      (Math.atan2(mouse.elementY - 8, mouse.elementX - 8) * 180) / Math.PI
-    );
-  }, [mouse]);
+export default async function Footer() {
+  const games = await fetchGames();
 
   return (
     <footer className="flex max-md:flex-col max-md:gap-16 justify-between items-center py-8 px-32 relative z-20">
@@ -35,45 +24,37 @@ export default function Footer() {
             draggable={false}
             className="flex gap-3 group items-center cursor-pointer select-none"
           >
-            <img
-              src="/logo.svg"
-              className="group-hover:rotate-[14deg] w-10 transition-transform duration-150"
-            />
+            <Logo className="group-hover:rotate-[14deg] w-10 transition-transform duration-150" />
             <p className="text-white font-luckiest-guy text-3xl select-none">
               Nouns
             </p>
           </Link>
-          <p className="w-64 max-md:text-center">{dictionary("tagline")}</p>
+          <p className="w-64 max-md:text-center">
+            <Text
+              en="Leading the revolution in community driven esports"
+              pt="Liderando a revolução nos esportes eletrônicos conduzidos pela comunidade"
+            />
+          </p>
         </div>
-        <Link
-          href="https://nouns.wtf"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex gap-2 items-center text-white font-londrina-solid"
-        >
-          {dictionary("aNounsThing1")}
-
-          <img
-            src="/noggles.png"
-            // @ts-ignore
-            ref={ref}
-            className="w-10 origin-center"
-            style={{ rotate: `${rotate}deg` }}
-          />
-          {dictionary("aNounsThing2")}
-        </Link>
+        <ANounsThing />
       </div>
       <div className="flex gap-40 max-lg:gap-20 max-[500px]:gap-8 max-[300px]:flex-col max-[300px]:gap-16">
-        <FooterSection title={dictionary("explore")}>
-          <FooterLink href="/getfunded">{dictionary("getFunded")}</FooterLink>
-          <FooterLink href="/about">{dictionary("about")}</FooterLink>
-          <FooterLink href="/shop">{dictionary("shop")}</FooterLink>
+        <FooterSection title={<Text en="Explore" pt="Explorar" />}>
+          <FooterLink href="/getfunded">
+            <Text en="Get Funded" pt="Seja financiado" />
+          </FooterLink>
+          <FooterLink href="/about">
+            <Text en="About" pt="Sobre" />
+          </FooterLink>
+          <FooterLink href="/shop">
+            <Text en="Shop" pt="Comprar" />
+          </FooterLink>
         </FooterSection>
-        <FooterSection title={dictionary("games")}>
-          {/* {games.map(({ name }, index) =>
+        <FooterSection title={<Text en="Games" pt="Jogos" />}>
+          {games.map(({ name }, index) =>
             index < 3 ? (
               <FooterLink
-                url={`/games/${name
+                href={`/games/${name
                   .normalize("NFD")
                   .replace(/[\u0300-\u036f]/g, "")
                   .toLowerCase()
@@ -84,18 +65,18 @@ export default function Footer() {
             ) : (
               ""
             )
-          )} */}
-          {/* {games.length > 3 ? <FooterLink href="/#games">All</FooterLink> : ""} */}
+          )}
+          {games.length > 3 ? <FooterLink href="/#games">All</FooterLink> : ""}
         </FooterSection>
-        <FooterSection title={dictionary("contributors")}>
+        <FooterSection title={<Text en="Contributors" pt="Contribuidores" />}>
           <FooterLink href="https://nouns-esports.notion.site/Contributor-Dashboard-776148bfb6164afea843ee59ff559236">
-            {dictionary("dashboard")}
+            <Text en="Dashboard" pt="Painel" />
           </FooterLink>
           <FooterLink href="https://nouns-esports.notion.site/95a06dc09ca34c93aa945bcb4392b445?v=5782f93244024a64bf04c2284a5ccba4">
-            {dictionary("proposals")}
+            <Text en="Proposals" pt="Propostas" />
           </FooterLink>
           <FooterLink href="https://app.safe.global/eth:0x8b45D1CACcb3593E9F1015BA8e97AFB68DE3a0d1/balances">
-            {dictionary("multisig")}
+            <Text en="Multisig" pt="Multisig" />
           </FooterLink>
         </FooterSection>
       </div>
@@ -149,7 +130,10 @@ function FooterLink(props: { href: string; children: React.ReactNode }) {
   );
 }
 
-function FooterSection(props: { title: string; children: React.ReactNode }) {
+function FooterSection(props: {
+  title: React.ReactNode;
+  children: React.ReactNode;
+}) {
   return (
     <div className="flex flex-col gap-2 select-none">
       <h3 className="text-2xl font-bebas-neue text-white max-md:text-center">

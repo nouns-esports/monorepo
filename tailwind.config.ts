@@ -14,6 +14,7 @@ const config: Config = {
       transparent: "transparent",
       lightgrey: "#858585",
       darkgrey: "#0A0A0A",
+      primary: "var(--primaryColor)",
     },
     fontFamily: {
       "luckiest-guy": ["var(--font-luckiest-guy)"],

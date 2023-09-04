@@ -8,7 +8,9 @@ import {
 } from "next/font/google";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import Providers from "./Providers";
+import Providers from "../providers";
+import { currentLocale } from "next-i18n-router";
+import { CSSProperties } from "react";
 
 const cabin = Cabin({ subsets: ["latin"], variable: "--font-cabin" });
 const luckiestGuy = Luckiest_Guy({
@@ -34,9 +36,17 @@ export const metadata: Metadata = {
 
 export default async function RootLayout(props: { children: React.ReactNode }) {
   return (
-    <html className="scroll-smooth overflow-x-hidden">
+    <html
+      lang={currentLocale() ?? "en"}
+      className="scroll-smooth overflow-x-hidden"
+      style={
+        {
+          "--primaryColor": "#E93737",
+        } as CSSProperties
+      }
+    >
       <body
-        className={`cursor-crosshair ${cabin.variable} ${luckiestGuy.variable} ${bebasNeue.variable} ${londrinaSolid.variable} bg-black text-lightgrey font-cabin selection:text-white selection:bg-red`}
+        className={`cursor-crosshair ${cabin.variable} ${luckiestGuy.variable} ${bebasNeue.variable} ${londrinaSolid.variable} bg-black text-lightgrey font-cabin selection:text-white selection:bg-red w-full`}
       >
         <Providers>
           <Header />
