@@ -18,6 +18,7 @@
     "@vercel/postgres": "^0.4.1",
     "autoprefixer": "10.4.15",
     "class-variance-authority": "^0.7.0",
+    "dotenv": "^16.3.1",
     "drizzle-kit": "^0.19.13",
     "drizzle-orm": "^0.28.5",
     "eslint": "8.47.0",
