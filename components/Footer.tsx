@@ -51,9 +51,11 @@ export default async function Footer() {
           </FooterLink>
         </FooterSection>
         <FooterSection title={<Text en="Games" pt="Jogos" />}>
-          {games.map(({ id, name }, index) =>
+          {games.map((game, index) =>
             index < 3 ? (
-              <FooterLink href={`/games/${id}`}>{name}</FooterLink>
+              <FooterLink key={game.id} href={`/games/${game.id}`}>
+                {game.name}
+              </FooterLink>
             ) : (
               ""
             )
