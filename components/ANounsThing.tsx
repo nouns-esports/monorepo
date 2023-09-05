@@ -15,7 +15,7 @@ export default function ANounsThing() {
   const primaryColor = useContext(PrimaryColorContext);
 
   useEffect(() => {
-    if (!lockRotation) {
+    if (window.innerWidth > 768 && !lockRotation) {
       setRotate(
         (Math.atan2(mouse.elementY - 8, mouse.elementX - 8) * 180) / Math.PI
       );

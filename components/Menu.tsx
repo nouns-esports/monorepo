@@ -6,6 +6,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { SelectLanguage } from "./SelectLanguage";
 import ConnectButton from "./ConnectButton";
+import Text from "./Text";
 
 export default function Menu() {
   const [open, setOpen] = useState(false);
@@ -44,18 +45,22 @@ export default function Menu() {
               />
             </div>
           </div>
-          <div className="flex items-center justify-between gap-8">
+          <div className="items-center justify-between gap-8 hidden max-[700px]:flex">
             <SelectLanguage />
             <ConnectButton />
           </div>
         </div>
         <div className="h-full flex justify-center">
           <div className="h-full flex flex-col justify-center items-center gap-16">
-            <MenuLink href="/getfunded">Get Funded</MenuLink>
-            <MenuLink href="https://www.youtube.com/watch?v=SAXzMQ8pPvE">
-              About
+            <MenuLink href="/getfunded">
+              <Text en="Get Funded" pt="Seja financiado" />
             </MenuLink>
-            <MenuLink href="/shop">Shop</MenuLink>
+            <MenuLink href="https://www.youtube.com/watch?v=SAXzMQ8pPvE">
+              <Text en="About" pt="Sobre" />
+            </MenuLink>
+            <MenuLink href="/shop">
+              <Text en="Shop" pt="Comprar" />
+            </MenuLink>
           </div>
         </div>
       </div>

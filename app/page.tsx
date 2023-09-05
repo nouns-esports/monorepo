@@ -29,7 +29,7 @@ export default async function Home() {
 
   return (
     <main className="cursor-crosshair flex flex-col">
-      <div className="relative h-screen bg-cover flex flex-col justify-center items-center gap-8 shadow-[inset_-80px_-80px_120px_black,inset_80px_80px_120px_black]">
+      <div className="relative h-screen bg-cover flex flex-col justify-center items-center gap-8 shadow-[inset_-80px_-80px_120px_black,inset_80px_80px_120px_black] max-sm:shadow-[inset_-40px_-40px_60px_black,inset_40px_40px_60px_black]">
         <video
           autoPlay
           muted
@@ -186,8 +186,8 @@ export default async function Home() {
       </div>
       <div className="relative mb-8">
         <img src="/pokemon.webp" className="w-full" />
-        <div className="from-black via-black/70 to-transparent bg-gradient-to-b h-64 w-full top-0 absolute"></div>
-        <div className="from-transparent to-black bg-gradient-to-b h-64 w-full bottom-0 absolute"></div>
+        <div className="from-black via-black/70 to-transparent bg-gradient-to-b h-2/5 w-full top-0 absolute"></div>
+        <div className="from-transparent to-black bg-gradient-to-b h-2/5 w-full bottom-0 absolute"></div>
       </div>
     </main>
   );

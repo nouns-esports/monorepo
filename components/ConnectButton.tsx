@@ -39,10 +39,12 @@ export default function ConnectButton() {
           >
             {connected ? (
               <>
-                <img
-                  src={account?.ensAvatar}
-                  className="rounded-full w-7 h-7"
-                />
+                {account?.ensAvatar && (
+                  <img
+                    src={account.ensAvatar}
+                    className="rounded-full w-7 h-7"
+                  />
+                )}
                 {account?.ensName
                   ? formatENSName(account.ensName)
                   : formatAddress(account?.address ?? "")}
