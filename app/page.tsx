@@ -124,7 +124,7 @@ export default async function Home() {
         <Text en="Our Games" pt="Nossos Jogos" />
         <div className="flex flex-wrap max-sm:flex-nowrap max-sm:overflow-x-scroll max-sm:justify-start justify-center max-w-[1920px] gap-16 w-full max-2xl:gap-8">
           {games.map((game) => (
-            <GameCard game={game} />
+            <GameCard key={game.id} game={game} />
           ))}
         </div>
       </div>
@@ -156,7 +156,7 @@ export default async function Home() {
         <Text en="Upcoming Events" pt="Próximos Eventos" />
         <div className="flex flex-wrap max-sm:flex-nowrap max-sm:overflow-x-scroll max-sm:justify-start justify-center max-w-[1920px] gap-16 w-full max-2xl:gap-8">
           {events.map((event) => (
-            <ScheduleCard event={event} />
+            <ScheduleCard key={event.id} event={event} />
           ))}
         </div>
       </div>
@@ -164,7 +164,7 @@ export default async function Home() {
         <Text en="Projects" pt="Projetos" />
         <div className="flex flex-wrap max-sm:flex-nowrap max-sm:overflow-x-scroll max-sm:justify-start justify-center max-w-[1920px] gap-16 w-full max-2xl:gap-8">
           {projects.map((project) => (
-            <ProjectCard project={project} />
+            <ProjectCard key={project.id} project={project} />
           ))}
         </div>
       </div>
