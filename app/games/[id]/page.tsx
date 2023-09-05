@@ -1,9 +1,9 @@
-import GameColor from "@/components/GameColor";
 import { Game, Talent } from "@/db/schema";
 import fetchGame from "@/utils/fetchGame";
 import fetchRoster from "@/utils/fetchRoster";
 import { ArrowSquareOut } from "phosphor-react-sc";
 import Text from "@/components/Text";
+import GameBorder from "@/components/GameBorder";
 export default async function Game(props: { params: { id: string } }) {
   const game = await fetchGame(props.params.id);
 
@@ -23,7 +23,7 @@ export default async function Game(props: { params: { id: string } }) {
           </h1>
         </div>
       </div>
-      <div className="bg-black p-16 max-lg:p-8 gap-16 max-lg:gap-8 flex flex-col border-t-4 border-t-primary rounded-t-[4rem] max-lg:rounded-t-[2rem] -mt-16 relative z-10">
+      <GameBorder>
         <GameSection
           title={<Text en="ROSTER" pt="LISTA" />}
           href={game.liquipedia ?? ""}
@@ -34,8 +34,7 @@ export default async function Game(props: { params: { id: string } }) {
             ))}
           </div>
         </GameSection>
-      </div>
-      <GameColor color={game.color} />
+      </GameBorder>
     </>
   );
 }

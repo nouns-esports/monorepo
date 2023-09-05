@@ -52,7 +52,7 @@ export default async function Home() {
           />
         </h1>
         <div className="flex gap-8 max-md:flex-col items-center">
-          <Button href="/about">
+          <Button href="/discord">
             <Text en="Get Involved" pt="Envolver-se" />
           </Button>
           <a
@@ -68,31 +68,47 @@ export default async function Home() {
             <Text en="Watch Video" pt="Assista o vídeo" />
           </a>
         </div>
-        <div className="flex gap-4 w-fit items-center">
-          <TwitchLogo
-            className="w-9 h-9 text-white hover:text-white/60 cursor-pointer transition-colors"
-            weight="fill"
-          />
-          <TwitterLogo
-            className="w-9 h-9 text-white hover:text-white/60 cursor-pointer transition-colors"
-            weight="fill"
-          />
-          <YoutubeLogo
-            className="w-9 h-9 text-white hover:text-white/60 cursor-pointer transition-colors"
-            weight="fill"
-          />
-          <TiktokLogo
-            className="w-9 h-9 text-white hover:text-white/60 cursor-pointer transition-colors"
-            weight="fill"
-          />
-          <DiscordLogo
-            className="w-9 h-9 text-white hover:text-white/60 cursor-pointer transition-colors"
-            weight="fill"
-          />
-          <InstagramLogo
-            className="w-9 h-9 text-white hover:text-white/60 cursor-pointer transition-colors"
-            weight="fill"
-          />
+        <div className="flex max-[450px]:flex-col gap-4 w-fit items-center">
+          <div className="flex gap-4 items-center">
+            <a href="/twitch" target="_blank" rel="noopener noreferrer">
+              <TwitchLogo
+                className="w-9 h-9 text-white hover:text-white/60 cursor-pointer transition-colors"
+                weight="fill"
+              />
+            </a>
+            <a href="/x" target="_blank" rel="noopener noreferrer">
+              <TwitterLogo
+                className="w-9 h-9 text-white hover:text-white/60 cursor-pointer transition-colors"
+                weight="fill"
+              />
+            </a>
+            <a href="/youtube" target="_blank" rel="noopener noreferrer">
+              <YoutubeLogo
+                className="w-9 h-9 text-white hover:text-white/60 cursor-pointer transition-colors"
+                weight="fill"
+              />
+            </a>
+          </div>
+          <div className="flex gap-4 items-center">
+            <a href="/tiktok" target="_blank" rel="noopener noreferrer">
+              <TiktokLogo
+                className="w-9 h-9 text-white hover:text-white/60 cursor-pointer transition-colors"
+                weight="fill"
+              />
+            </a>
+            <a href="/discord" target="_blank" rel="noopener noreferrer">
+              <DiscordLogo
+                className="w-9 h-9 text-white hover:text-white/60 cursor-pointer transition-colors"
+                weight="fill"
+              />
+            </a>
+            <a href="/instagram" target="_blank" rel="noopener noreferrer">
+              <InstagramLogo
+                className="w-9 h-9 text-white hover:text-white/60 cursor-pointer transition-colors"
+                weight="fill"
+              />
+            </a>
+          </div>
         </div>
       </div>
       <Marquee autoFill className="bg-red flex items-center h-8">
@@ -153,7 +169,7 @@ export default async function Home() {
         </div>
       </div>
       <div className="flex items-center justify-center">
-        <h2 className="text-white text-5xl font-luckiest-guy z-10 relative">
+        <h2 className="text-white text-5xl font-luckiest-guy z-10 relative  text-center leading-normal px-16 max-sm:text-4xl max-sm:leading-relaxed">
           <HighlightedText
             text={{
               en: "Lets redefine esports together!",
@@ -169,7 +185,7 @@ export default async function Home() {
         </h2>
       </div>
       <div className="relative mb-8">
-        <img src="/pokemon.jpg" className="w-full" />
+        <img src="/pokemon.webp" className="w-full" />
         <div className="from-black via-black/70 to-transparent bg-gradient-to-b h-64 w-full top-0 absolute"></div>
         <div className="from-transparent to-black bg-gradient-to-b h-64 w-full bottom-0 absolute"></div>
       </div>

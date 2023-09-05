@@ -10,10 +10,14 @@ import {
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import { mainnet, polygon, optimism, arbitrum, base, zora } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
-import { createContext } from "react";
-import { useSelectedLayoutSegment } from "next/navigation";
+import { createContext, useMemo } from "react";
+import { usePathname } from "next/navigation";
+import { useCurrentLocale } from "next-i18n-router/client";
+import i18nConfig from "@/i18nConfig";
+import { Locale } from "@/components/SelectLanguage";
+import { Game } from "@/db/schema";
 
-const PrimaryColorContext = createContext("#E93737");
+export const PrimaryColorContext = createContext<string>("#E93737");
 
 const { chains, publicClient } = configureChains(
   [mainnet, polygon, optimism, arbitrum, base, zora],
@@ -32,9 +36,25 @@ const config = createConfig({
   publicClient,
 });
 
-export default function Providers(props: { children: React.ReactNode }) {
-  const segment = useSelectedLayoutSegment();
-  console.log(segment);
+export default function Providers(props: {
+  children: React.ReactNode;
+  games: Game[];
+}) {
+  const pathname = usePathname();
+
+  const locale = useCurrentLocale(i18nConfig) as Locale;
+
+  const color = useMemo(() => {
+    if (pathname.includes("/games")) {
+      const game = props.games.find(
+        (_game) => _game.id === pathname.split("/")[locale === "en" ? 2 : 3]
+      );
+
+      if (game) return game?.color;
+    }
+
+    return "#E93737";
+  }, [pathname]);
 
   return (
     <WagmiConfig config={config}>
@@ -49,7 +69,7 @@ export default function Providers(props: { children: React.ReactNode }) {
         })}
         chains={chains}
       >
-        <PrimaryColorContext.Provider value="#E93737">
+        <PrimaryColorContext.Provider value={color}>
           {props.children}
         </PrimaryColorContext.Provider>
       </RainbowKitProvider>

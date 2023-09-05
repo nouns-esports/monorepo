@@ -23,7 +23,7 @@ export default function HighlightedText(props: {
               viewBox="0 0 40 4"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              className="absolute -bottom-3 -left-1.5 w-full"
+              className="absolute -bottom-3 -left-1.5 max-sm:-bottom-2 max-sm:-left-0.5 w-full"
             >
               <motion.path
                 d="M1.2417 2.61258C3.04409 2.49947 4.8292 2.15267 6.62401 1.97369C13.6525 1.27281 20.7035 1.11258 27.7814 1.11258C31.5762 1.11258 35.371 1.11258 39.1657 1.11258"

@@ -11,6 +11,7 @@ import Footer from "../components/Footer";
 import Providers from "../providers";
 import { currentLocale } from "next-i18n-router";
 import { CSSProperties } from "react";
+import fetchGames from "@/utils/fetchGames";
 
 const cabin = Cabin({ subsets: ["latin"], variable: "--font-cabin" });
 const luckiestGuy = Luckiest_Guy({
@@ -35,20 +36,17 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout(props: { children: React.ReactNode }) {
+  const games = await fetchGames();
+
   return (
     <html
       lang={currentLocale() ?? "en"}
       className="scroll-smooth overflow-x-hidden"
-      style={
-        {
-          "--primaryColor": "#E93737",
-        } as CSSProperties
-      }
     >
       <body
         className={`cursor-crosshair ${cabin.variable} ${luckiestGuy.variable} ${bebasNeue.variable} ${londrinaSolid.variable} bg-black text-lightgrey font-cabin selection:text-white selection:bg-red w-full`}
       >
-        <Providers>
+        <Providers games={games}>
           <Header />
           {props.children}
           <Footer />

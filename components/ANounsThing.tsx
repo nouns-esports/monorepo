@@ -2,14 +2,17 @@
 
 import Link from "next/link";
 import Text from "@/components/Text";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useMouse } from "@uidotdev/usehooks";
+import { PrimaryColorContext } from "@/providers";
 
 export default function ANounsThing() {
   const [mouse, ref] = useMouse();
 
   const [rotate, setRotate] = useState(0);
   const [lockRotation, setLockRotation] = useState(false);
+
+  const primaryColor = useContext(PrimaryColorContext);
 
   useEffect(() => {
     if (!lockRotation) {
@@ -40,7 +43,8 @@ export default function ANounsThing() {
         <svg viewBox="0 0 16 6" fill="none">
           <path
             d="M3 3V6H9V3H10V6H16V0H10V2H9V0H3V2H0V5H1V3H3Z"
-            fill="var(--primaryColor)"
+            fill={primaryColor}
+            className="transition-colors"
           />
           <path d="M3.99982 5V1H5.99982V5H3.99982Z" fill="white" />
           <path d="M5.99985 5V1H7.99985V5H5.99985Z" fill="black" />

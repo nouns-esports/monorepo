@@ -3,6 +3,8 @@
 import Link from "next/link";
 import Text from "./Text";
 import { ArrowRight } from "phosphor-react-sc";
+import { useContext } from "react";
+import { PrimaryColorContext } from "@/providers";
 
 export default function Banner() {
   //   const start = new Date(schedule[0].start.dateTime);
@@ -11,14 +13,16 @@ export default function Banner() {
   //   );
 
   //   const live = Date.now() > start.getTime() && Date.now() < end.getTime();
+  const primaryColor = useContext(PrimaryColorContext);
+
   return (
     <Link
       href="/mint"
       // href={live ? schedule[0].htmlLink : banner.url}
       target="_blank"
       rel="noopener noreferrer"
-      style={{ backgroundColor: "#000000" }}
-      className="relative z-20 h-9 bg-primary hover:brightness-[85%] transition-all text-white text-sm font-semibold w-full whitespace-nowrap flex items-center justify-center"
+      style={{ backgroundColor: primaryColor }}
+      className="relative z-20 h-9 hover:brightness-[85%] transition-all text-white text-sm font-semibold w-full whitespace-nowrap flex items-center justify-center"
     >
       {/* {live ? (
           <img

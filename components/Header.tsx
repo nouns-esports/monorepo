@@ -5,6 +5,7 @@ import Text from "@/components/Text";
 import ConnectButton from "@/components/ConnectButton";
 import Logo from "./Logo";
 import Banner from "./Banner";
+import Menu from "./Menu";
 
 export default function Header() {
   return (
@@ -23,14 +24,16 @@ export default function Header() {
                 Nouns
               </p>
             </Link>
-            <SelectLanguage />
+            <div className="max-[500px]:hidden">
+              <SelectLanguage />
+            </div>
           </div>
           <nav className="flex items-center gap-8 cursor-pointer">
             <div className="flex gap-6 max-lg:hidden">
               <HeaderLink href="/getfunded">
                 <Text en="Get Funded" pt="Seja financiado" />
               </HeaderLink>
-              <HeaderLink href="/about">
+              <HeaderLink href="https://www.youtube.com/watch?v=SAXzMQ8pPvE">
                 <Text en="About" pt="Sobre" />
               </HeaderLink>
               <HeaderLink href="/shop">
@@ -39,7 +42,7 @@ export default function Header() {
             </div>
             <a
               href="https://pog.nouns.gg"
-              className="flex gap-2 items-center group max-[700px]:hidden"
+              className="flex gap-2 items-center group max-[750px]:hidden"
             >
               <img
                 src="/logo-white.svg"
@@ -49,11 +52,9 @@ export default function Header() {
               <p className="text-white font-luckiest-guy text-xl">POG</p>
             </a>
             <div className="max-[700px]:hidden">
-              {/* <Button href="https://nouns.wtf">
-                <Text en="Join us" pt="Junte-se a nós" />
-              </Button> */}
               <ConnectButton />
             </div>
+            <Menu />
           </nav>
         </div>
       </header>
