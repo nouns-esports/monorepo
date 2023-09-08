@@ -30,10 +30,27 @@ export default async function Home() {
   return (
     <main className="cursor-crosshair flex flex-col">
       <div className="relative h-screen bg-cover flex flex-col justify-center items-center gap-8 shadow-[inset_-80px_-80px_120px_black,inset_80px_80px_120px_black] max-sm:shadow-[inset_-40px_-40px_60px_black,inset_40px_40px_60px_black]">
+        {/* <div
+          className="absolute w-full h-full -z-10"
+          dangerouslySetInnerHTML={{
+            __html: `
+            <video
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="relative -z-10 select-none object-cover object-top brightness-75"
+            >
+              <source src="/landing.webm" type="video/webm" />
+              <source src="/landing.mp4" type="video/mp4" />
+            </video>`,
+          }}
+        /> */}
         <video
           autoPlay
           muted
           loop
+          playsInline
           className="absolute select-none w-full h-full object-cover object-top brightness-75 -z-10"
         >
           <source src="/landing.webm" type="video/webm" />
