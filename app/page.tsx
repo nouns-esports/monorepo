@@ -34,7 +34,8 @@ export default async function Home() {
           autoPlay
           muted
           loop
-          className="absolute select-none w-full h-full object-cover object-top brightness-75 -z-10"
+          playsInline
+          className="absolute select-none w-full h-full object-cover max-[500px]:object-right object-top brightness-75 -z-10"
         >
           <source src="/landing.webm" type="video/webm" />
           <source src="/landing.mp4" type="video/mp4" />
