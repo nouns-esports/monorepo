@@ -21,8 +21,33 @@
       "permanent": true
     },
     {
-      "source": "/funds",
-      "destination": "https://nouns-esports.notion.site/nouns-esports/8d8d70a0128541ad945daa1daaf8008d?v=24419ddf3932475bac265fcaa73e9954",
+      "source": "/discord",
+      "destination": "https://discord.com/invite/nounsesports",
+      "permanent": true
+    },
+    {
+      "source": "/x",
+      "destination": "https://x.com/nounsesports",
+      "permanent": true
+    },
+    {
+      "source": "/twitch",
+      "destination": "https://www.twitch.tv/nounsesports/",
+      "permanent": true
+    },
+    {
+      "source": "/youtube",
+      "destination": "https://www.youtube.com/@nounsesports",
+      "permanent": true
+    },
+    {
+      "source": "/tiktok",
+      "destination": "https://www.tiktok.com/@nounsesports",
+      "permanent": true
+    },
+    {
+      "source": "/instagram",
+      "destination": "https://www.instagram.com/nouns_esports/",
       "permanent": true
     }
   ]

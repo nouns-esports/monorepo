@@ -13,7 +13,7 @@
 <path d="M189.217 322.784H189.215L74.98 437.019C80.232 442.273 85.723 447.285 91.415 452.067L189.217 354.263V322.784Z" fill="#D80027"/>
 <path d="M189.217 189.219V189.217L74.981 74.98C69.727 80.232 64.715 85.723 59.933 91.415L157.736 189.218L189.217 189.219Z" fill="#D80027"/>
 <path d="M322.783 189.219L437.02 74.981C431.768 69.727 426.277 64.715 420.585 59.934L322.783 157.737V189.219Z" fill="#D80027"/>
-<mask id="mask0_810_278" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="512" height="512">
+<mask id="mask0_810_278" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="256" height="512">
 <path fill-rule="evenodd" clip-rule="evenodd" d="M0 256C0 397.385 114.615 512 256 512V0C114.615 0 0 114.615 0 256Z" fill="#D9D9D9"/>
 </mask>
 <g mask="url(#mask0_810_278)">
