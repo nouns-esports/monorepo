@@ -116,7 +116,7 @@ export default async function Home() {
       <Marquee autoFill className="bg-red flex items-center h-8">
         <img src="/logo-white.svg" className="w-4 h-4 select-none" />
         <p className="px-4 text-white text-lg font-bebas-neue pt-[0.19rem]">
-          <Text en="Join the revolution" pt="Junta-te à revolução" />
+          <Text en="Join the revolution" pt="Junte-se à revolução" />
         </p>
       </Marquee>
       <div
@@ -175,7 +175,7 @@ export default async function Home() {
           <HighlightedText
             text={{
               en: "Lets redefine esports together!",
-              pt: "Vamos redefinir os esportes eletrônicos juntos!",
+              pt: "Vamos redefinir os esportes juntos!",
             }}
             highlight={{
               en: ["redefine"],

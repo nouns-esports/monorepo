@@ -1,16 +1,18 @@
 import Link from "next/link";
-import { ArrowRight } from "phosphor-react-sc";
 import { SelectLanguage } from "./SelectLanguage";
 import Text from "@/components/Text";
 import ConnectButton from "@/components/ConnectButton";
 import Logo from "./Logo";
 import Banner from "./Banner";
 import Menu from "./Menu";
+import fetchEvents from "@/utils/fetchEvents";
 
-export default function Header() {
+export default async function Header() {
+  const events = await fetchEvents();
+
   return (
     <>
-      <Banner />
+      <Banner events={events} />
       <header className="sticky top-0 w-full z-20">
         <div className="absolute top-0 w-full flex items-center justify-between p-8">
           <div className="flex items-center gap-8">
@@ -37,7 +39,7 @@ export default function Header() {
                 <Text en="About" pt="Sobre" />
               </HeaderLink>
               <HeaderLink href="/shop">
-                <Text en="Shop" pt="Comprar" />
+                <Text en="Shop" pt="Loja" />
               </HeaderLink>
             </div>
             <a

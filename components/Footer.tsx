@@ -32,7 +32,7 @@ export default async function Footer() {
           <p className="w-64 max-lg:text-center max-xl:w-48 max-lg:w-64">
             <Text
               en="Leading the revolution in community driven esports"
-              pt="Liderando a revolução nos esportes eletrônicos conduzidos pela comunidade"
+              pt="Liderando a revolução nos esportes conduzidos pela comunidade"
             />
           </p>
         </div>
@@ -47,7 +47,7 @@ export default async function Footer() {
             <Text en="About" pt="Sobre" />
           </FooterLink>
           <FooterLink href="/shop">
-            <Text en="Shop" pt="Comprar" />
+            <Text en="Shop" pt="Loja" />
           </FooterLink>
         </FooterSection>
         <FooterSection title={<Text en="Games" pt="Jogos" />}>

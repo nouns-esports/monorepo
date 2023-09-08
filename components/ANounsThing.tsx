@@ -33,7 +33,7 @@ export default function ANounsThing() {
       rel="noopener noreferrer"
       className="flex gap-2 items-center text-white w-fit font-londrina-solid"
     >
-      <Text en="A" pt="Um" />
+      <Text en="A" pt="É sobre" />
       <div
         // @ts-ignore
         ref={ref}
@@ -53,7 +53,7 @@ export default function ANounsThing() {
         </svg>
       </div>
 
-      <Text en="thing" pt="coisa" />
+      <Text en="thing" pt="" />
     </Link>
   );
 }

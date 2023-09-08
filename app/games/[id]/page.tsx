@@ -25,7 +25,7 @@ export default async function Game(props: { params: { id: string } }) {
       </div>
       <GameBorder>
         <GameSection
-          title={<Text en="ROSTER" pt="LISTA" />}
+          title={<Text en="ROSTER" pt="ROSTER" />}
           href={game.liquipedia ?? ""}
         >
           <div className="flex -mx-16 max-xl:-mx-8 px-16 max-xl:px-8 gap-8 max-xl:gap-4 w-[calc(100%_+_8rem)] max-xl:w-[calc(100%_+_4rem)] max-xl:overflow-x-scroll">
