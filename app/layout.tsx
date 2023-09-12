@@ -10,8 +10,8 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Providers from "../providers";
 import { currentLocale } from "next-i18n-router";
-import { CSSProperties } from "react";
 import fetchGames from "@/utils/fetchGames";
+import { Analytics } from "@vercel/analytics/react";
 
 const cabin = Cabin({ subsets: ["latin"], variable: "--font-cabin" });
 const luckiestGuy = Luckiest_Guy({
@@ -51,6 +51,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
           {props.children}
           <Footer />
         </Providers>
+        <Analytics />
       </body>
     </html>
   );
