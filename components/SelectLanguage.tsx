@@ -42,11 +42,9 @@ export function SelectLanguage() {
             _locale !== locale && (
               <Link
                 key={_locale}
-                href={pathname.replace(
-                  locale === "en" ? "/" : `/${locale}`,
-                  `/${_locale}/`
-                )}
-                // scroll={false}
+                as={`/${_locale}`}
+                href={`/[locale]`}
+                scroll={false}
                 className="flex gap-3 px-2 py-1 first:pt-2 last:pb-2"
               >
                 <img src={`/lang/${_locale}.svg`} className="w-6 h-6" />
