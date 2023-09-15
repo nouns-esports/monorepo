@@ -46,7 +46,7 @@ export function SelectLanguage() {
                   locale === "en" ? "/" : `/${locale}`,
                   `/${_locale}/`
                 )}
-                scroll={false}
+                // scroll={false}
                 className="flex gap-3 px-2 py-1 first:pt-2 last:pb-2"
               >
                 <img src={`/lang/${_locale}.svg`} className="w-6 h-6" />
