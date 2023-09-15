@@ -44,6 +44,7 @@ export function SelectLanguage() {
                 key={_locale}
                 as={`/${_locale}`}
                 href={`/[locale]`}
+                passHref
                 scroll={false}
                 className="flex gap-3 px-2 py-1 first:pt-2 last:pb-2"
               >
