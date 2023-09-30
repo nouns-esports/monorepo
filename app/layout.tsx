@@ -59,6 +59,7 @@ export const metadata: Metadata = {
     title,
     description,
     images: ["https://nouns.gg/pokemon.webp"],
+    url: "https://nouns.gg",
   },
   twitter: {
     site: "@NounsEsports",
@@ -66,7 +67,6 @@ export const metadata: Metadata = {
     images: ["https://nouns.gg/pokemon.webp"],
     title,
     description,
-    creator: "@NounsEsports",
   },
   themeColor: "black",
 };
