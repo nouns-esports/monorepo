@@ -35,12 +35,15 @@ const londrinaSolid = Londrina_Solid({
   variable: "--font-londrina-solid",
 });
 
+const title = "Nouns Esports";
+const description = "Leading the revolution in community driven esports!";
+
 export const metadata: Metadata = {
   title: {
-    default: "Nouns Esports",
-    template: "Nouns Esports - %s",
+    default: title,
+    template: `${title} - %s`,
   },
-  description: "Leading the revolution in community driven esports!",
+  description,
   keywords: baseKeywords,
   metadataBase: new URL("https://nouns.gg"),
   alternates: {
@@ -53,13 +56,14 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: "website",
-    title: "Nouns Esports",
-    description: "Leading the revolution in community driven esports!",
+    title,
+    description,
   },
   twitter: {
+    site: "@NounsEsports",
     card: "summary_large_image",
-    title: "Nouns Esports",
-    description: "Leading the revolution in community driven esports!",
+    title,
+    description,
     creator: "@NounsEsports",
   },
   themeColor: "black",
