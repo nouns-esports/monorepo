@@ -58,10 +58,12 @@ export const metadata: Metadata = {
     type: "website",
     title,
     description,
+    images: ["https://nouns.gg/pokemon.webp"],
   },
   twitter: {
     site: "@NounsEsports",
     card: "summary_large_image",
+    images: ["https://nouns.gg/pokemon.webp"],
     title,
     description,
     creator: "@NounsEsports",
