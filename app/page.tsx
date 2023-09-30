@@ -19,6 +19,7 @@ import fetchProjects from "@/utils/fetchProjects";
 import type { Event } from "@/utils/fetchEvents";
 import Date from "@/components/Date";
 import GameCard from "@/components/GameCard";
+import { headers } from "next/headers";
 
 export default async function Home() {
   const events = await fetchEvents();
@@ -26,6 +27,8 @@ export default async function Home() {
   const games = await fetchGames();
 
   const projects = await fetchProjects();
+
+  const isMobile = headers().get("x-device-type") === "mobile";
 
   return (
     <main className="cursor-crosshair flex flex-col">
@@ -35,12 +38,17 @@ export default async function Home() {
           muted
           loop
           playsInline
-          className="absolute select-none w-full h-full object-cover max-[500px]:object-right object-top brightness-75 -z-10"
+          className="absolute select-none w-full h-full object-cover object-top brightness-75 -z-10"
         >
-          <source src="/landing.webm" type="video/webm" />
-          <source src="/landing.mp4" type="video/mp4" />
+          <source
+            src={isMobile ? "/landing-mobile.webm" : "/landing.webm"}
+            type="video/webm"
+          />
+          <source
+            src={isMobile ? "/landing-mobile.mp4" : "/landing.mp4"}
+            type="video/mp4"
+          />
         </video>
-
         <h1 className="text-white text-6xl w-1/2 text-center font-luckiest-guy max-lg:w-full max-lg:px-16 max-sm:px-8 max-md:text-5xl max-[450px]:text-4xl">
           <HighlightedText
             text={{

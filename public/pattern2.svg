@@ -1,0 +1,66 @@
+<svg width="1440" height="720" viewBox="0 0 1440 720" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_855_2)">
+<rect width="60" height="60" fill="black" fill-opacity="0.1"/>
+<rect width="60" height="60" transform="translate(60 60)" fill="black" fill-opacity="0.05"/>
+<rect width="60" height="60" transform="translate(240 60)" fill="black" fill-opacity="0.02"/>
+<rect width="60" height="60" transform="translate(120)" fill="black" fill-opacity="0.1"/>
+<rect width="60" height="60" transform="translate(240)" fill="black" fill-opacity="0.05"/>
+<rect width="60" height="60" transform="translate(60 120)" fill="black" fill-opacity="0.02"/>
+<rect width="60" height="60" transform="translate(0 120)" fill="black" fill-opacity="0.1"/>
+<rect width="60" height="60" transform="translate(120 180)" fill="black" fill-opacity="0.02"/>
+<rect width="60" height="60" transform="translate(240 180)" fill="black" fill-opacity="0.02"/>
+<rect width="60" height="60" transform="translate(180 300)" fill="black" fill-opacity="0.02"/>
+<rect width="60" height="60" transform="translate(120 480)" fill="black" fill-opacity="0.02"/>
+<rect width="60" height="60" transform="translate(360 540)" fill="black" fill-opacity="0.02"/>
+<rect width="60" height="60" transform="translate(0 240)" fill="black" fill-opacity="0.05"/>
+<rect width="60" height="60" transform="translate(0 420)" fill="black" fill-opacity="0.1"/>
+<rect width="60" height="60" transform="translate(0 480)" fill="black" fill-opacity="0.05"/>
+<rect width="60" height="60" transform="translate(0 600)" fill="black" fill-opacity="0.1"/>
+<rect width="60" height="60" transform="translate(60 540)" fill="black" fill-opacity="0.1"/>
+<rect width="60" height="60" transform="translate(1320 240)" fill="black" fill-opacity="0.1"/>
+<rect width="60" height="60" transform="translate(1320 420)" fill="black" fill-opacity="0.05"/>
+<rect width="60" height="60" transform="translate(1380 360)" fill="black" fill-opacity="0.1"/>
+<rect width="60" height="60" transform="translate(360 660)" fill="black" fill-opacity="0.05"/>
+<rect width="60" height="60" transform="translate(300 660)" fill="black" fill-opacity="0.1"/>
+<rect width="60" height="60" transform="translate(180 660)" fill="black" fill-opacity="0.05"/>
+<rect width="60" height="60" transform="translate(240 600)" fill="black" fill-opacity="0.1"/>
+<rect width="60" height="60" transform="translate(480 600)" fill="black" fill-opacity="0.02"/>
+<rect width="60" height="60" transform="translate(720 60)" fill="black" fill-opacity="0.02"/>
+<rect width="60" height="60" transform="translate(840)" fill="black" fill-opacity="0.1"/>
+<rect width="60" height="60" transform="translate(840 60)" fill="black" fill-opacity="0.02"/>
+<rect width="60" height="60" transform="translate(900 540)" fill="black" fill-opacity="0.02"/>
+<rect width="60" height="60" transform="translate(540 660)" fill="black" fill-opacity="0.1"/>
+<rect width="60" height="60" transform="translate(660 660)" fill="black" fill-opacity="0.1"/>
+<rect width="60" height="60" transform="translate(720 600)" fill="black" fill-opacity="0.02"/>
+<rect width="60" height="60" transform="translate(840 660)" fill="black" fill-opacity="0.05"/>
+<rect width="60" height="60" transform="translate(960 660)" fill="black" fill-opacity="0.1"/>
+<rect width="60" height="60" transform="translate(960 540)" fill="black" fill-opacity="0.02"/>
+<rect width="60" height="60" transform="translate(1200 360)" fill="black" fill-opacity="0.02"/>
+<rect width="60" height="60" transform="translate(1200 480)" fill="black" fill-opacity="0.02"/>
+<rect width="60" height="60" transform="translate(1140 480)" fill="black" fill-opacity="0.02"/>
+<rect width="60" height="60" transform="translate(1080 180)" fill="black" fill-opacity="0.02"/>
+<rect width="60" height="60" transform="translate(1140 120)" fill="black" fill-opacity="0.02"/>
+<rect width="60" height="60" transform="translate(1260 60)" fill="black" fill-opacity="0.02"/>
+<rect width="60" height="60" transform="translate(1380 60)" fill="black" fill-opacity="0.1"/>
+<rect width="60" height="60" transform="translate(1260 180)" fill="black" fill-opacity="0.05"/>
+<rect width="60" height="60" transform="translate(300)" fill="black" fill-opacity="0.05"/>
+<rect width="60" height="60" transform="translate(480)" fill="black" fill-opacity="0.1"/>
+<rect width="60" height="60" transform="translate(540)" fill="black" fill-opacity="0.1"/>
+<rect width="60" height="60" transform="translate(660)" fill="black" fill-opacity="0.05"/>
+<rect width="60" height="60" transform="translate(960)" fill="black" fill-opacity="0.1"/>
+<rect width="60" height="60" transform="translate(1200)" fill="black" fill-opacity="0.05"/>
+<rect width="60" height="60" transform="translate(1320)" fill="black" fill-opacity="0.1"/>
+<rect width="60" height="60" transform="translate(1320 120)" fill="black" fill-opacity="0.05"/>
+<rect width="60" height="60" transform="translate(1380 120)" fill="black" fill-opacity="0.1"/>
+<rect width="60" height="60" transform="translate(1140 600)" fill="black" fill-opacity="0.05"/>
+<rect width="60" height="60" transform="translate(1200 660)" fill="black" fill-opacity="0.1"/>
+<rect width="60" height="60" transform="translate(1320 540)" fill="black" fill-opacity="0.1"/>
+<rect width="60" height="60" transform="translate(1380 540)" fill="black" fill-opacity="0.1"/>
+<rect width="60" height="60" transform="translate(1380 660)" fill="black" fill-opacity="0.1"/>
+</g>
+<defs>
+<clipPath id="clip0_855_2">
+<rect width="1440" height="720" fill="white"/>
+</clipPath>
+</defs>
+</svg>

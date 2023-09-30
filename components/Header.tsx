@@ -35,8 +35,8 @@ export default async function Header() {
               <HeaderLink href="/getfunded">
                 <Text en="Get Funded" pt="Seja financiado" />
               </HeaderLink>
-              <HeaderLink href="https://www.youtube.com/watch?v=SAXzMQ8pPvE">
-                <Text en="About" pt="Sobre" />
+              <HeaderLink href="/collect">
+                <Text en="Collect" pt="Coletar" />
               </HeaderLink>
               <HeaderLink href="/shop">
                 <Text en="Shop" pt="Loja" />

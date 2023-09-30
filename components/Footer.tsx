@@ -43,8 +43,8 @@ export default async function Footer() {
           <FooterLink href="/getfunded">
             <Text en="Get Funded" pt="Seja financiado" />
           </FooterLink>
-          <FooterLink href="https://www.youtube.com/watch?v=SAXzMQ8pPvE">
-            <Text en="About" pt="Sobre" />
+          <FooterLink href="/collect">
+            <Text en="Collect" pt="Coletar" />
           </FooterLink>
           <FooterLink href="/shop">
             <Text en="Shop" pt="Loja" />

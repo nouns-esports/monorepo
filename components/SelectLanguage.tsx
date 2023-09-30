@@ -5,7 +5,6 @@ import { CaretDown } from "phosphor-react-sc";
 import { useCurrentLocale } from "next-i18n-router/client";
 import i18nConfig from "@/i18nConfig";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 
 export const locales = {
   en: "English",
@@ -19,14 +18,12 @@ export function SelectLanguage() {
 
   const locale = useCurrentLocale(i18nConfig) as Locale;
 
-  const pathname = usePathname();
-
   return (
     <div
       onClick={() => setOpen(!open)}
-      className="relative flex items-center gap-3 text-white font-cabin cursor-pointer bg-black/60 p-2 rounded-full"
+      className="relative flex items-center gap-3 select-none text-white font-cabin cursor-pointer bg-black/60 p-2 rounded-full"
     >
-      <img src={`/lang/${locale}.svg`} className="w-6 h-6" />
+      <img src={`/lang/${locale}.svg`} draggable={false} className="w-6 h-6" />
       {locales[locale]}
       <CaretDown
         weight="bold"
@@ -42,13 +39,15 @@ export function SelectLanguage() {
             _locale !== locale && (
               <Link
                 key={_locale}
-                as={`/${_locale}`}
-                href={`/[locale]`}
-                passHref
+                href={`/${_locale}`}
                 scroll={false}
-                className="flex gap-3 px-2 py-1 first:pt-2 last:pb-2"
+                className="flex gap-3 px-2 py-1 first:pt-2 last:pb-2 select-none"
               >
-                <img src={`/lang/${_locale}.svg`} className="w-6 h-6" />
+                <img
+                  src={`/lang/${_locale}.svg`}
+                  draggable={false}
+                  className="w-6 h-6"
+                />
                 {locales[_locale as Locale]}
               </Link>
             )
