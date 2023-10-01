@@ -14,7 +14,6 @@ import fetchGames from "@/utils/fetchGames";
 import { Analytics } from "@vercel/analytics/react";
 import baseKeywords from "@/utils/metadata/baseKeywords";
 import i18nConfig from "@/i18nConfig";
-import { Suspense } from "react";
 
 const cabin = Cabin({ subsets: ["latin"], variable: "--font-cabin" });
 
