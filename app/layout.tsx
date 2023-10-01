@@ -88,9 +88,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
           {props.children}
           <Footer />
         </Providers>
-        <Suspense>
-          <Analytics />
-        </Suspense>
+        <Analytics />
       </body>
     </html>
   );
