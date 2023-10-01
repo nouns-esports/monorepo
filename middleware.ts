@@ -15,6 +15,6 @@ export function middleware(request: NextRequest) {
 }
 
 // only apply this middleware to files in the app directory
-// export const config = {
-//   matcher: "/((?!api|_next/static|_next/image|favicon.ico).*)",
-// };
+export const config = {
+  matcher: "/((?!api|_next/static|_next/image|favicon.ico).*)",
+};
