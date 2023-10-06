@@ -1,12 +1,9 @@
 import { userAgent } from "next/server";
 import { i18nRouter } from "next-i18n-router";
+import i18nConfig from "./i18nConfig";
 
 export function middleware(request) {
-  let i18nRequest = i18nRouter(request, {
-    locales: ["en", "pt"],
-    defaultLocale: "en",
-    routingStrategy: "dynamicSegment",
-  });
+  let i18nRequest = i18nRouter(request, i18nConfig);
 
   // Get the device type
   const device = getDevice(request);
