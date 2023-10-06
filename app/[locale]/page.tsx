@@ -40,11 +40,13 @@ export default async function Home(props: { params: { locale: string } }) {
           className="absolute select-none w-full h-full object-cover object-top brightness-75 -z-10"
         >
           <source
-            src={isMobile ? "/landing-mobile.webm" : "/landing.webm"}
+            src={
+              isMobile ? "/video/landing-mobile.webm" : "/video/landing.webm"
+            }
             type="video/webm"
           />
           <source
-            src={isMobile ? "/landing-mobile.mp4" : "/landing.mp4"}
+            src={isMobile ? "/video/landing-mobile.mp4" : "/video/landing.mp4"}
             type="video/mp4"
           />
         </video>
@@ -122,7 +124,7 @@ export default async function Home(props: { params: { locale: string } }) {
         </div>
       </div>
       <Marquee autoFill className="bg-red flex items-center h-8">
-        <img src="/logo-white.svg" className="w-4 h-4 select-none" />
+        <img src="/images/logo-white.svg" className="w-4 h-4 select-none" />
         <p className="px-4 text-white text-lg font-bebas-neue pt-[0.19rem]">
           <Text en="Join the revolution" pt="Junte-se à revolução" />
         </p>
@@ -146,7 +148,7 @@ export default async function Home(props: { params: { locale: string } }) {
       </div>
       <div className="relative py-32 max-sm:py-20">
         <img
-          src="/clips.webp"
+          src="/images/clips.webp"
           alt="POG image"
           className="absolute top-0 w-full h-full select-none object-cover object-center -z-10 brightness-[40%]"
         />
@@ -201,7 +203,7 @@ export default async function Home(props: { params: { locale: string } }) {
         </h2>
       </div>
       <div className="relative mb-8">
-        <img src="/pokemon.webp" className="w-full" />
+        <img src="/images/pokemon.webp" className="w-full" />
         <div className="from-black via-black/70 to-transparent bg-gradient-to-b h-2/5 w-full top-0 absolute"></div>
         <div className="from-transparent to-black bg-gradient-to-b h-2/5 w-full bottom-0 absolute"></div>
       </div>
@@ -253,7 +255,7 @@ async function ScheduleCard(props: { event: Event }) {
       className="relative w-[calc(33.33%_-_2.67rem)] max-xl:w-[calc(33.33%_-_2.67rem)] max-sm:first:ml-8 max-sm:last:mr-8 max-sm:min-w-[calc(100%_-_6rem)] min-w-[24rem] overflow-hidden select-none aspect-video text-left rounded-xl group drop-shadow-2xl"
     >
       <img
-        src={game?.image ?? "/contributor.webp"}
+        src={game?.image ?? "/images/contributor.webp"}
         alt={props.event.summary}
         className="object-cover object-center group-hover:scale-110 transition-transform absolute top-0 w-full h-full"
       />

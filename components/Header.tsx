@@ -47,7 +47,7 @@ export default async function Header() {
               className="flex gap-2 items-center group max-[750px]:hidden"
             >
               <img
-                src="/logo-white.svg"
+                src="/images/logo-white.svg"
                 alt="POG logo"
                 className="w-6 h-6 group-hover:rotate-[14deg] transition-transform duration-150"
               />

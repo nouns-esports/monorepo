@@ -16,7 +16,11 @@ export function SelectLanguage() {
       onClick={() => setOpen(!open)}
       className="relative flex items-center gap-3 select-none text-white font-cabin cursor-pointer bg-black/60 p-2 rounded-full"
     >
-      <img src={`/lang/${locale}.svg`} draggable={false} className="w-6 h-6" />
+      <img
+        src={`/icons/lang/${locale}.svg`}
+        draggable={false}
+        className="w-6 h-6"
+      />
       {locales[locale as string]}
       <CaretDown
         weight="bold"
@@ -37,7 +41,7 @@ export function SelectLanguage() {
                 className="flex gap-3 px-2 py-1 first:pt-2 last:pb-2 select-none"
               >
                 <img
-                  src={`/lang/${_locale}.svg`}
+                  src={`/icons/lang/${_locale}.svg`}
                   draggable={false}
                   className="w-6 h-6"
                 />
