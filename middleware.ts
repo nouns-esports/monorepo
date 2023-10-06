@@ -10,7 +10,7 @@ export type Locale = keyof typeof locales;
 
 export function middleware(request: NextRequest) {
   let i18nRequest = i18nRouter(request, {
-    locales: Object.keys(locales),
+    locales: ["en", "pt"],
     defaultLocale: "en",
     routingStrategy: "dynamicSegment",
   });
