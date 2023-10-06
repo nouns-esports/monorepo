@@ -2,21 +2,14 @@
 
 import { useState } from "react";
 import { CaretDown } from "phosphor-react-sc";
-import { useCurrentLocale } from "next-i18n-router/client";
-import i18nConfig from "@/i18nConfig";
 import Link from "next/link";
-
-export const locales = {
-  en: "English",
-  pt: "Português",
-} as const;
-
-export type Locale = keyof typeof locales;
+import { useParams } from "next/navigation";
+import { locales } from "@/middleware";
 
 export function SelectLanguage() {
   const [open, setOpen] = useState(false);
 
-  const locale = useCurrentLocale(i18nConfig) as Locale;
+  const { locale } = useParams();
 
   return (
     <div
@@ -24,7 +17,7 @@ export function SelectLanguage() {
       className="relative flex items-center gap-3 select-none text-white font-cabin cursor-pointer bg-black/60 p-2 rounded-full"
     >
       <img src={`/lang/${locale}.svg`} draggable={false} className="w-6 h-6" />
-      {locales[locale]}
+      {locales[locale as string]}
       <CaretDown
         weight="bold"
         className="mr-2 transition-transform"
@@ -48,7 +41,7 @@ export function SelectLanguage() {
                   draggable={false}
                   className="w-6 h-6"
                 />
-                {locales[_locale as Locale]}
+                {locales[_locale]}
               </Link>
             )
         )}

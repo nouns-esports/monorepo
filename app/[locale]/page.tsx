@@ -1,4 +1,4 @@
-import Button from "../components/Button";
+import Button from "@/components/Button";
 import Marquee from "react-fast-marquee";
 import {
   TwitchLogo,
@@ -10,7 +10,7 @@ import {
   InstagramLogo,
 } from "phosphor-react-sc";
 import Link from "next/link";
-import { Game, Project } from "@/db/schema";
+import { Project } from "@/db/schema";
 import Text from "@/components/Text";
 import HighlightedText from "@/components/HighlightedText";
 import fetchEvents from "@/utils/fetchEvents";
@@ -18,10 +18,9 @@ import fetchGames from "@/utils/fetchGames";
 import fetchProjects from "@/utils/fetchProjects";
 import type { Event } from "@/utils/fetchEvents";
 import Date from "@/components/Date";
-import GameCard from "@/components/GameCard";
 import { headers } from "next/headers";
 
-export default async function Home() {
+export default async function Home(props: { params: { locale: string } }) {
   const events = await fetchEvents();
 
   const games = await fetchGames();
@@ -135,7 +134,13 @@ export default async function Home() {
         <Text en="Our Games" pt="Nossos Jogos" />
         <div className="flex flex-wrap max-sm:flex-nowrap max-sm:overflow-x-scroll max-sm:justify-start justify-center max-w-[1920px] gap-16 w-full max-2xl:gap-8">
           {games.map((game) => (
-            <GameCard key={game.id} game={game} />
+            <GameCard
+              key={game.id}
+              locale={props.params.locale}
+              id={game.id}
+              image={game.image}
+              name={game.name}
+            />
           ))}
         </div>
       </div>
@@ -201,6 +206,35 @@ export default async function Home() {
         <div className="from-transparent to-black bg-gradient-to-b h-2/5 w-full bottom-0 absolute"></div>
       </div>
     </main>
+  );
+}
+
+function GameCard(props: {
+  id: string;
+  locale: string;
+  image: string;
+  name: string;
+}) {
+  return (
+    <Link
+      // TODO: Refactor this to its own custom Link component
+      href={`${props.locale === "en" ? "" : `/${props.locale}`}/games/${
+        props.id
+      }`}
+      style={{ backgroundImage: `url(${props.image})` }}
+      className="relative w-[calc(25%_-_3rem)] max-xl:w-[calc(25%_-_1.5rem)] max-sm:first:ml-8 max-sm:last:mr-8 max-sm:min-w-[calc(100%_-_6rem)] min-w-[12rem] rounded-xl select-none aspect-square group overflow-hidden"
+    >
+      <img
+        src={props.image}
+        alt={props.name}
+        className="object-cover object-center absolute w-full top-0 h-full brightness-[85%] group-hover:scale-110 transition-transform"
+      />
+      <div className="relative z-10 w-full h-full grid place-items-center shadow-[inset_-20px_-20px_80px_black,inset_20px_20px_80px_black]">
+        <h3 className="drop-shadow-2xl text-center p-4 text-5xl max-2xl:text-4xl max-sm:text-3xl font-bebas-neue [text-shadow:black_0_0_30px]">
+          {props.name}
+        </h3>
+      </div>
+    </Link>
   );
 }
 

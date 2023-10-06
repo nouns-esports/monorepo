@@ -6,14 +6,13 @@ import {
   Bebas_Neue,
   Londrina_Solid,
 } from "next/font/google";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import Providers from "../providers";
-import { currentLocale } from "next-i18n-router";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import Providers from "@/providers";
 import fetchGames from "@/utils/fetchGames";
 import { Analytics } from "@vercel/analytics/react";
 import baseKeywords from "@/utils/metadata/baseKeywords";
-import i18nConfig from "@/i18nConfig";
+import { locales } from "@/middleware";
 
 const cabin = Cabin({ subsets: ["latin"], variable: "--font-cabin" });
 
@@ -49,7 +48,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
     // TODO: See how this works for subpages; is /pt valid for /games/csgo?
-    languages: i18nConfig.locales.reduce((object, locale) => {
+    languages: Object.keys(locales).reduce((object, locale) => {
       object[locale] = `/${locale}`;
       return object;
     }, {} as Record<string, string>),
@@ -71,12 +70,15 @@ export const metadata: Metadata = {
   themeColor: "black",
 };
 
-export default async function RootLayout(props: { children: React.ReactNode }) {
+export default async function RootLayout(props: {
+  children: React.ReactNode;
+  params: { locale: string };
+}) {
   const games = await fetchGames();
 
   return (
     <html
-      lang={currentLocale() ?? "en"}
+      lang={props.params.locale}
       className="scroll-smooth overflow-x-hidden"
     >
       <body
