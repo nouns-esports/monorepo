@@ -4,7 +4,7 @@ import { useState } from "react";
 import { CaretDown } from "phosphor-react-sc";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { locales } from "@/middleware";
+import { locales } from "@/utils/fetchCollection";
 
 export function SelectLanguage() {
   const [open, setOpen] = useState(false);

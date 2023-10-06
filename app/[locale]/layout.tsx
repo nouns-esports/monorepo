@@ -12,7 +12,7 @@ import Providers from "@/providers";
 import fetchGames from "@/utils/fetchGames";
 import { Analytics } from "@vercel/analytics/react";
 import baseKeywords from "@/utils/metadata/baseKeywords";
-import { locales } from "@/middleware";
+import { locales } from "@/utils/fetchCollection";
 
 const cabin = Cabin({ subsets: ["latin"], variable: "--font-cabin" });
 

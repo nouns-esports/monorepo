@@ -1,14 +1,7 @@
-import { NextRequest, userAgent } from "next/server";
+import { userAgent } from "next/server";
 import { i18nRouter } from "next-i18n-router";
 
-export const locales: Record<string, string> = {
-  en: "English",
-  pt: "Português",
-};
-
-export type Locale = keyof typeof locales;
-
-export function middleware(request: NextRequest) {
+export function middleware(request) {
   let i18nRequest = i18nRouter(request, {
     locales: ["en", "pt"],
     defaultLocale: "en",
@@ -27,7 +20,7 @@ export const config = {
   matcher: "/((?!api|static|.*\\..*|_next).*)",
 };
 
-function getDevice(request: NextRequest) {
+function getDevice(request) {
   const { device } = userAgent(request);
 
   return device.type === "mobile" ? "mobile" : "desktop";
