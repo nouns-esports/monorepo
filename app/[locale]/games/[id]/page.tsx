@@ -6,21 +6,20 @@ import Text from "@/components/Text";
 import GameBorder from "@/components/GameBorder";
 import baseKeywords from "@/utils/metadata/baseKeywords";
 
-// export async function generateMetadata(props: { params: { id: string } }) {
-//   console.log(props.params);
-//   const game = await fetchGame(props.params.id);
+export async function generateMetadata(props: { params: { id: string } }) {
+  const game = await fetchGame(props.params.id);
 
-//   const players = (await fetchRoster(game.id)).map((person) =>
-//     person.name.toLowerCase()
-//   );
+  const players = (await fetchRoster(game.id)).map((person) =>
+    person.name.toLowerCase()
+  );
 
-//   return {
-//     title: game.name,
-//     description: `Learn more about our ${game.name} roster!`,
-//     image: game.image,
-//     keywords: [...baseKeywords, game.name, ...players],
-//   };
-// }
+  return {
+    title: game.name,
+    description: `Learn more about our ${game.name} roster!`,
+    image: game.image,
+    keywords: [...baseKeywords, game.name, ...players],
+  };
+}
 
 export default async function Game(props: { params: { id: string } }) {
   const game = await fetchGame(props.params.id);
