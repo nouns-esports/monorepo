@@ -1,6 +1,6 @@
 "use client";
 
-import type { Locale } from "@/utils/fetchCollection";
+import type { Locale } from "@/middleware";
 import { useParams } from "next/navigation";
 
 // TODO: Make this server first
