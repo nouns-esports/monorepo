@@ -1,7 +1,7 @@
 "use client";
 
-import { useParams, usePathname } from "next/navigation";
-import { Locale } from "@/utils/fetchCollection";
+import { useParams } from "next/navigation";
+import { Locale } from "@/middleware";
 import { motion } from "framer-motion";
 
 export default function HighlightedText(props: {
@@ -11,10 +11,6 @@ export default function HighlightedText(props: {
   underline?: boolean;
 }) {
   const { locale } = useParams();
-
-  const pathname = usePathname();
-
-  console.log("loc", locale, pathname);
 
   return props.text[locale as string].split(" ").map((word) => {
     if (props.highlight[(locale as string) || "en"].includes(word)) {

@@ -63,14 +63,14 @@ export default async function Footer() {
           {games.length > 3 ? <FooterLink href="/#games">All</FooterLink> : ""}
         </FooterSection>
         <FooterSection title={<Text en="Contributors" pt="Contribuidores" />}>
+          <FooterLink href="/partners">
+            <Text en="Partners" pt="Parceiros" />
+          </FooterLink>
           <FooterLink href="https://nouns-esports.notion.site/Contributor-Dashboard-776148bfb6164afea843ee59ff559236">
             <Text en="Dashboard" pt="Painel" />
           </FooterLink>
-          <FooterLink href="https://nouns-esports.notion.site/95a06dc09ca34c93aa945bcb4392b445?v=5782f93244024a64bf04c2284a5ccba4">
-            <Text en="Proposals" pt="Propostas" />
-          </FooterLink>
           <FooterLink href="https://app.safe.global/eth:0x8b45D1CACcb3593E9F1015BA8e97AFB68DE3a0d1/balances">
-            <Text en="Multisig" pt="Multisig" />
+            <Text en="Treasury" pt="Tesouraria" />
           </FooterLink>
         </FooterSection>
       </div>

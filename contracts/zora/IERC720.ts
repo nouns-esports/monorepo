@@ -3,13 +3,8 @@ export default [
     inputs: [
       {
         internalType: "address",
-        name: "minter",
+        name: "recipient",
         type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
       },
       {
         internalType: "uint256",
@@ -17,9 +12,9 @@ export default [
         type: "uint256",
       },
       {
-        internalType: "bytes",
-        name: "minterArguments",
-        type: "bytes",
+        internalType: "string",
+        name: "comment",
+        type: "string",
       },
       {
         internalType: "address",
@@ -28,7 +23,13 @@ export default [
       },
     ],
     name: "mintWithRewards",
-    outputs: [],
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
     stateMutability: "payable",
     type: "function",
   },

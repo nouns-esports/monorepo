@@ -1,3 +1,4 @@
+import { Locale } from "@/middleware";
 import type { Address } from "viem";
 import chains from "viem/chains";
 
@@ -13,12 +14,6 @@ import chains from "viem/chains";
 //     { network: ZDKNetwork.Base, chain: ZDKChain.BaseMainnet },
 //   ],
 // });
-export const locales: Record<string, string> = {
-  en: "English",
-  pt: "Português",
-};
-
-export type Locale = keyof typeof locales;
 
 export type Collection = {
   id: string;
