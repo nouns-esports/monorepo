@@ -18,6 +18,12 @@ export async function generateMetadata(props: { params: { id: string } }) {
       collection.chain,
       collection.type,
     ],
+    openGraph: {
+      images: [collection.image],
+    },
+    twitter: {
+      images: [collection.image],
+    },
   };
 }
 

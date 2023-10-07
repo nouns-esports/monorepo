@@ -3,11 +3,26 @@ import Link from "next/link";
 import { DownloadSimple } from "phosphor-react-sc";
 import Text from "@/components/Text";
 import { Metadata } from "next";
+import { metadata as baseMetadata } from "@/app/[locale]/layout";
 
 export const metadata: Metadata = {
   title: "Become a partner",
   description:
     "Hey there! We're Nouns Esports, a uniquely innovative esports organization with a fast growing fanbase of passionate gamers.",
+  keywords: [
+    ...baseMetadata.keywords,
+    "partner",
+    "partnership",
+    "deck",
+    "sponsor",
+    "sponsorship",
+  ],
+  openGraph: {
+    images: ["/partnership-deck.webp"],
+  },
+  twitter: {
+    images: ["/partnership-deck.webp"],
+  },
 };
 
 export default function Partners() {
