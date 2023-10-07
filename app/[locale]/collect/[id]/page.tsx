@@ -5,12 +5,14 @@ import Text from "@/components/Text";
 import Link from "next/link";
 import { metadata } from "../../layout";
 
-export async function generateMetadata(props: { params: { id: string } }) {
+export async function generateMetadata(props: {
+  params: { locale: string; id: string };
+}) {
   const collection = await fetchCollection(props.params.id);
 
   return {
-    title: collection.name,
-    description: collection.description,
+    title: collection.name[props.params.locale],
+    description: collection.description[props.params.locale],
     image: collection.image,
     keywords: [
       ...metadata.keywords,
