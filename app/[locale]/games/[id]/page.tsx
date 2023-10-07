@@ -5,6 +5,7 @@ import { ArrowSquareOut } from "phosphor-react-sc";
 import Text from "@/components/Text";
 import GameBorder from "@/components/GameBorder";
 import { metadata } from "@/app/[locale]/layout";
+import { Metadata } from "next";
 
 export async function generateMetadata(props: { params: { id: string } }) {
   const game = await fetchGame(props.params.id);
@@ -16,7 +17,6 @@ export async function generateMetadata(props: { params: { id: string } }) {
   return {
     title: game.name,
     description: `Learn more about our ${game.name} roster!`,
-    image: game.image,
     keywords: [...metadata.keywords, game.name, ...players],
     openGraph: {
       images: [game.image],
@@ -24,7 +24,7 @@ export async function generateMetadata(props: { params: { id: string } }) {
     twitter: {
       images: [game.image],
     },
-  };
+  } satisfies Metadata;
 }
 
 export default async function Game(props: { params: { id: string } }) {

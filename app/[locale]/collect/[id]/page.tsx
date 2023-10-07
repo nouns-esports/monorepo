@@ -4,6 +4,7 @@ import { CaretLeft, CaretRight } from "phosphor-react-sc";
 import Text from "@/components/Text";
 import Link from "next/link";
 import { metadata } from "../../layout";
+import { Metadata } from "next";
 
 export async function generateMetadata(props: {
   params: { locale: string; id: string };
@@ -13,10 +14,9 @@ export async function generateMetadata(props: {
   return {
     title: collection.name[props.params.locale],
     description: collection.description[props.params.locale],
-    image: collection.image,
     keywords: [
       ...metadata.keywords,
-      collection.name,
+      collection.name[props.params.locale],
       collection.chain,
       collection.type,
     ],
@@ -26,7 +26,7 @@ export async function generateMetadata(props: {
     twitter: {
       images: [collection.image],
     },
-  };
+  } satisfies Metadata;
 }
 
 export default async function Collect(props: { params: { id: string } }) {
