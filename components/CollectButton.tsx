@@ -38,15 +38,15 @@ export default function CollectButton(props: { collection: Collection }) {
 
         switch (props.collection.type) {
           case "ZORA-ERC721": {
-            collectZORAERC721.write({
-              value: parseEther("0.00277"),
-              args: [1n],
-            });
+            // collectZORAERC721.write({
+            //   value: parseEther("0.00277"),
+            //   args: [1n],
+            // });
 
             break;
           }
           case "ZORA-ERC1155": {
-            collectZORAERC1155.write();
+            // collectZORAERC1155.write();
 
             break;
           }
