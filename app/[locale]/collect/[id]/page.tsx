@@ -36,7 +36,7 @@ export default async function Collect(props: { params: { id: string } }) {
     <main className="mb-4">
       <div
         style={{
-          backgroundImage: `url(${collection.image})`,
+          backgroundImage: `url(${collection.background || collection.image})`,
         }}
         className="relative h-[calc(100vh_-_2.25rem)] bg-no-repeat bg-cover bg-center flex items-center justify-center transition-all"
       >
