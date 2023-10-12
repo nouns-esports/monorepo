@@ -38,10 +38,10 @@ export default async function fetchCollection(id: string) {
       address: "0x",
       chain: "base",
       type: "ZORA-ERC1155",
-      name: { en: "Esports Summer", pt: "Esports Summer" },
+      name: { en: "Esports Summer", pt: "Esports Verão" },
       description: {
-        en: "We love esports. Join the community from our website, nouns.gg Video made with love by nounish ⌐◨-◨",
-        pt: "We love esports. Join the community from our website, nouns.gg Video made with love by nounish ⌐◨-◨",
+        en: "We love esports. Get involved in your favorite esports community and you can make a difference! Video made with love by nounish ⌐◨-◨",
+        pt: "Amamos os esports. Envolva-se em sua comunidade de esports favorita e você pode fazer a diferença! Vídeo feito com amor por nounish ⌐◨-◨",
       },
       background: "/collections/esports-summer.webp",
       image: "/collections/esports-summer.gif",
@@ -55,13 +55,13 @@ export default async function fetchCollection(id: string) {
       chain: "mainnet",
       type: "ZORA-ERC721",
 
-      name: { en: "Esports Introduced", pt: "Esports Introduced" },
+      name: { en: "Esports Introduced", pt: "Esports Apresentados" },
       description: {
-        en: "Introducing Nouns Esports, a community that spreads the ⌐◨-◨ meme and drives innovation at the intersection of web3 and gaming. This artwork tells the story of decentralization and the opportunities that open source brands, like Nouns, enable for creatives. Mint ‘Esports, Introduced’ to celebrate the testnet launch of @BuildOnBase and join the broader decentralized gaming community. We're excited to build esports together with you. Art inspired by Base, Introduced https://mint.base.org",
-        pt: "Introducing Nouns Esports, a community that spreads the ⌐◨-◨ meme and drives innovation at the intersection of web3 and gaming. This artwork tells the story of decentralization and the opportunities that open source brands, like Nouns, enable for creatives. Mint ‘Esports, Introduced’ to celebrate the testnet launch of @BuildOnBase and join the broader decentralized gaming community. We're excited to build esports together with you. Art inspired by Base, Introduced https://mint.base.org",
+        en: "Introducing Nouns Esports, a community that spreads the ⌐◨-◨ meme and drives innovation at the intersection of web3 and gaming. This artwork tells the story of decentralization and the opportunities that open source brands, like Nouns, enable for creatives. Mint ‘Esports, Introduced’ to celebrate the testnet launch of Base and join the broader decentralized gaming community. We're excited to build esports together with you.",
+        pt: "Apresentando Nouns Esports, uma comunidade que propaga o meme ⌐◨-◨ e impulsiona a inovação na intersecção de web3 e jogos. Esta obra de arte conta a história da descentralização e as oportunidades que marcas de código aberto, como a Nouns, possibilitam para criativos. Cunhe 'Esports, Apresentados' para celebrar o lançamento da testnet do Base e junte-se à ampla comunidade de jogos descentralizada. Estamos animados para construir esports juntos com você.",
       },
       image: "/collections/esports-introduced.webp",
-      url: "https://mint.base.org",
+      url: "https://base.org",
     },
   };
 

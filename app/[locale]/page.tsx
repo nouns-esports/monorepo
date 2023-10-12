@@ -9,7 +9,7 @@ import {
   PlayCircle,
   InstagramLogo,
 } from "phosphor-react-sc";
-import Link from "next/link";
+import Link from "@/components/Link";
 import { Project } from "@/db/schema";
 import Text from "@/components/Text";
 import HighlightedText from "@/components/HighlightedText";
@@ -65,59 +65,57 @@ export default async function Home(props: { params: { locale: string } }) {
           <Button href="/discord">
             <Text en="Get Involved" pt="Envolver-se" />
           </Button>
-          <a
+          <Link
             href="https://www.youtube.com/watch?v=SAXzMQ8pPvE"
-            rel="noopener noreferrer"
-            target="_blank"
-            className="text-white hover:text-white/60 transition-colors group font-cabin flex gap-2 items-center"
+            className="text-white select-none hover:text-white/60 transition-colors group font-cabin flex gap-2 items-center"
           >
             <PlayCircle
               weight="bold"
               className="w-7 h-7 text-white transition-colors group-hover:text-white/60"
             />
             <Text en="Watch Video" pt="Assista o vídeo" />
-          </a>
+          </Link>
         </div>
         <div className="flex max-[450px]:flex-col gap-4 w-fit items-center">
           <div className="flex gap-4 items-center">
-            <a href="/twitch" target="_blank" rel="noopener noreferrer">
+            <Link href="/twitch">
               <TwitchLogo
                 className="w-9 h-9 text-white hover:text-white/60 cursor-pointer transition-colors"
                 weight="fill"
               />
-            </a>
-            <a href="/x" target="_blank" rel="noopener noreferrer">
+            </Link>
+            <Link href="/x">
               <TwitterLogo
                 className="w-9 h-9 text-white hover:text-white/60 cursor-pointer transition-colors"
                 weight="fill"
               />
-            </a>
-            <a href="/youtube" target="_blank" rel="noopener noreferrer">
+            </Link>
+            <Link href="/youtube">
               <YoutubeLogo
                 className="w-9 h-9 text-white hover:text-white/60 cursor-pointer transition-colors"
                 weight="fill"
               />
-            </a>
+            </Link>
           </div>
           <div className="flex gap-4 items-center">
-            <a href="/tiktok" target="_blank" rel="noopener noreferrer">
+            <Link href="/tiktok">
               <TiktokLogo
                 className="w-9 h-9 text-white hover:text-white/60 cursor-pointer transition-colors"
                 weight="fill"
               />
-            </a>
-            <a href="/discord" target="_blank" rel="noopener noreferrer">
+            </Link>
+            <Link href="/discord">
               <DiscordLogo
                 className="w-9 h-9 text-white hover:text-white/60 cursor-pointer transition-colors"
                 weight="fill"
               />
-            </a>
-            <a href="/instagram" target="_blank" rel="noopener noreferrer">
+            </Link>
+            <Link href="/instagram">
               <InstagramLogo
                 className="w-9 h-9 text-white hover:text-white/60 cursor-pointer transition-colors"
                 weight="fill"
               />
-            </a>
+            </Link>
           </div>
         </div>
       </div>
@@ -201,7 +199,7 @@ export default async function Home(props: { params: { locale: string } }) {
         </h2>
       </div>
       <div className="relative mb-8">
-        <img src="/pokemon.webp" className="w-full" />
+        <img src="/pokemon.webp" className="w-full select-none" />
         <div className="from-black via-black/70 to-transparent bg-gradient-to-b h-2/5 w-full top-0 absolute"></div>
         <div className="from-transparent to-black bg-gradient-to-b h-2/5 w-full bottom-0 absolute"></div>
       </div>
@@ -217,10 +215,7 @@ function GameCard(props: {
 }) {
   return (
     <Link
-      // TODO: Refactor this to its own custom Link component
-      href={`${props.locale === "en" ? "" : `/${props.locale}`}/games/${
-        props.id
-      }`}
+      href={`/${props.locale}/games/${props.id}`}
       style={{ backgroundImage: `url(${props.image})` }}
       className="relative w-[calc(25%_-_3rem)] max-xl:w-[calc(25%_-_1.5rem)] max-sm:first:ml-8 max-sm:last:mr-8 max-sm:min-w-[calc(100%_-_6rem)] min-w-[12rem] rounded-xl select-none aspect-square group overflow-hidden"
     >
@@ -248,8 +243,6 @@ async function ScheduleCard(props: { event: Event }) {
   return (
     <Link
       href={props.event.htmlLink}
-      target="_blank"
-      rel="noopener noreferrer"
       className="relative w-[calc(33.33%_-_2.67rem)] max-xl:w-[calc(33.33%_-_2.67rem)] max-sm:first:ml-8 max-sm:last:mr-8 max-sm:min-w-[calc(100%_-_6rem)] min-w-[24rem] overflow-hidden select-none aspect-video text-left rounded-xl group drop-shadow-2xl"
     >
       <img
@@ -279,8 +272,6 @@ function ProjectCard(props: { project: Project }) {
   return (
     <Link
       href={props.project.url}
-      target="_blank"
-      rel="noopener noreferrer"
       className="relative w-[calc(25%_-_3rem)] max-xl:w-[calc(25%_-_1.5rem)] max-sm:first:ml-8 max-sm:last:mr-8 max-sm:min-w-[calc(100%_-_6rem)] min-w-[20rem] overflow-hidden select-none aspect-video rounded-xl group drop-shadow-2xl"
     >
       <img

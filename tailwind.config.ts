@@ -32,7 +32,7 @@ const config: Config = {
         grow: "125%",
       },
       cursor: {
-        crosshair: "url('/icons/crosshair.svg') 16 16, auto",
+        crosshair: "url('/crosshair.svg') 16 16, auto",
       },
     },
   },

@@ -6,6 +6,7 @@ import Text from "@/components/Text";
 import GameBorder from "@/components/GameBorder";
 import { metadata } from "@/app/[locale]/layout";
 import { Metadata } from "next";
+import Link from "@/components/Link";
 
 export async function generateMetadata(props: { params: { id: string } }) {
   const game = await fetchGame(props.params.id);
@@ -72,12 +73,12 @@ function GameSection(props: {
       <div className="w-full justify-between flex items-center">
         <h2 className="font-bebas-neue text-white text-4xl">{props.title}</h2>
         {props.href ? (
-          <a href={props.href} target="_blank" rel="noopener noreferrer">
+          <Link href={props.href}>
             <ArrowSquareOut
               weight="bold"
               className="w-6 h-6 text-white hover:text-white/60 transition-colors"
             />
-          </a>
+          </Link>
         ) : (
           ""
         )}
@@ -90,7 +91,7 @@ function GameSection(props: {
 function RosterCard(props: { person: Talent; game: Game }) {
   return (
     <div
-      className="relative aspect-[21/30] w-full flex max-lg:w-60 max-lg:flex-shrink-0 rounded-xl border-fix group cursor-pointer overflow-hidden"
+      className="relative select-none aspect-[21/30] w-full flex max-lg:w-60 max-lg:flex-shrink-0 rounded-xl border-fix group cursor-pointer overflow-hidden"
       style={{
         backgroundColor: props.game.color,
         maxWidth: props.game.roster.length < 5 ? "18rem" : "100%",

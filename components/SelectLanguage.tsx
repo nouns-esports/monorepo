@@ -2,14 +2,16 @@
 
 import { useState } from "react";
 import { CaretDown } from "phosphor-react-sc";
-import Link from "next/link";
-import { useParams } from "next/navigation";
+import Link from "@/components/Link";
+import { useParams, usePathname } from "next/navigation";
 import { locales } from "@/middleware";
 
 export function SelectLanguage() {
   const [open, setOpen] = useState(false);
 
   const { locale } = useParams();
+
+  const pathname = usePathname();
 
   return (
     <div
@@ -32,7 +34,11 @@ export function SelectLanguage() {
             _locale !== locale && (
               <Link
                 key={_locale}
-                href={`/${_locale}`}
+                href={
+                  locale === "en"
+                    ? `/${_locale}${pathname}`
+                    : pathname.replace(locale as string, _locale)
+                }
                 scroll={false}
                 className="flex gap-3 px-2 py-1 first:pt-2 last:pb-2 select-none"
               >

@@ -65,17 +65,12 @@ export const metadata = {
   },
   openGraph: {
     type: "website",
-    // title,
-    // description,
     images: ["/pokemon.webp"],
-    // url: "https://nouns.gg",
   },
   twitter: {
     site: "@NounsEsports",
     card: "summary_large_image",
     images: ["/pokemon.webp"],
-    // title,
-    // description,
   },
   themeColor: "black",
 } satisfies Metadata;
@@ -95,9 +90,9 @@ export default async function RootLayout(props: {
         className={`cursor-crosshair ${cabin.variable} ${luckiestGuy.variable} ${bebasNeue.variable} ${londrinaSolid.variable} bg-black text-lightgrey font-cabin selection:text-white selection:bg-red w-full`}
       >
         <Providers games={games}>
-          <Header />
+          <Header locale={props.params.locale} />
           {props.children}
-          <Footer />
+          <Footer locale={props.params.locale} />
         </Providers>
         <Analytics />
       </body>
