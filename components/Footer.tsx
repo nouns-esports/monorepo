@@ -9,7 +9,7 @@ import {
 } from "phosphor-react-sc";
 import Text from "@/components/Text";
 import ANounsThing from "./ANounsThing";
-import fetchGames from "@/utils/fetchGames";
+import fetchGames from "@/utils/server/fetchGames";
 import Logo from "./Logo";
 
 export default async function Footer(props: { locale: string }) {
@@ -54,7 +54,7 @@ export default async function Footer(props: { locale: string }) {
             index < 3 ? (
               <FooterLink
                 key={game.id}
-                href={`${props.locale}/games/${game.id}`}
+                href={`/${props.locale}/games/${game.id}`}
               >
                 {game.name}
               </FooterLink>
@@ -64,7 +64,7 @@ export default async function Footer(props: { locale: string }) {
           )}
           {games.length > 3 ? <FooterLink href="/#games">All</FooterLink> : ""}
         </FooterSection>
-        <FooterSection title={<Text en="Contributors" pt="Contribuidores" />}>
+        <FooterSection title={<Text en="Contribute" pt="Contribuir" />}>
           <FooterLink href={`/${props.locale}/partners`}>
             <Text en="Partners" pt="Parceiros" />
           </FooterLink>
@@ -77,33 +77,7 @@ export default async function Footer(props: { locale: string }) {
         </FooterSection>
       </div>
       <div className="flex max-lg:flex-row max-[300px]:flex-col gap-4 items-center justify-center text-white">
-        <div className="flex flex-col gap-4 max-lg:flex-row ">
-          <Link href="/twitch">
-            <TwitchLogo
-              className="w-7 h-7 text-white hover:text-white/60 cursor-pointer transition-colors"
-              weight="fill"
-            />
-          </Link>
-          <Link href="/x">
-            <TwitterLogo
-              className="w-7 h-7 text-white hover:text-white/60 cursor-pointer transition-colors"
-              weight="fill"
-            />
-          </Link>
-          <Link href="/youtube">
-            <YoutubeLogo
-              className="w-7 h-7 text-white hover:text-white/60 cursor-pointer transition-colors"
-              weight="fill"
-            />
-          </Link>
-        </div>
         <div className="flex flex-col gap-4 max-lg:flex-row">
-          <Link href="/tiktok">
-            <TiktokLogo
-              className="w-7 h-7 text-white hover:text-white/60 cursor-pointer transition-colors"
-              weight="fill"
-            />
-          </Link>
           <Link href="/discord">
             <DiscordLogo
               className="w-7 h-7 text-white hover:text-white/60 cursor-pointer transition-colors"
@@ -112,6 +86,32 @@ export default async function Footer(props: { locale: string }) {
           </Link>
           <Link href="/instagram">
             <InstagramLogo
+              className="w-7 h-7 text-white hover:text-white/60 cursor-pointer transition-colors"
+              weight="fill"
+            />
+          </Link>
+          <Link href="/twitter">
+            <TwitterLogo
+              className="w-7 h-7 text-white hover:text-white/60 cursor-pointer transition-colors"
+              weight="fill"
+            />
+          </Link>
+        </div>
+        <div className="flex flex-col gap-4 max-lg:flex-row">
+          <Link href="/twitch">
+            <TwitchLogo
+              className="w-7 h-7 text-white hover:text-white/60 cursor-pointer transition-colors"
+              weight="fill"
+            />
+          </Link>
+          <Link href="/tiktok">
+            <TiktokLogo
+              className="w-7 h-7 text-white hover:text-white/60 cursor-pointer transition-colors"
+              weight="fill"
+            />
+          </Link>
+          <Link href="/youtube">
+            <YoutubeLogo
               className="w-7 h-7 text-white hover:text-white/60 cursor-pointer transition-colors"
               weight="fill"
             />

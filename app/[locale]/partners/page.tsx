@@ -4,6 +4,9 @@ import { DownloadSimple } from "phosphor-react-sc";
 import Text from "@/components/Text";
 import { Metadata } from "next";
 import { metadata as baseMetadata } from "@/app/[locale]/layout";
+import Image from "next/image";
+import whiteNoggles from "@/public/noggles-white.svg";
+import backgroundPattern from "@/public/pattern.svg";
 
 export const metadata: Metadata = {
   title: "Become a partner",
@@ -30,8 +33,10 @@ export default function Partners() {
     <div className="relative flex flex-col gap-12 items-center justify-center h-screen from-[#131b3a] via-[#1b315f] to-[#202d5c] bg-gradient-to-tr">
       <h1 className="relative text-white font-cabin font-medium text-7xl">
         <Text en="Become a partner" pt="Torne-se um parceiro" />
-        <img
-          src="/noggles-white.svg"
+        <Image
+          src={whiteNoggles}
+          alt="A pair of white noggles"
+          draggable={false}
           className="absolute w-12 top-0 -right-12 select-none"
         />
       </h1>
@@ -57,9 +62,13 @@ export default function Partners() {
         </Link>
       </div>
 
-      <img
-        src="/pattern.svg"
-        className="absolute select-none bottom-0 w-full object-cover pointer-events-none"
+      <Image
+        src={backgroundPattern}
+        sizes="100vw"
+        objectFit="cover"
+        priority
+        alt="Background pattern"
+        className="absolute select-none bottom-0 w-full pointer-events-none"
       />
       <div className="from-black to-transparent bg-gradient-to-t h-1/6 w-full bottom-0 z-10 absolute" />
     </div>

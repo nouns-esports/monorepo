@@ -1,5 +1,5 @@
 import CollectButton from "@/components/CollectButton";
-import fetchCollection from "@/utils/fetchCollection";
+import fetchCollection from "@/utils/server/fetchCollection";
 import { ArrowSquareOut, CaretLeft, CaretRight } from "phosphor-react-sc";
 import Text from "@/components/Text";
 import Link from "@/components/Link";
@@ -21,10 +21,10 @@ export async function generateMetadata(props: {
       collection.type,
     ],
     openGraph: {
-      images: [collection.image],
+      images: [collection.background ?? collection.image],
     },
     twitter: {
-      images: [collection.image],
+      images: [collection.background ?? collection.image],
     },
   } satisfies Metadata;
 }

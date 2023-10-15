@@ -5,6 +5,7 @@ import { CaretDown } from "phosphor-react-sc";
 import Link from "@/components/Link";
 import { useParams, usePathname } from "next/navigation";
 import { locales } from "@/middleware";
+import Image from "next/image";
 
 export function SelectLanguage() {
   const [open, setOpen] = useState(false);
@@ -18,7 +19,14 @@ export function SelectLanguage() {
       onClick={() => setOpen(!open)}
       className="relative flex items-center gap-3 select-none text-white font-cabin cursor-pointer bg-black/60 p-2 rounded-full"
     >
-      <img src={`/lang/${locale}.svg`} draggable={false} className="w-6 h-6" />
+      <Image
+        src={`/lang/${locale}.svg`}
+        alt={`${locales[locale as string]} locale image`}
+        width={24}
+        height={24}
+        draggable={false}
+        className="w-6 h-6"
+      />
       {locales[locale as string]}
       <CaretDown
         weight="bold"
@@ -42,8 +50,11 @@ export function SelectLanguage() {
                 scroll={false}
                 className="flex gap-3 px-2 py-1 first:pt-2 last:pb-2 select-none"
               >
-                <img
+                <Image
                   src={`/lang/${_locale}.svg`}
+                  alt={`${locales[_locale]} locale image`}
+                  width={24}
+                  height={24}
                   draggable={false}
                   className="w-6 h-6"
                 />

@@ -9,7 +9,7 @@ import {
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Providers from "@/providers";
-import fetchGames from "@/utils/fetchGames";
+import fetchGames from "@/utils/server/fetchGames";
 import { Analytics } from "@vercel/analytics/react";
 import { locales } from "@/middleware";
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { Collection } from "@/utils/fetchCollection";
+import { Collection } from "@/utils/server/fetchCollection";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { useAccount, useContractWrite } from "wagmi";
 import Text from "./Text";
@@ -77,7 +77,7 @@ function Spinner() {
         clipRule="evenodd"
         d="M12 24C18.6274 24 24 18.6274 24 12C24 5.37258 18.6274 0 12 0C5.37258 0 0 5.37258 0 12C0 18.6274 5.37258 24 12 24ZM12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20Z"
         fill="black"
-        fillOpacity="0.12"
+        fillOpacity="0.2"
       />
       <path
         fillRule="evenodd"

@@ -13,12 +13,16 @@ import Link from "@/components/Link";
 import { Project } from "@/db/schema";
 import Text from "@/components/Text";
 import HighlightedText from "@/components/HighlightedText";
-import fetchEvents from "@/utils/fetchEvents";
-import fetchGames from "@/utils/fetchGames";
-import fetchProjects from "@/utils/fetchProjects";
-import type { Event } from "@/utils/fetchEvents";
+import fetchEvents from "@/utils/server/fetchEvents";
+import fetchGames from "@/utils/server/fetchGames";
+import fetchProjects from "@/utils/server/fetchProjects";
+import type { Event } from "@/utils/server/fetchEvents";
 import Date from "@/components/Date";
 import { headers } from "next/headers";
+import Image from "next/image";
+import Clips from "@/public/clips.webp";
+import LogoWhite from "@/public/logo-white.svg";
+import Pokemon from "@/public/pokemon.webp";
 
 export default async function Home(props: { params: { locale: string } }) {
   const events = await fetchEvents();
@@ -31,7 +35,7 @@ export default async function Home(props: { params: { locale: string } }) {
 
   return (
     <main className="cursor-crosshair flex flex-col">
-      <div className="relative h-screen bg-cover flex flex-col justify-center items-center gap-8 shadow-[inset_-80px_-80px_120px_black,inset_80px_80px_120px_black] max-sm:shadow-[inset_-40px_-40px_60px_black,inset_40px_40px_60px_black]">
+      <div className="relative h-screen bg-cover flex flex-col justify-center items-center gap-10 shadow-[inset_-80px_-80px_120px_black,inset_80px_80px_120px_black] max-sm:shadow-[inset_-40px_-40px_60px_black,inset_40px_40px_60px_black]">
         <video
           autoPlay
           muted
@@ -78,41 +82,41 @@ export default async function Home(props: { params: { locale: string } }) {
         </div>
         <div className="flex max-[450px]:flex-col gap-4 w-fit items-center">
           <div className="flex gap-4 items-center">
-            <Link href="/twitch">
-              <TwitchLogo
-                className="w-9 h-9 text-white hover:text-white/60 cursor-pointer transition-colors"
-                weight="fill"
-              />
-            </Link>
-            <Link href="/x">
-              <TwitterLogo
-                className="w-9 h-9 text-white hover:text-white/60 cursor-pointer transition-colors"
-                weight="fill"
-              />
-            </Link>
-            <Link href="/youtube">
-              <YoutubeLogo
-                className="w-9 h-9 text-white hover:text-white/60 cursor-pointer transition-colors"
-                weight="fill"
-              />
-            </Link>
-          </div>
-          <div className="flex gap-4 items-center">
-            <Link href="/tiktok">
-              <TiktokLogo
-                className="w-9 h-9 text-white hover:text-white/60 cursor-pointer transition-colors"
-                weight="fill"
-              />
-            </Link>
             <Link href="/discord">
               <DiscordLogo
-                className="w-9 h-9 text-white hover:text-white/60 cursor-pointer transition-colors"
+                className="w-10 h-10 text-white hover:text-white/60 cursor-pointer transition-colors"
                 weight="fill"
               />
             </Link>
             <Link href="/instagram">
               <InstagramLogo
-                className="w-9 h-9 text-white hover:text-white/60 cursor-pointer transition-colors"
+                className="w-10 h-10 text-white hover:text-white/60 cursor-pointer transition-colors"
+                weight="fill"
+              />
+            </Link>
+            <Link href="/twitter">
+              <TwitterLogo
+                className="w-10 h-10 text-white hover:text-white/60 cursor-pointer transition-colors"
+                weight="fill"
+              />
+            </Link>
+          </div>
+          <div className="flex gap-4 items-center">
+            <Link href="/twitch">
+              <TwitchLogo
+                className="w-10 h-10 text-white hover:text-white/60 cursor-pointer transition-colors"
+                weight="fill"
+              />
+            </Link>
+            <Link href="/tiktok">
+              <TiktokLogo
+                className="w-10 h-10 text-white hover:text-white/60 cursor-pointer transition-colors"
+                weight="fill"
+              />
+            </Link>
+            <Link href="/youtube">
+              <YoutubeLogo
+                className="w-10 h-10 text-white hover:text-white/60 cursor-pointer transition-colors"
                 weight="fill"
               />
             </Link>
@@ -120,7 +124,11 @@ export default async function Home(props: { params: { locale: string } }) {
         </div>
       </div>
       <Marquee autoFill className="bg-red flex items-center h-8">
-        <img src="/logo-white.svg" className="w-4 h-4 select-none" />
+        <Image
+          src={LogoWhite}
+          alt="Nouns Esports logo in white"
+          className="w-4 h-4 select-none"
+        />
         <p className="px-4 text-white text-lg font-bebas-neue pt-[0.19rem]">
           <Text en="Join the revolution" pt="Junte-se à revolução" />
         </p>
@@ -143,9 +151,11 @@ export default async function Home(props: { params: { locale: string } }) {
         </div>
       </div>
       <div className="relative py-32 max-sm:py-20">
-        <img
-          src="/clips.webp"
-          alt="POG image"
+        <Image
+          src={Clips}
+          alt="POG background image"
+          sizes="100vw"
+          placeholder="blur"
           className="absolute top-0 w-full h-full select-none object-cover object-center -z-10 brightness-[40%]"
         />
         <div className="relative z-10 grid place-items-center gap-10 max-sm:gap-6">
@@ -199,7 +209,13 @@ export default async function Home(props: { params: { locale: string } }) {
         </h2>
       </div>
       <div className="relative mb-8">
-        <img src="/pokemon.webp" className="w-full select-none" />
+        <Image
+          src={Pokemon}
+          sizes="100vw"
+          alt="Pokemon wearing Nouns noggles"
+          placeholder="blur"
+          className="w-full select-none"
+        />
         <div className="from-black via-black/70 to-transparent bg-gradient-to-b h-2/5 w-full top-0 absolute"></div>
         <div className="from-transparent to-black bg-gradient-to-b h-2/5 w-full bottom-0 absolute"></div>
       </div>
@@ -219,9 +235,11 @@ function GameCard(props: {
       style={{ backgroundImage: `url(${props.image})` }}
       className="relative w-[calc(25%_-_3rem)] max-xl:w-[calc(25%_-_1.5rem)] max-sm:first:ml-8 max-sm:last:mr-8 max-sm:min-w-[calc(100%_-_6rem)] min-w-[12rem] rounded-xl select-none aspect-square group overflow-hidden"
     >
-      <img
+      <Image
         src={props.image}
         alt={props.name}
+        width={400}
+        height={400}
         className="object-cover object-center absolute w-full top-0 h-full brightness-[85%] group-hover:scale-110 transition-transform"
       />
       <div className="relative z-10 w-full h-full grid place-items-center shadow-[inset_-20px_-20px_80px_black,inset_20px_20px_80px_black]">
@@ -245,8 +263,10 @@ async function ScheduleCard(props: { event: Event }) {
       href={props.event.htmlLink}
       className="relative w-[calc(33.33%_-_2.67rem)] max-xl:w-[calc(33.33%_-_2.67rem)] max-sm:first:ml-8 max-sm:last:mr-8 max-sm:min-w-[calc(100%_-_6rem)] min-w-[24rem] overflow-hidden select-none aspect-video text-left rounded-xl group drop-shadow-2xl"
     >
-      <img
+      <Image
         src={game?.image ?? "/contributor.webp"}
+        width={800}
+        height={450}
         alt={props.event.summary}
         className="object-cover object-center group-hover:scale-110 transition-transform absolute top-0 w-full h-full"
       />
@@ -274,9 +294,11 @@ function ProjectCard(props: { project: Project }) {
       href={props.project.url}
       className="relative w-[calc(25%_-_3rem)] max-xl:w-[calc(25%_-_1.5rem)] max-sm:first:ml-8 max-sm:last:mr-8 max-sm:min-w-[calc(100%_-_6rem)] min-w-[20rem] overflow-hidden select-none aspect-video rounded-xl group drop-shadow-2xl"
     >
-      <img
+      <Image
         src={props.project.image}
         alt={props.project.name}
+        width={400}
+        height={225}
         className="object-cover object-center group-hover:scale-110 brightness-[85%] transition-transform absolute top-0 w-full h-full"
       />
       <div className="relative z-10 grid place-items-center w-full h-full shadow-[inset_-20px_-20px_80px_black,inset_20px_20px_80px_black]">

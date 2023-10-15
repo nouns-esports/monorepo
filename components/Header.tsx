@@ -5,7 +5,9 @@ import ConnectButton from "@/components/ConnectButton";
 import Logo from "./Logo";
 import Banner from "./Banner";
 import Menu from "./Menu";
-import fetchEvents from "@/utils/fetchEvents";
+import fetchEvents from "@/utils/server/fetchEvents";
+import Image from "next/image";
+import whiteLogo from "@/public/logo-white.svg";
 
 export default async function Header(props: { locale: string }) {
   const events = await fetchEvents();
@@ -45,8 +47,8 @@ export default async function Header(props: { locale: string }) {
               href="https://pog.nouns.gg"
               className="flex gap-2 select-none items-center group max-[750px]:hidden"
             >
-              <img
-                src="/logo-white.svg"
+              <Image
+                src={whiteLogo}
                 alt="POG logo"
                 className="w-6 h-6 group-hover:rotate-[14deg] transition-transform duration-150"
               />
