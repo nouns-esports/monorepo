@@ -1,4 +1,4 @@
-import CollectButton from "@/components/CollectButton";
+// import CollectButton from "@/components/CollectButton";
 import fetchCollection from "@/utils/server/fetchCollection";
 import { ArrowSquareOut, CaretLeft, CaretRight } from "phosphor-react-sc";
 import Text from "@/components/Text";
