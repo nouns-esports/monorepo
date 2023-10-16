@@ -12,6 +12,7 @@ import Providers from "@/providers";
 import fetchGames from "@/utils/server/fetchGames";
 import { Analytics } from "@vercel/analytics/react";
 import { locales } from "@/middleware";
+import { Toaster } from "react-hot-toast";
 
 const cabin = Cabin({ subsets: ["latin"], variable: "--font-cabin" });
 
@@ -95,6 +96,7 @@ export default async function RootLayout(props: {
           <Footer locale={props.params.locale} />
         </Providers>
         <Analytics />
+        <Toaster />
       </body>
     </html>
   );

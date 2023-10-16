@@ -42,9 +42,12 @@ export default async function Footer(props: { locale: string }) {
           <FooterLink href="/getfunded">
             <Text en="Get Funded" pt="Seja financiado" />
           </FooterLink>
-          <FooterLink href="/collect">
-            <Text en="Collect" pt="Coletar" />
+          <FooterLink href="https://www.youtube.com/watch?v=SAXzMQ8pPvE">
+            <Text en="About" pt="Sobre" />
           </FooterLink>
+          {/* <FooterLink href="/collect">
+            <Text en="Collect" pt="Coletar" />
+          </FooterLink> */}
           <FooterLink href="/shop">
             <Text en="Shop" pt="Loja" />
           </FooterLink>
@@ -62,7 +65,11 @@ export default async function Footer(props: { locale: string }) {
               ""
             )
           )}
-          {games.length > 3 ? <FooterLink href="/#games">All</FooterLink> : ""}
+          {games.length > 3 ? (
+            <FooterLink href={`/${props.locale}/#games`}>All</FooterLink>
+          ) : (
+            ""
+          )}
         </FooterSection>
         <FooterSection title={<Text en="Contribute" pt="Contribuir" />}>
           <FooterLink href={`/${props.locale}/partners`}>
