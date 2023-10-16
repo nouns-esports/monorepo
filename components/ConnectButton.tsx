@@ -41,11 +41,9 @@ export default function ConnectButton() {
             {connected ? (
               <>
                 {account?.ensAvatar && (
-                  <Image
+                  <img
                     src={account.ensAvatar}
                     alt={`${account.ensName ?? account.address}'s avatar`}
-                    width={28}
-                    height={28}
                     className="rounded-full w-7 h-7 select-none"
                     draggable={false}
                   />

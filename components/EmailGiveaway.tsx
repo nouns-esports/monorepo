@@ -22,7 +22,7 @@ export default function EmailGiveaway() {
           checked={acceptTerms}
           required
           onChange={(e) => setAcceptTerms(e.currentTarget.checked)}
-          className="accent-red"
+          className="accent-[#1F5543]"
         />
         <label className="text-xs">
           I give Nouns Esports permission to use this email blah blah blah legal

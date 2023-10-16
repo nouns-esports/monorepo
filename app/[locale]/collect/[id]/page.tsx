@@ -5,6 +5,7 @@ import Text from "@/components/Text";
 import Link from "@/components/Link";
 import { metadata } from "../../layout";
 import { Metadata } from "next";
+import Button from "@/components/Button";
 
 export async function generateMetadata(props: {
   params: { locale: string; id: string };
@@ -17,8 +18,8 @@ export async function generateMetadata(props: {
     keywords: [
       ...metadata.keywords,
       collection.name[props.params.locale],
-      collection.chain,
-      collection.type,
+      // collection.chain,
+      // collection.type,
     ],
     openGraph: {
       images: [collection.background ?? collection.image],
@@ -107,8 +108,11 @@ export default async function Collect(props: {
               <Text {...collection.description} />
             </p>
             <div className="flex gap-4 items-center">
-              <CollectButton collection={collection} />
-              <Link
+              <Button href={collection.url}>
+                <Text en="Collect" pt="Coletar" />
+              </Button>
+              {/* <CollectButton collection={collection} /> */}
+              {/* <Link
                 href={collection.url}
                 className="flex items-center group gap-1 select-none text-white hover:text-white/80 transition-colors"
               >
@@ -117,7 +121,7 @@ export default async function Collect(props: {
                   className="w-5 h-5 text-white group-hover:text-white/80 transition-colors"
                 />
                 <Text en="Open" pt="Abrir" />
-              </Link>
+              </Link> */}
             </div>
           </div>
         </div>

@@ -16,8 +16,8 @@ export default function TI() {
       </div>
       <div className="flex flex-col gap-16 items-center px-8">
         <div className="flex max-[860px]:flex-col gap-16 max-lg:gap-8 items-center">
-          <div className="">
-            <img src="/jersey.jpg" className="h-full rounded-2xl" />
+          <div className="bg-[#1F5543] rounded-2xl">
+            <img src="/jersey.webp" className="h-full" />
           </div>
           <div className="flex flex-col gap-6 max-[860px]:items-center max-w-lg">
             <p className="max-[860px]:text-center">
