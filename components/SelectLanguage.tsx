@@ -2,32 +2,32 @@
 
 import { useState } from "react";
 import { CaretDown } from "phosphor-react-sc";
-import { useCurrentLocale } from "next-i18n-router/client";
-import i18nConfig from "@/i18nConfig";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-
-export const locales = {
-  en: "English",
-  pt: "Português",
-} as const;
-
-export type Locale = keyof typeof locales;
+import Link from "@/components/Link";
+import { useParams, usePathname } from "next/navigation";
+import { locales } from "@/middleware";
+import Image from "next/image";
 
 export function SelectLanguage() {
   const [open, setOpen] = useState(false);
 
-  const locale = useCurrentLocale(i18nConfig) as Locale;
+  const { locale } = useParams();
 
   const pathname = usePathname();
 
   return (
     <div
       onClick={() => setOpen(!open)}
-      className="relative flex items-center gap-3 text-white font-cabin cursor-pointer bg-black/60 p-2 rounded-full"
+      className="relative flex items-center gap-3 select-none text-white font-cabin cursor-pointer bg-black/60 p-2 rounded-full"
     >
-      <img src={`/lang/${locale}.svg`} className="w-6 h-6" />
-      {locales[locale]}
+      <Image
+        src={`/lang/${locale}.svg`}
+        alt={`${locales[locale as string]} locale image`}
+        width={24}
+        height={24}
+        draggable={false}
+        className="w-6 h-6"
+      />
+      {locales[locale as string]}
       <CaretDown
         weight="bold"
         className="mr-2 transition-transform"
@@ -42,15 +42,23 @@ export function SelectLanguage() {
             _locale !== locale && (
               <Link
                 key={_locale}
-                href={pathname.replace(
-                  locale === "en" ? "/" : `/${locale}`,
-                  `/${_locale}/`
-                )}
+                href={
+                  locale === "en"
+                    ? `/${_locale}${pathname}`
+                    : pathname.replace(locale as string, _locale)
+                }
                 scroll={false}
-                className="flex gap-3 px-2 py-1 first:pt-2 last:pb-2"
+                className="flex gap-3 px-2 py-1 first:pt-2 last:pb-2 select-none"
               >
-                <img src={`/lang/${_locale}.svg`} className="w-6 h-6" />
-                {locales[_locale as Locale]}
+                <Image
+                  src={`/lang/${_locale}.svg`}
+                  alt={`${locales[_locale]} locale image`}
+                  width={24}
+                  height={24}
+                  draggable={false}
+                  className="w-6 h-6"
+                />
+                {locales[_locale]}
               </Link>
             )
         )}

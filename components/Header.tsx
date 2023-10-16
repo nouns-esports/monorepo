@@ -1,24 +1,25 @@
-import Link from "next/link";
+import Link from "@/components/Link";
 import { SelectLanguage } from "./SelectLanguage";
 import Text from "@/components/Text";
 import ConnectButton from "@/components/ConnectButton";
 import Logo from "./Logo";
 import Banner from "./Banner";
 import Menu from "./Menu";
-import fetchEvents from "@/utils/fetchEvents";
+import fetchEvents from "@/utils/server/fetchEvents";
+import Image from "next/image";
+import whiteLogo from "@/public/logo-white.svg";
 
-export default async function Header() {
+export default async function Header(props: { locale: string }) {
   const events = await fetchEvents();
 
   return (
     <>
-      <Banner events={events} />
+      <Banner events={events} locale={props.locale} />
       <header className="sticky top-0 w-full z-20">
         <div className="absolute top-0 w-full flex items-center justify-between p-8">
           <div className="flex items-center gap-8">
             <Link
-              href="/"
-              draggable={false}
+              href={`/${props.locale}/`}
               className="flex gap-4 group items-center cursor-pointer select-none"
             >
               <Logo className="group-hover:rotate-[14deg] w-12 transition-transform duration-150" />
@@ -38,25 +39,28 @@ export default async function Header() {
               <HeaderLink href="https://www.youtube.com/watch?v=SAXzMQ8pPvE">
                 <Text en="About" pt="Sobre" />
               </HeaderLink>
+              {/* <HeaderLink href={`/${props.locale}/collect`}>
+                <Text en="Collect" pt="Coletar" />
+              </HeaderLink> */}
               <HeaderLink href="/shop">
                 <Text en="Shop" pt="Loja" />
               </HeaderLink>
             </div>
-            <a
+            <Link
               href="https://pog.nouns.gg"
-              className="flex gap-2 items-center group max-[750px]:hidden"
+              className="flex gap-2 select-none items-center group max-[750px]:hidden"
             >
-              <img
-                src="/logo-white.svg"
+              <Image
+                src={whiteLogo}
                 alt="POG logo"
                 className="w-6 h-6 group-hover:rotate-[14deg] transition-transform duration-150"
               />
               <p className="text-white font-luckiest-guy text-xl">POG</p>
-            </a>
+            </Link>
             <div className="max-[700px]:hidden">
               <ConnectButton />
             </div>
-            <Menu />
+            <Menu locale={props.locale} />
           </nav>
         </div>
       </header>
@@ -64,15 +68,9 @@ export default async function Header() {
   );
 }
 function HeaderLink(props: { href: string; children: React.ReactNode }) {
-  const newTab =
-    props.href.includes("://") || ["/shop", "/getfunded"].includes(props.href);
-
   return (
     <Link
       href={props.href}
-      draggable={false}
-      target={newTab ? "_blank" : ""}
-      rel={newTab ? "noopener noreferrer" : ""}
       className="hover:text-white/60 text-white transition-colors select-none text-lg font-medium"
     >
       {props.children}

@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/Link";
 import {
   TwitchLogo,
   TwitterLogo,
@@ -9,10 +9,10 @@ import {
 } from "phosphor-react-sc";
 import Text from "@/components/Text";
 import ANounsThing from "./ANounsThing";
-import fetchGames from "@/utils/fetchGames";
+import fetchGames from "@/utils/server/fetchGames";
 import Logo from "./Logo";
 
-export default async function Footer() {
+export default async function Footer(props: { locale: string }) {
   const games = await fetchGames();
 
   return (
@@ -20,8 +20,7 @@ export default async function Footer() {
       <div className="flex flex-col gap-8 max-lg:items-center">
         <div className="flex flex-col gap-4">
           <Link
-            href="/"
-            draggable={false}
+            href={`/${props.locale}`}
             className="flex gap-3 group max-lg:justify-center items-center cursor-pointer select-none"
           >
             <Logo className="group-hover:rotate-[14deg] w-10 transition-transform duration-150" />
@@ -46,6 +45,9 @@ export default async function Footer() {
           <FooterLink href="https://www.youtube.com/watch?v=SAXzMQ8pPvE">
             <Text en="About" pt="Sobre" />
           </FooterLink>
+          {/* <FooterLink href="/collect">
+            <Text en="Collect" pt="Coletar" />
+          </FooterLink> */}
           <FooterLink href="/shop">
             <Text en="Shop" pt="Loja" />
           </FooterLink>
@@ -53,67 +55,74 @@ export default async function Footer() {
         <FooterSection title={<Text en="Games" pt="Jogos" />}>
           {games.map((game, index) =>
             index < 3 ? (
-              <FooterLink key={game.id} href={`/games/${game.id}`}>
+              <FooterLink
+                key={game.id}
+                href={`/${props.locale}/games/${game.id}`}
+              >
                 {game.name}
               </FooterLink>
             ) : (
               ""
             )
           )}
-          {games.length > 3 ? <FooterLink href="/#games">All</FooterLink> : ""}
+          {games.length > 3 ? (
+            <FooterLink href={`/${props.locale}/#games`}>All</FooterLink>
+          ) : (
+            ""
+          )}
         </FooterSection>
-        <FooterSection title={<Text en="Contributors" pt="Contribuidores" />}>
+        <FooterSection title={<Text en="Contribute" pt="Contribuir" />}>
+          <FooterLink href={`/${props.locale}/partners`}>
+            <Text en="Partners" pt="Parceiros" />
+          </FooterLink>
           <FooterLink href="https://nouns-esports.notion.site/Contributor-Dashboard-776148bfb6164afea843ee59ff559236">
             <Text en="Dashboard" pt="Painel" />
           </FooterLink>
-          <FooterLink href="https://nouns-esports.notion.site/95a06dc09ca34c93aa945bcb4392b445?v=5782f93244024a64bf04c2284a5ccba4">
-            <Text en="Proposals" pt="Propostas" />
-          </FooterLink>
           <FooterLink href="https://app.safe.global/eth:0x8b45D1CACcb3593E9F1015BA8e97AFB68DE3a0d1/balances">
-            <Text en="Multisig" pt="Multisig" />
+            <Text en="Treasury" pt="Tesouraria" />
           </FooterLink>
         </FooterSection>
       </div>
       <div className="flex max-lg:flex-row max-[300px]:flex-col gap-4 items-center justify-center text-white">
-        <div className="flex flex-col gap-4 max-lg:flex-row ">
-          <a href="/twitch" target="_blank" rel="noopener noreferrer">
-            <TwitchLogo
-              className="w-7 h-7 text-white hover:text-white/60 cursor-pointer transition-colors"
-              weight="fill"
-            />
-          </a>
-          <a href="/x" target="_blank" rel="noopener noreferrer">
-            <TwitterLogo
-              className="w-7 h-7 text-white hover:text-white/60 cursor-pointer transition-colors"
-              weight="fill"
-            />
-          </a>
-          <a href="/youtube" target="_blank" rel="noopener noreferrer">
-            <YoutubeLogo
-              className="w-7 h-7 text-white hover:text-white/60 cursor-pointer transition-colors"
-              weight="fill"
-            />
-          </a>
-        </div>
         <div className="flex flex-col gap-4 max-lg:flex-row">
-          <a href="/tiktok" target="_blank" rel="noopener noreferrer">
-            <TiktokLogo
-              className="w-7 h-7 text-white hover:text-white/60 cursor-pointer transition-colors"
-              weight="fill"
-            />
-          </a>
-          <a href="/discord" target="_blank" rel="noopener noreferrer">
+          <Link href="/discord">
             <DiscordLogo
               className="w-7 h-7 text-white hover:text-white/60 cursor-pointer transition-colors"
               weight="fill"
             />
-          </a>
-          <a href="/instagram" target="_blank" rel="noopener noreferrer">
+          </Link>
+          <Link href="/instagram">
             <InstagramLogo
               className="w-7 h-7 text-white hover:text-white/60 cursor-pointer transition-colors"
               weight="fill"
             />
-          </a>
+          </Link>
+          <Link href="/twitter">
+            <TwitterLogo
+              className="w-7 h-7 text-white hover:text-white/60 cursor-pointer transition-colors"
+              weight="fill"
+            />
+          </Link>
+        </div>
+        <div className="flex flex-col gap-4 max-lg:flex-row">
+          <Link href="/twitch">
+            <TwitchLogo
+              className="w-7 h-7 text-white hover:text-white/60 cursor-pointer transition-colors"
+              weight="fill"
+            />
+          </Link>
+          <Link href="/tiktok">
+            <TiktokLogo
+              className="w-7 h-7 text-white hover:text-white/60 cursor-pointer transition-colors"
+              weight="fill"
+            />
+          </Link>
+          <Link href="/youtube">
+            <YoutubeLogo
+              className="w-7 h-7 text-white hover:text-white/60 cursor-pointer transition-colors"
+              weight="fill"
+            />
+          </Link>
         </div>
       </div>
     </footer>
@@ -121,15 +130,10 @@ export default async function Footer() {
 }
 
 function FooterLink(props: { href: string; children: React.ReactNode }) {
-  const offsite = props.href.includes("://");
-
   return (
     <Link
       href={props.href}
-      target={offsite ? "_blank" : "_self"}
-      rel={offsite ? "noopener noreferrer" : ""}
-      draggable={false}
-      className="hover:text-white transition-colors max-lg:text-center"
+      className="hover:text-white select-none transition-colors max-lg:text-center"
     >
       {props.children}
     </Link>
@@ -141,7 +145,7 @@ function FooterSection(props: {
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-col gap-2 select-none">
+    <div className="flex flex-col gap-2">
       <h3 className="text-2xl font-bebas-neue text-white max-lg:text-center">
         {props.title}
       </h3>

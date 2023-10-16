@@ -3,12 +3,12 @@
 import { List, X } from "phosphor-react-sc";
 import Logo from "./Logo";
 import { useState } from "react";
-import Link from "next/link";
+import Link from "@/components/Link";
 import { SelectLanguage } from "./SelectLanguage";
 import ConnectButton from "./ConnectButton";
-import Text from "./Text";
+import Text from "@/components/Text";
 
-export default function Menu() {
+export default function Menu(props: { locale: string }) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -28,8 +28,7 @@ export default function Menu() {
         <div className="w-full flex flex-col gap-8">
           <div className="flex justify-between items-center w-full">
             <Link
-              href="/"
-              draggable={false}
+              href={`/${props.locale}/`}
               className="flex gap-4 group items-center cursor-pointer select-none"
             >
               <Logo className="group-hover:rotate-[14deg] w-12 transition-transform duration-150" />
@@ -69,13 +68,9 @@ export default function Menu() {
 }
 
 function MenuLink(props: { href: string; children: React.ReactNode }) {
-  const newTab = props.href.includes("://");
   return (
     <Link
       href={props.href}
-      draggable={false}
-      target={newTab ? "_blank" : ""}
-      rel={newTab ? "noopener noreferrer" : ""}
       className="text-white font-bebas-neue select-none text-4xl font-medium"
     >
       {props.children}

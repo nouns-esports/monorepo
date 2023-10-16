@@ -1,11 +1,9 @@
 "use client";
 
-import i18nConfig from "@/i18nConfig";
-import { useCurrentLocale } from "next-i18n-router/client";
-import { Locale } from "./SelectLanguage";
+import { useParams } from "next/navigation";
 
 export default function Date(props: { timestamp: string }) {
-  const locale = useCurrentLocale(i18nConfig) as Locale;
+  const { locale } = useParams();
 
   const date = new (typeof window === "undefined" ? global : window).Date(
     props.timestamp

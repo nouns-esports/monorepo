@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import Link from "@/components/Link";
 import Text from "@/components/Text";
 import { useContext, useEffect, useState } from "react";
 import { useMouse } from "@uidotdev/usehooks";
@@ -29,9 +29,7 @@ export default function ANounsThing() {
       onMouseEnter={() => setLockRotation(true)}
       onMouseLeave={() => setLockRotation(false)}
       href="https://nouns.wtf"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="flex gap-2 items-center text-white w-fit font-londrina-solid"
+      className="flex gap-2 items-center select-none text-white w-fit font-londrina-solid"
     >
       <Text en="A" pt="É sobre" />
       <div

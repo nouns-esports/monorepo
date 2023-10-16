@@ -1,13 +1,22 @@
 "use client";
 
-import Link from "next/link";
+import Link from "@/components/Link";
 import Text from "./Text";
 import { ArrowRight, Dot } from "phosphor-react-sc";
 import { useContext } from "react";
 import { PrimaryColorContext } from "@/providers";
-import { Event } from "@/utils/fetchEvents";
+import { Event } from "@/utils/server/fetchEvents";
+import { Locale } from "@/middleware";
 
-export default function Banner(props: { events: Event[] }) {
+const defaultBanner: { url: string; text: Record<Locale, string> } = {
+  url: "/mint",
+  text: {
+    en: "Celebrate esports summer with us!",
+    pt: "Comemore o verão dos esportes conosco!",
+  },
+};
+
+export default function Banner(props: { events: Event[]; locale: string }) {
   const start = new Date(props.events[0].start.dateTime);
   const end = new Date(
     props.events[0].end?.dateTime || Date.now() + 60 * 60 * 1000
@@ -19,9 +28,13 @@ export default function Banner(props: { events: Event[] }) {
 
   return (
     <Link
-      href={live ? props.events[0].htmlLink : "/mint"}
-      target="_blank"
-      rel="noopener noreferrer"
+      href={
+        live
+          ? props.events[0].htmlLink
+          : defaultBanner.url.includes("://")
+          ? defaultBanner.url
+          : `/${props.locale}/${defaultBanner.url}`
+      }
       style={{ backgroundColor: primaryColor }}
       className="relative z-20 h-9 hover:brightness-[85%] transition-all text-white text-sm font-semibold w-full whitespace-nowrap flex items-center justify-center"
     >
@@ -29,10 +42,7 @@ export default function Banner(props: { events: Event[] }) {
       {live ? (
         `${props.events[0].summary.split("] ")[1]} is happening now`
       ) : (
-        <Text
-          en="Celebrate esports summer with us!"
-          pt="Comemore o verão dos esportes conosco!"
-        />
+        <Text {...defaultBanner.text} />
       )}
       <ArrowRight weight="bold" className="w-4 h-4 ml-1.5" />
     </Link>

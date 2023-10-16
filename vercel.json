@@ -26,7 +26,7 @@
       "permanent": true
     },
     {
-      "source": "/x",
+      "source": "/twitter",
       "destination": "https://x.com/nounsesports",
       "permanent": true
     },

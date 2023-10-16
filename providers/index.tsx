@@ -4,23 +4,21 @@ import "@rainbow-me/rainbowkit/styles.css";
 
 import {
   getDefaultWallets,
+  Locale,
   midnightTheme,
   RainbowKitProvider,
 } from "@rainbow-me/rainbowkit";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
-import { mainnet, polygon, optimism, arbitrum, base, zora } from "wagmi/chains";
+import { mainnet, optimism, base, zora } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 import { createContext, useMemo } from "react";
-import { usePathname } from "next/navigation";
-import { useCurrentLocale } from "next-i18n-router/client";
-import i18nConfig from "@/i18nConfig";
-import { Locale } from "@/components/SelectLanguage";
+import { useParams, usePathname } from "next/navigation";
 import { Game } from "@/db/schema";
 
 export const PrimaryColorContext = createContext<string>("#E93737");
 
 const { chains, publicClient } = configureChains(
-  [mainnet, polygon, optimism, arbitrum, base, zora],
+  [mainnet, optimism, base, zora],
   [publicProvider()]
 );
 
@@ -42,7 +40,7 @@ export default function Providers(props: {
 }) {
   const pathname = usePathname();
 
-  const locale = useCurrentLocale(i18nConfig) as Locale;
+  const { locale } = useParams();
 
   const color = useMemo(() => {
     if (pathname.includes("/games")) {
@@ -59,6 +57,7 @@ export default function Providers(props: {
   return (
     <WagmiConfig config={config}>
       <RainbowKitProvider
+        locale={locale as Locale}
         appInfo={{
           appName: "Nouns Esports",
         }}

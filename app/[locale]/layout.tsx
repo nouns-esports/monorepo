@@ -6,26 +6,28 @@ import {
   Bebas_Neue,
   Londrina_Solid,
 } from "next/font/google";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import Providers from "../providers";
-import { currentLocale } from "next-i18n-router";
-import fetchGames from "@/utils/fetchGames";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import Providers from "@/providers";
+import fetchGames from "@/utils/server/fetchGames";
 import { Analytics } from "@vercel/analytics/react";
-import baseKeywords from "@/utils/metadata/baseKeywords";
-import i18nConfig from "@/i18nConfig";
+import { locales } from "@/middleware";
+import { Toaster } from "react-hot-toast";
 
 const cabin = Cabin({ subsets: ["latin"], variable: "--font-cabin" });
+
 const luckiestGuy = Luckiest_Guy({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-luckiest-guy",
 });
+
 const bebasNeue = Bebas_Neue({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-bebas-neue",
 });
+
 const londrinaSolid = Londrina_Solid({
   subsets: ["latin"],
   weight: "400",
@@ -35,56 +37,66 @@ const londrinaSolid = Londrina_Solid({
 const title = "Nouns Esports";
 const description = "Leading the revolution in community driven esports!";
 
-export const metadata: Metadata = {
+export const metadata = {
   title: {
     default: title,
     template: `${title} - %s`,
   },
   description,
-  keywords: baseKeywords,
+  keywords: [
+    "esports",
+    "nouns",
+    "nounsdao",
+    "web3",
+    "crypto",
+    "community",
+    "gaming",
+    "blockchain",
+    "nft",
+    "dao",
+    "governance",
+  ],
   metadataBase: new URL("https://nouns.gg"),
   alternates: {
     canonical: "/",
-    // TODO: See how this works for subpages; is /pt valid for /games/csgo?
-    languages: i18nConfig.locales.reduce((object, locale) => {
+    languages: Object.keys(locales).reduce((object, locale) => {
       object[locale] = `/${locale}`;
       return object;
     }, {} as Record<string, string>),
   },
   openGraph: {
     type: "website",
-    title,
-    description,
-    images: ["https://nouns.gg/pokemon.webp"],
-    url: "https://nouns.gg",
+    images: ["/pokemon.webp"],
   },
   twitter: {
     site: "@NounsEsports",
     card: "summary_large_image",
-    images: ["https://nouns.gg/pokemon.webp"],
-    title,
-    description,
+    images: ["/pokemon.webp"],
   },
   themeColor: "black",
-};
+} satisfies Metadata;
 
-export default async function RootLayout(props: { children: React.ReactNode }) {
+export default async function RootLayout(props: {
+  children: React.ReactNode;
+  params: { locale: string };
+}) {
   const games = await fetchGames();
 
   return (
     <html
-      lang={currentLocale() ?? "en"}
+      lang={props.params.locale}
       className="scroll-smooth overflow-x-hidden"
     >
       <body
         className={`cursor-crosshair ${cabin.variable} ${luckiestGuy.variable} ${bebasNeue.variable} ${londrinaSolid.variable} bg-black text-lightgrey font-cabin selection:text-white selection:bg-red w-full`}
       >
         <Providers games={games}>
-          <Header />
+          <Header locale={props.params.locale} />
           {props.children}
-          <Footer />
+          <Footer locale={props.params.locale} />
         </Providers>
         <Analytics />
+        <Toaster />
       </body>
     </html>
   );

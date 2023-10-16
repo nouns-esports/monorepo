@@ -1,4 +1,4 @@
-import Button from "../components/Button";
+import Button from "@/components/Button";
 import Marquee from "react-fast-marquee";
 import {
   TwitchLogo,
@@ -9,38 +9,49 @@ import {
   PlayCircle,
   InstagramLogo,
 } from "phosphor-react-sc";
-import Link from "next/link";
-import { Game, Project } from "@/db/schema";
+import Link from "@/components/Link";
+import { Project } from "@/db/schema";
 import Text from "@/components/Text";
 import HighlightedText from "@/components/HighlightedText";
-import fetchEvents from "@/utils/fetchEvents";
-import fetchGames from "@/utils/fetchGames";
-import fetchProjects from "@/utils/fetchProjects";
-import type { Event } from "@/utils/fetchEvents";
+import fetchEvents from "@/utils/server/fetchEvents";
+import fetchGames from "@/utils/server/fetchGames";
+import fetchProjects from "@/utils/server/fetchProjects";
+import type { Event } from "@/utils/server/fetchEvents";
 import Date from "@/components/Date";
-import GameCard from "@/components/GameCard";
+import { headers } from "next/headers";
+import Image from "next/image";
+import Clips from "@/public/clips.webp";
+import LogoWhite from "@/public/logo-white.svg";
+import Pokemon from "@/public/pokemon.webp";
 
-export default async function Home() {
+export default async function Home(props: { params: { locale: string } }) {
   const events = await fetchEvents();
 
   const games = await fetchGames();
 
   const projects = await fetchProjects();
 
+  const isMobile = headers().get("x-device-type") === "mobile";
+
   return (
     <main className="cursor-crosshair flex flex-col">
-      <div className="relative h-screen bg-cover flex flex-col justify-center items-center gap-8 shadow-[inset_-80px_-80px_120px_black,inset_80px_80px_120px_black] max-sm:shadow-[inset_-40px_-40px_60px_black,inset_40px_40px_60px_black]">
+      <div className="relative h-screen bg-cover flex flex-col justify-center items-center gap-10 shadow-[inset_-80px_-80px_120px_black,inset_80px_80px_120px_black] max-sm:shadow-[inset_-40px_-40px_60px_black,inset_40px_40px_60px_black]">
         <video
           autoPlay
           muted
           loop
           playsInline
-          className="absolute select-none w-full h-full object-cover max-[500px]:object-right object-top brightness-75 -z-10"
+          className="absolute select-none w-full h-full object-cover object-top brightness-75 -z-10"
         >
-          <source src="/landing.webm" type="video/webm" />
-          <source src="/landing.mp4" type="video/mp4" />
+          <source
+            src={isMobile ? "/landing-mobile.webm" : "/landing.webm"}
+            type="video/webm"
+          />
+          <source
+            src={isMobile ? "/landing-mobile.mp4" : "/landing.mp4"}
+            type="video/mp4"
+          />
         </video>
-
         <h1 className="text-white text-6xl w-1/2 text-center font-luckiest-guy max-lg:w-full max-lg:px-16 max-sm:px-8 max-md:text-5xl max-[450px]:text-4xl">
           <HighlightedText
             text={{
@@ -58,64 +69,66 @@ export default async function Home() {
           <Button href="/discord">
             <Text en="Get Involved" pt="Envolver-se" />
           </Button>
-          <a
+          <Link
             href="https://www.youtube.com/watch?v=SAXzMQ8pPvE"
-            rel="noopener noreferrer"
-            target="_blank"
-            className="text-white hover:text-white/60 transition-colors group font-cabin flex gap-2 items-center"
+            className="text-white select-none hover:text-white/60 transition-colors group font-cabin flex gap-2 items-center"
           >
             <PlayCircle
               weight="bold"
               className="w-7 h-7 text-white transition-colors group-hover:text-white/60"
             />
             <Text en="Watch Video" pt="Assista o vídeo" />
-          </a>
+          </Link>
         </div>
         <div className="flex max-[450px]:flex-col gap-4 w-fit items-center">
           <div className="flex gap-4 items-center">
-            <a href="/twitch" target="_blank" rel="noopener noreferrer">
-              <TwitchLogo
-                className="w-9 h-9 text-white hover:text-white/60 cursor-pointer transition-colors"
+            <Link href="/discord">
+              <DiscordLogo
+                className="w-10 h-10 text-white hover:text-white/60 cursor-pointer transition-colors"
                 weight="fill"
               />
-            </a>
-            <a href="/x" target="_blank" rel="noopener noreferrer">
+            </Link>
+            <Link href="/instagram">
+              <InstagramLogo
+                className="w-10 h-10 text-white hover:text-white/60 cursor-pointer transition-colors"
+                weight="fill"
+              />
+            </Link>
+            <Link href="/twitter">
               <TwitterLogo
-                className="w-9 h-9 text-white hover:text-white/60 cursor-pointer transition-colors"
+                className="w-10 h-10 text-white hover:text-white/60 cursor-pointer transition-colors"
                 weight="fill"
               />
-            </a>
-            <a href="/youtube" target="_blank" rel="noopener noreferrer">
-              <YoutubeLogo
-                className="w-9 h-9 text-white hover:text-white/60 cursor-pointer transition-colors"
-                weight="fill"
-              />
-            </a>
+            </Link>
           </div>
           <div className="flex gap-4 items-center">
-            <a href="/tiktok" target="_blank" rel="noopener noreferrer">
+            <Link href="/twitch">
+              <TwitchLogo
+                className="w-10 h-10 text-white hover:text-white/60 cursor-pointer transition-colors"
+                weight="fill"
+              />
+            </Link>
+            <Link href="/tiktok">
               <TiktokLogo
-                className="w-9 h-9 text-white hover:text-white/60 cursor-pointer transition-colors"
+                className="w-10 h-10 text-white hover:text-white/60 cursor-pointer transition-colors"
                 weight="fill"
               />
-            </a>
-            <a href="/discord" target="_blank" rel="noopener noreferrer">
-              <DiscordLogo
-                className="w-9 h-9 text-white hover:text-white/60 cursor-pointer transition-colors"
+            </Link>
+            <Link href="/youtube">
+              <YoutubeLogo
+                className="w-10 h-10 text-white hover:text-white/60 cursor-pointer transition-colors"
                 weight="fill"
               />
-            </a>
-            <a href="/instagram" target="_blank" rel="noopener noreferrer">
-              <InstagramLogo
-                className="w-9 h-9 text-white hover:text-white/60 cursor-pointer transition-colors"
-                weight="fill"
-              />
-            </a>
+            </Link>
           </div>
         </div>
       </div>
       <Marquee autoFill className="bg-red flex items-center h-8">
-        <img src="/logo-white.svg" className="w-4 h-4 select-none" />
+        <Image
+          src={LogoWhite}
+          alt="Nouns Esports logo in white"
+          className="w-4 h-4 select-none"
+        />
         <p className="px-4 text-white text-lg font-bebas-neue pt-[0.19rem]">
           <Text en="Join the revolution" pt="Junte-se à revolução" />
         </p>
@@ -127,14 +140,22 @@ export default async function Home() {
         <Text en="Our Games" pt="Nossos Jogos" />
         <div className="flex flex-wrap max-sm:flex-nowrap max-sm:overflow-x-scroll max-sm:justify-start justify-center max-w-[1920px] gap-16 w-full max-2xl:gap-8">
           {games.map((game) => (
-            <GameCard key={game.id} game={game} />
+            <GameCard
+              key={game.id}
+              locale={props.params.locale}
+              id={game.id}
+              image={game.image}
+              name={game.name}
+            />
           ))}
         </div>
       </div>
       <div className="relative py-32 max-sm:py-20">
-        <img
-          src="/clips.webp"
-          alt="POG image"
+        <Image
+          src={Clips}
+          alt="POG background image"
+          sizes="100vw"
+          placeholder="blur"
           className="absolute top-0 w-full h-full select-none object-cover object-center -z-10 brightness-[40%]"
         />
         <div className="relative z-10 grid place-items-center gap-10 max-sm:gap-6">
@@ -188,11 +209,45 @@ export default async function Home() {
         </h2>
       </div>
       <div className="relative mb-8">
-        <img src="/pokemon.webp" className="w-full" />
+        <Image
+          src={Pokemon}
+          sizes="100vw"
+          alt="Pokemon wearing Nouns noggles"
+          placeholder="blur"
+          className="w-full select-none"
+        />
         <div className="from-black via-black/70 to-transparent bg-gradient-to-b h-2/5 w-full top-0 absolute"></div>
         <div className="from-transparent to-black bg-gradient-to-b h-2/5 w-full bottom-0 absolute"></div>
       </div>
     </main>
+  );
+}
+
+function GameCard(props: {
+  id: string;
+  locale: string;
+  image: string;
+  name: string;
+}) {
+  return (
+    <Link
+      href={`/${props.locale}/games/${props.id}`}
+      style={{ backgroundImage: `url(${props.image})` }}
+      className="relative w-[calc(25%_-_3rem)] max-xl:w-[calc(25%_-_1.5rem)] max-sm:first:ml-8 max-sm:last:mr-8 max-sm:min-w-[calc(100%_-_6rem)] min-w-[12rem] rounded-xl select-none aspect-square group overflow-hidden"
+    >
+      <Image
+        src={props.image}
+        alt={props.name}
+        width={400}
+        height={400}
+        className="object-cover object-center absolute w-full top-0 h-full brightness-[85%] group-hover:scale-110 transition-transform"
+      />
+      <div className="relative z-10 w-full h-full grid place-items-center shadow-[inset_-20px_-20px_80px_black,inset_20px_20px_80px_black]">
+        <h3 className="drop-shadow-2xl text-center p-4 text-5xl max-2xl:text-4xl max-sm:text-3xl font-bebas-neue [text-shadow:black_0_0_30px]">
+          {props.name}
+        </h3>
+      </div>
+    </Link>
   );
 }
 
@@ -206,12 +261,12 @@ async function ScheduleCard(props: { event: Event }) {
   return (
     <Link
       href={props.event.htmlLink}
-      target="_blank"
-      rel="noopener noreferrer"
       className="relative w-[calc(33.33%_-_2.67rem)] max-xl:w-[calc(33.33%_-_2.67rem)] max-sm:first:ml-8 max-sm:last:mr-8 max-sm:min-w-[calc(100%_-_6rem)] min-w-[24rem] overflow-hidden select-none aspect-video text-left rounded-xl group drop-shadow-2xl"
     >
-      <img
+      <Image
         src={game?.image ?? "/contributor.webp"}
+        width={800}
+        height={450}
         alt={props.event.summary}
         className="object-cover object-center group-hover:scale-110 transition-transform absolute top-0 w-full h-full"
       />
@@ -237,13 +292,13 @@ function ProjectCard(props: { project: Project }) {
   return (
     <Link
       href={props.project.url}
-      target="_blank"
-      rel="noopener noreferrer"
       className="relative w-[calc(25%_-_3rem)] max-xl:w-[calc(25%_-_1.5rem)] max-sm:first:ml-8 max-sm:last:mr-8 max-sm:min-w-[calc(100%_-_6rem)] min-w-[20rem] overflow-hidden select-none aspect-video rounded-xl group drop-shadow-2xl"
     >
-      <img
+      <Image
         src={props.project.image}
         alt={props.project.name}
+        width={400}
+        height={225}
         className="object-cover object-center group-hover:scale-110 brightness-[85%] transition-transform absolute top-0 w-full h-full"
       />
       <div className="relative z-10 grid place-items-center w-full h-full shadow-[inset_-20px_-20px_80px_black,inset_20px_20px_80px_black]">

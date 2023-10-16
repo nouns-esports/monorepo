@@ -2,6 +2,7 @@
 
 import { ConnectButton as RainbowKitConnectButton } from "@rainbow-me/rainbowkit";
 import Text from "./Text";
+import Image from "next/image";
 
 export default function ConnectButton() {
   return (
@@ -42,7 +43,9 @@ export default function ConnectButton() {
                 {account?.ensAvatar && (
                   <img
                     src={account.ensAvatar}
-                    className="rounded-full w-7 h-7"
+                    alt={`${account.ensName ?? account.address}'s avatar`}
+                    className="rounded-full w-7 h-7 select-none"
+                    draggable={false}
                   />
                 )}
                 {account?.ensName

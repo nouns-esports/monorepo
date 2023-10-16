@@ -1,9 +1,8 @@
 "use client";
 
-import { Locale } from "./SelectLanguage";
-import i18nConfig from "@/i18nConfig";
+import { useParams } from "next/navigation";
+import { Locale } from "@/middleware";
 import { motion } from "framer-motion";
-import { useCurrentLocale } from "next-i18n-router/client";
 
 export default function HighlightedText(props: {
   text: Record<Locale, string>;
@@ -11,10 +10,10 @@ export default function HighlightedText(props: {
   color: string;
   underline?: boolean;
 }) {
-  const locale = useCurrentLocale(i18nConfig) as Locale;
+  const { locale } = useParams();
 
-  return props.text[locale].split(" ").map((word) => {
-    if (props.highlight[locale || "en"].includes(word)) {
+  return props.text[locale as string].split(" ").map((word) => {
+    if (props.highlight[(locale as string) || "en"].includes(word)) {
       return (
         <span key={word} style={{ color: props.color }} className="relative">
           {`${word} `}
