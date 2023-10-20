@@ -1,6 +1,9 @@
 import { db, talent } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { eq, and, inArray } from "drizzle-orm";
 
-export default async function fetchRoster(game: string) {
-  return db.select().from(talent).where(eq(talent.game, game));
+export default async function fetchRoster(game: string, roster: string[]) {
+  return db
+    .select()
+    .from(talent)
+    .where(and(eq(talent.game, game), inArray(talent.id, roster)));
 }

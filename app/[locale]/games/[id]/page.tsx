@@ -12,7 +12,7 @@ import Image from "next/image";
 export async function generateMetadata(props: { params: { id: string } }) {
   const game = await fetchGame(props.params.id);
 
-  const players = (await fetchRoster(game.id)).map((person) =>
+  const players = (await fetchRoster(game.id, game.roster)).map((person) =>
     person.name.toLowerCase()
   );
 
@@ -32,7 +32,7 @@ export async function generateMetadata(props: { params: { id: string } }) {
 export default async function Game(props: { params: { id: string } }) {
   const game = await fetchGame(props.params.id);
 
-  const roster = await fetchRoster(game.id);
+  const roster = await fetchRoster(game.id, game.roster);
 
   return (
     <>
