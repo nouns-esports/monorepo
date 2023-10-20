@@ -38,6 +38,7 @@ export const projects = pgTable("projects", {
 
 export const giveawayEmails = pgTable("giveaway_emails", {
   email: varchar("email", { length: 256 }).notNull().unique(),
+  twitter: varchar("twitter", { length: 256 }).unique(),
 });
 
 export type Game = typeof games.$inferSelect;

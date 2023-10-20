@@ -1,0 +1,1 @@
+ALTER TABLE "giveaway_emails" ALTER COLUMN "twitter" DROP NOT NULL;

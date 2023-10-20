@@ -1,0 +1,208 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "id": "3893d1ec-e6ac-4016-8923-bddf91a7d8fe",
+  "prevId": "ee1647e5-f327-4138-8d19-c6f3ec2e91c2",
+  "tables": {
+    "games": {
+      "name": "games",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(256)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "image": {
+          "name": "image",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "color": {
+          "name": "color",
+          "type": "char(7)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "roster": {
+          "name": "roster",
+          "type": "varchar(256)[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "liquipedia": {
+          "name": "liquipedia",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "giveaway_emails": {
+      "name": "giveaway_emails",
+      "schema": "",
+      "columns": {
+        "email": {
+          "name": "email",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "twitter": {
+          "name": "twitter",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "giveaway_emails_email_unique": {
+          "name": "giveaway_emails_email_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "email"
+          ]
+        },
+        "giveaway_emails_twitter_unique": {
+          "name": "giveaway_emails_twitter_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "twitter"
+          ]
+        }
+      }
+    },
+    "projects": {
+      "name": "projects",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(256)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "image": {
+          "name": "image",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "url": {
+          "name": "url",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "talent": {
+      "name": "talent",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(256)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "image": {
+          "name": "image",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role": {
+          "name": "role",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "game": {
+          "name": "game",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "liquipedia": {
+          "name": "liquipedia",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "twitch": {
+          "name": "twitch",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "twitter": {
+          "name": "twitter",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "youtube": {
+          "name": "youtube",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tiktok": {
+          "name": "tiktok",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "instagram": {
+          "name": "instagram",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  }
+}

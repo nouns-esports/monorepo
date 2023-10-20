@@ -15,6 +15,20 @@
       "when": 1697762264380,
       "tag": "0001_moaning_rictor",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1697820415810,
+      "tag": "0002_nifty_blackheart",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1697821437116,
+      "tag": "0003_fair_micromacro",
+      "breakpoints": true
     }
   ]
 }
