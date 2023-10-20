@@ -96,7 +96,8 @@ function GameSection(props: {
 
 function RosterCard(props: { person: Talent; game: Game }) {
   return (
-    <div
+    <Link
+      href={props.person.liquipedia ?? ""}
       className="relative select-none aspect-[21/30] w-full flex max-lg:w-60 max-lg:flex-shrink-0 rounded-xl border-fix group cursor-pointer overflow-hidden"
       style={{
         backgroundColor: props.game.color,
@@ -119,6 +120,6 @@ function RosterCard(props: { person: Talent; game: Game }) {
         </p>
       </div>
       <div className="absolute h-full w-full bg-darkgrey rounded-[0.6rem] group-hover:opacity-0 opacity-1 max-lg:opacity-0 transition-opacity"></div>
-    </div>
+    </Link>
   );
 }
