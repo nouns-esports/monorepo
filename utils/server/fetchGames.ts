@@ -1,5 +1,6 @@
 import { db, games } from "@/db/schema";
+import { cache } from "react";
 
-export default async function fetchGames() {
+export default cache(async () => {
   return db.select().from(games).orderBy(games.name);
-}
+});
