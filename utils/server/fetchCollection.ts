@@ -95,7 +95,7 @@ export default async function fetchCollection(id: string) {
       },
       background: "/collections/esports-summer.webp",
       image: "/collections/esports-summer.gif",
-      url: "mint link",
+      url: "https://zora.co/collect/base:0xbd627052c6699bd873de44b019ea04b1a191f3fc/1?referrer=0x8b45D1CACcb3593E9F1015BA8e97AFB68DE3a0d1",
     },
     "esports-introduced": {
       id: "esports-introduced",
@@ -107,7 +107,7 @@ export default async function fetchCollection(id: string) {
         pt: "Apresentando Nouns Esports, uma comunidade que propaga o meme ⌐◨-◨ e impulsiona a inovação na intersecção de web3 e jogos. Esta obra de arte conta a história da descentralização e as oportunidades que marcas de código aberto, como a Nouns, possibilitam para criativos. Cunhe 'Esports, Apresentados' para celebrar o lançamento da testnet do Base e junte-se à ampla comunidade de jogos descentralizada. Estamos animados para construir esports juntos com você.",
       },
       image: "/collections/esports-introduced.webp",
-      url: "mint link",
+      url: "https://zora.co/collect/eth:0x298e7881bd9fd35d3b1d860701560364947c4e02",
     },
   };
 

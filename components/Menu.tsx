@@ -54,8 +54,8 @@ export default function Menu(props: { locale: string }) {
             <MenuLink href="/getfunded">
               <Text en="Get Funded" pt="Seja financiado" />
             </MenuLink>
-            <MenuLink href="https://www.youtube.com/watch?v=SAXzMQ8pPvE">
-              <Text en="About" pt="Sobre" />
+            <MenuLink href={`/${props.locale}/collect`}>
+              <Text en="Collect" pt="Coletar" />
             </MenuLink>
             <MenuLink href="/shop">
               <Text en="Shop" pt="Comprar" />
