@@ -2,16 +2,41 @@
 
 import { useState } from "react";
 import Button from "./Button";
+import toast from "react-hot-toast";
+import fireworks from "@/utils/confetti/fireworks";
 
 export default function EmailGiveaway() {
   const [acceptTerms, setAcceptTerms] = useState(false);
 
   const [email, setEmail] = useState("");
 
-  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+  const [success, setSuccess] = useState<null | boolean>(null);
+
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    console.log(email);
+    const response = await fetch("/api/ti-giveaway", {
+      method: "POST",
+      body: JSON.stringify({ email }),
+    });
+
+    const { success } = await response.json();
+
+    setSuccess(success);
+
+    if (success) fireworks();
+  }
+
+  if (success === true) {
+    return (
+      <p className="text-white max-sm:text-center">
+        <span className="text-2xl mr-2">🎉</span>You are entered! Follow{" "}
+        <a href="/twitter" className="text-red font-bold">
+          @NounsEsports
+        </a>{" "}
+        on Twitter for updates!
+      </p>
+    );
   }
 
   return (
@@ -29,15 +54,22 @@ export default function EmailGiveaway() {
           jargon
         </label>
       </div>
-      <div className="flex w-full bg-lightgrey/10 rounded-full">
-        <input
-          type="email"
-          placeholder="Enter your email"
-          required
-          onChange={(e) => setEmail(e.currentTarget.value)}
-          className="bg-transparent w-full text-lg font-bebas-neue text-white focus:outline-none px-4 py-2"
-        />
-        <Button backgroundColor="#1F5543">Enter</Button>
+      <div className="flex flex-col gap-2 max-sm:items-center">
+        <div className="flex w-full bg-lightgrey/10 rounded-full">
+          <input
+            type="email"
+            placeholder="Enter your email"
+            required
+            onChange={(e) => setEmail(e.currentTarget.value)}
+            className="bg-transparent w-full text-lg font-bebas-neue text-white focus:outline-none px-4 py-2"
+          />
+          <Button backgroundColor="#1F5543">Enter</Button>
+        </div>
+        {success === false ? (
+          <small className="text-red">This email was already entered!</small>
+        ) : (
+          ""
+        )}
       </div>
     </form>
   );
