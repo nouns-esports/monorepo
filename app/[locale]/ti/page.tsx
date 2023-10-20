@@ -2,7 +2,7 @@ import EmailGiveaway from "@/components/EmailGiveaway";
 
 export default function TI() {
   return (
-    <div className="flex flex-col gap-16 max-[860px]:gap-8 mb-16 items-center">
+    <div className="flex flex-col gap-16 max-[860px]:gap-8 mb-8 items-center">
       <div className="relative flex items-center justify-center h-[500px] max-sm:h-[400px] w-full">
         <img
           src="/ti.png"

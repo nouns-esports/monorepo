@@ -51,7 +51,7 @@ export default function EmailGiveaway() {
           <p className="text-[#51D06D]">Twitter successfully submitted!</p>
         ) : (
           <>
-            <div>
+            <div className="max-sm:text-center">
               Want to double your chances? Reply to this{" "}
               <a href="" className="text-red font-bold">
                 tweet
