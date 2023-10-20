@@ -50,8 +50,7 @@ export default function EmailGiveaway() {
           className="accent-[#1F5543]"
         />
         <label className="text-xs">
-          I give Nouns Esports permission to use this email blah blah blah legal
-          jargon
+          I agree to receive emails from Nouns Esports
         </label>
       </div>
       <div className="flex flex-col gap-2 max-sm:items-center">
