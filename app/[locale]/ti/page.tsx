@@ -38,14 +38,6 @@ export default function TI() {
         </div>
         <div className="flex gap-8">
           <a
-            href="https://www.adidas.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="h-16"
-          >
-            <img src="/adidas.png" className="h-full" />
-          </a>
-          <a
             href="https://www.nounworks.wtf/"
             target="_blank"
             rel="noopener noreferrer"
