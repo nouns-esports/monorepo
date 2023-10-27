@@ -1,12 +1,12 @@
 // "use client";
 
-// import { Collection } from "@/utils/server/fetchCollection";
+// import { Collection } from "@/server/fetchCollection";
 // import { useConnectModal } from "@rainbow-me/rainbowkit";
 // import { useAccount, useContractWrite } from "wagmi";
 // import Text from "./Text";
 // import IERC720 from "@/contracts/zora/IERC720";
 // import IERC1155 from "@/contracts/zora/IERC1155";
-// import fireworks from "@/utils/confetti/fireworks";
+// import fireworks from "@/utils/fireworks";
 
 // export default function CollectButton(props: { collection: Collection }) {
 //   const { openConnectModal } = useConnectModal();

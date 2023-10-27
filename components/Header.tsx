@@ -5,7 +5,7 @@ import ConnectButton from "@/components/ConnectButton";
 import Logo from "./Logo";
 import Banner from "./Banner";
 import Menu from "./Menu";
-import fetchEvents from "@/utils/server/fetchEvents";
+import fetchEvents from "@/server/fetchEvents";
 import Image from "next/image";
 import whiteLogo from "@/public/logo-white.svg";
 
