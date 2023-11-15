@@ -3,7 +3,7 @@ import fetchCollection from "@/server/fetchCollection";
 import { ArrowSquareOut, CaretLeft, CaretRight } from "phosphor-react-sc";
 import Text from "@/components/Text";
 import Link from "@/components/Link";
-import { metadata } from "../../layout";
+import { metadata } from "@/app/[locale]/layout";
 import { Metadata } from "next";
 import Button from "@/components/Button";
 
