@@ -1,6 +1,6 @@
 import { Game, Talent } from "@/db/schema";
-import fetchGame from "@/utils/server/fetchGame";
-import fetchRoster from "@/utils/server/fetchRoster";
+import fetchGame from "@/server/fetchGame";
+import fetchRoster from "@/server/fetchRoster";
 import { ArrowSquareOut } from "phosphor-react-sc";
 import Text from "@/components/Text";
 import GameBorder from "@/components/GameBorder";

@@ -9,7 +9,7 @@ import {
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Providers from "@/providers";
-import fetchGames from "@/utils/server/fetchGames";
+import fetchGames from "@/server/fetchGames";
 import { Analytics } from "@vercel/analytics/react";
 import { locales } from "@/middleware";
 import { Toaster } from "react-hot-toast";
@@ -90,10 +90,10 @@ export default async function RootLayout(props: {
       <body
         className={`cursor-crosshair ${cabin.variable} ${luckiestGuy.variable} ${bebasNeue.variable} ${londrinaSolid.variable} bg-black text-lightgrey font-cabin selection:text-white selection:bg-red w-full`}
       >
-        <Providers games={games}>
-          <Header locale={props.params.locale} />
+        <Providers
+          games={games.map((game) => ({ id: game.id, color: game.color }))}
+        >
           {props.children}
-          <Footer locale={props.params.locale} />
         </Providers>
         <Analytics />
         <Toaster />

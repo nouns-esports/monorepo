@@ -9,7 +9,7 @@ import {
 } from "phosphor-react-sc";
 import Text from "@/components/Text";
 import ANounsThing from "./ANounsThing";
-import fetchGames from "@/utils/server/fetchGames";
+import fetchGames from "@/server/fetchGames";
 import Logo from "./Logo";
 
 export default async function Footer(props: { locale: string }) {
