@@ -36,7 +36,7 @@ const config = createConfig({
 
 export default function Providers(props: {
   children: React.ReactNode;
-  games: Game[];
+  games: { id: string; color: string }[];
 }) {
   const pathname = usePathname();
 

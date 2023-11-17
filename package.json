@@ -9,6 +9,7 @@
     "migrate": "drizzle-kit generate:pg --schema=./db/schema.ts --out=./db/migrations && node -r esbuild-register db/migrate.ts"
   },
   "dependencies": {
+    "@radix-ui/react-navigation-menu": "^1.1.4",
     "@rainbow-me/rainbowkit": "^1.1.1",
     "@types/node": "20.5.6",
     "@types/react": "18.2.21",
@@ -26,7 +27,7 @@
     "eslint": "8.47.0",
     "eslint-config-next": "13.4.19",
     "framer-motion": "^10.16.1",
-    "next": "^13.5.4",
+    "next": "^14.0.2",
     "next-i18n-router": "^4.1.2",
     "next-themes": "^0.2.1",
     "pg": "^8.11.3",

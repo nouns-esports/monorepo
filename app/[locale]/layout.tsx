@@ -90,10 +90,10 @@ export default async function RootLayout(props: {
       <body
         className={`cursor-crosshair ${cabin.variable} ${luckiestGuy.variable} ${bebasNeue.variable} ${londrinaSolid.variable} bg-black text-lightgrey font-cabin selection:text-white selection:bg-red w-full`}
       >
-        <Providers games={games}>
-          <Header locale={props.params.locale} />
+        <Providers
+          games={games.map((game) => ({ id: game.id, color: game.color }))}
+        >
           {props.children}
-          <Footer locale={props.params.locale} />
         </Providers>
         <Analytics />
         <Toaster />

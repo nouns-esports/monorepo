@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { Locale } from "@/middleware";
+import type { Locale } from "@/middleware";
 import { motion } from "framer-motion";
 
 export default function HighlightedText(props: {

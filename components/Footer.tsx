@@ -42,6 +42,9 @@ export default async function Footer(props: { locale: string }) {
           <FooterLink href="/getfunded">
             <Text en="Get Funded" pt="Seja financiado" />
           </FooterLink>
+          {/* <FooterLink href="https://www.youtube.com/watch?v=SAXzMQ8pPvE">
+            <Text en="About" pt="Sobre" />
+          </FooterLink> */}
           <FooterLink href="/collect">
             <Text en="Collect" pt="Coletar" />
           </FooterLink>

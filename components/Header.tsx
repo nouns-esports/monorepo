@@ -36,6 +36,9 @@ export default async function Header(props: { locale: string }) {
               <HeaderLink href="/getfunded">
                 <Text en="Get Funded" pt="Seja financiado" />
               </HeaderLink>
+              {/* <HeaderLink href="https://www.youtube.com/watch?v=SAXzMQ8pPvE">
+                <Text en="About" pt="Sobre" />
+              </HeaderLink> */}
               <HeaderLink href={`/${props.locale}/collect`}>
                 <Text en="Collect" pt="Coletar" />
               </HeaderLink>
@@ -64,6 +67,7 @@ export default async function Header(props: { locale: string }) {
     </>
   );
 }
+
 function HeaderLink(props: { href: string; children: React.ReactNode }) {
   return (
     <Link
