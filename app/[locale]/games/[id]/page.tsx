@@ -29,7 +29,7 @@ export async function generateMetadata(props: { params: { id: string } }) {
   } satisfies Metadata;
 }
 
-export default async function Game(props: { params: { id: string } }) {
+export default async function GamePage(props: { params: { id: string } }) {
   const game = await fetchGame(props.params.id);
 
   const roster = await fetchRoster(game.id, game.roster);
@@ -40,12 +40,10 @@ export default async function Game(props: { params: { id: string } }) {
         <Image
           src={game.image}
           fill
-          objectFit="cover"
-          objectPosition="center"
           sizes="100vw"
           alt={`Nouns Esports' ${game.name} banner`}
           priority
-          className="absolute top-0 -z-10 brightness-50"
+          className="absolute top-0 -z-10 brightness-50 object-cover object-center"
         />
         <div className="w-full h-full grid place-items-center shadow-[inset_-60px_-60px_100px_black,inset_60px_60px_100px_black]">
           <h1 className="text-white text-8xl max-lg:text-6xl max-md:text-5xl max-[500px]:text-4xl font-luckiest-guy">
@@ -54,10 +52,7 @@ export default async function Game(props: { params: { id: string } }) {
         </div>
       </div>
       <GameBorder>
-        <GameSection
-          title={<Text en="ROSTER" pt="ROSTER" />}
-          href={game.liquipedia ?? ""}
-        >
+        <GameSection title="ROSTER" href={game.liquipedia ?? ""}>
           <div className="flex -mx-16 max-xl:-mx-8 px-16 max-xl:px-8 gap-8 max-xl:gap-4 w-[calc(100%_+_8rem)] max-xl:w-[calc(100%_+_4rem)] max-xl:overflow-x-scroll">
             {roster.map((person) => (
               <RosterCard key={person.id} game={game} person={person} />
@@ -108,8 +103,7 @@ function RosterCard(props: { person: Talent; game: Game }) {
         src={props.person.image}
         alt={props.person.name}
         fill
-        objectFit="contain"
-        className="w-full pt-8 z-10 group-hover:translate-y-[4.5rem] max-lg:translate-y-[4.5rem] transition-transform"
+        className="w-full pt-8 z-10 group-hover:translate-y-[4.5rem] max-lg:translate-y-[4.5rem] transition-transform object-contain"
       />
       <div className="absolute top-6 w-full text-center">
         <h3 className="font-luckiest-guy text-4xl text-white">
@@ -119,7 +113,7 @@ function RosterCard(props: { person: Talent; game: Game }) {
           {props.person.role}
         </p>
       </div>
-      <div className="absolute h-full w-full bg-darkgrey rounded-[0.6rem] group-hover:opacity-0 opacity-1 max-lg:opacity-0 transition-opacity"></div>
+      <div className="absolute h-full w-full bg-darkgrey rounded-[0.6rem] group-hover:opacity-0 opacity-1 max-lg:opacity-0 transition-opacity" />
     </Link>
   );
 }

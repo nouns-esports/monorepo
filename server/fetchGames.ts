@@ -28,7 +28,7 @@ export default function fetchGames() {
       name: "Dota 2",
       image: "/games/dota-2.webp",
       color: "#dc9489",
-      roster: ["lelis", "yamsun", "moo", "gunnar", "astini", "k1"],
+      roster: ["lelis", "yuma", "stormstormer", "gunnar", "astini", "fly"],
       liquipedia: "https://liquipedia.net/dota2/Nouns",
     },
     {
