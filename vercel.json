@@ -49,6 +49,11 @@
       "source": "/instagram",
       "destination": "https://www.instagram.com/nouns_esports/",
       "permanent": true
+    },
+    {
+      "source": "/2024",
+      "destination": "https://nouns.wtf/candidates/0xe3f27deff96fe178e87559f36cbf868b9e75967d-nouns-esports-2024",
+      "permanent": true
     }
   ]
 }
