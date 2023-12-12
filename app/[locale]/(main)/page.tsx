@@ -20,7 +20,7 @@ import type { Event } from "@/server/fetchEvents";
 import Date from "@/components/Date";
 import { headers } from "next/headers";
 import Image from "next/image";
-import Clips from "@/public/clips.webp";
+import Prop from "@/public/prop.webp";
 import LogoWhite from "@/public/logo-white.svg";
 import Pokemon from "@/public/pokemon.webp";
 
@@ -152,24 +152,24 @@ export default async function Home(props: { params: { locale: string } }) {
       </div>
       <div className="relative py-32 max-sm:py-20">
         <Image
-          src={Clips}
-          alt="POG background image"
+          src={Prop}
+          alt="2024 proposal background image"
           sizes="100vw"
           placeholder="blur"
-          className="absolute top-0 w-full h-full select-none object-cover object-center -z-10 brightness-[40%]"
+          className="absolute top-0 w-full h-full select-none object-cover object-center -z-10 brightness-[50%]"
         />
-        <div className="relative z-10 grid place-items-center gap-10 max-sm:gap-6">
-          <h2 className="text-white font-luckiest-guy text-8xl max-sm:text-6xl">
-            POG
+        <div className="relative z-10 grid place-items-center gap-10 max-sm:gap-6 px-16 max-sm:px-8">
+          <h2 className="text-white font-luckiest-guy text-5xl max-sm:text-3xl text-center">
+          We're extending our rosters for another year
           </h2>
-          <p className="max-w-[500px] px-8 text-center text-[#AAAAAA] text-lg max-sm:text-base leading-tight [text-shadow:black_0_0_30px]">
+          <p className="max-w-[600px] px-8 text-center text-[#AAAAAA] text-lg max-sm:text-base leading-tight [text-shadow:black_0_0_50px]">
             <Text
-              en="POG is a platform by Nouns Esports that lets anyone showcase their clips from any multiplayer game and earn real money in the process."
-              pt="POG é uma plataforma da Nouns Esports que permite a qualquer pessoa mostrar seus clipes de qualquer jogo multiplayer e ganhar dinheiro real no processo."
+              en="Check out our 2024 proposal, see what it takes to run a tier one esports org, and learn our vision for the future of Nouns Esports"
+              pt="Check out our 2024 proposal, see what it takes to run a tier one esports org, and learn our vision for the future of Nouns Esports"
             />
           </p>
-          <Button href="https://pog.nouns.gg">
-            <Text en="Explore" pt="Explorar" />
+          <Button href="/2024">
+            <Text en="Learn more" pt="Explorar" />
           </Button>
         </div>
         <div className="from-black via-black/70/ to-transparent bg-gradient-to-b h-64 w-full top-0 absolute" />
