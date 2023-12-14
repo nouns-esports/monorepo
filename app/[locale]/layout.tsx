@@ -1,5 +1,5 @@
 import "./globals.css";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import {
   Cabin,
   Luckiest_Guy,
@@ -12,7 +12,6 @@ import Providers from "@/providers";
 import fetchGames from "@/server/fetchGames";
 import { Analytics } from "@vercel/analytics/react";
 import { locales } from "@/middleware";
-import { Toaster } from "react-hot-toast";
 
 const cabin = Cabin({ subsets: ["latin"], variable: "--font-cabin" });
 
@@ -73,8 +72,11 @@ export const metadata = {
     card: "summary_large_image",
     images: ["/pokemon.webp"],
   },
-  themeColor: "black",
 } satisfies Metadata;
+
+export const viewport = {
+  themeColor: "black",
+} satisfies Viewport;
 
 export default async function RootLayout(props: {
   children: React.ReactNode;
@@ -93,10 +95,11 @@ export default async function RootLayout(props: {
         <Providers
           games={games.map((game) => ({ id: game.id, color: game.color }))}
         >
-          {props.children}
+          <Header locale={props.params.locale} />
+            {props.children}
+          <Footer locale={props.params.locale} />
         </Providers>
         <Analytics />
-        <Toaster />
       </body>
     </html>
   );

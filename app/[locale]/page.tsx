@@ -160,12 +160,15 @@ export default async function Home(props: { params: { locale: string } }) {
         />
         <div className="relative z-10 grid place-items-center gap-10 max-sm:gap-6 px-16 max-sm:px-8">
           <h2 className="text-white font-luckiest-guy text-5xl max-sm:text-3xl text-center">
-          We're extending our rosters for another year
+          <Text 
+            en="We're extending our rosters for another year!"
+            pt="Estamos estendendo nossos roster por mais um ano!"
+          />
           </h2>
           <p className="max-w-[600px] px-8 text-center text-[#AAAAAA] text-lg max-sm:text-base leading-tight [text-shadow:black_0_0_50px]">
             <Text
               en="Check out our 2024 proposal, see what it takes to run a tier one esports org, and learn our vision for the future of Nouns Esports"
-              pt="Check out our 2024 proposal, see what it takes to run a tier one esports org, and learn our vision for the future of Nouns Esports"
+              pt="Confira nossa proposta para 2024, veja o que é necessário para administrar uma organização de esports de primeira linha, e conheça nossa visão para o futuro da Nouns Esports"
             />
           </p>
           <Button href="/2024">

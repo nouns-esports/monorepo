@@ -9,10 +9,10 @@ import { Event } from "@/server/fetchEvents";
 import { Locale } from "@/middleware";
 
 const defaultBanner: { url: string; text: Record<Locale, string> } = {
-  url: "/mint",
+  url: "/2024",
   text: {
-    en: "Celebrate esports summer with us!",
-    pt: "Comemore o verão dos esportes conosco!",
+    en: "We're extending our rosters for another year!",
+    pt: "Estamos estendendo nossos roster por mais um ano!",
   },
 };
 
@@ -31,9 +31,7 @@ export default function Banner(props: { events: Event[]; locale: string }) {
       href={
         live
           ? props.events[0].htmlLink
-          : defaultBanner.url.includes("://")
-          ? defaultBanner.url
-          : `/${props.locale}/${defaultBanner.url}`
+          : defaultBanner.url
       }
       style={{ backgroundColor: primaryColor }}
       className="relative z-20 h-9 hover:brightness-[85%] transition-all text-white text-sm font-semibold w-full whitespace-nowrap flex items-center justify-center"

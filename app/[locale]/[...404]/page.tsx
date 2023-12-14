@@ -1,10 +1,10 @@
 import Button from "@/components/Button";
-import notFound from "@/public/404.webp";
+import notFound from "@/public/404/shrug.webp";
 import Image from "next/image";
 
 export default function NotFound(props: { params: { locale: string } }) {
   return (
-    <main className="relative h-screen bg-[url(/stars.svg)] bg-repeat bg-[length:250px] flex flex-col gap-8 px-8 items-center justify-center">
+    <main className="relative h-screen bg-[url(/404/stars.svg)] bg-repeat bg-[length:250px] flex flex-col gap-8 px-8 items-center justify-center">
       <Image
         src={notFound}
         alt="Page not found image"

@@ -1,0 +1,81 @@
+[
+  {
+    "type": "function",
+    "name": "createEditionWithReferral",
+    "inputs": [
+      {
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "name": "symbol",
+        "type": "string"
+      },
+      {
+        "name": "editionSize",
+        "type": "uint64"
+      },
+      {
+        "name": "fundsRecipient",
+        "type": "address"
+      },
+      {
+        "name": "defaultAdmin",
+        "type": "address"
+      },
+      {
+        "name": "saleConfig",
+        "type": "tuple",
+        "components": [
+          {
+            "name": "publicSalePrice",
+            "type": "uint104"
+          },
+          {
+            "name": "publicSaleStart",
+            "type": "uint64"
+          },
+          {
+            "name": "publicSaleEnd",
+            "type": "uint64"
+          },
+          {
+            "name": "presaleStart",
+            "type": "uint64"
+          },
+          {
+            "name": "presaleEnd",
+            "type": "uint64"
+          },
+          {
+            "name": "presaleMerkleRoot",
+            "type": "bytes32"
+          }
+        ]
+      },
+      {
+        "name": "description",
+        "type": "string"
+      },
+      {
+        "name": "animationURI",
+        "type": "string"
+      },
+      {
+        "name": "imageURI",
+        "type": "string"
+      },
+      {
+        "name": "createReferral",
+        "type": "address"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable"
+  }
+]
