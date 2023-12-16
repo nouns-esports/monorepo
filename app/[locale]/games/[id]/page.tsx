@@ -1,4 +1,4 @@
-import { Game, Talent } from "@/db/schema";
+import { Game, Roster, Talent } from "@/db/schema";
 import fetchGame from "@/server/fetchGame";
 import fetchRoster from "@/server/fetchRoster";
 import { ArrowSquareOut } from "phosphor-react-sc";
@@ -8,18 +8,30 @@ import { metadata } from "@/app/[locale]/layout";
 import { Metadata } from "next";
 import Link from "@/components/Link";
 import Image from "next/image";
+import fetchTalent from "@/server/fetchTalent";
+import fetchTalents from "@/server/fetchTalents";
+import fetchRosters from "@/server/fetchRosters";
 
 export async function generateMetadata(props: { params: { id: string } }) {
   const game = await fetchGame(props.params.id);
 
-  const players = (await fetchRoster(game.id, game.roster)).map((person) =>
-    person.name.toLowerCase()
-  );
+  const talents = []
+
+  for (const rosterId of game.rosters) {
+    const roster = await fetchRoster(rosterId);
+    
+    for (const talentId of roster.talent) {
+      const talent = await fetchTalent(talentId)
+
+      talents.push(talent.name.toLowerCase())
+    }
+  }
+
 
   return {
     title: game.name,
     description: `Learn more about our ${game.name} roster!`,
-    keywords: [...metadata.keywords, game.name, ...players],
+    keywords: [...metadata.keywords, game.name, ...talents],
     openGraph: {
       images: [game.image],
     },
@@ -32,7 +44,9 @@ export async function generateMetadata(props: { params: { id: string } }) {
 export default async function GamePage(props: { params: { id: string } }) {
   const game = await fetchGame(props.params.id);
 
-  const roster = await fetchRoster(game.id, game.roster);
+  const rosters = await fetchRosters(game.rosters);
+
+  const talents = await fetchTalents(rosters[0].talent)
 
   return (
     <>
@@ -52,10 +66,10 @@ export default async function GamePage(props: { params: { id: string } }) {
         </div>
       </div>
       <GameBorder>
-        <GameSection title="ROSTER" href={game.liquipedia ?? ""}>
+        <GameSection title="ROSTER" href={rosters[0].liquipedia ?? ""}>
           <div className="flex -mx-16 max-xl:-mx-8 px-16 max-xl:px-8 gap-8 max-xl:gap-4 w-[calc(100%_+_8rem)] max-xl:w-[calc(100%_+_4rem)] max-xl:overflow-x-scroll">
-            {roster.map((person) => (
-              <RosterCard key={person.id} game={game} person={person} />
+            {talents.map((person) => (
+              <RosterCard key={person.id} game={game} roster={rosters[0]} person={person} />
             ))}
           </div>
         </GameSection>
@@ -89,14 +103,14 @@ function GameSection(props: {
   );
 }
 
-function RosterCard(props: { person: Talent; game: Game }) {
+function RosterCard(props: { person: Talent; game: Game, roster: Roster }) {
   return (
     <Link
       href={props.person.liquipedia ?? ""}
       className="relative select-none aspect-[21/30] w-full flex max-lg:w-60 max-lg:flex-shrink-0 rounded-xl border-fix group cursor-pointer overflow-hidden"
       style={{
         backgroundColor: props.game.color,
-        maxWidth: props.game.roster.length < 5 ? "18rem" : "100%",
+        maxWidth: props.roster.talent.length < 5 ? "18rem" : "100%",
       }}
     >
       <Image

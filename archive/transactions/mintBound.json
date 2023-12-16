@@ -16,6 +16,10 @@
         "type": "uint64"
       },
       {
+        "name": "royaltyBPS",
+        "type": "uint16"
+      },
+      {
         "name": "fundsRecipient",
         "type": "address"
       },
@@ -30,6 +34,10 @@
           {
             "name": "publicSalePrice",
             "type": "uint104"
+          },
+          {
+            "name": "maxSalePurchasePerAddress",
+            "type": "uint32"
           },
           {
             "name": "publicSaleStart",

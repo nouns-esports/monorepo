@@ -15,10 +15,11 @@ export const games = pgTable("games", {
   rosters: varchar("rosters", { length: 256 }).array().notNull(),
 });
 
-export const roster = pgTable("roster", {
+export const rosters = pgTable("rosters", {
   id: varchar("id", { length: 256 }).primaryKey(),
   active: boolean("active").notNull(),
   name: varchar("name", { length: 256 }).notNull(),
+  game: varchar("game", { length: 256 }).notNull(),
   talent: varchar("talent", { length: 256 }).array().notNull(),
   liquipedia: varchar("liquipedia", { length: 256 }),
 });
@@ -29,7 +30,7 @@ export const talent = pgTable("talent", {
   name: varchar("name", { length: 256 }).notNull(),
   image: varchar("image", { length: 256 }).notNull(),
   role: varchar("role", { length: 256 }).notNull(),
-  game: varchar("game", { length: 256 }).notNull(),
+  roster: varchar("roster", { length: 256 }).notNull(),
   liquipedia: varchar("liquipedia", { length: 256 }),
   twitch: varchar("twitch", { length: 256 }),
   twitter: varchar("twitter", { length: 256 }),
@@ -60,6 +61,6 @@ export const projects = pgTable("projects", {
 });
 
 export type Game = typeof games.$inferSelect;
-export type Roster = typeof roster.$inferSelect;
+export type Roster = typeof rosters.$inferSelect;
 export type Talent = typeof talent.$inferSelect;
 export type Project = typeof projects.$inferSelect;
