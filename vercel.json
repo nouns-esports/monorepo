@@ -49,11 +49,6 @@
       "source": "/instagram",
       "destination": "https://www.instagram.com/nouns_esports/",
       "permanent": true
-    },
-    {
-      "source": "/2024",
-      "destination": "https://nouns.wtf/vote/466",
-      "permanent": true
     }
   ]
 }
