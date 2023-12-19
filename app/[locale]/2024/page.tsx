@@ -1,8 +1,6 @@
-"use client";
-
 import { Metadata } from "next";
 import { metadata as baseMetadata } from "@/app/[locale]/layout";
-import { useEffect } from "react";
+import Redirect from "@/components/Redirect";
 
 export const metadata = {
     title: "Nouns Esports 2024",
@@ -20,9 +18,5 @@ export const metadata = {
   } satisfies Metadata;
 
 export default function PropPage() {
-    useEffect(() => {
-        window.location.href = "https://nouns.wtf/vote/466"
-    }, []);
-
-    return <></>
+    return <Redirect />
 }
