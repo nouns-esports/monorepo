@@ -9,11 +9,11 @@ import {
 } from "phosphor-react-sc";
 import Text from "@/components/Text";
 import ANounsThing from "./ANounsThing";
-import fetchGames from "@/server/fetchGames";
 import Logo from "./Logo";
+import { query } from "@/server/query";
 
 export default async function Footer(props: { locale: string }) {
-  const games = await fetchGames();
+  const games = await query.games();
 
   return (
     <footer className="flex max-lg:flex-col gap-16 justify-between items-center py-8 px-32 max-xl:px-16 relative z-20">

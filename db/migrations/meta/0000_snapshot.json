@@ -1,8 +1,8 @@
 {
+  "id": "f7a7a30f-e2e4-4a22-9163-25a53d9706c0",
+  "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
-  "id": "2dadb8ff-8a3c-466d-a494-50c9b0355b68",
-  "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "creators": {
       "name": "creators",
@@ -10,7 +10,7 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "varchar(256)",
+          "type": "text",
           "primaryKey": true,
           "notNull": true
         },
@@ -22,49 +22,49 @@
         },
         "name": {
           "name": "name",
-          "type": "varchar(256)",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
         "image": {
           "name": "image",
-          "type": "varchar(256)",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
         "liquipedia": {
           "name": "liquipedia",
-          "type": "varchar(256)",
+          "type": "text",
           "primaryKey": false,
           "notNull": false
         },
         "twitch": {
           "name": "twitch",
-          "type": "varchar(256)",
+          "type": "text",
           "primaryKey": false,
           "notNull": false
         },
         "twitter": {
           "name": "twitter",
-          "type": "varchar(256)",
+          "type": "text",
           "primaryKey": false,
           "notNull": false
         },
         "youtube": {
           "name": "youtube",
-          "type": "varchar(256)",
+          "type": "text",
           "primaryKey": false,
           "notNull": false
         },
         "tiktok": {
           "name": "tiktok",
-          "type": "varchar(256)",
+          "type": "text",
           "primaryKey": false,
           "notNull": false
         },
         "instagram": {
           "name": "instagram",
-          "type": "varchar(256)",
+          "type": "text",
           "primaryKey": false,
           "notNull": false
         }
@@ -80,7 +80,7 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "varchar(256)",
+          "type": "text",
           "primaryKey": true,
           "notNull": true
         },
@@ -92,25 +92,19 @@
         },
         "name": {
           "name": "name",
-          "type": "varchar(256)",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
         "image": {
           "name": "image",
-          "type": "varchar(256)",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
         "color": {
           "name": "color",
           "type": "char(7)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "rosters": {
-          "name": "rosters",
-          "type": "varchar(256)[]",
           "primaryKey": false,
           "notNull": true
         }
@@ -126,7 +120,7 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "varchar(256)",
+          "type": "text",
           "primaryKey": true,
           "notNull": true
         },
@@ -138,19 +132,19 @@
         },
         "name": {
           "name": "name",
-          "type": "varchar(256)",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
         "image": {
           "name": "image",
-          "type": "varchar(256)",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
         "url": {
           "name": "url",
-          "type": "varchar(256)",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         }
@@ -160,13 +154,13 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "roster": {
-      "name": "roster",
+    "rosters": {
+      "name": "rosters",
       "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "varchar(256)",
+          "type": "text",
           "primaryKey": true,
           "notNull": true
         },
@@ -178,21 +172,21 @@
         },
         "name": {
           "name": "name",
-          "type": "varchar(256)",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "talent": {
-          "name": "talent",
-          "type": "varchar(256)[]",
+        "game": {
+          "name": "game",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
         "liquipedia": {
           "name": "liquipedia",
-          "type": "varchar(256)",
+          "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         }
       },
       "indexes": {},
@@ -206,7 +200,7 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "varchar(256)",
+          "type": "text",
           "primaryKey": true,
           "notNull": true
         },
@@ -218,61 +212,61 @@
         },
         "name": {
           "name": "name",
-          "type": "varchar(256)",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
         "image": {
           "name": "image",
-          "type": "varchar(256)",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
         "role": {
           "name": "role",
-          "type": "varchar(256)",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "game": {
-          "name": "game",
-          "type": "varchar(256)",
+        "roster": {
+          "name": "roster",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
         "liquipedia": {
           "name": "liquipedia",
-          "type": "varchar(256)",
+          "type": "text",
           "primaryKey": false,
           "notNull": false
         },
         "twitch": {
           "name": "twitch",
-          "type": "varchar(256)",
+          "type": "text",
           "primaryKey": false,
           "notNull": false
         },
         "twitter": {
           "name": "twitter",
-          "type": "varchar(256)",
+          "type": "text",
           "primaryKey": false,
           "notNull": false
         },
         "youtube": {
           "name": "youtube",
-          "type": "varchar(256)",
+          "type": "text",
           "primaryKey": false,
           "notNull": false
         },
         "tiktok": {
           "name": "tiktok",
-          "type": "varchar(256)",
+          "type": "text",
           "primaryKey": false,
           "notNull": false
         },
         "instagram": {
           "name": "instagram",
-          "type": "varchar(256)",
+          "type": "text",
           "primaryKey": false,
           "notNull": false
         }
@@ -286,8 +280,8 @@
   "enums": {},
   "schemas": {},
   "_meta": {
+    "columns": {},
     "schemas": {},
-    "tables": {},
-    "columns": {}
+    "tables": {}
   }
 }

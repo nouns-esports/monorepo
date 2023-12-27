@@ -1,37 +1,41 @@
 import { Game, Roster, Talent } from "@/db/schema";
-import fetchGame from "@/server/fetchGame";
-import fetchRoster from "@/server/fetchRoster";
 import { ArrowSquareOut } from "phosphor-react-sc";
-import Text from "@/components/Text";
 import GameBorder from "@/components/GameBorder";
 import { metadata } from "@/app/[locale]/layout";
 import { Metadata } from "next";
 import Link from "@/components/Link";
 import Image from "next/image";
-import fetchTalent from "@/server/fetchTalent";
-import fetchTalents from "@/server/fetchTalents";
-import fetchRosters from "@/server/fetchRosters";
+import { query } from "@/server/query";
+import { notFound } from "next/navigation";
 
 export async function generateMetadata(props: { params: { id: string } }) {
-  const game = await fetchGame(props.params.id);
+  const game = await query.game({
+    id: props.params.id,
+  });
 
-  const talents = []
+  if (!game) notFound();
 
-  for (const rosterId of game.rosters) {
-    const roster = await fetchRoster(rosterId);
-    
-    for (const talentId of roster.talent) {
-      const talent = await fetchTalent(talentId)
+  const rosters = await query.rosters({ game: game.id });
 
-      talents.push(talent.name.toLowerCase())
-    }
+  const talents = [];
+
+  for (const roster of rosters) {
+    talents.push(
+      ...(await query.talent({ roster: roster.id })).map((t) =>
+        t.name.toLocaleLowerCase()
+      )
+    );
   }
-
 
   return {
     title: game.name,
     description: `Learn more about our ${game.name} roster!`,
-    keywords: [...metadata.keywords, game.name, ...talents],
+    keywords: [
+      ...metadata.keywords,
+      game.name,
+      ...talents,
+      ...rosters.map((roster) => roster.name),
+    ],
     openGraph: {
       images: [game.image],
     },
@@ -42,11 +46,13 @@ export async function generateMetadata(props: { params: { id: string } }) {
 }
 
 export default async function GamePage(props: { params: { id: string } }) {
-  const game = await fetchGame(props.params.id);
+  const game = await query.game({
+    id: props.params.id,
+  });
 
-  const rosters = await fetchRosters(game.rosters);
+  if (!game) notFound();
 
-  const talents = await fetchTalents(rosters[0].talent)
+  const rosters = await query.rosters({ game: game.id });
 
   return (
     <>
@@ -66,13 +72,26 @@ export default async function GamePage(props: { params: { id: string } }) {
         </div>
       </div>
       <GameBorder>
-        <GameSection title="ROSTER" href={rosters[0].liquipedia ?? ""}>
-          <div className="flex -mx-16 max-xl:-mx-8 px-16 max-xl:px-8 gap-8 max-xl:gap-4 w-[calc(100%_+_8rem)] max-xl:w-[calc(100%_+_4rem)] max-xl:overflow-x-scroll">
-            {talents.map((person) => (
-              <RosterCard key={person.id} game={game} roster={rosters[0]} person={person} />
-            ))}
-          </div>
-        </GameSection>
+        {rosters.map(async (roster) => {
+          const talent = await query.talent({ roster: roster.id });
+          return (
+            <GameSection
+              title={roster.id === game.id ? "ROSTER" : roster.name}
+              href={roster.liquipedia}
+            >
+              <div className="flex -mx-16 max-xl:-mx-8 px-16 max-xl:px-8 gap-8 max-xl:gap-4 w-[calc(100%_+_8rem)] max-xl:w-[calc(100%_+_4rem)] max-xl:overflow-x-scroll">
+                {talent.map((person) => (
+                  <RosterCard
+                    key={person.id}
+                    game={game}
+                    count={talent.length}
+                    person={person}
+                  />
+                ))}
+              </div>
+            </GameSection>
+          );
+        })}
       </GameBorder>
     </>
   );
@@ -103,14 +122,14 @@ function GameSection(props: {
   );
 }
 
-function RosterCard(props: { person: Talent; game: Game, roster: Roster }) {
+function RosterCard(props: { person: Talent; game: Game; count: number }) {
   return (
     <Link
       href={props.person.liquipedia ?? ""}
       className="relative select-none aspect-[21/30] w-full flex max-lg:w-60 max-lg:flex-shrink-0 rounded-xl border-fix group cursor-pointer overflow-hidden"
       style={{
         backgroundColor: props.game.color,
-        maxWidth: props.roster.talent.length < 5 ? "18rem" : "100%",
+        maxWidth: props.count < 5 ? "18rem" : "100%",
       }}
     >
       <Image

@@ -13,23 +13,21 @@ import Link from "@/components/Link";
 import { Project } from "@/db/schema";
 import Text from "@/components/Text";
 import HighlightedText from "@/components/HighlightedText";
-import fetchEvents from "@/server/fetchEvents";
-import fetchGames from "@/server/fetchGames";
-import fetchProjects from "@/server/fetchProjects";
-import type { Event } from "@/server/fetchEvents";
+import type { Event } from "@/server/resolve/events";
 import Date from "@/components/Date";
 import { headers } from "next/headers";
 import Image from "next/image";
 import Prop from "@/public/prop.webp";
 import LogoWhite from "@/public/logo-white.svg";
 import Pokemon from "@/public/pokemon.webp";
+import { query } from "@/server/query";
 
 export default async function Home(props: { params: { locale: string } }) {
-  const events = await fetchEvents();
+  const events = await query.events();
 
-  const games = await fetchGames();
+  const games = await query.games();
 
-  const projects = await fetchProjects();
+  const projects = await query.projects();
 
   const isMobile = headers().get("x-device-type") === "mobile";
 
@@ -160,10 +158,10 @@ export default async function Home(props: { params: { locale: string } }) {
         />
         <div className="relative z-10 grid place-items-center gap-10 max-sm:gap-6 px-16 max-sm:px-8">
           <h2 className="text-white font-luckiest-guy text-5xl max-sm:text-3xl text-center">
-          <Text 
-            en="We're extending our rosters for another year!"
-            pt="Estamos estendendo nossos roster por mais um ano!"
-          />
+            <Text
+              en="We're extending our rosters for another year!"
+              pt="Estamos estendendo nossos roster por mais um ano!"
+            />
           </h2>
           <p className="max-w-[600px] px-8 text-center text-[#AAAAAA] text-lg max-sm:text-base leading-tight [text-shadow:black_0_0_50px]">
             <Text
@@ -257,7 +255,7 @@ function GameCard(props: {
 async function ScheduleCard(props: { event: Event }) {
   const type = props.event.summary?.split("]")[0].replace("[", "");
 
-  const game = (await fetchGames()).find((game) =>
+  const game = (await query.games()).find((game) =>
     game.name.toLowerCase().includes(type.toLowerCase())
   );
 

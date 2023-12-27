@@ -23,6 +23,14 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "components/NavigationMenu"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "components/NavigationMenu",
+    ".deathrow/garph.ts",
+    ".deathrow/route.ts"
+  ],
   "exclude": ["node_modules"]
 }

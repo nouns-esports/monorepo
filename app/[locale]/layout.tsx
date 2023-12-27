@@ -9,9 +9,9 @@ import {
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Providers from "@/providers";
-import fetchGames from "@/server/fetchGames";
 import { Analytics } from "@vercel/analytics/react";
 import { locales } from "@/middleware";
+import { query } from "@/server/query";
 
 const cabin = Cabin({ subsets: ["latin"], variable: "--font-cabin" });
 
@@ -82,7 +82,7 @@ export default async function RootLayout(props: {
   children: React.ReactNode;
   params: { locale: string };
 }) {
-  const games = await fetchGames();
+  const games = await query.games();
 
   return (
     <html
@@ -96,7 +96,7 @@ export default async function RootLayout(props: {
           games={games.map((game) => ({ id: game.id, color: game.color }))}
         >
           <Header locale={props.params.locale} />
-            {props.children}
+          {props.children}
           <Footer locale={props.params.locale} />
         </Providers>
         <Analytics />

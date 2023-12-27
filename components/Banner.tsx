@@ -5,7 +5,7 @@ import Text from "./Text";
 import { ArrowRight, Dot } from "phosphor-react-sc";
 import { useContext } from "react";
 import { PrimaryColorContext } from "@/providers";
-import { Event } from "@/server/fetchEvents";
+import { Event } from "@/server/resolve/fetchEvents";
 import { Locale } from "@/middleware";
 
 const defaultBanner: { url: string; text: Record<Locale, string> } = {
@@ -28,11 +28,7 @@ export default function Banner(props: { events: Event[]; locale: string }) {
 
   return (
     <Link
-      href={
-        live
-          ? props.events[0].htmlLink
-          : defaultBanner.url
-      }
+      href={live ? props.events[0].htmlLink : defaultBanner.url}
       style={{ backgroundColor: primaryColor }}
       className="relative z-20 h-9 hover:brightness-[85%] transition-all text-white text-sm font-semibold w-full whitespace-nowrap flex items-center justify-center"
     >

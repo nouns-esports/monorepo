@@ -5,12 +5,12 @@ import ConnectButton from "@/components/ConnectButton";
 import Logo from "./Logo";
 import Banner from "./Banner";
 import Menu from "./Menu";
-import fetchEvents from "@/server/fetchEvents";
 import Image from "next/image";
 import whiteLogo from "@/public/logo-white.svg";
+import { query } from "@/server/query";
 
 export default async function Header(props: { locale: string }) {
-  const events = await fetchEvents();
+  const events = await query.events();
 
   return (
     <>

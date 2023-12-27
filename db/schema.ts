@@ -1,66 +1,98 @@
 import { drizzle } from "drizzle-orm/vercel-postgres";
 import { sql } from "@vercel/postgres";
-import { boolean, char, pgTable, varchar } from "drizzle-orm/pg-core";
+import { boolean, char, pgTable, text } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
 
 import "dotenv/config";
 
-export const db = drizzle(sql);
-
 export const games = pgTable("games", {
-  id: varchar("id", { length: 256 }).primaryKey(),
+  id: text("id").primaryKey(),
   active: boolean("active").notNull(),
-  name: varchar("name", { length: 256 }).notNull(),
-  image: varchar("image", { length: 256 }).notNull(),
+  name: text("name").notNull(),
+  image: text("image").notNull(),
   color: char("color", { length: 7 }).notNull(),
-  rosters: varchar("rosters", { length: 256 }).array().notNull(),
 });
+
+export const gamesRelations = relations(games, ({ many }) => ({
+  rosters: many(rosters),
+}));
 
 export const rosters = pgTable("rosters", {
-  id: varchar("id", { length: 256 }).primaryKey(),
+  id: text("id").primaryKey(),
   active: boolean("active").notNull(),
-  name: varchar("name", { length: 256 }).notNull(),
-  game: varchar("game", { length: 256 }).notNull(),
-  talent: varchar("talent", { length: 256 }).array().notNull(),
-  liquipedia: varchar("liquipedia", { length: 256 }),
+  name: text("name").notNull(),
+  game: text("game").notNull(),
+  liquipedia: text("liquipedia").notNull(),
 });
+
+export const rostersRelations = relations(rosters, ({ one, many }) => ({
+  game: one(games, {
+    fields: [rosters.game],
+    references: [games.id],
+  }),
+  talent: many(talent),
+}));
 
 export const talent = pgTable("talent", {
-  id: varchar("id", { length: 256 }).primaryKey(),
+  id: text("id").primaryKey(),
   active: boolean("active").notNull(),
-  name: varchar("name", { length: 256 }).notNull(),
-  image: varchar("image", { length: 256 }).notNull(),
-  role: varchar("role", { length: 256 }).notNull(),
-  roster: varchar("roster", { length: 256 }).notNull(),
-  liquipedia: varchar("liquipedia", { length: 256 }),
-  twitch: varchar("twitch", { length: 256 }),
-  twitter: varchar("twitter", { length: 256 }),
-  youtube: varchar("youtube", { length: 256 }),
-  tiktok: varchar("tiktok", { length: 256 }),
-  instagram: varchar("instagram", { length: 256 }),
+  name: text("name").notNull(),
+  image: text("image").notNull(),
+  role: text("role").notNull(),
+  roster: text("roster").notNull(),
+  liquipedia: text("liquipedia"),
+  twitch: text("twitch"),
+  twitter: text("twitter"),
+  youtube: text("youtube"),
+  tiktok: text("tiktok"),
+  instagram: text("instagram"),
 });
 
+export const talentRelations = relations(talent, ({ one, many }) => ({
+  roster: one(rosters, {
+    fields: [talent.roster],
+    references: [rosters.id],
+  }),
+}));
+
 export const creators = pgTable("creators", {
-  id: varchar("id", { length: 256 }).primaryKey(),
+  id: text("id").primaryKey(),
   active: boolean("active").notNull(),
-  name: varchar("name", { length: 256 }).notNull(),
-  image: varchar("image", { length: 256 }).notNull(),
-  liquipedia: varchar("liquipedia", { length: 256 }),
-  twitch: varchar("twitch", { length: 256 }),
-  twitter: varchar("twitter", { length: 256 }),
-  youtube: varchar("youtube", { length: 256 }),
-  tiktok: varchar("tiktok", { length: 256 }),
-  instagram: varchar("instagram", { length: 256 }),
+  name: text("name").notNull(),
+  image: text("image").notNull(),
+  liquipedia: text("liquipedia"),
+  twitch: text("twitch"),
+  twitter: text("twitter"),
+  youtube: text("youtube"),
+  tiktok: text("tiktok"),
+  instagram: text("instagram"),
 });
 
 export const projects = pgTable("projects", {
-  id: varchar("id", { length: 256 }).primaryKey(),
+  id: text("id").primaryKey(),
   active: boolean("active").notNull(),
-  name: varchar("name", { length: 256 }).notNull(),
-  image: varchar("image", { length: 256 }).notNull(),
-  url: varchar("url", { length: 256 }).notNull(),
+  name: text("name").notNull(),
+  image: text("image").notNull(),
+  url: text("url").notNull(),
+});
+
+export const db = drizzle(sql, {
+  schema: {
+    games: games,
+    rosters: rosters,
+    talent: talent,
+    creators: creators,
+    projects: projects,
+  },
 });
 
 export type Game = typeof games.$inferSelect;
 export type Roster = typeof rosters.$inferSelect;
 export type Talent = typeof talent.$inferSelect;
 export type Project = typeof projects.$inferSelect;
+export type Creator = typeof creators.$inferSelect;
+
+// export type Orderable<T> = Exclude<
+//   T extends string ? (string extends T ? never : T) : never,
+//   "_" | "getSQL" | "$inferSelect" | "$inferInsert"
+// >;
