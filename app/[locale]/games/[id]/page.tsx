@@ -76,6 +76,7 @@ export default async function GamePage(props: { params: { id: string } }) {
           const talent = await query.talent({ roster: roster.id });
           return (
             <GameSection
+              key={roster.id}
               title={roster.id === game.id ? "ROSTER" : roster.name}
               href={roster.liquipedia}
             >
