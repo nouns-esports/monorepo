@@ -5,7 +5,7 @@ import Text from "./Text";
 import { ArrowRight, Dot } from "phosphor-react-sc";
 import { useContext } from "react";
 import { PrimaryColorContext } from "@/providers";
-import { Event } from "@/server/resolve/fetchEvents";
+import { Event } from "@/server/resolve/events";
 import { Locale } from "@/middleware";
 
 const defaultBanner: { url: string; text: Record<Locale, string> } = {
