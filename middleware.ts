@@ -9,10 +9,14 @@ export const locales: Record<string, string> = {
 export type Locale = keyof typeof locales;
 
 export function middleware(request: NextRequest) {
+  console.log("--- Original Headers ---");
+  request.headers.forEach((value, key) => {
+    console.log(key + ": " + value);
+  });
+
   let i18nRequest = i18nRouter(request, {
     locales: Object.keys(locales),
     defaultLocale: "en",
-    routingStrategy: "dynamicSegment",
   });
 
   // Get the device type
@@ -22,6 +26,11 @@ export function middleware(request: NextRequest) {
     "x-device-type",
     device.type === "mobile" ? "mobile" : "desktop"
   );
+
+  console.log("--- i18n Headers ---");
+  i18nRequest.headers.forEach((value, key) => {
+    console.log(key + ": " + value);
+  });
 
   return i18nRequest;
 }
