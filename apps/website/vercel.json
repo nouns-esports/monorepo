@@ -21,11 +21,6 @@
       "permanent": true
     },
     {
-      "source": "/recap",
-      "destination": "https://shorturl.at/grzKM",
-      "permanent": true
-    },
-    {
       "source": "/discord",
       "destination": "https://discord.com/invite/nounsesports",
       "permanent": true
