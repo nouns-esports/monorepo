@@ -29,9 +29,7 @@ export default async function Home(props: { params: { locale: string } }) {
 
   const projects = await query.projects();
 
-  const isMobile = false;
-
-  //headers().get("x-device-type") === "mobile";
+  const isMobile = headers().get("x-device-type") === "mobile";
 
   return (
     <main className="cursor-crosshair flex flex-col">
