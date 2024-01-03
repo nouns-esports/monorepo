@@ -54,6 +54,11 @@
       "source": "/2024",
       "destination": "https://nouns.wtf/vote/466",
       "permanent": true
+    },
+    {
+      "source": "/posts/pass-preview",
+      "destination": "https://mirror.xyz/mirror.nounsesports.eth/Bu-RMSGzmu6zEHUpIOfu_xkJZPXZw6euOVKLFavFXhA",
+      "permanent": true
     }
   ]
 }
