@@ -36,7 +36,7 @@ const londrinaSolid = Londrina_Solid({
 const title = "Nouns Esports";
 const description = "Leading the revolution in community driven esports!";
 
-// export const dynamic = "force-static";
+export const dynamic = "force-static";
 
 export const metadata = {
   title: {
