@@ -36,6 +36,8 @@ const londrinaSolid = Londrina_Solid({
 const title = "Nouns Esports";
 const description = "Leading the revolution in community driven esports!";
 
+export const dynamic = "force-static";
+
 export const metadata = {
   title: {
     default: title,
@@ -58,10 +60,13 @@ export const metadata = {
   metadataBase: new URL("https://nouns.gg"),
   alternates: {
     canonical: "/",
-    languages: Object.keys(locales).reduce((object, locale) => {
-      object[locale] = `/${locale}`;
-      return object;
-    }, {} as Record<string, string>),
+    languages: Object.keys(locales).reduce(
+      (object, locale) => {
+        object[locale] = `/${locale}`;
+        return object;
+      },
+      {} as Record<string, string>
+    ),
   },
   openGraph: {
     type: "website",
