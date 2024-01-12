@@ -59,6 +59,11 @@
       "source": "/posts/pass-preview",
       "destination": "https://mirror.xyz/mirror.nounsesports.eth/Bu-RMSGzmu6zEHUpIOfu_xkJZPXZw6euOVKLFavFXhA",
       "permanent": true
+    },
+    {
+      "source": "/genesis",
+      "destination": "https://prop.house/0x0219c27b23972086a615df35adb653838e851b9b",
+      "permanent": true
     }
   ]
 }
