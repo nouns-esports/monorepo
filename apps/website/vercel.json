@@ -62,7 +62,12 @@
     },
     {
       "source": "/genesis",
-      "destination": "https://prop.house/0x0219c27b23972086a615df35adb653838e851b9b",
+      "destination": "https://prop.house/0x23c3d161eae43e40ca67618ae6f7836ecc7cd481",
+      "permanent": true
+    },
+    {
+      "source": "/signup",
+      "destination": "https://forms.gle/VZmWFgS6qp1U38FB8",
       "permanent": true
     }
   ]
