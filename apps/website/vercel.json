@@ -69,6 +69,11 @@
       "source": "/signup",
       "destination": "https://forms.gle/VZmWFgS6qp1U38FB8",
       "permanent": true
+    },
+    {
+      "source": "/aklo-video",
+      "destination": "https://twitter.com/NotAklo/status/1747414607436689680",
+      "permanent": true
     }
   ]
 }
