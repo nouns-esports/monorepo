@@ -50,7 +50,7 @@ export default async function Home(props: { params: { locale: string } }) {
             type="video/mp4"
           />
         </video>
-        <h1 className="text-white text-6xl w-1/2 text-center font-luckiest-guy max-lg:w-full max-lg:px-16 max-sm:px-8 max-md:text-5xl max-[450px]:text-4xl">
+        <h1 className="text-white text-6xl max-w-4xl w-1/2 text-center font-luckiest-guy max-lg:w-full max-lg:px-16 max-sm:px-8 max-md:text-5xl max-[450px]:text-4xl">
           <HighlightedText
             text={{
               en: "Leading the revolution in community driven esports",

@@ -13,9 +13,9 @@ export default async function Header(props: { locale: string }) {
   const events = await query.events();
 
   return (
-    <>
+    <div className="flex flex-col items-center w-full">
       <Banner events={events} locale={props.locale} />
-      <header className="sticky top-0 w-full z-20">
+      <header className="sticky top-0 w-full z-20 max-w-[1920px]">
         <div className="absolute top-0 w-full flex items-center justify-between p-8">
           <div className="flex items-center gap-8">
             <Link
@@ -61,7 +61,7 @@ export default async function Header(props: { locale: string }) {
           </nav>
         </div>
       </header>
-    </>
+    </div>
   );
 }
 
