@@ -9,7 +9,7 @@ import { Event } from "@/server/resolve/events";
 import { Locale } from "@/middleware";
 
 const defaultBanner: { url: string; text: Record<Locale, string> } = {
-  url: "/2024",
+  url: "https://nouns.wtf/vote/466",
   text: {
     en: "We're extending our rosters for another year!",
     pt: "Estamos estendendo nossos roster por mais um ano!",

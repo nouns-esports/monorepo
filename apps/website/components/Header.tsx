@@ -1,12 +1,9 @@
 import Link from "@/components/Link";
-import { SelectLanguage } from "./SelectLanguage";
 import Text from "@/components/Text";
 import ConnectButton from "@/components/ConnectButton";
 import Logo from "./Logo";
 import Banner from "./Banner";
 import Menu from "./Menu";
-import Image from "next/image";
-import whiteLogo from "@/public/logo-white.svg";
 import { query } from "@/server/query";
 
 export default async function Header(props: { locale: string }) {
@@ -18,20 +15,15 @@ export default async function Header(props: { locale: string }) {
       <header className="sticky top-0 w-full z-20 flex justify-center">
         <div className="relative w-full max-w-[1920px]">
           <div className="absolute top-0 w-full flex items-center justify-between p-8">
-            <div className="flex items-center gap-8">
-              <Link
-                href={`/${props.locale}/`}
-                className="flex gap-4 group items-center cursor-pointer select-none"
-              >
-                <Logo className="group-hover:rotate-[14deg] w-12 transition-transform duration-150" />
-                <p className="text-white font-luckiest-guy text-4xl select-none">
-                  Nouns
-                </p>
-              </Link>
-              <div className="max-[500px]:hidden">
-                <SelectLanguage />
-              </div>
-            </div>
+            <Link
+              href={`/${props.locale}/`}
+              className="flex gap-4 group items-center cursor-pointer select-none"
+            >
+              <Logo className="group-hover:rotate-[14deg] w-12 transition-transform duration-150" />
+              <p className="text-white font-luckiest-guy text-4xl select-none">
+                Nouns
+              </p>
+            </Link>
             <nav className="flex items-center gap-8 cursor-pointer">
               <div className="flex gap-6 max-lg:hidden">
                 <HeaderLink href="/getfunded">
@@ -44,17 +36,6 @@ export default async function Header(props: { locale: string }) {
                   <Text en="Shop" pt="Loja" />
                 </HeaderLink>
               </div>
-              <Link
-                href="https://pog.nouns.gg"
-                className="flex gap-2 select-none items-center group max-[750px]:hidden"
-              >
-                <Image
-                  src={whiteLogo}
-                  alt="POG logo"
-                  className="w-6 h-6 group-hover:rotate-[14deg] transition-transform duration-150"
-                />
-                <p className="text-white font-luckiest-guy text-xl">POG</p>
-              </Link>
               <div className="max-[700px]:hidden">
                 <ConnectButton />
               </div>

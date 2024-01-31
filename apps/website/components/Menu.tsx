@@ -4,7 +4,6 @@ import { List, X } from "phosphor-react-sc";
 import Logo from "./Logo";
 import { useState } from "react";
 import Link from "@/components/Link";
-import { SelectLanguage } from "./SelectLanguage";
 import ConnectButton from "./ConnectButton";
 import Text from "@/components/Text";
 
@@ -44,8 +43,7 @@ export default function Menu(props: { locale: string }) {
               />
             </div>
           </div>
-          <div className="items-center justify-between gap-8 hidden max-[700px]:flex">
-            <SelectLanguage />
+          <div className="items-center justify-end gap-8 hidden max-[700px]:flex">
             <ConnectButton />
           </div>
         </div>
