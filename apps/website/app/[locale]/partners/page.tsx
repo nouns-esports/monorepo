@@ -35,7 +35,7 @@ export default function Partners() {
         <meta property="fc:frame" content="vNext" />
         <meta
           property="fc:frame:image"
-          content="https://nouns.gg/partnership-decks/2024/1.png"
+          content="https://nouns.gg/partnership-decks/2024/1.webp"
         />
         <meta property="fc:frame:button:1" content="Next" />
         <meta
