@@ -78,47 +78,31 @@ export default async function Home(props: { params: { locale: string } }) {
             <Text en="Watch Video" pt="Assista o vídeo" />
           </Link>
         </div>
-        <div className="flex max-[450px]:flex-col gap-4 w-fit items-center">
-          <div className="flex gap-4 items-center">
-            <Link href="/discord">
-              <DiscordLogo
-                className="w-10 h-10 text-white hover:text-white/60 cursor-pointer transition-colors"
-                weight="fill"
-              />
-            </Link>
-            <Link href="/instagram">
-              <InstagramLogo
-                className="w-10 h-10 text-white hover:text-white/60 cursor-pointer transition-colors"
-                weight="fill"
-              />
-            </Link>
-            <Link href="/twitter">
-              <TwitterLogo
-                className="w-10 h-10 text-white hover:text-white/60 cursor-pointer transition-colors"
-                weight="fill"
-              />
-            </Link>
-          </div>
-          <div className="flex gap-4 items-center">
-            <Link href="/twitch">
-              <TwitchLogo
-                className="w-10 h-10 text-white hover:text-white/60 cursor-pointer transition-colors"
-                weight="fill"
-              />
-            </Link>
-            <Link href="/tiktok">
-              <TiktokLogo
-                className="w-10 h-10 text-white hover:text-white/60 cursor-pointer transition-colors"
-                weight="fill"
-              />
-            </Link>
-            <Link href="/youtube">
-              <YoutubeLogo
-                className="w-10 h-10 text-white hover:text-white/60 cursor-pointer transition-colors"
-                weight="fill"
-              />
-            </Link>
-          </div>
+        <div className="flex gap-4 items-center">
+          <Link href="/discord">
+            <DiscordLogo
+              className="w-10 h-10 text-white hover:text-white/60 cursor-pointer transition-colors"
+              weight="fill"
+            />
+          </Link>
+          <Link href="/instagram">
+            <InstagramLogo
+              className="w-10 h-10 text-white hover:text-white/60 cursor-pointer transition-colors"
+              weight="fill"
+            />
+          </Link>
+          <Link href="/twitter">
+            <TwitterLogo
+              className="w-10 h-10 text-white hover:text-white/60 cursor-pointer transition-colors"
+              weight="fill"
+            />
+          </Link>
+          <Link href="/youtube">
+            <YoutubeLogo
+              className="w-10 h-10 text-white hover:text-white/60 cursor-pointer transition-colors"
+              weight="fill"
+            />
+          </Link>
         </div>
       </div>
       <Marquee autoFill className="bg-red flex items-center h-8">

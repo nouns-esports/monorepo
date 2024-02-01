@@ -53,7 +53,7 @@ export default function ConnectButton() {
                   : formatAddress(account?.address ?? "")}
               </>
             ) : (
-              <Text en="Sign in" pt="Entrar" />
+              <Text en="Connect" pt="Conectar" />
             )}
           </button>
         );

@@ -31,18 +31,6 @@ export const metadata: Metadata = {
 export default function Partners() {
   return (
     <div className="relative flex flex-col gap-12 items-center justify-center h-screen from-[#131b3a] via-[#1b315f] to-[#202d5c] bg-gradient-to-tr">
-      <head>
-        <meta property="fc:frame" content="vNext" />
-        <meta
-          property="fc:frame:image"
-          content="https://nouns.gg/partnership-decks/2024/1.png"
-        />
-        <meta property="fc:frame:button:1" content="Next" />
-        <meta
-          property="fc:frame:post_url"
-          content="https://nouns.gg/api/frames/partnership-decks/2024/?n=1"
-        />
-      </head>
       <h1 className="relative text-white font-cabin font-medium text-7xl">
         <Text en="Become a partner" pt="Torne-se um parceiro" />
         <Image
@@ -59,18 +47,18 @@ export default function Partners() {
         />
       </p>
       <div className="flex gap-6 items-center">
-        <Button href="/discord">
+        <Button href="mailto:partners@nouns.gg">
           <Text en="Get in touch" pt="Entre em contato" />
         </Button>
         <Link
-          href="https://ipfs.decentralized-content.com/ipfs/bafybeige4wi2nv7pi2njucrcmm4b4j3bih6evlanopx32cnir6j7svrhce"
+          href="https://docsend.com/view/6nsudfgjdg5ezr2a"
           className="flex items-center gap-2 select-none text-white group font-cabin hover:text-white/80 transition-colors"
         >
           <DownloadSimple
             className="text-white w-6 h-6 group-hover:text-white/80 transition-colors"
             weight="bold"
           />
-          <Text en="2023 Partnership Deck" pt="Deck de Parceria 2023" />
+          <Text en="2024 Partnership Deck" pt="Deck de Parceria 2024" />
         </Link>
       </div>
 

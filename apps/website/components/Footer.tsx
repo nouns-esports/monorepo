@@ -73,9 +73,6 @@ export default async function Footer(props: { locale: string }) {
             <FooterLink href={`/${props.locale}/partners`}>
               <Text en="Partners" pt="Parceiros" />
             </FooterLink>
-            <FooterLink href="https://nouns-esports.notion.site/Contributor-Dashboard-776148bfb6164afea843ee59ff559236">
-              <Text en="Dashboard" pt="Painel" />
-            </FooterLink>
             <FooterLink href="https://app.safe.global/eth:0x8b45D1CACcb3593E9F1015BA8e97AFB68DE3a0d1/balances">
               <Text en="Treasury" pt="Tesouraria" />
             </FooterLink>
@@ -97,20 +94,6 @@ export default async function Footer(props: { locale: string }) {
             </Link>
             <Link href="/twitter">
               <TwitterLogo
-                className="w-7 h-7 text-white hover:text-white/60 cursor-pointer transition-colors"
-                weight="fill"
-              />
-            </Link>
-          </div>
-          <div className="flex flex-col gap-4 max-lg:flex-row">
-            <Link href="/twitch">
-              <TwitchLogo
-                className="w-7 h-7 text-white hover:text-white/60 cursor-pointer transition-colors"
-                weight="fill"
-              />
-            </Link>
-            <Link href="/tiktok">
-              <TiktokLogo
                 className="w-7 h-7 text-white hover:text-white/60 cursor-pointer transition-colors"
                 weight="fill"
               />
