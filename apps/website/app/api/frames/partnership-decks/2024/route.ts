@@ -27,6 +27,8 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  console.log("test", n, button);
+
   if (n === 1 && button === 2) {
     return NextResponse.redirect(
       "https://nouns.gg/mint/partnership-deck-2024/",
