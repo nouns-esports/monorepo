@@ -66,6 +66,11 @@
       "permanent": true
     },
     {
+      "source": "/mint/partnership-deck-2024",
+      "destination": "https://zora.co",
+      "permanent": true
+    },
+    {
       "source": "/aklo-video",
       "destination": "https://twitter.com/NotAklo/status/1747414607436689680",
       "permanent": true
