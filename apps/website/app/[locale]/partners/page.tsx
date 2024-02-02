@@ -28,6 +28,8 @@ export const metadata: Metadata = {
   },
 };
 
+// {"untrustedData": {"buttonIndex": "2"}}
+
 export default function Partners() {
   return (
     <div className="relative flex flex-col gap-12 items-center justify-center h-screen from-[#131b3a] via-[#1b315f] to-[#202d5c] bg-gradient-to-tr">
@@ -42,7 +44,7 @@ export default function Partners() {
         <meta property="fc:frame:button:2:action" content="post_redirect" />
         <meta
           property="fc:frame:post_url"
-          content="https://nouns.gg/api/frames/partnership-decks/2024/?n=1"
+          content="https://nouns.gg/frames/partnership-decks/2024/?n=1"
         />
       </head>
       <h1 className="relative text-white font-cabin font-medium text-7xl">

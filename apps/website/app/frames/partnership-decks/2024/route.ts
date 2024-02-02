@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
                                 <meta property="fc:frame:button:2" content="Next" />
                                 <meta property="fc:frame:button:3" content="Mint" />
                                 <meta property="fc:frame:button:3:action" content="post_redirect" />
-                                <meta property="fc:frame:post_url" content="https://nouns.gg/api/frames/partnership-decks/2024?n=2" />
+                                <meta property="fc:frame:post_url" content="https://nouns.gg/frames/partnership-decks/2024?n=2" />
                           </head>
                         </html>
                         `,
@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
                                 <meta property="fc:frame:button:1" content="Next" />
                                 <meta property="fc:frame:button:2" content="Mint" />
                                 <meta property="fc:frame:button:2:action" content="post_redirect" />
-                                <meta property="fc:frame:post_url" content="https://nouns.gg/api/frames/partnership-decks/2024?n=1" />
+                                <meta property="fc:frame:post_url" content="https://nouns.gg/frames/partnership-decks/2024?n=1" />
                           </head>
                         </html>
                         `,
@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
                                 <meta property="fc:frame:button:1" content="Back" />
                                 <meta property="fc:frame:button:2" content="Mint" />
                                 <meta property="fc:frame:button:2:action" content="post_redirect" />
-                                <meta property="fc:frame:post_url" content="https://nouns.gg/api/frames/partnership-decks/2024?n=16" />
+                                <meta property="fc:frame:post_url" content="https://nouns.gg/frames/partnership-decks/2024?n=16" />
                           </head>
                         </html>
                         `,
@@ -87,7 +87,7 @@ export async function POST(request: NextRequest) {
                                 <meta property="fc:frame:button:2" content="Next" />
                                 <meta property="fc:frame:button:3" content="Mint" />
                                 <meta property="fc:frame:button:3:action" content="post_redirect" />
-                                <meta property="fc:frame:post_url" content="https://nouns.gg/api/frames/partnership-decks/2024?n=15" />
+                                <meta property="fc:frame:post_url" content="https://nouns.gg/frames/partnership-decks/2024?n=15" />
                           </head>
                         </html>
                         `,
@@ -122,7 +122,7 @@ export async function POST(request: NextRequest) {
                               <meta property="fc:frame:button:2" content="Next" />
                               <meta property="fc:frame:button:3" content="Mint" />
                             <meta property="fc:frame:button:3:action" content="post_redirect" />
-                              <meta property="fc:frame:post_url" content="https://nouns.gg/api/frames/partnership-decks/2024?n=${
+                              <meta property="fc:frame:post_url" content="https://nouns.gg/frames/partnership-decks/2024?n=${
                                 button === 1 ? n - 1 : n + 1
                               }" />
                         </head>
