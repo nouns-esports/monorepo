@@ -119,7 +119,7 @@ export default async function Home(props: { params: { locale: string } }) {
         id="games"
         className="px-16 max-sm:px-0 py-32 max-sm:py-16 text-center text-white text-5xl font-luckiest-guy flex flex-col gap-20 max-sm:gap-10 items-center"
       >
-        <Text en="Our Games" pt="Nossos Jogos" />
+        <Text en="Our Rosters" pt="Nossos Elencos" />
         <div className="flex flex-wrap max-sm:flex-nowrap max-sm:overflow-x-scroll max-sm:justify-start justify-center max-w-[1920px] gap-16 w-full max-2xl:gap-8">
           {games.map((game) => (
             <GameCard

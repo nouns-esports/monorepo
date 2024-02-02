@@ -51,7 +51,7 @@ export async function generateMetadata(props: { params: { id: string } }) {
 //   return games.map((game) => ({
 //     id: game.id,
 //   }));
-// }/
+// }
 
 export default async function GamePage(props: { params: { id: string } }) {
   const game = await query.game({
