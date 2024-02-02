@@ -44,7 +44,7 @@ export default function Partners() {
         <meta property="fc:frame:button:2:action" content="post_redirect" />
         <meta
           property="fc:frame:post_url"
-          content="https://nouns.gg/frames/partnership-decks/2024/?n=1"
+          content="https://nouns.gg/frames/partnership-decks/2024?n=1"
         />
       </head>
       <h1 className="relative text-white font-cabin font-medium text-7xl">
