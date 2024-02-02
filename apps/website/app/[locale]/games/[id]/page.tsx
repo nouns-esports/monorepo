@@ -90,7 +90,7 @@ export default async function GamePage(props: { params: { id: string } }) {
             >
               <div className="flex -mx-16 max-xl:-mx-8 px-16 max-xl:px-8 gap-8 max-xl:gap-4 w-[calc(100%_+_8rem)] max-xl:w-[calc(100%_+_4rem)] max-xl:overflow-x-scroll">
                 {talent
-                  .toSorted((a, b) =>
+                  .sort((a, b) =>
                     a.role === "Coach" ? -1 : b.role === "Coach" ? 1 : 0
                   )
                   .map((person) => (
