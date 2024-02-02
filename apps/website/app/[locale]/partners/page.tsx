@@ -31,6 +31,18 @@ export const metadata: Metadata = {
 export default function Partners() {
   return (
     <div className="relative flex flex-col gap-12 items-center justify-center h-screen from-[#131b3a] via-[#1b315f] to-[#202d5c] bg-gradient-to-tr">
+      <head>
+        <meta property="fc:frame" content="vNext" />
+        <meta
+          property="fc:frame:image"
+          content="https://nouns.gg/partnership-decks/2024/1.webp"
+        />
+        <meta property="fc:frame:button:1" content="Next" />
+        <meta
+          property="fc:frame:post_url"
+          content="https://nouns.gg/api/frames/partnership-decks/2024/?n=1"
+        />
+      </head>
       <h1 className="relative text-white font-cabin font-medium text-7xl">
         <Text en="Become a partner" pt="Torne-se um parceiro" />
         <Image
