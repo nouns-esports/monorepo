@@ -239,8 +239,10 @@ function GameCard(props: {
 async function ScheduleCard(props: { event: Event }) {
   const type = props.event.summary?.split("]")[0].replace("[", "");
 
-  const game = (await query.games()).find((game) =>
-    game.name.toLowerCase().includes(type.toLowerCase())
+  const game = (await query.games()).find(
+    (game) =>
+      game.name.toLowerCase().includes(type.toLowerCase()) ||
+      game.id.toLowerCase().includes(type.toLowerCase())
   );
 
   return (
