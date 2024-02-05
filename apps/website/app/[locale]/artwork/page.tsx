@@ -1,4 +1,12 @@
+"use client";
+
+import { useEffect } from "react";
+
 export default function ArtworkPage() {
+  useEffect(() => {
+    window.location.href = "https://nouns.gg/art-contest";
+  }, []);
+
   return (
     <>
       <head>
