@@ -74,6 +74,11 @@
       "source": "/art-contest",
       "destination": "https://prop.house/0x810a108e4f827817a4063ba4f7bd8b13a4ddf13b",
       "permanent": true
+    },
+    {
+      "source": "/artwork-tweet",
+      "destination": "https://fxtwitter.com/nounsesports/status/1754570531376947508",
+      "permanent": true
     }
   ]
 }
