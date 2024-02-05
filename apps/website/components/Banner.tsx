@@ -32,7 +32,7 @@ export default function Banner(props: { events: Event[]; locale: string }) {
       style={{ backgroundColor: primaryColor }}
       className="relative z-20 h-9 hover:brightness-[85%] transition-all text-white text-sm font-semibold w-full whitespace-nowrap flex items-center justify-center"
     >
-      {live ? <Dot className="mr-2 w-2 animate-pulse" /> : ""}
+      {live ? <Dot className="-mr-5 w-16 h-16 animate-pulse" /> : ""}
       {live ? (
         `${props.events[0].summary.split("] ")[1]} is happening now`
       ) : (

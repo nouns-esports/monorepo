@@ -45,14 +45,6 @@ export async function generateMetadata(props: { params: { id: string } }) {
   } satisfies Metadata;
 }
 
-// export async function generateStaticParams() {
-//   const games = await query.games();
-
-//   return games.map((game) => ({
-//     id: game.id,
-//   }));
-// }
-
 export default async function GamePage(props: { params: { id: string } }) {
   const game = await query.game({
     id: props.params.id,

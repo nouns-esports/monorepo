@@ -10,7 +10,7 @@ import {
   InstagramLogo,
 } from "phosphor-react-sc";
 import Link from "@/components/Link";
-import { Project } from "@/db/schema";
+import { Creator, Project } from "@/db/schema";
 import Text from "@/components/Text";
 import HighlightedText from "@/components/HighlightedText";
 import type { Event } from "@/server/resolve/events";
@@ -29,7 +29,11 @@ export default async function Home(props: { params: { locale: string } }) {
 
   const projects = await query.projects();
 
+  const creators = await query.creators();
+
   const isMobile = headers().get("x-device-type") === "mobile";
+
+  const posts = await query.posts();
 
   return (
     <main className="cursor-crosshair flex flex-col">
@@ -132,6 +136,17 @@ export default async function Home(props: { params: { locale: string } }) {
           ))}
         </div>
       </div>
+      <div
+        id="creators"
+        className="px-16 max-sm:px-0 pb-32 max-sm:py-16 text-center text-white text-5xl font-luckiest-guy flex flex-col gap-20 max-sm:gap-10 items-center"
+      >
+        <Text en="Our Creators" pt="Nossos Criadores" />
+        <div className="flex flex-wrap max-sm:flex-nowrap max-sm:overflow-x-scroll max-sm:justify-start justify-center max-w-[1920px] gap-16 w-full max-2xl:gap-8">
+          {creators.map((creator) => (
+            <CreatorCard key={creator.id} creator={creator} />
+          ))}
+        </div>
+      </div>
       <div className="relative py-32 max-sm:py-20">
         <Image
           src={Prop}
@@ -166,6 +181,14 @@ export default async function Home(props: { params: { locale: string } }) {
         <div className="flex flex-wrap max-sm:flex-nowrap max-sm:overflow-x-scroll max-sm:justify-start justify-center max-w-[1920px] gap-16 w-full max-2xl:gap-8">
           {events.map((event) => (
             <ScheduleCard key={event.id} event={event} />
+          ))}
+        </div>
+      </div>
+      <div className="px-16 max-sm:px-0 pb-32 max-sm:py-16 text-white text-5xl text-center font-luckiest-guy flex flex-col gap-20 max-sm:gap-10 items-center">
+        <Text en="Publications" pt="Blog" />
+        <div className="flex flex-wrap max-sm:flex-nowrap max-sm:overflow-x-scroll max-sm:justify-start justify-center max-w-[1920px] gap-16 w-full max-2xl:gap-8">
+          {posts.map((post) => (
+            <PostCard key={post.id} post={post} locale={props.params.locale} />
           ))}
         </div>
       </div>
@@ -236,6 +259,28 @@ function GameCard(props: {
   );
 }
 
+function CreatorCard(props: { creator: Creator }) {
+  return (
+    <Link
+      href={props.creator.twitter ?? ""}
+      className="relative w-[calc(15%_-_3rem)] max-xl:w-[calc(15%_-_1.5rem)] max-sm:first:ml-8 max-sm:last:mr-8 max-sm:min-w-[calc(100%_-_6rem)] min-w-[12rem] rounded-xl select-none aspect-[21/30] group overflow-hidden"
+    >
+      <Image
+        src={props.creator.image}
+        alt={props.creator.name}
+        width={400}
+        height={400}
+        className="object-cover object-center absolute w-full top-0 h-full brightness-[85%] group-hover:scale-110 transition-transform"
+      />
+      <div className="relative z-10 w-full h-full flex items-end justify-center shadow-[inset_-20px_-20px_80px_black,inset_20px_20px_80px_black]">
+        <h3 className="drop-shadow-2xl text-center p-8 text-5xl max-2xl:text-4xl max-sm:text-3xl font-bebas-neue [text-shadow:black_0_0_30px]">
+          {props.creator.name}
+        </h3>
+      </div>
+    </Link>
+  );
+}
+
 async function ScheduleCard(props: { event: Event }) {
   const type = props.event.summary?.split("]")[0].replace("[", "");
 
@@ -270,6 +315,30 @@ async function ScheduleCard(props: { event: Event }) {
         >
           {type}
         </div>
+      </div>
+    </Link>
+  );
+}
+
+function PostCard(props: {
+  locale: string;
+  post: Awaited<ReturnType<typeof query.posts>>[number];
+}) {
+  return (
+    <Link
+      href={`/${props.locale}/posts/${props.post.slug}`}
+      className="relative w-[calc(33.33%_-_2.67rem)] max-xl:w-[calc(33.33%_-_2.67rem)] max-sm:first:ml-8 max-sm:last:mr-8 max-sm:min-w-[calc(100%_-_6rem)] min-w-[24rem] overflow-hidden select-none aspect-video text-left rounded-xl group drop-shadow-2xl"
+    >
+      <Image
+        src={props.post.image}
+        alt={props.post.title}
+        fill
+        className="object-cover object-center group-hover:scale-110 brightness-[85%] transition-transform absolute top-0 w-full h-full"
+      />
+      <div className="relative z-10 flex items-end w-full h-full shadow-[inset_-20px_-20px_80px_black,inset_20px_20px_80px_black]">
+        <h3 className="text-2xl font-bebas-neue p-4 [text-shadow:black_0_0_30px]">
+          {props.post.title}
+        </h3>
       </div>
     </Link>
   );
