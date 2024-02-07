@@ -27,6 +27,12 @@ const GetPublicationBySlug = gql`
   }
 `;
 
+export type Node = {
+  [key: string]: any;
+  type: string;
+  content: Node[];
+};
+
 export const post = publicProcedure
   .input(z.string())
   .query(async ({ input }) => {
@@ -70,6 +76,8 @@ export const post = publicProcedure
       image:
         transactionData.cover_img?.img?.src ?? transactionData.cover_img_url,
       markdown: transactionData.markdown,
-      json: transactionData.json,
+      json: JSON.parse(transactionData.json) as {
+        content: Node[];
+      },
     };
   });

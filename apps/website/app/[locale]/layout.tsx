@@ -93,7 +93,7 @@ export default async function RootLayout(props: {
       className="scroll-smooth overflow-x-hidden"
     >
       <body
-        className={`cursor-crosshair ${cabin.variable} ${luckiestGuy.variable} ${bebasNeue.variable} ${londrinaSolid.variable} bg-black text-lightgrey font-cabin selection:text-white selection:bg-red w-full`}
+        className={`${cabin.variable} ${luckiestGuy.variable} ${bebasNeue.variable} ${londrinaSolid.variable} bg-black text-lightgrey font-cabin selection:text-white selection:bg-red w-full`}
       >
         <Providers
           games={games.map((game) => ({ id: game.id, color: game.color }))}

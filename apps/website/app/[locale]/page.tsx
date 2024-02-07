@@ -141,7 +141,7 @@ export default async function Home(props: { params: { locale: string } }) {
         className="px-16 max-sm:px-0 pb-32 max-sm:py-16 text-center text-white text-5xl font-luckiest-guy flex flex-col gap-20 max-sm:gap-10 items-center"
       >
         <Text en="Our Creators" pt="Nossos Criadores" />
-        <div className="flex flex-wrap max-sm:flex-nowrap max-sm:overflow-x-scroll max-sm:justify-start justify-center max-w-[1920px] gap-16 w-full max-2xl:gap-8">
+        <div className="flex flex-wrap max-sm:flex-nowrap max-sm:overflow-x-scroll //max-sm:justify-start justify-center max-w-[1920px] gap-16 w-full max-2xl:gap-8">
           {creators.map((creator) => (
             <CreatorCard key={creator.id} creator={creator} />
           ))}
@@ -263,7 +263,7 @@ function CreatorCard(props: { creator: Creator }) {
   return (
     <Link
       href={props.creator.twitter ?? ""}
-      className="relative w-[calc(15%_-_3rem)] max-xl:w-[calc(15%_-_1.5rem)] max-sm:first:ml-8 max-sm:last:mr-8 max-sm:min-w-[calc(100%_-_6rem)] min-w-[12rem] rounded-xl select-none aspect-[21/30] group overflow-hidden"
+      className="relative w-[calc(18%_-_3rem)] max-xl:w-[calc(18%_-_1.5rem)] //max-sm:first:ml-8 //max-sm:last:mr-8 max-sm:min-w-[calc(100%_-_10rem)] min-w-[12rem] rounded-xl select-none aspect-[21/30] group overflow-hidden"
     >
       <Image
         src={props.creator.image}
