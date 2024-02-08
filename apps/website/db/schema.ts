@@ -37,7 +37,7 @@ export const talent = pgTable("talent", {
   id: text("id").primaryKey(),
   active: boolean("active").notNull(),
   name: text("name").notNull(),
-  image: text("image").notNull(),
+  image: text("image"),
   role: text("role").notNull(),
   roster: text("roster").notNull(),
   liquipedia: text("liquipedia"),

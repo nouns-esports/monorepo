@@ -1,0 +1,1 @@
+ALTER TABLE "talent" ALTER COLUMN "image" DROP NOT NULL;

@@ -138,7 +138,8 @@ function RosterCard(props: { person: Talent; game: Game; count: number }) {
       }}
     >
       <Image
-        src={props.person.image}
+        src={props.person.image ?? "/talent/silhouette.webp"}
+        style={{ filter: props.person.image ? "none" : "brightness(20%)" }}
         alt={props.person.name}
         fill
         className="w-full pt-8 z-10 group-hover:translate-y-[4.5rem] max-lg:translate-y-[4.5rem] transition-transform object-contain"
