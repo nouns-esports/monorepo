@@ -1,6 +1,5 @@
 import { query } from "@/server/query";
 import { notFound } from "next/navigation";
-import Image from "next/image";
 import type { Node } from "@/server/resolve/post";
 import { Tweet } from "react-tweet";
 
@@ -40,6 +39,10 @@ export default async function PostPage(props: { params: { id: string } }) {
 
               .tweet-header_follow__L7l42 {
                 color: rgb(233,55,55);
+              }
+
+              .tweet-body_root__NEuOx {
+                color: white;
               }
 
               .tweet-body_root__NEuOx > a {
@@ -182,7 +185,7 @@ function Render(props: { content: Node[] }) {
       // Youtube
       if (node.type === "youtube") {
         return (
-          <div className="my-8 w-full">
+          <div className="my-8 w-full rounded-xl overflow-hidden">
             <iframe
               className="w-full aspect-video"
               src={`https://www.youtube.com/embed/${node.attrs.videoId}`}
