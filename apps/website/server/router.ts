@@ -5,6 +5,9 @@ import { games } from "./resolve/games";
 import { rosters } from "./resolve/rosters";
 import { talent } from "./resolve/talent";
 import { t } from "./trpc";
+import { posts } from "./resolve/posts";
+import { post } from "./resolve/post";
+import { creators } from "./resolve/creators";
 
 export const router = t.router({
   events,
@@ -12,7 +15,10 @@ export const router = t.router({
   games,
   projects,
   rosters,
+  creators,
   talent,
+  posts,
+  post,
 });
 
 export type Router = typeof router;

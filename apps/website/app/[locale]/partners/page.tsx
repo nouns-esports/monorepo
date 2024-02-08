@@ -28,8 +28,6 @@ export const metadata: Metadata = {
   },
 };
 
-// {"untrustedData": {"buttonIndex": "2"}}
-
 export default function Partners() {
   return (
     <div className="relative flex flex-col gap-12 items-center justify-center h-screen from-[#131b3a] via-[#1b315f] to-[#202d5c] bg-gradient-to-tr">

@@ -40,14 +40,15 @@ export default function ConnectButton() {
           >
             {connected ? (
               <>
-                {account?.ensAvatar && (
-                  <img
-                    src={account.ensAvatar}
-                    alt={`${account.ensName ?? account.address}'s avatar`}
-                    className="rounded-full w-7 h-7 select-none"
-                    draggable={false}
-                  />
-                )}
+                <img
+                  src={
+                    account?.ensAvatar ??
+                    `https://api.cloudnouns.com/v1/pfp?text=${account.address}`
+                  }
+                  alt={`${account.ensName ?? account.address}'s avatar`}
+                  className="rounded-full w-7 h-7 select-none"
+                  draggable={false}
+                />
                 {account?.ensName
                   ? formatENSName(account.ensName)
                   : formatAddress(account?.address ?? "")}
@@ -63,7 +64,7 @@ export default function ConnectButton() {
 }
 
 function formatAddress(address: string) {
-  return `${address.slice(0, 6)}...${address.slice(-4)}`;
+  return `${address.slice(0, 5)}...${address.slice(-3)}`;
 }
 
 function formatENSName(name: string) {

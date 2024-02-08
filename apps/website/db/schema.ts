@@ -91,8 +91,3 @@ export type Roster = typeof rosters.$inferSelect;
 export type Talent = typeof talent.$inferSelect;
 export type Project = typeof projects.$inferSelect;
 export type Creator = typeof creators.$inferSelect;
-
-// export type Orderable<T> = Exclude<
-//   T extends string ? (string extends T ? never : T) : never,
-//   "_" | "getSQL" | "$inferSelect" | "$inferInsert"
-// >;
