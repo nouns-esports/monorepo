@@ -71,6 +71,7 @@ export const post = publicProcedure
 
     return {
       id: transactionData.id,
+      timestamp: transactionData.publishedAt,
       title: transactionData.title,
       slug: transactionData.slug,
       image:

@@ -10,68 +10,63 @@ export default async function PostPage(props: { params: { id: string } }) {
   if (!post) notFound();
 
   return (
-    <div className="flex flex-col w-full">
-      <div className="relative grid place-items-center h-[500px]">
-        <Image
+    <div className="flex justify-center w-full">
+      <div className="flex flex-col p-16 items-center max-sm:p-8 gap-16 mt-24 justify-center w-full max-w-[1920px]">
+        <img
           src={post.image}
-          fill
-          sizes="100vw"
           alt={post.title}
-          priority
-          className="absolute top-0 -z-10 brightness-50 object-cover object-center"
+          className="brightness-75 object-cover w-full h-[25vw] max-h-[500px] rounded-xl overflow-hidden object-center"
         />
-        <div className="w-full h-full grid place-items-center shadow-[inset_-60px_-60px_100px_black,inset_60px_60px_100px_black]">
+        <div className="flex flex-col gap-16 max-sm:gap-8 items-center max-w-4xl">
           <h1 className="text-white text-6xl max-lg:text-6xl max-md:text-5xl max-[500px]:text-4xl font-luckiest-guy">
             {post.title}
           </h1>
-        </div>
-      </div>
-      <div className="bg-black p-16 border-red max-lg:p-8 //gap-16 //max-lg:gap-8 flex flex-col items-center border-t-4 rounded-t-[4rem] max-lg:rounded-t-[2rem] transition-colors -mt-16 relative z-10">
-        <Render content={post.json.content} />
-        <style suppressHydrationWarning>
-          {`
-            .tweet-container_root__wzLwj {
-              background-color: rgb(20,20,20);
-              border-color: rgb(50,50,50);
-            }
+          <div className="flex flex-col items-center">
+            <Render content={post.json.content} />
+            <style suppressHydrationWarning>
+              {`
+              .tweet-container_root__wzLwj {
+                background-color: rgb(20,20,20);
+                border-color: rgb(50,50,50);
+              }
 
-            .tweet-container_root__wzLwj:hover {
-              background-color: rgb(30,30,30);
-            }
+              .tweet-container_root__wzLwj:hover {
+                background-color: rgb(30,30,30);
+              }
 
-            .tweet-container_root__wzLwj * {
-              border-color: rgb(50,50,50);
-            }
+              .tweet-container_root__wzLwj * {
+                border-color: rgb(50,50,50);
+              }
 
-            .tweet-header_follow__L7l42 {
-              color: rgb(233,55,55);
-            }
+              .tweet-header_follow__L7l42 {
+                color: rgb(233,55,55);
+              }
 
-            .tweet-body_root__NEuOx > a {
-              color: rgb(233,55,55);
-            }
+              .tweet-body_root__NEuOx > a {
+                color: rgb(233,55,55);
+              }
 
-            .tweet-replies_text__Ap4WV {
-              color: rgb(233,55,55);
-            }
+              .tweet-replies_text__Ap4WV {
+                color: rgb(233,55,55);
+              }
 
-            .tweet-replies_link__bBB0L:hover {
-              background-color: rgb(50,50,50);
-            }
+              .tweet-replies_link__bBB0L:hover {
+                background-color: rgb(50,50,50);
+              }
 
-            .subscribe > input {
-              background-color: rgb(20,20,20);
-            }
+              .subscribe > input {
+                background-color: rgb(20,20,20);
+              }
 
-          `}
-        </style>
-        <div className="w-full flex items-center justify-center mt-16">
-          <iframe
-            className="subscribe"
-            src="https://paragraph.xyz/@nounsesports/embed?minimal=true"
-            width="480"
-            height="45"
-          />
+            `}
+            </style>
+            <div className="w-full flex items-center justify-center mt-16">
+              <iframe
+                className="subscribe w-[480px] h-[45px] rounded-lg max-sm:w-full"
+                src="https://paragraph.xyz/@nounsesports/embed?minimal=true"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -83,13 +78,35 @@ function Render(props: { content: Node[] }) {
     return props.content.map((node) => {
       // Text
       if (node.type === "text") {
+        // @ts-ignore
+        const marks = node?.marks?.map((mark) => mark.type) ?? [];
+
+        if (marks.length > 0) {
+          const Tag = marks.includes("link") ? "a" : "span";
+
+          return (
+            <Tag
+              style={{
+                fontWeight: marks.includes("bold") ? "bold" : "normal",
+                color: marks.includes("link") ? "rgb(233,55,55)" : "white",
+              }}
+              href={
+                marks.includes("link") ? node.marks[0].attrs.href : undefined
+              }
+              target={marks.includes("link") ? "_blank" : undefined}
+            >
+              {node.text}
+            </Tag>
+          );
+        }
+
         return <span>{node.text}</span>;
       }
 
       // Paragraph
       if (node.type === "paragraph") {
         return (
-          <p className="text-lg mt-4">
+          <p className="text-xl mt-4 w-full">
             <Render content={node.content} />
           </p>
         );
@@ -106,10 +123,28 @@ function Render(props: { content: Node[] }) {
               marginTop: `${10 / node.attrs.level}rem`,
               marginBotton: `${5 / node.attrs.level}rem`,
             }}
-            className="text-white font-luckiest-guy text-xl"
+            className="text-white font-luckiest-guy text-xl w-full"
           >
             <Render content={node.content} />
           </Tag>
+        );
+      }
+
+      // Bullet List
+      if (node.type === "bulletList") {
+        return (
+          <ul className="w-full list-disc mt-4">
+            <Render content={node.content} />
+          </ul>
+        );
+      }
+
+      // List Item
+      if (node.type === "listItem") {
+        return (
+          <li className="w-full">
+            <Render content={node.content} />
+          </li>
         );
       }
 
@@ -121,7 +156,7 @@ function Render(props: { content: Node[] }) {
             alt={node.attrs.alt}
             width={node.attrs?.nextwidth ?? undefined}
             height={node.attrs?.nextheight ?? undefined}
-            className="max-w-lg rounded-lg relative my-16"
+            className="max-w-xl w-full rounded-lg relative my-16"
           />
         );
       }
@@ -138,24 +173,25 @@ function Render(props: { content: Node[] }) {
       // Twitter
       if (node.type === "twitter") {
         return (
-          <div className="my-8">
+          <div className="my-8 max-[450px]:scale-90">
             <Tweet id={node.attrs.tweetData.id_str} />
+          </div>
+        );
+      }
+
+      // Youtube
+      if (node.type === "youtube") {
+        return (
+          <div className="my-8 w-full">
+            <iframe
+              className="w-full aspect-video"
+              src={`https://www.youtube.com/embed/${node.attrs.videoId}`}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
           </div>
         );
       }
     });
   }
-}
-
-{
-  /* <blockquote class="twitter-tweet">
-    <p lang="en" dir="ltr">At dawn from the gateway to Mars, the launch of Starship’s second flight test 
-    <a href="https://t.co/ffKnsVKwG4">pic.twitter.com/ffKnsVKwG4</a></p>
-    &mdash; 
-    SpaceX (@SpaceX) 
-    <a href="https://twitter.com/SpaceX/status/1732824684683784516?ref_src=twsrc%5Etfw">December 7, 2023</a>
-  </blockquote> 
-  <script async src="https://platform.twitter.com/widgets.js" charset="utf-8">
-    
-</script> */
 }
