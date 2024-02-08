@@ -56,11 +56,6 @@
       "permanent": true
     },
     {
-      "source": "/posts/pass-preview",
-      "destination": "https://mirror.xyz/mirror.nounsesports.eth/Bu-RMSGzmu6zEHUpIOfu_xkJZPXZw6euOVKLFavFXhA",
-      "permanent": true
-    },
-    {
       "source": "/genesis",
       "destination": "https://prop.house/0x23c3d161eae43e40ca67618ae6f7836ecc7cd481",
       "permanent": true
@@ -68,11 +63,6 @@
     {
       "source": "/mint/partnership-deck-2024",
       "destination": "https://shorturl.at/bpG09",
-      "permanent": true
-    },
-    {
-      "source": "/aklo-video",
-      "destination": "https://twitter.com/NotAklo/status/1747414607436689680",
       "permanent": true
     },
     {
