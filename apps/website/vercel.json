@@ -74,6 +74,11 @@
       "source": "/artwork-tweet",
       "destination": "https://fxtwitter.com/nounsesports/status/1754574652335161635",
       "permanent": true
+    },
+    {
+      "source": "/party",
+      "destination": "https://rooms.party.app/party/0x66eD9EF8434771A451D44609304dBf865B82A68a",
+      "permanent": true
     }
   ]
 }
