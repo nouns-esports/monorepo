@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { publicProcedure } from "../trpc";
 import { gql } from "@apollo/client";
-import { arweave, client } from "../arweave";
+import { arweave, arweaveClient } from "../clients/arweave";
 
 const GetPublicationBySlug = gql`
   query GetParagraphPosts($slug: String!) {
@@ -36,7 +36,7 @@ export type Node = {
 export const post = publicProcedure
   .input(z.string())
   .query(async ({ input }) => {
-    const { data } = await client.query<{
+    const { data } = await arweaveClient.query<{
       transactions: {
         edges: Array<{
           cursor: string;
