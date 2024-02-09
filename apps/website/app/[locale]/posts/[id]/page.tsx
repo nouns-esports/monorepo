@@ -2,6 +2,25 @@ import { query } from "@/server/query";
 import { notFound } from "next/navigation";
 import type { Node } from "@/server/resolve/post";
 import { Tweet } from "react-tweet";
+import { Metadata } from "next";
+
+export async function generateMetadata(props: { params: { id: string } }) {
+  const post = await query.post(props.params.id);
+
+  if (!post) notFound();
+
+  return {
+    title: post.title,
+    description: "",
+    keywords: [post.title, post.slug],
+    openGraph: {
+      images: [post.image],
+    },
+    twitter: {
+      images: [post.image],
+    },
+  } satisfies Metadata;
+}
 
 export default async function PostPage(props: { params: { id: string } }) {
   const post = await query.post(props.params.id);

@@ -1,72 +1,8 @@
 "use client";
 
-import { ConnectButton as RainbowKitConnectButton } from "@rainbow-me/rainbowkit";
-import Text from "./Text";
-import Image from "next/image";
+import { usePrivy } from "@privy-io/react-auth";
 
 export default function ConnectButton() {
-  return (
-    <RainbowKitConnectButton.Custom>
-      {({
-        account,
-        chain,
-        openAccountModal,
-        openChainModal,
-        openConnectModal,
-        authenticationStatus,
-        mounted,
-      }) => {
-        // Note: If your app doesn't use authentication, you
-        // can remove all 'authenticationStatus' checks
-        const ready = mounted && authenticationStatus !== "loading";
-        const connected =
-          ready &&
-          account &&
-          chain &&
-          (!authenticationStatus || authenticationStatus === "authenticated");
-
-        return (
-          <button
-            onClick={() =>
-              connected ? openAccountModal() : openConnectModal()
-            }
-            style={{
-              paddingTop: connected ? "6px" : "10px",
-              paddingBottom: connected ? "6px" : "10px",
-              paddingLeft: connected ? "6px" : "16px",
-              paddingRight: connected ? "14px" : "16px",
-            }}
-            className="flex items-center gap-2 select-none text-darkgrey py-1.5 pl-1.5 pr-3.5  text-xl bg-white hover:bg-white/80 transition-colors rounded-full justify-center leading-none font-bebas-neue whitespace-nowrap"
-          >
-            {connected ? (
-              <>
-                <img
-                  src={
-                    account?.ensAvatar ??
-                    `https://api.cloudnouns.com/v1/pfp?text=${account.address}`
-                  }
-                  alt={`${account.ensName ?? account.address}'s avatar`}
-                  className="rounded-full w-7 h-7 select-none"
-                  draggable={false}
-                />
-                {account?.ensName
-                  ? formatENSName(account.ensName)
-                  : formatAddress(account?.address ?? "")}
-              </>
-            ) : (
-              <Text en="Connect" pt="Conectar" />
-            )}
-          </button>
-        );
-      }}
-    </RainbowKitConnectButton.Custom>
-  );
-}
-
-function formatAddress(address: string) {
-  return `${address.slice(0, 5)}...${address.slice(-3)}`;
-}
-
-function formatENSName(name: string) {
-  return name.replace(".eth", "");
+  const { login } = usePrivy();
+  return <></>;
 }

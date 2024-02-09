@@ -1,5 +1,5 @@
-import { publicProcedure, t } from "../trpc";
-import { arweave, client } from "../arweave";
+import { publicProcedure } from "../trpc";
+import { arweave, arweaveClient } from "../clients/arweave";
 import { gql } from "@apollo/client";
 
 const GetAllPublications = gql`
@@ -32,7 +32,7 @@ const GetAllPublications = gql`
 export const posts = publicProcedure.query(async () => {
   const seen: Record<string, boolean> = {};
 
-  const { data } = await client.query<{
+  const { data } = await arweaveClient.query<{
     transactions: {
       edges: Array<{
         cursor: string;
