@@ -7,7 +7,7 @@ export const arweave = Arweave.init({
   protocol: "https",
 });
 
-export const client = new ApolloClient({
+export const arweaveClient = new ApolloClient({
   uri: "https://arweave.net/graphql",
   cache: new InMemoryCache(),
 });

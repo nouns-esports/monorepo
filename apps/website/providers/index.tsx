@@ -1,42 +1,28 @@
 "use client";
 
-import "@rainbow-me/rainbowkit/styles.css";
-
-import {
-  getDefaultWallets,
-  Locale,
-  midnightTheme,
-  RainbowKitProvider,
-} from "@rainbow-me/rainbowkit";
-import { configureChains, createConfig, WagmiConfig } from "wagmi";
-import { mainnet, optimism, base, zora } from "wagmi/chains";
-import { publicProvider } from "wagmi/providers/public";
 import { createContext, useMemo } from "react";
 import { useParams, usePathname } from "next/navigation";
 import { Game } from "@/db/schema";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { http, createConfig, WagmiProvider } from "wagmi";
+import { baseSepolia, base } from "wagmi/chains";
+import { PrivyProvider } from "@privy-io/react-auth";
 
 export const PrimaryColorContext = createContext<string>("#E93737");
 
-const { chains, publicClient } = configureChains(
-  [mainnet, optimism, base, zora],
-  [publicProvider()]
-);
-
-const { connectors } = getDefaultWallets({
-  appName: "Nouns Esports",
-  projectId: "7820259db53692b745d1c7ba9ccf31c9",
-  chains,
+export const config = createConfig({
+  chains: [base, baseSepolia],
+  transports: {
+    [base.id]: http(),
+    [baseSepolia.id]: http(),
+  },
 });
 
-const config = createConfig({
-  autoConnect: true,
-  connectors,
-  publicClient,
-});
+const queryClient = new QueryClient();
 
 export default function Providers(props: {
   children: React.ReactNode;
-  games: { id: string; color: string }[];
+  games: { id: Game["id"]; color: Game["color"] }[];
 }) {
   const pathname = usePathname();
 
@@ -55,23 +41,27 @@ export default function Providers(props: {
   }, [pathname]);
 
   return (
-    <WagmiConfig config={config}>
-      <RainbowKitProvider
-        locale={locale as Locale}
-        appInfo={{
-          appName: "Nouns Esports",
-        }}
-        theme={midnightTheme({
-          accentColor: "#E93737",
-          overlayBlur: "small",
-          borderRadius: "medium",
-        })}
-        chains={chains}
-      >
+    <WagmiProvider config={config}>
+      <QueryClientProvider client={queryClient}>
         <PrimaryColorContext.Provider value={color}>
-          {props.children}
+          <PrivyProvider
+            appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID as string}
+            onSuccess={(user) => {
+              console.log(`User ${user.id} logged in!`);
+            }}
+            config={{
+              loginMethods: ["wallet"],
+              appearance: {
+                theme: "dark",
+                accentColor: "#E93737",
+                logo: "/logo.svg",
+              },
+            }}
+          >
+            {props.children}
+          </PrivyProvider>
         </PrimaryColorContext.Provider>
-      </RainbowKitProvider>
-    </WagmiConfig>
+      </QueryClientProvider>
+    </WagmiProvider>
   );
 }
