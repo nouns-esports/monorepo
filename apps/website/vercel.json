@@ -7,7 +7,7 @@
     },
     {
       "source": "/shop",
-      "destination": "https://nounsesports.myshopify.com/",
+      "destination": "https://shop.nouns.gg",
       "permanent": true
     },
     {
