@@ -105,7 +105,9 @@ export async function POST(request: NextRequest) {
                               <meta property="fc:frame:button:3" content="Mint" />
                               <meta property="fc:frame:button:3:action" content="mint" />
                               <meta property="fc:frame:button:3:target" content="eip155:8453:0xc2edf80bdaf2f067640fb0f3bf695f3dc76b0cf7:1" />
-                              <meta property="fc:frame:post_url" content="https://nouns.gg/frames/partnership-decks/2024?n=${n}" />
+                              <meta property="fc:frame:post_url" content="https://nouns.gg/frames/partnership-decks/2024?n=${
+                                button === 1 ? n - 1 : n + 1
+                              }" />
                         </head>
                       </html>
                       `,
