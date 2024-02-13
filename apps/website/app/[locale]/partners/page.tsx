@@ -48,6 +48,7 @@ export default function Partners() {
           property="fc:frame:post_url"
           content="https://nouns.gg/frames/partnership-decks/2024?n=1"
         />
+        <meta property="fc:frame:image:aspect_ratio" content="1.91:1" />
       </head>
       <h1 className="relative text-white font-cabin font-medium text-7xl">
         <Text en="Become a partner" pt="Torne-se um parceiro" />
