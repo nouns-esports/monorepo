@@ -42,7 +42,7 @@ export default function Partners() {
         <meta property="fc:frame:button:2:action" content="mint" />
         <meta
           property="fc:frame:button:2:target"
-          content="eip155:8453:0xc2edf80bdaf2f067640fb0f3bf695f3dc76b0cf7:6"
+          content="eip155:8453:0xc2edf80bdaf2f067640fb0f3bf695f3dc76b0cf7:1"
         />
         <meta
           property="fc:frame:post_url"
