@@ -30,13 +30,6 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // if (n === 1 && button === 2) {
-  //   return NextResponse.redirect(
-  //     "https://nouns.gg/mint/partnership-deck-2024/",
-  //     302
-  //   );
-  // }
-
   if (n === 2 && button === 1) {
     return new NextResponse(
       `
@@ -98,20 +91,6 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // if (n === 16 && button === 2) {
-  //   return NextResponse.redirect(
-  //     "https://nouns.gg/mint/partnership-deck-2024/",
-  //     302
-  //   );
-  // }
-
-  // if (button === 3) {
-  //   return NextResponse.redirect(
-  //     "https://nouns.gg/mint/partnership-deck-2024/",
-  //     302
-  //   );
-  // }
-
   return new NextResponse(
     `
                       <!DOCTYPE html>
@@ -126,6 +105,7 @@ export async function POST(request: NextRequest) {
                               <meta property="fc:frame:button:3" content="Mint" />
                               <meta property="fc:frame:button:3:action" content="mint" />
                               <meta property="fc:frame:button:3:target" content="eip155:8453:0xc2edf80bdaf2f067640fb0f3bf695f3dc76b0cf7:1" />
+                              <meta property="fc:frame:post_url" content="https://nouns.gg/frames/partnership-decks/2024?n=${n}" />
                         </head>
                       </html>
                       `,
