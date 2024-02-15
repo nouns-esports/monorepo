@@ -55,6 +55,7 @@ export const pimlicoPaymaster = createPimlicoPaymasterClient({
 });
 
 export default function Privy(props: { children: React.ReactNode }) {
+  console.log(process.env.NODE_ENV);
   return (
     <PrivyProvider
       appId={
