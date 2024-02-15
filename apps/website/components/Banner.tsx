@@ -39,12 +39,12 @@ export default function Banner(props: { events: Event[]; locale: string }) {
     <Link
       href={live ? props.events[0].htmlLink : defaultBanner.url}
       style={{
-        backgroundColor:
-          process.env.NODE_ENV === "production" ? primaryColor : undefined,
+        // backgroundColor:
+        //   process.env.NODE_ENV === "production" ? primaryColor : undefined,
         background:
           process.env.NODE_ENV === "development"
             ? "repeating-linear-gradient(-45deg, #F2B517, #F2B517 15px, #141617 15px, #141617 30px)"
-            : undefined,
+            : primaryColor,
         height: process.env.NODE_ENV === "development" ? "3rem" : undefined,
       }}
       className="relative z-20 h-9 hover:brightness-[85%] transition-all text-white text-sm font-semibold w-full whitespace-nowrap flex items-center justify-center"
