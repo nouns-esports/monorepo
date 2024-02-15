@@ -57,7 +57,11 @@ export const pimlicoPaymaster = createPimlicoPaymasterClient({
 export default function Privy(props: { children: React.ReactNode }) {
   return (
     <PrivyProvider
-      appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID_SANDBOX!}
+      appId={
+        process.env.NODE_ENV === "development"
+          ? process.env.NEXT_PUBLIC_PRIVY_APP_ID_SANDBOX!
+          : process.env.NEXT_PUBLIC_PRIVY_APP_ID_PRODUCTION!
+      }
       config={{
         loginMethods: ["wallet", "email", "discord", "farcaster"],
         appearance: {
