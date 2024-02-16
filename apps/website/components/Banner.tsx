@@ -39,8 +39,6 @@ export default function Banner(props: { events: Event[]; locale: string }) {
     <Link
       href={live ? props.events[0].htmlLink : defaultBanner.url}
       style={{
-        // backgroundColor:
-        //   process.env.NODE_ENV === "production" ? primaryColor : undefined,
         background:
           process.env.NODE_ENV === "development"
             ? "repeating-linear-gradient(-45deg, #F2B517, #F2B517 15px, #141617 15px, #141617 30px)"
