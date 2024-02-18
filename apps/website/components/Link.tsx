@@ -6,6 +6,8 @@ export default function Link(
     href: string;
     scroll?: boolean;
     newTab?: boolean;
+    passHref?: boolean;
+    legacyBehavior?: boolean;
   } & React.AnchorHTMLAttributes<HTMLAnchorElement>
 ) {
   const newTab = props.newTab ?? isNewTab(props.href);
@@ -18,6 +20,8 @@ export default function Link(
       target={newTab ? "_blank" : ""}
       rel={newTab ? "noopener noreferrer" : ""}
       draggable={false}
+      passHref={props.passHref || undefined}
+      legacyBehavior={props.legacyBehavior || undefined}
       style={{
         userSelect: "none",
         ...props.style,

@@ -5,6 +5,7 @@ import Logo from "./Logo";
 import Banner from "./Banner";
 import Menu from "./Menu";
 import { query } from "@/server/query";
+import Navbar from "./Navbar";
 
 export default async function Header(props: { locale: string }) {
   const events = await query.events();
@@ -24,8 +25,9 @@ export default async function Header(props: { locale: string }) {
                 Nouns
               </p>
             </Link>
-            <nav className="flex items-center gap-8 cursor-pointer">
-              <div className="flex gap-6 max-lg:hidden">
+            <nav className="flex items-center w-full justify-end gap-8 cursor-pointer">
+              <Navbar />
+              {/* <div className="flex gap-6 max-lg:hidden">
                 <HeaderLink href="/getfunded">
                   <Text en="Get Funded" pt="Seja financiado" />
                 </HeaderLink>
@@ -35,11 +37,11 @@ export default async function Header(props: { locale: string }) {
                 <HeaderLink href="/shop">
                   <Text en="Shop" pt="Loja" />
                 </HeaderLink>
-              </div>
-              <div className="max-[700px]:hidden">
+              </div> */}
+              {/* <div className="max-[700px]:hidden">
                 <ConnectButton />
-              </div>
-              <Menu locale={props.locale} />
+              </div> */}
+              {/* <Menu locale={props.locale} /> */}
             </nav>
           </div>
         </div>
