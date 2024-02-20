@@ -9,7 +9,6 @@ import {
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Providers from "@/providers";
-import { Analytics } from "@vercel/analytics/react";
 import { locales } from "@/middleware";
 import { query } from "@/server/query";
 
@@ -102,7 +101,6 @@ export default async function RootLayout(props: {
           {props.children}
           <Footer locale={props.params.locale} />
         </Providers>
-        <Analytics />
       </body>
     </html>
   );

@@ -38,6 +38,8 @@ export default function Banner(props: { events: Event[]; locale: string }) {
 
   const pathname = usePathname();
 
+  console.log(process.env.ENVIRONMENT);
+
   if (!pathname.includes("/dashboard")) {
     return (
       <Link
