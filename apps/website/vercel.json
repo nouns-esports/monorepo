@@ -56,8 +56,8 @@
       "permanent": true
     },
     {
-      "source": "/genesis",
-      "destination": "https://prop.house/0x23c3d161eae43e40ca67618ae6f7836ecc7cd481",
+      "source": "/collision",
+      "destination": "https://prop.house/0xfd160cf822a940bf554e8d5d02e10864b87556b2",
       "permanent": true
     },
     {
