@@ -11,16 +11,16 @@ import { usePathname } from "next/navigation";
 
 const defaultBanner: { url: string; text: Record<Locale, string> } = {
   url:
-    process.env.ENVIRONMENT === "development"
+    process.env.NEXT_PUBLIC_ENVIRONMENT === "development"
       ? "https://github.com/nouns-esports/monorepo"
       : "https://nouns.wtf/vote/466",
   text: {
     en:
-      process.env.ENVIRONMENT === "development"
+      process.env.NEXT_PUBLIC_ENVIRONMENT === "development"
         ? "This site is currently in development mode"
         : "We're extending our rosters for another year!",
     pt:
-      process.env.ENVIRONMENT === "development"
+      process.env.NEXT_PUBLIC_ENVIRONMENT === "development"
         ? "This site is currently in development mode"
         : "Estamos estendendo nossos roster por mais um ano!",
   },
@@ -38,7 +38,7 @@ export default function Banner(props: { events: Event[]; locale: string }) {
 
   const pathname = usePathname();
 
-  console.log(process.env.ENVIRONMENT);
+  console.log(process.env.NEXT_PUBLIC_ENVIRONMENT);
 
   if (!pathname.includes("/dashboard")) {
     return (
@@ -46,30 +46,42 @@ export default function Banner(props: { events: Event[]; locale: string }) {
         href={live ? props.events[0].htmlLink : defaultBanner.url}
         style={{
           background:
-            process.env.ENVIRONMENT === "development"
+            process.env.NEXT_PUBLIC_ENVIRONMENT === "development"
               ? "repeating-linear-gradient(-45deg, #F2B517, #F2B517 15px, #141617 15px, #141617 30px)"
               : primaryColor,
           height:
-            process.env.ENVIRONMENT === "development" ? "3rem" : undefined,
+            process.env.NEXT_PUBLIC_ENVIRONMENT === "development"
+              ? "3rem"
+              : undefined,
         }}
         className="relative z-20 h-9 hover:brightness-[85%] transition-all text-white text-sm font-semibold w-full whitespace-nowrap flex items-center justify-center"
       >
         <div
           style={{
             backgroundColor:
-              process.env.ENVIRONMENT === "development" ? "#F2B517" : undefined,
+              process.env.NEXT_PUBLIC_ENVIRONMENT === "development"
+                ? "#F2B517"
+                : undefined,
             color:
-              process.env.ENVIRONMENT === "development" ? "black" : undefined,
+              process.env.NEXT_PUBLIC_ENVIRONMENT === "development"
+                ? "black"
+                : undefined,
             fontFamily:
-              process.env.ENVIRONMENT === "development"
+              process.env.NEXT_PUBLIC_ENVIRONMENT === "development"
                 ? "var(--font-bebas-neue)"
                 : undefined,
             fontSize:
-              process.env.ENVIRONMENT === "development" ? "1.25rem" : undefined,
+              process.env.NEXT_PUBLIC_ENVIRONMENT === "development"
+                ? "1.25rem"
+                : undefined,
             paddingTop:
-              process.env.ENVIRONMENT === "development" ? "5px" : undefined,
+              process.env.NEXT_PUBLIC_ENVIRONMENT === "development"
+                ? "5px"
+                : undefined,
             paddingBottom:
-              process.env.ENVIRONMENT === "development" ? "2px" : undefined,
+              process.env.NEXT_PUBLIC_ENVIRONMENT === "development"
+                ? "2px"
+                : undefined,
           }}
           className="flex items-center justify-center w-full"
         >

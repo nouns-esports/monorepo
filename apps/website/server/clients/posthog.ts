@@ -6,4 +6,5 @@ const posthogClient = new PostHog(process.env.NEXT_PUBLIC_POSTHOG_KEY!, {
   flushInterval: 0,
 });
 
-if (process.env.ENVIRONMENT === "development") posthogClient.disable();
+if (process.env.NEXT_PUBLIC_ENVIRONMENT === "development")
+  posthogClient.disable();
