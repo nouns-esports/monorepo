@@ -4,7 +4,7 @@ cmds = ["npm install --prefix=../.."]
 
 [build]
 builder = "NIXPACKS"
-buildCommand = "npm run build"
+buildCommand = "turbo run build"
 
 [deploy]
 startCommand = "npm run start"
