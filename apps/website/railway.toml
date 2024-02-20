@@ -7,4 +7,4 @@ builder = "NIXPACKS"
 buildCommand = "npm run build"
 
 [deploy]
-startCommand = "npm run start"
+startCommand = "npm run --prefix /apps/website start"
