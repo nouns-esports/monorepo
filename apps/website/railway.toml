@@ -1,6 +1,6 @@
 [build.nixpacksPlan.phases.install]
 dependsOn = ["setup"]
-cmds = ["npm install"]
+cmds = ["cd ../..", "npm install"]
 
 [build]
 builder = "NIXPACKS"
