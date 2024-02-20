@@ -87,10 +87,6 @@ export default async function RootLayout(props: {
 }) {
   const games = await query.games();
 
-  console.log("ENV", process.env);
-
-  console.log("TEST", process.env.NEXT_PUBLIC_PRIVY_APP_ID_PRODUCTION);
-
   return (
     <html
       lang={props.params.locale}
