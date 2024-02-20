@@ -16,4 +16,3 @@ export default function Date(props: { timestamp: string }) {
     timeStyle: "short",
   })}`;
 }
-//
