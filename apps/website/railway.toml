@@ -4,7 +4,7 @@ cmds = ["ls -a & npm install"]
 
 [build]
 builder = "NIXPACKS"
-buildCommand = "npm run build"
+buildCommand = "ls -a & npm run build"
 
 [deploy]
 startCommand = "npm run --prefix ./apps/website start"
