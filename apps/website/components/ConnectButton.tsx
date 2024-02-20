@@ -3,16 +3,20 @@
 import { usePrivy } from "@privy-io/react-auth";
 import Text from "@/components/Text";
 import { useSmartAccount } from "@/providers/Privy";
+import { useRouter, useParams } from "next/navigation";
 
 export default function ConnectButton() {
-  const { login, logout } = usePrivy();
+  const { login } = usePrivy();
 
   const { address, connected } = useSmartAccount();
+
+  const router = useRouter();
+  const params = useParams();
 
   return (
     <button
       onClick={() => {
-        if (connected) logout();
+        if (connected) router.push(`/${params.locale}/dashboard/profile`);
         else login();
       }}
       style={{

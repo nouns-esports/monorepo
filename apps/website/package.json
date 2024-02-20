@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "start": "next start",
     "studio": "drizzle-kit studio --host 127.0.0.1",
     "migrate": "drizzle-kit generate:pg --schema=./db/schema.ts --out=./db/migrations && node -r esbuild-register db/migrate.ts"
   }

@@ -7,6 +7,7 @@ import { useContext } from "react";
 import { PrimaryColorContext } from "@/providers/PrimaryColor";
 import { Event } from "@/server/resolve/events";
 import { Locale } from "@/middleware";
+import { usePathname } from "next/navigation";
 
 const defaultBanner: { url: string; text: Record<Locale, string> } = {
   url:
@@ -35,44 +36,48 @@ export default function Banner(props: { events: Event[]; locale: string }) {
 
   const primaryColor = useContext(PrimaryColorContext);
 
-  return (
-    <Link
-      href={live ? props.events[0].htmlLink : defaultBanner.url}
-      style={{
-        background:
-          process.env.NODE_ENV === "development"
-            ? "repeating-linear-gradient(-45deg, #F2B517, #F2B517 15px, #141617 15px, #141617 30px)"
-            : primaryColor,
-        height: process.env.NODE_ENV === "development" ? "3rem" : undefined,
-      }}
-      className="relative z-20 h-9 hover:brightness-[85%] transition-all text-white text-sm font-semibold w-full whitespace-nowrap flex items-center justify-center"
-    >
-      <div
+  const pathname = usePathname();
+
+  if (!pathname.includes("/dashboard")) {
+    return (
+      <Link
+        href={live ? props.events[0].htmlLink : defaultBanner.url}
         style={{
-          backgroundColor:
-            process.env.NODE_ENV === "development" ? "#F2B517" : undefined,
-          color: process.env.NODE_ENV === "development" ? "black" : undefined,
-          fontFamily:
+          background:
             process.env.NODE_ENV === "development"
-              ? "var(--font-bebas-neue)"
-              : undefined,
-          fontSize:
-            process.env.NODE_ENV === "development" ? "1.25rem" : undefined,
-          paddingTop:
-            process.env.NODE_ENV === "development" ? "5px" : undefined,
-          paddingBottom:
-            process.env.NODE_ENV === "development" ? "2px" : undefined,
+              ? "repeating-linear-gradient(-45deg, #F2B517, #F2B517 15px, #141617 15px, #141617 30px)"
+              : primaryColor,
+          height: process.env.NODE_ENV === "development" ? "3rem" : undefined,
         }}
-        className="flex items-center justify-center w-full"
+        className="relative z-20 h-9 hover:brightness-[85%] transition-all text-white text-sm font-semibold w-full whitespace-nowrap flex items-center justify-center"
       >
-        {live ? <Dot className="-mr-5 w-16 h-16 animate-pulse" /> : ""}
-        {live ? (
-          `${props.events[0].summary.split("] ")[1]} is happening now`
-        ) : (
-          <Text {...defaultBanner.text} />
-        )}
-        <ArrowRight weight="bold" className="w-4 h-4 ml-1.5" />
-      </div>
-    </Link>
-  );
+        <div
+          style={{
+            backgroundColor:
+              process.env.NODE_ENV === "development" ? "#F2B517" : undefined,
+            color: process.env.NODE_ENV === "development" ? "black" : undefined,
+            fontFamily:
+              process.env.NODE_ENV === "development"
+                ? "var(--font-bebas-neue)"
+                : undefined,
+            fontSize:
+              process.env.NODE_ENV === "development" ? "1.25rem" : undefined,
+            paddingTop:
+              process.env.NODE_ENV === "development" ? "5px" : undefined,
+            paddingBottom:
+              process.env.NODE_ENV === "development" ? "2px" : undefined,
+          }}
+          className="flex items-center justify-center w-full"
+        >
+          {live ? <Dot className="-mr-5 w-16 h-16 animate-pulse" /> : ""}
+          {live ? (
+            `${props.events[0].summary.split("] ")[1]} is happening now`
+          ) : (
+            <Text {...defaultBanner.text} />
+          )}
+          <ArrowRight weight="bold" className="w-4 h-4 ml-1.5" />
+        </div>
+      </Link>
+    );
+  }
 }

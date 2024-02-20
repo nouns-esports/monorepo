@@ -25,24 +25,7 @@ export default async function Header(props: { locale: string }) {
                 Nouns
               </p>
             </Link>
-            <nav className="flex items-center w-full justify-end gap-8 cursor-pointer">
-              <Navbar />
-              {/* <div className="flex gap-6 max-lg:hidden">
-                <HeaderLink href="/getfunded">
-                  <Text en="Get Funded" pt="Seja financiado" />
-                </HeaderLink>
-                <HeaderLink href="https://www.youtube.com/watch?v=SAXzMQ8pPvE">
-                  <Text en="About" pt="Sobre" />
-                </HeaderLink>
-                <HeaderLink href="/shop">
-                  <Text en="Shop" pt="Loja" />
-                </HeaderLink>
-              </div> */}
-              {/* <div className="max-[700px]:hidden">
-                <ConnectButton />
-              </div> */}
-              {/* <Menu locale={props.locale} /> */}
-            </nav>
+            <Navbar />
           </div>
         </div>
       </header>

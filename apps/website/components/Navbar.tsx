@@ -10,7 +10,7 @@ import * as NavigationMenu from "@radix-ui/react-navigation-menu";
 export default function Navbar() {
   return (
     <NavigationMenu.Root>
-      <NavigationMenu.List className="flex items-center bg-black border-darkgrey/50 border rounded-full p-1.5">
+      <NavigationMenu.List className="flex items-center bg-black border-darkgrey border rounded-full p-1.5">
         <NavItem
           title="Explore"
           content={[
@@ -34,7 +34,7 @@ export default function Navbar() {
         </NavigationMenu.Item>
         <ConnectButton />
         <NavigationMenu.Indicator className="flex items-center justify-center h-2">
-          <div className="absolute top-1 w-2 h-2 bg-black rounded-sm rotate-45" />
+          <div className="absolute top-1 w-2 h-2 bg-darkgrey rounded-sm rotate-45" />
         </NavigationMenu.Indicator>
       </NavigationMenu.List>
     </NavigationMenu.Root>
@@ -50,11 +50,11 @@ function NavItem(props: {
       <NavigationMenu.Trigger className=" hover:bg-white/5 px-4 rounded-full hover:text-white h-full transition-colors">
         {props.title}
       </NavigationMenu.Trigger>
-      <NavigationMenu.Content className="absolute top-[60px] bg-black rounded-xl py-4 px-6">
+      <NavigationMenu.Content className="absolute top-[60px] bg-darkgrey drop-shadow-lg border border-grey rounded-xl py-4 px-6">
         <NavigationMenu.Sub>
           <NavigationMenu.List>
             {props.content.map((item) => (
-              <NavigationMenu.Item>
+              <NavigationMenu.Item key={item.name}>
                 <Link
                   href={item.href}
                   className="hover:text-white text-nowrap transition-colors"

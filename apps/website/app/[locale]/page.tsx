@@ -303,7 +303,7 @@ async function ScheduleCard(props: { event: Event }) {
         className="object-cover object-center group-hover:scale-110 transition-transform absolute top-0 w-full h-full"
       />
       <div className="relative z-10 flex flex-col-reverse py-4 px-6 max-sm:py-3.5 max-sm:px-5 w-full h-full shadow-[inset_-20px_-20px_80px_black,inset_20px_20px_80px_black]">
-        <p className="text-lightgrey text-base font-cabin">
+        <p className="text-white text-base font-cabin">
           <Date timestamp={props.event.start.dateTime} />
         </p>
         <h3 className="drop-shadow-2xl text-4xl font-bebas-neue max-[500px]:text-2xl max-[350px]:text-xl">
