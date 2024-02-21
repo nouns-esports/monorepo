@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 
 export default function Sidebar() {
   return (
-    <aside className="absolute left-16 flex flex-col gap-4 w-60">
+    <aside className="fixed left-16 flex flex-col gap-4 w-60">
       <ul className="flex flex-col gap-2 bg-darkgrey p-4 rounded-xl">
         <Button route="/dashboard">Home</Button>
         <Button route="/dashboard/mint">Mint</Button>
