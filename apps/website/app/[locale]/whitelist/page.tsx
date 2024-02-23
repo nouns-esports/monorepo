@@ -1,6 +1,7 @@
 "use client";
 
 import Button from "@/components/Button";
+import TextArea from "@/components/form/TextArea";
 import { usePrivy } from "@privy-io/react-auth";
 
 export default function Whitelist() {
@@ -14,9 +15,9 @@ export default function Whitelist() {
           alt="Nouns Esports Banner"
           className="brightness-75 object-cover w-full h-[25vw] max-h-[500px] rounded-b-2xl overflow-hidden object-center"
         />
-        <div className="flex flex-col items-center gap-8 max-w-4xl">
+        <div className="flex flex-col items-center gap-8 mb-8 max-w-4xl">
           <h1 className="font-luckiest-guy text-white text-6xl">
-            Become a Nouns Esports VIP
+            Become a Nouns Esports OG
           </h1>
           <p className="max-w-2xl text-center">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
@@ -36,8 +37,8 @@ export default function Whitelist() {
               Get Started
             </Button>
           ) : (
-            <form className="flex flex-col items-center gap-8">
-              <div className="flex flex-col gap-6 items-center">
+            <form className="flex flex-col gap-8">
+              <div className="flex flex-col gap-6">
                 <FormHeader>Step 1 - Connect a Wallet</FormHeader>
                 <Button
                   onClick={() => {
@@ -47,7 +48,7 @@ export default function Whitelist() {
                   Connect Wallet
                 </Button>
               </div>
-              <div className="flex flex-col gap-6 items-center">
+              <div className="flex flex-col gap-6">
                 <FormHeader>Step 2 - Join the Discord server</FormHeader>
                 <Button
                   onClick={() => {
@@ -57,19 +58,43 @@ export default function Whitelist() {
                   Connect Discord
                 </Button>
               </div>
-              <div className="flex flex-col gap-6 items-center">
+              <div className="flex flex-col gap-6">
                 <FormHeader>Step 3 - Connect adtitional accounts</FormHeader>
+                <div className="flex gap-4">
+                  <Button
+                    onClick={() => {
+                      linkWallet();
+                    }}
+                  >
+                    Email
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      linkWallet();
+                    }}
+                  >
+                    Twitter
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      linkWallet();
+                    }}
+                  >
+                    Farcaster
+                  </Button>
+                </div>
               </div>
-              <div className="flex flex-col">
+              <div className="flex flex-col gap-6 w-full">
                 <FormHeader>Step 4 - Tell us about yourself</FormHeader>
-                <label>Who are you?</label>
-                <textarea></textarea>
-                <label>What is your esports / gaming background?</label>
-                <textarea></textarea>
-                <label>
-                  How have you contributed to the esports / gaming industry?
-                </label>
-                <textarea></textarea>
+                <TextArea label="Who are you?" placeholder="Type here..." />
+                <TextArea
+                  label="What is your esports / gaming background?"
+                  placeholder="Type here..."
+                />
+                <TextArea
+                  label="How have you contributed to the esports / gaming industry?"
+                  placeholder="Type here..."
+                />
               </div>
               <div>
                 <Button onClick={() => {}}>Submit</Button>
@@ -85,5 +110,11 @@ export default function Whitelist() {
 function FormHeader(props: { children: React.ReactNode }) {
   return (
     <h2 className="text-white text-3xl font-luckiest-guy">{props.children}</h2>
+  );
+}
+
+function Label(props: { children: React.ReactNode }) {
+  return (
+    <label className="text-white font-lg font-bold">{props.children}</label>
   );
 }

@@ -1,5 +1,5 @@
 {
-  "id": "f7a7a30f-e2e4-4a22-9163-25a53d9706c0",
+  "id": "41070364-29ab-478c-9f3b-da266684f536",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -220,7 +220,7 @@
           "name": "image",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "role": {
           "name": "role",

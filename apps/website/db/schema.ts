@@ -1,7 +1,7 @@
-import { drizzle } from "drizzle-orm/vercel-postgres";
-import { sql } from "@vercel/postgres";
+import { drizzle } from "drizzle-orm/node-postgres";
 import { boolean, char, pgTable, text } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
+import { Pool } from "pg";
 
 import "dotenv/config";
 
@@ -76,15 +76,20 @@ export const projects = pgTable("projects", {
   url: text("url").notNull(),
 });
 
-export const db = drizzle(sql, {
-  schema: {
-    games: games,
-    rosters: rosters,
-    talent: talent,
-    creators: creators,
-    projects: projects,
-  },
-});
+export const db = drizzle(
+  new Pool({
+    connectionString: process.env.DATABASE_URL,
+  }),
+  {
+    schema: {
+      games: games,
+      rosters: rosters,
+      talent: talent,
+      creators: creators,
+      projects: projects,
+    },
+  }
+);
 
 export type Game = typeof games.$inferSelect;
 export type Roster = typeof rosters.$inferSelect;

@@ -27,7 +27,7 @@ export default function Navbar() {
             { name: "Smash Melee", href: "/games/smash-melee" },
           ]}
         />
-        <NavigationMenu.Item className="flex items-center mr-4 justify-center hover:bg-white/5 px-4 rounded-full hover:text-white h-10 transition-colors">
+        <NavigationMenu.Item className="flex items-center mr-4 justify-center text-white/30 hover:bg-white/5 px-4 rounded-full hover:text-white h-10 transition-colors">
           <Link href="/dashboard">
             <NavigationMenu.Link>Dashboard</NavigationMenu.Link>
           </Link>
@@ -47,7 +47,7 @@ function NavItem(props: {
 }) {
   return (
     <NavigationMenu.Item className="flex justify-center h-10">
-      <NavigationMenu.Trigger className=" hover:bg-white/5 px-4 rounded-full hover:text-white h-full transition-colors">
+      <NavigationMenu.Trigger className=" hover:bg-white/5  text-white/30 px-4 rounded-full hover:text-white h-full transition-colors">
         {props.title}
       </NavigationMenu.Trigger>
       <NavigationMenu.Content className="absolute top-[60px] bg-darkgrey drop-shadow-lg border border-grey rounded-xl py-4 px-6">

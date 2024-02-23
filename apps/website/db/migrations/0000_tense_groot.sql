@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS "talent" (
 	"id" text PRIMARY KEY NOT NULL,
 	"active" boolean NOT NULL,
 	"name" text NOT NULL,
-	"image" text NOT NULL,
+	"image" text,
 	"role" text NOT NULL,
 	"roster" text NOT NULL,
 	"liquipedia" text,
