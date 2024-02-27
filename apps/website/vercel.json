@@ -61,6 +61,11 @@
       "permanent": true
     },
     {
+      "source": "/battle-of-bc",
+      "destination": "https://prop.house/0x61e25db1e668ffe4d5d3afba1a7ec0b7b19689e0",
+      "permanent": true
+    },
+    {
       "source": "/signup",
       "destination": "https://forms.nouns.gg/collision/",
       "permanent": true
