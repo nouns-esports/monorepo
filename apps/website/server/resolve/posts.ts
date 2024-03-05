@@ -64,8 +64,6 @@ export const posts = publicProcedure.query(async () => {
       })) as string
     );
 
-    // console.log(transactionData);
-
     if (!transactionData.cover_img && !transactionData.cover_img_url) continue;
 
     if (seen[transactionData.slug]) continue;

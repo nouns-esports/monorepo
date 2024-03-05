@@ -3,9 +3,24 @@
 import Button from "@/components/Button";
 import TextArea from "@/components/form/TextArea";
 import { usePrivy } from "@privy-io/react-auth";
+import {
+  NumberCircleOne,
+  NumberCircleTwo,
+  NumberCircleThree,
+  NumberCircleFour,
+  NumberCircleFive,
+} from "phosphor-react-sc";
 
 export default function Whitelist() {
-  const { authenticated, login, linkWallet, linkDiscord } = usePrivy();
+  const {
+    authenticated,
+    login,
+    linkWallet,
+    linkDiscord,
+    linkTwitter,
+    linkEmail,
+    linkFarcaster,
+  } = usePrivy();
 
   return (
     <div className="flex w-full">
@@ -39,7 +54,7 @@ export default function Whitelist() {
           ) : (
             <form className="flex flex-col gap-8">
               <div className="flex flex-col gap-6">
-                <FormHeader>Step 1 - Connect a Wallet</FormHeader>
+                <FormHeader number={1}>Connect a Wallet</FormHeader>
                 <Button
                   onClick={() => {
                     linkWallet();
@@ -49,7 +64,7 @@ export default function Whitelist() {
                 </Button>
               </div>
               <div className="flex flex-col gap-6">
-                <FormHeader>Step 2 - Join the Discord server</FormHeader>
+                <FormHeader number={2}>Join the Discord server</FormHeader>
                 <Button
                   onClick={() => {
                     linkDiscord();
@@ -59,25 +74,25 @@ export default function Whitelist() {
                 </Button>
               </div>
               <div className="flex flex-col gap-6">
-                <FormHeader>Step 3 - Connect adtitional accounts</FormHeader>
+                <FormHeader number={3}>Connect adtitional accounts</FormHeader>
                 <div className="flex gap-4">
                   <Button
                     onClick={() => {
-                      linkWallet();
+                      linkEmail();
                     }}
                   >
                     Email
                   </Button>
                   <Button
                     onClick={() => {
-                      linkWallet();
+                      linkTwitter();
                     }}
                   >
                     Twitter
                   </Button>
                   <Button
                     onClick={() => {
-                      linkWallet();
+                      linkFarcaster();
                     }}
                   >
                     Farcaster
@@ -85,14 +100,17 @@ export default function Whitelist() {
                 </div>
               </div>
               <div className="flex flex-col gap-6 w-full">
-                <FormHeader>Step 4 - Tell us about yourself</FormHeader>
-                <TextArea label="Who are you?" placeholder="Type here..." />
+                <FormHeader number={4}>Tell us about yourself</FormHeader>
                 <TextArea
-                  label="What is your esports / gaming background?"
+                  label="Who are you and what is your esports / gaming background?"
                   placeholder="Type here..."
                 />
                 <TextArea
-                  label="How have you contributed to the esports / gaming industry?"
+                  label="What is your favorite video game of all time?"
+                  placeholder="Type here..."
+                />
+                <TextArea
+                  label="What game do you currently play the most?"
                   placeholder="Type here..."
                 />
               </div>
@@ -107,9 +125,23 @@ export default function Whitelist() {
   );
 }
 
-function FormHeader(props: { children: React.ReactNode }) {
+function FormHeader(props: { number: number; children: React.ReactNode }) {
+  const Icon =
+    props.number === 1
+      ? NumberCircleOne
+      : props.number === 2
+        ? NumberCircleTwo
+        : props.number === 3
+          ? NumberCircleThree
+          : props.number === 4
+            ? NumberCircleFour
+            : NumberCircleFive;
+
   return (
-    <h2 className="text-white text-3xl font-luckiest-guy">{props.children}</h2>
+    <h2 className="flex gap-2 items-center text-white text-3xl font-luckiest-guy">
+      <Icon className="w-10 h-10 text-white" weight="fill" />
+      {props.children}
+    </h2>
   );
 }
 

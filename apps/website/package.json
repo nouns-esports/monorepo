@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "studio": "drizzle-kit studio --host 127.0.0.1",
-    "migrate": "drizzle-kit generate:pg --schema=./db/schema.ts --out=./db/migrations && node -r esbuild-register db/migrate.ts"
+    "studio:production": "cross-env NODE_ENV=production drizzle-kit studio --host 127.0.0.1 --config drizzle.config.ts",
+    "studio:development": "cross-env NODE_ENV=development drizzle-kit studio --host 127.0.0.1 --config drizzle.config.ts",
+    "migrate:production": "cross-env NODE_ENV=production drizzle-kit generate:pg --config drizzle.config.ts --schema=./server/db/schema.ts --out=./server/db/migrations/production && node -r esbuild-register server/db/migrate.ts",
+    "migrate:development": "cross-env NODE_ENV=development drizzle-kit generate:pg --config drizzle.config.ts --schema=./server/db/schema.ts --out=./server/db/migrations/development && node -r esbuild-register server/db/migrate.ts"
   }
 }

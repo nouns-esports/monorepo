@@ -2,8 +2,7 @@ import { drizzle } from "drizzle-orm/node-postgres";
 import { boolean, char, pgTable, text } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { Pool } from "pg";
-
-import "dotenv/config";
+import { env } from "@/env";
 
 export const games = pgTable("games", {
   id: text("id").primaryKey(),
@@ -85,15 +84,16 @@ export const applicationResponses = pgTable("applicationResponses", {
 
 export const db = drizzle(
   new Pool({
-    connectionString: process.env.DATABASE_URL,
+    connectionString: env.DATABASE_URL,
   }),
   {
     schema: {
-      games: games,
-      rosters: rosters,
-      talent: talent,
-      creators: creators,
-      projects: projects,
+      games,
+      rosters,
+      talent,
+      creators,
+      projects,
+      applicationResponses,
     },
   }
 );
@@ -103,3 +103,4 @@ export type Roster = typeof rosters.$inferSelect;
 export type Talent = typeof talent.$inferSelect;
 export type Project = typeof projects.$inferSelect;
 export type Creator = typeof creators.$inferSelect;
+export type ApplicationResponse = typeof applicationResponses.$inferSelect;

@@ -64,15 +64,15 @@ export default function Privy(props: { children: React.ReactNode }) {
     <PrivyProvider
       appId={
         process.env.NEXT_PUBLIC_ENVIRONMENT === "development"
-          ? process.env.NEXT_PUBLIC_PRIVY_APP_ID_SANDBOX!
+          ? process.env.NEXT_PUBLIC_PRIVY_APP_ID_DEVELOPMENT!
           : process.env.NEXT_PUBLIC_PRIVY_APP_ID_PRODUCTION!
       }
       config={{
-        loginMethods: ["wallet", "email", "discord", "farcaster"],
+        loginMethods: ["wallet", "email", "twitter", "discord", "farcaster"],
         appearance: {
           theme: "dark",
           accentColor: "#E93737",
-          logo: "/logo.svg",
+          logo: "/logo/logo.svg",
         },
         embeddedWallets: {
           createOnLogin: "all-users",

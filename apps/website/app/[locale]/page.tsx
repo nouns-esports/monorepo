@@ -18,7 +18,7 @@ import Date from "@/components/Date";
 import { headers } from "next/headers";
 import Image from "next/image";
 import Prop from "@/public/prop.webp";
-import LogoWhite from "@/public/logo-white.svg";
+import LogoWhite from "@/public/logo/logo-white.svg";
 import Pokemon from "@/public/pokemon.webp";
 import { query } from "@/server/query";
 
