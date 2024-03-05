@@ -1,4 +1,5 @@
 import { publicProcedure } from "../trpc";
+import { env } from "@/env";
 
 export type Event = {
   id: string;
@@ -26,7 +27,7 @@ export const events = publicProcedure.query(async () => {
         orderBy: "startTime",
         timeMin: new Date().toISOString(),
         maxResults: "3",
-        key: process.env.GOOGLE_CALENDAR,
+        key: env.GOOGLE_CALENDAR_API_KEY,
       })
     // Revalidate every 10 minutes
     // { next: { revalidate: 600 } }

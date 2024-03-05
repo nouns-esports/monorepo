@@ -1,5 +1,4 @@
-import { games as gamesTable } from "@/db/schema";
-import { db } from "@/db/schema";
+import { db, games as gamesTable } from "@/server/db/schema";
 import { eq, asc } from "drizzle-orm";
 import { publicProcedure } from "../trpc";
 

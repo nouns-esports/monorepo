@@ -1,5 +1,4 @@
-import { projects as projectsTable } from "@/db/schema";
-import { db } from "@/db/schema";
+import { db, projects as projectsTable } from "@/server/db/schema";
 import { asc, eq } from "drizzle-orm";
 import { publicProcedure } from "../trpc";
 

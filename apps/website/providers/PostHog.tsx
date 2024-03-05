@@ -3,13 +3,14 @@
 import posthog from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
 import { useEffect, useMemo } from "react";
+import { env } from "@/env";
 
 if (
   typeof window !== "undefined" &&
   !window.location.host.includes("127.0.0.1") &&
   !window.location.host.includes("localhost")
 ) {
-  posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY!, {
+  posthog.init(env.NEXT_PUBLIC_POSTHOG_API_KEY, {
     api_host: "https://app.posthog.com",
   });
 }

@@ -4,14 +4,19 @@ import { usePrivy } from "@privy-io/react-auth";
 import Text from "@/components/Text";
 import { useSmartAccount } from "@/providers/Privy";
 import { useRouter, useParams } from "next/navigation";
+import { useEffect } from "react";
 
 export default function ConnectButton() {
   const { login } = usePrivy();
 
-  const { address, connected } = useSmartAccount();
+  const { address, connected, id } = useSmartAccount();
 
   const router = useRouter();
   const params = useParams();
+
+  useEffect(() => {
+    console.log(id);
+  }, [id]);
 
   return (
     <button
@@ -35,7 +40,7 @@ export default function ConnectButton() {
             className="rounded-full w-7 h-7 select-none"
             draggable={false}
           />
-          {`${address?.slice(0, 5)}...${address?.slice(-3)}`}
+          {id ?? `${address?.slice(0, 5)}...${address?.slice(-3)}`}
         </>
       ) : (
         <Text en="Connect" pt="Conectar" />

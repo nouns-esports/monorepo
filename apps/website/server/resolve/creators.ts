@@ -1,4 +1,4 @@
-import { db, creators as creatorsTable } from "@/db/schema";
+import { db, creators as creatorsTable } from "@/server/db/schema";
 import { eq, and, asc } from "drizzle-orm";
 import { publicProcedure } from "../trpc";
 

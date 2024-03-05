@@ -11,6 +11,7 @@ export const env = createEnv({
     GOOGLE_CALENDAR_API_KEY: z.string().min(1),
     NEYNAR_API_KEY: z.string().min(1),
     DATABASE_URL: z.string().url(),
+    REDIS_URL: z.string().url(),
   },
   client: {
     NEXT_PUBLIC_ENVIRONMENT: z.enum(["development", "production"]),

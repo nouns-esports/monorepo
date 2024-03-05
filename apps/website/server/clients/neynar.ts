@@ -1,5 +1,4 @@
 import { NeynarAPIClient } from "@neynar/nodejs-sdk";
+import { env } from "@/env";
 
-export const neynarClient = new NeynarAPIClient(
-  process.env.NEYNAR_API_KEY as string
-);
+export const neynarClient = new NeynarAPIClient(env.NEYNAR_API_KEY);

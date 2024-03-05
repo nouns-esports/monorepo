@@ -8,6 +8,7 @@ import { t } from "./trpc";
 import { posts } from "./resolve/posts";
 import { post } from "./resolve/post";
 import { creators } from "./resolve/creators";
+import { id } from "./resolve/id";
 
 export const router = t.router({
   events,
@@ -19,6 +20,7 @@ export const router = t.router({
   talent,
   posts,
   post,
+  id,
 });
 
 export type Router = typeof router;

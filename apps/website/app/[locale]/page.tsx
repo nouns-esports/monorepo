@@ -10,7 +10,7 @@ import {
   InstagramLogo,
 } from "phosphor-react-sc";
 import Link from "@/components/Link";
-import { Creator, Project } from "@/db/schema";
+import { Creator, Project } from "@/server/db/schema";
 import Text from "@/components/Text";
 import HighlightedText from "@/components/HighlightedText";
 import type { Event } from "@/server/resolve/events";

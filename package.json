@@ -55,6 +55,7 @@
     "react-dom": "^18.2.0",
     "react-fast-marquee": "^1.6.4",
     "react-tweet": "^3.2.0",
+    "redis": "^4.6.13",
     "tailwind-merge": "^2.2.1",
     "tailwindcss": "^3.4.1",
     "tailwindcss-animate": "^1.0.7",

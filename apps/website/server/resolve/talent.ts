@@ -1,4 +1,4 @@
-import { db, talent as talentTable } from "@/db/schema";
+import { db, talent as talentTable } from "@/server/db/schema";
 import { eq, and, asc } from "drizzle-orm";
 import { z } from "zod";
 import { publicProcedure } from "../trpc";

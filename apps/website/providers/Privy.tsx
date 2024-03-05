@@ -32,41 +32,33 @@ import {
   SmartAccountSigner,
   signerToEcdsaKernelSmartAccount,
 } from "permissionless/accounts";
+import { env } from "@/env";
 
 export const publicClient = createPublicClient({
-  chain:
-    process.env.NEXT_PUBLIC_ENVIRONMENT === "development" ? baseSepolia : base,
+  chain: env.NEXT_PUBLIC_ENVIRONMENT === "development" ? baseSepolia : base,
   transport: http(),
 });
 
 export const pimlicoBundler = createPimlicoBundlerClient({
   transport: http(
     `https://api.pimlico.io/v2/${
-      process.env.NEXT_PUBLIC_ENVIRONMENT === "development"
-        ? "baseSepolia"
-        : "base"
-    }/rpc?apikey=${process.env.NEXT_PUBLIC_PIMLICO_API_KEY}`
+      env.NEXT_PUBLIC_ENVIRONMENT === "development" ? "baseSepolia" : "base"
+    }/rpc?apikey=${env.NEXT_PUBLIC_PIMLICO_API_KEY}`
   ),
 });
 
 export const pimlicoPaymaster = createPimlicoPaymasterClient({
   transport: http(
     `https://api.pimlico.io/v2/${
-      process.env.NEXT_PUBLIC_ENVIRONMENT === "development"
-        ? "baseSepolia"
-        : "base"
-    }/rpc?apikey=${process.env.NEXT_PUBLIC_PIMLICO_API_KEY}`
+      env.NEXT_PUBLIC_ENVIRONMENT === "development" ? "baseSepolia" : "base"
+    }/rpc?apikey=${env.NEXT_PUBLIC_PIMLICO_API_KEY}`
   ),
 });
 
 export default function Privy(props: { children: React.ReactNode }) {
   return (
     <PrivyProvider
-      appId={
-        process.env.NEXT_PUBLIC_ENVIRONMENT === "development"
-          ? process.env.NEXT_PUBLIC_PRIVY_APP_ID_DEVELOPMENT!
-          : process.env.NEXT_PUBLIC_PRIVY_APP_ID_PRODUCTION!
-      }
+      appId={env.NEXT_PUBLIC_PRIVY_APP_ID}
       config={{
         loginMethods: ["wallet", "email", "twitter", "discord", "farcaster"],
         appearance: {
@@ -106,6 +98,16 @@ export function useSmartAccount() {
 
   const privyContext = useContext(PrivyContext);
 
+  const [id, setId] = useState<string>();
+
+  useEffect(() => {
+    (async () => {
+      const response = await fetch("/api/id");
+      const result = await response.json();
+      setId(result.result.data);
+    })();
+  }, [address]);
+
   useEffect(() => {
     if (ready && authenticated && privyContext?.smartAccountClient?.account) {
       setAddress(privyContext.smartAccountClient.account.address);
@@ -116,7 +118,7 @@ export function useSmartAccount() {
     }
   }, [privyContext, ready, authenticated]);
 
-  return { address, connected };
+  return { address, connected, id };
 }
 
 function PrivyState(props: { children: React.ReactNode }) {
@@ -134,10 +136,7 @@ function PrivyState(props: { children: React.ReactNode }) {
 
     return createWalletClient({
       account: embeddedWallet?.address as `0x${string}`,
-      chain:
-        process.env.NEXT_PUBLIC_ENVIRONMENT === "development"
-          ? baseSepolia
-          : base,
+      chain: env.NEXT_PUBLIC_ENVIRONMENT === "development" ? baseSepolia : base,
       transport: custom(eip1193provider),
     });
   }, [eip1193provider, embeddedWallet]);
@@ -154,16 +153,11 @@ function PrivyState(props: { children: React.ReactNode }) {
 
     return createSmartAccountClient({
       account: kernelAccount,
-      chain:
-        process.env.NEXT_PUBLIC_ENVIRONMENT === "development"
-          ? baseSepolia
-          : base,
+      chain: env.NEXT_PUBLIC_ENVIRONMENT === "development" ? baseSepolia : base,
       transport: http(
         `https://api.pimlico.io/v2/${
-          process.env.NEXT_PUBLIC_ENVIRONMENT === "development"
-            ? "baseSepolia"
-            : "base"
-        }/rpc?apikey=${process.env.NEXT_PUBLIC_PIMLICO_API_KEY}`
+          env.NEXT_PUBLIC_ENVIRONMENT === "development" ? "baseSepolia" : "base"
+        }/rpc?apikey=${env.NEXT_PUBLIC_PIMLICO_API_KEY}`
       ),
       sponsorUserOperation: pimlicoPaymaster.sponsorUserOperation,
     });
