@@ -78,7 +78,7 @@
     
     {
       "source": "/signup",
-      "destination": "https://forms.nouns.gg/collision/",
+      "destination": "https://forms.nouns.gg/signup/",
       "permanent": true
     },
     {
