@@ -92,6 +92,11 @@
       "permanent": true
     },
     {
+      "source": "/mint/art-contest",
+      "destination": "https://zora.co/collect/base:0x2c5d820cfea3b6d51ebbc2f2cbb544ddcd9eef8f",
+      "permanent": true
+    },
+    {
       "source": "/artwork-tweet",
       "destination": "https://fxtwitter.com/nounsesports/status/1754574652335161635",
       "permanent": true
