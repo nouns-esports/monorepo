@@ -15,7 +15,7 @@ const defaultBanner: { url: string; text: Record<Locale, string> } = {
     pt: "Estamos estendendo nossos roster por mais um ano!",
   },
 };
-
+ 
 export default function Banner(props: { events: Event[]; locale: string }) {
   const start = new Date(props.events[0].start.dateTime);
   const end = new Date(
