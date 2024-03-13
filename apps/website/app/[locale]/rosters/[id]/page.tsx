@@ -45,7 +45,7 @@ export async function generateMetadata(props: { params: { id: string } }) {
   } satisfies Metadata;
 }
 
-export default async function GamePage(props: { params: { id: string } }) {
+export default async function RosterPage(props: { params: { id: string } }) {
   const game = await query.game({
     id: props.params.id,
   });
@@ -56,7 +56,7 @@ export default async function GamePage(props: { params: { id: string } }) {
 
   return (
     <>
-      <div className="relative grid place-items-center h-[500px]">
+      <div className="relative grid place-items-center h-[500px] max-sm:h-80">
         <Image
           src={game.image}
           fill

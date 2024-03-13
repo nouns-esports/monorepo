@@ -11,7 +11,13 @@ import {
   NumberCircleFive,
 } from "phosphor-react-sc";
 
-export default function Whitelist() {
+// Nouns Esports Pass
+//  - VIP (Whales)
+//  - OG (Early Adopters)
+//  - Premium (Paid)
+//  - Community (Free)
+
+export default function Pass() {
   const {
     authenticated,
     login,
@@ -31,17 +37,16 @@ export default function Whitelist() {
           className="brightness-75 object-cover w-full h-[25vw] max-h-[500px] rounded-b-2xl overflow-hidden object-center"
         />
         <div className="flex flex-col items-center gap-8 mb-8 max-w-4xl">
-          <h1 className="font-luckiest-guy text-white text-6xl">
-            Become a Nouns Esports OG
+          <h1 className="font-luckiest-guy text-white text-center text-6xl">
+            Become a Nouns Esports Pass Member
           </h1>
           <p className="max-w-2xl text-center">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
+            Join our esports journey at Nouns Esports! We're offering a unique
+            opportunity for esports enthusiasts to directly influence our major
+            decisions. Apply for a Nouns Esport Pass, and if accepted, you'll be
+            given the power to vote on key organizational decisions, making you
+            an active participant in shaping our future. Don't miss out on this
+            chance to be part of our community-driven approach to esports.
           </p>
           {!authenticated ? (
             <Button
@@ -52,7 +57,7 @@ export default function Whitelist() {
               Get Started
             </Button>
           ) : (
-            <form className="flex flex-col gap-8">
+            <div className="flex flex-col gap-8">
               <div className="flex flex-col gap-6">
                 <FormHeader number={1}>Connect a Wallet</FormHeader>
                 <Button
@@ -74,7 +79,7 @@ export default function Whitelist() {
                 </Button>
               </div>
               <div className="flex flex-col gap-6">
-                <FormHeader number={3}>Connect adtitional accounts</FormHeader>
+                <FormHeader number={3}>Connect additional accounts</FormHeader>
                 <div className="flex gap-4">
                   <Button
                     onClick={() => {
@@ -102,22 +107,26 @@ export default function Whitelist() {
               <div className="flex flex-col gap-6 w-full">
                 <FormHeader number={4}>Tell us about yourself</FormHeader>
                 <TextArea
-                  label="Who are you and what is your esports / gaming background?"
-                  placeholder="Type here..."
-                />
-                <TextArea
-                  label="What is your favorite video game of all time?"
-                  placeholder="Type here..."
-                />
-                <TextArea
                   label="What game do you currently play the most?"
-                  placeholder="Type here..."
+                  placeholder="CS 2, Dota 2, Smash Melee, etc..."
+                />
+                <TextArea
+                  label="Who are you and what is your esports / gaming background?"
+                  placeholder="Competitive player, fan, event organizer, etc..."
+                />
+                <TextArea
+                  label="What do you think is needed to push the esports industry forward?"
+                  placeholder="Fan empowerment, transparency, etc..."
+                />
+                <TextArea
+                  label="What games would you like to see funded by Nouns?"
+                  placeholder="Rocket League, Valorant, etc..."
                 />
               </div>
               <div>
                 <Button onClick={() => {}}>Submit</Button>
               </div>
-            </form>
+            </div>
           )}
         </div>
       </div>

@@ -7,7 +7,7 @@ import { useRouter, useParams } from "next/navigation";
 import { useEffect } from "react";
 
 export default function ConnectButton() {
-  const { login } = usePrivy();
+  const { login, logout } = usePrivy();
 
   const { address, connected, id } = useSmartAccount();
 
@@ -21,7 +21,8 @@ export default function ConnectButton() {
   return (
     <button
       onClick={() => {
-        if (connected) router.push(`/${params.locale}/dashboard/profile`);
+        if (connected)
+          logout(); //router.push(`/${params.locale}/dashboard/profile`);
         else login();
       }}
       style={{

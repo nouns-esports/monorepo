@@ -120,7 +120,7 @@ export default async function Home(props: { params: { locale: string } }) {
         </p>
       </Marquee>
       <div
-        id="games"
+        id="rosters"
         className="px-16 max-sm:px-0 py-32 max-sm:py-16 text-center text-white text-5xl font-luckiest-guy flex flex-col gap-20 max-sm:gap-10 items-center"
       >
         <Text en="Our Rosters" pt="Nossos Elencos" />
@@ -176,7 +176,10 @@ export default async function Home(props: { params: { locale: string } }) {
         <div className="from-transparent to-black bg-gradient-to-b h-64 w-full bottom-0 absolute" />
       </div>
 
-      <div className="px-16 max-sm:px-0 py-32 max-sm:py-16 text-white text-5xl text-center font-luckiest-guy flex flex-col gap-20 max-sm:gap-10 items-center">
+      <div
+        id="events"
+        className="px-16 max-sm:px-0 py-32 max-sm:py-16 text-white text-5xl text-center font-luckiest-guy flex flex-col gap-20 max-sm:gap-10 items-center"
+      >
         <Text en="Upcoming Events" pt="Próximos Eventos" />
         <div className="flex flex-wrap max-sm:flex-nowrap max-sm:overflow-x-scroll max-sm:justify-start justify-center max-w-[1920px] gap-16 w-full max-2xl:gap-8">
           {events.map((event) => (
@@ -184,7 +187,10 @@ export default async function Home(props: { params: { locale: string } }) {
           ))}
         </div>
       </div>
-      <div className="px-16 max-sm:px-0 pb-32 max-sm:py-16 text-white text-5xl text-center font-luckiest-guy flex flex-col gap-20 max-sm:gap-10 items-center">
+      <div
+        id="publications"
+        className="px-16 max-sm:px-0 pb-32 max-sm:py-16 text-white text-5xl text-center font-luckiest-guy flex flex-col gap-20 max-sm:gap-10 items-center"
+      >
         <Text en="Publications" pt="Blog" />
         <div className="flex flex-wrap max-sm:flex-nowrap max-sm:overflow-x-scroll max-sm:justify-start justify-center max-w-[1920px] gap-16 w-full max-2xl:gap-8">
           {posts.map((post) => (
@@ -192,7 +198,10 @@ export default async function Home(props: { params: { locale: string } }) {
           ))}
         </div>
       </div>
-      <div className="px-16 max-sm:px-0 pb-32 max-sm:pb-16 text-white text-5xl font-luckiest-guy flex flex-col gap-20 max-sm:gap-10 items-center">
+      <div
+        id="projects"
+        className="px-16 max-sm:px-0 pb-32 max-sm:pb-16 text-white text-5xl font-luckiest-guy flex flex-col gap-20 max-sm:gap-10 items-center"
+      >
         <Text en="Projects" pt="Projetos" />
         <div className="flex flex-wrap max-sm:flex-nowrap max-sm:overflow-x-scroll max-sm:justify-start justify-center max-w-[1920px] gap-16 w-full max-2xl:gap-8">
           {projects.map((project) => (
@@ -239,7 +248,7 @@ function GameCard(props: {
 }) {
   return (
     <Link
-      href={`/${props.locale}/games/${props.id}`}
+      href={`/${props.locale}/rosters/${props.id}`}
       style={{ backgroundImage: `url(${props.image})` }}
       className="relative w-[calc(25%_-_3rem)] max-xl:w-[calc(25%_-_1.5rem)] max-sm:first:ml-8 max-sm:last:mr-8 max-sm:min-w-[calc(100%_-_6rem)] min-w-[12rem] rounded-xl select-none aspect-square group overflow-hidden"
     >

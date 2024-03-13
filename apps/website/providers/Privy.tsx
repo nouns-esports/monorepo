@@ -62,7 +62,7 @@ export default function Privy(props: { children: React.ReactNode }) {
       config={{
         loginMethods: ["wallet", "email", "twitter", "discord", "farcaster"],
         appearance: {
-          theme: "dark",
+          theme: "#040404",
           accentColor: "#E93737",
           logo: "/logo/logo.svg",
         },

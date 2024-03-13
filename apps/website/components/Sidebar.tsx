@@ -8,17 +8,17 @@ export default function Sidebar() {
     <aside className="fixed left-16 flex flex-col gap-4 w-60">
       <ul className="flex flex-col gap-2 bg-darkgrey p-4 rounded-xl">
         <Button route="/dashboard">Home</Button>
-        <Button route="/dashboard/mint">Mint</Button>
-        <Button route="/dashboard/vote">Vote</Button>
-        <Button route="/dashboard/profile">Profile</Button>
+        <Button route="/shop">Shop</Button>
+        <Button route="/vote">Vote</Button>
+        <Button route="/profile">Profile</Button>
       </ul>
       <div className="flex flex-col gap-2 bg-darkgrey p-4 rounded-xl">
         <h2 className="font-bebas-neue text-xl text-white">Discussion</h2>
         <ul className="flex flex-col gap-2">
-          <Button route="/dashboard/dota-2">Dota 2</Button>
-          <Button route="/dashboard/rocket-legaue">Rocket League</Button>
-          <Button route="/dashboard/smash">Smash</Button>
-          <Button route="/dashboard/cs-2">CS 2</Button>
+          <Button route="/chat/dota-2">Dota 2</Button>
+          <Button route="/chat/rocket-legaue">Rocket League</Button>
+          <Button route="/chat/smash">Smash</Button>
+          <Button route="/chat/cs-2">CS 2</Button>
         </ul>
       </div>
     </aside>

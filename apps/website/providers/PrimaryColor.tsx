@@ -15,7 +15,7 @@ export default function PrimaryColor(props: {
   const { locale } = useParams();
 
   const color = useMemo(() => {
-    if (pathname.includes("/games")) {
+    if (pathname.includes("/rosters")) {
       const game = props.games.find(
         (_game) => _game.id === pathname.split("/")[locale === "en" ? 2 : 3]
       );

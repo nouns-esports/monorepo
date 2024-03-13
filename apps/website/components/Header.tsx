@@ -1,9 +1,6 @@
 import Link from "@/components/Link";
-import Text from "@/components/Text";
-import ConnectButton from "@/components/ConnectButton";
 import Logo from "./Logo";
 import Banner from "./Banner";
-import Menu from "./Menu";
 import { query } from "@/server/query";
 import Navbar from "./Navbar";
 
@@ -15,13 +12,13 @@ export default async function Header(props: { locale: string }) {
       <Banner events={events} locale={props.locale} />
       <header className="sticky top-0 w-full z-20 flex justify-center">
         <div className="relative w-full max-w-[1920px]">
-          <div className="absolute top-0 w-full flex items-center justify-between p-8">
+          <div className="absolute top-0 w-full flex items-center justify-between p-8 max-sm:p-4 z-40">
             <Link
               href={`/${props.locale}/`}
-              className="flex gap-4 group items-center cursor-pointer select-none"
+              className="flex gap-4 max-sm:gap-3 group items-center cursor-pointer select-none"
             >
-              <Logo className="group-hover:rotate-[14deg] w-12 transition-transform duration-150" />
-              <p className="text-white font-luckiest-guy text-4xl select-none">
+              <Logo className="group-hover:rotate-[14deg] w-12 max-sm:w-10 transition-transform duration-150" />
+              <p className="text-white font-luckiest-guy text-4xl max-sm:text-3xl select-none">
                 Nouns
               </p>
             </Link>
@@ -30,16 +27,5 @@ export default async function Header(props: { locale: string }) {
         </div>
       </header>
     </>
-  );
-}
-
-function HeaderLink(props: { href: string; children: React.ReactNode }) {
-  return (
-    <Link
-      href={props.href}
-      className="hover:text-white/60 text-white transition-colors select-none text-lg font-medium"
-    >
-      {props.children}
-    </Link>
   );
 }
