@@ -1,5 +1,5 @@
 import { drizzle } from "drizzle-orm/node-postgres";
-import { boolean, char, pgTable, text } from "drizzle-orm/pg-core";
+import { boolean, char, pgEnum, pgTable, text } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { Pool } from "pg";
 import { env } from "@/env";
@@ -47,7 +47,7 @@ export const talent = pgTable("talent", {
   instagram: text("instagram"),
 });
 
-export const talentRelations = relations(talent, ({ one, many }) => ({
+export const talentRelations = relations(talent, ({ one }) => ({
   roster: one(rosters, {
     fields: [talent.roster],
     references: [rosters.id],
@@ -75,12 +75,37 @@ export const projects = pgTable("projects", {
   url: text("url").notNull(),
 });
 
-export const applicationResponses = pgTable("applicationResponses", {
+export const pass = pgEnum("pass", ["og", "vip", "community", "premium"]);
+
+export const users = pgTable("users", {
   wallet: text("wallet").primaryKey(),
-  whoAreYou: text("whoAreYou").notNull(),
-  favoriteGame: text("favoriteGame").notNull(),
-  currentGame: text("currentGame").notNull(),
+  id: text("id").notNull(),
+  pass: pass("pass").notNull(),
 });
+
+export const applicationResponses = pgTable("applicationResponses", {
+  user: text("id").notNull(),
+  whatGameDoYouPlayTheMost: text("whatGameDoYouPlayTheMost").notNull(),
+  whoAreYouAndWhatIsYourEsportsBackground: text(
+    "whoAreYouAndWhatIsYourEsportsBackground"
+  ).notNull(),
+  whatDoYouThinkIsNeededToPushTheEsportsIndustryForward: text(
+    "whatDoYouThinkIsNeededToPushTheEsportsIndustryForward"
+  ).notNull(),
+  whatThingsWouldYouLikeToSeeFundedByNouns: text(
+    "whatThingsWouldYouLikeToSeeFundedByNouns"
+  ).notNull(),
+});
+
+export const applicationResponsesRelations = relations(
+  applicationResponses,
+  ({ one }) => ({
+    user: one(users, {
+      fields: [applicationResponses.user],
+      references: [users.id],
+    }),
+  })
+);
 
 export const db = drizzle(
   new Pool({
@@ -93,6 +118,7 @@ export const db = drizzle(
       talent,
       creators,
       projects,
+      users,
       applicationResponses,
     },
   }
@@ -103,4 +129,5 @@ export type Roster = typeof rosters.$inferSelect;
 export type Talent = typeof talent.$inferSelect;
 export type Project = typeof projects.$inferSelect;
 export type Creator = typeof creators.$inferSelect;
+export type User = typeof users.$inferSelect;
 export type ApplicationResponse = typeof applicationResponses.$inferSelect;

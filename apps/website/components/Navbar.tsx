@@ -1,7 +1,7 @@
 "use client";
 
 import { List, X } from "phosphor-react-sc";
-import ConnectButton from "./ConnectButton";
+import SignInButton from "@/components/SignInButton";
 import Link from "./Link";
 import * as NavigationMenu from "@radix-ui/react-navigation-menu";
 import { useEffect, useState } from "react";
@@ -70,7 +70,7 @@ export default function Navbar() {
           <NavItem href={`/${params.locale}/pass`} icon="/logo/logo-white.svg">
             Pass
           </NavItem>
-          <ConnectButton />
+          <SignInButton />
           <div onClick={() => setOpen(!open)} className="max-sm:flex hidden">
             {open ? (
               <X className="w-6 h-6 mx-2" />
@@ -169,7 +169,7 @@ function NavItem(props: { href: string; icon: string; children: string }) {
   return (
     <NavigationMenu.Item className="max-sm:hidden flex items-center mr-4 justify-center text-white/30 hover:bg-white/5 px-4 rounded-full hover:text-white h-10 transition-colors">
       <Link href={props.href}>
-        <NavigationMenu.Link className="flex items-center gap-2 text-white">
+        <NavigationMenu.Link className="flex items-center gap-1.5 text-white">
           <img className="w-4 h-4" src={props.icon} />
           {props.children}
         </NavigationMenu.Link>

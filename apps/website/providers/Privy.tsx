@@ -4,6 +4,7 @@ import {
   ConnectedWallet,
   EIP1193Provider,
   PrivyProvider,
+  User as PrivyUser,
   usePrivy,
   useWallets,
 } from "@privy-io/react-auth";
@@ -33,6 +34,7 @@ import {
   signerToEcdsaKernelSmartAccount,
 } from "permissionless/accounts";
 import { env } from "@/env";
+import { User } from "@/server/db/schema";
 
 export const publicClient = createPublicClient({
   chain: env.NEXT_PUBLIC_ENVIRONMENT === "development" ? baseSepolia : base,
@@ -92,19 +94,27 @@ export const PrivyContext = createContext<
 >(undefined);
 
 export function useSmartAccount() {
-  const { ready, authenticated } = usePrivy();
+  const { ready, authenticated, user: privyUser } = usePrivy();
   const [address, setAddress] = useState<`0x${string}`>();
   const [connected, setConnected] = useState<boolean>(false);
 
   const privyContext = useContext(PrivyContext);
 
-  const [id, setId] = useState<string>();
+  const [user, setUser] = useState<User & { privy: PrivyUser }>();
 
   useEffect(() => {
     (async () => {
-      const response = await fetch("/api/id");
-      const result = await response.json();
-      setId(result.result.data);
+      if (address && privyUser) {
+        const response = await fetch("/api/getUser", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ address }),
+        });
+        const result = await response.json();
+        setUser({ ...(result.result.data as User), privy: privyUser });
+      }
     })();
   }, [address]);
 
@@ -118,7 +128,7 @@ export function useSmartAccount() {
     }
   }, [privyContext, ready, authenticated]);
 
-  return { address, connected, id };
+  return { address, connected, user };
 }
 
 function PrivyState(props: { children: React.ReactNode }) {

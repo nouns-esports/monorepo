@@ -2,6 +2,7 @@
 
 import Button from "@/components/Button";
 import TextArea from "@/components/form/TextArea";
+import TextInput from "@/components/form/TextInput";
 import { usePrivy } from "@privy-io/react-auth";
 import {
   NumberCircleOne,
@@ -26,6 +27,7 @@ export default function Pass() {
     linkTwitter,
     linkEmail,
     linkFarcaster,
+    user,
   } = usePrivy();
 
   return (
@@ -65,7 +67,7 @@ export default function Pass() {
                     linkWallet();
                   }}
                 >
-                  Connect Wallet
+                  {user?.wallet ? user.wallet.address : "Connect Wallet"}
                 </Button>
               </div>
               <div className="flex flex-col gap-6">
@@ -75,7 +77,7 @@ export default function Pass() {
                     linkDiscord();
                   }}
                 >
-                  Connect Discord
+                  {user?.discord ? user.discord.username : "Connect Discord"}
                 </Button>
               </div>
               <div className="flex flex-col gap-6">
@@ -86,27 +88,29 @@ export default function Pass() {
                       linkEmail();
                     }}
                   >
-                    Email
+                    {user?.email ? user.email.address : "Connect Email"}
                   </Button>
                   <Button
                     onClick={() => {
                       linkTwitter();
                     }}
                   >
-                    Twitter
+                    {user?.twitter ? user.twitter.username : "Connect Twitter"}
                   </Button>
                   <Button
                     onClick={() => {
                       linkFarcaster();
                     }}
                   >
-                    Farcaster
+                    {user?.farcaster
+                      ? user.farcaster.username
+                      : "Connect Farcaster"}
                   </Button>
                 </div>
               </div>
               <div className="flex flex-col gap-6 w-full">
                 <FormHeader number={4}>Tell us about yourself</FormHeader>
-                <TextArea
+                <TextInput
                   label="What game do you currently play the most?"
                   placeholder="CS 2, Dota 2, Smash Melee, etc..."
                 />
@@ -151,11 +155,5 @@ function FormHeader(props: { number: number; children: React.ReactNode }) {
       <Icon className="w-10 h-10 text-white" weight="fill" />
       {props.children}
     </h2>
-  );
-}
-
-function Label(props: { children: React.ReactNode }) {
-  return (
-    <label className="text-white font-lg font-bold">{props.children}</label>
   );
 }

@@ -1,0 +1,20 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1710449852601,
+      "tag": "0000_pink_adam_destine",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1710451177693,
+      "tag": "0001_serious_jack_flag",
+      "breakpoints": true
+    }
+  ]
+}

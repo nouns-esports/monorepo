@@ -1,0 +1,20 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1710450869491,
+      "tag": "0000_stiff_solo",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1710451208666,
+      "tag": "0001_useful_blue_shield",
+      "breakpoints": true
+    }
+  ]
+}

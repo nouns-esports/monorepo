@@ -6,17 +6,17 @@ import { useSmartAccount } from "@/providers/Privy";
 import { useRouter, useParams } from "next/navigation";
 import { useEffect } from "react";
 
-export default function ConnectButton() {
+export default function SignInButton() {
   const { login, logout } = usePrivy();
 
-  const { address, connected, id } = useSmartAccount();
+  const { address, connected, user } = useSmartAccount();
 
   const router = useRouter();
   const params = useParams();
 
   useEffect(() => {
-    console.log(id);
-  }, [id]);
+    console.log(user);
+  }, [user]);
 
   return (
     <button
@@ -31,20 +31,23 @@ export default function ConnectButton() {
         paddingLeft: connected ? "6px" : "16px",
         paddingRight: connected ? "14px" : "16px",
       }}
-      className="flex items-center gap-2 select-none text-darkgrey py-1.5 pl-1.5 pr-3.5  text-xl bg-white hover:bg-white/80 transition-colors rounded-full justify-center leading-none font-bebas-neue whitespace-nowrap"
+      className="flex items-center gap-2 select-none text-darkgrey py-1.5 pl-1.5 pr-3.5 text-xl bg-white hover:bg-white/80 transition-colors rounded-full justify-center leading-none font-bebas-neue whitespace-nowrap"
     >
       {connected ? (
         <>
           <img
-            src={`https://api.cloudnouns.com/v1/pfp?text=${address}`}
+            src={
+              user?.privy.farcaster?.pfp ??
+              `https://api.cloudnouns.com/v1/pfp?text=${address}`
+            }
             alt={`${address}'s avatar`}
-            className="rounded-full w-7 h-7 select-none"
+            className="rounded-full w-7 h-7 select-none object-center object-cover"
             draggable={false}
           />
-          {id ?? `${address?.slice(0, 5)}...${address?.slice(-3)}`}
+          {user?.id ?? `${address?.slice(0, 5)}...${address?.slice(-3)}`}
         </>
       ) : (
-        <Text en="Connect" pt="Conectar" />
+        <Text en="Sign in" pt="Entrar" />
       )}
     </button>
   );
