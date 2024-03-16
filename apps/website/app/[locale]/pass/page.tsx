@@ -22,6 +22,7 @@ import Link from "@/components/Link";
 import { useDebounce } from "@uidotdev/usehooks";
 import { query } from "@/app/api/query/client";
 import { z } from "zod";
+import toast from "react-hot-toast";
 
 const idSchema = z
   .string()
@@ -110,18 +111,18 @@ export default function Pass() {
   }, [address]);
 
   return (
-    <div className="flex w-full mb-32">
-      <div className="flex flex-col items-center max-sm:p-8 gap-8 w-full max-w-[1920px]">
+    <div className="flex justify-center w-full mb-32 max-sm:mb-16">
+      <div className="flex flex-col items-center max-sm:p-8 max-sm:mt-16 max-[400px]:p-4 gap-8 w-full max-w-[1920px]">
         <img
           src="/banner.webp"
           alt="Nouns Esports Banner"
-          className="brightness-75 object-cover w-full h-[25vw] max-h-[500px] rounded-b-2xl overflow-hidden object-center"
+          className="brightness-75 max-sm:brightness-100 object-cover w-full h-[25vw] max-sm:h-32 max-h-[500px] rounded-2xl max-sm:rounded-t-2xl max-[1920px]:rounded-t-none overflow-hidden object-center mt-32 max-[1920px]:mt-0 "
         />
-        <div className="flex flex-col items-center gap-8 mb-8 max-w-4xl">
-          <h1 className="font-luckiest-guy text-white text-center text-6xl">
+        <div className="flex flex-col items-center gap-8 max-sm:gap-4 mb-8 max-w-4xl">
+          <h1 className="font-luckiest-guy text-white text-center text-6xl max-sm:text-3xl max-md:text-4xl">
             Become a Nouns Esports Pass Member
           </h1>
-          <p className="text-center text-lg leading-snug">
+          <p className="text-center text-lg leading-snug max-sm:text-sm">
             Join our esports journey at Nouns Esports! We're offering a unique
             opportunity for esports enthusiasts to directly influence our major
             decisions. Apply for a Nouns Esport Pass, and if accepted, you'll be
@@ -130,7 +131,7 @@ export default function Pass() {
             chance to be part of our community-driven approach to esports.
           </p>
           {authenticated ? (
-            applied ? (
+            !applied ? (
               <div className="flex flex-col gap-4 items-center">
                 <h2 className="text-white text-3xl font-luckiest-guy">
                   Your Application
@@ -143,7 +144,7 @@ export default function Pass() {
                 </p>
                 <p className="text-white max-w-md text-center">
                   {approved
-                    ? "Congrats on becoming a Nouns Esports Pass member! Keep an eyeout for more information on our Twitter or in the Discord server."
+                    ? "Congrats on becoming a Nouns Esports Pass member! Keep an eye out for more information on our Twitter or in the Discord server."
                     : "We are reviewing your application. Check back here in a few days to see if you've been approved."}
                 </p>
                 <ProfileCard
@@ -211,7 +212,7 @@ export default function Pass() {
                     <h2 className="text-white font-semibold">
                       Connect additional accounts (optional)
                     </h2>
-                    <p className="mb-3 leading-tight">
+                    <p className="mb-3 leading-tight max-sm:text-sm">
                       Even though connecting additional accounts is optional,
                       include as much information as possible to give yourself
                       the highest chance of being accepted.
@@ -311,7 +312,7 @@ export default function Pass() {
                 </div>
                 <div className="flex flex-col gap-4 w-full">
                   <FormHeader number={3}>Submit your responses</FormHeader>
-                  <p className="mb-3 leading-tight">
+                  <p className="mb-3 leading-tight max-sm:text-sm">
                     Responses can only be submitted once. Reach out to us in the{" "}
                     <Link href="/discord" className="text-red">
                       Discord
@@ -335,25 +336,34 @@ export default function Pass() {
                             const token = await getAccessToken();
 
                             if (token) {
-                              await query.setUser.mutate({
-                                token,
-                                wallet: address,
-                                id,
-                                pass: "community",
-                              });
+                              try {
+                                await query.setUser.mutate({
+                                  token,
+                                  wallet: address,
+                                  id,
+                                  pass: "community",
+                                });
 
-                              await query.setApplicationResponse.mutate({
-                                token,
-                                user: address,
-                                whatGameDoYouPlayTheMost:
-                                  whatGameDoYouCurrentlyPlayTheMost,
-                                whoAreYouAndWhatIsYourEsportsBackground:
-                                  whoAreYouAndWhatIsYourEsportsBackground,
-                                whatDoYouThinkIsNeededToPushTheEsportsIndustryForward:
-                                  whatDoYouThinkIsNeededToPushTheEsportsIndustryForward,
-                                whatThingsWouldYouLikeToSeeFundedByNouns:
-                                  whatThingsWouldYouLikeToSeeFundedByNouns,
-                              });
+                                await query.setApplicationResponse.mutate({
+                                  token,
+                                  user: address,
+                                  whatGameDoYouPlayTheMost:
+                                    whatGameDoYouCurrentlyPlayTheMost,
+                                  whoAreYouAndWhatIsYourEsportsBackground:
+                                    whoAreYouAndWhatIsYourEsportsBackground,
+                                  whatDoYouThinkIsNeededToPushTheEsportsIndustryForward:
+                                    whatDoYouThinkIsNeededToPushTheEsportsIndustryForward,
+                                  whatThingsWouldYouLikeToSeeFundedByNouns:
+                                    whatThingsWouldYouLikeToSeeFundedByNouns,
+                                });
+                              } catch (error) {
+                                toast.error(
+                                  `Erorr: ${
+                                    // @ts-ignore
+                                    error.message
+                                  }`
+                                );
+                              }
 
                               setApplied(true);
                             }
@@ -396,7 +406,7 @@ function ProfileCard(props: {
   };
 }) {
   return (
-    <div className="flex flex-col gap-4 bg-darkgrey rounded-xl w-fit min-w-[400px] p-3">
+    <div className="flex flex-col gap-4 bg-darkgrey rounded-xl w-fit min-w-[400px] max-sm:min-w-0 max-sm:w-full p-3">
       <div className="flex items-center justify-between w-full">
         <div className="flex items-center gap-3">
           <img
@@ -492,8 +502,11 @@ function FormHeader(props: { number: number; children: React.ReactNode }) {
           ? NumberCircleThree
           : NumberCircleFour;
   return (
-    <h2 className="flex gap-2 items-center text-white text-3xl font-luckiest-guy">
-      <Icon className="w-10 h-10 text-white" weight="fill" />
+    <h2 className="flex gap-2 items-center text-white text-3xl font-luckiest-guy max-sm:text-2xl">
+      <Icon
+        className="w-10 h-10 max-sm:w-7 max-sm:h-7 text-white"
+        weight="fill"
+      />
       {props.children}
     </h2>
   );
