@@ -13,27 +13,27 @@ import Link from "@/components/Link";
 import { Creator, Project } from "@/server/db/schema";
 import Text from "@/components/Text";
 import HighlightedText from "@/components/HighlightedText";
-import type { Event } from "@/server/resolve/events";
+import type { Event } from "@/server/resolve/getEvents";
 import Date from "@/components/Date";
 import { headers } from "next/headers";
 import Image from "next/image";
 import Prop from "@/public/prop.webp";
 import LogoWhite from "@/public/logo/logo-white.svg";
 import Pokemon from "@/public/pokemon.webp";
-import { query } from "@/server/query";
+import { query } from "@/app/api/query/server";
 
 export default async function Home(props: { params: { locale: string } }) {
-  const events = await query.events();
+  const events = await query.getEvents();
 
-  const games = await query.games();
+  const games = await query.getGames();
 
-  const projects = await query.projects();
+  const projects = await query.getProjects();
 
-  const creators = await query.creators();
+  const creators = await query.getCreators();
 
   const isMobile = headers().get("x-device-type") === "mobile";
 
-  const posts = await query.posts();
+  const posts = await query.getPosts();
 
   return (
     <main className="cursor-crosshair flex flex-col">
@@ -293,7 +293,7 @@ function CreatorCard(props: { creator: Creator }) {
 async function ScheduleCard(props: { event: Event }) {
   const type = props.event.summary?.split("]")[0].replace("[", "");
 
-  const game = (await query.games()).find(
+  const game = (await query.getGames()).find(
     (game) =>
       game.name.toLowerCase().includes(type.toLowerCase()) ||
       game.id.toLowerCase().includes(type.toLowerCase())
@@ -331,7 +331,7 @@ async function ScheduleCard(props: { event: Event }) {
 
 function PostCard(props: {
   locale: string;
-  post: Awaited<ReturnType<typeof query.posts>>[number];
+  post: Awaited<ReturnType<typeof query.getPosts>>[number];
 }) {
   return (
     <Link

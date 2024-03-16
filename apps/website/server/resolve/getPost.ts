@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { publicProcedure } from "../trpc";
+import { publicProcedure } from "../clients/trpc";
 import { gql } from "@apollo/client";
 import { arweave, arweaveClient } from "../clients/arweave";
 
@@ -33,7 +33,7 @@ export type Node = {
   content: Node[];
 };
 
-export const post = publicProcedure
+export const getPost = publicProcedure
   .input(z.string())
   .query(async ({ input }) => {
     const { data } = await arweaveClient.query<{

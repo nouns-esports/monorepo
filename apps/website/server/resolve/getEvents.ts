@@ -1,4 +1,4 @@
-import { publicProcedure } from "../trpc";
+import { publicProcedure } from "../clients/trpc";
 import { env } from "@/env";
 
 export type Event = {
@@ -18,7 +18,7 @@ export type Event = {
   };
 };
 
-export const events = publicProcedure.query(async () => {
+export const getEvents = publicProcedure.query(async () => {
   const response = await fetch(
     "https://www.googleapis.com/calendar/v3/calendars/2gl6iku9kcb2qjdrtgdthgng3s@group.calendar.google.com/events?" +
       // @ts-ignore

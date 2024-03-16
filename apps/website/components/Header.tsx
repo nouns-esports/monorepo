@@ -1,11 +1,11 @@
 import Link from "@/components/Link";
 import Logo from "./Logo";
 import Banner from "./Banner";
-import { query } from "@/server/query";
+import { query } from "@/app/api/query/server";
 import Navbar from "./Navbar";
 
 export default async function Header(props: { locale: string }) {
-  const events = await query.events();
+  const events = await query.getEvents();
 
   return (
     <>

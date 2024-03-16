@@ -10,10 +10,10 @@ import {
 import Text from "@/components/Text";
 import ANounsThing from "./ANounsThing";
 import Logo from "./Logo";
-import { query } from "@/server/query";
+import { query } from "@/app/api/query/server";
 
 export default async function Footer(props: { locale: string }) {
-  const games = await query.games();
+  const games = await query.getGames();
 
   return (
     <footer className="flex justify-center w-full">

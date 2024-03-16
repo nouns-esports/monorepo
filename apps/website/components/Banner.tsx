@@ -5,7 +5,7 @@ import Text from "./Text";
 import { ArrowRight, Dot } from "phosphor-react-sc";
 import { useContext } from "react";
 import { PrimaryColorContext } from "@/providers/PrimaryColor";
-import { Event } from "@/server/resolve/events";
+import { Event } from "@/server/resolve/getEvents";
 import { Locale } from "@/middleware";
 import { usePathname } from "next/navigation";
 import { env } from "@/env";

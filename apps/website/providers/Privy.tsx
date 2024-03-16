@@ -35,6 +35,7 @@ import {
 } from "permissionless/accounts";
 import { env } from "@/env";
 import { User } from "@/server/db/schema";
+import { query } from "@/app/api/query/client";
 
 export const publicClient = createPublicClient({
   chain: env.NEXT_PUBLIC_ENVIRONMENT === "development" ? baseSepolia : base,
@@ -94,26 +95,20 @@ export const PrivyContext = createContext<
 >(undefined);
 
 export function useSmartAccount() {
-  const { ready, authenticated, user: privyUser } = usePrivy();
+  const { ready, authenticated } = usePrivy();
   const [address, setAddress] = useState<`0x${string}`>();
   const [connected, setConnected] = useState<boolean>(false);
 
   const privyContext = useContext(PrivyContext);
 
-  const [user, setUser] = useState<User & { privy: PrivyUser }>();
+  const [user, setUser] = useState<User>();
 
   useEffect(() => {
     (async () => {
-      if (address && privyUser) {
-        const response = await fetch("/api/getUser", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ address }),
-        });
-        const result = await response.json();
-        setUser({ ...(result.result.data as User), privy: privyUser });
+      if (address) {
+        const getUser = await query.getUser.query({ address });
+
+        if (getUser) setUser(getUser);
       }
     })();
   }, [address]);
@@ -192,23 +187,23 @@ function PrivyState(props: { children: React.ReactNode }) {
     })();
   }, [embeddedWallet, smartAccountSigner]);
 
-  useEffect(() => {
-    console.log("wallets", wallets);
-    console.log("eip1193provider", eip1193provider);
-    console.log("embeddedWallet", embeddedWallet);
-    console.log("privyClient", privyClient);
-    console.log("smartAccountSigner", smartAccountSigner);
-    console.log("kernelAccount", kernelAccount);
-    console.log("smartAccountClient", smartAccountClient);
-  }, [
-    wallets,
-    eip1193provider,
-    embeddedWallet,
-    privyClient,
-    smartAccountSigner,
-    kernelAccount,
-    smartAccountClient,
-  ]);
+  // useEffect(() => {
+  //   console.log("wallets", wallets);
+  //   console.log("eip1193provider", eip1193provider);
+  //   console.log("embeddedWallet", embeddedWallet);
+  //   console.log("privyClient", privyClient);
+  //   console.log("smartAccountSigner", smartAccountSigner);
+  //   console.log("kernelAccount", kernelAccount);
+  //   console.log("smartAccountClient", smartAccountClient);
+  // }, [
+  //   wallets,
+  //   eip1193provider,
+  //   embeddedWallet,
+  //   privyClient,
+  //   smartAccountSigner,
+  //   kernelAccount,
+  //   smartAccountClient,
+  // ]);
 
   return (
     <PrivyContext.Provider

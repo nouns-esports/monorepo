@@ -79,12 +79,12 @@ export const pass = pgEnum("pass", ["og", "vip", "community", "premium"]);
 
 export const users = pgTable("users", {
   wallet: text("wallet").primaryKey(),
-  id: text("id").notNull(),
+  id: text("id").notNull().unique(),
   pass: pass("pass").notNull(),
 });
 
 export const applicationResponses = pgTable("applicationResponses", {
-  user: text("id").notNull(),
+  user: text("user").primaryKey(),
   whatGameDoYouPlayTheMost: text("whatGameDoYouPlayTheMost").notNull(),
   whoAreYouAndWhatIsYourEsportsBackground: text(
     "whoAreYouAndWhatIsYourEsportsBackground"
@@ -102,7 +102,7 @@ export const applicationResponsesRelations = relations(
   ({ one }) => ({
     user: one(users, {
       fields: [applicationResponses.user],
-      references: [users.id],
+      references: [users.wallet],
     }),
   })
 );

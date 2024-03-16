@@ -1,4 +1,4 @@
-import { publicProcedure } from "../trpc";
+import { publicProcedure } from "../clients/trpc";
 import { arweave, arweaveClient } from "../clients/arweave";
 import { gql } from "@apollo/client";
 
@@ -29,7 +29,7 @@ const GetAllPublications = gql`
   }
 `;
 
-export const posts = publicProcedure.query(async () => {
+export const getPosts = publicProcedure.query(async () => {
   const seen: Record<string, boolean> = {};
 
   const { data } = await arweaveClient.query<{

@@ -168,12 +168,13 @@ export default function Navbar() {
 function NavItem(props: { href: string; icon: string; children: string }) {
   return (
     <NavigationMenu.Item className="max-sm:hidden flex items-center mr-4 justify-center text-white/30 hover:bg-white/5 px-4 rounded-full hover:text-white h-10 transition-colors">
-      <Link href={props.href}>
-        <NavigationMenu.Link className="flex items-center gap-1.5 text-white">
-          <img className="w-4 h-4" src={props.icon} />
-          {props.children}
-        </NavigationMenu.Link>
-      </Link>
+      <NavigationMenu.Link
+        href={props.href}
+        className="flex items-center gap-1.5 text-white"
+      >
+        <img className="w-4 h-4" src={props.icon} />
+        {props.children}
+      </NavigationMenu.Link>
     </NavigationMenu.Item>
   );
 }
@@ -198,18 +199,19 @@ function NavGroup(props: { title: string; children: React.ReactNode }) {
 function NavGroupItem(props: { children: string; href: string; icon: string }) {
   return (
     <NavigationMenu.Item key={props.children}>
-      <Link href={props.href} className="group">
-        <NavigationMenu.Link className="flex items-center gap-3">
-          {props.icon.includes("/") ? (
-            <img className="w-4 h-4 rounded-sm" src={props.icon} />
-          ) : (
-            <p>{props.icon}</p>
-          )}
-          <p className="group-hover:text-white text-white/30 text-nowrap transition-colors">
-            {props.children}
-          </p>
-        </NavigationMenu.Link>
-      </Link>
+      <NavigationMenu.Link
+        href={props.href}
+        className="group flex items-center gap-3"
+      >
+        {props.icon.includes("/") ? (
+          <img className="w-4 h-4 rounded-sm" src={props.icon} />
+        ) : (
+          <p>{props.icon}</p>
+        )}
+        <p className="group-hover:text-white text-white/30 text-nowrap transition-colors">
+          {props.children}
+        </p>
+      </NavigationMenu.Link>
     </NavigationMenu.Item>
   );
 }

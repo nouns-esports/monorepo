@@ -7,16 +7,12 @@ import { useRouter, useParams } from "next/navigation";
 import { useEffect } from "react";
 
 export default function SignInButton() {
-  const { login, logout } = usePrivy();
+  const { login, logout, user: privyUser } = usePrivy();
 
   const { address, connected, user } = useSmartAccount();
 
   const router = useRouter();
   const params = useParams();
-
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
 
   return (
     <button
@@ -37,7 +33,7 @@ export default function SignInButton() {
         <>
           <img
             src={
-              user?.privy.farcaster?.pfp ??
+              privyUser?.farcaster?.pfp ??
               `https://api.cloudnouns.com/v1/pfp?text=${address}`
             }
             alt={`${address}'s avatar`}

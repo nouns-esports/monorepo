@@ -15,6 +15,20 @@
       "when": 1710451177693,
       "tag": "0001_serious_jack_flag",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1710538904810,
+      "tag": "0002_noisy_champions",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1710547810654,
+      "tag": "0003_confused_the_fury",
+      "breakpoints": true
     }
   ]
 }
