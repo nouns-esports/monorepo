@@ -3,8 +3,7 @@
 import Button from "@/components/Button";
 import TextArea from "@/components/form/TextArea";
 import TextInput from "@/components/form/TextInput";
-import { useSmartAccount } from "@/providers/Privy";
-import { usePrivy } from "@privy-io/react-auth";
+import { useAccount } from "@/providers/Privy";
 import {
   NumberCircleOne,
   NumberCircleTwo,
@@ -23,6 +22,7 @@ import { useDebounce } from "@uidotdev/usehooks";
 import { query } from "@/app/api/query/client";
 import { z } from "zod";
 import toast from "react-hot-toast";
+import Loading from "@/components/Loading";
 
 const idSchema = z
   .string()
@@ -37,21 +37,24 @@ const idSchema = z
 
 export default function Pass() {
   const {
-    authenticated,
+    connected,
+    address,
+    farcaster,
+    discord,
+    twitter,
+    email,
+    id,
     login,
     linkWallet,
     linkDiscord,
     linkTwitter,
     linkEmail,
     linkFarcaster,
-    user: privyUser,
     getAccessToken,
-  } = usePrivy();
+  } = useAccount();
 
-  const { user, address } = useSmartAccount();
-
-  const [id, setId] = useState("");
-  const debouncedId = useDebounce(id, 300);
+  const [idState, setIdState] = useState("");
+  const debouncedId = useDebounce(idState, 300);
 
   const [isIdValid, setIsIdValid] = useState(false);
 
@@ -95,12 +98,10 @@ export default function Pass() {
       query.getApplicationResponse
         .query({ wallet: address })
         .then((response) => {
-          console.log("response", response);
           if (response) setApplied(true);
         });
 
-      query.getUser.query({ address: address }).then((user) => {
-        console.log("user", user);
+      query.getUser.query({ address }).then((user) => {
         if (user) {
           if (user.pass === "og") {
             setApproved(true);
@@ -130,8 +131,8 @@ export default function Pass() {
             an active participant in shaping our future. Don't miss out on this
             chance to be part of our community-driven approach to esports.
           </p>
-          {authenticated ? (
-            !applied ? (
+          {connected ? (
+            applied ? (
               <div className="flex flex-col gap-4 items-center">
                 <h2 className="text-white text-3xl font-luckiest-guy">
                   Your Application
@@ -148,16 +149,16 @@ export default function Pass() {
                     : "We are reviewing your application. Check back here in a few days to see if you've been approved."}
                 </p>
                 <ProfileCard
-                  pfp={privyUser?.farcaster?.pfp}
-                  id={user?.id ?? id}
+                  pfp={farcaster?.pfp}
+                  id={id ?? idState}
                   address={address}
-                  bio={privyUser?.farcaster?.bio}
+                  bio={farcaster?.bio}
                   connections={{
-                    discord: privyUser?.discord?.username,
-                    twitter: privyUser?.twitter?.username,
-                    email: privyUser?.email?.address,
-                    farcaster: privyUser?.farcaster?.username,
-                    wallet: privyUser?.wallet?.address,
+                    discord: discord?.username,
+                    twitter: twitter?.username,
+                    email: email?.address,
+                    farcaster: farcaster?.username,
+                    wallet: address,
                   }}
                 />
               </div>
@@ -166,16 +167,16 @@ export default function Pass() {
                 <div className="flex flex-col gap-6">
                   <FormHeader number={1}>Create your profile</FormHeader>
                   <ProfileCard
-                    pfp={privyUser?.farcaster?.pfp}
-                    id={id ? id : "New User"}
+                    pfp={farcaster?.pfp}
+                    id={idState ? idState : "New User"}
                     address={address}
-                    bio={privyUser?.farcaster?.bio}
+                    bio={farcaster?.bio}
                     connections={{
-                      discord: privyUser?.discord?.username,
-                      twitter: privyUser?.twitter?.username,
-                      email: privyUser?.email?.address,
-                      farcaster: privyUser?.farcaster?.username,
-                      wallet: privyUser?.wallet?.address,
+                      discord: discord?.username,
+                      twitter: twitter?.username,
+                      email: email?.address,
+                      farcaster: farcaster?.username,
+                      wallet: address,
                     }}
                   />
 
@@ -186,11 +187,10 @@ export default function Pass() {
                         linkWallet();
                       }}
                     >
-                      {privyUser?.wallet
-                        ? `Connected: ${privyUser?.wallet.address.slice(
-                            0,
-                            5
-                          )}...${privyUser?.wallet.address.slice(-3)}`
+                      {address
+                        ? `Connected: ${address.slice(0, 5)}...${address.slice(
+                            -3
+                          )}`
                         : "Connect Wallet"}
                     </Button>
                   </div>
@@ -203,8 +203,8 @@ export default function Pass() {
                         linkDiscord();
                       }}
                     >
-                      {privyUser?.discord
-                        ? `Connected: ${privyUser?.discord.username}`
+                      {discord
+                        ? `Connected: ${discord.username}`
                         : "Connect Discord"}
                     </Button>
                   </div>
@@ -223,8 +223,8 @@ export default function Pass() {
                           linkTwitter();
                         }}
                       >
-                        {privyUser?.twitter
-                          ? `Connected: ${privyUser?.twitter.username}`
+                        {twitter
+                          ? `Connected: ${twitter.username}`
                           : "Connect Twitter"}
                       </Button>
                       <Button
@@ -232,8 +232,8 @@ export default function Pass() {
                           linkFarcaster();
                         }}
                       >
-                        {privyUser?.farcaster
-                          ? `Connected: ${privyUser?.farcaster.username}`
+                        {farcaster
+                          ? `Connected: ${farcaster.username}`
                           : "Connect Farcaster"}
                       </Button>
                       <Button
@@ -241,8 +241,8 @@ export default function Pass() {
                           linkEmail();
                         }}
                       >
-                        {privyUser?.email
-                          ? `Connected: ${privyUser?.email.address}`
+                        {email
+                          ? `Connected: ${email.address}`
                           : "Connect Email"}
                       </Button>
                     </div>
@@ -251,15 +251,15 @@ export default function Pass() {
                     placeholder="@handle"
                     label="Claim your Nouns Esports ID"
                     small
-                    value={id}
+                    value={idState}
                     error={
                       idTaken
                         ? "ID already taken"
-                        : !isIdValid && id.length > 0
+                        : !isIdValid && idState.length > 0
                           ? "ID can only include letters, numbers, and underscores"
                           : undefined
                     }
-                    onChange={(value) => setId(value)}
+                    onChange={(value) => setIdState(value)}
                   />
                 </div>
                 {/* <div className="flex flex-col gap-6">
@@ -321,12 +321,8 @@ export default function Pass() {
                   </p>
                   <Button
                     onClick={async () => {
-                      if (idSchema.safeParse(id).success) {
-                        if (
-                          address &&
-                          privyUser?.discord &&
-                          privyUser?.wallet
-                        ) {
+                      if (idSchema.safeParse(idState).success) {
+                        if (address && discord) {
                           if (
                             whatGameDoYouCurrentlyPlayTheMost &&
                             whoAreYouAndWhatIsYourEsportsBackground &&
@@ -340,7 +336,7 @@ export default function Pass() {
                                 await query.setUser.mutate({
                                   token,
                                   wallet: address,
-                                  id,
+                                  id: idState,
                                   pass: "community",
                                 });
 
@@ -383,7 +379,7 @@ export default function Pass() {
                 login();
               }}
             >
-              Get Started
+              {false ? <Loading /> : "Get Started"}
             </Button>
           )}
         </div>

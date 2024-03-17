@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "@/components/Link";
-import cn from "classnames";
+import { twMerge } from "tailwind-merge";
 
 export default function Button(props: {
   href?: string;
@@ -31,7 +31,7 @@ export default function Button(props: {
         ""
       )}
       <div
-        className={cn(
+        className={twMerge(
           "relative select-none text-darkgrey py-3 px-[22px] text-xl bg-white rounded-full flex items-center justify-center leading-none font-bebas-neue whitespace-nowrap",
           props.href
             ? "hover:translate-x-1 hover:-translate-y-1 transition-transform"

@@ -1,59 +1,45 @@
 "use client";
 
-import {
-  ConnectedWallet,
-  EIP1193Provider,
-  PrivyProvider,
-  User as PrivyUser,
-  usePrivy,
-  useWallets,
-} from "@privy-io/react-auth";
-import {
-  PimlicoBundlerClient,
-  PimlicoPaymasterClient,
-  createPimlicoBundlerClient,
-  createPimlicoPaymasterClient,
-} from "permissionless/clients/pimlico";
-import {
-  walletClientToSmartAccountSigner,
-  createSmartAccountClient,
-  SmartAccountClient,
-} from "permissionless";
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import {
-  WalletClient,
-  createPublicClient,
-  createWalletClient,
-  custom,
-  http,
-} from "viem";
-import { base, baseSepolia } from "viem/chains";
-import {
-  KernelEcdsaSmartAccount,
-  SmartAccountSigner,
-  signerToEcdsaKernelSmartAccount,
-} from "permissionless/accounts";
+import { PrivyProvider, usePrivy, useWallets } from "@privy-io/react-auth";
+import { WagmiProvider, useSetActiveWallet } from "@privy-io/wagmi";
 import { env } from "@/env";
+import {
+  createContext,
+  use,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { createConfig } from "@privy-io/wagmi";
+import { http, useWalletClient, usePublicClient } from "wagmi";
+import { base, baseSepolia } from "wagmi/chains";
+import { walletClientToSmartAccountSigner } from "permissionless";
+import { createPimlicoPaymasterClient } from "permissionless/clients/pimlico";
+import { createKernelAccount, createKernelAccountClient } from "@zerodev/sdk";
+import { signerToEcdsaValidator } from "@zerodev/ecdsa-validator";
+import { createWeightedECDSAValidator } from "@zerodev/weighted-ecdsa-validator";
+import { toFunctionSelector } from "viem";
 import { User } from "@/server/db/schema";
 import { query } from "@/app/api/query/client";
+// import toast from "react-hot-toast";
 
-export const publicClient = createPublicClient({
-  chain: env.NEXT_PUBLIC_ENVIRONMENT === "development" ? baseSepolia : base,
-  transport: http(),
+const queryClient = new QueryClient();
+
+const wagmiConfig = createConfig({
+  chains: [env.NEXT_PUBLIC_ENVIRONMENT === "production" ? base : baseSepolia],
+  transports: {
+    [base.id]: http(),
+    [baseSepolia.id]: http(),
+  },
 });
 
-export const pimlicoBundler = createPimlicoBundlerClient({
+const pimlicoPaymasterClient = createPimlicoPaymasterClient({
+  chain: env.NEXT_PUBLIC_ENVIRONMENT === "production" ? base : baseSepolia,
   transport: http(
     `https://api.pimlico.io/v2/${
-      env.NEXT_PUBLIC_ENVIRONMENT === "development" ? "baseSepolia" : "base"
-    }/rpc?apikey=${env.NEXT_PUBLIC_PIMLICO_API_KEY}`
-  ),
-});
-
-export const pimlicoPaymaster = createPimlicoPaymasterClient({
-  transport: http(
-    `https://api.pimlico.io/v2/${
-      env.NEXT_PUBLIC_ENVIRONMENT === "development" ? "baseSepolia" : "base"
+      env.NEXT_PUBLIC_ENVIRONMENT === "production" ? "base" : "baseSepolia"
     }/rpc?apikey=${env.NEXT_PUBLIC_PIMLICO_API_KEY}`
   ),
 });
@@ -75,55 +61,102 @@ export default function Privy(props: { children: React.ReactNode }) {
         },
       }}
     >
-      <PrivyState>{props.children}</PrivyState>
+      <QueryClientProvider client={queryClient}>
+        <WagmiProvider config={wagmiConfig}>
+          <PrivyState>{props.children}</PrivyState>
+        </WagmiProvider>
+      </QueryClientProvider>
     </PrivyProvider>
   );
 }
 
 export const PrivyContext = createContext<
   | {
-      pimlicoBundler: PimlicoBundlerClient;
-      pimlicoPaymaster: PimlicoPaymasterClient;
-      embeddedWallet?: ConnectedWallet;
-      eip1193provider?: EIP1193Provider;
-      privyClient?: WalletClient;
-      smartAccountSigner?: SmartAccountSigner;
-      kernelAccount?: KernelEcdsaSmartAccount;
-      smartAccountClient?: SmartAccountClient;
+      smartAccountClient?: ReturnType<typeof createKernelAccountClient>;
+      setSmartAccountClient?: React.Dispatch<
+        React.SetStateAction<
+          ReturnType<typeof createKernelAccountClient> | undefined
+        >
+      >;
     }
   | undefined
 >(undefined);
 
-export function useSmartAccount() {
-  const { ready, authenticated } = usePrivy();
-  const [address, setAddress] = useState<`0x${string}`>();
-  const [connected, setConnected] = useState<boolean>(false);
+export function useAccount() {
+  const {
+    ready,
+    authenticated,
+    user: privy,
+    login: privyLogin,
+    logout: privyLogout,
+    linkDiscord,
+    linkEmail,
+    linkFarcaster,
+    linkWallet,
+    linkTwitter,
+    getAccessToken,
+  } = usePrivy();
+  const { ready: walletsReady, wallets } = useWallets();
 
   const privyContext = useContext(PrivyContext);
 
-  const [user, setUser] = useState<User>();
+  const [address, setAddress] = useState<`0x${string}`>();
+  const [pass, setPass] = useState<User["pass"]>();
+  const [id, setId] = useState<User["id"]>();
 
-  useEffect(() => {
-    (async () => {
-      if (address) {
-        const getUser = await query.getUser.query({ address });
-
-        if (getUser) setUser(getUser);
-      }
-    })();
-  }, [address]);
+  const connected = useMemo(
+    () => ready && authenticated && address && id,
+    [ready, authenticated, address, id]
+  );
 
   useEffect(() => {
     if (ready && authenticated && privyContext?.smartAccountClient?.account) {
       setAddress(privyContext.smartAccountClient.account.address);
-      setConnected(true);
-    } else {
-      setAddress(undefined);
-      setConnected(false);
+      query.getUser
+        .query({ address: privyContext.smartAccountClient.account.address })
+        .then((user) => {
+          if (user) {
+            setId(user.id);
+            setPass(user.pass);
+          }
+          //  else toast.error("User data not found"); dafdafda
+        });
     }
   }, [privyContext, ready, authenticated]);
 
-  return { address, connected, user };
+  function login() {
+    // setLoading(true);
+    privyLogin();
+  }
+
+  async function logout() {
+    await privyLogout();
+
+    privyContext?.setSmartAccountClient?.(undefined);
+    setAddress(undefined);
+    setId(undefined);
+    setPass(undefined);
+  }
+
+  return {
+    address,
+    pass,
+    id,
+    connected,
+    wallets: walletsReady ? wallets : undefined,
+    email: privy?.email,
+    twitter: privy?.twitter,
+    discord: privy?.discord,
+    farcaster: privy?.farcaster,
+    login,
+    logout,
+    linkDiscord,
+    linkEmail,
+    linkFarcaster,
+    linkWallet,
+    linkTwitter,
+    getAccessToken,
+  };
 }
 
 function PrivyState(props: { children: React.ReactNode }) {
@@ -134,89 +167,80 @@ function PrivyState(props: { children: React.ReactNode }) {
     [wallets]
   );
 
-  const [eip1193provider, setEip1193Provider] = useState<EIP1193Provider>();
-
-  const privyClient = useMemo(() => {
-    if (!eip1193provider || !embeddedWallet) return;
-
-    return createWalletClient({
-      account: embeddedWallet?.address as `0x${string}`,
-      chain: env.NEXT_PUBLIC_ENVIRONMENT === "development" ? baseSepolia : base,
-      transport: custom(eip1193provider),
-    });
-  }, [eip1193provider, embeddedWallet]);
-
-  const smartAccountSigner = useMemo(() => {
-    if (!privyClient) return;
-    return walletClientToSmartAccountSigner(privyClient);
-  }, [privyClient]);
-
-  const [kernelAccount, setKernalAccount] = useState<KernelEcdsaSmartAccount>();
-
-  const smartAccountClient = useMemo(() => {
-    if (!kernelAccount) return;
-
-    return createSmartAccountClient({
-      account: kernelAccount,
-      chain: env.NEXT_PUBLIC_ENVIRONMENT === "development" ? baseSepolia : base,
-      transport: http(
-        `https://api.pimlico.io/v2/${
-          env.NEXT_PUBLIC_ENVIRONMENT === "development" ? "baseSepolia" : "base"
-        }/rpc?apikey=${env.NEXT_PUBLIC_PIMLICO_API_KEY}`
-      ),
-      sponsorUserOperation: pimlicoPaymaster.sponsorUserOperation,
-    });
-  }, [kernelAccount]);
+  const { setActiveWallet } = useSetActiveWallet();
 
   useEffect(() => {
-    (async () => {
-      if (embeddedWallet) {
-        setEip1193Provider(await embeddedWallet.getEthereumProvider());
-      }
+    if (embeddedWallet) setActiveWallet(embeddedWallet);
+  }, [embeddedWallet]);
 
-      if (smartAccountSigner) {
-        setKernalAccount(
-          await signerToEcdsaKernelSmartAccount(publicClient, {
-            entryPoint: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789",
-            signer: smartAccountSigner,
-            index: 0n,
-            // address: "0x...",
+  const { data: walletClient } = useWalletClient();
+  const publicClient = usePublicClient();
+
+  const signer = useMemo(() => {
+    if (embeddedWallet && walletClient) {
+      return walletClientToSmartAccountSigner(walletClient);
+    }
+  }, [walletClient]);
+
+  const [smartAccountClient, setSmartAccountClient] =
+    useState<ReturnType<typeof createKernelAccountClient>>();
+
+  useEffect(() => {
+    if (signer && publicClient) {
+      (async () => {
+        setSmartAccountClient(
+          createKernelAccountClient({
+            account: await createKernelAccount(publicClient, {
+              plugins: {
+                sudo: await signerToEcdsaValidator(publicClient, {
+                  signer,
+                }),
+                regular: await createWeightedECDSAValidator(publicClient, {
+                  config: {
+                    threshold: 100,
+                    signers: [
+                      {
+                        // Nouns Esports Multisig
+                        address: "0x2842dd3C97F902aEC2eF36a64FF722A7F90C400F",
+                        weight: 100,
+                      },
+                    ],
+                  },
+                  signers: [signer],
+                }),
+                executorData: {
+                  // ZeroDev Recovery Executor
+                  executor: "0x2f65dB8039fe5CAEE0a8680D2879deB800F31Ae1",
+                  selector: toFunctionSelector(
+                    "function doRecovery(address _validator, bytes calldata _data)"
+                  ),
+                },
+              },
+            }),
+            chain:
+              env.NEXT_PUBLIC_ENVIRONMENT === "production" ? base : baseSepolia,
+            transport: http(
+              `https://api.pimlico.io/v2/${
+                env.NEXT_PUBLIC_ENVIRONMENT === "production"
+                  ? "base"
+                  : "baseSepolia"
+              }/rpc?apikey=${env.NEXT_PUBLIC_PIMLICO_API_KEY}`
+            ),
+            sponsorUserOperation: async ({ userOperation, entryPoint }) => {
+              return pimlicoPaymasterClient.sponsorUserOperation({
+                userOperation,
+                entryPoint,
+              });
+            },
           })
         );
-      }
-    })();
-  }, [embeddedWallet, smartAccountSigner]);
-
-  // useEffect(() => {
-  //   console.log("wallets", wallets);
-  //   console.log("eip1193provider", eip1193provider);
-  //   console.log("embeddedWallet", embeddedWallet);
-  //   console.log("privyClient", privyClient);
-  //   console.log("smartAccountSigner", smartAccountSigner);
-  //   console.log("kernelAccount", kernelAccount);
-  //   console.log("smartAccountClient", smartAccountClient);
-  // }, [
-  //   wallets,
-  //   eip1193provider,
-  //   embeddedWallet,
-  //   privyClient,
-  //   smartAccountSigner,
-  //   kernelAccount,
-  //   smartAccountClient,
-  // ]);
+      })();
+    }
+  }, [publicClient, signer]);
 
   return (
     <PrivyContext.Provider
-      value={{
-        pimlicoBundler,
-        pimlicoPaymaster,
-        embeddedWallet,
-        eip1193provider,
-        privyClient,
-        smartAccountSigner,
-        kernelAccount,
-        smartAccountClient,
-      }}
+      value={{ smartAccountClient, setSmartAccountClient }}
     >
       {props.children}
     </PrivyContext.Provider>

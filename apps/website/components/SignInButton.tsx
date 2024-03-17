@@ -1,15 +1,12 @@
 "use client";
 
-import { usePrivy } from "@privy-io/react-auth";
 import Text from "@/components/Text";
-import { useSmartAccount } from "@/providers/Privy";
+import { useAccount } from "@/providers/Privy";
 import { useRouter, useParams } from "next/navigation";
-import { useEffect } from "react";
+import Loading from "./Loading";
 
 export default function SignInButton() {
-  const { login, logout, user: privyUser } = usePrivy();
-
-  const { address, connected, user } = useSmartAccount();
+  const { address, connected, farcaster, id, login, logout } = useAccount();
 
   const router = useRouter();
   const params = useParams();
@@ -33,15 +30,19 @@ export default function SignInButton() {
         <>
           <img
             src={
-              privyUser?.farcaster?.pfp ??
+              farcaster?.pfp ??
               `https://api.cloudnouns.com/v1/pfp?text=${address}`
             }
             alt={`${address}'s avatar`}
             className="rounded-full w-7 h-7 select-none object-center object-cover"
             draggable={false}
           />
-          {user?.id ?? `${address?.slice(0, 5)}...${address?.slice(-3)}`}
+          {id ?? `${address?.slice(0, 5)}...${address?.slice(-3)}`}
         </>
+      ) : false ? (
+        <div className="pt-[3px]">
+          <Loading />
+        </div>
       ) : (
         <Text en="Sign in" pt="Entrar" />
       )}

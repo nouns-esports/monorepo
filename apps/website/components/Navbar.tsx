@@ -168,13 +168,10 @@ export default function Navbar() {
 function NavItem(props: { href: string; icon: string; children: string }) {
   return (
     <NavigationMenu.Item className="max-sm:hidden flex items-center mr-4 justify-center text-white/30 hover:bg-white/5 px-4 rounded-full hover:text-white h-10 transition-colors">
-      <NavigationMenu.Link
-        href={props.href}
-        className="flex items-center gap-1.5 text-white"
-      >
+      <Link href={props.href} className="flex items-center gap-1.5 text-white">
         <img className="w-4 h-4" src={props.icon} />
         {props.children}
-      </NavigationMenu.Link>
+      </Link>
     </NavigationMenu.Item>
   );
 }
