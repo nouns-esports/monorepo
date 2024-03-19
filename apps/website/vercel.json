@@ -71,17 +71,35 @@
       "permanent": true
     },
     {
+      "source": "/evo",
+      "destination": "https://prop.house/0x707c63f7b86479a1b4bae3c24224ca9c18dd3338",
+      "permanent": true
+    },
+    {
+      "source": "/GOML",
+      "destination": "https://prop.house/0x3830a19ec7aa113cdc9e8fa84aeb0a5080c66bb2",
+      "permanent": true
+    },
+    {
+      "source": "/goml",
+      "destination": "https://prop.house/0x3830a19ec7aa113cdc9e8fa84aeb0a5080c66bb2",
+      "permanent": true
+    },
+    {
+      "source": "/tippedoff",
+      "destination": "https://prop.house/0x972fe18d946cbba02e398aa1749e0c400100deb1",
+      "permanent": true
+    },
+    {
       "source": "/foxes",
       "destination": "https://shop.nouns.gg/products/pre-sale-nouns-foxes-t-shirt",
       "permanent": true
     },
-    
     {
       "source": "/signup",
       "destination": "https://forms.nouns.gg/signup/",
       "permanent": true
     },
-
     {
       "source": "/signup-jp",
       "destination": "https://forms.nouns.gg/signup-jp/",
