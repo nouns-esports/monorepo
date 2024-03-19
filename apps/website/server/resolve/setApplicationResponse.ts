@@ -6,12 +6,12 @@ import { privyClient } from "../clients/privy";
 export const setApplicationResponse = publicProcedure
   .input(
     z.object({
-      token: z.string(),
-      user: z.string(),
-      whatGameDoYouPlayTheMost: z.string(),
-      whoAreYouAndWhatIsYourEsportsBackground: z.string(),
-      whatDoYouThinkIsNeededToPushTheEsportsIndustryForward: z.string(),
-      whatThingsWouldYouLikeToSeeFundedByNouns: z.string(),
+      token: z.string().min(1),
+      user: z.string().min(1),
+      whatGameDoYouPlayTheMost: z.string().min(1),
+      whoAreYouAndWhatIsYourEsportsBackground: z.string().min(1),
+      whatDoYouThinkIsNeededToPushTheEsportsIndustryForward: z.string().min(1),
+      whatThingsWouldYouLikeToSeeFundedByNouns: z.string().min(1),
     })
   )
   .mutation(async ({ input }) => {

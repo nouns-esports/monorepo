@@ -3,14 +3,7 @@
 import { PrivyProvider, usePrivy, useWallets } from "@privy-io/react-auth";
 import { WagmiProvider, useSetActiveWallet } from "@privy-io/wagmi";
 import { env } from "@/env";
-import {
-  createContext,
-  use,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createConfig } from "@privy-io/wagmi";
 import { http, useWalletClient, usePublicClient } from "wagmi";
@@ -23,7 +16,6 @@ import { createWeightedECDSAValidator } from "@zerodev/weighted-ecdsa-validator"
 import { toFunctionSelector } from "viem";
 import { User } from "@/server/db/schema";
 import { query } from "@/app/api/query/client";
-// import toast from "react-hot-toast";
 
 const queryClient = new QueryClient();
 
@@ -87,7 +79,7 @@ export function useAccount() {
     ready,
     authenticated,
     user: privy,
-    login: privyLogin,
+    login,
     logout: privyLogout,
     linkDiscord,
     linkEmail,
@@ -102,46 +94,39 @@ export function useAccount() {
 
   const [address, setAddress] = useState<`0x${string}`>();
   const [pass, setPass] = useState<User["pass"]>();
-  const [id, setId] = useState<User["id"]>();
 
   const connected = useMemo(
-    () => ready && authenticated && address && id,
-    [ready, authenticated, address, id]
+    () => ready && authenticated && address,
+    [ready, authenticated, address]
   );
 
   useEffect(() => {
-    if (ready && authenticated && privyContext?.smartAccountClient?.account) {
+    if (privyContext?.smartAccountClient?.account) {
       setAddress(privyContext.smartAccountClient.account.address);
-      query.getUser
-        .query({ address: privyContext.smartAccountClient.account.address })
-        .then((user) => {
-          if (user) {
-            setId(user.id);
-            setPass(user.pass);
-          }
-          //  else toast.error("User data not found"); dafdafda
-        });
     }
-  }, [privyContext, ready, authenticated]);
+  }, [privyContext]);
 
-  function login() {
-    // setLoading(true);
-    privyLogin();
-  }
+  useEffect(() => {
+    if (privy) {
+      query.getUser.query({ id: privy.id }).then((user) => {
+        if (user) setPass(user.pass);
+      });
+    }
+  }, [privy]);
 
+  // this can probably just be a reaction to privy state
   async function logout() {
     await privyLogout();
 
     privyContext?.setSmartAccountClient?.(undefined);
     setAddress(undefined);
-    setId(undefined);
     setPass(undefined);
   }
 
   return {
+    id: privy?.id,
     address,
     pass,
-    id,
     connected,
     wallets: walletsReady ? wallets : undefined,
     email: privy?.email,

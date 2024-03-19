@@ -24,20 +24,10 @@ import { z } from "zod";
 import toast from "react-hot-toast";
 import Loading from "@/components/Loading";
 
-const idSchema = z
-  .string()
-  .min(1)
-  .regex(/^[a-z0-9_]+$/);
-
-// Nouns Esports Pass
-//  - VIP (Whales)
-//  - OG (Early Adopters)
-//  - Premium (Paid)
-//  - Community (Free)
-
 export default function Pass() {
   const {
     connected,
+    pass,
     address,
     farcaster,
     discord,
@@ -52,26 +42,6 @@ export default function Pass() {
     linkFarcaster,
     getAccessToken,
   } = useAccount();
-
-  const [idState, setIdState] = useState("");
-  const debouncedId = useDebounce(idState, 300);
-
-  const [isIdValid, setIsIdValid] = useState(false);
-
-  const [idTaken, setIdTaken] = useState(false);
-
-  useEffect(() => {
-    if (debouncedId) {
-      if (idSchema.safeParse(debouncedId.toLocaleLowerCase()).success) {
-        setIsIdValid(true);
-      } else setIsIdValid(false);
-
-      query.getId.query({ id: debouncedId.toLocaleLowerCase() }).then((id) => {
-        if (id) setIdTaken(true);
-        else setIdTaken(false);
-      });
-    }
-  }, [debouncedId]);
 
   const [
     whatGameDoYouCurrentlyPlayTheMost,
@@ -91,25 +61,14 @@ export default function Pass() {
   ] = useState("");
 
   const [applied, setApplied] = useState(false);
-  const [approved, setApproved] = useState(false);
 
   useEffect(() => {
-    if (address) {
-      query.getApplicationResponse
-        .query({ wallet: address })
-        .then((response) => {
-          if (response) setApplied(true);
-        });
-
-      query.getUser.query({ address }).then((user) => {
-        if (user) {
-          if (user.pass === "og") {
-            setApproved(true);
-          }
-        }
+    if (id) {
+      query.getApplicationResponse.query({ id }).then((response) => {
+        if (response) setApplied(true);
       });
     }
-  }, [address]);
+  }, [id]);
 
   return (
     <div className="flex justify-center w-full mb-32 max-sm:mb-16">
@@ -139,18 +98,20 @@ export default function Pass() {
                 </h2>
                 <p className="text-white font-bebas-neue text-xl">
                   Status:{" "}
-                  <span className={approved ? "text-green" : "text-yellow"}>
-                    {approved ? "Approved" : "In Review"}
+                  <span
+                    className={pass === "og" ? "text-green" : "text-yellow"}
+                  >
+                    {pass === "og" ? "Approved" : "In Review"}
                   </span>
                 </p>
                 <p className="text-white max-w-md text-center">
-                  {approved
+                  {pass === "og"
                     ? "Congrats on becoming a Nouns Esports Pass member! Keep an eye out for more information on our Twitter or in the Discord server."
                     : "We are reviewing your application. Check back here in a few days to see if you've been approved."}
                 </p>
                 <ProfileCard
                   pfp={farcaster?.pfp}
-                  id={id ?? idState}
+                  id={farcaster?.username ?? "New User"}
                   address={address}
                   bio={farcaster?.bio}
                   connections={{
@@ -168,7 +129,7 @@ export default function Pass() {
                   <FormHeader number={1}>Create your profile</FormHeader>
                   <ProfileCard
                     pfp={farcaster?.pfp}
-                    id={idState ? idState : "New User"}
+                    id={farcaster?.username ?? "New User"}
                     address={address}
                     bio={farcaster?.bio}
                     connections={{
@@ -179,19 +140,18 @@ export default function Pass() {
                       wallet: address,
                     }}
                   />
-
                   <div className="flex flex-col gap-2">
-                    <h2 className="text-white font-semibold">Add a wallet</h2>
+                    <h2 className="text-white font-semibold">
+                      Connect a Farcaster account
+                    </h2>
                     <Button
                       onClick={() => {
-                        linkWallet();
+                        linkFarcaster();
                       }}
                     >
-                      {address
-                        ? `Connected: ${address.slice(0, 5)}...${address.slice(
-                            -3
-                          )}`
-                        : "Connect Wallet"}
+                      {farcaster
+                        ? `Connected ${farcaster.username}`
+                        : "Connect Farcaster"}
                     </Button>
                   </div>
                   <div className="flex flex-col gap-2">
@@ -229,15 +189,6 @@ export default function Pass() {
                       </Button>
                       <Button
                         onClick={() => {
-                          linkFarcaster();
-                        }}
-                      >
-                        {farcaster
-                          ? `Connected: ${farcaster.username}`
-                          : "Connect Farcaster"}
-                      </Button>
-                      <Button
-                        onClick={() => {
                           linkEmail();
                         }}
                       >
@@ -247,38 +198,7 @@ export default function Pass() {
                       </Button>
                     </div>
                   </div>
-                  <TextInput
-                    placeholder="@handle"
-                    label="Claim your Nouns Esports ID"
-                    small
-                    value={idState}
-                    error={
-                      idTaken
-                        ? "ID already taken"
-                        : !isIdValid && idState.length > 0
-                          ? "ID can only include letters, numbers, and underscores"
-                          : undefined
-                    }
-                    onChange={(value) => setIdState(value)}
-                  />
                 </div>
-                {/* <div className="flex flex-col gap-6">
-                <FormHeader number={2}>Join the Discord server</FormHeader>
-                <div className="flex items-center gap-6">
-                  <Button onClick={() => {}}>Verify</Button>{" "}
-                  <Link
-                    href="/discord"
-                    newTab
-                    className="text-white flex items-center gap-1 hover:underline"
-                  >
-                    Join the server
-                    <ArrowSquareOut
-                      weight="fill"
-                      className="w-4 h-4 text-white"
-                    />
-                  </Link>
-                </div>
-              </div> */}
                 <div className="flex flex-col gap-6 w-full">
                   <FormHeader number={2}>Tell us about yourself</FormHeader>
                   <TextInput
@@ -321,48 +241,45 @@ export default function Pass() {
                   </p>
                   <Button
                     onClick={async () => {
-                      if (idSchema.safeParse(idState).success) {
-                        if (address && discord) {
-                          if (
-                            whatGameDoYouCurrentlyPlayTheMost &&
-                            whoAreYouAndWhatIsYourEsportsBackground &&
-                            whatDoYouThinkIsNeededToPushTheEsportsIndustryForward &&
-                            whatThingsWouldYouLikeToSeeFundedByNouns
-                          ) {
-                            const token = await getAccessToken();
+                      if (id && address && farcaster && discord) {
+                        if (
+                          whatGameDoYouCurrentlyPlayTheMost &&
+                          whoAreYouAndWhatIsYourEsportsBackground &&
+                          whatDoYouThinkIsNeededToPushTheEsportsIndustryForward &&
+                          whatThingsWouldYouLikeToSeeFundedByNouns
+                        ) {
+                          const token = await getAccessToken();
 
-                            if (token) {
-                              try {
-                                await query.setUser.mutate({
-                                  token,
-                                  wallet: address,
-                                  id: idState,
-                                  pass: "community",
-                                });
+                          if (token) {
+                            try {
+                              await query.setUser.mutate({
+                                token,
+                                id,
+                                pass: "community",
+                              });
 
-                                await query.setApplicationResponse.mutate({
-                                  token,
-                                  user: address,
-                                  whatGameDoYouPlayTheMost:
-                                    whatGameDoYouCurrentlyPlayTheMost,
-                                  whoAreYouAndWhatIsYourEsportsBackground:
-                                    whoAreYouAndWhatIsYourEsportsBackground,
-                                  whatDoYouThinkIsNeededToPushTheEsportsIndustryForward:
-                                    whatDoYouThinkIsNeededToPushTheEsportsIndustryForward,
-                                  whatThingsWouldYouLikeToSeeFundedByNouns:
-                                    whatThingsWouldYouLikeToSeeFundedByNouns,
-                                });
-                              } catch (error) {
-                                toast.error(
-                                  `Erorr: ${
-                                    // @ts-ignore
-                                    error.message
-                                  }`
-                                );
-                              }
-
-                              setApplied(true);
+                              await query.setApplicationResponse.mutate({
+                                token,
+                                user: id,
+                                whatGameDoYouPlayTheMost:
+                                  whatGameDoYouCurrentlyPlayTheMost,
+                                whoAreYouAndWhatIsYourEsportsBackground:
+                                  whoAreYouAndWhatIsYourEsportsBackground,
+                                whatDoYouThinkIsNeededToPushTheEsportsIndustryForward:
+                                  whatDoYouThinkIsNeededToPushTheEsportsIndustryForward,
+                                whatThingsWouldYouLikeToSeeFundedByNouns:
+                                  whatThingsWouldYouLikeToSeeFundedByNouns,
+                              });
+                            } catch (error) {
+                              toast.error(
+                                `Erorr: ${
+                                  // @ts-ignore
+                                  error.message
+                                }`
+                              );
                             }
+
+                            setApplied(true);
                           }
                         }
                       }

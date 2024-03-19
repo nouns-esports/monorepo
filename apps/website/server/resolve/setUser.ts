@@ -6,12 +6,8 @@ import { privyClient } from "../clients/privy";
 export const setUser = publicProcedure
   .input(
     z.object({
-      token: z.string(),
-      id: z
-        .string()
-        .min(1)
-        .regex(/^[a-z0-9_]+$/),
-      wallet: z.string(),
+      token: z.string().min(1),
+      id: z.string().min(1),
       pass: z.enum(["og", "vip", "community", "premium"]),
     })
   )

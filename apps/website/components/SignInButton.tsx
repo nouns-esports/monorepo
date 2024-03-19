@@ -37,7 +37,7 @@ export default function SignInButton() {
             className="rounded-full w-7 h-7 select-none object-center object-cover"
             draggable={false}
           />
-          {id ?? `${address?.slice(0, 5)}...${address?.slice(-3)}`}
+          {farcaster?.username ?? `${id?.substring(0, 8)}`}
         </>
       ) : false ? (
         <div className="pt-[3px]">

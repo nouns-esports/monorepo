@@ -1,5 +1,13 @@
 import { drizzle } from "drizzle-orm/node-postgres";
-import { boolean, char, pgEnum, pgTable, text } from "drizzle-orm/pg-core";
+import {
+  boolean,
+  char,
+  pgEnum,
+  pgTable,
+  text,
+  time,
+  serial,
+} from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { Pool } from "pg";
 import { env } from "@/env";
@@ -78,10 +86,31 @@ export const projects = pgTable("projects", {
 export const pass = pgEnum("pass", ["og", "vip", "community", "premium"]);
 
 export const users = pgTable("users", {
-  wallet: text("wallet").primaryKey(),
-  id: text("id").notNull().unique(),
+  id: text("id").primaryKey(),
   pass: pass("pass").notNull(),
 });
+
+// export const badges = pgTable("badges", {
+//   id: text("id").primaryKey(),
+//   name: text("name").notNull(),
+//   description: text("description").notNull(),
+//   image: text("image").notNull(),
+//   timestamp: time("timestamp").notNull(),
+// });
+
+// export const snapshots = pgTable("snapshots", {
+//   id: serial("id").primaryKey(),
+//   type: text("type").notNull(),
+//   timestamp: time("timestamp").notNull(),
+//   user: text("user").notNull(),
+// });
+
+// export const snapshotRelations = relations(snapshots, ({ one }) => ({
+//   user: one(users, {
+//     fields: [snapshots.user],
+//     references: [users.id],
+//   }),
+// }));
 
 export const applicationResponses = pgTable("applicationResponses", {
   user: text("user").primaryKey(),
@@ -102,7 +131,7 @@ export const applicationResponsesRelations = relations(
   ({ one }) => ({
     user: one(users, {
       fields: [applicationResponses.user],
-      references: [users.wallet],
+      references: [users.id],
     }),
   })
 );

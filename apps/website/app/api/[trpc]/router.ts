@@ -11,7 +11,6 @@ import { getPosts } from "@/server/resolve/getPosts";
 import { getPost } from "@/server/resolve/getPost";
 import { getCreators } from "@/server/resolve/getCreators";
 import { getUser } from "@/server/resolve/getUser";
-import { getId } from "@/server/resolve/getId";
 import { getApplicationResponse } from "@/server/resolve/getApplicationResponse";
 import { setUser } from "@/server/resolve/setUser";
 import { setApplicationResponse } from "@/server/resolve/setApplicationResponse";
@@ -27,7 +26,6 @@ export const router = t.router({
   getPosts,
   getPost,
   getUser,
-  getId,
   getApplicationResponse,
   setUser,
   setApplicationResponse,

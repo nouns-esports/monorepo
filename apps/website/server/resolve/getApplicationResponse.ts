@@ -6,11 +6,11 @@ import { eq } from "drizzle-orm";
 export const getApplicationResponse = publicProcedure
   .input(
     z.object({
-      wallet: z.string(),
+      id: z.string().min(1),
     })
   )
   .query(async ({ input }) => {
     return db.query.applicationResponses.findFirst({
-      where: eq(applicationResponses.user, input.wallet),
+      where: eq(applicationResponses.user, input.id),
     });
   });

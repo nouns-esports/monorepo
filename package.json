@@ -45,6 +45,7 @@
     "eslint": "^8.56.0",
     "eslint-config-next": "^14.1.0",
     "framer-motion": "^11.0.3",
+    "frog": "^0.6.5",
     "jiti": "^1.21.0",
     "next": "^14.1.0",
     "next-i18n-router": "^5.3.0",
