@@ -16,6 +16,11 @@
       "permanent": true
     },
     {
+      "source": "/duff-hoodie",
+      "destination": "https://shop.nouns.gg/collections/duff-city",
+      "permanent": true
+    },
+    {
       "source": "/mint",
       "destination": "https://shorturl.at/grzKM",
       "permanent": true
