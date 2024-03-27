@@ -101,6 +101,11 @@
       "permanent": true
     },
     {
+      "source": "/pokemon-contest",
+      "destination": "https://prop.house/0x617a72bf73233234a140381129c1e160a182c251",
+      "permanent": true
+    },
+    {
       "source": "/foxes",
       "destination": "https://shop.nouns.gg/products/pre-sale-nouns-foxes-t-shirt",
       "permanent": true
