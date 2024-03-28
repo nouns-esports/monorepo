@@ -121,6 +121,11 @@
       "permanent": true
     },
     {
+      "source": "/signup-jpに投票者として登録し、勝者を選ぶのにご協力ください。",
+      "destination": "https://forms.nouns.gg/signup-jp/",
+      "permanent": true
+    },
+    {
       "source": "/mint/partnership-deck-2024",
       "destination": "https://shorturl.at/bpG09",
       "permanent": true
