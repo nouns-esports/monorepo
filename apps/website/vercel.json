@@ -77,7 +77,7 @@
     },
     {
       "source": "/evo",
-      "destination": "https://prop.house/0xdc8c6ecbe0d543214ec4b74cf0241042cd377e0c",
+      "destination": "https://prop.house/0x456a88b30eca83b710eff4b95a015da197ef9978",
       "permanent": true
     },
     {
@@ -117,11 +117,6 @@
     },
     {
       "source": "/signup-jp",
-      "destination": "https://forms.nouns.gg/signup-jp/",
-      "permanent": true
-    },
-    {
-      "source": "/signup-jpに投票者として登録し、勝者を選ぶのにご協力ください。",
       "destination": "https://forms.nouns.gg/signup-jp/",
       "permanent": true
     },
