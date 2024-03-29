@@ -41,7 +41,7 @@ export default function Privy(props: { children: React.ReactNode }) {
     <PrivyProvider
       appId={env.NEXT_PUBLIC_PRIVY_APP_ID}
       config={{
-        loginMethods: ["wallet", "email", "twitter", "discord", "farcaster"],
+        loginMethods: ["discord"],
         appearance: {
           theme: "#040404",
           accentColor: "#E93737",

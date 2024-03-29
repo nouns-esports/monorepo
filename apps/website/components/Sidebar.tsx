@@ -11,7 +11,7 @@ import { usePathname } from "next/navigation";
 
 export default function Sidebar() {
   return (
-    <div className="fixed left-0 flex justify-center w-full">
+    <div className="fixed left-0 flex justify-center w-full max-sm:hidden">
       <div className="flex justify-between w-full max-w-[1920px] px-16 max-2xl:px-8 max-sm:px-4">
         <aside className="flex flex-col gap-4 w-60">
           <ul className="flex flex-col gap-2 bg-darkgrey p-4 rounded-xl">
@@ -24,7 +24,7 @@ export default function Sidebar() {
               Home
             </Button>
             <Button
-              route="/vote"
+              route="/rounds"
               icon={<Trophy className="w-5 h-5 text-white" weight="fill" />}
             >
               Rounds
