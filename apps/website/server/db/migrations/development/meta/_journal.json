@@ -43,6 +43,13 @@
       "when": 1710827508551,
       "tag": "0005_careful_riptide",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1711767539310,
+      "tag": "0006_green_smasher",
+      "breakpoints": true
     }
   ]
 }
