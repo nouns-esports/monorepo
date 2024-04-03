@@ -10,30 +10,30 @@ import {
   InstagramLogo,
 } from "phosphor-react-sc";
 import Link from "@/components/Link";
-import { Creator, Project } from "@/db/schema";
+import { Creator, Project } from "@/server/db/schema";
 import Text from "@/components/Text";
 import HighlightedText from "@/components/HighlightedText";
-import type { Event } from "@/server/resolve/events";
+import type { Event } from "@/server/resolve/getEvents";
 import Date from "@/components/Date";
 import { headers } from "next/headers";
 import Image from "next/image";
 import Prop from "@/public/prop.webp";
-import LogoWhite from "@/public/logo-white.svg";
+import LogoWhite from "@/public/logo/logo-white.svg";
 import Pokemon from "@/public/pokemon.webp";
-import { query } from "@/server/query";
+import { query } from "@/app/api/query/server";
 
 export default async function Home(props: { params: { locale: string } }) {
-  const events = await query.events();
+  const events = await query.getEvents();
 
-  const games = await query.games();
+  const games = await query.getGames();
 
-  const projects = await query.projects();
+  const projects = await query.getProjects();
 
-  const creators = await query.creators();
+  const creators = await query.getCreators();
 
   const isMobile = headers().get("x-device-type") === "mobile";
 
-  const posts = await query.posts();
+  const posts = await query.getPosts();
 
   return (
     <main className="cursor-crosshair flex flex-col">
@@ -120,7 +120,7 @@ export default async function Home(props: { params: { locale: string } }) {
         </p>
       </Marquee>
       <div
-        id="games"
+        id="rosters"
         className="px-16 max-sm:px-0 py-32 max-sm:py-16 text-center text-white text-5xl font-luckiest-guy flex flex-col gap-20 max-sm:gap-10 items-center"
       >
         <Text en="Our Rosters" pt="Nossos Elencos" />
@@ -158,25 +158,28 @@ export default async function Home(props: { params: { locale: string } }) {
         <div className="relative z-10 grid place-items-center gap-10 max-sm:gap-6 px-16 max-sm:px-8">
           <h2 className="text-white font-luckiest-guy text-5xl max-sm:text-3xl text-center">
             <Text
-              en="We're extending our rosters for another year!"
-              pt="Estamos estendendo nossos roster por mais um ano!"
+              en="Join the Nouns Esports Discord server!"
+              pt="Join the Nouns Esports Discord server!"
             />
           </h2>
           <p className="max-w-[600px] px-8 text-center text-[#AAAAAA] text-lg max-sm:text-base leading-tight [text-shadow:black_0_0_50px]">
             <Text
-              en="Check out our 2024 proposal, see what it takes to run a tier one esports org, and learn our vision for the future of Nouns Esports"
-              pt="Confira nossa proposta para 2024, veja o que é necessário para administrar uma organização de esports de primeira linha, e conheça nossa visão para o futuro da Nouns Esports"
+              en="Get involved with the Nouns Esports community and stay up to date with our latest events and announcements!"
+              pt="Get involved with the Nouns Esports community and stay up to date with our latest events and announcements!"
             />
           </p>
-          <Button href="/2024">
-            <Text en="Learn more" pt="Explorar" />
+          <Button href="/discord">
+            <Text en="Join Now" pt="Join Now" />
           </Button>
         </div>
         <div className="from-black via-black/70/ to-transparent bg-gradient-to-b h-64 w-full top-0 absolute" />
         <div className="from-transparent to-black bg-gradient-to-b h-64 w-full bottom-0 absolute" />
       </div>
 
-      <div className="px-16 max-sm:px-0 py-32 max-sm:py-16 text-white text-5xl text-center font-luckiest-guy flex flex-col gap-20 max-sm:gap-10 items-center">
+      <div
+        id="events"
+        className="px-16 max-sm:px-0 py-32 max-sm:py-16 text-white text-5xl text-center font-luckiest-guy flex flex-col gap-20 max-sm:gap-10 items-center"
+      >
         <Text en="Upcoming Events" pt="Próximos Eventos" />
         <div className="flex flex-wrap max-sm:flex-nowrap max-sm:overflow-x-scroll max-sm:justify-start justify-center max-w-[1920px] gap-16 w-full max-2xl:gap-8">
           {events.map((event) => (
@@ -184,7 +187,10 @@ export default async function Home(props: { params: { locale: string } }) {
           ))}
         </div>
       </div>
-      <div className="px-16 max-sm:px-0 pb-32 max-sm:py-16 text-white text-5xl text-center font-luckiest-guy flex flex-col gap-20 max-sm:gap-10 items-center">
+      <div
+        id="publications"
+        className="px-16 max-sm:px-0 pb-32 max-sm:py-16 text-white text-5xl text-center font-luckiest-guy flex flex-col gap-20 max-sm:gap-10 items-center"
+      >
         <Text en="Publications" pt="Blog" />
         <div className="flex flex-wrap max-sm:flex-nowrap max-sm:overflow-x-scroll max-sm:justify-start justify-center max-w-[1920px] gap-16 w-full max-2xl:gap-8">
           {posts.map((post) => (
@@ -192,12 +198,26 @@ export default async function Home(props: { params: { locale: string } }) {
           ))}
         </div>
       </div>
-      <div className="px-16 max-sm:px-0 pb-32 max-sm:pb-16 text-white text-5xl font-luckiest-guy flex flex-col gap-20 max-sm:gap-10 items-center">
+      <div
+        id="projects"
+        className="px-16 max-sm:px-0 pb-32 max-sm:pb-16 text-white text-5xl font-luckiest-guy flex flex-col gap-20 max-sm:gap-10 items-center"
+      >
         <Text en="Projects" pt="Projetos" />
         <div className="flex flex-wrap max-sm:flex-nowrap max-sm:overflow-x-scroll max-sm:justify-start justify-center max-w-[1920px] gap-16 w-full max-2xl:gap-8">
           {projects.map((project) => (
             <ProjectCard key={project.id} project={project} />
           ))}
+        </div>
+      </div>
+      <div className="px-16 max-sm:px-0 pb-32 max-sm:pb-16 text-white text-5xl font-luckiest-guy flex flex-col gap-12 max-sm:gap-6 items-center">
+        <Text en="Partners" pt="Partners" />
+        <div className="flex justify-center items-center max-w-[1920px] gap-20 w-full max-2xl:gap-10">
+          <Link href="https://nouns.wtf">
+            <img src="/nouns-partner-logo.png" className="h-10" />
+          </Link>
+          <Link href="https://matcha.xyz">
+            <img src="/matcha.svg" className="h-8" />
+          </Link>
         </div>
       </div>
       <div className="flex items-center justify-center">
@@ -239,7 +259,7 @@ function GameCard(props: {
 }) {
   return (
     <Link
-      href={`/${props.locale}/games/${props.id}`}
+      href={`/${props.locale}/rosters/${props.id}`}
       style={{ backgroundImage: `url(${props.image})` }}
       className="relative w-[calc(25%_-_3rem)] max-xl:w-[calc(25%_-_1.5rem)] max-sm:first:ml-8 max-sm:last:mr-8 max-sm:min-w-[calc(100%_-_6rem)] min-w-[12rem] rounded-xl select-none aspect-square group overflow-hidden"
     >
@@ -284,7 +304,7 @@ function CreatorCard(props: { creator: Creator }) {
 async function ScheduleCard(props: { event: Event }) {
   const type = props.event.summary?.split("]")[0].replace("[", "");
 
-  const game = (await query.games()).find(
+  const game = (await query.getGames()).find(
     (game) =>
       game.name.toLowerCase().includes(type.toLowerCase()) ||
       game.id.toLowerCase().includes(type.toLowerCase())
@@ -303,7 +323,7 @@ async function ScheduleCard(props: { event: Event }) {
         className="object-cover object-center group-hover:scale-110 transition-transform absolute top-0 w-full h-full"
       />
       <div className="relative z-10 flex flex-col-reverse py-4 px-6 max-sm:py-3.5 max-sm:px-5 w-full h-full shadow-[inset_-20px_-20px_80px_black,inset_20px_20px_80px_black]">
-        <p className="text-lightgrey text-base font-cabin">
+        <p className="text-white text-base font-cabin">
           <Date timestamp={props.event.start.dateTime} />
         </p>
         <h3 className="drop-shadow-2xl text-4xl font-bebas-neue max-[500px]:text-2xl max-[350px]:text-xl">
@@ -311,7 +331,7 @@ async function ScheduleCard(props: { event: Event }) {
         </h3>
         <div
           style={{ backgroundColor: game?.color ?? "#E93737" }}
-          className="text-xs whitespace-nowrap font-cabin font-semibold px-2 py-1 rounded-full w-min mb-2 max-[500px]:mb-1"
+          className="text-xs font-cabin font-semibold px-2 py-1 rounded-full w-min mb-2 max-[500px]:mb-1 whitespace-nowrap"
         >
           {type}
         </div>
@@ -322,7 +342,7 @@ async function ScheduleCard(props: { event: Event }) {
 
 function PostCard(props: {
   locale: string;
-  post: Awaited<ReturnType<typeof query.posts>>[number];
+  post: Awaited<ReturnType<typeof query.getPosts>>[number];
 }) {
   return (
     <Link

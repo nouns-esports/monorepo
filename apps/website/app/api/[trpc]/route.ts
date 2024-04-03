@@ -1,5 +1,5 @@
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
-import { router } from "@/server/router";
+import { router } from "./router";
 
 function handler(req: Request) {
   return fetchRequestHandler({

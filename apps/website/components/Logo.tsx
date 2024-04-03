@@ -1,6 +1,6 @@
 "use client";
 
-import { PrimaryColorContext } from "@/providers";
+import { PrimaryColorContext } from "@/providers/PrimaryColor";
 import { useContext } from "react";
 
 export default function Logo(props: { className?: string }) {

@@ -1,3 +1,8 @@
+const createJiti = require("jiti");
+const jiti = createJiti(__filename);
+
+jiti("./env");
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Polyfills for RainbowKit and Wagmi, see: https://www.rainbowkit.com/docs/installation#react-nextjs-and-webpack

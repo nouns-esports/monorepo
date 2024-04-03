@@ -1,11 +1,11 @@
-import { query } from "@/server/query";
+import { query } from "@/app/api/query/server";
 import { notFound } from "next/navigation";
-import type { Node } from "@/server/resolve/post";
+import type { Node } from "@/server/resolve/getPost";
 import { Tweet } from "react-tweet";
 import { Metadata } from "next";
 
 export async function generateMetadata(props: { params: { id: string } }) {
-  const post = await query.post(props.params.id);
+  const post = await query.getPost(props.params.id);
 
   if (!post) notFound();
 
@@ -23,7 +23,7 @@ export async function generateMetadata(props: { params: { id: string } }) {
 }
 
 export default async function PostPage(props: { params: { id: string } }) {
-  const post = await query.post(props.params.id);
+  const post = await query.getPost(props.params.id);
 
   if (!post) notFound();
 

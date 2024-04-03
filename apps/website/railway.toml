@@ -1,10 +1,11 @@
 [build.nixpacksPlan.phases.install]
 dependsOn = ["setup"]
-cmds = ["ls -a ../ & npm install"]
+
+cmds = ["npm install"]
 
 [build]
 builder = "NIXPACKS"
-buildCommand = "ls -a & npm run --prefix ../.. build"
+buildCommand = "npm run build"
 
 [deploy]
-startCommand = "ls -a & npm run start"
+startCommand = "npm run --prefix ./apps/website start"

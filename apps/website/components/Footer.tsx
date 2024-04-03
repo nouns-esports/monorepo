@@ -10,14 +10,14 @@ import {
 import Text from "@/components/Text";
 import ANounsThing from "./ANounsThing";
 import Logo from "./Logo";
-import { query } from "@/server/query";
+import { query } from "@/app/api/query/server";
 
 export default async function Footer(props: { locale: string }) {
-  const games = await query.games();
+  const games = await query.getGames();
 
   return (
     <footer className="flex justify-center w-full">
-      <div className="flex max-w-[1920px] w-full max-lg:flex-col gap-16 justify-between items-center py-8 px-32 max-xl:px-16 relative z-20">
+      <div className="flex max-w-[1920px] w-full max-lg:flex-col gap-16 justify-between items-center py-8 px-32 max-xl:px-16 relative /z-20">
         <div className="flex flex-col gap-8 max-lg:items-center">
           <div className="flex flex-col gap-4">
             <Link
@@ -50,12 +50,12 @@ export default async function Footer(props: { locale: string }) {
               <Text en="Shop" pt="Loja" />
             </FooterLink>
           </FooterSection>
-          <FooterSection title={<Text en="Games" pt="Jogos" />}>
+          <FooterSection title={<Text en="Rosters" pt="Jogos" />}>
             {games.map((game, index) =>
               index < 3 ? (
                 <FooterLink
                   key={game.id}
-                  href={`/${props.locale}/games/${game.id}`}
+                  href={`/${props.locale}/rosters/${game.id}`}
                 >
                   {game.name}
                 </FooterLink>
@@ -64,7 +64,7 @@ export default async function Footer(props: { locale: string }) {
               )
             )}
             {games.length > 3 ? (
-              <FooterLink href={`/${props.locale}/#games`}>All</FooterLink>
+              <FooterLink href={`/${props.locale}/#rosters`}>All</FooterLink>
             ) : (
               ""
             )}

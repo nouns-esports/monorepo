@@ -4,7 +4,7 @@ import Link from "@/components/Link";
 import Text from "@/components/Text";
 import { useContext, useEffect, useState } from "react";
 import { useMouse } from "@uidotdev/usehooks";
-import { PrimaryColorContext } from "@/providers";
+import { PrimaryColorContext } from "@/providers/PrimaryColor";
 
 export default function ANounsThing() {
   const [mouse, ref] = useMouse();

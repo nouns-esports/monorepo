@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import plugin from "tailwindcss/plugin";
 
 const config: Config = {
   future: {
@@ -11,12 +12,18 @@ const config: Config = {
   ],
   theme: {
     colors: {
-      white: "white",
-      black: "black",
+      white: "#F2F2F2",
+      black: "#040404",
       red: "#E93737",
+      pink: "#f26262",
+      purple: "#BC30ED",
+      blue: "#4080E0",
+      green: "#4CC87D",
+      yellow: "#F8C648",
       transparent: "transparent",
-      lightgrey: "#858585",
-      darkgrey: "#0A0A0A",
+      lightgrey: "#454647",
+      grey: "#1C1C1C",
+      darkgrey: "#0C0C0C",
     },
     fontFamily: {
       "luckiest-guy": ["var(--font-luckiest-guy)"],
@@ -36,7 +43,15 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    plugin(({ matchUtilities }) => {
+      matchUtilities({
+        perspective: (value) => ({
+          perspective: value,
+        }),
+      });
+    }),
+  ],
 };
 
 export default config;

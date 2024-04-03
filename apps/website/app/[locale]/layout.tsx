@@ -9,9 +9,8 @@ import {
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Providers from "@/providers";
-import { Analytics } from "@vercel/analytics/react";
 import { locales } from "@/middleware";
-import { query } from "@/server/query";
+import { query } from "@/app/api/query/server";
 
 const cabin = Cabin({ subsets: ["latin"], variable: "--font-cabin" });
 
@@ -85,7 +84,7 @@ export default async function RootLayout(props: {
   children: React.ReactNode;
   params: { locale: string };
 }) {
-  const games = await query.games();
+  const games = await query.getGames();
 
   return (
     <html
@@ -93,16 +92,17 @@ export default async function RootLayout(props: {
       className="scroll-smooth overflow-x-hidden"
     >
       <body
-        className={`${cabin.variable} ${luckiestGuy.variable} ${bebasNeue.variable} ${londrinaSolid.variable} bg-black text-lightgrey font-cabin selection:text-white selection:bg-red w-full`}
+        className={`${cabin.variable} ${luckiestGuy.variable} ${bebasNeue.variable} ${londrinaSolid.variable} bg-black text-lightgrey font-cabin selection:text-white selection:bg-red flex flex-col w-full h-full`}
       >
         <Providers
           games={games.map((game) => ({ id: game.id, color: game.color }))}
         >
           <Header locale={props.params.locale} />
-          {props.children}
+          <main className="flex flex-col w-full min-h-[calc(100vh_-_224px)] h-full">
+            {props.children}
+          </main>
           <Footer locale={props.params.locale} />
         </Providers>
-        <Analytics />
       </body>
     </html>
   );
