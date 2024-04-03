@@ -212,8 +212,12 @@ export default async function Home(props: { params: { locale: string } }) {
       <div className="px-16 max-sm:px-0 pb-32 max-sm:pb-16 text-white text-5xl font-luckiest-guy flex flex-col gap-12 max-sm:gap-6 items-center">
         <Text en="Partners" pt="Partners" />
         <div className="flex justify-center items-center max-w-[1920px] gap-20 w-full max-2xl:gap-10">
-          <img src="/matcha.svg" className="h-8" />
-          <img src="/nouns-partner-logo.png" className="h-10" />
+          <Link href="https://nouns.wtf">
+            <img src="/nouns-partner-logo.png" className="h-10" />
+          </Link>
+          <Link href="https://matcha.xyz">
+            <img src="/matcha.svg" className="h-8" />
+          </Link>
         </div>
       </div>
       <div className="flex items-center justify-center">
