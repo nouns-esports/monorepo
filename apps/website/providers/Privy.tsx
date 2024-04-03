@@ -106,13 +106,16 @@ export function useAccount() {
     }
   }, [privyContext]);
 
+  const user = query.getUser.useQuery(
+    { id: privy?.id ?? "" },
+    { enabled: !!privy?.id }
+  );
+
   useEffect(() => {
-    if (privy) {
-      query.getUser.query({ id: privy.id }).then((user) => {
-        if (user) setPass(user.pass);
-      });
+    if (user.data) {
+      setPass(user.data.pass);
     }
-  }, [privy]);
+  }, [user]);
 
   // this can probably just be a reaction to privy state
   async function logout() {

@@ -68,7 +68,7 @@ export default function Pass() {
   );
 
   useEffect(() => {
-    if (applicationResponse) {
+    if (applicationResponse.data) {
       setApplied(true);
     }
   }, [applicationResponse]);
