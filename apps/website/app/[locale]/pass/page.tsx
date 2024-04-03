@@ -19,7 +19,7 @@ import { useEffect, useState } from "react";
 import { LinkIt } from "react-linkify-it";
 import Link from "@/components/Link";
 import { useDebounce } from "@uidotdev/usehooks";
-import { query } from "@/app/api/query/client";
+import { trpc } from "@/providers/TRPC";
 import { z } from "zod";
 import toast from "react-hot-toast";
 import Loading from "@/components/Loading";
@@ -62,7 +62,7 @@ export default function Pass() {
 
   const [applied, setApplied] = useState(false);
 
-  const applicationResponse = query.getApplicationResponse.useQuery(
+  const applicationResponse = trpc.getApplicationResponse.useQuery(
     { id: id ?? "" },
     { enabled: !!id }
   );

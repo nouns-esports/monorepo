@@ -15,7 +15,7 @@ import { signerToEcdsaValidator } from "@zerodev/ecdsa-validator";
 import { createWeightedECDSAValidator } from "@zerodev/weighted-ecdsa-validator";
 import { toFunctionSelector } from "viem";
 import { User } from "@/server/db/schema";
-import { query } from "@/app/api/query/client";
+import { trpc } from "./TRPC";
 
 const queryClient = new QueryClient();
 
@@ -106,7 +106,7 @@ export function useAccount() {
     }
   }, [privyContext]);
 
-  const user = query.getUser.useQuery(
+  const user = trpc.getUser.useQuery(
     { id: privy?.id ?? "" },
     { enabled: !!privy?.id }
   );
