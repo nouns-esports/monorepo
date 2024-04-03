@@ -158,18 +158,18 @@ export default async function Home(props: { params: { locale: string } }) {
         <div className="relative z-10 grid place-items-center gap-10 max-sm:gap-6 px-16 max-sm:px-8">
           <h2 className="text-white font-luckiest-guy text-5xl max-sm:text-3xl text-center">
             <Text
-              en="We're extending our rosters for another year!"
-              pt="Estamos estendendo nossos roster por mais um ano!"
+              en="Join the Nouns Esports Discord server!"
+              pt="Join the Nouns Esports Discord server!"
             />
           </h2>
           <p className="max-w-[600px] px-8 text-center text-[#AAAAAA] text-lg max-sm:text-base leading-tight [text-shadow:black_0_0_50px]">
             <Text
-              en="Check out our 2024 proposal, see what it takes to run a tier one esports org, and learn our vision for the future of Nouns Esports"
-              pt="Confira nossa proposta para 2024, veja o que é necessário para administrar uma organização de esports de primeira linha, e conheça nossa visão para o futuro da Nouns Esports"
+              en="Get involved with the Nouns Esports community and stay up to date with our latest events and announcements!"
+              pt="Get involved with the Nouns Esports community and stay up to date with our latest events and announcements!"
             />
           </p>
-          <Button href="/2024">
-            <Text en="Learn more" pt="Explorar" />
+          <Button href="/discord">
+            <Text en="Join Now" pt="Join Now" />
           </Button>
         </div>
         <div className="from-black via-black/70/ to-transparent bg-gradient-to-b h-64 w-full top-0 absolute" />
@@ -207,6 +207,13 @@ export default async function Home(props: { params: { locale: string } }) {
           {projects.map((project) => (
             <ProjectCard key={project.id} project={project} />
           ))}
+        </div>
+      </div>
+      <div className="px-16 max-sm:px-0 pb-32 max-sm:pb-16 text-white text-5xl font-luckiest-guy flex flex-col gap-12 max-sm:gap-6 items-center">
+        <Text en="Partners" pt="Partners" />
+        <div className="flex justify-center items-center max-w-[1920px] gap-20 w-full max-2xl:gap-10">
+          <img src="/matcha.svg" className="h-8" />
+          <img src="/nouns-partner-logo.png" className="h-10" />
         </div>
       </div>
       <div className="flex items-center justify-center">

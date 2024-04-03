@@ -7,10 +7,10 @@ import Link from "./Link";
 
 export default function DashboardNavigation() {
   return (
-    <NavigationMenu.Root className="sticky top-20">
+    <NavigationMenu.Root className="sticky top-28 max-sm:top-20 max-lg:flex hidden">
       <NavigationMenu.List>
         <NavigationMenu.Item>
-          <NavigationMenu.Trigger className="border border-darkgrey bg-black rounded-lg h-10 text-white flex w-full justify-between items-center px-4">
+          <NavigationMenu.Trigger className="border border-darkgrey bg-black rounded-lg h-10 text-white flex w-[calc(100vw_-_64px)] max-sm:w-[calc(100vw_-_32px)] justify-between items-center px-4">
             Dashboard
             <CaretDown className="w-5 h-5 text-white" />
           </NavigationMenu.Trigger>

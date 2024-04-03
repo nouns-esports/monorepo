@@ -14,9 +14,9 @@ export default function SignInButton() {
   return (
     <button
       onClick={() => {
-        if (connected)
-          logout(); //router.push(`/${params.locale}/dashboard/profile`);
-        else login();
+        // if (connected)
+        //   logout(); //router.push(`/${params.locale}/dashboard/profile`);
+        // else login();
       }}
       style={{
         paddingTop: connected ? "6px" : "10px",

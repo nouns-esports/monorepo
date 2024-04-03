@@ -67,9 +67,10 @@ export default function Navbar() {
               Smash Melee
             </NavGroupItem>
           </NavGroup>
-          <NavItem href={`/${params.locale}/pass`} icon="/logo/logo-white.svg">
+          <div className="w-4 max-sm:hidden"></div>
+          {/* <NavItem href={`/${params.locale}/pass`} icon="/logo/logo-white.svg">
             Pass
-          </NavItem>
+          </NavItem> */}
           <SignInButton />
           <div onClick={() => setOpen(!open)} className="max-sm:flex hidden">
             {open ? (
@@ -91,7 +92,7 @@ export default function Navbar() {
         // onClick={() => setOpen(!open)}
         className="bg-black left-0 top-0 w-full h-screen absolute -z-10 pt-24 p-4 flex flex-col gap-8"
       >
-        <Link
+        {/* <Link
           className="bg-darkgrey rounded-lg w-full min-h-40 overflow-hidden relative"
           href="/pass"
         >
@@ -99,7 +100,7 @@ export default function Navbar() {
           <p className="text-white font-luckiest-guy text-4xl text-center flex items-center justify-center absolute top-0 w-full h-40">
             Become a pass member
           </p>
-        </Link>
+        </Link> */}
         <MenuGroup title="Explore">
           <MenuGroupItem href={`/${params.locale}/#events`} icon="📅">
             Events

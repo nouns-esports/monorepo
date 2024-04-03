@@ -62,13 +62,16 @@ export default function Pass() {
 
   const [applied, setApplied] = useState(false);
 
+  const applicationResponse = query.getApplicationResponse.useQuery(
+    { id: id ?? "" },
+    { enabled: !!id }
+  );
+
   useEffect(() => {
-    if (id) {
-      query.getApplicationResponse.query({ id }).then((response) => {
-        if (response) setApplied(true);
-      });
+    if (applicationResponse) {
+      setApplied(true);
     }
-  }, [id]);
+  }, [applicationResponse]);
 
   return (
     <div className="flex justify-center w-full mb-32 max-sm:mb-16">
@@ -252,24 +255,23 @@ export default function Pass() {
 
                           if (token) {
                             try {
-                              await query.setUser.mutate({
-                                token,
-                                id,
-                                pass: "community",
-                              });
-
-                              await query.setApplicationResponse.mutate({
-                                token,
-                                user: id,
-                                whatGameDoYouPlayTheMost:
-                                  whatGameDoYouCurrentlyPlayTheMost,
-                                whoAreYouAndWhatIsYourEsportsBackground:
-                                  whoAreYouAndWhatIsYourEsportsBackground,
-                                whatDoYouThinkIsNeededToPushTheEsportsIndustryForward:
-                                  whatDoYouThinkIsNeededToPushTheEsportsIndustryForward,
-                                whatThingsWouldYouLikeToSeeFundedByNouns:
-                                  whatThingsWouldYouLikeToSeeFundedByNouns,
-                              });
+                              // await query.setUser.mutate({
+                              //   token,
+                              //   id,
+                              //   pass: "community",
+                              // });
+                              // await query.setApplicationResponse.mutate({
+                              //   token,
+                              //   user: id,
+                              //   whatGameDoYouPlayTheMost:
+                              //     whatGameDoYouCurrentlyPlayTheMost,
+                              //   whoAreYouAndWhatIsYourEsportsBackground:
+                              //     whoAreYouAndWhatIsYourEsportsBackground,
+                              //   whatDoYouThinkIsNeededToPushTheEsportsIndustryForward:
+                              //     whatDoYouThinkIsNeededToPushTheEsportsIndustryForward,
+                              //   whatThingsWouldYouLikeToSeeFundedByNouns:
+                              //     whatThingsWouldYouLikeToSeeFundedByNouns,
+                              // });
                             } catch (error) {
                               toast.error(
                                 `Erorr: ${
