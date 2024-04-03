@@ -40,11 +40,16 @@ export default function Partners() {
         />
         <meta property="fc:frame:button:1" content="Next" />
         <meta property="fc:frame:button:2" content="Mint" />
-        <meta property="fc:frame:button:2:action" content="post_redirect" />
+        <meta property="fc:frame:button:2:action" content="mint" />
+        <meta
+          property="fc:frame:button:2:target"
+          content="eip155:8453:0xc2edf80bdaf2f067640fb0f3bf695f3dc76b0cf7:1"
+        />
         <meta
           property="fc:frame:post_url"
           content="https://nouns.gg/frames/partnership-decks/2024?n=1"
         />
+        <meta property="fc:frame:image:aspect_ratio" content="1.91:1" />
       </head>
       <div className="relative flex flex-col gap-6 max-xl:gap-4 justify-center items-center h-[30vw] max-xl:h-[450px]">
         <img
