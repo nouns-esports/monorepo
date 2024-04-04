@@ -43,41 +43,62 @@ export default function Sidebar() {
       <div className="flex flex-col gap-2 bg-darkgrey p-4 rounded-xl">
         <h2 className="font-bebas-neue text-xl text-white">Discussion</h2>
         <ul className="flex flex-col gap-2">
-          <Button route="/chat/nouns-esports" icon="/logo/logo.svg">
+          <Button
+            route="https://warpcast.com/~/channel/nouns-esports"
+            icon="/logo/logo.svg"
+          >
             Nouns Esports
           </Button>
-          <Button route="/chat/nouns" icon="/nouns.png">
+          <Button
+            route="https://warpcast.com/~/channel/nouns"
+            icon="/nouns.png"
+          >
             Nouns
           </Button>
-          <Button route="/chat/esports" icon="/esports.png">
+          <Button
+            route="https://warpcast.com/~/channel/esports"
+            icon="/esports.png"
+          >
             Esports
           </Button>
-          <Button route="/chat/dota-2" icon="/games/icons/dota-2.png">
+          <Button
+            route="https://warpcast.com/~/channel/dota-2"
+            icon="/games/icons/dota-2.png"
+          >
             Dota 2
           </Button>
           <Button
-            route="/chat/rocket-legaue"
+            route="https://warpcast.com/~/channel/rocket-legaue"
             icon="/games/icons/rocket-league.png"
           >
             Rocket League
           </Button>
-          <Button route="/chat/smash" icon="/games/icons/smash-melee.png">
+          <Button
+            route="https://warpcast.com/~/channel/smash"
+            icon="/games/icons/smash-melee.png"
+          >
             Smash
           </Button>
-          <Button route="/chat/cs2" icon="/games/icons/cs2.png">
+          <Button
+            route="https://warpcast.com/~/channel/cs2"
+            icon="/games/icons/cs2.png"
+          >
             CS 2
           </Button>
-          <Button route="/chat/valorant" icon="/games/icons/valorant.png">
+          <Button
+            route="https://warpcast.com/~/channel/valorant"
+            icon="/games/icons/valorant.png"
+          >
             Valorant
           </Button>
           <Button
-            route="/chat/league"
+            route="https://warpcast.com/~/channel/league"
             icon="/games/icons/league-of-legends.png"
           >
             League of Legends
           </Button>
           <Button
-            route="/chat/streetfighter"
+            route="https://warpcast.com/~/channel/streetfighter"
             icon="/games/icons/street-fighter.png"
           >
             Street Fighter
