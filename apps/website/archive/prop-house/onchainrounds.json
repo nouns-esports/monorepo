@@ -1,0 +1,1059 @@
+{
+  "data": {
+    "rounds": [
+      {
+        "id": "0xc668cb2ad23accf8da50c72a4ccc8efe264e7779",
+        "type": "TIMED",
+        "title": "EVO JapanでNouns EsportsとBLVKHVNDに参加して300ドルをゲットしよう！",
+        "description": "<p>Nouns EsportsとBLVKHVNDでは、EVO Japanに参加する10名のプレイヤーを募集しております！選ばれた選手には、300ドル、Nouns Esports x BLVKHVNDジャージ、グッズパックが贈られます。﻿</p><p><br></p><p>Requirements:</p><p><br></p><p>Nouns Esportsのイベント関連の投稿をソーシャルメディアでシェアすること</p><p><br></p><p>EVO JapanでNounsとBLVKHVNDの代表にふさわしい理由や、あなたのゲームでの実績について、企画書を提出すること</p><p><br></p><p>Extra Opportunity:</p><p>スト6か鉄拳8の成績優秀者には、EVOラスベガスへの参加費として2000ドルがゲットできる!</p><p><br></p><p>FGCベテランへ:</p><p><a href=\"https://nouns.gg/signup-jp\" rel=\"noopener noreferrer\" target=\"_blank\">https://nouns.gg/signup-jp</a> に投票者として登録し、勝者を選ぶのにご協力ください。</p><p><br></p><p>Nouns Esports x BLVKHVNDの代表として、ゲーミングキャリアを次のレベルに引き上げるために、今すぐ応募ください！</p><p><a href=\"https://twitter.com/nounsesports\" rel=\"noopener noreferrer\" target=\"_blank\">Nouns Esports</a> &amp; <a href=\"https://twitter.com/BLVKHVND\" rel=\"noopener noreferrer\" target=\"_blank\">BLVKHVND</a> をフォローしてください。</p>",
+        "createdAt": "1711730483",
+        "eventState": "CREATED",
+        "isFullyFunded": true,
+        "manager": {
+          "id": "0xa22e30ec47bf0a2005e11e81d9b08427bbca0b8b"
+        },
+        "proposingStrategies": [],
+        "votingStrategies": [
+          {
+            "strategy": {
+              "id": "0x30a87c3a621e38afefa37b6226ae727f6178cab3277bb21dd93c960faaffdff",
+              "type": "BALANCE_OF_ERC1155",
+              "address": "1947478707102246277284783329899598037449395219464670626282841624346847030901",
+              "params": [
+                "1012592092552684491504889854851691286127693450759",
+                "0",
+                "2",
+                "10"
+              ]
+            }
+          }
+        ],
+        "timedConfig": {
+          "winnerCount": 10,
+          "proposalThreshold": "0",
+          "proposalPeriodStartTimestamp": "1711730483",
+          "proposalPeriodEndTimestamp": "1712767283",
+          "proposalPeriodDuration": "1036800",
+          "votePeriodStartTimestamp": "1712767284",
+          "votePeriodEndTimestamp": "1713199284",
+          "votePeriodDuration": "432000",
+          "claimPeriodEndTimestamp": "1715618484",
+          "awards": [
+            {
+              "index": 0,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "300000000"
+            },
+            {
+              "index": 1,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "300000000"
+            },
+            {
+              "index": 2,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "300000000"
+            },
+            {
+              "index": 3,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "300000000"
+            },
+            {
+              "index": 4,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "300000000"
+            },
+            {
+              "index": 5,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "300000000"
+            },
+            {
+              "index": 6,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "300000000"
+            },
+            {
+              "index": 7,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "300000000"
+            },
+            {
+              "index": 8,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "300000000"
+            },
+            {
+              "index": 9,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "300000000"
+            }
+          ]
+        }
+      },
+      {
+        "id": "0x456a88b30eca83b710eff4b95a015da197ef9978",
+        "type": "TIMED",
+        "title": "EVO JapanでNouns EsportsとBLVKHVNDに参加して300ドルをゲットしよう！",
+        "description": "<p>Nouns EsportsとBLVKHVNDでは、EVO Japanに参加する10名のプレイヤーを募集しております！選ばれた選手には、300ドル、Nouns Esports x BLVKHVNDジャージ、グッズパックが贈られます。﻿</p><p><br></p><p>Requirements:</p><p><br></p><p>Nouns Esportsのイベント関連の投稿をソーシャルメディアでシェアすること</p><p>EVO JapanでNounsとBLVKHVNDの代表にふさわしい理由や、あなたのゲームでの実績について、企画書を提出すること</p><p><br></p><p>Extra Opportunity:</p><p><br></p><p>スト6か鉄拳8の成績優秀者には、EVOラスベガスへの参加費として2000ドルがゲットできる!</p><p><br></p><p>FGCベテランへ:</p><p><br></p><p><a href=\"https://nouns.gg/signup-jp\" rel=\"noopener noreferrer\" target=\"_blank\">https://nouns.gg/signup-jp</a> に投票者として登録し、勝者を選ぶのにご協力ください。</p><p><br></p><p>Nouns Esports x BLVKHVNDの代表として、ゲーミングキャリアを次のレベルに引き上げるために、今すぐ応募ください！</p><p>[Nouns Esports](https://twitter.com/nounsesports) &amp; [BLVKHVND](https://twitter.com/BLVKHVND) をフォローしてください。</p>",
+        "createdAt": "1711586915",
+        "eventState": "CANCELLED",
+        "isFullyFunded": true,
+        "manager": {
+          "id": "0xa22e30ec47bf0a2005e11e81d9b08427bbca0b8b"
+        },
+        "proposingStrategies": [],
+        "votingStrategies": [
+          {
+            "strategy": {
+              "id": "0x30a87c3a621e38afefa37b6226ae727f6178cab3277bb21dd93c960faaffdff",
+              "type": "BALANCE_OF_ERC1155",
+              "address": "1947478707102246277284783329899598037449395219464670626282841624346847030901",
+              "params": [
+                "1012592092552684491504889854851691286127693450759",
+                "0",
+                "2",
+                "10"
+              ]
+            }
+          }
+        ],
+        "timedConfig": {
+          "winnerCount": 10,
+          "proposalThreshold": "0",
+          "proposalPeriodStartTimestamp": "1711586915",
+          "proposalPeriodEndTimestamp": "1712623715",
+          "proposalPeriodDuration": "1036800",
+          "votePeriodStartTimestamp": "1712623716",
+          "votePeriodEndTimestamp": "1713228516",
+          "votePeriodDuration": "604800",
+          "claimPeriodEndTimestamp": "1715647716",
+          "awards": [
+            {
+              "index": 0,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "300000000"
+            },
+            {
+              "index": 1,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "300000000"
+            },
+            {
+              "index": 2,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "300000000"
+            },
+            {
+              "index": 3,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "300000000"
+            },
+            {
+              "index": 4,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "300000000"
+            },
+            {
+              "index": 5,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "300000000"
+            },
+            {
+              "index": 6,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "300000000"
+            },
+            {
+              "index": 7,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "300000000"
+            },
+            {
+              "index": 8,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "300000000"
+            },
+            {
+              "index": 9,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "300000000"
+            }
+          ]
+        }
+      },
+      {
+        "id": "0xdc8c6ecbe0d543214ec4b74cf0241042cd377e0c",
+        "type": "TIMED",
+        "title": "EVO JapanでNouns EsportsとBLVKHVNDに参加して300ドルをゲットしよう！",
+        "description": "<p>Nouns EsportsとBLVKHVNDでは、EVO Japanに参加する10名のプレイヤーを募集しております！選ばれた選手には、300ドル、Nouns Esports x BLVKHVNDジャージ、グッズパックが贈られます。﻿</p><p><br></p><p>Requirements:</p><p><br></p><p>Nouns Esportsのイベント関連の投稿をソーシャルメディアでシェアすること</p><p><br></p><p>EVO JapanでNounsとBLVKHVNDの代表にふさわしい理由や、あなたのゲームでの実績について、企画書を提出すること</p><p><br></p><p>Extra Opportunity:</p><p><br></p><p>スト6か鉄拳8の成績優秀者には、EVOラスベガスへの参加費として2000ドルがゲットできる!</p><p><br></p><p>FGCベテランへ:</p><p><br></p><p>https://nouns.gg/signup-jpに投票者として登録し、勝者を選ぶのにご協力ください。</p><p><br></p><p>Nouns Esports x BLVKHVNDの代表として、ゲーミングキャリアを次のレベルに引き上げるために、今すぐ応募ください！</p><p><br></p><p>Nouns Esports &amp; BLVKHVND をフォローしてください。</p>",
+        "createdAt": "1711586315",
+        "eventState": "CREATED",
+        "isFullyFunded": false,
+        "manager": {
+          "id": "0xa22e30ec47bf0a2005e11e81d9b08427bbca0b8b"
+        },
+        "proposingStrategies": [],
+        "votingStrategies": [
+          {
+            "strategy": {
+              "id": "0x30a87c3a621e38afefa37b6226ae727f6178cab3277bb21dd93c960faaffdff",
+              "type": "BALANCE_OF_ERC1155",
+              "address": "1947478707102246277284783329899598037449395219464670626282841624346847030901",
+              "params": [
+                "1012592092552684491504889854851691286127693450759",
+                "0",
+                "2",
+                "10"
+              ]
+            }
+          }
+        ],
+        "timedConfig": {
+          "winnerCount": 10,
+          "proposalThreshold": "0",
+          "proposalPeriodStartTimestamp": "1711586315",
+          "proposalPeriodEndTimestamp": "1712623115",
+          "proposalPeriodDuration": "1036800",
+          "votePeriodStartTimestamp": "1712623116",
+          "votePeriodEndTimestamp": "1713227916",
+          "votePeriodDuration": "604800",
+          "claimPeriodEndTimestamp": "1715647116",
+          "awards": [
+            {
+              "index": 0,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "300000000"
+            },
+            {
+              "index": 1,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "300000000"
+            },
+            {
+              "index": 2,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "300000000"
+            },
+            {
+              "index": 3,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "300000000"
+            },
+            {
+              "index": 4,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "300000000"
+            },
+            {
+              "index": 5,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "300000000"
+            },
+            {
+              "index": 6,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "300000000"
+            },
+            {
+              "index": 7,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "300000000"
+            },
+            {
+              "index": 8,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "300000000"
+            },
+            {
+              "index": 9,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "300000000"
+            }
+          ]
+        }
+      },
+      {
+        "id": "0x617a72bf73233234a140381129c1e160a182c251",
+        "type": "TIMED",
+        "title": "Pokémon Art Contest",
+        "description": "<p>Nouns Esports is looking for Pokémon Artwork! </p><p><br></p><p>We all know there are a lot of amazing artists in the Pokémon community, and we want to highlight and support them! </p><p><br></p><p>In this round we are looking for breathtaking, wholesome, or fun artworks that include Pokémon (UNITE) and possibly combined with Nouns Esports. </p><p><br></p><p>From all participants, two winners will be chosen. </p><p><br></p><p>1st place: $500 </p><p>2nd place: $250 </p><p><br></p><p>To enter, submit a proposal with an introduction of yourself and the art you created. The proposal should also show us progress pictures and if you want, your portfolio, in the proposal to showcase your skills and have others see them as well. </p><p><br></p><p>If you are a member of the Pokémon or Pokémon UNITE community, you are welcome to join our community and vote for the winners! Apply to become a voter at https://nouns.gg/signup</p>",
+        "createdAt": "1711566491",
+        "eventState": "CREATED",
+        "isFullyFunded": true,
+        "manager": {
+          "id": "0xa22e30ec47bf0a2005e11e81d9b08427bbca0b8b"
+        },
+        "proposingStrategies": [],
+        "votingStrategies": [
+          {
+            "strategy": {
+              "id": "0x30a87c3a621e38afefa37b6226ae727f6178cab3277bb21dd93c960faaffdff",
+              "type": "BALANCE_OF_ERC1155",
+              "address": "1947478707102246277284783329899598037449395219464670626282841624346847030901",
+              "params": [
+                "1012592092552684491504889854851691286127693450759",
+                "0",
+                "2",
+                "10"
+              ]
+            }
+          }
+        ],
+        "timedConfig": {
+          "winnerCount": 2,
+          "proposalThreshold": "0",
+          "proposalPeriodStartTimestamp": "1711602000",
+          "proposalPeriodEndTimestamp": "1712811600",
+          "proposalPeriodDuration": "1209600",
+          "votePeriodStartTimestamp": "1712811601",
+          "votePeriodEndTimestamp": "1713243601",
+          "votePeriodDuration": "432000",
+          "claimPeriodEndTimestamp": "1715662801",
+          "awards": [
+            {
+              "index": 0,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "500000000"
+            },
+            {
+              "index": 1,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "250000000"
+            }
+          ]
+        }
+      },
+      {
+        "id": "0x2b46d2a078ab53972c9e68153998159fea21bbc2",
+        "type": "TIMED",
+        "title": "Join our Street Fighter Roster at COMBO BREAKER 2024!",
+        "description": "<p><strong>Description:</strong> Nouns Esports is offering 1 winner $1,500 to join our Street Fighter Roster at COMBO BREAKER 2024! </p><p><br></p><p>Nouns Esports will provide you with a jersey and a care package of swag to represent Nouns at the event. We expect active participation in sharing our key event posts before, during, and after the event. </p><p><br></p><p>In order to be eligible submit a proposal explaining why you'd be an excellent representative for Nouns. Tell us about yourself, your previous results, and why our community should choose you. </p><p><br></p><p>Please include a link to your preferred social media account so we know who you are! </p><p><br></p><p>If you're a seasoned member of the Street Fighter community we’d love for you to join our community and help us choose a winner! Sign up to be a voter at <a href=\"https://forms.nouns.gg/signup/\" rel=\"noopener noreferrer\" target=\"_blank\">https://forms.nouns.gg/signup/</a></p>",
+        "createdAt": "1711130363",
+        "eventState": "CREATED",
+        "isFullyFunded": true,
+        "manager": {
+          "id": "0xa22e30ec47bf0a2005e11e81d9b08427bbca0b8b"
+        },
+        "proposingStrategies": [],
+        "votingStrategies": [
+          {
+            "strategy": {
+              "id": "0x30a87c3a621e38afefa37b6226ae727f6178cab3277bb21dd93c960faaffdff",
+              "type": "BALANCE_OF_ERC1155",
+              "address": "1947478707102246277284783329899598037449395219464670626282841624346847030901",
+              "params": [
+                "1012592092552684491504889854851691286127693450759",
+                "0",
+                "2",
+                "10"
+              ]
+            }
+          }
+        ],
+        "timedConfig": {
+          "winnerCount": 1,
+          "proposalThreshold": "0",
+          "proposalPeriodStartTimestamp": "1712898000",
+          "proposalPeriodEndTimestamp": "1713502800",
+          "proposalPeriodDuration": "604800",
+          "votePeriodStartTimestamp": "1713502801",
+          "votePeriodEndTimestamp": "1713762001",
+          "votePeriodDuration": "259200",
+          "claimPeriodEndTimestamp": "1716181201",
+          "awards": [
+            {
+              "index": 0,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "1500000000"
+            }
+          ]
+        }
+      },
+      {
+        "id": "0x972fe18d946cbba02e398aa1749e0c400100deb1",
+        "type": "TIMED",
+        "title": "Join our Smash Roster at Tipped Off 15!",
+        "description": "<p>Nouns Esports is offering 1 winner $1,500 to join our Smash roster at Tipped Off 15!</p><p><br></p><p>Nouns Esports will provide you with a jersey and a care package of swag to represent Nouns at the event. We expect active participation in sharing our key event posts before, during, and after the event.</p><p><br></p><p>In order to be eligible submit a proposal explaining why you'd be an excellent representative for Nouns at Tipped Off 15. Tell us about yourself, your previous results, and why our community should choose you.</p><p><br></p><p>Please include a link to your preferred social media account so we know who you are!</p><p><br></p><p>If you're a seasoned member of the Smash community we’d love for you to join our community and help us choose a winner! Sign up to be a voter at <a href=\"https://forms.nouns.gg/signup/\" rel=\"noopener noreferrer\" target=\"_blank\">https://forms.nouns.gg/signup/</a>&nbsp;</p>",
+        "createdAt": "1710886655",
+        "eventState": "CREATED",
+        "isFullyFunded": true,
+        "manager": {
+          "id": "0xa22e30ec47bf0a2005e11e81d9b08427bbca0b8b"
+        },
+        "proposingStrategies": [],
+        "votingStrategies": [
+          {
+            "strategy": {
+              "id": "0x30a87c3a621e38afefa37b6226ae727f6178cab3277bb21dd93c960faaffdff",
+              "type": "BALANCE_OF_ERC1155",
+              "address": "1947478707102246277284783329899598037449395219464670626282841624346847030901",
+              "params": [
+                "1012592092552684491504889854851691286127693450759",
+                "0",
+                "2",
+                "10"
+              ]
+            }
+          }
+        ],
+        "timedConfig": {
+          "winnerCount": 1,
+          "proposalThreshold": "0",
+          "proposalPeriodStartTimestamp": "1713934800",
+          "proposalPeriodEndTimestamp": "1715749200",
+          "proposalPeriodDuration": "1814400",
+          "votePeriodStartTimestamp": "1715749201",
+          "votePeriodEndTimestamp": "1716008401",
+          "votePeriodDuration": "259200",
+          "claimPeriodEndTimestamp": "1718427601",
+          "awards": [
+            {
+              "index": 0,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "1500000000"
+            }
+          ]
+        }
+      },
+      {
+        "id": "0x3830a19ec7aa113cdc9e8fa84aeb0a5080c66bb2",
+        "type": "TIMED",
+        "title": "Join our Smash Roster at GOML!",
+        "description": "<p>Nouns Esports is offering 1 winner $1,500 to join our Smash roster at GOML!</p><p><br></p><p>Nouns Esports will provide you with a jersey and a care package of swag to represent Nouns at the event. We expect active participation in sharing our key event posts before, during, and after the event.</p><p><br></p><p>In order to be eligible submit a proposal explaining why you'd be an excellent representative for Nouns at GOML. Tell us about yourself, your previous results, and why our community should choose you.</p><p><br></p><p>Please include a link to your preferred social media account so we know who you are!</p><p><br></p><p>If you're a seasoned member of the Smash community we’d love for you to join our community and help us choose a winner! Sign up to be a voter at <a href=\"https://forms.nouns.gg/signup/\" rel=\"noopener noreferrer\" target=\"_blank\">https://forms.nouns.gg/signup/</a></p><p><br></p>",
+        "createdAt": "1710886415",
+        "eventState": "CREATED",
+        "isFullyFunded": true,
+        "manager": {
+          "id": "0xa22e30ec47bf0a2005e11e81d9b08427bbca0b8b"
+        },
+        "proposingStrategies": [],
+        "votingStrategies": [
+          {
+            "strategy": {
+              "id": "0x30a87c3a621e38afefa37b6226ae727f6178cab3277bb21dd93c960faaffdff",
+              "type": "BALANCE_OF_ERC1155",
+              "address": "1947478707102246277284783329899598037449395219464670626282841624346847030901",
+              "params": [
+                "1012592092552684491504889854851691286127693450759",
+                "0",
+                "2",
+                "10"
+              ]
+            }
+          }
+        ],
+        "timedConfig": {
+          "winnerCount": 1,
+          "proposalThreshold": "0",
+          "proposalPeriodStartTimestamp": "1711947600",
+          "proposalPeriodEndTimestamp": "1713502800",
+          "proposalPeriodDuration": "1555200",
+          "votePeriodStartTimestamp": "1713502801",
+          "votePeriodEndTimestamp": "1713762001",
+          "votePeriodDuration": "259200",
+          "claimPeriodEndTimestamp": "1716181201",
+          "awards": [
+            {
+              "index": 0,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "1500000000"
+            }
+          ]
+        }
+      },
+      {
+        "id": "0x707c63f7b86479a1b4bae3c24224ca9c18dd3338",
+        "type": "TIMED",
+        "title": "EVO JapanでNouns Esportsに参加して300ドルをゲットしよう！",
+        "description": "<p><strong>まとめ：&nbsp;</strong></p><p><br></p><p>Nouns Esportsでは、EVO Japanに参加する10名のプレイヤーを募集しております！選ばれた選手には、300ドル、Nouns Esportsジャージ、グッズパックが贈られます。</p><p><br></p><p><strong>条件:</strong></p><p><br></p><p>Nouns Esportsのイベント関連の投稿をソーシャルメディアでシェアすること</p><p><br></p><p>EVO JapanでNounsの代表にふさわしい理由や、あなたのゲームでの実績について、企画書を提出すること</p><p><br></p><p><strong>特別な機会:</strong></p><p><br></p><p>スト6か鉄拳8の成績優秀者には、EVOラスベガスへの参加費として2000ドルがゲットできる！</p><p><br></p><p><strong>FGCベテランへ:</strong></p><p><br></p><p><a href=\"https://nouns.gg/signup-jp\" rel=\"noopener noreferrer\" target=\"_blank\">https://nouns.gg/signup-jp</a>に投票者として登録し、勝者を選ぶのにご協力ください。</p><p><br></p><p>Nouns Esportsの代表として、ゲーミングキャリアを次のレベルに引き上げるために、今すぐ応募ください！</p><p><br></p><p><br></p>",
+        "createdAt": "1710886271",
+        "eventState": "CREATED",
+        "isFullyFunded": true,
+        "manager": {
+          "id": "0xa22e30ec47bf0a2005e11e81d9b08427bbca0b8b"
+        },
+        "proposingStrategies": [],
+        "votingStrategies": [
+          {
+            "strategy": {
+              "id": "0x30a87c3a621e38afefa37b6226ae727f6178cab3277bb21dd93c960faaffdff",
+              "type": "BALANCE_OF_ERC1155",
+              "address": "1947478707102246277284783329899598037449395219464670626282841624346847030901",
+              "params": [
+                "1012592092552684491504889854851691286127693450759",
+                "0",
+                "2",
+                "10"
+              ]
+            }
+          }
+        ],
+        "timedConfig": {
+          "winnerCount": 10,
+          "proposalThreshold": "0",
+          "proposalPeriodStartTimestamp": "1710886271",
+          "proposalPeriodEndTimestamp": "1712355071",
+          "proposalPeriodDuration": "1468800",
+          "votePeriodStartTimestamp": "1712355072",
+          "votePeriodEndTimestamp": "1712614272",
+          "votePeriodDuration": "259200",
+          "claimPeriodEndTimestamp": "1715033472",
+          "awards": [
+            {
+              "index": 0,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "300000000"
+            },
+            {
+              "index": 1,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "300000000"
+            },
+            {
+              "index": 2,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "300000000"
+            },
+            {
+              "index": 3,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "300000000"
+            },
+            {
+              "index": 4,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "300000000"
+            },
+            {
+              "index": 5,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "300000000"
+            },
+            {
+              "index": 6,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "300000000"
+            },
+            {
+              "index": 7,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "300000000"
+            },
+            {
+              "index": 8,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "300000000"
+            },
+            {
+              "index": 9,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "300000000"
+            }
+          ]
+        }
+      },
+      {
+        "id": "0xbb959e92e67afb2c39f5dcec54c5878f5ff8c459",
+        "type": "TIMED",
+        "title": "EVO JapanでNouns Esportsに参加して500ドルをゲットしよう！",
+        "description": "<p><strong>まとめ：&nbsp;</strong></p><p><br></p><p>Nouns Esportsでは、EVO Japanに参加する10名のプレイヤーを募集しております！選ばれた選手には、500ドル、Nouns Esportsジャージ、グッズパックが贈られます。</p><p><br></p><p><strong>条件:</strong></p><p>Nouns Esportsのイベント関連の投稿をソーシャルメディアでシェアすること</p><p><br></p><p>EVO JapanでNounsの代表にふさわしい理由や、あなたのゲームでの実績について、企画書を提出すること</p><p><br></p><p><strong>特別な機会:</strong></p><p>スト6か鉄拳8の成績優秀者には、EVOラスベガスへの参加費として2000ドルがゲットできる！</p><p><br></p><p><strong>FGCベテランへ:</strong></p><p><a href=\"https://nouns.gg/signup-jp\" rel=\"noopener noreferrer\" target=\"_blank\">https://nouns.gg/signup-jp</a>に投票者として登録し、勝者を選ぶのにご協力ください。</p><p><br></p><p>Nouns Esportsの代表として、ゲーミングキャリアを次のレベルに引き上げるために、今すぐ応募ください！</p><p><br></p><p><br></p>",
+        "createdAt": "1710877331",
+        "eventState": "CANCELLED",
+        "isFullyFunded": false,
+        "manager": {
+          "id": "0xa22e30ec47bf0a2005e11e81d9b08427bbca0b8b"
+        },
+        "proposingStrategies": [],
+        "votingStrategies": [
+          {
+            "strategy": {
+              "id": "0x30a87c3a621e38afefa37b6226ae727f6178cab3277bb21dd93c960faaffdff",
+              "type": "BALANCE_OF_ERC1155",
+              "address": "1947478707102246277284783329899598037449395219464670626282841624346847030901",
+              "params": [
+                "1012592092552684491504889854851691286127693450759",
+                "0",
+                "2",
+                "10"
+              ]
+            }
+          }
+        ],
+        "timedConfig": {
+          "winnerCount": 10,
+          "proposalThreshold": "0",
+          "proposalPeriodStartTimestamp": "1710877331",
+          "proposalPeriodEndTimestamp": "1712346131",
+          "proposalPeriodDuration": "1468800",
+          "votePeriodStartTimestamp": "1712346132",
+          "votePeriodEndTimestamp": "1712605332",
+          "votePeriodDuration": "259200",
+          "claimPeriodEndTimestamp": "1715024532",
+          "awards": [
+            {
+              "index": 0,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "500000000"
+            },
+            {
+              "index": 1,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "500000000"
+            },
+            {
+              "index": 2,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "500000000"
+            },
+            {
+              "index": 3,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "500000000"
+            },
+            {
+              "index": 4,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "500000000"
+            },
+            {
+              "index": 5,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "500000000"
+            },
+            {
+              "index": 6,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "500000000"
+            },
+            {
+              "index": 7,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "500000000"
+            },
+            {
+              "index": 8,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "500000000"
+            },
+            {
+              "index": 9,
+              "asset": {
+                "assetType": "ERC20",
+                "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "identifier": "0"
+              },
+              "amount": "500000000"
+            }
+          ]
+        }
+      },
+      {
+        "id": "0x61e25db1e668ffe4d5d3afba1a7ec0b7b19689e0",
+        "type": "TIMED",
+        "title": "Join our Smash roster at the Battle of BC",
+        "description": "<p>We're offering you $1,500 to join our Smash roster at the Battle of BC 2024! </p><p><br></p><p>Nouns Esports will provide you with a jersey and a care package of swag to represent Nouns at the event. We expect active participation in sharing our key event posts before, during, and after the event. </p><p><br></p><p>In order to be eligible submit a proposal explaining why you'd be an excellent representative for Nouns at Battle of BC. Tell us about yourself, your previous results, and why our community should choose you. </p><p><br></p><p>If you're a seasoned member of the Smash community we’d love for you to join our community and help us choose a winner! Sign up to <a href=\"https://nouns.gg/signup\" rel=\"noopener noreferrer\" target=\"_blank\">be a voter</a> on our website.</p>",
+        "createdAt": "1709074367",
+        "eventState": "FINALIZED",
+        "isFullyFunded": true,
+        "manager": {
+          "id": "0xa22e30ec47bf0a2005e11e81d9b08427bbca0b8b"
+        },
+        "proposingStrategies": [],
+        "votingStrategies": [
+          {
+            "strategy": {
+              "id": "0x30a87c3a621e38afefa37b6226ae727f6178cab3277bb21dd93c960faaffdff",
+              "type": "BALANCE_OF_ERC1155",
+              "address": "1947478707102246277284783329899598037449395219464670626282841624346847030901",
+              "params": [
+                "1012592092552684491504889854851691286127693450759",
+                "0",
+                "2",
+                "10"
+              ]
+            }
+          }
+        ],
+        "timedConfig": {
+          "winnerCount": 1,
+          "proposalThreshold": "0",
+          "proposalPeriodStartTimestamp": "1709074367",
+          "proposalPeriodEndTimestamp": "1710543167",
+          "proposalPeriodDuration": "1468800",
+          "votePeriodStartTimestamp": "1710543168",
+          "votePeriodEndTimestamp": "1710802368",
+          "votePeriodDuration": "259200",
+          "claimPeriodEndTimestamp": "1713276395",
+          "awards": [
+            {
+              "index": 0,
+              "asset": {
+                "assetType": "ERC1155",
+                "token": "0x0938c5372675e58ea315cbb574e5ceafae9a8f5a",
+                "identifier": "4"
+              },
+              "amount": "1"
+            }
+          ]
+        }
+      },
+      {
+        "id": "0xfd160cf822a940bf554e8d5d02e10864b87556b2",
+        "type": "TIMED",
+        "title": "Join our Smash roster at Collision",
+        "description": "<p>Nouns Esports invites you to join our Smash roster at Collision 2024! </p><p><br></p><p><strong>The Opportunity: </strong></p><p><br></p><p>Your travel, accommodation, and food expenses for attending Collision will be fully taken care of by Nouns Esports. Nouns Esports will provide you with a jersey and a care package of swag to represent Nouns at the event. We expect active participation in sharing our key event posts before, during, and after the event. </p><p><br></p><p>In order to be eligible submit a proposal explaining why you'd be an excellent representative for Nouns at Collision. Tell us about yourself, your previous results, and why our community should choose you. Check out the winner of the previous round, <a href=\"https://prop.house/0x23c3d161eae43e40ca67618ae6f7836ecc7cd481/9\" rel=\"noopener noreferrer\" target=\"_blank\">Happymealz</a>, for inspiration. </p><p><br></p><p>If you're a seasoned member of the Smash community we’d love for you to join our community and help us choose a winner! Sign up to <a href=\"https://forms.nouns.gg/collision/\" rel=\"noopener noreferrer\" target=\"_blank\">be a voter</a> on our website.</p>",
+        "createdAt": "1708391315",
+        "eventState": "FINALIZED",
+        "isFullyFunded": true,
+        "manager": {
+          "id": "0xa22e30ec47bf0a2005e11e81d9b08427bbca0b8b"
+        },
+        "proposingStrategies": [],
+        "votingStrategies": [
+          {
+            "strategy": {
+              "id": "0x30a87c3a621e38afefa37b6226ae727f6178cab3277bb21dd93c960faaffdff",
+              "type": "BALANCE_OF_ERC1155",
+              "address": "1947478707102246277284783329899598037449395219464670626282841624346847030901",
+              "params": [
+                "1012592092552684491504889854851691286127693450759",
+                "0",
+                "2",
+                "10"
+              ]
+            }
+          }
+        ],
+        "timedConfig": {
+          "winnerCount": 1,
+          "proposalThreshold": "0",
+          "proposalPeriodStartTimestamp": "1708391315",
+          "proposalPeriodEndTimestamp": "1709341715",
+          "proposalPeriodDuration": "950400",
+          "votePeriodStartTimestamp": "1709341716",
+          "votePeriodEndTimestamp": "1709600916",
+          "votePeriodDuration": "259200",
+          "claimPeriodEndTimestamp": "1712095955",
+          "awards": [
+            {
+              "index": 0,
+              "asset": {
+                "assetType": "ERC1155",
+                "token": "0x0938c5372675e58ea315cbb574e5ceafae9a8f5a",
+                "identifier": "3"
+              },
+              "amount": "1"
+            }
+          ]
+        }
+      },
+      {
+        "id": "0x810a108e4f827817a4063ba4f7bd8b13a4ddf13b",
+        "type": "TIMED",
+        "title": "Gaming Art Contest",
+        "description": "<p><strong>Objective:</strong> Nouns Esports is on a quest to create a distinctive new brand and Intellectual Property (IP). </p><p><br></p><p><strong>Your Mission:</strong> Unleash your imagination and experiment with ideas that resonate with the heart of gaming and esports.  </p><p><br></p><p>We're looking for submissions that: </p><p>\t- Are deeply rooted in the gaming and esports universe featuring character based models. </p><p>\t- These characters should proudly sport 'Noggles' ⌐◨-◨ – a signature accessory in our envisioned world.  </p><p>\t- Feel free to draw inspiration from popular games, incorporating unique features like specialized weapons, innovative clothing, etc. However, ensure originality to avoid any copyright infringements.</p><p><br></p><p>Here is some nounish <a href=\"https://nouns.gg/artwork-tweet\" rel=\"noopener noreferrer\" target=\"_blank\">artwork</a> we have commissioned over the years that you can use to draw inspiration from.</p>",
+        "createdAt": "1706911991",
+        "eventState": "FINALIZED",
+        "isFullyFunded": true,
+        "manager": {
+          "id": "0xa22e30ec47bf0a2005e11e81d9b08427bbca0b8b"
+        },
+        "proposingStrategies": [],
+        "votingStrategies": [
+          {
+            "strategy": {
+              "id": "0x67c9186019b4b16ee36aeb01595c2d4777affae612d9466be7529cfb8e1b0e9",
+              "type": "ALLOWLIST",
+              "address": "1743243495938318158319147646051035197132241063048561245666865929138939037596",
+              "params": [
+                "569296905850145213766916974073623906358683789939331262331999183731288052798",
+                "8737911506913553745",
+                "4923088929713973863",
+                "6435210884917064049",
+                "3923281132091356515",
+                "6228842640707892075",
+                "126905351554673"
+              ]
+            }
+          }
+        ],
+        "timedConfig": {
+          "winnerCount": 5,
+          "proposalThreshold": "0",
+          "proposalPeriodStartTimestamp": "1707112800",
+          "proposalPeriodEndTimestamp": "1708322400",
+          "proposalPeriodDuration": "1209600",
+          "votePeriodStartTimestamp": "1708322401",
+          "votePeriodEndTimestamp": "1708927201",
+          "votePeriodDuration": "604800",
+          "claimPeriodEndTimestamp": "1711409711",
+          "awards": [
+            {
+              "index": 0,
+              "asset": {
+                "assetType": "NATIVE",
+                "token": "0x0000000000000000000000000000000000000000",
+                "identifier": "0"
+              },
+              "amount": "500000000000000000"
+            },
+            {
+              "index": 1,
+              "asset": {
+                "assetType": "NATIVE",
+                "token": "0x0000000000000000000000000000000000000000",
+                "identifier": "0"
+              },
+              "amount": "200000000000000000"
+            },
+            {
+              "index": 2,
+              "asset": {
+                "assetType": "NATIVE",
+                "token": "0x0000000000000000000000000000000000000000",
+                "identifier": "0"
+              },
+              "amount": "100000000000000000"
+            },
+            {
+              "index": 3,
+              "asset": {
+                "assetType": "NATIVE",
+                "token": "0x0000000000000000000000000000000000000000",
+                "identifier": "0"
+              },
+              "amount": "100000000000000000"
+            },
+            {
+              "index": 4,
+              "asset": {
+                "assetType": "NATIVE",
+                "token": "0x0000000000000000000000000000000000000000",
+                "identifier": "0"
+              },
+              "amount": "100000000000000000"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

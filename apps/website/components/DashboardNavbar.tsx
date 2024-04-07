@@ -23,7 +23,7 @@ export default function DashboardNavigation() {
             </ul>
             <div className="flex flex-col gap-2">
               <h2 className="text-white font-bebas-neue text-xl">Discussion</h2>
-              <ul className="grid grid-cols-6 gap-2">
+              <ul className="grid grid-cols-10 gap-2">
                 <GameIcon src="/logo/logo.svg" href="/chat/nouns-esports" />
                 <GameIcon src="/nouns.png" href="/chat/nouns" />
                 <GameIcon src="/esports.png" href="/chat/esports" />

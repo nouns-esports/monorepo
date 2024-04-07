@@ -1,0 +1,22 @@
+https://www.graphqlbin.com/v2/new
+
+https://starknet-subgraph-mainnet-backup.onrender.com/
+
+query {
+  proposals(where: { round_: { sourceChainRound: "0xb824920f50df203feaf485362eaa8179fd672d37" } }) {
+    title,
+    tldr,
+    body,
+    receivedAt,
+    proposer {
+      id
+    },
+    votes {
+      voter {
+        id
+      }
+      receivedAt,
+      votingPower
+    }
+  }
+}

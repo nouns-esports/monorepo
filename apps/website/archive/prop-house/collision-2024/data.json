@@ -1,0 +1,245 @@
+{
+  "data": {
+    "proposals": [
+      {
+        "title": "Peter - Test Prop",
+        "tldr": "my name is peter and i like to party",
+        "body": "<p>does this work??<img src=\"https://ipfs.backend.prop.house/ipfs/Qmemb7eBES6k6D6F9PUthRvbjr9E9PtxoTSrLYDT7BNZ1H\"></p><p><br></p><p><br></p>",
+        "receivedAt": 1708887833,
+        "proposer": {
+          "id": "0x2993284dd36A836f0d83856c2b4586C6Daf008EC"
+        },
+        "votes": []
+      },
+      {
+        "title": "Chaler Is Looking to make content, commentate and rep the UK at collusion",
+        "tldr": "I want to make content that I can only make on the ground in the US the hub of melee That I can't in the UK",
+        "body": "<p><strong><u>Chaler wants to make cool stuff in America</u></strong></p><p><br></p><p>Yo my name is Josh but you might know me as Chaler the YouTube guy. I have been a part of the melee scene for 8 years but I am yet to ever travel to the hub of melee in the world the USA. Mainly because as you might know I am not that great at the video game so why travel all that way when I could go around Europe.</p><p>However things have changed!</p><p>In the past year I have been chasing my dream of doing YouTube full time and have made many many videos on melee, its competitive history and goings on.</p><p>So now I want to finally make the trek to the US to connect with people I have never met in person and make content that I could only make from attending events like this, for example.</p><p><br></p><p>Vlogs: I have ideas for interesting vlogs that I could make attending events that people care about rather than my uk locals which while really cool doesn't grab the broad range of people.&nbsp;</p><p><br></p><p>On the ground Docs: I am in a period of change for my channel where I will undoubtedly be doing more large scale documentaries (Hopefully my first is live by the time you can vote) so being able to go and meet these people I have been documenting and getting real interviews with them sounds like a dream come true as well as better content for you guys.</p><p><br></p><p>if you want an example of any of these style of videos go check out the<a href=\"https://www.youtube.com/@ChalerYT/videos\" rel=\"noopener noreferrer\" target=\"_blank\"> channel</a> or maybe you have already watched my stuff and just don't know it. <a href=\"https://www.youtube.com/watch?v=BrMwna7sQiU&amp;t=425s\" rel=\"noopener noreferrer\" target=\"_blank\">&nbsp;Doc</a> <a href=\"https://www.youtube.com/watch?v=tefmQsilUQU&amp;t=2s\" rel=\"noopener noreferrer\" target=\"_blank\">&nbsp;Vlog</a></p><p><br></p><p><img src=\"https://lh7-us.googleusercontent.com/Zw4kFtyO8y4GpaASxhU2ki28ARAmOTRDHtIG06mNidQ1YBMucEo2rSCW5otGLlrBOO4WlG3KDRT_tvmWztOtGvmYuQ8_iD3Rsboc5U7FjE2hd3486d04Y5TKOQ-VHCX5aIOEz5VRjOSdIAMlYN2QHFQ\"></p><p><img src=\"https://lh7-us.googleusercontent.com/jD0lNTEvUe8Rb-uEyEdGE0BZIuyBSr-56M5C3x5W66aaZTJQ_E4K4yzQL6mhJIsF-jA50KN-S4Puw9WNkVAShRztAHqrhAWH7DMj4NgORp3ky9w-a2BE6VbPuS82NFoCql2bFPWqS-YZouu6Axc1TKE\"></p><p><br></p><p><strong>Commentary</strong></p><p><br></p><p>Over the past year I have really been pushing my commentary, taking notes from great commentators in Europe and doing the best I can to be both entertaining and informative.</p><p>I really feel my commentary has reached a solid level in this time so I would love the chance to commentate in front of more people as a opportunity like<a href=\"https://www.youtube.com/watch?v=YaXxV9GK76U\" rel=\"noopener noreferrer\" target=\"_blank\"> Fete</a> only comes around ever so often in Europe.</p><p><br></p><p><strong>Competing</strong></p><p><br></p><p>So yeah I'm not the best I don't have any crazy wins or anything like that but if you are a real stats nerd would it not be fun to compare the peak of average in the UK vs the American field? Idk just stacking on whatever I can here and being as transparent as I can be that competition while not being the main focus anymore is 100% something I still enjoy and take seriously so I would love to see how I hold up.</p><p>This opportunity would genuinely mean the world to me and I promise to deliver as much as I physically can from this one trip. So if you vote for me please let me know (also its my birthday on the date of collusion... so that's fun if that influences you at all)&nbsp;&nbsp;</p><p><br></p>",
+        "receivedAt": 1708971631,
+        "proposer": {
+          "id": "0xE9b362c5497Ea845a12e0dE59E062B7523106ADb"
+        },
+        "votes": [
+          {
+            "voter": {
+              "id": "0xE3f27DEFf96fe178e87559F36Cbf868B9E75967D"
+            },
+            "receivedAt": 1709572361,
+            "votingPower": "1"
+          },
+          {
+            "voter": {
+              "id": "0x87a0Dee820326C2CAcbB37F54FF849Db5fd3A5f9"
+            },
+            "receivedAt": 1709381555,
+            "votingPower": "2"
+          },
+          {
+            "voter": {
+              "id": "0xE3ff24a97BFB65CAdEF30F6Ad19a6EA7E6F6149d"
+            },
+            "receivedAt": 1709395616,
+            "votingPower": "5"
+          },
+          {
+            "voter": {
+              "id": "0x51C6b737C1ef6d06733A1F48924fDe1BE57337F1"
+            },
+            "receivedAt": 1709417076,
+            "votingPower": "3"
+          },
+          {
+            "voter": {
+              "id": "0x2993284dd36A836f0d83856c2b4586C6Daf008EC"
+            },
+            "receivedAt": 1709362978,
+            "votingPower": "2"
+          }
+        ]
+      },
+      {
+        "title": "meleesadposts",
+        "tldr": "help this monkey hone their craft",
+        "body": "<p>hello i am meleesadposts. I have been playing melee for 8 years and i have started taking it more seriously than ever. Now that I have graduated college, I have had more time than ever to obsess over this beautiful game. Going to collision would help my improvement as a player immensely. I've been living in the middle of basically nowhere for some time and have little to no access to top level talent to play. I spend hours daily playing and this opportunity would make it even more worth it. This game means the world to me and this experience would be priceless. I want to push my Donkey Kong to the limit!</p><p><br></p><p>On top of that, I promise to bring you some awesome content surrounding the event afterwards o7 </p><p><br></p><p><br></p>",
+        "receivedAt": 1709075068,
+        "proposer": {
+          "id": "0xcEb0b073a97CD5bB48E876ef415Dfe8f4DC03cb0"
+        },
+        "votes": [
+          {
+            "voter": {
+              "id": "0xE3f27DEFf96fe178e87559F36Cbf868B9E75967D"
+            },
+            "receivedAt": 1709572361,
+            "votingPower": "1"
+          },
+          {
+            "voter": {
+              "id": "0x2993284dd36A836f0d83856c2b4586C6Daf008EC"
+            },
+            "receivedAt": 1709362978,
+            "votingPower": "1"
+          }
+        ]
+      },
+      {
+        "title": "Salt X Nouns",
+        "tldr": "Help get me to Collision!",
+        "body": "<p><strong>Hey everyone! I'm once again signing up for the Nouns Prop House to be able to represent Nouns at Collision!</strong></p><p><br></p><p><strong>My resume includes: </strong></p><ol><li><strong>Ranked 14th best player in the world </strong></li><li><strong>Arguably the best Captain Falcon in the World </strong></li><li><strong>Multiple tourney wins (Low Tide City 2023, Rise n Grind 2023, Luminosity Makes Moves Miami 2023, BEMI 2023) </strong></li><li><strong>Multiple Top 8, Top 12, and Top 16 placements at Majors </strong></li><li><strong>I bring the HYPE!!! </strong></li></ol><p><br></p><p><strong>Thank you again to Nouns for this awesome opportunity! Good luck to everyone who signed up and may the one with the most votes win!</strong></p><p><br></p><p><strong><span class=\"ql-cursor\">﻿﻿</span></strong><img src=\"https://ipfs.backend.prop.house/ipfs/QmYrnxxwhwhkQg68anEQcR4DH3M7WV8giStqXeb8kU55QX\"></p><p><br></p><p><br></p>",
+        "receivedAt": 1709156296,
+        "proposer": {
+          "id": "0xb2277afFECb1b2b061acAC920A373F501237908e"
+        },
+        "votes": [
+          {
+            "voter": {
+              "id": "0x87a0Dee820326C2CAcbB37F54FF849Db5fd3A5f9"
+            },
+            "receivedAt": 1709381555,
+            "votingPower": "5"
+          },
+          {
+            "voter": {
+              "id": "0x3f9413E785020f3B37A838A1E5a72Ba81CA7F514"
+            },
+            "receivedAt": 1709589108,
+            "votingPower": "5"
+          },
+          {
+            "voter": {
+              "id": "0xE3ff24a97BFB65CAdEF30F6Ad19a6EA7E6F6149d"
+            },
+            "receivedAt": 1709350116,
+            "votingPower": "5"
+          },
+          {
+            "voter": {
+              "id": "0x51C6b737C1ef6d06733A1F48924fDe1BE57337F1"
+            },
+            "receivedAt": 1709417076,
+            "votingPower": "5"
+          },
+          {
+            "voter": {
+              "id": "0x2993284dd36A836f0d83856c2b4586C6Daf008EC"
+            },
+            "receivedAt": 1709362978,
+            "votingPower": "4"
+          },
+          {
+            "voter": {
+              "id": "0x3f9413E785020f3B37A838A1E5a72Ba81CA7F514"
+            },
+            "receivedAt": 1709394851,
+            "votingPower": "5"
+          },
+          {
+            "voter": {
+              "id": "0x1FCf9A9D40f2F47C0F4c308Fd8852C945BC7ad9E"
+            },
+            "receivedAt": 1709470119,
+            "votingPower": "10"
+          },
+          {
+            "voter": {
+              "id": "0xE3f27DEFf96fe178e87559F36Cbf868B9E75967D"
+            },
+            "receivedAt": 1709459956,
+            "votingPower": "6"
+          },
+          {
+            "voter": {
+              "id": "0x1ffD639A6E26Da0E8b2a1Bd6caD1E910739e6Ec7"
+            },
+            "receivedAt": 1709420733,
+            "votingPower": "10"
+          }
+        ]
+      },
+      {
+        "title": "Salt X Nouns",
+        "tldr": "Help send me to Collison!",
+        "body": "<p><strong>Hey everyone! I'm once again signing up for the Nouns Prop House to be able to represent Nouns at Collision!</strong></p><p><br></p><p><strong>My resume includes:</strong></p><ol><li><strong>Ranked 14th best player in the world</strong></li><li><strong>Arguably the best Captain Falcon in the World</strong></li><li><strong>Multiple tourney wins (Low Tide City 2023, Rise n Grind 2023, Luminosity Makes Moves Miami 2023, BEMI 2023)</strong></li><li><strong>Multiple Top 8, Top 12, and Top 16 placements at Majors</strong></li><li><strong>I bring the HYPE!!!</strong></li></ol><p><br></p><p><strong>Thank you again to Nouns for this awesome opportunity! Good luck to everyone who signed up and may the one with the most votes win!</strong></p><p><br></p><p><img src=\"https://ipfs.backend.prop.house/ipfs/QmYrnxxwhwhkQg68anEQcR4DH3M7WV8giStqXeb8kU55QX\"></p><p><br></p><p><br></p>",
+        "receivedAt": 1709184788,
+        "proposer": {
+          "id": "0xC705519E6Ae96264693844f5B3E58bAbB3E8D9c5"
+        },
+        "votes": []
+      },
+      {
+        "title": "Salt X Nouns",
+        "tldr": "Help get me to Collision!",
+        "body": "<p><strong>Hey everyone! I'm once again signing up for the Nouns Prop House to be able to represent Nouns at Collision!</strong></p><p><br></p><p><strong>My resume includes: </strong></p><ol><li><strong>Ranked 14th best player in the world </strong></li><li><strong>Arguably the best Captain Falcon in the World </strong></li><li><strong>Multiple tourney wins (Low Tide City 2023, Rise n Grind 2023, Luminosity Makes Moves Miami 2023, BEMI 2023) </strong></li><li><strong>Multiple Top 8, Top 12, and Top 16 placements at Majors </strong></li><li><strong>I bring the HYPE!!! </strong></li></ol><p><br></p><p><strong>Thank you again to Nouns for this awesome opportunity! Good luck to everyone who signed up and may the one with the most votes win!</strong></p><p><br></p><p><strong><span class=\"ql-cursor\">﻿</span></strong><img src=\"https://ipfs.backend.prop.house/ipfs/QmYrnxxwhwhkQg68anEQcR4DH3M7WV8giStqXeb8kU55QX\"></p><p><br></p><p><br></p>",
+        "receivedAt": 1709185156,
+        "proposer": {
+          "id": "0xC705519E6Ae96264693844f5B3E58bAbB3E8D9c5"
+        },
+        "votes": []
+      },
+      {
+        "title": "ANT FOR NOUNS AT COLLISION",
+        "tldr": "Send a nightclub redemption bracket representative to his first tristate major",
+        "body": "<p>I’m a spacies main who started playing in 2019, and would love the opportunity to play the best in the world at Collision this year. Watching a Nouns legend every week at the nightclub weekly in NYC has influenced me and made me want to take the game more seriously and play as much as I can, especially at big events like Collision. I would happily wear Nouns merch and complete any sponser obligations while playing the best game ever made. </p><p><img src=\"https://ipfs.backend.prop.house/ipfs/Qmcyr7mJiB5b8p9mHW11sghecqVDSi2HxGWM7Bw6pW6EAM\"></p><p><br></p><p><br></p>",
+        "receivedAt": 1709328187,
+        "proposer": {
+          "id": "0x35D1E729A0304eF5D3E6a14D97C8c1fB90d0d1e5"
+        },
+        "votes": [
+          {
+            "voter": {
+              "id": "0xE3f27DEFf96fe178e87559F36Cbf868B9E75967D"
+            },
+            "receivedAt": 1709572361,
+            "votingPower": "1"
+          },
+          {
+            "voter": {
+              "id": "0x87a0Dee820326C2CAcbB37F54FF849Db5fd3A5f9"
+            },
+            "receivedAt": 1709381555,
+            "votingPower": "3"
+          },
+          {
+            "voter": {
+              "id": "0x51C6b737C1ef6d06733A1F48924fDe1BE57337F1"
+            },
+            "receivedAt": 1709417076,
+            "votingPower": "2"
+          },
+          {
+            "voter": {
+              "id": "0x2993284dd36A836f0d83856c2b4586C6Daf008EC"
+            },
+            "receivedAt": 1709362978,
+            "votingPower": "2"
+          }
+        ]
+      },
+      {
+        "title": "Justus",
+        "tldr": "VOTE FOR ME",
+        "body": "<p>My birthday is during Collision and I’d love to go, I have less opportunity to travel and it’s also during spring break, I work at a school so it’s really hard to get time off! Thanks</p><p><br></p><p> -Justus</p>",
+        "receivedAt": 1709340638,
+        "proposer": {
+          "id": "0x88acD7b35a35a1D6D0e9BA057768E49f78b7739d"
+        },
+        "votes": [
+          {
+            "voter": {
+              "id": "0xE3f27DEFf96fe178e87559F36Cbf868B9E75967D"
+            },
+            "receivedAt": 1709572361,
+            "votingPower": "1"
+          },
+          {
+            "voter": {
+              "id": "0x2993284dd36A836f0d83856c2b4586C6Daf008EC"
+            },
+            "receivedAt": 1709362978,
+            "votingPower": "1"
+          }
+        ]
+      }
+    ]
+  }
+}

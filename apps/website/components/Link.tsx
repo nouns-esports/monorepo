@@ -1,4 +1,4 @@
-import Vercel from "@/vercel.json";
+// import { redirects } from "@/next.config";
 import NextLink from "next/link";
 
 export default function Link(
@@ -8,7 +8,7 @@ export default function Link(
     newTab?: boolean;
   } & React.AnchorHTMLAttributes<HTMLAnchorElement>
 ) {
-  const newTab = props.newTab ?? isNewTab(props.href);
+  const newTab = props.newTab; //?? isNewTab(props.href);
 
   const Component = newTab ? "a" : NextLink;
 
@@ -28,18 +28,18 @@ export default function Link(
   );
 }
 
-function isNewTab(url: string) {
-  // Check for Vercel HTTP redirects
-  for (const redirect of Vercel.redirects) {
-    if (redirect.source === url) {
-      return true;
-    }
-  }
+// function isNewTab(url: string) {
+//   // Check for Vercel HTTP redirects
+//   for (const redirect of Vercel.redirects) {
+//     if (redirect.source === url) {
+//       return true;
+//     }
+//   }
 
-  // Check for protocol
-  if (url.includes("://")) {
-    return true;
-  }
+//   // Check for protocol
+//   if (url.includes("://")) {
+//     return true;
+//   }
 
-  return false;
-}
+//   return false;
+// }

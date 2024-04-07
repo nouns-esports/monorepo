@@ -97,14 +97,14 @@ export const badges = pgTable("badges", {
   name: text("name").notNull(),
   description: text("description").notNull(),
   image: text("image").notNull(),
-  timestamp: timestamp("timestamp").notNull(),
+  timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
 });
 
 // type can be a string or a string:id for things like rounds, but rounds should probably just use a "voter" snapshot type instead and check against the timestamp
 export const snapshots = pgTable("snapshots", {
   id: serial("id").primaryKey(),
   type: text("type").notNull(),
-  timestamp: timestamp("timestamp").notNull(),
+  timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
   user: text("user").notNull(),
 });
 
@@ -115,13 +115,15 @@ export const snapshotRelations = relations(snapshots, ({ one }) => ({
   }),
 }));
 
+// An infinite round is defined as a round with a null end timestamp and votingStart = start, respecitive proposals will include a value
 export const rounds = pgTable("rounds", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
   description: text("description").notNull(),
-  start: timestamp("start").notNull(),
-  end: timestamp("end").notNull(),
-  category: text("category").notNull(),
+  start: timestamp("start", { mode: "date" }).notNull(),
+  votingStart: timestamp("votingStart", { mode: "date" }).notNull(),
+  end: timestamp("end", { mode: "date" }),
+  tags: text("tags").array().notNull(),
   image: text("image").notNull(),
 });
 
@@ -136,6 +138,7 @@ export const roundsRelations = relations(rounds, ({ many }) => ({
 // ETH on Base: eip155:8453:0x0000000000000000000000000000000000000000
 // An ERC1155: eip155:8453:0xADDRESS:2
 // Value with precision 78 is the min value to account for a uint256
+// If place is 0, it is an infinite round
 export const awards = pgTable("awards", {
   round: text("round").notNull(),
   place: smallint("place").notNull(),
@@ -150,14 +153,14 @@ export const awardsRelations = relations(awards, ({ one }) => ({
   }),
 }));
 
-// word "who" in the frontend as "tell us about yourself", there will already be basic context as to who is proposing
+// descripiton will be abstracted in frontend as who and why
 export const proposals = pgTable("proposals", {
   user: text("user").primaryKey(),
   round: text("round").notNull(),
   title: text("title").notNull(),
-  who: text("who").notNull(),
-  why: text("why").notNull(),
+  description: text("description").notNull(),
   value: numeric("value", { precision: 78 }).notNull(),
+  createdAt: timestamp("createdAt", { mode: "date" }).notNull(),
 });
 
 export const proposalsRelations = relations(proposals, ({ one }) => ({
@@ -175,6 +178,7 @@ export const votes = pgTable("votes", {
   user: text("user").primaryKey(),
   round: text("round").notNull(),
   count: smallint("count").notNull(),
+  timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
 });
 
 export const votesRelations = relations(votes, ({ one }) => ({

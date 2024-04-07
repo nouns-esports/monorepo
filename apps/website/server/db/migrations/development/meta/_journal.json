@@ -50,6 +50,27 @@
       "when": 1711767539310,
       "tag": "0006_green_smasher",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1712437917582,
+      "tag": "0007_icy_millenium_guard",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "5",
+      "when": 1712438635817,
+      "tag": "0008_complete_justice",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "5",
+      "when": 1712439501013,
+      "tag": "0009_worthless_gambit",
+      "breakpoints": true
     }
   ]
 }
