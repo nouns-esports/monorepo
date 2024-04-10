@@ -16,7 +16,7 @@ export default function DashboardNavigation() {
           </NavigationMenu.Trigger>
           <NavigationMenu.Content className="border border-darkgrey bg-black rounded-lg absolute left-0 w-[calc(100vw_-_32px)] mt-2 flex flex-col gap-4 p-4">
             <ul className="flex flex-col gap-1">
-              <NavItem href="/dashboard">Dashboard</NavItem>
+              {/* <NavItem href="/dashboard">Dashboard</NavItem> */}
               <NavItem href="/rounds">Rounds</NavItem>
               <NavItem href="/shop">Shop</NavItem>
               <NavItem href="/profile">Profile</NavItem>

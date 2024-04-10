@@ -257,8 +257,8 @@ const data = [
   },
 ] as const;
 
-const proposals: Proposal[] = [];
-const votes: Vote[] = [];
+const proposals: Omit<Proposal, "id">[] = [];
+const votes: Omit<Vote, "id" | "proposal">[] = [];
 
 data.forEach((p) => {
   proposals.push({

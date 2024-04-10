@@ -1,6 +1,6 @@
 import { Proposal } from "@/server/db/schema";
 
-const proposals: Proposal[] = [
+const proposals: Omit<Proposal, "id">[] = [
   // Tournatments
   {
     title: "Tipped Off 14 + Nouns Esports",
@@ -1237,3 +1237,61 @@ const proposals: Proposal[] = [
     createdAt: new Date("2024-03-14T02:06:03.000Z"),
   },
 ];
+
+let count = 0;
+let ipfsBackend = 0;
+let mypinata = 0;
+let google7 = 0;
+let google5 = 0;
+
+// 2: https://lh5.googleusercontent.com/
+// 4: https://lh7-us.googleusercontent.com
+// 61: https://prophouse.mypinata.cloud/
+// 116: https://ipfs.backend.prop.house/
+
+const key: Record<string, string> = {};
+
+proposals.forEach((proposal) => {
+  const images = [
+    proposal.description.match(
+      /https:\/\/ipfs.backend.prop.house\/ipfs\/[a-zA-Z0-9]*/g
+    ) ?? [],
+    proposal.description.match(
+      /https:\/\/lh7-us.googleusercontent.com\/[a-zA-Z0-9]*/g
+    ) ?? [],
+    proposal.description.match(
+      /https:\/\/lh5.googleusercontent.com\/[a-zA-Z0-9]*/g
+    ) ?? [],
+    proposal.description.match(
+      /https:\/\/prophouse.mypinata.cloud\/[a-zA-Z0-9]*/g
+    ) ?? [],
+  ];
+
+  images[0].forEach((image) => {
+    count++;
+    ipfsBackend++;
+  });
+
+  images[1].forEach((image) => {
+    count++;
+    google7++;
+
+    console.log(image);
+  });
+
+  images[2].forEach((image) => {
+    count++;
+    google5++;
+  });
+
+  images[3].forEach((image) => {
+    count++;
+    mypinata++;
+  });
+});
+
+console.log("Total images: ", count);
+console.log("ipfs.backend.prop.house: ", ipfsBackend);
+console.log("lh7-us.googleusercontent.com: ", google7);
+console.log("lh5.googleusercontent.com: ", google5);
+console.log("prophouse.mypinata.cloud: ", mypinata);

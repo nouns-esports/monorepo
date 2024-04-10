@@ -9,6 +9,7 @@ import {
   numeric,
   serial,
   smallint,
+  integer,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { Pool } from "pg";
@@ -155,7 +156,8 @@ export const awardsRelations = relations(awards, ({ one }) => ({
 
 // descripiton will be abstracted in frontend as who and why
 export const proposals = pgTable("proposals", {
-  user: text("user").primaryKey(),
+  id: serial("id").primaryKey(),
+  user: text("user").notNull(),
   round: text("round").notNull(),
   title: text("title").notNull(),
   description: text("description").notNull(),
@@ -175,7 +177,9 @@ export const proposalsRelations = relations(proposals, ({ one }) => ({
 }));
 
 export const votes = pgTable("votes", {
-  user: text("user").primaryKey(),
+  id: serial("id").primaryKey(),
+  user: text("user").notNull(),
+  proposal: integer("proposal").notNull(),
   round: text("round").notNull(),
   count: smallint("count").notNull(),
   timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
@@ -185,6 +189,10 @@ export const votesRelations = relations(votes, ({ one }) => ({
   user: one(users, {
     fields: [votes.user],
     references: [users.id],
+  }),
+  proposal: one(proposals, {
+    fields: [votes.proposal],
+    references: [proposals.id],
   }),
   round: one(rounds, {
     fields: [votes.round],

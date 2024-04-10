@@ -1,4 +1,8 @@
+import { permanentRedirect } from "next/navigation";
+
 export default async function Dashboard() {
+  permanentRedirect("/rounds");
+
   return (
     <div className="flex flex-col w-full gap-8">
       <div className="flex flex-col gap-4">

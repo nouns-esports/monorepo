@@ -71,6 +71,13 @@
       "when": 1712439501013,
       "tag": "0009_worthless_gambit",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "5",
+      "when": 1712528311278,
+      "tag": "0010_classy_vengeance",
+      "breakpoints": true
     }
   ]
 }

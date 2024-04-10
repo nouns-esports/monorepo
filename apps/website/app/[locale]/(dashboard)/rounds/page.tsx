@@ -15,15 +15,15 @@ function RoundCard(props: { id: string }) {
   return (
     <Link
       href={`/rounds/${props.id}`}
-      className="w-full flex gap-4 bg-darkgrey border-grey/ border/ rounded-lg p-4 h-[9.25rem]"
+      className="w-full flex gap-4 bg-darkgrey border-grey/ border/ rounded-xl p-4 h-[9.25rem]"
     >
       <div className="flex gap-2">
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-3">
-            <img
+            {/* <img
               src="/games/icons/smash-melee.png"
               className="w-7 h-7 rounded-full -mt-1"
-            />
+            /> */}
             <h3 className="font-bebas-neue text-3xl text-white leading-none">
               Join our Smash roster at Collision!
             </h3>

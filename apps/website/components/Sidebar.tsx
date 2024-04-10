@@ -13,12 +13,12 @@ export default function Sidebar() {
   return (
     <>
       <ul className="flex flex-col gap-2 bg-darkgrey p-4 rounded-xl">
-        <Button
+        {/* <Button
           route="/dashboard"
           icon={<HouseSimple className="w-5 h-5 text-white" weight="fill" />}
         >
           Home
-        </Button>
+        </Button> */}
         <Button
           route="/rounds"
           icon={<Trophy className="w-5 h-5 text-white" weight="fill" />}
