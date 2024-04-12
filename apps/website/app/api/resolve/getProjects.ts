@@ -1,6 +1,6 @@
-import { db, projects } from "@/server/db/schema";
+import { db, projects } from "@/db/schema";
 import { asc, eq } from "drizzle-orm";
-import { publicProcedure } from "../clients/trpc";
+import { publicProcedure } from "../trpc";
 
 export const getProjects = publicProcedure.query(async () => {
   return db.query.projects.findMany({

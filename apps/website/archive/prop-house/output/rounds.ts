@@ -1,4 +1,4 @@
-import { Round } from "@/server/db/schema";
+import { Round } from "@/db/schema";
 
 const rounds: Round[] = [
   // Offchain (Infinite)

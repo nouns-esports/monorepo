@@ -5,7 +5,7 @@ import Text from "./Text";
 import { ArrowRight, Dot } from "phosphor-react-sc";
 import { useContext } from "react";
 import { PrimaryColorContext } from "@/providers/PrimaryColor";
-import { Event } from "@/server/resolve/getEvents";
+import { Event } from "@/app/api/resolve/getEvents";
 import { Locale } from "@/middleware";
 import { usePathname } from "next/navigation";
 import { env } from "@/env";
@@ -17,7 +17,7 @@ const defaultBanner: { url: string; text: Record<Locale, string> } = {
     pt: "Estamos estendendo nossos roster por mais um ano!",
   },
 };
- 
+
 export default function Banner(props: { events: Event[]; locale: string }) {
   const start = new Date(props.events[0].start.dateTime);
   const end = new Date(

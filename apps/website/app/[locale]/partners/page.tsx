@@ -66,7 +66,7 @@ export default function Partners() {
           the opportunity and become a partner today!
         </p>
         <div className="flex gap-6 items-center max-[400px]:flex-col">
-          <Button href="mailto:partners@nouns.gg">
+          <Button href="mailto:partners@nouns.gg" animate="hover">
             <Text en="Contact Us" pt="Entre em contato" />
           </Button>
           <Link
@@ -99,7 +99,9 @@ export default function Partners() {
               and brands, Nouns is for everyone.
             </p>
             <div className="flex items-center gap-6">
-              <Button href="https://nouns.wtf/vote/466">Visit</Button>
+              <Button href="https://nouns.wtf/vote/466" animate="hover">
+                Visit
+              </Button>
               <div className="flex items-center gap-4">
                 <Link href="https://twitter.com/nounsdao">
                   <TwitterLogo
@@ -133,7 +135,9 @@ export default function Partners() {
               infrastructure.
             </p>
             <div className="flex gap-6">
-              <Button href="https://matcha.xyz">Visit</Button>
+              <Button href="https://matcha.xyz" animate="hover">
+                Visit
+              </Button>
               <div className="flex items-center gap-4">
                 <Link href="https://twitter.com/matchaxyz">
                   <TwitterLogo

@@ -10,10 +10,10 @@ import {
   InstagramLogo,
 } from "phosphor-react-sc";
 import Link from "@/components/Link";
-import { Creator, Project } from "@/server/db/schema";
+import { Creator, Project } from "@/db/schema";
 import Text from "@/components/Text";
 import HighlightedText from "@/components/HighlightedText";
-import type { Event } from "@/server/resolve/getEvents";
+import type { Event } from "@/app/api/resolve/getEvents";
 import Date from "@/components/Date";
 import { headers } from "next/headers";
 import Image from "next/image";
@@ -68,7 +68,7 @@ export default async function Home(props: { params: { locale: string } }) {
           />
         </h1>
         <div className="flex gap-8 max-md:flex-col items-center">
-          <Button href="/discord">
+          <Button href="/discord" animate="hover">
             <Text en="Get Involved" pt="Envolver-se" />
           </Button>
           <Link
@@ -168,7 +168,7 @@ export default async function Home(props: { params: { locale: string } }) {
               pt="Get involved with the Nouns Esports community and stay up to date with our latest events and announcements!"
             />
           </p>
-          <Button href="/discord">
+          <Button href="/discord" animate="hover">
             <Text en="Join Now" pt="Join Now" />
           </Button>
         </div>

@@ -2,7 +2,7 @@
 
 import { createContext, useMemo } from "react";
 import { useParams, usePathname } from "next/navigation";
-import { Game } from "@/server/db/schema";
+import { Game } from "@/db/schema";
 
 export const PrimaryColorContext = createContext<string>("#E93737");
 

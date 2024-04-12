@@ -6,7 +6,7 @@ import { httpBatchLink } from "@trpc/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { getAccessToken } from "@privy-io/react-auth";
 import { createTRPCReact } from "@trpc/react-query";
-import { Router } from "@/app/api/[trpc]/router";
+import { Router } from "@/app/api/router";
 
 export const trpc = createTRPCReact<Router>({});
 

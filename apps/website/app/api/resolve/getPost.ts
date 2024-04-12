@@ -1,7 +1,7 @@
 import { z } from "zod";
-import { publicProcedure } from "../clients/trpc";
+import { publicProcedure } from "../trpc";
 import { gql } from "@apollo/client";
-import { arweave, arweaveClient } from "../clients/arweave";
+import { arweave, arweaveClient } from "./clients/arweave";
 
 const GetPublicationBySlug = gql`
   query GetParagraphPosts($slug: String!) {

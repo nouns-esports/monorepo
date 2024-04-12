@@ -1,4 +1,4 @@
-import { Game, Roster, Talent } from "@/server/db/schema";
+import { Game, Roster, Talent } from "@/db/schema";
 import { ArrowSquareOut } from "phosphor-react-sc";
 import GameBorder from "@/components/GameBorder";
 import { metadata } from "@/app/[locale]/layout";

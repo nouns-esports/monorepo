@@ -1,34 +1,48 @@
+import { query } from "@/app/api/query/server";
+import Button from "@/components/Button";
 import Link from "@/components/Link";
+import { notFound } from "next/navigation";
 import { ArrowLeft } from "phosphor-react-sc";
 
-export default function Round(props: { params: { round: string } }) {
+export default async function Round(props: { params: { round: string } }) {
+  const round = await query.getRound({ id: props.params.round });
+
+  if (!round) {
+    return notFound();
+  }
+
   return (
     <div className="flex flex-col gap-4">
       <Link href={"/rounds"} className="text-red flex items-center gap-1">
         <ArrowLeft className="w-5 h-5 text-red" />
         Back to rounds
       </Link>
-      <img
-        src="/games/smash-melee.webp"
-        className="w-full rounded-lg h-48 object-cover object-center"
-      />
-      <h2 className="text-white font-luckiest-guy text-3xl">
-        {props.params.round}
-      </h2>
-      <p className="text-lightgrey">
-        Nouns Esports invites you to join our Smash roster at Collision 2024!
-        Your travel, accommodation, and food expenses for attending Collision
-        will be fully taken care of by Nouns Esports. Nouns Esports will provide
-        you with a jersey and a care package of swag to represent Nouns at the
-        event. We expect active participation in sharing our key event posts
-        before, during, and after the event.
-      </p>
-      <div className="flex flex-col gap-4">
-        <h3 className="text-white font-luckiest-guy text-2xl">Proposals</h3>
+      <div className="flex flex-col gap-8">
+        <div className="bg-darkgrey rounded-xl overflow-hidden">
+          <img
+            src={round.image}
+            className="w-full h-48 object-cover object-center"
+          />
+          <div className="flex flex-col gap-2 p-4">
+            <h2 className="text-white font-luckiest-guy text-3xl">
+              {round.name}
+            </h2>
+            <p className="text-lightgrey">{round.description}</p>
+          </div>
+        </div>
         <div className="flex flex-col gap-4">
-          <ProposalCard round={props.params.round} proposal="happymealz" />
-          <ProposalCard round={props.params.round} proposal="happymealz" />
-          <ProposalCard round={props.params.round} proposal="happymealz" />
+          <div className="flex justify-between items-center w-full gap-4">
+            <h3 className="text-white font-luckiest-guy text-2xl">Proposals</h3>
+            <Button href={`/rounds/${props.params.round}/create`} animate="bg">
+              Create
+            </Button>
+          </div>
+
+          <div className="flex flex-col gap-4">
+            <ProposalCard round={props.params.round} proposal="happymealz" />
+            <ProposalCard round={props.params.round} proposal="happymealz" />
+            <ProposalCard round={props.params.round} proposal="happymealz" />
+          </div>
         </div>
       </div>
     </div>

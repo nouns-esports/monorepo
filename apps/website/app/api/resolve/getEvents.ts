@@ -1,4 +1,4 @@
-import { publicProcedure } from "../clients/trpc";
+import { publicProcedure } from "../trpc";
 import { env } from "@/env";
 
 export type Event = {

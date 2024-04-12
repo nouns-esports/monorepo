@@ -3,7 +3,7 @@
 import PostHog from "@/providers/PostHog";
 import PrimaryColor from "@/providers/PrimaryColor";
 import Privy from "@/providers/Privy";
-import { Game } from "@/server/db/schema";
+import { Game } from "@/db/schema";
 import { Toaster } from "react-hot-toast";
 import TRPC from "./TRPC";
 

@@ -14,7 +14,7 @@ import { createKernelAccount, createKernelAccountClient } from "@zerodev/sdk";
 import { signerToEcdsaValidator } from "@zerodev/ecdsa-validator";
 import { createWeightedECDSAValidator } from "@zerodev/weighted-ecdsa-validator";
 import { toFunctionSelector } from "viem";
-import { User } from "@/server/db/schema";
+import { User } from "@/db/schema";
 import { trpc } from "./TRPC";
 
 const queryClient = new QueryClient();

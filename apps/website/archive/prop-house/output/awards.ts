@@ -1,4 +1,4 @@
-import { Award } from "@/server/db/schema";
+import { Award } from "@/db/schema";
 
 // type is defined as a CAIP-10 string with an optional ID for 1155 token ids
 // See https://docs.farcaster.xyz/reference/frames/spec#mint

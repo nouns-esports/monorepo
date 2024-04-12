@@ -15,7 +15,9 @@ export default function NotFound(props: { params: { locale: string } }) {
       <h1 className="font-luckiest-guy text-5xl max-md:text-4xl max-sm:text-3xl text-white text-center">
         Sorry, we couldn't find that page!
       </h1>
-      <Button href={`/${props.params.locale}/`}>Home</Button>
+      <Button href={`/${props.params.locale}/`} animate="hover">
+        Home
+      </Button>
       <div className="from-transparent to-black bg-gradient-to-b h-64 w-full bottom-0 absolute pointer-events-none" />
     </main>
   );

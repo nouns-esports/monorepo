@@ -31,7 +31,7 @@ export default function Navbar() {
 
   return (
     <>
-      <NavigationMenu.Root>
+      <NavigationMenu.Root className="pointer-events-auto">
         <NavigationMenu.List className="flex items-center bg-black border-darkgrey border rounded-full p-1.5 max-sm:p-1 z-50">
           <NavGroup title="Explore">
             <NavGroupItem href={`/${params.locale}/#events`} icon="📅">
@@ -65,6 +65,12 @@ export default function Navbar() {
               icon="/games/icons/smash-melee.png"
             >
               Smash Melee
+            </NavGroupItem>
+            <NavGroupItem
+              href={`/${params.locale}/rosters/street-fighter`}
+              icon="/games/street-fighter.webp"
+            >
+              Street Fighter
             </NavGroupItem>
           </NavGroup>
           <div className="w-4 max-sm:hidden"></div>

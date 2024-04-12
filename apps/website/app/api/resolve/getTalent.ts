@@ -1,7 +1,7 @@
-import { db, talent } from "@/server/db/schema";
+import { db, talent } from "@/db/schema";
 import { eq, and, asc } from "drizzle-orm";
 import { z } from "zod";
-import { publicProcedure } from "../clients/trpc";
+import { publicProcedure } from "../trpc";
 
 export const getTalent = publicProcedure
   .input(

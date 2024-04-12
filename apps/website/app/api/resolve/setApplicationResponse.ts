@@ -1,7 +1,7 @@
-import { db, applicationResponses } from "@/server/db/schema";
-import { publicProcedure } from "../clients/trpc";
+import { db, applicationResponses } from "@/db/schema";
+import { publicProcedure } from "../trpc";
 import { z } from "zod";
-import { privyClient } from "../clients/privy";
+import { privyClient } from "./clients/privy";
 
 export const setApplicationResponse = publicProcedure
   .input(

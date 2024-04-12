@@ -4,7 +4,7 @@ import { env } from "@/env";
 
 async function main() {
   await migrate(db, {
-    migrationsFolder: `./server/db/migrations/${env.NEXT_PUBLIC_ENVIRONMENT}`,
+    migrationsFolder: `./db/migrations/${env.NEXT_PUBLIC_ENVIRONMENT}`,
   });
   process.exit(0);
 }

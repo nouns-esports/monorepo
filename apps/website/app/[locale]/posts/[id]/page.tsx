@@ -1,6 +1,6 @@
 import { query } from "@/app/api/query/server";
 import { notFound } from "next/navigation";
-import type { Node } from "@/server/resolve/getPost";
+import type { Node } from "@/app/api/resolve/getPost";
 import { Tweet } from "react-tweet";
 import { Metadata } from "next";
 

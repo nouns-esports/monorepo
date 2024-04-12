@@ -148,6 +148,7 @@ export default function Pass() {
                       Connect a Farcaster account
                     </h2>
                     <Button
+                      animate="bg"
                       onClick={() => {
                         linkFarcaster();
                       }}
@@ -162,6 +163,7 @@ export default function Pass() {
                       Connect your Discord account
                     </h2>
                     <Button
+                      animate="bg"
                       onClick={() => {
                         linkDiscord();
                       }}
@@ -182,6 +184,7 @@ export default function Pass() {
                     </p>
                     <div className="flex gap-4 flex-wrap">
                       <Button
+                        animate="bg"
                         onClick={() => {
                           linkTwitter();
                         }}
@@ -191,6 +194,7 @@ export default function Pass() {
                           : "Connect Twitter"}
                       </Button>
                       <Button
+                        animate="bg"
                         onClick={() => {
                           linkEmail();
                         }}
@@ -243,6 +247,7 @@ export default function Pass() {
                     server if you have any questions.
                   </p>
                   <Button
+                    animate="bg"
                     onClick={async () => {
                       if (id && address && farcaster && discord) {
                         if (
@@ -294,6 +299,7 @@ export default function Pass() {
             )
           ) : (
             <Button
+              animate="bg"
               onClick={() => {
                 login();
               }}

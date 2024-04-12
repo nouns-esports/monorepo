@@ -8,6 +8,8 @@ export default function Button(props: {
   onClick?: () => void;
   backgroundColor?: string;
   form?: boolean;
+  large?: boolean;
+  animate: "hover" | "bg";
   children: React.ReactNode;
 }) {
   const Component = props.href ? Link : props.form ? "input" : "button";
@@ -20,7 +22,7 @@ export default function Button(props: {
       type={props.form ? "submit" : undefined}
       className="relative w-min cursor-pointer"
     >
-      {props.href ? (
+      {props.animate === "hover" ? (
         <div
           style={{
             backgroundColor: props.backgroundColor,
@@ -32,8 +34,10 @@ export default function Button(props: {
       )}
       <div
         className={twMerge(
-          "relative select-none text-darkgrey py-3 px-[22px] text-xl bg-white rounded-full flex items-center justify-center leading-none font-bebas-neue whitespace-nowrap",
-          props.href
+          "relative select-none text-darkgrey bg-white rounded-full flex items-center justify-center leading-none font-bebas-neue whitespace-nowrap",
+          props.large ? "py-3 px-[22px] text-xl" : "py-1.5 px-4 text-xl",
+
+          props.animate === "hover"
             ? "hover:translate-x-1 hover:-translate-y-1 transition-transform"
             : "hover:bg-white/80 transition-colors"
         )}

@@ -1,6 +1,6 @@
 import { httpBatchLink } from "@trpc/client";
 import { createTRPCNext } from "@trpc/next";
-import type { Router } from "@/app/api/[trpc]/router";
+import type { Router } from "@/app/api/router";
 import { getAccessToken } from "@privy-io/react-auth";
 import { createTRPCReact } from "@trpc/react-query";
 

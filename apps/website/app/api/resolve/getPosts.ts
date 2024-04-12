@@ -1,5 +1,5 @@
-import { publicProcedure } from "../clients/trpc";
-import { arweave, arweaveClient } from "../clients/arweave";
+import { publicProcedure } from "../trpc";
+import { arweave, arweaveClient } from "./clients/arweave";
 import { gql } from "@apollo/client";
 
 const GetAllPublications = gql`

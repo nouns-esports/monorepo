@@ -1,4 +1,4 @@
-import { Proposal, Vote } from "@/server/db/schema";
+import { Proposal, Vote } from "@/db/schema";
 import fs from "fs";
 
 const data = [

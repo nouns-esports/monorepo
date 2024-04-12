@@ -1,6 +1,6 @@
-import { db, games } from "@/server/db/schema";
+import { db, games } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
-import { publicProcedure } from "../clients/trpc";
+import { publicProcedure } from "../trpc";
 import { z } from "zod";
 
 export const getGame = publicProcedure

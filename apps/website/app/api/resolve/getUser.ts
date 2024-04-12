@@ -1,5 +1,5 @@
-import { db, users } from "@/server/db/schema";
-import { publicProcedure } from "../clients/trpc";
+import { db, users } from "@/db/schema";
+import { publicProcedure } from "../trpc";
 import { z } from "zod";
 import { eq } from "drizzle-orm";
 
