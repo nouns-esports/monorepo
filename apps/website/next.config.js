@@ -123,6 +123,11 @@ const nextConfig = {
       "permanent": true
     },
     {
+      "source": "/combo",
+      "destination": "https://prop.house/0x2b46d2a078ab53972c9e68153998159fea21bbc2",
+      "permanent": true
+    },
+    {
       "source": "/pokemon-contest",
       "destination": "https://prop.house/0x617a72bf73233234a140381129c1e160a182c251",
       "permanent": true
