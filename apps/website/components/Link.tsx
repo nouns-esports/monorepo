@@ -1,4 +1,3 @@
-import Vercel from "@/vercel.json";
 import NextLink from "next/link";
 
 export default function Link(
@@ -30,11 +29,11 @@ export default function Link(
 
 function isNewTab(url: string) {
   // Check for Vercel HTTP redirects
-  for (const redirect of Vercel.redirects) {
-    if (redirect.source === url) {
-      return true;
-    }
-  }
+  // for (const redirect of Vercel.redirects) {
+  //   if (redirect.source === url) {
+  //     return true;
+  //   }
+  // }
 
   // Check for protocol
   if (url.includes("://")) {
