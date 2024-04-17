@@ -108,6 +108,11 @@ const nextConfig = {
       "permanent": true
     },
     {
+      "source": "/signup",
+      "destination": "https://forms.nouns.gg/signup",
+      "permanent": true
+    },
+    {
       "source": "/mint/partnership-deck-2024",
       "destination": "https://shorturl.at/bpG09",
       "permanent": true
