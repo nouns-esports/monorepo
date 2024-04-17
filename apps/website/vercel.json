@@ -61,21 +61,6 @@
       "permanent": true
     },
     {
-      "source": "/collision",
-      "destination": "https://prop.house/0xfd160cf822a940bf554e8d5d02e10864b87556b2",
-      "permanent": true
-    },
-    {
-      "source": "/BoBC",
-      "destination": "https://prop.house/0x61e25db1e668ffe4d5d3afba1a7ec0b7b19689e0",
-      "permanent": true
-    },
-    {
-      "source": "/bobc",
-      "destination": "https://prop.house/0x61e25db1e668ffe4d5d3afba1a7ec0b7b19689e0",
-      "permanent": true
-    },
-    {
       "source": "/evo-japan",
       "destination": "https://prop.house/0xc668cb2ad23accf8da50c72a4ccc8efe264e7779",
       "permanent": true
@@ -101,33 +86,8 @@
       "permanent": true
     },
     {
-      "source": "/pokemon-contest",
-      "destination": "https://prop.house/0x617a72bf73233234a140381129c1e160a182c251",
-      "permanent": true
-    },
-    {
-      "source": "/foxes",
-      "destination": "https://shop.nouns.gg/products/pre-sale-nouns-foxes-t-shirt",
-      "permanent": true
-    },
-    {
-      "source": "/signup",
-      "destination": "https://forms.nouns.gg/signup/",
-      "permanent": true
-    },
-    {
-      "source": "/signup-jp",
-      "destination": "https://forms.nouns.gg/signup-jp/",
-      "permanent": true
-    },
-    {
       "source": "/mint/partnership-deck-2024",
       "destination": "https://shorturl.at/bpG09",
-      "permanent": true
-    },
-    {
-      "source": "/art-contest",
-      "destination": "https://prop.house/0x810a108e4f827817a4063ba4f7bd8b13a4ddf13b",
       "permanent": true
     },
     {
