@@ -268,6 +268,7 @@ data.forEach((p) => {
     description: p.body,
     value: `0`,
     createdAt: new Date(p.receivedAt * 1000),
+    hidden: false,
   });
 
   p.votes.forEach((v) => {
