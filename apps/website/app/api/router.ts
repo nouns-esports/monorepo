@@ -21,6 +21,7 @@ import { getRound } from "@/app/api/resolve/getRound";
 import { getRounds } from "@/app/api/resolve/getRounds";
 
 import { addRound } from "@/app/api/resolve/addRound";
+import { addProposal } from "@/app/api/resolve/addProposal";
 
 export const router = t.router({
   getEvents,
@@ -42,6 +43,7 @@ export const router = t.router({
   getRound,
   getRounds,
   addRound,
+  addProposal,
 });
 
 export type Router = typeof router;

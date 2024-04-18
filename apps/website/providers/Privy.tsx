@@ -8,14 +8,22 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createConfig } from "@privy-io/wagmi";
 import { http, useWalletClient, usePublicClient } from "wagmi";
 import { base, baseSepolia } from "wagmi/chains";
-import { walletClientToSmartAccountSigner } from "permissionless";
+import {
+  walletClientToSmartAccountSigner,
+  ENTRYPOINT_ADDRESS_V07,
+} from "permissionless";
 import { createPimlicoPaymasterClient } from "permissionless/clients/pimlico";
-import { createKernelAccount, createKernelAccountClient } from "@zerodev/sdk";
+import {
+  KernelAccountClient,
+  createKernelAccount,
+  createKernelAccountClient,
+} from "@zerodev/sdk";
 import { signerToEcdsaValidator } from "@zerodev/ecdsa-validator";
 import { createWeightedECDSAValidator } from "@zerodev/weighted-ecdsa-validator";
 import { toFunctionSelector } from "viem";
 import { User } from "@/db/schema";
 import { trpc } from "./TRPC";
+import { identify } from "@multibase/js";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +36,7 @@ const wagmiConfig = createConfig({
 });
 
 const pimlicoPaymasterClient = createPimlicoPaymasterClient({
+  entryPoint: ENTRYPOINT_ADDRESS_V07,
   chain: env.NEXT_PUBLIC_ENVIRONMENT === "production" ? base : baseSepolia,
   transport: http(
     `https://api.pimlico.io/v2/${
@@ -41,7 +50,7 @@ export default function Privy(props: { children: React.ReactNode }) {
     <PrivyProvider
       appId={env.NEXT_PUBLIC_PRIVY_APP_ID}
       config={{
-        loginMethods: ["discord"],
+        loginMethods: ["discord", "twitter", "email", "wallet", "farcaster"],
         appearance: {
           theme: "#040404",
           accentColor: "#E93737",
@@ -62,13 +71,13 @@ export default function Privy(props: { children: React.ReactNode }) {
   );
 }
 
+type SmartAccountClient = KernelAccountClient<typeof ENTRYPOINT_ADDRESS_V07>;
+
 export const PrivyContext = createContext<
   | {
-      smartAccountClient?: ReturnType<typeof createKernelAccountClient>;
+      smartAccountClient?: SmartAccountClient;
       setSmartAccountClient?: React.Dispatch<
-        React.SetStateAction<
-          ReturnType<typeof createKernelAccountClient> | undefined
-        >
+        React.SetStateAction<SmartAccountClient | undefined>
       >;
     }
   | undefined
@@ -171,56 +180,65 @@ function PrivyState(props: { children: React.ReactNode }) {
   }, [walletClient]);
 
   const [smartAccountClient, setSmartAccountClient] =
-    useState<ReturnType<typeof createKernelAccountClient>>();
+    useState<SmartAccountClient>();
 
   useEffect(() => {
     if (signer && publicClient) {
       (async () => {
-        setSmartAccountClient(
-          createKernelAccountClient({
-            account: await createKernelAccount(publicClient, {
-              plugins: {
-                sudo: await signerToEcdsaValidator(publicClient, {
-                  signer,
-                }),
-                regular: await createWeightedECDSAValidator(publicClient, {
-                  config: {
-                    threshold: 100,
-                    signers: [
-                      {
-                        // Nouns Esports Multisig
-                        address: "0x2842dd3C97F902aEC2eF36a64FF722A7F90C400F",
-                        weight: 100,
-                      },
-                    ],
-                  },
-                  signers: [signer],
-                }),
-                executorData: {
-                  // ZeroDev Recovery Executor
-                  executor: "0x2f65dB8039fe5CAEE0a8680D2879deB800F31Ae1",
-                  selector: toFunctionSelector(
-                    "function doRecovery(address _validator, bytes calldata _data)"
-                  ),
-                },
-              },
+        const account = await createKernelAccount(publicClient, {
+          entryPoint: ENTRYPOINT_ADDRESS_V07,
+          plugins: {
+            sudo: await signerToEcdsaValidator(publicClient, {
+              entryPoint: ENTRYPOINT_ADDRESS_V07,
+              signer,
             }),
-            chain:
-              env.NEXT_PUBLIC_ENVIRONMENT === "production" ? base : baseSepolia,
-            transport: http(
-              `https://api.pimlico.io/v2/${
-                env.NEXT_PUBLIC_ENVIRONMENT === "production"
-                  ? "base"
-                  : "baseSepolia"
-              }/rpc?apikey=${env.NEXT_PUBLIC_PIMLICO_API_KEY}`
-            ),
-            sponsorUserOperation: async ({ userOperation, entryPoint }) => {
+            regular: await createWeightedECDSAValidator(publicClient, {
+              entryPoint: ENTRYPOINT_ADDRESS_V07,
+              config: {
+                threshold: 100,
+                signers: [
+                  {
+                    // Nouns Esports Multisig
+                    address: "0x68A2aD5b63aB374fc5f6F7D1Fb5f41B267035868",
+                    weight: 100,
+                  },
+                ],
+              },
+              signers: [signer],
+            }),
+            action: {
+              address: "0x2f65dB8039fe5CAEE0a8680D2879deB800F31Ae1",
+              selector: toFunctionSelector(
+                "function doRecovery(address _validator, bytes calldata _data)"
+              ),
+            },
+          },
+        });
+
+        const client = createKernelAccountClient({
+          entryPoint: ENTRYPOINT_ADDRESS_V07,
+          account,
+          chain:
+            env.NEXT_PUBLIC_ENVIRONMENT === "production" ? base : baseSepolia,
+          bundlerTransport: http(
+            `https://api.pimlico.io/v2/${
+              env.NEXT_PUBLIC_ENVIRONMENT === "production"
+                ? "base"
+                : "baseSepolia"
+            }/rpc?apikey=${env.NEXT_PUBLIC_PIMLICO_API_KEY}`
+          ),
+          middleware: {
+            sponsorUserOperation: async ({ userOperation }) => {
               return pimlicoPaymasterClient.sponsorUserOperation({
                 userOperation,
-                entryPoint,
               });
             },
-          })
+          },
+        });
+
+        setSmartAccountClient(
+          //@ts-ignore
+          client
         );
       })();
     }

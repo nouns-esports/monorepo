@@ -1,5 +1,6 @@
 import type { Config } from "tailwindcss";
 import plugin from "tailwindcss/plugin";
+import typography from "@tailwindcss/typography";
 
 const config: Config = {
   future: {
@@ -44,11 +45,26 @@ const config: Config = {
     },
   },
   plugins: [
-    plugin(({ matchUtilities }) => {
+    typography,
+    plugin(({ matchUtilities, addUtilities }) => {
       matchUtilities({
         perspective: (value) => ({
           perspective: value,
         }),
+      });
+      addUtilities({
+        ".scrollbar-hidden": {
+          /* IE and Edge */
+          "-ms-overflow-style": "none",
+
+          /* Firefox */
+          "scrollbar-width": "none",
+
+          /* Safari and Chrome */
+          "&::-webkit-scrollbar": {
+            display: "none",
+          },
+        },
       });
     }),
   ],

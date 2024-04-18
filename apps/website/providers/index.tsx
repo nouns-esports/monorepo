@@ -1,11 +1,16 @@
 "use client";
 
-import PostHog from "@/providers/PostHog";
 import PrimaryColor from "@/providers/PrimaryColor";
 import Privy from "@/providers/Privy";
 import { Game } from "@/db/schema";
 import { Toaster } from "react-hot-toast";
 import TRPC from "./TRPC";
+import { init } from "@multibase/js";
+import { env } from "@/env";
+
+// if (env.NEXT_PUBLIC_ENVIRONMENT === "production") {
+//   init(env.NEXT_PUBLIC_MULTIBASE_API_KEY);
+// }
 
 export default function Providers(props: {
   children: React.ReactNode;
@@ -13,12 +18,10 @@ export default function Providers(props: {
 }) {
   return (
     <TRPC>
-      <PostHog>
-        <Privy>
-          <PrimaryColor games={props.games}>{props.children}</PrimaryColor>
-        </Privy>
-        <Toaster position="top-center" />
-      </PostHog>
+      <Privy>
+        <PrimaryColor games={props.games}>{props.children}</PrimaryColor>
+      </Privy>
+      <Toaster position="top-center" />
     </TRPC>
   );
 }

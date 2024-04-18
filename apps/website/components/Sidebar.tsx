@@ -3,6 +3,7 @@
 import {
   HouseSimple,
   ShoppingCartSimple,
+  Ticket,
   Trophy,
   User,
 } from "phosphor-react-sc";
@@ -24,6 +25,12 @@ export default function Sidebar() {
           icon={<Trophy className="w-5 h-5 text-white" weight="fill" />}
         >
           Rounds
+        </Button>
+        <Button
+          route="/pass"
+          icon={<Ticket className="w-5 h-5 text-white" weight="fill" />}
+        >
+          Pass
         </Button>
         <Button
           route="/shop"

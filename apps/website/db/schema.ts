@@ -166,7 +166,7 @@ export const proposals = pgTable("proposals", {
   hidden: boolean("hidden").default(false).notNull(),
 });
 
-export const proposalsRelations = relations(proposals, ({ one }) => ({
+export const proposalsRelations = relations(proposals, ({ one, many }) => ({
   user: one(users, {
     fields: [proposals.user],
     references: [users.id],
@@ -175,6 +175,7 @@ export const proposalsRelations = relations(proposals, ({ one }) => ({
     fields: [proposals.round],
     references: [rounds.id],
   }),
+  votes: many(votes),
 }));
 
 export const votes = pgTable("votes", {

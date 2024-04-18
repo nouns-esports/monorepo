@@ -57,7 +57,7 @@ export default async function Create(props: { params: { round: string } }) {
               <li>Verify your identity with Farcaster</li>
               <li>Include images of you or your achivements</li>
               <li>
-                Get to know the Nouns Esports community through our Discord
+                Engage with the Nouns Esports community through our Discord
                 server or Farcaster channels
               </li>
             </ul>
@@ -66,7 +66,7 @@ export default async function Create(props: { params: { round: string } }) {
       </div>
 
       <Suspense fallback={null}>
-        <MarkdownEditor markdown="Hello **world**!" />
+        <MarkdownEditor markdown="" />
       </Suspense>
     </div>
   );

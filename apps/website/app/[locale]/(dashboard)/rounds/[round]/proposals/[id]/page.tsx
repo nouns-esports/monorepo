@@ -1,9 +1,18 @@
+import { query } from "@/app/api/query/server";
 import Link from "@/components/Link";
+import Markdown from "@/components/Mardown";
+import { notFound } from "next/navigation";
 import { ArrowLeft } from "phosphor-react-sc";
 
-export default function Proposal(props: {
+export default async function Proposal(props: {
   params: { round: string; id: string };
 }) {
+  const proposal = await query.getProposal({ id: Number(props.params.id) });
+
+  if (!proposal) {
+    return notFound();
+  }
+
   return (
     <div className="flex flex-col gap-4">
       <Link
@@ -11,25 +20,13 @@ export default function Proposal(props: {
         className="text-red flex items-center gap-1"
       >
         <ArrowLeft className="w-5 h-5 text-red" />
-        Back to {props.params.round}
+        Back to round
       </Link>
       <div className="flex flex-col gap-2 bg-darkgrey rounded-xl p-4">
         <h2 className="text-white font-luckiest-guy text-3xl">
-          Dutch player Happymealz wants to represent top level Dutch Melee at
-          GX!
+          {proposal.title}
         </h2>
-        <p className="text-lightgrey">
-          Happymealz wants to put the Netherlands on the map and show what Dutch
-          Melee is made of! Skill, art and that EU charm {"<"}3 A little
-          backstory: as an 18 year old kid, when I had only been playing for
-          about a year and wasn't even ranked in my country yet, I knew I wanted
-          to experience competing at an American super major. I worked for half
-          a year and gathered the money to travel to Genesis 5. Travelling there
-          by myself was a great adventure and I'll never forget it. However,
-          besides Plup complimenting me on my mid-shortens, I drowned in my
-          first round of pools and vowed that I would return as a good player
-          one day.
-        </p>
+        <Markdown markdown={proposal.description} style />
       </div>
     </div>
   );

@@ -9,14 +9,14 @@ export default function Countdown(props: { date: Date }) {
       renderer={({ days, hours, minutes, seconds }) => {
         if (days > 1) {
           return (
-            <span>
+            <span suppressHydrationWarning>
               {days}d {hours}h {minutes}m
             </span>
           );
         }
 
         return (
-          <span>
+          <span suppressHydrationWarning>
             {hours}h {minutes}m {seconds}s
           </span>
         );
