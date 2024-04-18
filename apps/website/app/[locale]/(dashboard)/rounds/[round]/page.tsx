@@ -10,9 +10,11 @@ import Markdown from "@/components/Mardown";
 import { Vote } from "@/db/schema";
 
 export default async function Round(props: { params: { round: string } }) {
-  const round = await query.getRound({ id: props.params.round });
-
-  const awards = await query.getAwards({ round: props.params.round });
+  const [round, awards, proposals] = await Promise.all([
+    query.getRound({ id: props.params.round }),
+    query.getAwards({ round: props.params.round }),
+    query.getProposals({ round: props.params.round }),
+  ]);
 
   if (!round) {
     return notFound();
@@ -32,11 +34,6 @@ export default async function Round(props: { params: { round: string } }) {
         : now < roundEnd
           ? "voting"
           : "ended";
-
-  const proposals = await query.getProposals({
-    round: props.params.round,
-    withVotes: status === "voting",
-  });
 
   return (
     <div className="flex flex-col gap-4">

@@ -7,7 +7,6 @@ export const getProposals = publicProcedure
   .input(
     z.object({
       round: z.string().min(1),
-      withVotes: z.boolean().optional(),
     })
   )
   .query(async ({ input }) => {
@@ -15,7 +14,7 @@ export const getProposals = publicProcedure
       where: and(eq(proposals.round, input.round), eq(proposals.hidden, false)),
       orderBy: asc(proposals.createdAt),
       with: {
-        votes: input.withVotes,
+        votes: true,
       },
     });
   });
