@@ -141,6 +141,7 @@ export const roundsRelations = relations(rounds, ({ many }) => ({
 // Value with precision 78 is the min value to account for a uint256
 // If place is 0, it is an infinite round
 export const awards = pgTable("awards", {
+  id: serial("id").primaryKey(),
   round: text("round").notNull(),
   place: smallint("place").notNull(),
   type: text("type").notNull(),

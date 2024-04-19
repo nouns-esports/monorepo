@@ -15,7 +15,7 @@ const builderTokenType =
 const ethTokenType = "eip155:1:0x0000000000000000000000000000000000000000";
 const ethDecimalsMinus1 = "00000000000000000";
 
-const awards: Award[] = [
+const awards: Omit<Award, "id">[] = [
   // Offchian (Infinite)
   {
     round: "compete",

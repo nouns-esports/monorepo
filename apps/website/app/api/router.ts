@@ -20,7 +20,6 @@ import { getProposals } from "@/app/api/resolve/getProposals";
 import { getRound } from "@/app/api/resolve/getRound";
 import { getRounds } from "@/app/api/resolve/getRounds";
 
-import { addRound } from "@/app/api/resolve/addRound";
 import { addProposal } from "@/app/api/resolve/addProposal";
 
 export const router = t.router({
@@ -42,7 +41,6 @@ export const router = t.router({
   getProposals,
   getRound,
   getRounds,
-  addRound,
   addProposal,
 });
 

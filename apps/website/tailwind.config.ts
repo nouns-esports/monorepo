@@ -25,6 +25,18 @@ const config: Config = {
       lightgrey: "#454647",
       grey: "#1C1C1C",
       darkgrey: "#0C0C0C",
+      gold: {
+        500: "#EEAF36",
+        900: "#664300",
+      },
+      silver: {
+        500: "#CBD4D7",
+        900: "#656565",
+      },
+      bronze: {
+        500: "#D4682B",
+        900: "#5B2100",
+      },
     },
     fontFamily: {
       "luckiest-guy": ["var(--font-luckiest-guy)"],

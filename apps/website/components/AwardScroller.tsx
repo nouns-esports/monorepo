@@ -11,7 +11,7 @@ export default function AwardScroller() {
 
           if (awards) awards.scrollLeft -= 200;
         }}
-        className="w-6 h-6 text-lightgrey cursor-pointer"
+        className="w-6 h-6 text-lightgrey hover:text-white transition-colors cursor-pointer"
         weight="fill"
       />
       <ArrowCircleRight
@@ -20,7 +20,7 @@ export default function AwardScroller() {
 
           if (awards) awards.scrollLeft += 200;
         }}
-        className="w-6 h-6 text-lightgrey cursor-pointer"
+        className="w-6 h-6 text-lightgrey hover:text-white transition-colors cursor-pointer"
         weight="fill"
       />
     </div>

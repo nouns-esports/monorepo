@@ -1,5 +1,4 @@
 import { query } from "@/app/api/query/server";
-import Button from "@/components/Button";
 import Countdown from "@/components/Countdown";
 import Link from "@/components/Link";
 import { notFound } from "next/navigation";
@@ -8,6 +7,30 @@ import AwardScroller from "@/components/AwardScroller";
 import Proposals from "@/components/Proposals";
 import Markdown from "@/components/Mardown";
 import { Vote } from "@/db/schema";
+import { twMerge } from "tailwind-merge";
+import { formatUnits } from "viem";
+
+export const tokenList: Record<
+  string,
+  { name: string; image: string; decimals: number }
+> = {
+  "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913": {
+    name: "USDC",
+    image: "https://cryptologos.cc/logos/usd-coin-usdc-logo.png",
+    decimals: 6,
+  },
+  "0xb15e3327351ea46ab314f809652076f9c37ece07": {
+    name: "Nouns Esports Builders",
+    image:
+      "https://i.seadn.io/s/raw/files/000d9574d11b6f6669c753729bb5adf0.png?auto=format&dpr=1&w=1000",
+    decimals: 0,
+  },
+  "0x0000000000000000000000000000000000000000": {
+    name: "ETH",
+    image: "https://cdn.worldvectorlogo.com/logos/ethereum-eth.svg",
+    decimals: 18,
+  },
+};
 
 export default async function Round(props: { params: { round: string } }) {
   const [round, awards, proposals] = await Promise.all([
@@ -46,7 +69,7 @@ export default async function Round(props: { params: { round: string } }) {
           <div className="bg-darkgrey rounded-xl overflow-hidden">
             <img
               src={round.image}
-              className="w-full h-48 object-cover object-center"
+              className="w-full h-48 object-cover object-center max-sm:h-32"
             />
             <div className="flex flex-col gap-2 p-4">
               <h2 className="w-full text-white font-luckiest-guy text-3xl">
@@ -57,43 +80,47 @@ export default async function Round(props: { params: { round: string } }) {
               </div>
             </div>
           </div>
-          <div className="flex gap-4 w-full h-fit">
-            <div className="flex flex-col gap-2 items-center justify-center bg-darkgrey rounded-xl overflow-hidden min-w-36 p-4 flex-shrink-0">
-              <p className="text-sm whitespace-nowrap">
-                {status === "starting" ? "Round starts" : ""}
-                {status === "proposing" ? "Proposing ends" : ""}
-                {status === "voting" ? "Round ends" : ""}
-                {status === "ended" ? "Round ended" : ""}
-              </p>
-              <p className="text-white whitespace-nowrap">
-                {now < roundEnd ? (
-                  <Countdown
-                    date={
-                      status === "starting"
-                        ? new Date(round.start)
-                        : status === "proposing"
-                          ? new Date(round.votingStart)
-                          : new Date(round.end ?? Infinity)
-                    }
-                  />
-                ) : (
-                  new Intl.DateTimeFormat("en-US", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  }).format(new Date(round.end ?? Infinity))
-                )}
-              </p>
-            </div>
-            <div className="flex flex-col gap-2 items-center justify-center h-full bg-darkgrey rounded-xl overflow-hidden w-36 flex-shrink-0">
-              <p className="text-sm whitespace-nowrap">Total prizes</p>
-              <p className="text-white whitespace-nowrap">$1,000</p>
+          <div className="flex gap-4 w-full h-fit max-md:flex-col">
+            <div className="flex gap-4 max-md:w-full">
+              <div className="flex flex-col gap-2 items-center justify-center bg-darkgrey rounded-xl overflow-hidden min-w-36 p-4 flex-shrink-0 max-md:w-full max-md:flex-shrink">
+                <p className="text-sm whitespace-nowrap">
+                  {status === "starting" ? "Round starts" : ""}
+                  {status === "proposing" ? "Proposing ends" : ""}
+                  {status === "voting" ? "Round ends" : ""}
+                  {status === "ended" ? "Round ended" : ""}
+                </p>
+                <p className="text-white whitespace-nowrap">
+                  {now < roundEnd ? (
+                    <Countdown
+                      date={
+                        status === "starting"
+                          ? new Date(round.start)
+                          : status === "proposing"
+                            ? new Date(round.votingStart)
+                            : new Date(round.end ?? Infinity)
+                      }
+                    />
+                  ) : (
+                    new Intl.DateTimeFormat("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    }).format(new Date(round.end ?? Infinity))
+                  )}
+                </p>
+              </div>
+              <div className="flex flex-col gap-2 items-center justify-center h-full bg-darkgrey rounded-xl overflow-hidden w-36 flex-shrink-0 max-md:w-full max-md:flex-shrink">
+                <p className="text-sm whitespace-nowrap">Total prizes</p>
+                <p className="text-white whitespace-nowrap">$1,000</p>
+              </div>
             </div>
             <div className="flex gap-6 items-center justify-center h-full bg-darkgrey rounded-xl overflow-hidden w-full p-4 pt-5">
               <div className="flex flex-col gap-2 items-center pl-4 pr-2">
                 <div className="flex flex-col gap-1 items-center">
                   <p className="text-sm whitespace-nowrap">Awards</p>
-                  <p className="text-white whitespace-nowrap">5 winners</p>
+                  <p className="text-white whitespace-nowrap">
+                    {awards.length} winner{awards.length === 1 ? "" : "s"}
+                  </p>
                 </div>
                 <AwardScroller />
               </div>
@@ -104,73 +131,42 @@ export default async function Round(props: { params: { round: string } }) {
               >
                 {awards
                   .toSorted((a, b) => a.place - b.place)
-                  .map((award, index) => (
-                    <div
-                      key={index}
-                      className="relative flex flex-col items-center gap-2 border-grey border rounded-xl p-2 px-4"
-                    >
-                      <img
-                        src="https://cryptologos.cc/logos/usd-coin-usdc-logo.png"
-                        className="w-7 h-7"
-                      />
-                      <p className="text-white whitespace-nowrap text-sm">
-                        {award.value}
-                      </p>
-                      <div className="absolute -top-3 -right-3 rounded-full bg-grey text-white text-xs flex items-center justify-center w-7 h-7">
-                        {award.place}
+                  .map((award, index) => {
+                    const [eip115, chainId, address, tokenId] =
+                      award.type.split(":");
+
+                    const token = tokenList[address];
+
+                    return (
+                      <div
+                        key={index}
+                        className="relative flex flex-col items-center flex-shrink-0 gap-2 border-grey border rounded-xl p-2 px-4"
+                      >
+                        <img
+                          src={token.image}
+                          className="w-7 h-7 rounded-full object-cover object-center"
+                        />
+                        <p className="text-white whitespace-nowrap text-sm">
+                          {formatUnits(BigInt(award.value), token.decimals)}
+                        </p>
+                        <div
+                          className={twMerge(
+                            "absolute -top-3 -right-3 rounded-full bg-grey font-bold text-white text-xs flex items-center justify-center w-7 h-7",
+                            index === 0 && "bg-gold-500 text-gold-900",
+                            index === 1 && "bg-silver-500 text-silver-900",
+                            index === 2 && "bg-bronze-500 text-bronze-900"
+                          )}
+                        >
+                          {award.place}
+                          {award.place % 10 === 0 && "th"}
+                          {award.place % 10 === 1 && "st"}
+                          {award.place % 10 === 2 && "nd"}
+                          {award.place % 10 === 3 && "rd"}
+                          {award.place % 10 > 3 && "th"}
+                        </div>
                       </div>
-                    </div>
-                  ))}
-                <div className="relative flex flex-col items-center gap-2 border-grey border rounded-xl p-2 px-4">
-                  <img
-                    src="https://cryptologos.cc/logos/usd-coin-usdc-logo.png"
-                    className="w-7 h-7"
-                  />
-                  <p className="text-white whitespace-nowrap text-sm">500</p>
-                  <div className="absolute -top-3 -right-3 rounded-full bg-yellow text-white text-xs flex items-center justify-center w-7 h-7">
-                    1st
-                  </div>
-                </div>
-                <div className="relative flex flex-col items-center gap-2 border-grey border rounded-xl p-2 px-4">
-                  <img
-                    src="https://cryptologos.cc/logos/usd-coin-usdc-logo.png"
-                    className="w-7 h-7"
-                  />
-                  <p className="text-white whitespace-nowrap text-sm">500</p>
-                  <div className="absolute -top-3 -right-3 rounded-full bg-lightgrey text-white text-xs flex items-center justify-center w-7 h-7">
-                    2nd
-                  </div>
-                </div>
-                <div className="relative flex flex-col items-center gap-2 border-grey border rounded-xl p-2 px-4">
-                  <img
-                    src="https://cryptologos.cc/logos/usd-coin-usdc-logo.png"
-                    className="w-7 h-7"
-                  />
-                  <p className="text-white whitespace-nowrap text-sm">500</p>
-                  <div className="absolute -top-3 -right-3 rounded-full bg-grey text-white text-xs flex items-center justify-center w-7 h-7">
-                    3rd
-                  </div>
-                </div>
-                <div className="relative flex flex-col items-center gap-2 border-grey border rounded-xl p-2 px-4">
-                  <img
-                    src="https://cryptologos.cc/logos/usd-coin-usdc-logo.png"
-                    className="w-7 h-7"
-                  />
-                  <p className="text-white whitespace-nowrap text-sm">500</p>
-                  <div className="absolute -top-3 -right-3 rounded-full bg-grey text-white text-xs flex items-center justify-center w-7 h-7">
-                    3rd
-                  </div>
-                </div>
-                <div className="relative flex flex-col items-center gap-2 border-grey border rounded-xl p-2 px-4">
-                  <img
-                    src="https://cryptologos.cc/logos/usd-coin-usdc-logo.png"
-                    className="w-7 h-7"
-                  />
-                  <p className="text-white whitespace-nowrap text-sm">500</p>
-                  <div className="absolute -top-3 -right-3 rounded-full bg-grey text-white text-xs flex items-center justify-center w-7 h-7">
-                    3rd
-                  </div>
-                </div>
+                    );
+                  })}
               </div>
             </div>
           </div>

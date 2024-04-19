@@ -39,7 +39,7 @@ export default function Button(props: {
 
           props.animate === "hover"
             ? "hover:translate-x-1 hover:-translate-y-1 transition-transform"
-            : "hover:bg-white/80 transition-colors"
+            : "hover:brightness-75 transition-all"
         )}
       >
         {props.children}
