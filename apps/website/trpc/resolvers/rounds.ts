@@ -1,7 +1,19 @@
 import { db, rounds } from "@/db/schema";
-import { gt, and, lt, asc } from "drizzle-orm";
-import { publicProcedure } from "../trpc";
+import { eq, gt, and, lt, asc, desc } from "drizzle-orm";
+import { publicProcedure } from "@/trpc";
 import { z } from "zod";
+
+export const getRound = publicProcedure
+  .input(
+    z.object({
+      id: z.string().min(1),
+    })
+  )
+  .query(async ({ input }) => {
+    return db.query.rounds.findFirst({
+      where: eq(rounds.id, input.id),
+    });
+  });
 
 export const getRounds = publicProcedure
   .input(
@@ -32,7 +44,7 @@ export const getRounds = publicProcedure
           return db.query.rounds.findMany({
             where: lt(rounds.end, new Date()),
             limit: input.max ?? undefined,
-            orderBy: asc(rounds.end),
+            orderBy: desc(rounds.end),
           });
       }
     }

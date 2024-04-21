@@ -22,7 +22,7 @@ import { signerToEcdsaValidator } from "@zerodev/ecdsa-validator";
 import { createWeightedECDSAValidator } from "@zerodev/weighted-ecdsa-validator";
 import { toFunctionSelector } from "viem";
 import { User } from "@/db/schema";
-import { trpc } from "./TRPC";
+import { trpc } from "@/trpc/query/client";
 import { identify } from "@multibase/js";
 
 const queryClient = new QueryClient();

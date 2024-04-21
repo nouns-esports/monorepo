@@ -25,7 +25,7 @@ export default async function DashboardLayout(props: {
                 Become a pass member
               </p>
               <p className="text-white text-sm leading-snug max-w-[180px]">
-                Help us shape the future of Nouns Esports
+                Help shape the future of Nouns Esports
               </p>
               <Button href="/pass" animate="bg">
                 Get Started
@@ -39,7 +39,6 @@ export default async function DashboardLayout(props: {
           <Link
             href="/discord"
             className="relative h-40 w-80 bg-darkgrey rounded-xl overflow-hidden"
-            newTab
           >
             <img
               src="/prop.webp"

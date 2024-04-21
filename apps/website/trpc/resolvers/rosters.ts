@@ -1,6 +1,6 @@
 import { db, rosters } from "@/db/schema";
 import { and, eq } from "drizzle-orm";
-import { publicProcedure } from "../trpc";
+import { publicProcedure } from "@/trpc";
 import { z } from "zod";
 
 export const getRosters = publicProcedure

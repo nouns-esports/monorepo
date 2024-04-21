@@ -1,11 +1,11 @@
-import { query } from "@/app/api/query/server";
+import { trpc } from "@/trpc/query/server";
 import { notFound } from "next/navigation";
-import type { Node } from "@/app/api/resolve/getPost";
+import type { Node } from "@/trpc/resolvers/posts";
 import { Tweet } from "react-tweet";
 import { Metadata } from "next";
 
 export async function generateMetadata(props: { params: { id: string } }) {
-  const post = await query.getPost(props.params.id);
+  const post = await trpc.getPost(props.params.id);
 
   if (!post) notFound();
 
@@ -23,7 +23,7 @@ export async function generateMetadata(props: { params: { id: string } }) {
 }
 
 export default async function PostPage(props: { params: { id: string } }) {
-  const post = await query.getPost(props.params.id);
+  const post = await trpc.getPost(props.params.id);
 
   if (!post) notFound();
 

@@ -34,8 +34,8 @@ export default function Navbar() {
       <NavigationMenu.Root className="pointer-events-auto">
         <NavigationMenu.List className="flex items-center bg-black border-darkgrey border rounded-full p-1.5 max-sm:p-1 z-50">
           <NavGroup title="Explore">
-            <NavGroupItem href={`/${params.locale}/#events`} icon="📅">
-              Events
+            <NavGroupItem href={`/${params.locale}/rounds`} icon="⌛">
+              Rounds
             </NavGroupItem>
             <NavGroupItem href="/shop" icon="🛒">
               Shop
@@ -73,10 +73,9 @@ export default function Navbar() {
               Street Fighter
             </NavGroupItem>
           </NavGroup>
-          <div className="w-4 max-sm:hidden"></div>
-          {/* <NavItem href={`/${params.locale}/pass`} icon="/logo/logo-white.svg">
+          <NavItem href={`/${params.locale}/pass`} icon="/logo/logo-white.svg">
             Pass
-          </NavItem> */}
+          </NavItem>
           <SignInButton />
           <div onClick={() => setOpen(!open)} className="max-sm:flex hidden">
             {open ? (

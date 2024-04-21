@@ -1,6 +1,6 @@
 import { db, awards } from "@/db/schema";
 import { eq, asc } from "drizzle-orm";
-import { publicProcedure } from "../trpc";
+import { publicProcedure } from "@/trpc";
 import { z } from "zod";
 
 export const getAwards = publicProcedure

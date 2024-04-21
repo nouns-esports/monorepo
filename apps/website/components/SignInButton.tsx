@@ -14,9 +14,8 @@ export default function SignInButton() {
   return (
     <button
       onClick={() => {
-        // if (connected)
-        //   logout(); //router.push(`/${params.locale}/dashboard/profile`);
-        // else login();
+        if (connected) router.push(`/${params.locale}/profile`);
+        else login();
       }}
       style={{
         paddingTop: connected ? "6px" : "10px",
@@ -37,7 +36,7 @@ export default function SignInButton() {
             className="rounded-full w-7 h-7 select-none object-center object-cover"
             draggable={false}
           />
-          {farcaster?.username ?? `${id?.substring(0, 8)}`}
+          {farcaster?.username ?? "Profile"}
         </>
       ) : false ? (
         <div className="pt-[3px]">

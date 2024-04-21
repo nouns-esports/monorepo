@@ -1,4 +1,4 @@
-import { query } from "@/app/api/query/server";
+import { trpc } from "@/trpc/query/server";
 import Countdown from "@/components/Countdown";
 import Link from "@/components/Link";
 import { notFound } from "next/navigation";
@@ -9,8 +9,10 @@ import Markdown from "@/components/Mardown";
 import { Vote } from "@/db/schema";
 import { twMerge } from "tailwind-merge";
 import { formatUnits } from "viem";
+import { getFrameMetadata } from "frog/next";
+import type { Metadata } from "next";
 
-export const tokenList: Record<
+const tokenList: Record<
   string,
   { name: string; image: string; decimals: number }
 > = {
@@ -32,11 +34,21 @@ export const tokenList: Record<
   },
 };
 
+export async function generateMetadata(props: {
+  params: { round: string };
+}): Promise<Metadata> {
+  return {
+    other: await getFrameMetadata(
+      `http://localhost:3000/frames/round/${props.params.round}`
+    ),
+  };
+}
+
 export default async function Round(props: { params: { round: string } }) {
   const [round, awards, proposals] = await Promise.all([
-    query.getRound({ id: props.params.round }),
-    query.getAwards({ round: props.params.round }),
-    query.getProposals({ round: props.params.round }),
+    trpc.getRound({ id: props.params.round }),
+    trpc.getAwards({ round: props.params.round }),
+    trpc.getProposals({ round: props.params.round }),
   ]);
 
   if (!round) {
@@ -180,6 +192,7 @@ export default async function Round(props: { params: { round: string } }) {
               images: (
                 proposal.description.match(/src="http[^"]*"/g) ?? []
               ).map((image) => image.replace('src="', "").replace('"', "")),
+              user: proposal.user,
               votes:
                 proposal.votes?.reduce(
                   (totalVotes: number, currentVote: Vote) =>

@@ -13,27 +13,27 @@ import Link from "@/components/Link";
 import { Creator, Project } from "@/db/schema";
 import Text from "@/components/Text";
 import HighlightedText from "@/components/HighlightedText";
-import type { Event } from "@/app/api/resolve/getEvents";
+import type { Event } from "@/trpc/resolvers/events";
 import Date from "@/components/Date";
 import { headers } from "next/headers";
 import Image from "next/image";
 import Prop from "@/public/prop.webp";
 import LogoWhite from "@/public/logo/logo-white.svg";
 import Pokemon from "@/public/pokemon.webp";
-import { query } from "@/app/api/query/server";
+import { trpc } from "@/trpc/query/server";
 
 export default async function Home(props: { params: { locale: string } }) {
-  const events = await query.getEvents();
+  const events = await trpc.getEvents();
 
-  const games = await query.getGames();
+  const games = await trpc.getGames();
 
-  const projects = await query.getProjects();
+  const projects = await trpc.getProjects();
 
-  const creators = await query.getCreators();
+  const creators = await trpc.getCreators();
 
   const isMobile = headers().get("x-device-type") === "mobile";
 
-  const posts = await query.getPosts();
+  const posts = await trpc.getPosts();
 
   return (
     <main className="cursor-crosshair flex flex-col">
@@ -304,7 +304,7 @@ function CreatorCard(props: { creator: Creator }) {
 async function ScheduleCard(props: { event: Event }) {
   const type = props.event.summary?.split("]")[0].replace("[", "");
 
-  const game = (await query.getGames()).find(
+  const game = (await trpc.getGames()).find(
     (game) =>
       game.name.toLowerCase().includes(type.toLowerCase()) ||
       game.id.toLowerCase().includes(type.toLowerCase())
@@ -342,7 +342,7 @@ async function ScheduleCard(props: { event: Event }) {
 
 function PostCard(props: {
   locale: string;
-  post: Awaited<ReturnType<typeof query.getPosts>>[number];
+  post: Awaited<ReturnType<typeof trpc.getPosts>>[number];
 }) {
   return (
     <Link

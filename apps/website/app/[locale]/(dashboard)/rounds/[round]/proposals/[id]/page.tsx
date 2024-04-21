@@ -1,13 +1,25 @@
-import { query } from "@/app/api/query/server";
+import { trpc } from "@/trpc/query/server";
 import Link from "@/components/Link";
 import Markdown from "@/components/Mardown";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "phosphor-react-sc";
+import { getFrameMetadata } from "frog/next";
+import type { Metadata } from "next";
+
+export async function generateMetadata(props: {
+  params: { round: string; id: string };
+}): Promise<Metadata> {
+  return {
+    other: await getFrameMetadata(
+      `http://localhost:3000/frames/round/${props.params.round}/proposal${props.params.id}`
+    ),
+  };
+}
 
 export default async function Proposal(props: {
   params: { round: string; id: string };
 }) {
-  const proposal = await query.getProposal({ id: Number(props.params.id) });
+  const proposal = await trpc.getProposal({ id: Number(props.params.id) });
 
   if (!proposal) {
     return notFound();

@@ -2,7 +2,6 @@ import { drizzle } from "drizzle-orm/node-postgres";
 import {
   boolean,
   char,
-  pgEnum,
   pgTable,
   text,
   timestamp,
@@ -86,11 +85,9 @@ export const projects = pgTable("projects", {
   url: text("url").notNull(),
 });
 
-export const pass = pgEnum("pass", ["og", "vip", "community", "premium"]);
-
 export const users = pgTable("users", {
   id: text("id").primaryKey(),
-  pass: pass("pass").notNull(),
+  pass: boolean("pass").default(false),
 });
 
 export const badges = pgTable("badges", {
@@ -155,7 +152,6 @@ export const awardsRelations = relations(awards, ({ one }) => ({
   }),
 }));
 
-// descripiton will be abstracted in frontend as who and why
 export const proposals = pgTable("proposals", {
   id: serial("id").primaryKey(),
   user: text("user").notNull(),
@@ -203,30 +199,6 @@ export const votesRelations = relations(votes, ({ one }) => ({
   }),
 }));
 
-export const applicationResponses = pgTable("applicationResponses", {
-  user: text("user").primaryKey(),
-  whatGameDoYouPlayTheMost: text("whatGameDoYouPlayTheMost").notNull(),
-  whoAreYouAndWhatIsYourEsportsBackground: text(
-    "whoAreYouAndWhatIsYourEsportsBackground"
-  ).notNull(),
-  whatDoYouThinkIsNeededToPushTheEsportsIndustryForward: text(
-    "whatDoYouThinkIsNeededToPushTheEsportsIndustryForward"
-  ).notNull(),
-  whatThingsWouldYouLikeToSeeFundedByNouns: text(
-    "whatThingsWouldYouLikeToSeeFundedByNouns"
-  ).notNull(),
-});
-
-export const applicationResponsesRelations = relations(
-  applicationResponses,
-  ({ one }) => ({
-    user: one(users, {
-      fields: [applicationResponses.user],
-      references: [users.id],
-    }),
-  })
-);
-
 export const db = drizzle(
   new Pool({
     connectionString: env.DATABASE_URL,
@@ -242,7 +214,6 @@ export const db = drizzle(
       creators,
       projects,
       users,
-      applicationResponses,
       rounds,
       roundsRelations,
       awards,
@@ -264,7 +235,6 @@ export type Talent = typeof talent.$inferSelect;
 export type Project = typeof projects.$inferSelect;
 export type Creator = typeof creators.$inferSelect;
 export type User = typeof users.$inferSelect;
-export type ApplicationResponse = typeof applicationResponses.$inferSelect;
 export type Round = typeof rounds.$inferSelect;
 export type Award = typeof awards.$inferSelect;
 export type Proposal = typeof proposals.$inferSelect;

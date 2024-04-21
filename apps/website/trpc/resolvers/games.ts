@@ -1,6 +1,6 @@
 import { db, games } from "@/db/schema";
-import { eq, and } from "drizzle-orm";
-import { publicProcedure } from "../trpc";
+import { eq, and, asc } from "drizzle-orm";
+import { publicProcedure } from "@/trpc";
 import { z } from "zod";
 
 export const getGame = publicProcedure
@@ -14,3 +14,10 @@ export const getGame = publicProcedure
       where: and(eq(games.active, true), eq(games.id, input.id)),
     });
   });
+
+export const getGames = publicProcedure.query(async () => {
+  return db.query.games.findMany({
+    where: eq(games.active, true),
+    orderBy: asc(games.name),
+  });
+});

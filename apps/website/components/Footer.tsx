@@ -10,10 +10,10 @@ import {
 import Text from "@/components/Text";
 import ANounsThing from "./ANounsThing";
 import Logo from "./Logo";
-import { query } from "@/app/api/query/server";
+import { trpc } from "@/trpc/query/server";
 
 export default async function Footer(props: { locale: string }) {
-  const games = await query.getGames();
+  const games = await trpc.getGames();
 
   return (
     <footer className="flex justify-center w-full">
@@ -38,7 +38,7 @@ export default async function Footer(props: { locale: string }) {
           </div>
           <ANounsThing />
         </div>
-        <div className="flex gap-40 max-2xl:gap-20 max-[500px]:flex-col max-[500px]:gap-16">
+        <div className="flex gap-40 max-2xl:gap-20 max-[500px]:flex-col max-[500px]:gap-8">
           <FooterSection title={<Text en="Explore" pt="Explorar" />}>
             <FooterLink href="/getfunded">
               <Text en="Get Funded" pt="Seja financiado" />
@@ -115,7 +115,7 @@ function FooterLink(props: { href: string; children: React.ReactNode }) {
   return (
     <Link
       href={props.href}
-      className="hover:text-white select-none transition-colors max-lg:text-center"
+      className="hover:text-white select-none transition-colors max-lg:text-center text-nowrap"
     >
       {props.children}
     </Link>
@@ -127,11 +127,13 @@ function FooterSection(props: {
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col max-[500px]:items-center gap-2">
       <h3 className="text-2xl font-bebas-neue text-white max-lg:text-center">
         {props.title}
       </h3>
-      {props.children}
+      <div className="flex flex-col gap-2 max-[500px]:flex-row max-[500px]:gap-6">
+        {props.children}
+      </div>
     </div>
   );
 }

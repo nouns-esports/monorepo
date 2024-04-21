@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "frog": "frog dev",
     "build": "next build",
     "start": "next start",
     "studio:production": "cross-env NODE_ENV=production drizzle-kit studio --host 127.0.0.1 --config drizzle.config.ts",

@@ -1,4 +1,4 @@
-import { query } from "@/app/api/query/server";
+import { trpc } from "@/trpc/query/server";
 import Countdown from "@/components/Countdown";
 import Link from "@/components/Link";
 import Markdown from "@/components/Mardown";
@@ -6,9 +6,9 @@ import { Round } from "@/db/schema";
 
 export default async function Rounds() {
   const [activeRounds, upcomingRounds, endedRounds] = await Promise.all([
-    query.getRounds({ stage: "active" }),
-    query.getRounds({ stage: "upcoming" }),
-    query.getRounds({ stage: "ended" }),
+    trpc.getRounds({ stage: "active" }),
+    trpc.getRounds({ stage: "upcoming" }),
+    trpc.getRounds({ stage: "ended" }),
   ]);
 
   return (
@@ -56,7 +56,7 @@ function RoundCard(props: { round: Round }) {
         alt={props.round.name}
         className="h-full object-cover aspect-square max-sm:h-32"
       />
-      <div className="flex max-sm:flex-col gap-4 max-sm:gap-0 px-4 pt-4 max-sm:pt-0">
+      <div className="flex max-sm:flex-col gap-4 pr-4 max-sm:pl-4 max-sm:gap-0 pt-4 max-sm:pt-0">
         <div className="flex flex-col gap-2">
           <h3 className="font-bebas-neue text-3xl text-white leading-none">
             {props.round.name}
@@ -66,7 +66,7 @@ function RoundCard(props: { round: Round }) {
             <div className="absolute w-full bg-gradient-to-t from-darkgrey to-transparent h-10 bottom-0" />
           </div>
         </div>
-        <div className="w-0.5 bg-grey h-[calc(100%_-_16px)] max-sm:hidden" />
+        <div className="w-0.5 bg-grey h-[calc(100%_-_16px)] max-sm:hidden flex-shrink-0" />
         <div className="flex flex-col gap-4 items-center px-4 pb-4 aspect-square h-full max-sm:flex-row max-sm:w-full max-sm:h-24">
           <div className="flex flex-col gap-2 items-center max-sm:w-full">
             <p className="text-sm whitespace-nowrap">
@@ -98,7 +98,7 @@ function RoundCard(props: { round: Round }) {
               )}
             </p>
           </div>
-          <div className="w-0.5 bg-grey h-full hidden max-sm:flex" />
+          <div className="w-0.5 bg-grey h-full hidden max-sm:flex flex-shrink-0" />
           <div className="flex flex-col gap-2 items-center justify-center h-full max-sm:w-full">
             <p className="text-sm whitespace-nowrap">Total prizes</p>
             <p className="text-white whitespace-nowrap">$1,000</p>

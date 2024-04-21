@@ -4,14 +4,14 @@ import { ArrowLeft } from "phosphor-react-sc";
 import { Suspense } from "react";
 import "@mdxeditor/editor/style.css";
 import { notFound } from "next/navigation";
-import { query } from "@/app/api/query/server";
+import { trpc } from "@/trpc/query/server";
 
 const MarkdownEditor = dynamic(() => import("@/components/MarkdownEditor"), {
   ssr: false,
 });
 
 export default async function Create(props: { params: { round: string } }) {
-  const round = await query.getRound({ id: props.params.round });
+  const round = await trpc.getRound({ id: props.params.round });
 
   if (!round) {
     return notFound();
