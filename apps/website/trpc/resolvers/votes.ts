@@ -1,9 +1,10 @@
 import { db, votes, proposals, rounds, Round } from "@/db/schema";
-import { publicProcedure } from "@/trpc";
+import { onlyPassMember, publicProcedure } from "@/trpc";
 import { z } from "zod";
 import { and, eq } from "drizzle-orm";
+import { TRPCError } from "@trpc/server";
 
-export const castVotes = publicProcedure
+export const castVotes = onlyPassMember
   .input(
     z.object({
       user: z.string().min(1),
@@ -16,7 +17,14 @@ export const castVotes = publicProcedure
       ),
     })
   )
-  .query(async ({ input }) => {
+  .mutation(async ({ input, ctx }) => {
+    if (ctx.userClaim.userId !== input.user) {
+      throw new TRPCError({
+        code: "UNAUTHORIZED",
+        message: "You are not authorized to vote for this user",
+      });
+    }
+
     const [round, previousVotes] = await Promise.all([
       db.query.rounds.findFirst({
         where: eq(rounds.id, input.round),
@@ -27,7 +35,7 @@ export const castVotes = publicProcedure
     ]);
 
     if (!round) {
-      throw new Error("Round not found");
+      throw new TRPCError({ code: "NOT_FOUND", message: "Round not found" });
     }
 
     const now = new Date();
@@ -35,11 +43,17 @@ export const castVotes = publicProcedure
     const roundEnd = new Date(round.end ?? Infinity);
 
     if (now < votingStart) {
-      throw new Error("Voting has not started yet");
+      throw new TRPCError({
+        code: "PRECONDITION_FAILED",
+        message: "Voting has not started yet",
+      });
     }
 
     if (now > roundEnd) {
-      throw new Error("Round has ended");
+      throw new TRPCError({
+        code: "PRECONDITION_FAILED",
+        message: "Round has ended",
+      });
     }
 
     let votesUsed = previousVotes.reduce(
@@ -55,17 +69,26 @@ export const castVotes = publicProcedure
 
         if (!proposal) {
           tx.rollback();
-          throw new Error("Proposal not found");
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Proposal not found",
+          });
         }
 
         if (proposal.round !== input.round) {
           tx.rollback();
-          throw new Error("You can only vote on proposals in the same round");
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "You can only vote on proposals in the same round",
+          });
         }
 
         if (votesUsed + vote.count > 10) {
           tx.rollback();
-          throw new Error("You have exceeded the vote limit");
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "You have used all your votes",
+          });
         }
 
         votesUsed += vote.count;

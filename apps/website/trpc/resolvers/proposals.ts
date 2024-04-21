@@ -1,7 +1,8 @@
 import { db, proposals, rounds } from "@/db/schema";
 import { and, asc, eq } from "drizzle-orm";
-import { publicProcedure } from "@/trpc";
+import { onlyAdmin, onlyUser, publicProcedure } from "@/trpc";
 import { z } from "zod";
+import { TRPCError } from "@trpc/server";
 
 export const getProposal = publicProcedure
   .input(
@@ -31,7 +32,7 @@ export const getProposals = publicProcedure
     });
   });
 
-export const createProposal = publicProcedure
+export const createProposal = onlyUser
   .input(
     z.object({
       title: z.string().min(10).max(100),
@@ -41,13 +42,23 @@ export const createProposal = publicProcedure
       value: z.string().optional(),
     })
   )
-  .query(async ({ input }) => {
+  .mutation(async ({ input, ctx }) => {
+    if (ctx.userClaim.userId !== input.user) {
+      throw new TRPCError({
+        code: "UNAUTHORIZED",
+        message: "You are not authorized to propose for this user",
+      });
+    }
+
     const round = await db.query.rounds.findFirst({
       where: eq(rounds.id, input.round),
     });
 
     if (!round) {
-      throw new Error("Round not found");
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "Round not found",
+      });
     }
 
     const now = new Date();
@@ -55,11 +66,17 @@ export const createProposal = publicProcedure
     const votingStart = new Date(round.votingStart);
 
     if (now < roundStart) {
-      throw new Error("Round has not started yet");
+      throw new TRPCError({
+        code: "PRECONDITION_FAILED",
+        message: "Round has not started yet",
+      });
     }
 
     if (now > votingStart) {
-      throw new Error("Proposing has closed");
+      throw new TRPCError({
+        code: "PRECONDITION_FAILED",
+        message: "Proposing has closed",
+      });
     }
 
     const hasProposed = await db.query.proposals.findFirst({
@@ -70,7 +87,10 @@ export const createProposal = publicProcedure
     });
 
     if (hasProposed) {
-      throw new Error("You have already proposed for this round");
+      throw new TRPCError({
+        code: "PRECONDITION_FAILED",
+        message: "You have already proposed for this round",
+      });
     }
 
     return db.insert(proposals).values([
@@ -85,29 +105,43 @@ export const createProposal = publicProcedure
     ]);
   });
 
-export const updateProposal = publicProcedure
+export const updateProposal = onlyUser
   .input(
     z.object({
+      user: z.string().min(1),
       round: z.string().min(1),
       proposal: z.number().gt(0),
       title: z.string().min(10).max(100),
       description: z.string().min(500),
     })
   )
-  .query(async ({ input }) => {
+  .mutation(async ({ input, ctx }) => {
+    if (ctx.userClaim.userId !== input.user) {
+      throw new TRPCError({
+        code: "UNAUTHORIZED",
+        message: "You are not authorized to propose for this user",
+      });
+    }
+
     const round = await db.query.rounds.findFirst({
       where: eq(rounds.id, input.round),
     });
 
     if (!round) {
-      throw new Error("Round not found");
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "Round not found",
+      });
     }
 
     const now = new Date();
     const votingStart = new Date(round.votingStart);
 
     if (now > votingStart) {
-      throw new Error("Proposing has closed");
+      throw new TRPCError({
+        code: "PRECONDITION_FAILED",
+        message: "Proposing has closed",
+      });
     }
 
     return db
@@ -119,7 +153,7 @@ export const updateProposal = publicProcedure
       .where(eq(proposals.id, input.proposal));
   });
 
-export const seetProposals = publicProcedure.query(async () => {
+export const seetProposals = onlyAdmin.mutation(async () => {
   return db.insert(proposals).values([
     {
       title: "Test Propoasl",

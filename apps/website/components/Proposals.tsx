@@ -90,7 +90,7 @@ export default function Proposals(props: {
             const [imageIndex, setImageIndex] = useState(0);
 
             return (
-              <>
+              <div key={index} className="flex flex-col gap-4">
                 <Link
                   href={`/rounds/${props.round}/proposals/${proposal.id}`}
                   className={twMerge(
@@ -227,7 +227,7 @@ export default function Proposals(props: {
                 ) : (
                   ""
                 )}
-              </>
+              </div>
             );
           })}
       </div>
