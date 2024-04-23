@@ -29,9 +29,9 @@ export default async function Proposal(props: {
     <div className="flex flex-col gap-4">
       <Link
         href={`/rounds/${props.params.round}`}
-        className="text-red flex items-center gap-1"
+        className="text-red flex items-center gap-1 group"
       >
-        <ArrowLeft className="w-5 h-5 text-red" />
+        <ArrowLeft className="w-5 h-5 text-red group-hover:-translate-x-1 transition-transform" />
         Back to round
       </Link>
       <div className="flex flex-col gap-2 bg-darkgrey rounded-xl p-4">

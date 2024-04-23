@@ -74,8 +74,8 @@ export default async function Round(props: { params: { round: string } }) {
 
   return (
     <div className="flex flex-col gap-4">
-      <Link href={"/rounds"} className="text-red flex items-center gap-1">
-        <ArrowLeft className="w-5 h-5 text-red" />
+      <Link href={"/rounds"} className="text-red flex items-center gap-1 group">
+        <ArrowLeft className="w-5 h-5 text-red group-hover:-translate-x-1 transition-transform" />
         Back to rounds
       </Link>
       <div className="flex flex-col gap-8">

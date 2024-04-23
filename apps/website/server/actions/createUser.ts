@@ -1,3 +1,5 @@
+"use server";
+
 import { db, users } from "@/db/schema";
 import { onlyUserAction } from "@/server/actions";
 import { z } from "zod";

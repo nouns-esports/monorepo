@@ -22,7 +22,6 @@ import { getGames } from "@/server/queries/games";
 import { getCreators } from "@/server/queries/creators";
 import { getPosts } from "@/server/queries/posts";
 import { getProjects } from "@/server/queries/projects";
-import Marquee from "@/components/Marquee";
 
 export default async function Home(props: { params: { locale: string } }) {
   const events = await getEvents();
@@ -111,7 +110,7 @@ export default async function Home(props: { params: { locale: string } }) {
           </Link>
         </div>
       </div>
-      <Marquee />
+      <div className="bg-[url('/marquee.png')] bg-repeat-x bg-center bg-red h-8 w-full animate-marquee" />
       <div
         id="rosters"
         className="px-16 max-sm:px-0 py-32 max-sm:py-16 text-center text-white text-5xl font-luckiest-guy flex flex-col gap-20 max-sm:gap-10 items-center"

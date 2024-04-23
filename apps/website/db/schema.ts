@@ -160,7 +160,7 @@ export const proposals = pgTable("proposals", {
   description: text("description").notNull(),
   value: numeric("value", { precision: 78 }).notNull(),
   createdAt: timestamp("createdAt", { mode: "date" }).notNull(),
-  hidden: boolean("hidden").default(false).notNull(),
+  hidden: boolean("hidden").default(false),
 });
 
 export const proposalsRelations = relations(proposals, ({ one, many }) => ({

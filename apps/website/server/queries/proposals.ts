@@ -9,7 +9,7 @@ export const getProposal = cache(
     });
   },
   ["proposal"],
-  { tags: ["proposal"], revalidate: 60 * 10 }
+  { tags: ["proposal"], revalidate: 1 }
 );
 
 export const getProposals = cache(
@@ -23,5 +23,5 @@ export const getProposals = cache(
     });
   },
   ["proposals"],
-  { tags: ["proposals"], revalidate: 60 * 10 }
+  { tags: ["proposals"], revalidate: 1 }
 );

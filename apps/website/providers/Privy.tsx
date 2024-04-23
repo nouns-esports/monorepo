@@ -24,6 +24,8 @@ import { createWeightedECDSAValidator } from "@zerodev/weighted-ecdsa-validator"
 import { Chain, Transport, toFunctionSelector } from "viem";
 import { User } from "@/db/schema";
 import { identify } from "@multibase/js";
+import { useAction } from "next-safe-action/hooks";
+import { createUser } from "@/server/actions/createUser";
 
 const queryClient = new QueryClient();
 
@@ -106,6 +108,8 @@ export function useAccount() {
 
   const privyContext = useContext(PrivyContext);
 
+  const { execute, result } = useAction(createUser);
+
   const [address, setAddress] = useState<`0x${string}`>();
   const [pass, setPass] = useState<User["pass"]>();
 
@@ -117,6 +121,7 @@ export function useAccount() {
   useEffect(() => {
     if (privyContext?.smartAccountClient?.account) {
       setAddress(privyContext.smartAccountClient.account.address);
+      execute({ id: privy?.id ?? "", pass: true });
     }
   }, [privyContext]);
 
@@ -126,10 +131,10 @@ export function useAccount() {
   // );
 
   // useEffect(() => {
-  //   if (user.data) {
-  //     setPass(user.data.pass);
+  //   if (result.data) {
+  //     setPass(true);
   //   }
-  // }, [user]);
+  // }, [result]);
 
   // this can probably just be a reaction to privy state
   async function logout() {

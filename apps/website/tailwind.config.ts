@@ -54,6 +54,15 @@ const config: Config = {
       cursor: {
         crosshair: "url('/crosshair.svg') 16 16, auto",
       },
+      keyframes: {
+        marquee: {
+          from: { backgroundPosition: "0% 0" },
+          to: { backgroundPosition: "100% 0" },
+        },
+      },
+      animation: {
+        marquee: "marquee 20s linear infinite",
+      },
     },
   },
   plugins: [

@@ -1,7 +1,10 @@
+"use server";
+
 import { db, votes, proposals, rounds } from "@/db/schema";
 import { onlyPassMemberAction } from "@/server/actions";
 import { z } from "zod";
-import { and, eq } from "drizzle-orm";
+import { and, asc, desc, eq, sql } from "drizzle-orm";
+import { revalidateTag } from "next/cache";
 
 export const castVotes = onlyPassMemberAction(
   z.object({
@@ -52,8 +55,21 @@ export const castVotes = onlyPassMemberAction(
       0
     );
 
-    return db.transaction(async (tx) => {
+    // const latestVote = await db.query.votes.findFirst({
+    //   orderBy: desc(votes.id),
+    // });
+
+    // let id = latestVote ? latestVote.id : 0;
+
+    // console.log(latestVote, id);
+
+    // let id =
+    //   (await db.execute(sql.raw(`SELECT MAX(id) FROM votes`))).rowCount ?? 0;
+
+    await db.transaction(async (tx) => {
       for (const vote of input.votes) {
+        // id += 1;
+
         const proposal = await tx.query.proposals.findFirst({
           where: eq(proposals.id, vote.proposal),
         });
@@ -75,8 +91,9 @@ export const castVotes = onlyPassMemberAction(
 
         votesUsed += vote.count;
 
-        return tx.insert(votes).values([
+        await tx.insert(votes).values([
           {
+            // id: votes.id.default,
             user: input.user,
             proposal: vote.proposal,
             round: round.id,
@@ -86,5 +103,7 @@ export const castVotes = onlyPassMemberAction(
         ]);
       }
     });
+
+    revalidateTag("proposals");
   }
 );

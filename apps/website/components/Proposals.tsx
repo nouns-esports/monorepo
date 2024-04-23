@@ -5,6 +5,10 @@ import { ReactNode, useEffect, useMemo, useState } from "react";
 import { CaretUp, CaretDown, CaretLeft, CaretRight } from "phosphor-react-sc";
 import Button from "./Button";
 import { twMerge } from "tailwind-merge";
+import { usePrivy } from "@privy-io/react-auth";
+import { useAction } from "next-safe-action/hooks";
+import { castVotes } from "@/server/actions/castVotes";
+import toast from "react-hot-toast";
 
 export default function Proposals(props: {
   round: string;
@@ -29,10 +33,21 @@ export default function Proposals(props: {
     [votes]
   );
 
-  const you = "0x97350C11a21658E5a02c5C08FFF11F3A0e5710Fa";
+  const { user } = usePrivy();
+
   const yourProposal = props.proposals.find(
-    (proposal) => proposal.user === you
+    (proposal) => proposal.user === user?.id
   );
+
+  const { execute, status } = useAction(castVotes, {
+    onSuccess: () => {
+      // Do something
+    },
+    onError: (error) => {
+      console.error(error);
+      toast.error("Failed to cast votes");
+    },
+  });
 
   return (
     <div className="flex flex-col gap-4">
@@ -51,37 +66,54 @@ export default function Proposals(props: {
           ) : (
             ""
           )}
-          {props.status === "proposing" && yourProposal ? (
-            <Button href={`/rounds/${props.round}/create`} animate="bg">
-              Edit Proposal
-            </Button>
-          ) : props.status === "voting" ? (
+          {props.status === "proposing" ? (
+            yourProposal ? (
+              <Button href={`/rounds/${props.round}/create`} animate="bg">
+                Edit Proposal
+              </Button>
+            ) : (
+              <Button href={`/rounds/${props.round}/create`} animate="bg">
+                Create Proposal
+              </Button>
+            )
+          ) : (
+            ""
+          )}
+          {props.status === "voting" ? (
             <Button
+              disabled={votesCast < 1 || !user}
               onClick={() => {
-                // Submit votes
+                if (!user) return;
+
+                execute({
+                  user: user?.id,
+                  round: props.round,
+                  votes: Object.entries(votes).map(([id, count]) => ({
+                    proposal: Number(id),
+                    count,
+                  })),
+                });
               }}
               animate="bg"
             >
               Submit Votes
             </Button>
           ) : (
-            <Button href={`/rounds/${props.round}/create`} animate="bg">
-              Create Proposal
-            </Button>
+            ""
           )}
         </div>
       </div>
       <div className="flex flex-col gap-4">
         {props.proposals
           .toSorted((a, b) => {
-            if (a.user === you && b.user !== you) {
+            if (a.user === user?.id && b.user !== user?.id) {
               return -1;
-            } else if (b.user === you && a.user !== you) {
+            } else if (b.user === user?.id && a.user !== user?.id) {
               return 1;
             }
 
-            if (props.status === "voting" || props.status === "ended") {
-              return a.votes - b.votes;
+            if (a.votes > 0 || b.votes > 0) {
+              return b.votes - a.votes;
             }
 
             return Number(a.id) - Number(b.id);
@@ -101,51 +133,55 @@ export default function Proposals(props: {
                     // index === 2 && "border-[3px] border-bronze-500"
                   )}
                 >
-                  <div className="w-40 flex-shrink-0 h-[calc(100%_-_16px)] rounded-xl overflow-hidden z-20 relative group">
-                    <div className="w-full top-0 absolute h-full flex items-center px-2 z-30">
-                      <div
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          setImageIndex(
-                            imageIndex === proposal.images.length - 1
-                              ? 0
-                              : imageIndex + 1
-                          );
-                          return false;
-                        }}
-                        className="flex items-center w-full h-full"
-                      >
-                        <CaretLeft
-                          className="text-white opacity-0 group-hover:opacity-100 transition-opacity h-6 w-6"
-                          weight="bold"
-                        />
+                  {proposal.images.length > 0 ? (
+                    <div className="w-40 flex-shrink-0 h-[calc(100%_-_16px)] rounded-xl overflow-hidden z-20 relative group">
+                      <div className="w-full top-0 absolute h-full flex items-center px-2 z-30">
+                        <div
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setImageIndex(
+                              imageIndex === proposal.images.length - 1
+                                ? 0
+                                : imageIndex + 1
+                            );
+                            return false;
+                          }}
+                          className="flex items-center w-full h-full"
+                        >
+                          <CaretLeft
+                            className="text-white opacity-0 group-hover:opacity-100 transition-opacity h-6 w-6"
+                            weight="bold"
+                          />
+                        </div>
+                        <div
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setImageIndex(
+                              imageIndex === 0
+                                ? proposal.images.length - 1
+                                : imageIndex - 1
+                            );
+                          }}
+                          className="flex items-center justify-end w-full h-full"
+                        >
+                          <CaretRight
+                            className="text-white opacity-0 group-hover:opacity-100 transition-opacity h-6 w-6"
+                            weight="bold"
+                          />
+                        </div>
                       </div>
-                      <div
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          setImageIndex(
-                            imageIndex === 0
-                              ? proposal.images.length - 1
-                              : imageIndex - 1
-                          );
-                        }}
-                        className="flex items-center justify-end w-full h-full"
-                      >
-                        <CaretRight
-                          className="text-white opacity-0 group-hover:opacity-100 transition-opacity h-6 w-6"
-                          weight="bold"
-                        />
-                      </div>
+                      <img
+                        key={imageIndex}
+                        src={proposal.images[imageIndex]}
+                        className="w-full h-full object-cover object-center"
+                      />
+                      <div className="bg-black w-full h-full absolute top-0 opacity-0 group-hover:opacity-30 transition-opacity" />
                     </div>
-                    <img
-                      key={imageIndex}
-                      src={proposal.images[imageIndex]}
-                      className="w-full h-full object-cover object-center"
-                    />
-                    <div className="bg-black w-full h-full absolute top-0 opacity-0 group-hover:opacity-30 transition-opacity" />
-                  </div>
+                  ) : (
+                    ""
+                  )}
                   <div className="w-full flex flex-col">
                     <h4 className="text-2xl font-bebas-neue text-white">
                       {proposal.title}
@@ -166,7 +202,7 @@ export default function Proposals(props: {
                       <div className="flex flex-col items-center gap-2 w-14 flex-shrink-0">
                         <CaretUp
                           onClick={() => {
-                            if (proposal.user === you) return;
+                            if (proposal.user === user?.id) return;
                             if (votesCast > 9) return;
                             setVotes({
                               ...votes,
@@ -177,7 +213,7 @@ export default function Proposals(props: {
                           }}
                           className={twMerge(
                             "w-5 h-5 text-lightgrey",
-                            proposal.user === you
+                            proposal.user === user?.id
                               ? "pointer-events-none"
                               : "hover:text-white transition-colors"
                           )}
@@ -197,7 +233,7 @@ export default function Proposals(props: {
                         </p>
                         <CaretDown
                           onClick={() => {
-                            if (proposal.user === you) return;
+                            if (proposal.user === user?.id) return;
                             if (
                               (votes[proposal.id] ? votes[proposal.id] : 0) < 1
                             )
@@ -209,7 +245,7 @@ export default function Proposals(props: {
                           }}
                           className={twMerge(
                             "w-5 h-5 text-lightgrey",
-                            proposal.user === you
+                            proposal.user === user?.id
                               ? "pointer-events-none"
                               : "hover:text-white transition-colors"
                           )}
@@ -222,7 +258,7 @@ export default function Proposals(props: {
                   )}
                   <div className="absolute left-0 w-full bg-gradient-to-t from-darkgrey to-transparent h-10 bottom-0 z-10" />
                 </Link>
-                {proposal.user === you ? (
+                {proposal.user === user?.id ? (
                   <div className="w-[calc(100%_-_128px)] h-[1px] bg-grey mx-16 my-2" />
                 ) : (
                   ""

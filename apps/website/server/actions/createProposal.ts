@@ -1,7 +1,10 @@
+"use server";
+
 import { db, proposals, rounds } from "@/db/schema";
 import { and, asc, eq } from "drizzle-orm";
 import { onlyUserAction } from "@/server/actions";
 import { z } from "zod";
+import { revalidateTag } from "next/cache";
 
 export const createProposal = onlyUserAction(
   z.object({
@@ -50,7 +53,7 @@ export const createProposal = onlyUserAction(
       throw new Error("You have already proposed for this round");
     }
 
-    return db.insert(proposals).values([
+    await db.insert(proposals).values([
       {
         title: input.title,
         description: input.description,
@@ -60,6 +63,8 @@ export const createProposal = onlyUserAction(
         createdAt: new Date(),
       },
     ]);
+
+    revalidateTag("proposals");
   }
 );
 
