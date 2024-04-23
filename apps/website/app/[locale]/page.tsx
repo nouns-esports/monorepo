@@ -1,5 +1,4 @@
 import Button from "@/components/Button";
-import Marquee from "react-fast-marquee";
 import {
   TwitchLogo,
   TwitterLogo,
@@ -17,13 +16,13 @@ import Date from "@/components/Date";
 import { headers } from "next/headers";
 import Image from "next/image";
 import Prop from "@/public/prop.webp";
-import LogoWhite from "@/public/logo/logo-white.svg";
 import Pokemon from "@/public/pokemon.webp";
 import { getEvents, type Event } from "@/server/queries/events";
 import { getGames } from "@/server/queries/games";
 import { getCreators } from "@/server/queries/creators";
 import { getPosts } from "@/server/queries/posts";
 import { getProjects } from "@/server/queries/projects";
+import Marquee from "@/components/Marquee";
 
 export default async function Home(props: { params: { locale: string } }) {
   const events = await getEvents();
@@ -112,16 +111,7 @@ export default async function Home(props: { params: { locale: string } }) {
           </Link>
         </div>
       </div>
-      <Marquee autoFill className="bg-red flex items-center h-8">
-        <Image
-          src={LogoWhite}
-          alt="Nouns Esports logo in white"
-          className="w-4 h-4 select-none"
-        />
-        <p className="px-4 text-white text-lg font-bebas-neue pt-[0.19rem]">
-          <Text en="Join the revolution" pt="Junte-se à revolução" />
-        </p>
-      </Marquee>
+      <Marquee />
       <div
         id="rosters"
         className="px-16 max-sm:px-0 py-32 max-sm:py-16 text-center text-white text-5xl font-luckiest-guy flex flex-col gap-20 max-sm:gap-10 items-center"
