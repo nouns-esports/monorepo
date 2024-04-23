@@ -1,10 +1,10 @@
-import { trpc } from "@/trpc/query/server";
 import Link from "@/components/Link";
 import Markdown from "@/components/Mardown";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "phosphor-react-sc";
 import { getFrameMetadata } from "frog/next";
 import type { Metadata } from "next";
+import { getProposal } from "@/server/queries/proposals";
 
 export async function generateMetadata(props: {
   params: { round: string; id: string };
@@ -19,7 +19,7 @@ export async function generateMetadata(props: {
 export default async function Proposal(props: {
   params: { round: string; id: string };
 }) {
-  const proposal = await trpc.getProposal({ id: Number(props.params.id) });
+  const proposal = await getProposal({ id: Number(props.params.id) });
 
   if (!proposal) {
     return notFound();

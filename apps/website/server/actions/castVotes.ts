@@ -1,29 +1,27 @@
-import { db, votes, proposals, rounds, Round } from "@/db/schema";
-import { onlyPassMember, publicProcedure } from "@/trpc";
+import { db, votes, proposals, rounds } from "@/db/schema";
+import { onlyPassMemberAction } from "@/server/actions";
 import { z } from "zod";
 import { and, eq } from "drizzle-orm";
 import { TRPCError } from "@trpc/server";
 
-export const castVotes = onlyPassMember
-  .input(
-    z.object({
-      user: z.string().min(1),
-      round: z.string().min(1),
-      votes: z.array(
-        z.object({
-          proposal: z.number().gt(0),
-          count: z.number().gt(0),
-        })
-      ),
-    })
-  )
-  .mutation(async ({ input, ctx }) => {
-    if (ctx.userClaim.userId !== input.user) {
-      throw new TRPCError({
-        code: "UNAUTHORIZED",
-        message: "You are not authorized to vote for this user",
-      });
-    }
+export const castVotes = onlyPassMemberAction(
+  z.object({
+    user: z.string().min(1),
+    round: z.string().min(1),
+    votes: z.array(
+      z.object({
+        proposal: z.number().gt(0),
+        count: z.number().gt(0),
+      })
+    ),
+  }),
+  async (input, ctx) => {
+    // if (ctx.userClaim.userId !== input.user) {
+    //   throw new TRPCError({
+    //     code: "UNAUTHORIZED",
+    //     message: "You are not authorized to vote for this user",
+    //   });
+    // }
 
     const [round, previousVotes] = await Promise.all([
       db.query.rounds.findFirst({
@@ -104,4 +102,5 @@ export const castVotes = onlyPassMember
         ]);
       }
     });
-  });
+  }
+);

@@ -4,10 +4,6 @@ import { DownloadSimple, TwitterLogo, DiscordLogo } from "phosphor-react-sc";
 import Text from "@/components/Text";
 import { Metadata } from "next";
 import { metadata as baseMetadata } from "@/app/[locale]/layout";
-import Image from "next/image";
-import whiteNoggles from "@/public/noggles-white.svg";
-import backgroundPattern from "@/public/pattern.svg";
-import { LinkIt } from "react-linkify-it";
 
 export const metadata: Metadata = {
   title: "Become a partner",

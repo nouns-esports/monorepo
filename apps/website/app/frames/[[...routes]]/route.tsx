@@ -3,7 +3,8 @@ import { Button, Frog, TextInput } from "frog";
 import { handle } from "frog/next";
 import { devtools } from "frog/dev";
 import { serveStatic } from "frog/serve-static";
-import { trpc } from "@/trpc/query/server";
+import { getProposal } from "@/server/queries/proposals";
+import { getRound } from "@/server/queries/rounds";
 
 const app = new Frog({
   basePath: "/",
@@ -28,7 +29,7 @@ const app = new Frog({
 // });
 
 app.frame("/frames/round/:id", async (c) => {
-  const round = await trpc.getRound({ id: c.req.param("id") });
+  const round = await getRound({ id: c.req.param("id") });
 
   if (!round) {
     return c.error({ statusCode: 404, message: "Round not found" });
@@ -62,7 +63,7 @@ app.frame("/frames/round/:id", async (c) => {
 });
 
 app.frame("/frames/proposal/:id", async (c) => {
-  const proposal = await trpc.getProposal({ id: Number(c.req.param("id")) });
+  const proposal = await getProposal({ id: Number(c.req.param("id")) });
 
   if (!proposal) {
     return c.error({ statusCode: 404, message: "Proposal not found" });

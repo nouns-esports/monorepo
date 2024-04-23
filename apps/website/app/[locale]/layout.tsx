@@ -10,7 +10,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Providers from "@/providers";
 import { locales } from "@/middleware";
-import { trpc } from "@/trpc/query/server";
+import { getGames } from "@/server/queries/games";
 
 const cabin = Cabin({ subsets: ["latin"], variable: "--font-cabin" });
 
@@ -84,7 +84,7 @@ export default async function RootLayout(props: {
   children: React.ReactNode;
   params: { locale: string };
 }) {
-  const games = await trpc.getGames();
+  const games = await getGames();
 
   return (
     <html

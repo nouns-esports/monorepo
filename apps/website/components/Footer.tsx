@@ -10,10 +10,10 @@ import {
 import Text from "@/components/Text";
 import ANounsThing from "./ANounsThing";
 import Logo from "./Logo";
-import { trpc } from "@/trpc/query/server";
+import { getGames } from "@/server/queries/games";
 
 export default async function Footer(props: { locale: string }) {
-  const games = await trpc.getGames();
+  const games = await getGames();
 
   return (
     <footer className="flex justify-center w-full">

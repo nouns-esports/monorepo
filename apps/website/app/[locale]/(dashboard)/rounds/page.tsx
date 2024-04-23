@@ -1,14 +1,14 @@
-import { trpc } from "@/trpc/query/server";
 import Countdown from "@/components/Countdown";
 import Link from "@/components/Link";
 import Markdown from "@/components/Mardown";
 import { Round } from "@/db/schema";
+import { getRounds } from "@/server/queries/rounds";
 
 export default async function Rounds() {
   const [activeRounds, upcomingRounds, endedRounds] = await Promise.all([
-    trpc.getRounds({ stage: "active" }),
-    trpc.getRounds({ stage: "upcoming" }),
-    trpc.getRounds({ stage: "ended" }),
+    getRounds({ stage: "active" }),
+    getRounds({ stage: "upcoming" }),
+    getRounds({ stage: "ended" }),
   ]);
 
   return (

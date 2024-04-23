@@ -1,28 +1,19 @@
 import { db, rounds } from "@/db/schema";
 import { eq, gt, and, lt, asc, desc } from "drizzle-orm";
-import { publicProcedure } from "@/trpc";
-import { z } from "zod";
+import { unstable_cache as cache } from "next/cache";
 
-export const getRound = publicProcedure
-  .input(
-    z.object({
-      id: z.string().min(1),
-    })
-  )
-  .query(async ({ input }) => {
+export const getRound = cache(
+  async (input: { id: string }) => {
     return db.query.rounds.findFirst({
       where: eq(rounds.id, input.id),
     });
-  });
+  },
+  ["round"],
+  { tags: ["round"], revalidate: 60 * 10 }
+);
 
-export const getRounds = publicProcedure
-  .input(
-    z.object({
-      stage: z.enum(["active", "upcoming", "ended"]).optional(),
-      max: z.number().optional(),
-    })
-  )
-  .query(async ({ input }) => {
+export const getRounds = cache(
+  async (input: { stage: "active" | "upcoming" | "ended"; max?: number }) => {
     if (input.stage) {
       switch (input.stage) {
         case "active":
@@ -53,4 +44,7 @@ export const getRounds = publicProcedure
       limit: input.max ?? undefined,
       orderBy: asc(rounds.end),
     });
-  });
+  },
+  ["rounds"],
+  { tags: ["rounds"], revalidate: 60 * 10 }
+);

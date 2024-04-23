@@ -1,11 +1,11 @@
 import Link from "@/components/Link";
 import Logo from "./Logo";
 import Banner from "./Banner";
-import { trpc } from "@/trpc/query/server";
 import Navbar from "./Navbar";
+import { getEvents } from "@/server/queries/events";
 
 export default async function Header(props: { locale: string }) {
-  const events = await trpc.getEvents();
+  const events = await getEvents();
 
   return (
     <>

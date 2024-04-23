@@ -5,23 +5,25 @@ import { metadata } from "@/app/[locale]/layout";
 import { Metadata } from "next";
 import Link from "@/components/Link";
 import Image from "next/image";
-import { trpc } from "@/trpc/query/server";
 import { notFound } from "next/navigation";
+import { getGame } from "@/server/queries/games";
+import { getRosters } from "@/server/queries/rosters";
+import { getTalent } from "@/server/queries/talent";
 
 export async function generateMetadata(props: { params: { id: string } }) {
-  const game = await trpc.getGame({
+  const game = await getGame({
     id: props.params.id,
   });
 
   if (!game) notFound();
 
-  const rosters = await trpc.getRosters({ game: game.id });
+  const rosters = await getRosters({ game: game.id });
 
   const talents = [];
 
   for (const roster of rosters) {
     talents.push(
-      ...(await trpc.getTalent({ roster: roster.id })).map((t) =>
+      ...(await getTalent({ roster: roster.id })).map((t) =>
         t.name.toLocaleLowerCase()
       )
     );
@@ -46,13 +48,13 @@ export async function generateMetadata(props: { params: { id: string } }) {
 }
 
 export default async function RosterPage(props: { params: { id: string } }) {
-  const game = await trpc.getGame({
+  const game = await getGame({
     id: props.params.id,
   });
 
   if (!game) notFound();
 
-  const rosters = await trpc.getRosters({ game: game.id });
+  const rosters = await getRosters({ game: game.id });
 
   return (
     <>
@@ -73,7 +75,7 @@ export default async function RosterPage(props: { params: { id: string } }) {
       </div>
       <GameBorder>
         {rosters.map(async (roster) => {
-          const talent = await trpc.getTalent({ roster: roster.id });
+          const talent = await getTalent({ roster: roster.id });
           return (
             <GameSection
               key={roster.id}

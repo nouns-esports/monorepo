@@ -15,14 +15,14 @@ import {
 import { createPimlicoPaymasterClient } from "permissionless/clients/pimlico";
 import {
   KernelAccountClient,
+  KernelSmartAccount,
   createKernelAccount,
   createKernelAccountClient,
 } from "@zerodev/sdk";
 import { signerToEcdsaValidator } from "@zerodev/ecdsa-validator";
 import { createWeightedECDSAValidator } from "@zerodev/weighted-ecdsa-validator";
-import { toFunctionSelector } from "viem";
+import { Chain, Transport, toFunctionSelector } from "viem";
 import { User } from "@/db/schema";
-import { trpc } from "@/trpc/query/client";
 import { identify } from "@multibase/js";
 
 const queryClient = new QueryClient();
@@ -71,7 +71,12 @@ export default function Privy(props: { children: React.ReactNode }) {
   );
 }
 
-type SmartAccountClient = KernelAccountClient<typeof ENTRYPOINT_ADDRESS_V07>;
+type SmartAccountClient = KernelAccountClient<
+  typeof ENTRYPOINT_ADDRESS_V07,
+  Transport,
+  Chain | undefined,
+  KernelSmartAccount<typeof ENTRYPOINT_ADDRESS_V07>
+>;
 
 export const PrivyContext = createContext<
   | {
@@ -115,16 +120,16 @@ export function useAccount() {
     }
   }, [privyContext]);
 
-  const user = trpc.getUser.useQuery(
-    { id: privy?.id ?? "" },
-    { enabled: !!privy?.id }
-  );
+  // const user = trpc.getUser.useQuery(
+  //   { id: privy?.id ?? "" },
+  //   { enabled: !!privy?.id }
+  // );
 
-  useEffect(() => {
-    if (user.data) {
-      setPass(user.data.pass);
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (user.data) {
+  //     setPass(user.data.pass);
+  //   }
+  // }, [user]);
 
   // this can probably just be a reaction to privy state
   async function logout() {

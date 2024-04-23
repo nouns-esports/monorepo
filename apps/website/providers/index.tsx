@@ -4,7 +4,6 @@ import PrimaryColor from "@/providers/PrimaryColor";
 import Privy from "@/providers/Privy";
 import { Game } from "@/db/schema";
 import { Toaster } from "react-hot-toast";
-import TRPC from "./TRPC";
 import { init } from "@multibase/js";
 import { env } from "@/env";
 
@@ -17,11 +16,9 @@ export default function Providers(props: {
   games: { id: Game["id"]; color: Game["color"] }[];
 }) {
   return (
-    <TRPC>
-      <Privy>
-        <PrimaryColor games={props.games}>{props.children}</PrimaryColor>
-      </Privy>
+    <Privy>
+      <PrimaryColor games={props.games}>{props.children}</PrimaryColor>
       <Toaster position="top-center" />
-    </TRPC>
+    </Privy>
   );
 }

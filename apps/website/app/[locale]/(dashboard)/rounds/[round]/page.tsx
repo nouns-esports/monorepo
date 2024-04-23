@@ -1,4 +1,3 @@
-import { trpc } from "@/trpc/query/server";
 import Countdown from "@/components/Countdown";
 import Link from "@/components/Link";
 import { notFound } from "next/navigation";
@@ -11,6 +10,9 @@ import { twMerge } from "tailwind-merge";
 import { formatUnits } from "viem";
 import { getFrameMetadata } from "frog/next";
 import type { Metadata } from "next";
+import { getRound } from "@/server/queries/rounds";
+import { getAwards } from "@/server/queries/awards";
+import { getProposals } from "@/server/queries/proposals";
 
 const tokenList: Record<
   string,
@@ -46,9 +48,9 @@ export async function generateMetadata(props: {
 
 export default async function Round(props: { params: { round: string } }) {
   const [round, awards, proposals] = await Promise.all([
-    trpc.getRound({ id: props.params.round }),
-    trpc.getAwards({ round: props.params.round }),
-    trpc.getProposals({ round: props.params.round }),
+    getRound({ id: props.params.round }),
+    getAwards({ round: props.params.round }),
+    getProposals({ round: props.params.round }),
   ]);
 
   if (!round) {

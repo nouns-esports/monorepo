@@ -1,7 +1,12 @@
-import { z } from "zod";
-import { publicProcedure } from "@/trpc";
+import { unstable_cache as cache } from "next/cache";
 import { gql } from "@apollo/client";
-import { arweave, arweaveClient } from "../clients/arweave";
+import { arweave, arweaveClient } from "@/server/clients/arweave";
+
+export type Node = {
+  [key: string]: any;
+  type: string;
+  content: Node[];
+};
 
 const GetPublicationBySlug = gql`
   query GetParagraphPosts($slug: String!) {
@@ -54,15 +59,8 @@ const GetAllPublications = gql`
   }
 `;
 
-export type Node = {
-  [key: string]: any;
-  type: string;
-  content: Node[];
-};
-
-export const getPost = publicProcedure
-  .input(z.string())
-  .query(async ({ input }) => {
+export const getPost = cache(
+  async (input: { id: string }) => {
     const { data } = await arweaveClient.query<{
       transactions: {
         edges: Array<{
@@ -78,7 +76,7 @@ export const getPost = publicProcedure
       };
     }>({
       query: GetPublicationBySlug,
-      variables: { slug: input },
+      variables: { slug: input.id },
     });
 
     if (data.transactions.edges.length === 0) {
@@ -108,56 +106,64 @@ export const getPost = publicProcedure
         content: Node[];
       },
     };
-  });
+  },
+  ["post"],
+  { revalidate: 60 * 10 }
+);
 
-export const getPosts = publicProcedure.query(async () => {
-  const seen: Record<string, boolean> = {};
+export const getPosts = cache(
+  async () => {
+    const seen: Record<string, boolean> = {};
 
-  const { data } = await arweaveClient.query<{
-    transactions: {
-      edges: Array<{
-        cursor: string;
-        node: {
-          id: string;
-          tags: Array<{
-            name: string;
-            value: string;
-          }>;
-        };
-      }>;
-    };
-  }>({
-    query: GetAllPublications,
-    variables: { limit: 100 },
-  });
+    const { data } = await arweaveClient.query<{
+      transactions: {
+        edges: Array<{
+          cursor: string;
+          node: {
+            id: string;
+            tags: Array<{
+              name: string;
+              value: string;
+            }>;
+          };
+        }>;
+      };
+    }>({
+      query: GetAllPublications,
+      variables: { limit: 100 },
+    });
 
-  const posts = [];
+    const posts = [];
 
-  for (const edge of data.transactions.edges) {
-    if (Object.keys(seen).length > 2) {
-      return posts;
+    for (const edge of data.transactions.edges) {
+      if (Object.keys(seen).length > 2) {
+        return posts;
+      }
+
+      const transactionData = JSON.parse(
+        (await arweave.transactions.getData(edge.node.id, {
+          decode: true,
+          string: true,
+        })) as string
+      );
+
+      if (!transactionData.cover_img && !transactionData.cover_img_url)
+        continue;
+
+      if (seen[transactionData.slug]) continue;
+      seen[transactionData.slug] = true;
+
+      posts.push({
+        id: transactionData.id,
+        title: transactionData.title,
+        slug: transactionData.slug,
+        image:
+          transactionData.cover_img?.img?.src ?? transactionData.cover_img_url,
+      });
     }
 
-    const transactionData = JSON.parse(
-      (await arweave.transactions.getData(edge.node.id, {
-        decode: true,
-        string: true,
-      })) as string
-    );
-
-    if (!transactionData.cover_img && !transactionData.cover_img_url) continue;
-
-    if (seen[transactionData.slug]) continue;
-    seen[transactionData.slug] = true;
-
-    posts.push({
-      id: transactionData.id,
-      title: transactionData.title,
-      slug: transactionData.slug,
-      image:
-        transactionData.cover_img?.img?.src ?? transactionData.cover_img_url,
-    });
-  }
-
-  return posts;
-});
+    return posts;
+  },
+  ["posts"],
+  { revalidate: 60 * 10 }
+);
