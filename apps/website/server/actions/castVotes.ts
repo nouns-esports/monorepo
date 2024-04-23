@@ -2,7 +2,6 @@ import { db, votes, proposals, rounds } from "@/db/schema";
 import { onlyPassMemberAction } from "@/server/actions";
 import { z } from "zod";
 import { and, eq } from "drizzle-orm";
-import { TRPCError } from "@trpc/server";
 
 export const castVotes = onlyPassMemberAction(
   z.object({
@@ -33,7 +32,7 @@ export const castVotes = onlyPassMemberAction(
     ]);
 
     if (!round) {
-      throw new TRPCError({ code: "NOT_FOUND", message: "Round not found" });
+      throw new Error("Round not found");
     }
 
     const now = new Date();
@@ -41,17 +40,11 @@ export const castVotes = onlyPassMemberAction(
     const roundEnd = new Date(round.end ?? Infinity);
 
     if (now < votingStart) {
-      throw new TRPCError({
-        code: "PRECONDITION_FAILED",
-        message: "Voting has not started yet",
-      });
+      throw new Error("Voting has not started yet");
     }
 
     if (now > roundEnd) {
-      throw new TRPCError({
-        code: "PRECONDITION_FAILED",
-        message: "Round has ended",
-      });
+      throw new Error("Round has ended");
     }
 
     let votesUsed = previousVotes.reduce(
@@ -67,26 +60,17 @@ export const castVotes = onlyPassMemberAction(
 
         if (!proposal) {
           tx.rollback();
-          throw new TRPCError({
-            code: "NOT_FOUND",
-            message: "Proposal not found",
-          });
+          throw new Error("Proposal not found");
         }
 
         if (proposal.round !== input.round) {
           tx.rollback();
-          throw new TRPCError({
-            code: "BAD_REQUEST",
-            message: "You can only vote on proposals in the same round",
-          });
+          throw new Error("You can only vote on proposals in the same round");
         }
 
         if (votesUsed + vote.count > 10) {
           tx.rollback();
-          throw new TRPCError({
-            code: "BAD_REQUEST",
-            message: "You have used all your votes",
-          });
+          throw new Error("You have used all your votes");
         }
 
         votesUsed += vote.count;

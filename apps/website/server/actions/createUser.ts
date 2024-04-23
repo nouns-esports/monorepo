@@ -1,8 +1,6 @@
 import { db, users } from "@/db/schema";
 import { onlyUserAction } from "@/server/actions";
 import { z } from "zod";
-import { eq } from "drizzle-orm";
-import { TRPCError } from "@trpc/server";
 
 export const createUser = onlyUserAction(
   z.object({

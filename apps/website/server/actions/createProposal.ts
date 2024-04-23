@@ -2,7 +2,6 @@ import { db, proposals, rounds } from "@/db/schema";
 import { and, asc, eq } from "drizzle-orm";
 import { onlyUserAction } from "@/server/actions";
 import { z } from "zod";
-import { TRPCError } from "@trpc/server";
 
 export const createProposal = onlyUserAction(
   z.object({
@@ -25,10 +24,7 @@ export const createProposal = onlyUserAction(
     });
 
     if (!round) {
-      throw new TRPCError({
-        code: "NOT_FOUND",
-        message: "Round not found",
-      });
+      throw new Error("Round not found");
     }
 
     const now = new Date();
@@ -36,17 +32,11 @@ export const createProposal = onlyUserAction(
     const votingStart = new Date(round.votingStart);
 
     if (now < roundStart) {
-      throw new TRPCError({
-        code: "PRECONDITION_FAILED",
-        message: "Round has not started yet",
-      });
+      throw new Error("Round has not started yet");
     }
 
     if (now > votingStart) {
-      throw new TRPCError({
-        code: "PRECONDITION_FAILED",
-        message: "Proposing has closed",
-      });
+      throw new Error("Proposing has closed");
     }
 
     const hasProposed = await db.query.proposals.findFirst({
@@ -57,10 +47,7 @@ export const createProposal = onlyUserAction(
     });
 
     if (hasProposed) {
-      throw new TRPCError({
-        code: "PRECONDITION_FAILED",
-        message: "You have already proposed for this round",
-      });
+      throw new Error("You have already proposed for this round");
     }
 
     return db.insert(proposals).values([
@@ -97,20 +84,14 @@ export const updateProposal = onlyUserAction(
     });
 
     if (!round) {
-      throw new TRPCError({
-        code: "NOT_FOUND",
-        message: "Round not found",
-      });
+      throw new Error("Round not found");
     }
 
     const now = new Date();
     const votingStart = new Date(round.votingStart);
 
     if (now > votingStart) {
-      throw new TRPCError({
-        code: "PRECONDITION_FAILED",
-        message: "Proposing has closed",
-      });
+      throw new Error("Proposing has closed");
     }
 
     return db
