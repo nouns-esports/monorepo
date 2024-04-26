@@ -1,4 +1,3 @@
-// import { MDXRemote } from "next-mdx-remote/rsc";
 import { twMerge } from "tailwind-merge";
 
 export default function Markdown(props: { markdown: string; style?: boolean }) {
@@ -11,8 +10,6 @@ export default function Markdown(props: { markdown: string; style?: boolean }) {
       )}
     >
       <p>{props.markdown.replaceAll(/<[^>]*>/g, "")}</p>
-
-      {/* <MDXRemote source={props.markdown.replaceAll("<br>", "")} /> */}
     </div>
   );
 }

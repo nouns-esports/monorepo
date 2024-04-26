@@ -24,18 +24,27 @@ export const getRounds = cache(
             ),
             limit: input.max ?? undefined,
             orderBy: asc(rounds.end),
+            with: {
+              awards: true,
+            },
           });
         case "upcoming":
           return db.query.rounds.findMany({
             where: gt(rounds.start, new Date()),
             limit: input.max ?? undefined,
             orderBy: asc(rounds.start),
+            with: {
+              awards: true,
+            },
           });
         case "ended":
           return db.query.rounds.findMany({
             where: lt(rounds.end, new Date()),
             limit: input.max ?? undefined,
             orderBy: desc(rounds.end),
+            with: {
+              awards: true,
+            },
           });
       }
     }
@@ -43,6 +52,9 @@ export const getRounds = cache(
     return db.query.rounds.findMany({
       limit: input.max ?? undefined,
       orderBy: asc(rounds.end),
+      with: {
+        awards: true,
+      },
     });
   },
   ["rounds"],

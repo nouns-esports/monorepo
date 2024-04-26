@@ -9,6 +9,7 @@ import { usePrivy } from "@privy-io/react-auth";
 import { useAction } from "next-safe-action/hooks";
 import { castVotes } from "@/server/actions/castVotes";
 import toast from "react-hot-toast";
+import { User } from "@/server/queries/users";
 
 export default function Proposals(props: {
   round: string;
@@ -17,7 +18,7 @@ export default function Proposals(props: {
     title: string;
     markdown: ReactNode;
     images: string[];
-    user: string;
+    user: User;
     votes: number;
   }[];
   status: "voting" | "proposing" | "starting" | "ended";
@@ -36,7 +37,7 @@ export default function Proposals(props: {
   const { user } = usePrivy();
 
   const yourProposal = props.proposals.find(
-    (proposal) => proposal.user === user?.id
+    (proposal) => proposal.user.id === user?.id
   );
 
   const { execute, status } = useAction(castVotes, {
@@ -106,9 +107,9 @@ export default function Proposals(props: {
       <div className="flex flex-col gap-4">
         {props.proposals
           .toSorted((a, b) => {
-            if (a.user === user?.id && b.user !== user?.id) {
+            if (a.user.id === user?.id && b.user.id !== user?.id) {
               return -1;
-            } else if (b.user === user?.id && a.user !== user?.id) {
+            } else if (b.user.id === user?.id && a.user.id !== user?.id) {
               return 1;
             }
 
@@ -182,10 +183,17 @@ export default function Proposals(props: {
                   ) : (
                     ""
                   )}
-                  <div className="w-full flex flex-col">
+                  <div className="w-full flex flex-col gap-1">
                     <h4 className="text-2xl font-bebas-neue text-white">
                       {proposal.title}
                     </h4>
+                    <div className="flex gap-2 items-center hover:bg-grey pl-1 py-0.5 pr-2 -ml-1 -mt-1 rounded-full w-fit">
+                      <img
+                        src={proposal.user.pfp}
+                        className="w-5 h-5 rounded-full"
+                      />
+                      <p className="text-white">{proposal.user.name}</p>
+                    </div>
                     <div className="w-full overflow-hidden h-full">
                       {proposal.markdown}
                     </div>
@@ -202,7 +210,7 @@ export default function Proposals(props: {
                       <div className="flex flex-col items-center gap-2 w-14 flex-shrink-0">
                         <CaretUp
                           onClick={() => {
-                            if (proposal.user === user?.id) return;
+                            if (proposal.user.id === user?.id) return;
                             if (votesCast > 9) return;
                             setVotes({
                               ...votes,
@@ -213,7 +221,7 @@ export default function Proposals(props: {
                           }}
                           className={twMerge(
                             "w-5 h-5 text-lightgrey",
-                            proposal.user === user?.id
+                            proposal.user.id === user?.id
                               ? "pointer-events-none"
                               : "hover:text-white transition-colors"
                           )}
@@ -233,7 +241,7 @@ export default function Proposals(props: {
                         </p>
                         <CaretDown
                           onClick={() => {
-                            if (proposal.user === user?.id) return;
+                            if (proposal.user.id === user?.id) return;
                             if (
                               (votes[proposal.id] ? votes[proposal.id] : 0) < 1
                             )
@@ -245,7 +253,7 @@ export default function Proposals(props: {
                           }}
                           className={twMerge(
                             "w-5 h-5 text-lightgrey",
-                            proposal.user === user?.id
+                            proposal.user.id === user?.id
                               ? "pointer-events-none"
                               : "hover:text-white transition-colors"
                           )}
@@ -258,7 +266,7 @@ export default function Proposals(props: {
                   )}
                   <div className="absolute left-0 w-full bg-gradient-to-t from-darkgrey to-transparent h-10 bottom-0 z-10" />
                 </Link>
-                {proposal.user === user?.id ? (
+                {proposal.user.id === user?.id ? (
                   <div className="w-[calc(100%_-_128px)] h-[1px] bg-grey mx-16 my-2" />
                 ) : (
                   ""
@@ -266,6 +274,7 @@ export default function Proposals(props: {
               </div>
             );
           })}
+        {props.proposals.length < 1 ? <p>There are no proposals yet</p> : ""}
       </div>
     </div>
   );

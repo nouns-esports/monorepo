@@ -134,6 +134,34 @@
       "when": 1713899308007,
       "tag": "0018_shallow_johnny_blaze",
       "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "5",
+      "when": 1713901908140,
+      "tag": "0019_regular_jimmy_woo",
+      "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "5",
+      "when": 1713901922837,
+      "tag": "0020_steady_dazzler",
+      "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "5",
+      "when": 1714076229902,
+      "tag": "0021_moaning_kree",
+      "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "5",
+      "when": 1714136979461,
+      "tag": "0022_white_rocket_raccoon",
+      "breakpoints": true
     }
   ]
 }

@@ -1,8 +1,10 @@
 import Countdown from "@/components/Countdown";
 import Link from "@/components/Link";
 import Markdown from "@/components/Mardown";
-import { Round } from "@/db/schema";
+import { Award, Round, tokenList } from "@/db/schema";
 import { getRounds } from "@/server/queries/rounds";
+import { revalidateTag } from "next/cache";
+import { formatUnits } from "viem";
 
 export default async function Rounds() {
   const [activeRounds, upcomingRounds, endedRounds] = await Promise.all([
@@ -18,6 +20,7 @@ export default async function Rounds() {
         {activeRounds.map((round) => (
           <RoundCard key={round.id} round={round} />
         ))}
+        {activeRounds.length < 1 ? <p>There are no active rounds</p> : ""}
       </div>
       <div className="flex flex-col gap-4">
         <h2 className="text-white font-luckiest-guy text-3xl">
@@ -26,6 +29,7 @@ export default async function Rounds() {
         {upcomingRounds.map((round) => (
           <RoundCard key={round.id} round={round} />
         ))}
+        {upcomingRounds.length < 1 ? <p>There are no upcoming rounds</p> : ""}
       </div>
       <div className="flex flex-col gap-4">
         <h2 className="text-white font-luckiest-guy text-3xl">
@@ -39,12 +43,20 @@ export default async function Rounds() {
   );
 }
 
-function RoundCard(props: { round: Round }) {
+function RoundCard(props: { round: Round & { awards: Award[] } }) {
   const now = new Date().getTime();
 
   const roundStart = new Date(props.round.start).getTime();
   const votingStart = new Date(props.round.votingStart).getTime();
   const roundEnd = new Date(props.round.end ?? Infinity).getTime();
+
+  const tokens: Record<string, number> = {};
+
+  for (const award of props.round.awards) {
+    const [eip115, chainId, address, tokenId] = award.type.split(":");
+
+    tokens[address] = (tokens[address] ?? 0) + Number(award.value);
+  }
 
   return (
     <Link
@@ -101,7 +113,12 @@ function RoundCard(props: { round: Round }) {
           <div className="w-0.5 bg-grey h-full hidden max-sm:flex flex-shrink-0" />
           <div className="flex flex-col gap-2 items-center justify-center h-full max-sm:w-full">
             <p className="text-sm whitespace-nowrap">Total prizes</p>
-            <p className="text-white whitespace-nowrap">$1,000</p>
+            {Object.entries(tokens).map(([address, value], index) => (
+              <div key={index} className="flex gap-2 items-center text-white">
+                <img src={tokenList[address].image} className="w-4 h-4" />
+                {formatUnits(BigInt(value), tokenList[address].decimals)}
+              </div>
+            ))}
           </div>
         </div>
       </div>

@@ -1,11 +1,11 @@
 import Countdown from "@/components/Countdown";
 import Link from "@/components/Link";
 import { notFound } from "next/navigation";
-import { ArrowLeft } from "phosphor-react-sc";
+import { ArrowLeft, LinkSimple, Share, ShareFat } from "phosphor-react-sc";
 import AwardScroller from "@/components/AwardScroller";
 import Proposals from "@/components/Proposals";
 import Markdown from "@/components/Mardown";
-import { Vote } from "@/db/schema";
+import { Vote, tokenList } from "@/db/schema";
 import { twMerge } from "tailwind-merge";
 import { formatUnits } from "viem";
 import { getFrameMetadata } from "frog/next";
@@ -13,28 +13,7 @@ import type { Metadata } from "next";
 import { getRound } from "@/server/queries/rounds";
 import { getAwards } from "@/server/queries/awards";
 import { getProposals } from "@/server/queries/proposals";
-
-const tokenList: Record<
-  string,
-  { name: string; image: string; decimals: number }
-> = {
-  "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913": {
-    name: "USDC",
-    image: "https://cryptologos.cc/logos/usd-coin-usdc-logo.png",
-    decimals: 6,
-  },
-  "0xb15e3327351ea46ab314f809652076f9c37ece07": {
-    name: "Nouns Esports Builders",
-    image:
-      "https://i.seadn.io/s/raw/files/000d9574d11b6f6669c753729bb5adf0.png?auto=format&dpr=1&w=1000",
-    decimals: 0,
-  },
-  "0x0000000000000000000000000000000000000000": {
-    name: "ETH",
-    image: "https://cdn.worldvectorlogo.com/logos/ethereum-eth.svg",
-    decimals: 18,
-  },
-};
+import { getUser } from "@/server/queries/users";
 
 export async function generateMetadata(props: {
   params: { round: string };
@@ -72,6 +51,14 @@ export default async function Round(props: { params: { round: string } }) {
           ? "voting"
           : "ended";
 
+  const tokens: Record<string, number> = {};
+
+  for (const award of awards) {
+    const [eip115, chainId, address, tokenId] = award.type.split(":");
+
+    tokens[address] = (tokens[address] ?? 0) + Number(award.value);
+  }
+
   return (
     <div className="flex flex-col gap-4">
       <Link href={"/rounds"} className="text-red flex items-center gap-1 group">
@@ -86,9 +73,12 @@ export default async function Round(props: { params: { round: string } }) {
               className="w-full h-48 object-cover object-center max-sm:h-32"
             />
             <div className="flex flex-col gap-2 p-4">
-              <h2 className="w-full text-white font-luckiest-guy text-3xl">
-                {round.name}
-              </h2>
+              <div className="flex items-center w-full justify-between">
+                <h2 className="w-full text-white font-luckiest-guy text-3xl">
+                  {round.name}
+                </h2>
+                <LinkSimple className="w-5 h-5 text-red" />
+              </div>
               <div className="flex flex-col gap-2">
                 <Markdown markdown={round.description} style />
               </div>
@@ -125,7 +115,15 @@ export default async function Round(props: { params: { round: string } }) {
               </div>
               <div className="flex flex-col gap-2 items-center justify-center h-full bg-darkgrey rounded-xl overflow-hidden w-36 flex-shrink-0 max-md:w-full max-md:flex-shrink">
                 <p className="text-sm whitespace-nowrap">Total prizes</p>
-                <p className="text-white whitespace-nowrap">$1,000</p>
+                {Object.entries(tokens).map(([address, value], index) => (
+                  <div
+                    key={index}
+                    className="flex gap-2 items-center text-white"
+                  >
+                    <img src={tokenList[address].image} className="w-4 h-4" />
+                    {formatUnits(BigInt(value), tokenList[address].decimals)}
+                  </div>
+                ))}
               </div>
             </div>
             <div className="flex gap-6 items-center justify-center h-full bg-darkgrey rounded-xl overflow-hidden w-full p-4 pt-5">
@@ -186,23 +184,25 @@ export default async function Round(props: { params: { round: string } }) {
           </div>
         </div>
         <Proposals
-          proposals={proposals.map((proposal) => {
-            return {
-              id: proposal.id.toString(),
-              title: proposal.title,
-              markdown: <Markdown markdown={proposal.description} />,
-              images: (
-                proposal.description.match(/src="http[^"]*"/g) ?? []
-              ).map((image) => image.replace('src="', "").replace('"', "")),
-              user: proposal.user,
-              votes:
-                proposal.votes?.reduce(
-                  (totalVotes: number, currentVote: Vote) =>
-                    totalVotes + currentVote.count,
-                  0
-                ) ?? 0,
-            };
-          })}
+          proposals={await Promise.all(
+            proposals.map(async (proposal) => {
+              return {
+                id: proposal.id.toString(),
+                title: proposal.title,
+                markdown: <Markdown markdown={proposal.description} />,
+                images: (
+                  proposal.description.match(/src="http[^"]*"/g) ?? []
+                ).map((image) => image.replace('src="', "").replace('"', "")),
+                user: await getUser({ id: proposal.user }),
+                votes:
+                  proposal.votes?.reduce(
+                    (totalVotes: number, currentVote: Vote) =>
+                      totalVotes + currentVote.count,
+                    0
+                  ) ?? 0,
+              };
+            })
+          )}
           round={props.params.round}
           status={status}
         />

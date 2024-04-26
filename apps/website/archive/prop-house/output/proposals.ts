@@ -13,6 +13,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "1800000000",
     createdAt: new Date("2023-05-10T16:12:57.672Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Nouns ComShow: Marvel Snap",
@@ -23,6 +24,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "1000000000",
     createdAt: new Date("2023-05-15T13:20:14.664Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Proposal for The Noggles Cup - Fortnite Edition",
@@ -33,6 +35,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "1200000000",
     createdAt: new Date("2023-05-12T21:59:17.980Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "GEMS Cup: Women Division | Americas",
@@ -43,6 +46,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "1400000000",
     createdAt: new Date("2023-05-10T21:31:47.232Z"),
     hidden: false,
+    published: true,
   },
   {
     title:
@@ -54,6 +58,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "500000000",
     createdAt: new Date("2023-05-10T03:50:58.827Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Warehouse War 3 w/ Nouns Esports",
@@ -64,6 +69,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "1000000000",
     createdAt: new Date("2023-06-05T05:52:45.681Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Midwest Dota 2 League",
@@ -74,6 +80,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "1500000000",
     createdAt: new Date("2023-06-02T21:01:08.597Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "AMAesport MLBB tournament 2023",
@@ -84,6 +91,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "1000000000",
     createdAt: new Date("2023-06-04T11:01:44.036Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Warehouse War 3 w/ Nouns Esports",
@@ -94,6 +102,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "1000000000",
     createdAt: new Date("2023-06-14T04:23:51.660Z"),
     hidden: false,
+    published: true,
   },
   {
     title:
@@ -105,6 +114,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "500000000",
     createdAt: new Date("2023-06-27T07:38:33.867Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "LCA: Final Offensive League Sponsorship by Nouns",
@@ -115,6 +125,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "1500000000",
     createdAt: new Date("2023-07-04T19:23:02.658Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Nouns Esports Creator Map - Fortnite Tournament",
@@ -125,6 +136,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "1200000000",
     createdAt: new Date("2023-10-03T21:40:55.881Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Galint Melee Open 2023 & Nouns Esports",
@@ -135,6 +147,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "1750000000",
     createdAt: new Date("2023-10-02T22:22:00.885Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Save Santa Paws",
@@ -145,6 +158,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "2.5000000",
     createdAt: new Date("2023-11-14T02:17:28.823Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "ggQuest x The Machines Arena",
@@ -155,6 +169,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "2500000000",
     createdAt: new Date("2023-05-16T18:45:03.033Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "EUROPEAN HALO INFINITE PRO SERIES CIRCUIT",
@@ -165,6 +180,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "5000000000",
     createdAt: new Date("2023-05-12T18:07:05.671Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Warehouse War 3 w/ Nouns Esports",
@@ -175,6 +191,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "1000000000",
     createdAt: new Date("2023-07-30T09:58:04.569Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Proposal for The Noggles Cup - Fortnite Edition",
@@ -185,6 +202,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "800000000",
     createdAt: new Date("2023-08-01T06:24:00.357Z"),
     hidden: false,
+    published: true,
   },
   {
     title:
@@ -196,6 +214,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "null000000",
     createdAt: new Date("2023-05-10T19:49:22.069Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Phantoms Esports X Nouns Esports : Free Fire Winter Warzone 2023",
@@ -206,6 +225,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "400000000",
     createdAt: new Date("2023-11-10T16:50:15.627Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Midwest Dota 2 League LAN",
@@ -216,6 +236,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "1000000000",
     createdAt: new Date("2023-05-15T18:24:38.926Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "GEMS Cup: Women Division | Americas",
@@ -226,6 +247,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "1400000000",
     createdAt: new Date("2023-07-31T15:10:10.855Z"),
     hidden: false,
+    published: true,
   },
   // Compete
   {
@@ -237,6 +259,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "2950000000",
     createdAt: new Date("2023-05-10T02:49:32.555Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Nouns Esports NBA2K Team",
@@ -247,6 +270,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "450000000",
     createdAt: new Date("2023-05-11T12:40:12.394Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Content Sponsorship Collaboration with NOUN for 3xpGG",
@@ -257,6 +281,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "1500000000",
     createdAt: new Date("2023-05-11T16:18:07.156Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Nouns Esports Tekken 7 team",
@@ -267,6 +292,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "300000000",
     createdAt: new Date("2023-05-27T12:12:01.972Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Help me attend 3XP expo at Los angeles",
@@ -277,6 +303,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "1500000000",
     createdAt: new Date("2023-05-31T05:38:22.206Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Origins + Frosty @DreamHack Open ft. Fortnite - Sweden",
@@ -287,6 +314,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "3500000000",
     createdAt: new Date("2023-06-07T00:46:25.326Z"),
     hidden: false,
+    published: true,
   },
   {
     title:
@@ -298,6 +326,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "1000000000",
     createdAt: new Date("2023-06-04T06:51:58.346Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Go to EVO2023",
@@ -308,6 +337,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "1900000000",
     createdAt: new Date("2023-07-08T11:59:35.484Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Nouns Esports Farlight 84 Team",
@@ -318,6 +348,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "550000000",
     createdAt: new Date("2023-07-14T19:24:54.400Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Send Betty to EVO 2023",
@@ -328,6 +359,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "2300000000",
     createdAt: new Date("2023-07-10T04:53:53.015Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Send Betty to EVO 2023",
@@ -338,6 +370,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "2300000000",
     createdAt: new Date("2023-07-21T18:12:44.936Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Mojak - Circuito Estadual Fortnite",
@@ -348,6 +381,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "200000000",
     createdAt: new Date("2023-10-03T22:18:05.080Z"),
     hidden: false,
+    published: true,
   },
   {
     title:
@@ -359,6 +393,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "2826000000",
     createdAt: new Date("2023-11-09T23:10:32.727Z"),
     hidden: false,
+    published: true,
   },
   {
     title:
@@ -370,6 +405,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "800000000",
     createdAt: new Date("2023-11-05T07:24:02.499Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Theblender Competing in The TFT Las Vegas Open",
@@ -380,6 +416,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "1000000000",
     createdAt: new Date("2023-11-13T23:59:04.923Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Team Gosu qualified for the LAN of Apex Legends (New proposal)",
@@ -390,6 +427,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "3000000000",
     createdAt: new Date("2023-07-30T09:44:47.716Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Partnership Opportunity: Funding the Future of Esports - Dota 2",
@@ -400,6 +438,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "5000000000",
     createdAt: new Date("2023-05-11T03:29:20.428Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Nouns Esports NBA2K",
@@ -410,6 +449,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "1000000",
     createdAt: new Date("2023-12-08T20:21:11.328Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Team Gosu qualified for the LAN of Apex Legends (New proposal)",
@@ -420,6 +460,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "3000000000",
     createdAt: new Date("2023-05-11T21:33:56.852Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Origins + Frosty @DreamHack Open ft. Fortnite - Sweden",
@@ -430,6 +471,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "3500000000",
     createdAt: new Date("2023-07-31T14:36:26.557Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Theblender for TFT Las Vegas Open",
@@ -440,6 +482,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "1000000000",
     createdAt: new Date("2023-10-22T00:51:19.564Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Nouns at DPC SA tour 3",
@@ -450,6 +493,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "5000000000",
     createdAt: new Date("2023-05-11T00:42:26.854Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Brazilian top 100 Valorant Team",
@@ -460,6 +504,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "3000000000",
     createdAt: new Date("2023-05-24T18:25:22.521Z"),
     hidden: false,
+    published: true,
   },
   // Builders Build
   {
@@ -471,6 +516,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2023-12-08T04:30:17.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Nouns Esports Brasil - Highlights ⚡",
@@ -481,6 +527,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2023-12-13T20:06:33.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Hope I win!",
@@ -491,6 +538,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2023-12-10T15:31:07.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Bringing Web3 eSports Mainstream",
@@ -501,6 +549,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2023-12-10T17:26:38.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title:
@@ -512,6 +561,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2023-12-10T21:12:49.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Veel-Tark x Nouns Esports: A New Dimension in Team Strategy",
@@ -522,6 +572,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2023-12-11T20:11:39.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "From Bali to Beyond: Nouns Esports Player Manager NFT Proposal",
@@ -532,6 +583,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2023-12-11T23:54:43.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Nouns in our game!",
@@ -542,6 +594,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2023-12-12T14:45:59.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Nouns Art Contest 2024 Proposal",
@@ -552,6 +605,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2023-12-12T16:06:38.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Mini-Artisanals for Nouns Esports ",
@@ -562,6 +616,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2023-12-13T19:54:05.000Z"),
     hidden: false,
+    published: true,
   },
 
   // Genesis X
@@ -574,6 +629,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-01-17T00:56:17.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Vityee",
@@ -584,6 +640,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-01-20T14:51:30.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Colbol X Nouns at Genesis X",
@@ -594,6 +651,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-01-22T15:34:15.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Gorgi",
@@ -604,6 +662,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-01-22T18:16:54.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Falco",
@@ -613,6 +672,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-01-22T19:03:36.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Faust x Nouns for Genesis X",
@@ -623,6 +683,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-01-24T19:18:58.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Send NYC falco main Ant on first ever trip to the west coast",
@@ -633,6 +694,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-01-25T14:10:35.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "mvlvchi @ Genesis X WOULD BE ????",
@@ -643,6 +705,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-01-25T19:29:25.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "iLOVEBROOKLYN99 -> GENESIS X",
@@ -653,6 +716,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-01-25T20:39:53.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Fable",
@@ -663,6 +727,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-01-25T22:34:36.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "S2J to Genesis ( and other potential events)",
@@ -673,6 +738,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-01-26T22:17:17.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Let salami cook",
@@ -683,6 +749,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-01-17T00:56:17.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "chase for genesis",
@@ -693,6 +760,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-01-26T22:42:11.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "[Example] Aklo",
@@ -703,6 +771,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-01-17T01:08:50.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "TOP 100 & BLACK & NOT CISHET?!?! Affirmiate action wya?",
@@ -713,6 +782,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-01-17T01:36:24.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Smash's New Rising Star in videography, me Professor Kay",
@@ -723,6 +793,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-01-17T02:46:04.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: 'Max "maxi" Inzunza',
@@ -733,6 +804,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-01-17T04:10:43.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Salt",
@@ -743,6 +815,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-01-17T12:04:43.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "THE SCHMIXTAPE",
@@ -753,6 +826,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-01-17T14:43:52.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title:
@@ -764,6 +838,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-01-17T22:24:19.000Z"),
     hidden: false,
+    published: true,
   },
   // Gaming Art Contest
 
@@ -776,6 +851,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-11T02:06:59.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Reina of Nouns!",
@@ -786,6 +862,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-17T08:22:20.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "NOUNISH-MON??",
@@ -796,6 +873,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-17T13:25:22.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Reina of Nouns!",
@@ -806,6 +884,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-17T17:20:54.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Noun Fighter",
@@ -816,6 +895,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-17T19:46:55.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Gamer Quack",
@@ -826,6 +906,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-17T21:51:45.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Rare Item",
@@ -836,6 +917,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-18T03:55:12.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Nouns Esports Animated",
@@ -846,6 +928,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-18T06:32:19.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Entropy-  A Nouns Super Hero",
@@ -856,6 +939,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-18T06:59:34.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "WINNER WINNER CHICKEN DINNER!",
@@ -866,6 +950,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-18T07:01:31.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Together We Noun",
@@ -876,6 +961,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-12T06:37:27.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Nounsports",
@@ -886,6 +972,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-18T09:55:38.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: 'Art Design for "Aetherr: Birth of the Mystical Element" ',
@@ -896,6 +983,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-18T14:54:47.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "What is the game?",
@@ -906,6 +994,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-18T16:13:04.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Super Mario 3D Land and Room",
@@ -916,6 +1005,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-18T18:29:06.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Nouns Bandanoggles ⌐◨-◨",
@@ -926,6 +1016,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-18T18:29:44.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Reeling in the Nouns",
@@ -936,6 +1027,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-18T19:49:32.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Good Game, Nouns!",
@@ -946,6 +1038,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-18T22:26:04.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "NOUNS GAMING ",
@@ -956,6 +1049,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-18T23:15:59.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Nouns Sword ",
@@ -966,6 +1060,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-19T00:09:30.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "nouns esports ",
@@ -976,6 +1071,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-19T01:07:03.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Nouns Esports",
@@ -986,6 +1082,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-14T18:58:19.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Mavia ⌐◨-◨",
@@ -996,6 +1093,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-19T01:08:25.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Nouns Esports",
@@ -1006,6 +1104,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-19T01:10:47.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Heart of Gaming ",
@@ -1016,6 +1115,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-19T01:15:02.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Noun ・PókemonUnite",
@@ -1026,6 +1126,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-19T02:16:56.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "ATIRATH - Nounish Warrior",
@@ -1036,6 +1137,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-19T03:21:12.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Stand together",
@@ -1046,6 +1148,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-19T04:04:09.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Noun Gaming",
@@ -1056,6 +1159,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-19T04:51:30.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Watch out these Noggles!!",
@@ -1066,6 +1170,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-19T05:01:21.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "toward noun Esport ",
@@ -1076,6 +1181,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-19T05:11:51.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "nouns.good.grind",
@@ -1086,6 +1192,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-19T05:21:39.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "NOUNS [NFTrans] glitched Queens",
@@ -1096,6 +1203,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-15T19:54:31.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Indian witcher With Noggles",
@@ -1106,6 +1214,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-19T05:25:02.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Supportive people support people.",
@@ -1116,6 +1225,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-19T05:33:08.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Ready Player Nouns ⌐◨-◨",
@@ -1126,6 +1236,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-19T05:36:10.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Gotta Catch Them All",
@@ -1136,6 +1247,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-19T05:50:39.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "We all love these games. It's one of the treasure of our memories",
@@ -1146,6 +1258,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-19T05:51:48.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Steve rocking +999 ATK Noggles",
@@ -1156,6 +1269,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-19T05:56:00.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Gamer",
@@ -1166,6 +1280,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-16T02:54:28.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Minecraft & Nouns Esport",
@@ -1176,6 +1291,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-16T05:38:10.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Nouns GTA",
@@ -1186,6 +1302,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-16T05:44:01.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "RED DEAD REDEMPTION",
@@ -1196,6 +1313,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-16T05:48:41.000Z"),
     hidden: false,
+    published: true,
   },
 
   // Collision
@@ -1209,6 +1327,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-26T18:20:31.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "meleesadposts",
@@ -1219,6 +1338,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-27T23:04:28.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Salt X Nouns",
@@ -1229,6 +1349,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-28T21:38:16.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Salt X Nouns",
@@ -1239,6 +1360,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-29T05:33:08.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Salt X Nouns",
@@ -1249,6 +1371,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-02-29T05:39:16.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "ANT FOR NOUNS AT COLLISION",
@@ -1259,6 +1382,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-03-01T21:23:07.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Justus",
@@ -1269,6 +1393,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-03-02T00:50:38.000Z"),
     hidden: false,
+    published: true,
   },
 
   // Battle of bc
@@ -1281,6 +1406,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-03-09T19:16:35.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Slippi Part Timer Hits the Main Stage",
@@ -1291,6 +1417,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-03-15T12:07:52.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "(Paladin) I want to see if my practice is paying off!",
@@ -1301,6 +1428,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-03-09T20:31:23.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "meleesadposts",
@@ -1311,6 +1439,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-03-09T21:49:31.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "jaye 4 bobc",
@@ -1321,6 +1450,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-03-09T22:22:59.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Vote for CJ",
@@ -1331,6 +1461,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-03-09T23:20:54.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "hello i am spark.",
@@ -1341,6 +1472,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-03-10T12:29:38.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "give salami money",
@@ -1351,6 +1483,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-03-10T19:07:50.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title:
@@ -1362,6 +1495,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-03-11T13:30:46.000Z"),
     hidden: false,
+    published: true,
   },
   {
     title: "Get Wizzy to BOBC",
@@ -1372,6 +1506,7 @@ const proposals: Omit<Proposal, "id">[] = [
     value: "0",
     createdAt: new Date("2024-03-14T02:06:03.000Z"),
     hidden: false,
+    published: true,
   },
 ];
 

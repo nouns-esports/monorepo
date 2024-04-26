@@ -121,7 +121,7 @@ export function useAccount() {
   useEffect(() => {
     if (privyContext?.smartAccountClient?.account) {
       setAddress(privyContext.smartAccountClient.account.address);
-      execute({ id: privy?.id ?? "", pass: true });
+      // execute({ id: privy?.id ?? "", pass: true });
     }
   }, [privyContext]);
 

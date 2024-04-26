@@ -2,9 +2,11 @@ import Link from "@/components/Link";
 import dynamic from "next/dynamic";
 import { ArrowLeft } from "phosphor-react-sc";
 import { Suspense } from "react";
-import "@mdxeditor/editor/style.css";
+// import "@mdxeditor/editor/style.css";
 import { notFound } from "next/navigation";
 import { getRound } from "@/server/queries/rounds";
+import { getProposal } from "@/server/queries/proposals";
+// import MarkdownEditor from "@/components/MarkdownEditor";
 
 const MarkdownEditor = dynamic(() => import("@/components/MarkdownEditor"), {
   ssr: false,
@@ -16,6 +18,8 @@ export default async function Create(props: { params: { round: string } }) {
   if (!round) {
     return notFound();
   }
+
+  // const proposal = await getProposal ({ id: Number(props.params.id) });
 
   return (
     <div className="flex flex-col gap-4">
@@ -64,7 +68,6 @@ export default async function Create(props: { params: { round: string } }) {
           </div>
         </div>
       </div>
-
       <Suspense fallback={null}>
         <MarkdownEditor round={props.params.round} />
       </Suspense>
