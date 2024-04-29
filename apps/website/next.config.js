@@ -128,6 +128,11 @@ const nextConfig = {
       "permanent": true
     },
     {
+      "source": "/petertest",
+      "destination": "https://x.com/Peterpandam/status/1784331397437497838",
+      "permanent": true
+    },
+    {
       "source": "/party",
       "destination": "https://rooms.party.app/party/0x66eD9EF8434771A451D44609304dBf865B82A68a",
       "permanent": true
