@@ -162,6 +162,20 @@
       "when": 1714136979461,
       "tag": "0022_white_rocket_raccoon",
       "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "5",
+      "when": 1714408662210,
+      "tag": "0023_bored_scalphunter",
+      "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "5",
+      "when": 1714408699841,
+      "tag": "0024_glossy_malice",
+      "breakpoints": true
     }
   ]
 }

@@ -30,14 +30,14 @@ export default async function Create(props: { params: { round: string } }) {
         <ArrowLeft className="w-5 h-5 text-red group-hover:-translate-x-1 transition-transform" />
         Back to round
       </Link>
-      <div className="flex flex-col bg-darkgrey rounded-xl overflow-hidden">
+      <div className="flex flex-col bg-grey-800 rounded-xl overflow-hidden">
         <img
           src={round.image}
           className="w-full h-48 object-cover object-center"
         />
         <div className="flex flex-col gap-4 p-4">
           <div className="flex flex-col gap-1">
-            <p className="text-white/40 text-sm">Creating a proposal for</p>
+            <p className="text-grey-200 text-sm">Creating a proposal for</p>
             <h1 className="text-white font-luckiest-guy text-3xl">
               {round.name}
             </h1>
@@ -46,7 +46,7 @@ export default async function Create(props: { params: { round: string } }) {
             <h2 className="text-white font-semibold">
               Your proposal should include
             </h2>
-            <ul className="list-disc pl-6 text-white/40">
+            <ul className="list-disc pl-6 text-grey-200">
               <li>A detailed desciption of your background</li>
               <li>
                 A convincing argument as to why someone should vote for you
@@ -57,7 +57,7 @@ export default async function Create(props: { params: { round: string } }) {
             <h2 className="text-white font-semibold">
               How to increase your odds of being voted for
             </h2>
-            <ul className="list-disc pl-6 text-white/40">
+            <ul className="list-disc pl-6 text-grey-200">
               <li>Verify your identity with Farcaster</li>
               <li>Include images of you or your achivements</li>
               <li>

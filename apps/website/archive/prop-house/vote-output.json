@@ -1,128 +1,296 @@
 [
   {
-    "user": "0x87a0Dee820326C2CAcbB37F54FF849Db5fd3A5f9",
-    "round": "battle-of-bc-2024",
+    "user": "0x75640B1eB20E9473AD40Fcb600B016eefcAE2A7F",
+    "round": "pokemon-art-contest",
     "count": 1,
-    "timestamp": "2024-03-17T06:57:59.000Z"
-  },
-  {
-    "user": "0x51C6b737C1ef6d06733A1F48924fDe1BE57337F1",
-    "round": "battle-of-bc-2024",
-    "count": 4,
-    "timestamp": "2024-03-17T23:21:43.000Z"
-  },
-  {
-    "user": "0x2bEa6FB8d74B8bA8A79ee8339FBEd293dB9C4277",
-    "round": "battle-of-bc-2024",
-    "count": 8,
-    "timestamp": "2024-03-18T22:41:45.000Z"
-  },
-  {
-    "user": "0xE3f27DEFf96fe178e87559F36Cbf868B9E75967D",
-    "round": "battle-of-bc-2024",
-    "count": 5,
-    "timestamp": "2024-03-18T22:50:18.000Z"
-  },
-  {
-    "user": "0x91dCCAA260CC4616E1a6e6b693DB7207C5E42937",
-    "round": "battle-of-bc-2024",
-    "count": 10,
-    "timestamp": "2024-03-18T22:38:56.000Z"
-  },
-  {
-    "user": "0xa87Daa2Bc3bd0eCca4C9111776BAB2c9d44D6c6B",
-    "round": "battle-of-bc-2024",
-    "count": 10,
-    "timestamp": "2024-03-18T22:44:54.000Z"
+    "timestamp": "2024-04-16T04:04:18.000Z",
+    "proposal": 159
   },
   {
     "user": "0xE3ff24a97BFB65CAdEF30F6Ad19a6EA7E6F6149d",
-    "round": "battle-of-bc-2024",
+    "round": "pokemon-art-contest",
+    "count": 1,
+    "timestamp": "2024-04-12T17:54:36.000Z",
+    "proposal": 160
+  },
+  {
+    "user": "0xd75cCA4D0CC46bf0D3A5dc9cC40d133d80A6F322",
+    "round": "pokemon-art-contest",
+    "count": 1,
+    "timestamp": "2024-04-12T17:58:59.000Z",
+    "proposal": 160
+  },
+  {
+    "user": "0xE3ff24a97BFB65CAdEF30F6Ad19a6EA7E6F6149d",
+    "round": "pokemon-art-contest",
+    "count": 1,
+    "timestamp": "2024-04-12T17:54:36.000Z",
+    "proposal": 161
+  },
+  {
+    "user": "0xE3ff24a97BFB65CAdEF30F6Ad19a6EA7E6F6149d",
+    "round": "pokemon-art-contest",
+    "count": 1,
+    "timestamp": "2024-04-12T17:54:36.000Z",
+    "proposal": 166
+  },
+  {
+    "user": "0x51C6b737C1ef6d06733A1F48924fDe1BE57337F1",
+    "round": "pokemon-art-contest",
+    "count": 1,
+    "timestamp": "2024-04-15T18:27:07.000Z",
+    "proposal": 166
+  },
+  {
+    "user": "0x87a0Dee820326C2CAcbB37F54FF849Db5fd3A5f9",
+    "round": "pokemon-art-contest",
     "count": 2,
-    "timestamp": "2024-03-16T23:41:41.000Z"
+    "timestamp": "2024-04-12T18:57:10.000Z",
+    "proposal": 166
+  },
+  {
+    "user": "0xd75cCA4D0CC46bf0D3A5dc9cC40d133d80A6F322",
+    "round": "pokemon-art-contest",
+    "count": 1,
+    "timestamp": "2024-04-12T17:58:59.000Z",
+    "proposal": 166
+  },
+  {
+    "user": "0x75640B1eB20E9473AD40Fcb600B016eefcAE2A7F",
+    "round": "pokemon-art-contest",
+    "count": 8,
+    "timestamp": "2024-04-16T04:04:18.000Z",
+    "proposal": 166
   },
   {
     "user": "0x2993284dd36A836f0d83856c2b4586C6Daf008EC",
-    "round": "battle-of-bc-2024",
-    "count": 10,
-    "timestamp": "2024-03-18T16:46:46.000Z"
+    "round": "pokemon-art-contest",
+    "count": 1,
+    "timestamp": "2024-04-14T15:54:22.000Z",
+    "proposal": 166
   },
   {
-    "user": "0x87a0Dee820326C2CAcbB37F54FF849Db5fd3A5f9",
-    "round": "battle-of-bc-2024",
-    "count": 2,
-    "timestamp": "2024-03-17T06:57:59.000Z"
+    "user": "0xc7E49b53671A36323256380Ad4beD5FDc90842Fe",
+    "round": "pokemon-art-contest",
+    "count": 1,
+    "timestamp": "2024-04-15T18:27:07.000Z",
+    "proposal": 166
   },
   {
     "user": "0xE3ff24a97BFB65CAdEF30F6Ad19a6EA7E6F6149d",
-    "round": "battle-of-bc-2024",
-    "count": 5,
-    "timestamp": "2024-03-18T16:55:50.000Z"
-  },
-  {
-    "user": "0x75640B1eB20E9473AD40Fcb600B016eefcAE2A7F",
-    "round": "battle-of-bc-2024",
-    "count": 5,
-    "timestamp": "2024-03-17T18:51:34.000Z"
-  },
-  {
-    "user": "0x2666f0C8FB58d182f2Dd79475DCA4A07B3724607",
-    "round": "battle-of-bc-2024",
-    "count": 10,
-    "timestamp": "2024-03-18T22:38:40.000Z"
-  },
-  {
-    "user": "0xE3f27DEFf96fe178e87559F36Cbf868B9E75967D",
-    "round": "battle-of-bc-2024",
-    "count": 5,
-    "timestamp": "2024-03-18T22:50:18.000Z"
-  },
-  {
-    "user": "0x75640B1eB20E9473AD40Fcb600B016eefcAE2A7F",
-    "round": "battle-of-bc-2024",
-    "count": 5,
-    "timestamp": "2024-03-18T18:01:22.000Z"
-  },
-  {
-    "user": "0x3f9413E785020f3B37A838A1E5a72Ba81CA7F514",
-    "round": "battle-of-bc-2024",
-    "count": 10,
-    "timestamp": "2024-03-18T22:38:40.000Z"
-  },
-  {
-    "user": "0x87a0Dee820326C2CAcbB37F54FF849Db5fd3A5f9",
-    "round": "battle-of-bc-2024",
+    "round": "pokemon-art-contest",
     "count": 1,
-    "timestamp": "2024-03-17T06:57:59.000Z"
+    "timestamp": "2024-04-12T17:54:36.000Z",
+    "proposal": 167
   },
   {
     "user": "0x51C6b737C1ef6d06733A1F48924fDe1BE57337F1",
-    "round": "battle-of-bc-2024",
-    "count": 6,
-    "timestamp": "2024-03-17T23:21:43.000Z"
-  },
-  {
-    "user": "0x2bEa6FB8d74B8bA8A79ee8339FBEd293dB9C4277",
-    "round": "battle-of-bc-2024",
+    "round": "pokemon-art-contest",
     "count": 2,
-    "timestamp": "2024-03-18T22:41:45.000Z"
-  },
-  {
-    "user": "0xE3ff24a97BFB65CAdEF30F6Ad19a6EA7E6F6149d",
-    "round": "battle-of-bc-2024",
-    "count": 1,
-    "timestamp": "2024-03-16T23:41:41.000Z"
+    "timestamp": "2024-04-15T18:27:07.000Z",
+    "proposal": 167
   },
   {
     "user": "0x87a0Dee820326C2CAcbB37F54FF849Db5fd3A5f9",
-    "round": "battle-of-bc-2024",
-    "count": 6,
-    "timestamp": "2024-03-17T06:57:59.000Z"
+    "round": "pokemon-art-contest",
+    "count": 1,
+    "timestamp": "2024-04-12T18:57:10.000Z",
+    "proposal": 167
+  },
+  {
+    "user": "0x2993284dd36A836f0d83856c2b4586C6Daf008EC",
+    "round": "pokemon-art-contest",
+    "count": 5,
+    "timestamp": "2024-04-14T15:54:22.000Z",
+    "proposal": 167
+  },
+  {
+    "user": "0xc7E49b53671A36323256380Ad4beD5FDc90842Fe",
+    "round": "pokemon-art-contest",
+    "count": 3,
+    "timestamp": "2024-04-15T18:27:07.000Z",
+    "proposal": 167
   },
   {
     "user": "0xE3ff24a97BFB65CAdEF30F6Ad19a6EA7E6F6149d",
-    "round": "battle-of-bc-2024",
+    "round": "pokemon-art-contest",
     "count": 2,
-    "timestamp": "2024-03-18T16:55:50.000Z"
+    "timestamp": "2024-04-12T17:54:36.000Z",
+    "proposal": 168
+  },
+  {
+    "user": "0x51C6b737C1ef6d06733A1F48924fDe1BE57337F1",
+    "round": "pokemon-art-contest",
+    "count": 2,
+    "timestamp": "2024-04-15T18:27:07.000Z",
+    "proposal": 168
+  },
+  {
+    "user": "0xa87Daa2Bc3bd0eCca4C9111776BAB2c9d44D6c6B",
+    "round": "pokemon-art-contest",
+    "count": 1,
+    "timestamp": "2024-04-13T19:43:09.000Z",
+    "proposal": 168
+  },
+  {
+    "user": "0x87a0Dee820326C2CAcbB37F54FF849Db5fd3A5f9",
+    "round": "pokemon-art-contest",
+    "count": 2,
+    "timestamp": "2024-04-12T18:57:10.000Z",
+    "proposal": 168
+  },
+  {
+    "user": "0xd75cCA4D0CC46bf0D3A5dc9cC40d133d80A6F322",
+    "round": "pokemon-art-contest",
+    "count": 1,
+    "timestamp": "2024-04-12T17:58:59.000Z",
+    "proposal": 168
+  },
+  {
+    "user": "0x2993284dd36A836f0d83856c2b4586C6Daf008EC",
+    "round": "pokemon-art-contest",
+    "count": 1,
+    "timestamp": "2024-04-14T15:54:22.000Z",
+    "proposal": 168
+  },
+  {
+    "user": "0xd75cCA4D0CC46bf0D3A5dc9cC40d133d80A6F322",
+    "round": "pokemon-art-contest",
+    "count": 1,
+    "timestamp": "2024-04-12T17:50:10.000Z",
+    "proposal": 169
+  },
+  {
+    "user": "0xE3ff24a97BFB65CAdEF30F6Ad19a6EA7E6F6149d",
+    "round": "pokemon-art-contest",
+    "count": 1,
+    "timestamp": "2024-04-12T17:54:36.000Z",
+    "proposal": 173
+  },
+  {
+    "user": "0x51C6b737C1ef6d06733A1F48924fDe1BE57337F1",
+    "round": "pokemon-art-contest",
+    "count": 1,
+    "timestamp": "2024-04-15T18:27:07.000Z",
+    "proposal": 173
+  },
+  {
+    "user": "0xd75cCA4D0CC46bf0D3A5dc9cC40d133d80A6F322",
+    "round": "pokemon-art-contest",
+    "count": 2,
+    "timestamp": "2024-04-12T17:58:59.000Z",
+    "proposal": 173
+  },
+  {
+    "user": "0x2993284dd36A836f0d83856c2b4586C6Daf008EC",
+    "round": "pokemon-art-contest",
+    "count": 1,
+    "timestamp": "2024-04-14T15:54:22.000Z",
+    "proposal": 173
+  },
+  {
+    "user": "0xE3ff24a97BFB65CAdEF30F6Ad19a6EA7E6F6149d",
+    "round": "pokemon-art-contest",
+    "count": 1,
+    "timestamp": "2024-04-12T17:54:36.000Z",
+    "proposal": 175
+  },
+  {
+    "user": "0x51C6b737C1ef6d06733A1F48924fDe1BE57337F1",
+    "round": "pokemon-art-contest",
+    "count": 2,
+    "timestamp": "2024-04-15T18:27:07.000Z",
+    "proposal": 175
+  },
+  {
+    "user": "0x87a0Dee820326C2CAcbB37F54FF849Db5fd3A5f9",
+    "round": "pokemon-art-contest",
+    "count": 1,
+    "timestamp": "2024-04-12T18:57:10.000Z",
+    "proposal": 175
+  },
+  {
+    "user": "0xa87Daa2Bc3bd0eCca4C9111776BAB2c9d44D6c6B",
+    "round": "pokemon-art-contest",
+    "count": 9,
+    "timestamp": "2024-04-15T17:41:19.000Z",
+    "proposal": 175
+  },
+  {
+    "user": "0xd75cCA4D0CC46bf0D3A5dc9cC40d133d80A6F322",
+    "round": "pokemon-art-contest",
+    "count": 1,
+    "timestamp": "2024-04-12T17:58:59.000Z",
+    "proposal": 175
+  },
+  {
+    "user": "0xc7E49b53671A36323256380Ad4beD5FDc90842Fe",
+    "round": "pokemon-art-contest",
+    "count": 3,
+    "timestamp": "2024-04-15T18:27:07.000Z",
+    "proposal": 175
+  },
+  {
+    "user": "0xE3ff24a97BFB65CAdEF30F6Ad19a6EA7E6F6149d",
+    "round": "pokemon-art-contest",
+    "count": 2,
+    "timestamp": "2024-04-12T17:54:36.000Z",
+    "proposal": 177
+  },
+  {
+    "user": "0x51C6b737C1ef6d06733A1F48924fDe1BE57337F1",
+    "round": "pokemon-art-contest",
+    "count": 2,
+    "timestamp": "2024-04-15T18:27:07.000Z",
+    "proposal": 177
+  },
+  {
+    "user": "0x87a0Dee820326C2CAcbB37F54FF849Db5fd3A5f9",
+    "round": "pokemon-art-contest",
+    "count": 1,
+    "timestamp": "2024-04-12T18:57:10.000Z",
+    "proposal": 177
+  },
+  {
+    "user": "0xd75cCA4D0CC46bf0D3A5dc9cC40d133d80A6F322",
+    "round": "pokemon-art-contest",
+    "count": 2,
+    "timestamp": "2024-04-12T17:58:59.000Z",
+    "proposal": 177
+  },
+  {
+    "user": "0x75640B1eB20E9473AD40Fcb600B016eefcAE2A7F",
+    "round": "pokemon-art-contest",
+    "count": 1,
+    "timestamp": "2024-04-16T04:04:18.000Z",
+    "proposal": 177
+  },
+  {
+    "user": "0x2993284dd36A836f0d83856c2b4586C6Daf008EC",
+    "round": "pokemon-art-contest",
+    "count": 1,
+    "timestamp": "2024-04-14T15:54:22.000Z",
+    "proposal": 177
+  },
+  {
+    "user": "0xc7E49b53671A36323256380Ad4beD5FDc90842Fe",
+    "round": "pokemon-art-contest",
+    "count": 3,
+    "timestamp": "2024-04-15T18:27:07.000Z",
+    "proposal": 177
+  },
+  {
+    "user": "0x87a0Dee820326C2CAcbB37F54FF849Db5fd3A5f9",
+    "round": "pokemon-art-contest",
+    "count": 3,
+    "timestamp": "2024-04-12T18:57:10.000Z",
+    "proposal": 178
+  },
+  {
+    "user": "0x2993284dd36A836f0d83856c2b4586C6Daf008EC",
+    "round": "pokemon-art-contest",
+    "count": 1,
+    "timestamp": "2024-04-14T15:54:22.000Z",
+    "proposal": 178
   }
 ]

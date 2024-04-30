@@ -13,7 +13,7 @@ export default function Profile() {
             onClick={() => {
               logout();
             }}
-            className="flex gap-6 p-6 w-full rounded-xl bg-darkgrey"
+            className="flex gap-6 p-6 w-full rounded-xl bg-grey-800"
           >
             <img
               src={user.farcaster.pfp ?? ""}
@@ -25,7 +25,7 @@ export default function Profile() {
                   <h1 className="text-white font-semibold text-lg leading-none">
                     {user.farcaster.displayName}
                   </h1>
-                  <p className="text-lightgrey">@{user.farcaster.username}</p>
+                  <p className="text-grey-400">@{user.farcaster.username}</p>
                 </div>
                 <div>
                   <Button

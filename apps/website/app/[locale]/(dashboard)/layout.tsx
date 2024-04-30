@@ -38,7 +38,7 @@ export default async function DashboardLayout(props: {
           </div>
           <Link
             href="/discord"
-            className="relative h-40 w-80 bg-darkgrey rounded-xl overflow-hidden"
+            className="relative h-40 w-80 bg-grey-800 rounded-xl overflow-hidden"
           >
             <img
               src="/prop.webp"

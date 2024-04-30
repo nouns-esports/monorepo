@@ -67,7 +67,7 @@ export default async function Round(props: { params: { round: string } }) {
       </Link>
       <div className="flex flex-col gap-8">
         <div className="flex flex-col gap-4">
-          <div className="bg-darkgrey rounded-xl overflow-hidden">
+          <div className="bg-grey-800 rounded-xl overflow-hidden">
             <img
               src={round.image}
               className="w-full h-48 object-cover object-center max-sm:h-32"
@@ -80,13 +80,13 @@ export default async function Round(props: { params: { round: string } }) {
                 <LinkSimple className="w-5 h-5 text-red" />
               </div>
               <div className="flex flex-col gap-2">
-                <Markdown markdown={round.description} style />
+                <Markdown markdown={round.description} readOnly />
               </div>
             </div>
           </div>
           <div className="flex gap-4 w-full h-fit max-md:flex-col">
             <div className="flex gap-4 max-md:w-full">
-              <div className="flex flex-col gap-2 items-center justify-center bg-darkgrey rounded-xl overflow-hidden min-w-36 p-4 flex-shrink-0 max-md:w-full max-md:flex-shrink">
+              <div className="flex flex-col gap-2 items-center justify-center bg-grey-800 rounded-xl overflow-hidden min-w-36 p-4 flex-shrink-0 max-md:w-full max-md:flex-shrink">
                 <p className="text-sm whitespace-nowrap">
                   {status === "starting" ? "Round starts" : ""}
                   {status === "proposing" ? "Proposing ends" : ""}
@@ -113,20 +113,23 @@ export default async function Round(props: { params: { round: string } }) {
                   )}
                 </p>
               </div>
-              <div className="flex flex-col gap-2 items-center justify-center h-full bg-darkgrey rounded-xl overflow-hidden w-36 flex-shrink-0 max-md:w-full max-md:flex-shrink">
+              <div className="flex flex-col gap-2 items-center justify-center h-full bg-grey-800 rounded-xl overflow-hidden w-36 flex-shrink-0 max-md:w-full max-md:flex-shrink">
                 <p className="text-sm whitespace-nowrap">Total prizes</p>
                 {Object.entries(tokens).map(([address, value], index) => (
                   <div
                     key={index}
                     className="flex gap-2 items-center text-white"
                   >
-                    <img src={tokenList[address].image} className="w-4 h-4" />
+                    <img
+                      src={tokenList[address].image}
+                      className="w-4 h-4 rounded-[4px]"
+                    />
                     {formatUnits(BigInt(value), tokenList[address].decimals)}
                   </div>
                 ))}
               </div>
             </div>
-            <div className="flex gap-6 items-center justify-center h-full bg-darkgrey rounded-xl overflow-hidden w-full p-4 pt-5">
+            <div className="flex gap-6 items-center justify-center h-full bg-grey-800 rounded-xl overflow-hidden w-full p-4 pt-5">
               <div className="flex flex-col gap-2 items-center pl-4 pr-2">
                 <div className="flex flex-col gap-1 items-center">
                   <p className="text-sm whitespace-nowrap">Awards</p>
@@ -136,7 +139,7 @@ export default async function Round(props: { params: { round: string } }) {
                 </div>
                 <AwardScroller />
               </div>
-              <div className="bg-grey h-full w-[1px]" />
+              <div className="bg-grey-600 h-full w-[1px]" />
               <div
                 id="awards"
                 className="w-full flex gap-4 overflow-x-scroll scrollbar-hidden pt-3 -mt-3 scroll-smooth"
@@ -152,18 +155,18 @@ export default async function Round(props: { params: { round: string } }) {
                     return (
                       <div
                         key={index}
-                        className="relative flex flex-col items-center flex-shrink-0 gap-2 border-grey border rounded-xl p-2 px-4"
+                        className="relative flex flex-col items-center flex-shrink-0 gap-2 border-grey-600 border rounded-xl p-2 px-4"
                       >
                         <img
                           src={token.image}
-                          className="w-7 h-7 rounded-full object-cover object-center"
+                          className="w-7 h-7 rounded-md object-cover object-center"
                         />
                         <p className="text-white whitespace-nowrap text-sm">
                           {formatUnits(BigInt(award.value), token.decimals)}
                         </p>
                         <div
                           className={twMerge(
-                            "absolute -top-3 -right-3 rounded-full bg-grey font-bold text-white text-xs flex items-center justify-center w-7 h-7",
+                            "absolute -top-3 -right-3 rounded-full bg-grey-600 font-bold text-white text-xs flex items-center justify-center w-7 h-7",
                             index === 0 && "bg-gold-500 text-gold-900",
                             index === 1 && "bg-silver-500 text-silver-900",
                             index === 2 && "bg-bronze-500 text-bronze-900"
@@ -186,13 +189,30 @@ export default async function Round(props: { params: { round: string } }) {
         <Proposals
           proposals={await Promise.all(
             proposals.map(async (proposal) => {
+              let description = "";
+              let images: string[] = [];
+
+              function traverse(node: any) {
+                for (const child of node.children) {
+                  if (description.length < 300 && child.type === "text") {
+                    description += `${child.text} `;
+                  }
+
+                  if (child.type === "image") {
+                    images.push(child.src);
+                  }
+
+                  if (child.children) traverse(child);
+                }
+              }
+
+              traverse(JSON.parse(proposal.description));
+
               return {
                 id: proposal.id.toString(),
                 title: proposal.title,
-                markdown: <Markdown markdown={proposal.description} />,
-                images: (
-                  proposal.description.match(/src="http[^"]*"/g) ?? []
-                ).map((image) => image.replace('src="', "").replace('"', "")),
+                markdown: description,
+                images,
                 user: await getUser({ id: proposal.user }),
                 votes:
                   proposal.votes?.reduce(

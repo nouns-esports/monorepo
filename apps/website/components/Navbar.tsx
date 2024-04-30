@@ -32,7 +32,7 @@ export default function Navbar() {
   return (
     <>
       <NavigationMenu.Root className="pointer-events-auto">
-        <NavigationMenu.List className="flex items-center bg-black border-darkgrey border rounded-full p-1.5 max-sm:p-1 z-50">
+        <NavigationMenu.List className="flex items-center bg-black border-grey-800 border rounded-full p-1.5 max-sm:p-1 z-50">
           <NavGroup title="Explore">
             <NavGroupItem href={`/${params.locale}/rounds`} icon="⌛">
               Rounds
@@ -98,7 +98,7 @@ export default function Navbar() {
         className="bg-black left-0 top-0 w-full h-screen absolute -z-10 pt-24 p-4 flex flex-col gap-8"
       >
         {/* <Link
-          className="bg-darkgrey rounded-lg w-full min-h-40 overflow-hidden relative"
+          className="bg-grey-800 rounded-lg w-full min-h-40 overflow-hidden relative"
           href="/pass"
         >
           <img src="/pass.webp" alt="" className="w-full h-full object-cover" />
@@ -188,7 +188,7 @@ function NavGroup(props: { title: string; children: React.ReactNode }) {
       <NavigationMenu.Trigger className=" hover:bg-white/5  text-white/30 px-4 rounded-full hover:text-white h-full transition-colors">
         {props.title}
       </NavigationMenu.Trigger>
-      <NavigationMenu.Content className="absolute top-[60px] bg-black drop-shadow-lg border border-darkgrey rounded-xl py-4 px-6">
+      <NavigationMenu.Content className="absolute top-[60px] bg-black drop-shadow-lg border border-grey-800 rounded-xl py-4 px-6">
         <NavigationMenu.Sub>
           <NavigationMenu.List className="flex flex-col gap-2">
             {props.children}

@@ -23,7 +23,7 @@ export default function SignInButton() {
         paddingLeft: connected ? "6px" : "16px",
         paddingRight: connected ? "14px" : "16px",
       }}
-      className="flex items-center gap-2 select-none text-darkgrey py-1.5 pl-1.5 pr-3.5 text-xl bg-white hover:bg-white/80 transition-colors rounded-full justify-center leading-none font-bebas-neue whitespace-nowrap"
+      className="flex items-center gap-2 select-none text-grey-800 py-1.5 pl-1.5 pr-3.5 text-xl bg-white hover:bg-white/80 transition-colors rounded-full justify-center leading-none font-bebas-neue whitespace-nowrap"
     >
       {connected ? (
         <>

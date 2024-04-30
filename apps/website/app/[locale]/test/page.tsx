@@ -1,4 +1,4 @@
-import { Proposal, Vote, db, proposals as proposalsTable } from "@/db/schema";
+import { Vote, db, proposals as proposalsTable } from "@/db/schema";
 import { and, eq } from "drizzle-orm";
 import fs from "fs";
 
@@ -274,24 +274,12 @@ const data = [
   },
 ] as const;
 
-const proposals: Omit<Proposal, "id">[] = [];
 const votes: Omit<Vote, "id">[] = [];
 
-const round = "evo-japan-2024";
+const round = "pokemon-art-contest";
 
-async function getStuff() {
+export default async function Test() {
   for (const p of data) {
-    proposals.push({
-      title: p.title,
-      user: p.proposer.id,
-      round,
-      description: p.body,
-      value: `0`,
-      createdAt: new Date(p.receivedAt * 1000),
-      hidden: false,
-      published: true,
-    });
-
     const proposalId = await db.query.proposals.findFirst({
       where: and(
         eq(proposalsTable.round, round),
@@ -317,19 +305,7 @@ async function getStuff() {
   }
 
   fs.writeFile(
-    "./apps/website/archive/prop-house/proposal-output.json",
-    JSON.stringify(proposals),
-    (err) => {
-      if (err) {
-        console.error("An error occurred:", err);
-        return;
-      }
-      console.log("Data successfully written to output.json");
-    }
-  );
-
-  fs.writeFile(
-    "./apps/website/archive/prop-house/vote-output.json",
+    "./archive/prop-house/vote-output.json",
     JSON.stringify(votes),
     (err) => {
       if (err) {
@@ -339,6 +315,6 @@ async function getStuff() {
       console.log("Data successfully written to output.json");
     }
   );
-}
 
-getStuff();
+  return <div></div>;
+}

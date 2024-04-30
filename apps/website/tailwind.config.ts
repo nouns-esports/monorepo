@@ -22,9 +22,13 @@ const config: Config = {
       green: "#4CC87D",
       yellow: "#F8C648",
       transparent: "transparent",
-      lightgrey: "#454647",
-      grey: "#1C1C1C",
-      darkgrey: "#0C0C0C",
+      grey: {
+        200: "#808080",
+        400: "#4D4D4D",
+        500: "#333333",
+        600: "#1A1A1A",
+        800: "#0C0C0C",
+      },
       gold: {
         500: "#EEAF36",
         900: "#664300",

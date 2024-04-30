@@ -10,11 +10,11 @@ export default function DashboardNavigation() {
     <NavigationMenu.Root className="sticky top-28 max-sm:top-20 max-lg:flex hidden">
       <NavigationMenu.List>
         <NavigationMenu.Item>
-          <NavigationMenu.Trigger className="border border-darkgrey bg-black rounded-lg h-10 text-white flex w-[calc(100vw_-_64px)] max-sm:w-[calc(100vw_-_32px)] justify-between items-center px-4">
+          <NavigationMenu.Trigger className="border border-grey-800 bg-black rounded-lg h-10 text-white flex w-[calc(100vw_-_64px)] max-sm:w-[calc(100vw_-_32px)] justify-between items-center px-4">
             Dashboard
             <CaretDown className="w-5 h-5 text-white" />
           </NavigationMenu.Trigger>
-          <NavigationMenu.Content className="border border-darkgrey bg-black rounded-lg absolute left-0 w-[calc(100vw_-_32px)] mt-2 flex flex-col gap-4 p-4">
+          <NavigationMenu.Content className="border border-grey-800 bg-black rounded-lg absolute left-0 w-[calc(100vw_-_32px)] mt-2 flex flex-col gap-4 p-4">
             <ul className="flex flex-col gap-1">
               {/* <NavItem href="/dashboard">Dashboard</NavItem> */}
               <NavItem href="/rounds">Rounds</NavItem>
@@ -76,7 +76,7 @@ function GameIcon(props: { src: string; href: string }) {
     <NavigationMenu.Link className="group" asChild>
       <Link
         href={props.href}
-        className="w-full aspect-square rounded-lg p-1 border border-grey"
+        className="w-full aspect-square rounded-lg p-1 border border-grey-600"
       >
         <img
           className="w-full h-full object-cover object-center rounded-full"

@@ -13,7 +13,7 @@ import { usePathname } from "next/navigation";
 export default function Sidebar() {
   return (
     <>
-      <ul className="flex flex-col gap-2 bg-darkgrey p-4 rounded-xl">
+      <ul className="flex flex-col gap-2 bg-grey-800 p-4 rounded-xl">
         <Button
           route="/rounds"
           icon={<Trophy className="w-5 h-5 text-white" weight="fill" />}
@@ -41,7 +41,7 @@ export default function Sidebar() {
           Profile
         </Button>
       </ul>
-      <div className="flex flex-col gap-2 bg-darkgrey p-4 rounded-xl">
+      <div className="flex flex-col gap-2 bg-grey-800 p-4 rounded-xl">
         <h2 className="font-bebas-neue text-xl text-white">Discussion</h2>
         <ul className="flex flex-col gap-2">
           <Button

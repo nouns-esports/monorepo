@@ -24,7 +24,7 @@ export default function TextInput(props: {
         onBlur={props.onBlur}
         placeholder={props.placeholder}
         className={twMerge(
-          "bg-darkgrey rounded-xl text-white placeholder-lightgrey py-2 px-3 outline-none border-grey border-[1px]",
+          "bg-grey-800 rounded-xl text-white placeholder-grey-400 py-2 px-3 outline-none border-grey-600 border-[1px]",
           props.small ? "w-40" : "w-full"
         )}
       />

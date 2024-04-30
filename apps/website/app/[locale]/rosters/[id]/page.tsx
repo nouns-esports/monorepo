@@ -154,7 +154,7 @@ function RosterCard(props: { person: Talent; game: Game; count: number }) {
           {props.person.role}
         </p>
       </div>
-      <div className="absolute h-full w-full bg-darkgrey rounded-[0.6rem] group-hover:opacity-0 opacity-1 max-lg:opacity-0 transition-opacity" />
+      <div className="absolute h-full w-full bg-grey-800 rounded-[0.6rem] group-hover:opacity-0 opacity-1 max-lg:opacity-0 transition-opacity" />
     </Link>
   );
 }

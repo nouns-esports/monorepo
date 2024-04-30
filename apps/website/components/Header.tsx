@@ -18,9 +18,9 @@ export default async function Header(props: { locale: string }) {
               className="pointer-events-auto flex gap-4 max-sm:gap-3 group items-center cursor-pointer select-none"
             >
               <Logo className="group-hover:rotate-[14deg] w-12 max-sm:w-10 transition-transform duration-150" />
-              <p className="text-white font-luckiest-guy text-4xl max-sm:text-3xl select-none">
+              <div className="text-white font-luckiest-guy text-4xl max-sm:text-3xl select-none">
                 Nouns
-              </p>
+              </div>
             </Link>
             <Navbar />
           </div>

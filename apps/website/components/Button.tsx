@@ -8,6 +8,7 @@ export default function Button(props: {
   href?: string;
   onClick?: () => void;
   backgroundColor?: string;
+  scroll?: boolean;
   form?: boolean;
   large?: boolean;
   animate: "hover" | "bg";
@@ -23,6 +24,7 @@ export default function Button(props: {
       // @ts-ignore
       href={props.href}
       type={props.form ? "submit" : undefined}
+      scroll={!!props.href && !!props.scroll}
       className="relative w-min cursor-pointer"
     >
       {props.animate === "hover" ? (
@@ -37,7 +39,7 @@ export default function Button(props: {
       )}
       <div
         className={twMerge(
-          "relative select-none text-darkgrey bg-white rounded-full flex items-center justify-center leading-none font-bebas-neue whitespace-nowrap",
+          "relative select-none text-grey-800 bg-white rounded-full flex items-center justify-center leading-none font-bebas-neue whitespace-nowrap",
           props.large ? "py-3 px-[22px] text-xl" : "py-1.5 px-4 text-xl",
 
           props.disabled
