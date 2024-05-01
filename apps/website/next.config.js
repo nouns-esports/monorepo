@@ -129,7 +129,7 @@ const nextConfig = {
     },
     {
       "source": "/matchacup",
-      "destination": "https://www.start.gg/tournament/the-cody-aklo-cup/details",
+      "destination": "https://www.start.gg/tournament/matcha-cup/details",
       "permanent": true
     },
     {
