@@ -133,6 +133,11 @@ const nextConfig = {
       "permanent": true
     },
     {
+      "source": "/matcha",
+      "destination": "https://x.com/nounsesports/status/1785700745154830376",
+      "permanent": true
+    },
+    {
       "source": "/party",
       "destination": "https://rooms.party.app/party/0x66eD9EF8434771A451D44609304dBf865B82A68a",
       "permanent": true
