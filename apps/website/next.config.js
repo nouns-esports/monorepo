@@ -128,8 +128,8 @@ const nextConfig = {
       "permanent": true
     },
     {
-      "source": "/petertest",
-      "destination": "https://x.com/Peterpandam/status/1784331397437497838",
+      "source": "/matchacup",
+      "destination": "https://www.start.gg/tournament/the-cody-aklo-cup/details",
       "permanent": true
     },
     {
