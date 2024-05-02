@@ -73,6 +73,11 @@ const nextConfig = {
       "permanent": true
     },
     {
+      "source": "/smashprop",
+      "destination": "https://nouns.wtf/vote/534",
+      "permanent": true
+    },
+    {
       "source": "/instagram",
       "destination": "https://www.instagram.com/nouns_esports/",
       "permanent": true
