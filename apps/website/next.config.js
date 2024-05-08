@@ -138,6 +138,11 @@ const nextConfig = {
       "permanent": true
     },
     {
+      "source": "/duffcity",
+      "destination": "https://www.start.gg/tournament/duff-city-volume-2/details",
+      "permanent": true
+    },
+    {
       "source": "/matcha",
       "destination": "https://x.com/nounsesports/status/1785700745154830376",
       "permanent": true
