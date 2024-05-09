@@ -18,7 +18,27 @@ export default function MarkdownEditor(props: {
 }) {
   const [title, setTitle] = useState("");
 
-  const [editorState, setEditorState] = useState("");
+  const [editorState, setEditorState] = useState(
+    props.markdown ??
+      JSON.stringify({
+        children: [
+          {
+            children: [],
+            direction: null,
+            format: "",
+            indent: 0,
+            type: "paragraph",
+            version: 1,
+            textFormat: 0,
+          },
+        ],
+        direction: null,
+        format: "",
+        indent: 0,
+        type: "root",
+        version: 1,
+      })
+  );
 
   const [parsedMarkdown, setParsedMarkdown] = useState(props.markdown ?? "");
 
@@ -68,7 +88,7 @@ export default function MarkdownEditor(props: {
         </div>
         <div className="relative bg-grey-800 border border-grey-600 rounded-xl overflow-hidden p-2 ">
           <Markdown
-            markdown=""
+            markdown={editorState}
             readOnly={false}
             onChange={(state, editor) => {
               state.read(() => {

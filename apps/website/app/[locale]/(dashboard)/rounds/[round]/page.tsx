@@ -166,7 +166,7 @@ export default async function Round(props: { params: { round: string } }) {
                         </p>
                         <div
                           className={twMerge(
-                            "absolute -top-3 -right-3 rounded-full bg-grey-600 font-bold text-white text-xs flex items-center justify-center w-7 h-7",
+                            "absolute -top-3 -right-3 rounded-md bg-grey-600 font-bold text-white text-xs flex items-center justify-center w-[30px] py-0.5",
                             index === 0 && "bg-gold-500 text-gold-900",
                             index === 1 && "bg-silver-500 text-silver-900",
                             index === 2 && "bg-bronze-500 text-bronze-900"

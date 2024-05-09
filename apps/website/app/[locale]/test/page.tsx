@@ -276,7 +276,7 @@ const data = [
 
 const votes: Omit<Vote, "id">[] = [];
 
-const round = "pokemon-art-contest";
+const round = "evo-";
 
 export default async function Test() {
   for (const p of data) {

@@ -1,55 +1,35 @@
-import { db, users } from "@/db/schema";
-import { eq } from "drizzle-orm";
 import { unstable_cache as cache } from "next/cache";
 import { privyClient } from "@/server/clients/privy";
+import { User as PrivyUser } from "@privy-io/server-auth";
 
 export type User = {
   id: string;
-  pfp: string;
-  name: string;
-  handle?: string;
-  bio?: string;
+  name?: string;
+  pfp?: string;
 };
 
-export const getUser = cache(
-  async (input: { id: string }): Promise<User> => {
-    const [privyUser, dbUser] = await Promise.all([
-      await privyClient.getUser(
-        // input.id
-        "did:privy:clvctgk910lfdk7zywimbzbh8"
-      ),
-      await db.query.users.findFirst({
-        where: eq(
-          users.id,
-          "did:privy:clvctgk910lfdk7zywimbzbh8"
-          // input.id
-        ),
-      }),
-    ]);
+export const getUser = cache(async (input: { id: string }) => {
+  try {
+    let privyUser: PrivyUser | null;
 
-    if (!privyUser || !dbUser) {
-      console.log(privyUser, dbUser);
-      throw new Error("User not found");
+    if (input.id.startsWith("0x")) {
+      privyUser = await privyClient.getUserByWalletAddress(input.id);
+    } else {
+      privyUser = await privyClient.getUser(input.id);
     }
 
+    if (!privyUser) throw new Error("User not found");
+
+    return {
+      id: privyUser.id,
+      name: privyUser.farcaster?.displayName,
+      pfp: privyUser.farcaster?.pfp,
+    };
+  } catch (e) {
     return {
       id: input.id,
-      pfp:
-        privyUser.farcaster?.pfp ??
-        privyUser.twitter?.profilePictureUrl ??
-        `https://api.cloudnouns.com/v1/pfp?text=${input.id}`,
-      name:
-        privyUser.farcaster?.displayName ??
-        privyUser.twitter?.name ??
-        input.id.substring(10, 15),
-      handle:
-        privyUser.farcaster?.username ??
-        privyUser.discord?.username ??
-        privyUser.twitter?.username ??
-        undefined,
-      bio: privyUser.farcaster?.bio,
+      name: undefined,
+      pfp: undefined,
     };
-  },
-  ["user"],
-  { tags: ["user"], revalidate: 60 * 10 }
-);
+  }
+});

@@ -18,6 +18,7 @@ export default function Link(
       target={newTab ? "_blank" : ""}
       rel={newTab ? "noopener noreferrer" : ""}
       draggable={false}
+      scroll={props.scroll}
       style={{
         userSelect: "none",
         ...props.style,

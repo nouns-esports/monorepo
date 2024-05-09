@@ -37,7 +37,7 @@ export default function Proposals(props: {
   const { user } = usePrivy();
 
   const yourProposal = props.proposals.find(
-    (proposal) => proposal.user.id === user?.id
+    (proposal) => proposal?.user.id === user?.id
   );
 
   const { execute, status } = useAction(castVotes, {
@@ -131,11 +131,16 @@ export default function Proposals(props: {
                 <Link
                   href={`/rounds/${props.round}/proposals/${proposal.id}`}
                   className={twMerge(
-                    "relative w-full flex gap-4 bg-grey-800 rounded-xl px-4 pt-4 h-36 overflow-hidden"
-                    // props.status === "ended" &&
-                    // index === 0 && "border-[3px] border-gold-500",
-                    // index === 1 && "border-[3px] border-silver-500",
-                    // index === 2 && "border-[3px] border-bronze-500"
+                    "relative w-full flex gap-4 bg-grey-800 rounded-xl px-4 pt-4 h-36 overflow-hidden",
+                    props.status === "ended" &&
+                      index === 0 &&
+                      "border-[3px] border-gold-500 bg-gold-900 text-white",
+                    props.status === "ended" &&
+                      index === 1 &&
+                      "border-[3px] border-silver-500 bg-silver-900 text-white",
+                    props.status === "ended" &&
+                      index === 2 &&
+                      "border-[3px] border-bronze-500 bg-bronze-900 text-white"
                   )}
                 >
                   {proposal.images.length > 0 ? (
@@ -183,7 +188,7 @@ export default function Proposals(props: {
                       )}
                       <img
                         key={imageIndex}
-                        src={proposal.images[imageIndex]}
+                        src={`${proposal.images[imageIndex]}?img-width=250`}
                         className="w-full h-full object-cover object-center"
                       />
                       <div
@@ -201,13 +206,17 @@ export default function Proposals(props: {
                     <h4 className="text-2xl font-bebas-neue text-white">
                       {proposal.title}
                     </h4>
-                    <div className="flex gap-2 items-center hover:bg-grey-600 pl-1 py-0.5 pr-2 -ml-1 -mt-1 rounded-full w-fit">
-                      <img
-                        src={proposal.user.pfp}
-                        className="w-5 h-5 rounded-full"
-                      />
-                      <p className="text-white">{proposal.user.name}</p>
-                    </div>
+                    {proposal.user.name && proposal.user.pfp ? (
+                      <div className="flex gap-2 items-center hover:bg-grey-600 pl-1 py-0.5 pr-2 -ml-1 -mt-1 rounded-full w-fit">
+                        <img
+                          src={proposal.user.pfp}
+                          className="w-5 h-5 rounded-full"
+                        />
+                        <p className="text-white">{proposal.user.name}</p>
+                      </div>
+                    ) : (
+                      ""
+                    )}
                     <div className="w-full overflow-hidden h-full">
                       {proposal.markdown
                         .replaceAll(/<[^>]*>/g, "")
@@ -222,12 +231,25 @@ export default function Proposals(props: {
                       }}
                       className="h-full items-center flex gap-4 z-20 relative pb-4"
                     >
-                      <div className="h-full bg-grey-600 w-[1px]" />
+                      <div
+                        className={twMerge(
+                          "h-full bg-grey-600 w-[1px]",
+                          props.status === "ended" &&
+                            index === 0 &&
+                            "bg-gold-500",
+                          props.status === "ended" &&
+                            index === 1 &&
+                            "bg-silver-500",
+                          props.status === "ended" &&
+                            index === 2 &&
+                            "bg-bronze-500"
+                        )}
+                      />
                       <div className="flex flex-col items-center gap-2 w-14 flex-shrink-0">
                         <CaretUp
                           onClick={() => {
                             if (props.status !== "voting") return;
-                            if (proposal.user.id === user?.id) return;
+                            if (proposal.user?.id === user?.id) return;
                             if (votesCast > 9) return;
                             setVotes({
                               ...votes,
@@ -238,14 +260,36 @@ export default function Proposals(props: {
                           }}
                           className={twMerge(
                             "w-5 h-5 text-grey-200",
-                            proposal.user.id === user?.id
+                            proposal.user?.id === user?.id
                               ? "pointer-events-none"
                               : "hover:text-white transition-colors",
-                            props.status === "ended" && "cursor-not-allowed"
+                            props.status === "ended" && "cursor-not-allowed",
+                            props.status === "ended" &&
+                              index === 0 &&
+                              "text-white",
+                            props.status === "ended" &&
+                              index === 1 &&
+                              "text-white",
+                            props.status === "ended" &&
+                              index === 2 &&
+                              "text-white"
                           )}
                           weight="fill"
                         />
-                        <p className="text-grey-200 text-2xl font-bebas-neue text-center text-nowrap">
+                        <p
+                          className={twMerge(
+                            "text-grey-200 text-2xl font-bebas-neue text-center text-nowrap",
+                            props.status === "ended" &&
+                              index === 0 &&
+                              "text-white",
+                            props.status === "ended" &&
+                              index === 1 &&
+                              "text-white",
+                            props.status === "ended" &&
+                              index === 2 &&
+                              "text-white"
+                          )}
+                        >
                           {proposal.votes}
 
                           {votes[proposal.id] ? (
@@ -260,7 +304,7 @@ export default function Proposals(props: {
                         <CaretDown
                           onClick={() => {
                             if (props.status !== "voting") return;
-                            if (proposal.user.id === user?.id) return;
+                            if (proposal.user?.id === user?.id) return;
                             if (
                               (votes[proposal.id] ? votes[proposal.id] : 0) < 1
                             )
@@ -272,10 +316,19 @@ export default function Proposals(props: {
                           }}
                           className={twMerge(
                             "w-5 h-5 text-grey-200",
-                            proposal.user.id === user?.id
+                            proposal.user?.id === user?.id
                               ? "pointer-events-none"
                               : "hover:text-white transition-colors",
-                            props.status === "ended" && "cursor-not-allowed"
+                            props.status === "ended" && "cursor-not-allowed",
+                            props.status === "ended" &&
+                              index === 0 &&
+                              "text-white",
+                            props.status === "ended" &&
+                              index === 1 &&
+                              "text-white",
+                            props.status === "ended" &&
+                              index === 2 &&
+                              "text-white"
                           )}
                           weight="fill"
                         />
@@ -284,9 +337,22 @@ export default function Proposals(props: {
                   ) : (
                     ""
                   )}
-                  <div className="absolute left-0 w-full bg-gradient-to-t from-grey-800 to-transparent h-10 bottom-0 z-10" />
+                  <div
+                    className={twMerge(
+                      "absolute left-0 w-full bg-gradient-to-t from-grey-800 to-transparent h-10 bottom-0 z-10",
+                      props.status === "ended" &&
+                        index === 0 &&
+                        "from-gold-900",
+                      props.status === "ended" &&
+                        index === 1 &&
+                        "from-silver-900",
+                      props.status === "ended" &&
+                        index === 2 &&
+                        "from-bronze-900"
+                    )}
+                  />
                 </Link>
-                {proposal.user.id === user?.id ? (
+                {proposal.user?.id === user?.id ? (
                   <div className="w-[calc(100%_-_128px)] h-[1px] bg-grey-600 mx-16 my-2" />
                 ) : (
                   ""
@@ -294,7 +360,17 @@ export default function Proposals(props: {
               </div>
             );
           })}
-        {props.proposals.length < 1 ? <p>There are no proposals yet</p> : ""}
+        {props.proposals.length < 1 ? (
+          <div className="mt-4 flex gap-4 justify-center items-center">
+            <img src="/fire-sticker.png" alt="" className="h-32" />
+            <p className="text-grey-200 text-lg max-w-80">
+              There are no proposals yet.{" "}
+              {props.status === "proposing" ? "Be the first to propose?" : ""}
+            </p>
+          </div>
+        ) : (
+          ""
+        )}
       </div>
     </div>
   );

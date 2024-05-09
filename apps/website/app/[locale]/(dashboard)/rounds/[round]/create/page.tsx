@@ -69,7 +69,27 @@ export default async function Create(props: { params: { round: string } }) {
         </div>
       </div>
       <Suspense fallback={null}>
-        <MarkdownEditor round={props.params.round} />
+        <MarkdownEditor
+          round={props.params.round}
+          markdown={JSON.stringify({
+            children: [
+              {
+                children: [],
+                direction: null,
+                format: "",
+                indent: 0,
+                type: "paragraph",
+                version: 1,
+                textFormat: 0,
+              },
+            ],
+            direction: null,
+            format: "",
+            indent: 0,
+            type: "root",
+            version: 1,
+          })}
+        />
       </Suspense>
     </div>
   );

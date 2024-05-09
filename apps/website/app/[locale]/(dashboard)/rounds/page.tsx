@@ -14,22 +14,30 @@ export default async function Rounds() {
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-col gap-4">
-        <h2 className="text-white font-luckiest-guy text-3xl">Active Rounds</h2>
-        {activeRounds.map((round) => (
-          <RoundCard key={round.id} round={round} />
-        ))}
-        {activeRounds.length < 1 ? <p>There are no active rounds</p> : ""}
-      </div>
-      <div className="flex flex-col gap-4">
-        <h2 className="text-white font-luckiest-guy text-3xl">
-          Upcoming Rounds
-        </h2>
-        {upcomingRounds.map((round) => (
-          <RoundCard key={round.id} round={round} />
-        ))}
-        {upcomingRounds.length < 1 ? <p>There are no upcoming rounds</p> : ""}
-      </div>
+      {activeRounds.length > 0 ? (
+        <div className="flex flex-col gap-4">
+          <h2 className="text-white font-luckiest-guy text-3xl">
+            Active Rounds
+          </h2>
+          {activeRounds.map((round) => (
+            <RoundCard key={round.id} round={round} />
+          ))}
+        </div>
+      ) : (
+        ""
+      )}
+      {upcomingRounds.length > 0 ? (
+        <div className="flex flex-col gap-4">
+          <h2 className="text-white font-luckiest-guy text-3xl">
+            Upcoming Rounds
+          </h2>
+          {upcomingRounds.map((round) => (
+            <RoundCard key={round.id} round={round} />
+          ))}
+        </div>
+      ) : (
+        ""
+      )}
       <div className="flex flex-col gap-4">
         <h2 className="text-white font-luckiest-guy text-3xl">
           Completed Rounds
