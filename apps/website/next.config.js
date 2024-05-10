@@ -153,8 +153,13 @@ const nextConfig = {
       "permanent": true
     },
     {
-      "source": "/coast-to-coast",
-      "destination": "https://www.nouns.camp/proposals/534",
+      "source": "/davids-cup",
+      "destination": "https://tiltify.com/+davids-cup/davids-cup",
+      "permanent": true
+    },
+    {
+      "source": "/donate",
+      "destination": "https://tilt.fyi/zNgsRsgiDQ",
       "permanent": true
     }
   ];
