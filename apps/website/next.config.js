@@ -143,6 +143,11 @@ const nextConfig = {
       "permanent": true
     },
     {
+      "source": "/davidscup",
+      "destination": "https://tiltify.com/+davids-cup/davids-cup",
+      "permanent": true
+    },
+    {
       "source": "/matcha",
       "destination": "https://x.com/nounsesports/status/1785700745154830376",
       "permanent": true
