@@ -144,7 +144,7 @@ const nextConfig = {
     },
     {
       "source": "/davidscup",
-      "destination": "https://tiltify.com/+davids-cup/davids-cup",
+      "destination": "https://shorturl.at/glyNS",
       "permanent": true
     },
     {
