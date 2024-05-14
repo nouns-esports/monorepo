@@ -1,10 +1,8 @@
 {
-  "id": "6f8916b2-aee7-43e1-83ed-8f92aa89724b",
-  "prevId": "62c08ccb-0d21-49fa-a56e-43047265c099",
-  "version": "5",
-  "dialect": "pg",
+  "version": "6",
+  "dialect": "postgresql",
   "tables": {
-    "applicationResponses": {
+    "public.applicationResponses": {
       "name": "applicationResponses",
       "schema": "",
       "columns": {
@@ -44,7 +42,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "awards": {
+    "public.awards": {
       "name": "awards",
       "schema": "",
       "columns": {
@@ -78,7 +76,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "badges": {
+    "public.badges": {
       "name": "badges",
       "schema": "",
       "columns": {
@@ -118,7 +116,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "creators": {
+    "public.creators": {
       "name": "creators",
       "schema": "",
       "columns": {
@@ -188,7 +186,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "games": {
+    "public.games": {
       "name": "games",
       "schema": "",
       "columns": {
@@ -228,7 +226,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "projects": {
+    "public.projects": {
       "name": "projects",
       "schema": "",
       "columns": {
@@ -268,7 +266,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "proposals": {
+    "public.proposals": {
       "name": "proposals",
       "schema": "",
       "columns": {
@@ -314,7 +312,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "rosters": {
+    "public.rosters": {
       "name": "rosters",
       "schema": "",
       "columns": {
@@ -354,7 +352,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "rounds": {
+    "public.rounds": {
       "name": "rounds",
       "schema": "",
       "columns": {
@@ -406,7 +404,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "snapshots": {
+    "public.snapshots": {
       "name": "snapshots",
       "schema": "",
       "columns": {
@@ -440,7 +438,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "talent": {
+    "public.talent": {
       "name": "talent",
       "schema": "",
       "columns": {
@@ -522,7 +520,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "users": {
+    "public.users": {
       "name": "users",
       "schema": "",
       "columns": {
@@ -544,7 +542,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "votes": {
+    "public.votes": {
       "name": "votes",
       "schema": "",
       "columns": {
@@ -574,20 +572,23 @@
     }
   },
   "enums": {
-    "pass": {
+    "public.pass": {
       "name": "pass",
-      "values": {
-        "og": "og",
-        "vip": "vip",
-        "community": "community",
-        "premium": "premium"
-      }
+      "schema": "public",
+      "values": [
+        "og",
+        "vip",
+        "community",
+        "premium"
+      ]
     }
   },
   "schemas": {},
   "_meta": {
-    "columns": {},
     "schemas": {},
-    "tables": {}
-  }
+    "tables": {},
+    "columns": {}
+  },
+  "id": "6f8916b2-aee7-43e1-83ed-8f92aa89724b",
+  "prevId": "62c08ccb-0d21-49fa-a56e-43047265c099"
 }

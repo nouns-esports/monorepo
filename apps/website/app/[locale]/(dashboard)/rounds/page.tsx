@@ -1,6 +1,6 @@
-import Countdown from "@/components/Countdown";
+import Countdown from "@/components/rounds/Countdown";
 import Link from "@/components/Link";
-import Markdown from "@/components/Mardown";
+import Markdown from "@/components/lexical/Mardown";
 import { Award, Round, tokenList } from "@/db/schema";
 import { getRounds } from "@/server/queries/rounds";
 import { formatUnits } from "viem";

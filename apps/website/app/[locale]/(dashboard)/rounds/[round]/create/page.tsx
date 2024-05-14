@@ -2,15 +2,18 @@ import Link from "@/components/Link";
 import dynamic from "next/dynamic";
 import { ArrowLeft } from "phosphor-react-sc";
 import { Suspense } from "react";
-// import "@mdxeditor/editor/style.css";
 import { notFound } from "next/navigation";
 import { getRound } from "@/server/queries/rounds";
 import { getProposal } from "@/server/queries/proposals";
-// import MarkdownEditor from "@/components/MarkdownEditor";
+import { cookies } from "next/headers";
+import { privyClient } from "@/server/clients/privy";
 
-const MarkdownEditor = dynamic(() => import("@/components/MarkdownEditor"), {
-  ssr: false,
-});
+const ProposalEditor = dynamic(
+  () => import("@/components/proposals/ProposalEditor"),
+  {
+    ssr: false,
+  }
+);
 
 export default async function Create(props: { params: { round: string } }) {
   const round = await getRound({ id: props.params.round });
@@ -19,7 +22,21 @@ export default async function Create(props: { params: { round: string } }) {
     return notFound();
   }
 
-  // const proposal = await getProposal ({ id: Number(props.params.id) });
+  let user = "";
+
+  try {
+    const cookie = cookies().get("privy-token")?.value;
+
+    if (!cookie) {
+      throw new Error("No cookie found");
+    }
+
+    user = (await privyClient.verifyAuthToken(cookie)).userId;
+  } catch (error) {
+    console.log(error);
+  }
+
+  const proposal = user ? await getProposal({ user }) : undefined;
 
   return (
     <div className="flex flex-col gap-4">
@@ -69,27 +86,7 @@ export default async function Create(props: { params: { round: string } }) {
         </div>
       </div>
       <Suspense fallback={null}>
-        <MarkdownEditor
-          round={props.params.round}
-          markdown={JSON.stringify({
-            children: [
-              {
-                children: [],
-                direction: null,
-                format: "",
-                indent: 0,
-                type: "paragraph",
-                version: 1,
-                textFormat: 0,
-              },
-            ],
-            direction: null,
-            format: "",
-            indent: 0,
-            type: "root",
-            version: 1,
-          })}
-        />
+        <ProposalEditor round={props.params.round} proposal={proposal} />
       </Suspense>
     </div>
   );

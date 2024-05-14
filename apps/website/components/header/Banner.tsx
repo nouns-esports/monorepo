@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "@/components/Link";
-import Text from "./Text";
+import Text from "../Text";
 import { ArrowRight, Dot } from "phosphor-react-sc";
 import { useContext } from "react";
 import { PrimaryColorContext } from "@/providers/PrimaryColor";

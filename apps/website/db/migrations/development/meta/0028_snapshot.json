@@ -1,4 +1,6 @@
 {
+  "id": "a1e67c31-5f4d-493b-bf6c-0cd21cc34831",
+  "prevId": "5a227abe-0ba9-48ab-84ab-e9c349013b8b",
   "version": "6",
   "dialect": "postgresql",
   "tables": {
@@ -192,6 +194,28 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
+    "public.pass": {
+      "name": "pass",
+      "schema": "",
+      "columns": {
+        "user": {
+          "name": "user",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "tier": {
+          "name": "tier",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "public.projects": {
       "name": "projects",
       "schema": "",
@@ -225,6 +249,72 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.proposals": {
+      "name": "proposals",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user": {
+          "name": "user",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "round": {
+          "name": "round",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "value": {
+          "name": "value",
+          "type": "numeric(78)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "hidden": {
+          "name": "hidden",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "published": {
+          "name": "published",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
         }
       },
       "indexes": {},
@@ -340,6 +430,12 @@
           "primaryKey": true,
           "notNull": true
         },
+        "user": {
+          "name": "user",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
         "type": {
           "name": "type",
           "type": "text",
@@ -352,11 +448,11 @@
           "primaryKey": false,
           "notNull": true
         },
-        "user": {
-          "name": "user",
-          "type": "text",
+        "metadata": {
+          "name": "metadata",
+          "type": "json",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         }
       },
       "indexes": {},
@@ -446,29 +542,6 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "public.users": {
-      "name": "users",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "pass": {
-          "name": "pass",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "default": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
     "public.votes": {
       "name": "votes",
       "schema": "",
@@ -519,10 +592,8 @@
   "enums": {},
   "schemas": {},
   "_meta": {
+    "columns": {},
     "schemas": {},
-    "tables": {},
-    "columns": {}
-  },
-  "id": "402686eb-299b-476f-818e-b84a76472d28",
-  "prevId": "e5e9466d-c846-4f61-8b56-736f984d8aa8"
+    "tables": {}
+  }
 }

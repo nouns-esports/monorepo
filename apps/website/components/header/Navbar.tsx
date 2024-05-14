@@ -1,8 +1,8 @@
 "use client";
 
 import { List, X } from "phosphor-react-sc";
-import SignInButton from "@/components/SignInButton";
-import Link from "./Link";
+import SignInButton from "@/components/header/SignInButton";
+import Link from "../Link";
 import * as NavigationMenu from "@radix-ui/react-navigation-menu";
 import { useEffect, useState } from "react";
 import {

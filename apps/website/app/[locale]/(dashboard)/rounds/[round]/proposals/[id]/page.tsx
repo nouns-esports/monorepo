@@ -1,5 +1,5 @@
 import Link from "@/components/Link";
-import Markdown from "@/components/Mardown";
+import Markdown from "@/components/lexical/Mardown";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "phosphor-react-sc";
 import { getFrameMetadata } from "frog/next";

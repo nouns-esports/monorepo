@@ -9,6 +9,7 @@ import {
   serial,
   smallint,
   integer,
+  json,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { Pool } from "pg";
@@ -85,11 +86,6 @@ export const projects = pgTable("projects", {
   url: text("url").notNull(),
 });
 
-export const users = pgTable("users", {
-  id: text("id").primaryKey(),
-  pass: boolean("pass").default(false),
-});
-
 export const badges = pgTable("badges", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
@@ -98,20 +94,18 @@ export const badges = pgTable("badges", {
   timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
 });
 
-// type can be a string or a string:id for things like rounds, but rounds should probably just use a "voter" snapshot type instead and check against the timestamp
 export const snapshots = pgTable("snapshots", {
   id: serial("id").primaryKey(),
+  user: text("user").notNull(),
   type: text("type").notNull(),
   timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
-  user: text("user").notNull(),
+  metadata: json("metadata"),
 });
 
-export const snapshotRelations = relations(snapshots, ({ one }) => ({
-  user: one(users, {
-    fields: [snapshots.user],
-    references: [users.id],
-  }),
-}));
+export const pass = pgTable("pass", {
+  user: text("user").primaryKey(),
+  tier: smallint("tier").notNull(),
+});
 
 // An infinite round is defined as a round with a null end timestamp and votingStart = start, respecitive proposals will include a value
 export const rounds = pgTable("rounds", {
@@ -184,14 +178,10 @@ export const proposals = pgTable("proposals", {
   value: numeric("value", { precision: 78 }).notNull(),
   createdAt: timestamp("created_at", { mode: "date" }).notNull(),
   hidden: boolean("hidden").default(false),
-  published: boolean("published").default(false),
+  published: boolean("published").default(true),
 });
 
 export const proposalsRelations = relations(proposals, ({ one, many }) => ({
-  user: one(users, {
-    fields: [proposals.user],
-    references: [users.id],
-  }),
   round: one(rounds, {
     fields: [proposals.round],
     references: [rounds.id],
@@ -209,10 +199,6 @@ export const votes = pgTable("votes", {
 });
 
 export const votesRelations = relations(votes, ({ one }) => ({
-  user: one(users, {
-    fields: [votes.user],
-    references: [users.id],
-  }),
   proposal: one(proposals, {
     fields: [votes.proposal],
     references: [proposals.id],
@@ -237,7 +223,6 @@ export const db = drizzle(
       talentRelations,
       creators,
       projects,
-      users,
       rounds,
       roundsRelations,
       awards,
@@ -247,8 +232,8 @@ export const db = drizzle(
       votes,
       votesRelations,
       snapshots,
-      snapshotRelations,
       badges,
+      pass,
     },
   }
 );
@@ -258,10 +243,10 @@ export type Roster = typeof rosters.$inferSelect;
 export type Talent = typeof talent.$inferSelect;
 export type Project = typeof projects.$inferSelect;
 export type Creator = typeof creators.$inferSelect;
-export type User = typeof users.$inferSelect;
 export type Round = typeof rounds.$inferSelect;
 export type Award = typeof awards.$inferSelect;
 export type Proposal = typeof proposals.$inferSelect;
 export type Vote = typeof votes.$inferSelect;
 export type Snapshot = typeof snapshots.$inferSelect;
 export type Badge = typeof badges.$inferSelect;
+export type Pass = typeof pass.$inferSelect;

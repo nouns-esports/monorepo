@@ -8,9 +8,11 @@ import {
   InstagramLogo,
 } from "phosphor-react-sc";
 import Text from "@/components/Text";
-import ANounsThing from "./ANounsThing";
-import Logo from "./Logo";
+import ANounsThing from "@/components/footer/ANounsThing";
+import Logo from "../Logo";
 import { getGames } from "@/server/queries/games";
+import FooterLink from "@/components/footer/FooterLink";
+import FooterSection from "@/components/footer/FooterSection";
 
 export default async function Footer(props: { locale: string }) {
   const games = await getGames();
@@ -108,32 +110,5 @@ export default async function Footer(props: { locale: string }) {
         </div>
       </div>
     </footer>
-  );
-}
-
-function FooterLink(props: { href: string; children: React.ReactNode }) {
-  return (
-    <Link
-      href={props.href}
-      className="hover:text-white select-none transition-colors max-lg:text-center text-nowrap"
-    >
-      {props.children}
-    </Link>
-  );
-}
-
-function FooterSection(props: {
-  title: React.ReactNode;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="flex flex-col max-[500px]:items-center gap-2">
-      <h3 className="text-2xl font-bebas-neue text-white max-lg:text-center">
-        {props.title}
-      </h3>
-      <div className="flex flex-col gap-2 max-[500px]:flex-row max-[500px]:gap-6">
-        {props.children}
-      </div>
-    </div>
   );
 }

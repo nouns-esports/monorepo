@@ -18,10 +18,14 @@ const config: Config = {
       red: "#E93737",
       pink: "#f26262",
       purple: "#BC30ED",
-      blue: "#4080E0",
+      // blue: "#4080E0",
       green: "#4CC87D",
       yellow: "#F8C648",
       transparent: "transparent",
+      blue: {
+        500: "#789AF4",
+        900: "#002688",
+      },
       grey: {
         200: "#808080",
         400: "#4D4D4D",

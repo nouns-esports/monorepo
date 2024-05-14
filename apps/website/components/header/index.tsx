@@ -1,5 +1,5 @@
 import Link from "@/components/Link";
-import Logo from "./Logo";
+import Logo from "../Logo";
 import Banner from "./Banner";
 import Navbar from "./Navbar";
 import { getEvents } from "@/server/queries/events";

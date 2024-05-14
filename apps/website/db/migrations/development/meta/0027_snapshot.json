@@ -232,6 +232,72 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
+    "public.proposals": {
+      "name": "proposals",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user": {
+          "name": "user",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "round": {
+          "name": "round",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "value": {
+          "name": "value",
+          "type": "numeric(78)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "hidden": {
+          "name": "hidden",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "published": {
+          "name": "published",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "public.rosters": {
       "name": "rosters",
       "schema": "",
@@ -340,6 +406,12 @@
           "primaryKey": true,
           "notNull": true
         },
+        "user": {
+          "name": "user",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
         "type": {
           "name": "type",
           "type": "text",
@@ -352,11 +424,11 @@
           "primaryKey": false,
           "notNull": true
         },
-        "user": {
-          "name": "user",
-          "type": "text",
+        "metadata": {
+          "name": "metadata",
+          "type": "json",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         }
       },
       "indexes": {},
@@ -446,29 +518,6 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "public.users": {
-      "name": "users",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "pass": {
-          "name": "pass",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "default": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
     "public.votes": {
       "name": "votes",
       "schema": "",
@@ -523,6 +572,6 @@
     "tables": {},
     "columns": {}
   },
-  "id": "402686eb-299b-476f-818e-b84a76472d28",
-  "prevId": "e5e9466d-c846-4f61-8b56-736f984d8aa8"
+  "id": "5a227abe-0ba9-48ab-84ab-e9c349013b8b",
+  "prevId": "fc208ec9-7f57-4839-b768-8798ca9e956b"
 }

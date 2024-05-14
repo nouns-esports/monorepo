@@ -4,7 +4,7 @@ import { LinkNode } from "@lexical/link";
 import { ListItemNode, ListNode } from "@lexical/list";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { HeadingNode } from "@lexical/rich-text";
-import { ImageNode } from "./lexical/nodes/ImageNode";
+import { ImageNode } from "./nodes/ImageNode";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
@@ -14,8 +14,8 @@ import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import type { EditorState, LexicalEditor } from "lexical";
 import { LinkPlugin } from "@lexical/react/LexicalLinkPlugin";
 import { ListPlugin } from "@lexical/react/LexicalListPlugin";
-import ImagePlugin from "./lexical/plugins/ImagePlugin";
-import ToolbarPlugin from "./lexical/plugins/ToolbarPlugin";
+import ImagePlugin from "./plugins/ImagePlugin";
+import ToolbarPlugin from "./plugins/ToolbarPlugin";
 
 export default function Markdown(props: {
   markdown: string;

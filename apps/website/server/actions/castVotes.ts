@@ -3,7 +3,7 @@
 import { db, votes, proposals, rounds } from "@/db/schema";
 import { onlyPassMemberAction } from "@/server/actions";
 import { z } from "zod";
-import { and, asc, desc, eq, sql } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { revalidateTag } from "next/cache";
 
 export const castVotes = onlyPassMemberAction(
@@ -18,12 +18,7 @@ export const castVotes = onlyPassMemberAction(
     ),
   }),
   async (input, ctx) => {
-    // if (ctx.userClaim.userId !== input.user) {
-    //   throw new TRPCError({
-    //     code: "UNAUTHORIZED",
-    //     message: "You are not authorized to vote for this user",
-    //   });
-    // }
+    const allottedVotes = ctx.pass === 0 ? 1 : ctx.pass === 1 ? 3 : 10;
 
     const [round, previousVotes] = await Promise.all([
       db.query.rounds.findFirst({
@@ -55,21 +50,8 @@ export const castVotes = onlyPassMemberAction(
       0
     );
 
-    // const latestVote = await db.query.votes.findFirst({
-    //   orderBy: desc(votes.id),
-    // });
-
-    // let id = latestVote ? latestVote.id : 0;
-
-    // console.log(latestVote, id);
-
-    // let id =
-    //   (await db.execute(sql.raw(`SELECT MAX(id) FROM votes`))).rowCount ?? 0;
-
     await db.transaction(async (tx) => {
       for (const vote of input.votes) {
-        // id += 1;
-
         const proposal = await tx.query.proposals.findFirst({
           where: eq(proposals.id, vote.proposal),
         });
@@ -84,7 +66,7 @@ export const castVotes = onlyPassMemberAction(
           throw new Error("You can only vote on proposals in the same round");
         }
 
-        if (votesUsed + vote.count > 10) {
+        if (votesUsed + vote.count > allottedVotes) {
           tx.rollback();
           throw new Error("You have used all your votes");
         }
@@ -93,7 +75,6 @@ export const castVotes = onlyPassMemberAction(
 
         await tx.insert(votes).values([
           {
-            // id: votes.id.default,
             user: input.user,
             proposal: vote.proposal,
             round: round.id,

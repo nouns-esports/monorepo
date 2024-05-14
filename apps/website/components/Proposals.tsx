@@ -22,6 +22,7 @@ export default function Proposals(props: {
     votes: number;
   }[];
   status: "voting" | "proposing" | "starting" | "ended";
+  awardCount: number;
 }) {
   const [votes, setVotes] = useState<Record<string, number>>({});
 
@@ -127,20 +128,47 @@ export default function Proposals(props: {
             const [imageIndex, setImageIndex] = useState(0);
 
             return (
-              <div key={index} className="flex flex-col gap-4">
+              <div key={index} className="relative flex flex-col gap-4">
+                {props.status === "ended" && index < props.awardCount ? (
+                  <div
+                    className={twMerge(
+                      "absolute -top-2 -left-2 z-10 rounded-md bg-grey-600 font-bold text-white flex items-center justify-center w-9",
+                      index === 0 && "bg-gold-500 text-gold-900",
+                      index === 1 && "bg-silver-500 text-silver-900",
+                      index === 2 && "bg-bronze-500 text-bronze-900",
+                      index > 2 && "bg-blue-500 text-blue-900"
+                    )}
+                  >
+                    {index + 1}
+                    {index + (1 % 10) === 0 && "th"}
+                    {index + (1 % 10) === 1 && "st"}
+                    {index + (1 % 10) === 2 && "nd"}
+                    {index + (1 % 10) === 3 && "rd"}
+                    {index + (1 % 10) > 3 && "th"}
+                  </div>
+                ) : (
+                  ""
+                )}
                 <Link
                   href={`/rounds/${props.round}/proposals/${proposal.id}`}
                   className={twMerge(
                     "relative w-full flex gap-4 bg-grey-800 rounded-xl px-4 pt-4 h-36 overflow-hidden",
                     props.status === "ended" &&
+                      index < props.awardCount &&
                       index === 0 &&
                       "border-[3px] border-gold-500 bg-gold-900 text-white",
                     props.status === "ended" &&
+                      index < props.awardCount &&
                       index === 1 &&
                       "border-[3px] border-silver-500 bg-silver-900 text-white",
                     props.status === "ended" &&
+                      index < props.awardCount &&
                       index === 2 &&
-                      "border-[3px] border-bronze-500 bg-bronze-900 text-white"
+                      "border-[3px] border-bronze-500 bg-bronze-900 text-white",
+                    props.status === "ended" &&
+                      index > 2 &&
+                      index < props.awardCount &&
+                      "border-[3px] border-blue-500 bg-blue-900 text-white"
                   )}
                 >
                   {proposal.images.length > 0 ? (
@@ -236,13 +264,20 @@ export default function Proposals(props: {
                           "h-full bg-grey-600 w-[1px]",
                           props.status === "ended" &&
                             index === 0 &&
+                            index < props.awardCount &&
                             "bg-gold-500",
                           props.status === "ended" &&
                             index === 1 &&
+                            index < props.awardCount &&
                             "bg-silver-500",
                           props.status === "ended" &&
                             index === 2 &&
-                            "bg-bronze-500"
+                            index < props.awardCount &&
+                            "bg-bronze-500",
+                          props.status === "ended" &&
+                            index > 2 &&
+                            index < props.awardCount &&
+                            "bg-blue-500"
                         )}
                       />
                       <div className="flex flex-col items-center gap-2 w-14 flex-shrink-0">
@@ -265,13 +300,7 @@ export default function Proposals(props: {
                               : "hover:text-white transition-colors",
                             props.status === "ended" && "cursor-not-allowed",
                             props.status === "ended" &&
-                              index === 0 &&
-                              "text-white",
-                            props.status === "ended" &&
-                              index === 1 &&
-                              "text-white",
-                            props.status === "ended" &&
-                              index === 2 &&
+                              index < props.awardCount &&
                               "text-white"
                           )}
                           weight="fill"
@@ -280,13 +309,7 @@ export default function Proposals(props: {
                           className={twMerge(
                             "text-grey-200 text-2xl font-bebas-neue text-center text-nowrap",
                             props.status === "ended" &&
-                              index === 0 &&
-                              "text-white",
-                            props.status === "ended" &&
-                              index === 1 &&
-                              "text-white",
-                            props.status === "ended" &&
-                              index === 2 &&
+                              index < props.awardCount &&
                               "text-white"
                           )}
                         >
@@ -321,13 +344,7 @@ export default function Proposals(props: {
                               : "hover:text-white transition-colors",
                             props.status === "ended" && "cursor-not-allowed",
                             props.status === "ended" &&
-                              index === 0 &&
-                              "text-white",
-                            props.status === "ended" &&
-                              index === 1 &&
-                              "text-white",
-                            props.status === "ended" &&
-                              index === 2 &&
+                              index < props.awardCount &&
                               "text-white"
                           )}
                           weight="fill"
@@ -341,18 +358,26 @@ export default function Proposals(props: {
                     className={twMerge(
                       "absolute left-0 w-full bg-gradient-to-t from-grey-800 to-transparent h-10 bottom-0 z-10",
                       props.status === "ended" &&
+                        index < props.awardCount &&
                         index === 0 &&
                         "from-gold-900",
                       props.status === "ended" &&
+                        index < props.awardCount &&
                         index === 1 &&
                         "from-silver-900",
                       props.status === "ended" &&
+                        index < props.awardCount &&
                         index === 2 &&
-                        "from-bronze-900"
+                        "from-bronze-900",
+                      props.status === "ended" &&
+                        index > 2 &&
+                        index < props.awardCount &&
+                        "from-blue-900"
                     )}
                   />
                 </Link>
-                {proposal.user?.id === user?.id ? (
+                {props.proposals.length > 1 &&
+                proposal.user?.id === user?.id ? (
                   <div className="w-[calc(100%_-_128px)] h-[1px] bg-grey-600 mx-16 my-2" />
                 ) : (
                   ""

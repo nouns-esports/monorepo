@@ -1,10 +1,8 @@
 {
-  "id": "6074cd17-10da-43bd-b98b-a1b316b4d3e4",
-  "prevId": "38f70497-d546-448b-9c8d-97aaecc0ff10",
-  "version": "5",
-  "dialect": "pg",
+  "version": "6",
+  "dialect": "postgresql",
   "tables": {
-    "awards": {
+    "public.awards": {
       "name": "awards",
       "schema": "",
       "columns": {
@@ -44,7 +42,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "badges": {
+    "public.badges": {
       "name": "badges",
       "schema": "",
       "columns": {
@@ -84,7 +82,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "creators": {
+    "public.creators": {
       "name": "creators",
       "schema": "",
       "columns": {
@@ -154,7 +152,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "games": {
+    "public.games": {
       "name": "games",
       "schema": "",
       "columns": {
@@ -194,7 +192,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "projects": {
+    "public.projects": {
       "name": "projects",
       "schema": "",
       "columns": {
@@ -234,7 +232,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "proposals": {
+    "public.proposals": {
       "name": "proposals",
       "schema": "",
       "columns": {
@@ -293,7 +291,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "rosters": {
+    "public.rosters": {
       "name": "rosters",
       "schema": "",
       "columns": {
@@ -333,7 +331,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "rounds": {
+    "public.rounds": {
       "name": "rounds",
       "schema": "",
       "columns": {
@@ -391,7 +389,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "snapshots": {
+    "public.snapshots": {
       "name": "snapshots",
       "schema": "",
       "columns": {
@@ -425,7 +423,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "talent": {
+    "public.talent": {
       "name": "talent",
       "schema": "",
       "columns": {
@@ -507,7 +505,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "users": {
+    "public.users": {
       "name": "users",
       "schema": "",
       "columns": {
@@ -534,8 +532,10 @@
   "enums": {},
   "schemas": {},
   "_meta": {
-    "columns": {},
     "schemas": {},
-    "tables": {}
-  }
+    "tables": {},
+    "columns": {}
+  },
+  "id": "6074cd17-10da-43bd-b98b-a1b316b4d3e4",
+  "prevId": "38f70497-d546-448b-9c8d-97aaecc0ff10"
 }

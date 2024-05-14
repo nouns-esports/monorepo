@@ -1,10 +1,10 @@
-import Countdown from "@/components/Countdown";
+import Countdown from "@/components/rounds/Countdown";
 import Link from "@/components/Link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, LinkSimple, Share, ShareFat } from "phosphor-react-sc";
-import AwardScroller from "@/components/AwardScroller";
+import AwardScroller from "@/components/rounds/AwardScroller";
 import Proposals from "@/components/Proposals";
-import Markdown from "@/components/Mardown";
+import Markdown from "@/components/lexical/Mardown";
 import { Vote, tokenList } from "@/db/schema";
 import { twMerge } from "tailwind-merge";
 import { formatUnits } from "viem";
@@ -73,12 +73,9 @@ export default async function Round(props: { params: { round: string } }) {
               className="w-full h-48 object-cover object-center max-sm:h-32"
             />
             <div className="flex flex-col gap-2 p-4">
-              <div className="flex items-center w-full justify-between">
-                <h2 className="w-full text-white font-luckiest-guy text-3xl">
-                  {round.name}
-                </h2>
-                <LinkSimple className="w-5 h-5 text-red" />
-              </div>
+              <h2 className="w-full text-white font-luckiest-guy text-3xl">
+                {round.name}
+              </h2>
               <div className="flex flex-col gap-2">
                 <Markdown markdown={round.description} readOnly />
               </div>
@@ -169,7 +166,8 @@ export default async function Round(props: { params: { round: string } }) {
                             "absolute -top-3 -right-3 rounded-md bg-grey-600 font-bold text-white text-xs flex items-center justify-center w-[30px] py-0.5",
                             index === 0 && "bg-gold-500 text-gold-900",
                             index === 1 && "bg-silver-500 text-silver-900",
-                            index === 2 && "bg-bronze-500 text-bronze-900"
+                            index === 2 && "bg-bronze-500 text-bronze-900",
+                            index > 2 && "bg-blue-500 text-blue-900"
                           )}
                         >
                           {award.place}
@@ -225,6 +223,7 @@ export default async function Round(props: { params: { round: string } }) {
           )}
           round={props.params.round}
           status={status}
+          awardCount={awards.length}
         />
       </div>
     </div>

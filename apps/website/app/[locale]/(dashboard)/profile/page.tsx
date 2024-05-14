@@ -1,22 +1,21 @@
 "use client";
 
 import Button from "@/components/Button";
+import Link from "@/components/Link";
 import { usePrivy } from "@privy-io/react-auth";
 
 export default function Profile() {
-  const { logout, user, linkFarcaster } = usePrivy();
+  const { logout, user, linkFarcaster, unlinkFarcaster } = usePrivy();
   return (
     <div className="flex flex-col items-center">
       <div className="flex flex-col gap-4 justify-center w-full max-w-2xl">
         <div className="flex flex-col gap-8 w-full ">
           {user?.farcaster ? (
-            <div
-              onClick={() => {
-                logout();
-              }}
-              className="flex gap-6 p-6 w-full rounded-xl bg-grey-800"
-            >
+            <div className="flex gap-6 p-6 w-full rounded-xl bg-grey-800">
               <img
+                onClick={() => {
+                  if (user?.farcaster?.fid) unlinkFarcaster(user.farcaster.fid);
+                }}
                 src={user.farcaster.pfp ?? ""}
                 className="w-16 h-16 rounded-full"
               />
@@ -51,23 +50,34 @@ export default function Profile() {
               </div>
             </div>
           ) : (
-            <p
-              onClick={() => {
-                linkFarcaster();
-              }}
-            >
-              Connect a Farcaster account to complete your profile
-            </p>
+            <div className="relative w-full rounded-xl bg-grey-800 overflow-hidden">
+              <div className="relative flex flex-col items-center justify-center gap-6 p-6 z-10">
+                <h1 className="text-white font-luckiest-guy text-2xl">
+                  Create your social profile!
+                </h1>
+                <p className="text-center text-white">
+                  Nouns Esports leverages Farcaster to provide a portable and
+                  user controlled social experience. Create an account through{" "}
+                  <Link href="https://warpcast.com" className="text-red">
+                    Warpcast
+                  </Link>{" "}
+                  and then link it here to get started.
+                </p>
+                <Button
+                  animate="bg"
+                  onClick={() => {
+                    linkFarcaster();
+                  }}
+                >
+                  Link Farcaster
+                </Button>
+              </div>
+              <img
+                src="/games/pokemon-unite.webp"
+                className="w-full h-full absolute top-0 left-0 z-0 brightness-[15%]"
+              />
+            </div>
           )}
-        </div>
-        <div className="w-full flex gap-4">
-          <div className="bg-grey-800 rounded-xl w-full h-32 flex items-center justify-center">
-            200 XP
-          </div>
-          <div className="bg-grey-800 rounded-xl w-full h-32 flex items-center justify-center">
-            Superfan Pass
-          </div>
-          <div className="bg-grey-800 rounded-xl w-full h-32 flex items-center justify-center"></div>
         </div>
       </div>
     </div>

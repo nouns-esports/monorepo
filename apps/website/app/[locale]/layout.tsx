@@ -6,8 +6,8 @@ import {
   Bebas_Neue,
   Londrina_Solid,
 } from "next/font/google";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import Header from "@/components/header";
+import Footer from "@/components/footer";
 import Providers from "@/providers";
 import { locales } from "@/middleware";
 import { getGames } from "@/server/queries/games";

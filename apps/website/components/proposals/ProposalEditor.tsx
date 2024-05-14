@@ -1,25 +1,27 @@
 "use client";
 
 import { useState } from "react";
-import TextInput from "./form/TextInput";
-import Button from "./Button";
+import TextInput from "../form/TextInput";
+import Button from "../Button";
 import { useAction } from "next-safe-action/hooks";
 import { createProposal } from "@/server/actions/createProposal";
 import { $generateHtmlFromNodes } from "@lexical/html";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { usePrivy } from "@privy-io/react-auth";
-import LimitMeter from "./LimitMeter";
-import Markdown from "./Mardown";
+import LimitMeter from "../LimitMeter";
+import Markdown from "../lexical/Mardown";
+import { Proposal } from "@/db/schema";
+import { updateProposal } from "@/server/actions/updateProposal";
 
 export default function MarkdownEditor(props: {
   round: string;
-  markdown?: string;
+  proposal?: Proposal;
 }) {
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState(props.proposal?.title ?? "");
 
   const [editorState, setEditorState] = useState(
-    props.markdown ??
+    props.proposal?.description ??
       JSON.stringify({
         children: [
           {
@@ -40,19 +42,37 @@ export default function MarkdownEditor(props: {
       })
   );
 
-  const [parsedMarkdown, setParsedMarkdown] = useState(props.markdown ?? "");
+  const [parsedMarkdown, setParsedMarkdown] = useState(
+    props.proposal?.description ?? ""
+  );
 
   const router = useRouter();
 
-  const { execute, result, status } = useAction(createProposal, {
-    onSuccess: () => {
-      router.push(`/rounds/${props.round}`);
-    },
-    onError: (error) => {
-      console.error(error);
-      toast.error(error.fetchError ?? error.serverError ?? "An error occurred");
-    },
-  });
+  const { execute: executeCreateProposal, status: createProposalStatus } =
+    useAction(createProposal, {
+      onSuccess: () => {
+        router.push(`/rounds/${props.round}`);
+      },
+      onError: (error) => {
+        console.error(error);
+        toast.error(
+          error.fetchError ?? error.serverError ?? "An error occurred"
+        );
+      },
+    });
+
+  const { execute: executeUpdateProposal, status: updateProposalStatus } =
+    useAction(updateProposal, {
+      onSuccess: () => {
+        router.push(`/rounds/${props.round}`);
+      },
+      onError: (error) => {
+        console.error(error);
+        toast.error(
+          error.fetchError ?? error.serverError ?? "An error occurred"
+        );
+      },
+    });
 
   const { user } = usePrivy();
 
@@ -92,7 +112,9 @@ export default function MarkdownEditor(props: {
             readOnly={false}
             onChange={(state, editor) => {
               state.read(() => {
-                setEditorState(JSON.stringify(editor.toJSON()));
+                setEditorState(
+                  JSON.stringify(editor.toJSON().editorState.root)
+                );
                 setParsedMarkdown(
                   $generateHtmlFromNodes(editor).replaceAll(/<[^>]*>/g, "")
                 );
@@ -111,22 +133,36 @@ export default function MarkdownEditor(props: {
         </div>
         <Button
           animate="bg"
-          loading={status === "executing"}
+          loading={
+            createProposalStatus === "executing" ||
+            updateProposalStatus === "executing"
+          }
           disabled={
             title.length < 15 || parsedMarkdown.split(" ").length - 1 < 150
           }
           onClick={() => {
             if (!user) return;
 
-            execute({
+            if (props.proposal) {
+              executeUpdateProposal({
+                user: user.id,
+                round: props.round,
+                proposal: props.proposal.id,
+                title,
+                description: editorState,
+              });
+              return;
+            }
+
+            executeCreateProposal({
               title,
               description: editorState,
               round: props.round,
-              user: user?.id,
+              user: user.id,
             });
           }}
         >
-          Submit
+          {props.proposal ? "Update Proposal" : "Create Proposal"}
         </Button>
       </div>
     </div>
