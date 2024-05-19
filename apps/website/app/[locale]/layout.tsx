@@ -11,6 +11,7 @@ import Footer from "@/components/footer";
 import Providers from "@/providers";
 import { locales } from "@/middleware";
 import { getGames } from "@/server/queries/games";
+import { isInServer } from "@/server/queries/discord";
 
 const cabin = Cabin({ subsets: ["latin"], variable: "--font-cabin" });
 
@@ -85,6 +86,10 @@ export default async function RootLayout(props: {
   params: { locale: string };
 }) {
   const games = await getGames();
+
+  // const inServer = await isInServer({ user: "samscolari" });
+
+  // console.log("In Server?", inServer);
 
   return (
     <html

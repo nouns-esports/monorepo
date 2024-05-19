@@ -85,6 +85,7 @@ export const castVotes = onlyPassMemberAction(
       }
     });
 
+    revalidateTag("votes");
     revalidateTag("proposals");
   }
 );

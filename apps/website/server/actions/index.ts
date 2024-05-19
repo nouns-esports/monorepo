@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import { privyClient } from "../clients/privy";
 import { getPass } from "../queries/pass";
 
-async function getUserIdFromSession() {
+export async function getUserIdFromSession() {
   const session = cookies().get("privy-token")?.value;
 
   if (!session) {

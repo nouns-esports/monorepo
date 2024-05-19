@@ -11,3 +11,21 @@ export const getPass = cache(
   ["pass"],
   { tags: ["pass"], revalidate: 1 }
 );
+
+// const router = {
+//   user: {
+//     query: {
+//       getUser: () => {},
+//       getUsers: () => {},
+//     },
+//     mutate: {
+//       setUser: () => {},
+//       updateUser: () => {},
+//     },
+//   },
+// };
+
+// user is parent revalidation tag
+// getUser and getUsers are child revalidation tags
+// You can manually revalidate getUser or getUsers with the respective tags "user/getUser" and "user/getUsers"
+// You can autmatically revalidate child queries with the tag "user"

@@ -1,9 +1,9 @@
 import Countdown from "@/components/rounds/Countdown";
 import Link from "@/components/Link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, LinkSimple, Share, ShareFat } from "phosphor-react-sc";
+import { ArrowLeft } from "phosphor-react-sc";
 import AwardScroller from "@/components/rounds/AwardScroller";
-import Proposals from "@/components/Proposals";
+import CastVotes from "@/components/proposals/CastVotes";
 import Markdown from "@/components/lexical/Mardown";
 import { Vote, tokenList } from "@/db/schema";
 import { twMerge } from "tailwind-merge";
@@ -14,6 +14,8 @@ import { getRound } from "@/server/queries/rounds";
 import { getAwards } from "@/server/queries/awards";
 import { getProposals } from "@/server/queries/proposals";
 import { getUser } from "@/server/queries/users";
+import { getUserIdFromSession } from "@/server/actions";
+import { getVoteAllocation } from "@/server/queries/votes";
 
 export async function generateMetadata(props: {
   params: { round: string };
@@ -57,6 +59,16 @@ export default async function Round(props: { params: { round: string } }) {
     const [eip115, chainId, address, tokenId] = award.type.split(":");
 
     tokens[address] = (tokens[address] ?? 0) + Number(award.value);
+  }
+
+  console.log(roundEnd);
+
+  let user = "";
+
+  try {
+    user = await getUserIdFromSession();
+  } catch (error) {
+    console.log(error);
   }
 
   return (
@@ -184,7 +196,7 @@ export default async function Round(props: { params: { round: string } }) {
             </div>
           </div>
         </div>
-        <Proposals
+        <CastVotes
           proposals={await Promise.all(
             proposals.map(async (proposal) => {
               let description = "";
@@ -224,6 +236,10 @@ export default async function Round(props: { params: { round: string } }) {
           round={props.params.round}
           status={status}
           awardCount={awards.length}
+          voteAllocation={await getVoteAllocation({
+            round: props.params.round,
+            user,
+          })}
         />
       </div>
     </div>

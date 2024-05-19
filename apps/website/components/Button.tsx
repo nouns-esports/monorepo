@@ -14,6 +14,7 @@ export default function Button(props: {
   animate: "hover" | "bg";
   loading?: boolean;
   children: React.ReactNode;
+  fill?: boolean;
 }) {
   const Component = props.href ? Link : props.form ? "input" : "button";
 
@@ -24,8 +25,11 @@ export default function Button(props: {
       // @ts-ignore
       href={props.href}
       type={props.form ? "submit" : undefined}
-      scroll={!!props.href && !!props.scroll}
-      className="relative w-min cursor-pointer"
+      scroll={(!!props.href ?? undefined) && (props.scroll ?? undefined)}
+      className={twMerge(
+        "relative w-min cursor-pointer",
+        props.fill && "w-full"
+      )}
     >
       {props.animate === "hover" ? (
         <div

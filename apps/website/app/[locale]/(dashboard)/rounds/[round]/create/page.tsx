@@ -7,6 +7,7 @@ import { getRound } from "@/server/queries/rounds";
 import { getProposal } from "@/server/queries/proposals";
 import { cookies } from "next/headers";
 import { privyClient } from "@/server/clients/privy";
+import { getUserIdFromSession } from "@/server/actions";
 
 const ProposalEditor = dynamic(
   () => import("@/components/proposals/ProposalEditor"),
@@ -25,13 +26,7 @@ export default async function Create(props: { params: { round: string } }) {
   let user = "";
 
   try {
-    const cookie = cookies().get("privy-token")?.value;
-
-    if (!cookie) {
-      throw new Error("No cookie found");
-    }
-
-    user = (await privyClient.verifyAuthToken(cookie)).userId;
+    user = await getUserIdFromSession();
   } catch (error) {
     console.log(error);
   }

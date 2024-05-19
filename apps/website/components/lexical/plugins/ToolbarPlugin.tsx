@@ -8,25 +8,63 @@ import {
   UNDO_COMMAND,
   REDO_COMMAND,
   FORMAT_TEXT_COMMAND,
-  FORMAT_ELEMENT_COMMAND,
+  ElementNode,
+  RangeSelection,
+  TextNode,
 } from "lexical";
+import { $isAtNodeEnd } from "@lexical/selection";
+import {
+  INSERT_ORDERED_LIST_COMMAND,
+  INSERT_UNORDERED_LIST_COMMAND,
+  REMOVE_LIST_COMMAND,
+} from "@lexical/list";
+import {
+  $isLinkNode,
+  TOGGLE_LINK_COMMAND,
+  $createLinkNode,
+} from "@lexical/link";
 import {
   ArrowCounterClockwise,
   ArrowClockwise,
   TextB,
   TextItalic,
   TextUnderline,
-  TextStrikethrough,
+  Image,
+  Link,
+  ListBullets,
+  ListNumbers,
 } from "phosphor-react-sc";
 import { useRef, useState, useCallback, useEffect } from "react";
 import { twMerge } from "tailwind-merge";
 import { mergeRegister } from "@lexical/utils";
+import { INSERT_IMAGE_COMMAND } from "./ImagePlugin";
+import toast from "react-hot-toast";
+import Button from "@/components/Button";
 
 const LowPriority = 1;
 
 function Divider() {
-  return <div className="divider" />;
+  return (
+    <div className="w-[1px] h-[calc(100%_-_16px)] my-2 bg-grey-500 mx-2" />
+  );
 }
+
+function getSelectedNode(selection: RangeSelection): TextNode | ElementNode {
+  const anchor = selection.anchor;
+  const focus = selection.focus;
+  const anchorNode = selection.anchor.getNode();
+  const focusNode = selection.focus.getNode();
+  if (anchorNode === focusNode) {
+    return anchorNode;
+  }
+  const isBackward = selection.isBackward();
+  if (isBackward) {
+    return $isAtNodeEnd(focus) ? anchorNode : focusNode;
+  } else {
+    return $isAtNodeEnd(anchor) ? anchorNode : focusNode;
+  }
+}
+
 export default function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext();
 
@@ -36,7 +74,11 @@ export default function ToolbarPlugin() {
   const [isBold, setIsBold] = useState(false);
   const [isItalic, setIsItalic] = useState(false);
   const [isUnderline, setIsUnderline] = useState(false);
-  const [isStrikethrough, setIsStrikethrough] = useState(false);
+  // const [isLink, setIsLink] = useState(false);
+
+  const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
+  const [linkName, setLinkName] = useState("");
+  const [linkUrl, setLinkUrl] = useState("");
 
   const $updateToolbar = useCallback(() => {
     const selection = $getSelection();
@@ -45,9 +87,39 @@ export default function ToolbarPlugin() {
       setIsBold(selection.hasFormat("bold"));
       setIsItalic(selection.hasFormat("italic"));
       setIsUnderline(selection.hasFormat("underline"));
-      setIsStrikethrough(selection.hasFormat("strikethrough"));
+
+      // Update links
+      // const node = getSelectedNode(selection);
+      // const parent = node.getParent();
+      // if ($isLinkNode(parent) || $isLinkNode(node)) {
+      //   setIsLink(true);
+      // } else {
+      //   setIsLink(false);
+      // }
     }
   }, []);
+
+  const blockTypeToBlockName = {
+    bullet: "Bulleted List",
+    number: "Numbered List",
+    paragraph: "Normal",
+  };
+
+  const [blockType, setBlockType] =
+    useState<keyof typeof blockTypeToBlockName>("paragraph");
+
+  const formatList = (listType: "bullet" | "number") => {
+    if (listType === "number" && blockType !== "number") {
+      editor.dispatchCommand(INSERT_ORDERED_LIST_COMMAND, undefined);
+      setBlockType("number");
+    } else if (listType === "bullet" && blockType !== "bullet") {
+      editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND, undefined);
+      setBlockType("bullet");
+    } else {
+      editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined);
+      setBlockType("paragraph");
+    }
+  };
 
   useEffect(() => {
     return mergeRegister(
@@ -169,61 +241,140 @@ export default function ToolbarPlugin() {
           weight="bold"
         />
       </button>
+      <Divider />
       <button
         onClick={() => {
-          editor.dispatchCommand(FORMAT_TEXT_COMMAND, "strikethrough");
+          formatList("bullet");
         }}
-        className={twMerge(
-          "h-full aspect-square flex items-center justify-center group cursor-pointer",
-          isStrikethrough && "bg-grey-400"
-        )}
-        aria-label="Format Strikethrough"
+        className="h-full aspect-square flex items-center justify-center group cursor-pointer"
+        aria-label="Insert Unordered List"
       >
-        <TextStrikethrough
-          className={twMerge(
-            "w-4 h-4 text-grey-400 group-hover:text-white transition-colors",
-            isStrikethrough ? "text-white" : "text-grey-400"
-          )}
+        <ListBullets
+          className="w-4 h-4 text-grey-400 group-hover:text-white transition-colors"
+          weight="bold"
+        />
+      </button>
+      <button
+        onClick={() => {
+          formatList("number");
+        }}
+        className="h-full aspect-square flex items-center justify-center group cursor-pointer"
+        aria-label="Insert Ordered List"
+      >
+        <ListNumbers
+          className="w-4 h-4 text-grey-400 group-hover:text-white transition-colors"
           weight="bold"
         />
       </button>
       <Divider />
       <button
-        onClick={() => {
-          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "left");
-        }}
-        className="toolbar-item spaced"
-        aria-label="Left Align"
+        onClick={() => setIsLinkModalOpen(true)}
+        className="h-full aspect-square flex items-center justify-center group cursor-pointer"
       >
-        <i className="format left-align" />
+        <Link
+          className={
+            "w-4 h-4 text-grey-400 group-hover:text-white transition-colors"
+          }
+          weight="bold"
+        />
+        <div
+          onClick={() => setIsLinkModalOpen(false)}
+          className={twMerge(
+            "fixed top-0 flex items-center justify-center w-screen h-screen bg-black/40 transition-opacity duration-150",
+            isLinkModalOpen
+              ? "opacity-100 pointer-events-auto"
+              : "opacity-0 pointer-events-none"
+          )}
+        >
+          <div
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+            className="bg-grey-800 rounded-xl p-4 flex flex-col gap-4 border border-grey-600 w-80"
+          >
+            <div className="flex flex-col items-start gap-2">
+              <label className="text-white font-semibold">Name</label>
+              <input
+                type="text"
+                placeholder="Enter a name..."
+                value={linkName}
+                onChange={(event) => setLinkName(event.target.value)}
+                className="bg-grey-600 rounded-xl px-4 py-2 text-white placeholder:text-white outline-none w-full"
+              />
+            </div>
+
+            <div className="flex flex-col items-start gap-2">
+              <label className="text-white font-semibold">Link</label>
+              <input
+                type="text"
+                placeholder="Enter a link..."
+                value={linkUrl}
+                onChange={(event) => setLinkUrl(event.target.value)}
+                className="bg-grey-600 rounded-xl px-4 py-2 text-white placeholder:text-white outline-none w-full"
+              />
+            </div>
+            <div className="flex gap-4">
+              <Button
+                animate="bg"
+                onClick={() => {
+                  // instead of toggle link, create one
+                  editor.dispatchCommand(
+                    TOGGLE_LINK_COMMAND,
+                    "https://nouns.gg/"
+                  );
+                  setIsLinkModalOpen(false);
+                  setLinkName("");
+                  setLinkUrl("");
+                }}
+              >
+                Create Link
+              </Button>
+              <button
+                className="text-red"
+                onClick={() => {
+                  setIsLinkModalOpen(false);
+                  setLinkName("");
+                  setLinkUrl("");
+                }}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
       </button>
-      <button
-        onClick={() => {
-          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "center");
-        }}
-        className="toolbar-item spaced"
-        aria-label="Center Align"
-      >
-        <i className="format center-align" />
-      </button>
-      <button
-        onClick={() => {
-          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "right");
-        }}
-        className="toolbar-item spaced"
-        aria-label="Right Align"
-      >
-        <i className="format right-align" />
-      </button>
-      <button
-        onClick={() => {
-          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "justify");
-        }}
-        className="toolbar-item"
-        aria-label="Justify Align"
-      >
-        <i className="format justify-align" />
-      </button>{" "}
+      <label className="h-full aspect-square flex items-center justify-center group cursor-pointer">
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(event) => {
+            const files = event.target.files;
+
+            if (files && files.length > 0) {
+              const file = files[0];
+
+              // 5 MB in bytes
+              if (file.size > 5 * 1024 * 1024) {
+                toast.error("Image size should be less than 5 MB");
+                return;
+              }
+
+              // Pin to IPFS
+              const pinnedFile = "";
+
+              editor.dispatchCommand(INSERT_IMAGE_COMMAND, {
+                altText: "",
+                src: "https://nouns.gg/logo/logo.svg",
+              });
+            }
+          }}
+          style={{ display: "none" }}
+        />
+        <Image
+          className="w-4 h-4 text-grey-400 group-hover:text-white transition-colors"
+          weight="bold"
+        />
+      </label>
     </div>
   );
 }

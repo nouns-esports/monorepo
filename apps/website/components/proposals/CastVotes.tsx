@@ -1,17 +1,32 @@
 "use client";
 
-import Link from "./Link";
+import Link from "../Link";
 import { ReactNode, useEffect, useMemo, useState } from "react";
-import { CaretUp, CaretDown, CaretLeft, CaretRight } from "phosphor-react-sc";
-import Button from "./Button";
+import {
+  CaretUp,
+  CaretDown,
+  CaretLeft,
+  CaretRight,
+  Coin,
+  Gavel,
+  AlignBottom,
+  ChartBarHorizontal,
+  User as UserIcon,
+  Star,
+} from "phosphor-react-sc";
+import Button from "../Button";
 import { twMerge } from "tailwind-merge";
 import { usePrivy } from "@privy-io/react-auth";
 import { useAction } from "next-safe-action/hooks";
 import { castVotes } from "@/server/actions/castVotes";
 import toast from "react-hot-toast";
 import { User } from "@/server/queries/users";
+import { useRouter } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
+import { canClaimAward } from "@/server/queries/awards";
+import { useQuery } from "@/hooks/useQuery";
 
-export default function Proposals(props: {
+export default function CastVotes(props: {
   round: string;
   proposals: {
     id: string;
@@ -22,17 +37,24 @@ export default function Proposals(props: {
     votes: number;
   }[];
   status: "voting" | "proposing" | "starting" | "ended";
+  voteAllocation: {
+    allocated: number;
+    remaining: number;
+  };
   awardCount: number;
 }) {
   const [votes, setVotes] = useState<Record<string, number>>({});
+  const [previousVotes, setPreviousVotes] = useState(
+    props.voteAllocation.allocated - props.voteAllocation.remaining
+  );
 
   const votesCast = useMemo(
     () =>
       Object.values(votes).reduce(
         (totalVotes: number, currentVotes: number) => totalVotes + currentVotes,
         0
-      ),
-    [votes]
+      ) + previousVotes,
+    [votes, previousVotes]
   );
 
   const { user } = usePrivy();
@@ -41,9 +63,13 @@ export default function Proposals(props: {
     (proposal) => proposal?.user.id === user?.id
   );
 
+  const router = useRouter();
+
   const { execute, status } = useAction(castVotes, {
     onSuccess: () => {
-      // Do something
+      setPreviousVotes(votesCast + previousVotes);
+      setVotes({});
+      router.refresh();
     },
     onError: (error) => {
       console.error(error);
@@ -51,23 +77,32 @@ export default function Proposals(props: {
     },
   });
 
+  const { data: canClaim } = useQuery({
+    key: "canClaimAward",
+    queryFn: canClaimAward,
+    args: { user: user?.id, round: props.round },
+    canQuery: props.status === "ended" && !!user,
+  });
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex justify-between items-center w-full gap-4">
         <h3 className="text-white font-luckiest-guy text-3xl">Proposals</h3>
         <div className="flex gap-4 items-center">
-          {props.status === "proposing" && yourProposal ? (
-            <p className="text-white">
-              You can edit your proposal until voting starts
-            </p>
-          ) : props.status === "voting" ? (
-            <p className="text-white">
-              {10 - votesCast}
-              /10 votes remaining
-            </p>
-          ) : (
-            ""
-          )}
+          <p className="text-white">
+            {props.status === "proposing" && yourProposal
+              ? "You can edit your proposal until voting starts"
+              : props.status === "voting"
+                ? props.voteAllocation.allocated === 0
+                  ? "You don't have any votes"
+                  : `${props.voteAllocation.allocated - votesCast}/${
+                      props.voteAllocation.allocated
+                    } votes
+              remaining`
+                : canClaim
+                  ? "Your proposal won!"
+                  : ""}
+          </p>
           {props.status === "proposing" ? (
             yourProposal ? (
               <Button href={`/rounds/${props.round}/create`} animate="bg">
@@ -82,11 +117,16 @@ export default function Proposals(props: {
                 Create Proposal
               </Button>
             )
+          ) : canClaim ? (
+            <Button href="/discord" animate="bg">
+              Claim Awards
+            </Button>
           ) : (
             ""
           )}
           {props.status === "voting" ? (
             <Button
+              loading={status === "executing"}
               disabled={votesCast < 1 || !user}
               onClick={() => {
                 if (!user) return;
@@ -235,7 +275,7 @@ export default function Proposals(props: {
                       {proposal.title}
                     </h4>
                     {proposal.user.name && proposal.user.pfp ? (
-                      <div className="flex gap-2 items-center hover:bg-grey-600 pl-1 py-0.5 pr-2 -ml-1 -mt-1 rounded-full w-fit">
+                      <div className="flex gap-2 items-center pl-1 py-0.5 pr-2 -ml-1 -mt-1 rounded-full w-fit">
                         <img
                           src={proposal.user.pfp}
                           className="w-5 h-5 rounded-full"
@@ -280,37 +320,45 @@ export default function Proposals(props: {
                             "bg-blue-500"
                         )}
                       />
-                      <div className="flex flex-col items-center gap-2 w-14 flex-shrink-0">
-                        <CaretUp
-                          onClick={() => {
-                            if (props.status !== "voting") return;
-                            if (proposal.user?.id === user?.id) return;
-                            if (votesCast > 9) return;
-                            setVotes({
-                              ...votes,
-                              [proposal.id]:
-                                (votes[proposal.id] ? votes[proposal.id] : 0) +
-                                1,
-                            });
-                          }}
-                          className={twMerge(
-                            "w-5 h-5 text-grey-200",
-                            proposal.user?.id === user?.id
-                              ? "pointer-events-none"
-                              : "hover:text-white transition-colors",
-                            props.status === "ended" && "cursor-not-allowed",
-                            props.status === "ended" &&
-                              index < props.awardCount &&
-                              "text-white"
-                          )}
-                          weight="fill"
-                        />
+                      <div
+                        className={twMerge(
+                          "flex flex-col items-center gap-2 w-14 flex-shrink-0"
+                        )}
+                      >
+                        {proposal.user?.id !== user?.id &&
+                        props.status === "voting" ? (
+                          <CaretUp
+                            onClick={() => {
+                              if (
+                                votesCast >
+                                props.voteAllocation.allocated - 1
+                              )
+                                return;
+
+                              setVotes({
+                                ...votes,
+                                [proposal.id]:
+                                  (votes[proposal.id]
+                                    ? votes[proposal.id]
+                                    : 0) + 1,
+                              });
+                            }}
+                            className="w-5 h-5 text-grey-200 hover:text-white transition-colors"
+                            weight="fill"
+                          />
+                        ) : (
+                          ""
+                        )}
                         <p
                           className={twMerge(
                             "text-grey-200 text-2xl font-bebas-neue text-center text-nowrap",
                             props.status === "ended" &&
                               index < props.awardCount &&
-                              "text-white"
+                              "text-white",
+
+                            (props.status === "ended" ||
+                              proposal.user?.id === user?.id) &&
+                              "flex flex-col items-center gap-2.5"
                           )}
                         >
                           {proposal.votes}
@@ -323,32 +371,43 @@ export default function Proposals(props: {
                           ) : (
                             ""
                           )}
-                        </p>
-                        <CaretDown
-                          onClick={() => {
-                            if (props.status !== "voting") return;
-                            if (proposal.user?.id === user?.id) return;
-                            if (
-                              (votes[proposal.id] ? votes[proposal.id] : 0) < 1
-                            )
-                              return;
-                            setVotes({
-                              ...votes,
-                              [proposal.id]: votes[proposal.id] - 1,
-                            });
-                          }}
-                          className={twMerge(
-                            "w-5 h-5 text-grey-200",
-                            proposal.user?.id === user?.id
-                              ? "pointer-events-none"
-                              : "hover:text-white transition-colors",
-                            props.status === "ended" && "cursor-not-allowed",
-                            props.status === "ended" &&
-                              index < props.awardCount &&
-                              "text-white"
+
+                          {props.status === "ended" ||
+                          (proposal.user?.id === user?.id &&
+                            props.status === "voting") ? (
+                            <ChartBarHorizontal
+                              className={twMerge(
+                                "w-5 h-5 text-grey-200 -rotate-90",
+                                props.status === "ended" &&
+                                  index < props.awardCount &&
+                                  "text-white"
+                              )}
+                              weight="fill"
+                            />
+                          ) : (
+                            ""
                           )}
-                          weight="fill"
-                        />
+                        </p>
+                        {proposal.user?.id !== user?.id &&
+                        props.status === "voting" ? (
+                          <CaretDown
+                            onClick={() => {
+                              if (
+                                (votes[proposal.id] ? votes[proposal.id] : 0) <
+                                1
+                              )
+                                return;
+                              setVotes({
+                                ...votes,
+                                [proposal.id]: votes[proposal.id] - 1,
+                              });
+                            }}
+                            className="w-5 h-5 text-grey-200 hover:text-white transition-colors"
+                            weight="fill"
+                          />
+                        ) : (
+                          ""
+                        )}
                       </div>
                     </div>
                   ) : (
@@ -376,12 +435,6 @@ export default function Proposals(props: {
                     )}
                   />
                 </Link>
-                {props.proposals.length > 1 &&
-                proposal.user?.id === user?.id ? (
-                  <div className="w-[calc(100%_-_128px)] h-[1px] bg-grey-600 mx-16 my-2" />
-                ) : (
-                  ""
-                )}
               </div>
             );
           })}

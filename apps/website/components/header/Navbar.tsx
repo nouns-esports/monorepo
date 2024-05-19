@@ -14,6 +14,7 @@ import {
   InstagramLogo,
 } from "phosphor-react-sc";
 import { usePathname, useParams } from "next/navigation";
+import { twMerge } from "tailwind-merge";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -32,7 +33,11 @@ export default function Navbar() {
   return (
     <>
       <NavigationMenu.Root className="pointer-events-auto">
-        <NavigationMenu.List className="flex items-center bg-black border-grey-800 border rounded-full p-1.5 max-sm:p-1 z-50">
+        <NavigationMenu.List
+          className={twMerge(
+            "flex items-center bg-black border-grey-800 border rounded-full p-1.5 max-sm:p-1 z-50"
+          )}
+        >
           <NavGroup title="Explore">
             <NavGroupItem href={`/${params.locale}/rounds`} icon="⌛">
               Rounds
