@@ -19,6 +19,7 @@ import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import ImagePlugin from "./plugins/ImagePlugin";
 import ToolbarPlugin from "./plugins/ToolbarPlugin";
 import { useState } from "react";
+import { twMerge } from "tailwind-merge";
 
 export default function Markdown(props: {
   markdown: string;
@@ -26,87 +27,91 @@ export default function Markdown(props: {
   onChange?: (state: EditorState, editor: LexicalEditor) => void;
 }) {
   return (
-    <div>
-      <LexicalComposer
-        initialConfig={{
-          namespace: "Nouns Esports Proposals",
-          theme: {},
-          onError: (error) => {
-            console.error(error);
-          },
-          editable: !props.readOnly,
-          nodes: [
-            LinkNode,
-            AutoLinkNode,
-            ListNode,
-            ListItemNode,
-            HeadingNode,
-            ImageNode,
-          ],
-          editorState: JSON.stringify({
-            root: JSON.parse(props.markdown),
-          }),
-        }}
-      >
-        {!props.readOnly ? (
-          <>
-            <HistoryPlugin />
-            <ToolbarPlugin />
-            <AutoFocusPlugin />
-            <OnChangePlugin onChange={props.onChange ?? (() => {})} />
-            <TabIndentationPlugin />
-          </>
-        ) : (
-          ""
-        )}
-        <RichTextPlugin
-          contentEditable={
-            <ContentEditable
-              onKeyDown={(e) => {
-                if (e.key === "Tab") {
-                  e.preventDefault();
-                }
-              }}
-              className="outline-none pt-2 px-1 flex flex-col gap-4 prose max-w-none prose-strong:text-white prose-a:text-red prose-p:text-grey-200 marker:text-grey-200 prose-p:leading-snug prose-p:my-0 prose-headings:text-white prose-li:text-grey-200 prose-headings:m-0 prose-ul:m-0 prose-ol:m-0 prose-li:m-0 prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl"
-            />
-          }
-          placeholder={
-            <div className="text-grey-400 pointer-events-none absolute top-12 pl-1">
-              Enter proposal here
-            </div>
-          }
-          ErrorBoundary={LexicalErrorBoundary}
-        />
-        <LinkPlugin />
-        <AutoLinkPlugin
-          matchers={[
-            (text) => {
-              const URL_MATCHER =
-                /((https?:\/\/(www\.)?)|(www\.))[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/;
-
-              const match = URL_MATCHER.exec(text);
-
-              if (match === null) {
-                return null;
+    <LexicalComposer
+      initialConfig={{
+        namespace: "Nouns Esports Proposals",
+        theme: {},
+        onError: (error) => {
+          console.error(error);
+        },
+        editable: !props.readOnly,
+        nodes: [
+          LinkNode,
+          AutoLinkNode,
+          ListNode,
+          ListItemNode,
+          HeadingNode,
+          ImageNode,
+        ],
+        editorState: JSON.stringify({
+          root: JSON.parse(props.markdown),
+        }),
+      }}
+    >
+      {!props.readOnly ? (
+        <>
+          <HistoryPlugin />
+          <ToolbarPlugin />
+          <AutoFocusPlugin />
+          <OnChangePlugin onChange={props.onChange ?? (() => {})} />
+          <TabIndentationPlugin />
+        </>
+      ) : (
+        ""
+      )}
+      <RichTextPlugin
+        contentEditable={
+          <ContentEditable
+            onKeyDown={(e) => {
+              if (e.key === "Tab") {
+                e.preventDefault();
               }
+            }}
+            className={twMerge(
+              "outline-none flex flex-col prose max-w-none",
+              "prose-strong:text-white prose-a:text-red prose-p:text-grey-200 marker:text-grey-200 prose-p:leading-snug prose-headings:text-white prose-li:text-grey-200 prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl",
+              "prose-p:m-0 prose-p:mb-2 prose-h1:mb-4 prose-h2:mb-2 prose-h3:mb-2 prose-headings:mt-4 prose-ul:my-2 prose-ol:my-2 prose-li:m-0",
+              "prose-img:rounded-xl prose-img:m-0",
+              !props.readOnly && "ml-1 mt-2"
+            )}
+          />
+        }
+        placeholder={
+          <div className="text-grey-400 pointer-events-none absolute top-12 pl-1">
+            Enter proposal here
+          </div>
+        }
+        ErrorBoundary={LexicalErrorBoundary}
+      />
+      <LinkPlugin />
+      <AutoLinkPlugin
+        matchers={[
+          (text) => {
+            const URL_MATCHER =
+              /((https?:\/\/(www\.)?)|(www\.))[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/;
 
-              const fullMatch = match[0];
+            const match = URL_MATCHER.exec(text);
 
-              return {
-                index: match.index,
-                length: fullMatch.length,
-                text: fullMatch,
-                url: fullMatch.startsWith("http")
-                  ? fullMatch
-                  : `https://${fullMatch}`,
-                attributes: { rel: "noreferrer", target: "_blank" },
-              };
-            },
-          ]}
-        />
-        <ListPlugin />
-        <ImagePlugin />
-      </LexicalComposer>
-    </div>
+            if (match === null) {
+              return null;
+            }
+
+            const fullMatch = match[0];
+
+            return {
+              index: match.index,
+              length: fullMatch.length,
+              text: fullMatch,
+              url: fullMatch.startsWith("http")
+                ? fullMatch
+                : `https://${fullMatch}`,
+              attributes: { rel: "noreferrer", target: "_blank" },
+            };
+          },
+        ]}
+      />
+      <ListPlugin />
+      <ImagePlugin />
+    </LexicalComposer>
   );
 }

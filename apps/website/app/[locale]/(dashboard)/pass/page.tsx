@@ -8,16 +8,20 @@ import { usePrivy } from "@privy-io/react-auth";
 import { CheckCircle, Circle } from "phosphor-react-sc";
 import { useQuery } from "@/hooks/useQuery";
 import { twMerge } from "tailwind-merge";
+import { useAction } from "next-safe-action/hooks";
+import { grantPass } from "@/server/actions/grantPass";
 
 export default function Pass() {
-  const { user } = usePrivy();
+  const { user, login, linkDiscord } = usePrivy();
 
-  const { data: inDiscord } = useQuery({
+  const { data: inDiscord, mutate } = useQuery({
     key: "isInServer",
     queryFn: isInServer,
     args: { user: user?.discord?.username?.split("#")[0] },
     canQuery: !!user?.discord,
   });
+
+  const { execute } = useAction(grantPass);
 
   return (
     <div className="w-full flex flex-col gap-8">
@@ -70,7 +74,24 @@ export default function Pass() {
               </p>
             </li>
           </ul>
-          <Button animate="bg" onClick={() => {}}>
+          <Button
+            animate="bg"
+            onClick={() => {
+              if (!user) {
+                return login();
+              }
+
+              if (!user.discord) {
+                return linkDiscord();
+              }
+
+              if (!inDiscord) {
+                return mutate();
+              }
+
+              execute({ user: user.id });
+            }}
+          >
             {user
               ? user.discord
                 ? inDiscord

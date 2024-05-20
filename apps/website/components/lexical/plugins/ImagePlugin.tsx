@@ -17,7 +17,7 @@ export type InsertImagePayload = Readonly<ImagePayload>;
 export const INSERT_IMAGE_COMMAND: LexicalCommand<InsertImagePayload> =
   createCommand("INSERT_IMAGE_COMMAND");
 
-export default function ImagesPlugin({
+export default function ImagePlugin({
   captionsEnabled,
 }: {
   captionsEnabled?: boolean;

@@ -17,6 +17,8 @@ export async function isInServer(input: { user: string }) {
 
   const members = await response.json();
 
+  console.log(members);
+
   for (const member of members) {
     if (member.user.username === input.user) {
       return true;

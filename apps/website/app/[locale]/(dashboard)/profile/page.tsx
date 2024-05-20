@@ -39,10 +39,10 @@ export default function Profile() {
         <div className="flex flex-col gap-8 w-full ">
           {user?.farcaster ? (
             <div className="flex flex-col gap-4">
-              <div className="flex gap-6 p-6 w-full rounded-xl bg-grey-800">
+              <div className="flex gap-6 p-6 w-full rounded-xl bg-grey-800 max-sm:p-4 max-sm:gap-4">
                 <img
                   src={user.farcaster.pfp ?? ""}
-                  className="w-16 h-16 rounded-full"
+                  className="w-16 h-16 rounded-full max-sm:w-12 max-sm:h-12"
                 />
                 <div className="flex flex-col gap-2 justify-between w-full">
                   <div className="w-full flex justify-between gap-8">
@@ -65,12 +65,14 @@ export default function Profile() {
                         <LinkBreak className="w-[18px] h-[18px]" />
                         Unlink
                       </button>
-                      <Button
-                        animate="bg"
-                        href={`https://warpcast.com/${user.farcaster.username}`}
-                      >
-                        View on Warpcast
-                      </Button>
+                      <div className="max-sm:hidden">
+                        <Button
+                          animate="bg"
+                          href={`https://warpcast.com/${user.farcaster.username}`}
+                        >
+                          View on Warpcast
+                        </Button>
+                      </div>
                     </div>
                   </div>
                   <p className="">{user.farcaster.bio}</p>
@@ -86,8 +88,8 @@ export default function Profile() {
                 </div> */}
                 </div>
               </div>
-              <div className="flex gap-4">
-                <div className="flex items-center justify-between w-full gap-4 rounded-xl bg-grey-800 py-4 px-6">
+              <div className="flex gap-4 max-sm:flex-col">
+                <div className="flex items-center justify-between w-full gap-4 rounded-xl bg-grey-800 py-4 px-6 max-sm:py-3 max-sm:px-4">
                   <div className="flex items-center gap-2.5 text-2xl font-bebas-neue text-white">
                     <DiscordLogo className="w-6 h-6 mb-1" weight="fill" />
                     Discord
@@ -107,7 +109,7 @@ export default function Profile() {
                     {user.discord ? "Unlink" : "Link"}
                   </button>
                 </div>
-                <div className="flex items-center justify-between w-full gap-4 rounded-xl bg-grey-800 py-4 px-6">
+                <div className="flex items-center justify-between w-full gap-4 rounded-xl bg-grey-800 py-4 px-6 max-sm:py-3 max-sm:px-4">
                   <div className="flex items-center gap-2.5 text-2xl font-bebas-neue text-white">
                     <TwitterLogo className="w-6 h-6 mb-1" weight="fill" />
                     Twitter
@@ -128,7 +130,7 @@ export default function Profile() {
                   </button>
                 </div>
               </div>
-              <div className="flex flex-col gap-4 rounded-xl bg-grey-800 py-4 px-6">
+              <div className="flex flex-col gap-4 rounded-xl bg-grey-800 py-4 px-6 max-sm:py-3 max-sm:px-4 max-sm:gap-3">
                 <div className="flex justify-between items-center w-full">
                   <div className="flex items-center gap-2.5 text-2xl font-bebas-neue text-white">
                     <img src="/ethereum.png" className="h-6 mb-1" />
@@ -167,7 +169,7 @@ export default function Profile() {
                         />
                         {wallet.address.substring(0, 8)}
                         <XCircle
-                          className="h-5 text-grey-200 w-0 group-hover:w-5 transition-all"
+                          className="h-5 text-grey-200 w-0 group-hover:w-5 max-sm:w-5 transition-all"
                           weight="fill"
                         />
                       </li>

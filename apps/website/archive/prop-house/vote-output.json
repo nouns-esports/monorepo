@@ -1,296 +1,219 @@
 [
   {
-    "user": "0x75640B1eB20E9473AD40Fcb600B016eefcAE2A7F",
-    "round": "pokemon-art-contest",
-    "count": 1,
-    "timestamp": "2024-04-16T04:04:18.000Z",
-    "proposal": 159
+    "user": "0x651e2daCBF1FF16aC4FaDD67Aa23a2E1612924a1",
+    "round": "tipped-off-15",
+    "count": 10,
+    "timestamp": "2024-05-15T22:03:12.000Z",
+    "proposal": 190
   },
   {
-    "user": "0xE3ff24a97BFB65CAdEF30F6Ad19a6EA7E6F6149d",
-    "round": "pokemon-art-contest",
-    "count": 1,
-    "timestamp": "2024-04-12T17:54:36.000Z",
-    "proposal": 160
+    "user": "0xa87Daa2Bc3bd0eCca4C9111776BAB2c9d44D6c6B",
+    "round": "tipped-off-15",
+    "count": 6,
+    "timestamp": "2024-05-16T21:11:31.000Z",
+    "proposal": 190
   },
   {
-    "user": "0xd75cCA4D0CC46bf0D3A5dc9cC40d133d80A6F322",
-    "round": "pokemon-art-contest",
-    "count": 1,
-    "timestamp": "2024-04-12T17:58:59.000Z",
-    "proposal": 160
+    "user": "0x2f16B37C4b2F9A4637550A24CFd8225D7a0Aefce",
+    "round": "tipped-off-15",
+    "count": 10,
+    "timestamp": "2024-05-15T23:53:47.000Z",
+    "proposal": 190
   },
   {
-    "user": "0xE3ff24a97BFB65CAdEF30F6Ad19a6EA7E6F6149d",
-    "round": "pokemon-art-contest",
-    "count": 1,
-    "timestamp": "2024-04-12T17:54:36.000Z",
-    "proposal": 161
+    "user": "0xC705519E6Ae96264693844f5B3E58bAbB3E8D9c5",
+    "round": "tipped-off-15",
+    "count": 10,
+    "timestamp": "2024-05-17T20:54:39.000Z",
+    "proposal": 190
   },
   {
-    "user": "0xE3ff24a97BFB65CAdEF30F6Ad19a6EA7E6F6149d",
-    "round": "pokemon-art-contest",
-    "count": 1,
-    "timestamp": "2024-04-12T17:54:36.000Z",
-    "proposal": 166
+    "user": "0x4B16a1D917EB241471Dcb1c18f943811A53F714d",
+    "round": "tipped-off-15",
+    "count": 10,
+    "timestamp": "2024-05-17T18:18:16.000Z",
+    "proposal": 190
   },
   {
-    "user": "0x51C6b737C1ef6d06733A1F48924fDe1BE57337F1",
-    "round": "pokemon-art-contest",
-    "count": 1,
-    "timestamp": "2024-04-15T18:27:07.000Z",
-    "proposal": 166
-  },
-  {
-    "user": "0x87a0Dee820326C2CAcbB37F54FF849Db5fd3A5f9",
-    "round": "pokemon-art-contest",
-    "count": 2,
-    "timestamp": "2024-04-12T18:57:10.000Z",
-    "proposal": 166
-  },
-  {
-    "user": "0xd75cCA4D0CC46bf0D3A5dc9cC40d133d80A6F322",
-    "round": "pokemon-art-contest",
-    "count": 1,
-    "timestamp": "2024-04-12T17:58:59.000Z",
-    "proposal": 166
-  },
-  {
-    "user": "0x75640B1eB20E9473AD40Fcb600B016eefcAE2A7F",
-    "round": "pokemon-art-contest",
-    "count": 8,
-    "timestamp": "2024-04-16T04:04:18.000Z",
-    "proposal": 166
-  },
-  {
-    "user": "0x2993284dd36A836f0d83856c2b4586C6Daf008EC",
-    "round": "pokemon-art-contest",
-    "count": 1,
-    "timestamp": "2024-04-14T15:54:22.000Z",
-    "proposal": 166
-  },
-  {
-    "user": "0xc7E49b53671A36323256380Ad4beD5FDc90842Fe",
-    "round": "pokemon-art-contest",
-    "count": 1,
-    "timestamp": "2024-04-15T18:27:07.000Z",
-    "proposal": 166
-  },
-  {
-    "user": "0xE3ff24a97BFB65CAdEF30F6Ad19a6EA7E6F6149d",
-    "round": "pokemon-art-contest",
-    "count": 1,
-    "timestamp": "2024-04-12T17:54:36.000Z",
-    "proposal": 167
-  },
-  {
-    "user": "0x51C6b737C1ef6d06733A1F48924fDe1BE57337F1",
-    "round": "pokemon-art-contest",
-    "count": 2,
-    "timestamp": "2024-04-15T18:27:07.000Z",
-    "proposal": 167
+    "user": "0x111c80d3747Ba73B21757a0465a4826685Ba8D38",
+    "round": "tipped-off-15",
+    "count": 10,
+    "timestamp": "2024-05-17T18:08:17.000Z",
+    "proposal": 190
   },
   {
     "user": "0x87a0Dee820326C2CAcbB37F54FF849Db5fd3A5f9",
-    "round": "pokemon-art-contest",
+    "round": "tipped-off-15",
+    "count": 4,
+    "timestamp": "2024-05-16T04:05:25.000Z",
+    "proposal": 190
+  },
+  {
+    "user": "0xE9b362c5497Ea845a12e0dE59E062B7523106ADb",
+    "round": "tipped-off-15",
+    "count": 10,
+    "timestamp": "2024-05-15T20:31:10.000Z",
+    "proposal": 190
+  },
+  {
+    "user": "0xC5E2D7ce7Db890DB4DC8fB9F797A4F9262BaB76e",
+    "round": "tipped-off-15",
     "count": 1,
-    "timestamp": "2024-04-12T18:57:10.000Z",
-    "proposal": 167
+    "timestamp": "2024-05-16T00:13:31.000Z",
+    "proposal": 190
   },
   {
-    "user": "0x2993284dd36A836f0d83856c2b4586C6Daf008EC",
-    "round": "pokemon-art-contest",
-    "count": 5,
-    "timestamp": "2024-04-14T15:54:22.000Z",
-    "proposal": 167
+    "user": "0x922d1fCBc42BA761685871726dcf68dBeeDF2267",
+    "round": "tipped-off-15",
+    "count": 10,
+    "timestamp": "2024-05-15T20:31:10.000Z",
+    "proposal": 190
   },
   {
-    "user": "0xc7E49b53671A36323256380Ad4beD5FDc90842Fe",
-    "round": "pokemon-art-contest",
+    "user": "0xE3f27DEFf96fe178e87559F36Cbf868B9E75967D",
+    "round": "tipped-off-15",
     "count": 3,
-    "timestamp": "2024-04-15T18:27:07.000Z",
-    "proposal": 167
+    "timestamp": "2024-05-18T04:26:14.000Z",
+    "proposal": 190
   },
   {
-    "user": "0xE3ff24a97BFB65CAdEF30F6Ad19a6EA7E6F6149d",
-    "round": "pokemon-art-contest",
-    "count": 2,
-    "timestamp": "2024-04-12T17:54:36.000Z",
-    "proposal": 168
-  },
-  {
-    "user": "0x51C6b737C1ef6d06733A1F48924fDe1BE57337F1",
-    "round": "pokemon-art-contest",
-    "count": 2,
-    "timestamp": "2024-04-15T18:27:07.000Z",
-    "proposal": 168
-  },
-  {
-    "user": "0xa87Daa2Bc3bd0eCca4C9111776BAB2c9d44D6c6B",
-    "round": "pokemon-art-contest",
-    "count": 1,
-    "timestamp": "2024-04-13T19:43:09.000Z",
-    "proposal": 168
-  },
-  {
-    "user": "0x87a0Dee820326C2CAcbB37F54FF849Db5fd3A5f9",
-    "round": "pokemon-art-contest",
-    "count": 2,
-    "timestamp": "2024-04-12T18:57:10.000Z",
-    "proposal": 168
-  },
-  {
-    "user": "0xd75cCA4D0CC46bf0D3A5dc9cC40d133d80A6F322",
-    "round": "pokemon-art-contest",
-    "count": 1,
-    "timestamp": "2024-04-12T17:58:59.000Z",
-    "proposal": 168
+    "user": "0x15A37c86c1104fE1f1C9a49B6a2c519d12320bcb",
+    "round": "tipped-off-15",
+    "count": 10,
+    "timestamp": "2024-05-16T02:23:26.000Z",
+    "proposal": 190
   },
   {
     "user": "0x2993284dd36A836f0d83856c2b4586C6Daf008EC",
-    "round": "pokemon-art-contest",
+    "round": "tipped-off-15",
     "count": 1,
-    "timestamp": "2024-04-14T15:54:22.000Z",
-    "proposal": 168
-  },
-  {
-    "user": "0xd75cCA4D0CC46bf0D3A5dc9cC40d133d80A6F322",
-    "round": "pokemon-art-contest",
-    "count": 1,
-    "timestamp": "2024-04-12T17:50:10.000Z",
-    "proposal": 169
-  },
-  {
-    "user": "0xE3ff24a97BFB65CAdEF30F6Ad19a6EA7E6F6149d",
-    "round": "pokemon-art-contest",
-    "count": 1,
-    "timestamp": "2024-04-12T17:54:36.000Z",
-    "proposal": 173
-  },
-  {
-    "user": "0x51C6b737C1ef6d06733A1F48924fDe1BE57337F1",
-    "round": "pokemon-art-contest",
-    "count": 1,
-    "timestamp": "2024-04-15T18:27:07.000Z",
-    "proposal": 173
-  },
-  {
-    "user": "0xd75cCA4D0CC46bf0D3A5dc9cC40d133d80A6F322",
-    "round": "pokemon-art-contest",
-    "count": 2,
-    "timestamp": "2024-04-12T17:58:59.000Z",
-    "proposal": 173
-  },
-  {
-    "user": "0x2993284dd36A836f0d83856c2b4586C6Daf008EC",
-    "round": "pokemon-art-contest",
-    "count": 1,
-    "timestamp": "2024-04-14T15:54:22.000Z",
-    "proposal": 173
-  },
-  {
-    "user": "0xE3ff24a97BFB65CAdEF30F6Ad19a6EA7E6F6149d",
-    "round": "pokemon-art-contest",
-    "count": 1,
-    "timestamp": "2024-04-12T17:54:36.000Z",
-    "proposal": 175
-  },
-  {
-    "user": "0x51C6b737C1ef6d06733A1F48924fDe1BE57337F1",
-    "round": "pokemon-art-contest",
-    "count": 2,
-    "timestamp": "2024-04-15T18:27:07.000Z",
-    "proposal": 175
+    "timestamp": "2024-05-15T21:13:52.000Z",
+    "proposal": 192
   },
   {
     "user": "0x87a0Dee820326C2CAcbB37F54FF849Db5fd3A5f9",
-    "round": "pokemon-art-contest",
+    "round": "tipped-off-15",
     "count": 1,
-    "timestamp": "2024-04-12T18:57:10.000Z",
-    "proposal": 175
+    "timestamp": "2024-05-16T04:05:25.000Z",
+    "proposal": 192
   },
   {
-    "user": "0xa87Daa2Bc3bd0eCca4C9111776BAB2c9d44D6c6B",
-    "round": "pokemon-art-contest",
+    "user": "0xE3ff24a97BFB65CAdEF30F6Ad19a6EA7E6F6149d",
+    "round": "tipped-off-15",
+    "count": 2,
+    "timestamp": "2024-05-15T18:47:56.000Z",
+    "proposal": 192
+  },
+  {
+    "user": "0xC5E2D7ce7Db890DB4DC8fB9F797A4F9262BaB76e",
+    "round": "tipped-off-15",
     "count": 9,
-    "timestamp": "2024-04-15T17:41:19.000Z",
-    "proposal": 175
+    "timestamp": "2024-05-16T00:13:31.000Z",
+    "proposal": 192
   },
   {
-    "user": "0xd75cCA4D0CC46bf0D3A5dc9cC40d133d80A6F322",
-    "round": "pokemon-art-contest",
-    "count": 1,
-    "timestamp": "2024-04-12T17:58:59.000Z",
-    "proposal": 175
-  },
-  {
-    "user": "0xc7E49b53671A36323256380Ad4beD5FDc90842Fe",
-    "round": "pokemon-art-contest",
+    "user": "0xE3f27DEFf96fe178e87559F36Cbf868B9E75967D",
+    "round": "tipped-off-15",
     "count": 3,
-    "timestamp": "2024-04-15T18:27:07.000Z",
-    "proposal": 175
-  },
-  {
-    "user": "0xE3ff24a97BFB65CAdEF30F6Ad19a6EA7E6F6149d",
-    "round": "pokemon-art-contest",
-    "count": 2,
-    "timestamp": "2024-04-12T17:54:36.000Z",
-    "proposal": 177
-  },
-  {
-    "user": "0x51C6b737C1ef6d06733A1F48924fDe1BE57337F1",
-    "round": "pokemon-art-contest",
-    "count": 2,
-    "timestamp": "2024-04-15T18:27:07.000Z",
-    "proposal": 177
-  },
-  {
-    "user": "0x87a0Dee820326C2CAcbB37F54FF849Db5fd3A5f9",
-    "round": "pokemon-art-contest",
-    "count": 1,
-    "timestamp": "2024-04-12T18:57:10.000Z",
-    "proposal": 177
-  },
-  {
-    "user": "0xd75cCA4D0CC46bf0D3A5dc9cC40d133d80A6F322",
-    "round": "pokemon-art-contest",
-    "count": 2,
-    "timestamp": "2024-04-12T17:58:59.000Z",
-    "proposal": 177
+    "timestamp": "2024-05-18T04:26:14.000Z",
+    "proposal": 192
   },
   {
     "user": "0x75640B1eB20E9473AD40Fcb600B016eefcAE2A7F",
-    "round": "pokemon-art-contest",
-    "count": 1,
-    "timestamp": "2024-04-16T04:04:18.000Z",
-    "proposal": 177
+    "round": "tipped-off-15",
+    "count": 10,
+    "timestamp": "2024-05-15T18:35:54.000Z",
+    "proposal": 192
+  },
+  {
+    "user": "0xa87Daa2Bc3bd0eCca4C9111776BAB2c9d44D6c6B",
+    "round": "tipped-off-15",
+    "count": 4,
+    "timestamp": "2024-05-16T21:11:31.000Z",
+    "proposal": 194
+  },
+  {
+    "user": "0xC8072ee5521A382164Ff74857a32c3CACaE8F69a",
+    "round": "tipped-off-15",
+    "count": 10,
+    "timestamp": "2024-05-15T19:41:06.000Z",
+    "proposal": 194
   },
   {
     "user": "0x2993284dd36A836f0d83856c2b4586C6Daf008EC",
-    "round": "pokemon-art-contest",
-    "count": 1,
-    "timestamp": "2024-04-14T15:54:22.000Z",
-    "proposal": 177
-  },
-  {
-    "user": "0xc7E49b53671A36323256380Ad4beD5FDc90842Fe",
-    "round": "pokemon-art-contest",
-    "count": 3,
-    "timestamp": "2024-04-15T18:27:07.000Z",
-    "proposal": 177
+    "round": "tipped-off-15",
+    "count": 8,
+    "timestamp": "2024-05-15T21:13:52.000Z",
+    "proposal": 194
   },
   {
     "user": "0x87a0Dee820326C2CAcbB37F54FF849Db5fd3A5f9",
-    "round": "pokemon-art-contest",
+    "round": "tipped-off-15",
     "count": 3,
-    "timestamp": "2024-04-12T18:57:10.000Z",
-    "proposal": 178
+    "timestamp": "2024-05-16T04:05:25.000Z",
+    "proposal": 194
+  },
+  {
+    "user": "0xE3ff24a97BFB65CAdEF30F6Ad19a6EA7E6F6149d",
+    "round": "tipped-off-15",
+    "count": 6,
+    "timestamp": "2024-05-15T18:47:56.000Z",
+    "proposal": 194
+  },
+  {
+    "user": "0xd75cCA4D0CC46bf0D3A5dc9cC40d133d80A6F322",
+    "round": "tipped-off-15",
+    "count": 5,
+    "timestamp": "2024-05-15T18:41:52.000Z",
+    "proposal": 194
+  },
+  {
+    "user": "0xE3f27DEFf96fe178e87559F36Cbf868B9E75967D",
+    "round": "tipped-off-15",
+    "count": 4,
+    "timestamp": "2024-05-18T04:26:14.000Z",
+    "proposal": 194
+  },
+  {
+    "user": "0xc7E49b53671A36323256380Ad4beD5FDc90842Fe",
+    "round": "tipped-off-15",
+    "count": 10,
+    "timestamp": "2024-05-15T05:20:11.000Z",
+    "proposal": 194
   },
   {
     "user": "0x2993284dd36A836f0d83856c2b4586C6Daf008EC",
-    "round": "pokemon-art-contest",
+    "round": "tipped-off-15",
     "count": 1,
-    "timestamp": "2024-04-14T15:54:22.000Z",
-    "proposal": 178
+    "timestamp": "2024-05-15T21:13:52.000Z",
+    "proposal": 195
+  },
+  {
+    "user": "0x87a0Dee820326C2CAcbB37F54FF849Db5fd3A5f9",
+    "round": "tipped-off-15",
+    "count": 2,
+    "timestamp": "2024-05-16T04:05:25.000Z",
+    "proposal": 195
+  },
+  {
+    "user": "0xE3ff24a97BFB65CAdEF30F6Ad19a6EA7E6F6149d",
+    "round": "tipped-off-15",
+    "count": 2,
+    "timestamp": "2024-05-15T18:47:56.000Z",
+    "proposal": 195
+  },
+  {
+    "user": "0x94f88B353674B2AcC82A2Fec99c00764aE631F00",
+    "round": "tipped-off-15",
+    "count": 10,
+    "timestamp": "2024-05-15T18:18:34.000Z",
+    "proposal": 195
+  },
+  {
+    "user": "0xd75cCA4D0CC46bf0D3A5dc9cC40d133d80A6F322",
+    "round": "tipped-off-15",
+    "count": 5,
+    "timestamp": "2024-05-15T18:41:52.000Z",
+    "proposal": 195
   }
 ]

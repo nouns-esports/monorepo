@@ -11,9 +11,13 @@ import {
   ElementNode,
   RangeSelection,
   TextNode,
+  $createParagraphNode,
+  $isParagraphNode,
+  $createTextNode,
 } from "lexical";
-import { $isAtNodeEnd } from "@lexical/selection";
+import { $isAtNodeEnd, $setBlocksType } from "@lexical/selection";
 import {
+  $isListNode,
   INSERT_ORDERED_LIST_COMMAND,
   INSERT_UNORDERED_LIST_COMMAND,
   REMOVE_LIST_COMMAND,
@@ -40,6 +44,8 @@ import { mergeRegister } from "@lexical/utils";
 import { INSERT_IMAGE_COMMAND } from "./ImagePlugin";
 import toast from "react-hot-toast";
 import Button from "@/components/Button";
+import { env } from "@/env";
+import { $createHeadingNode, $isHeadingNode } from "@lexical/rich-text";
 
 const LowPriority = 1;
 
@@ -88,6 +94,30 @@ export default function ToolbarPlugin() {
       setIsItalic(selection.hasFormat("italic"));
       setIsUnderline(selection.hasFormat("underline"));
 
+      const anchorNode = selection.anchor.getNode();
+      const blockNode = anchorNode.getTopLevelElementOrThrow();
+
+      if ($isHeadingNode(blockNode)) {
+        const tag = blockNode.getTag();
+
+        if (tag === "h1" || tag === "h2" || tag === "h3") {
+          setBlockType(tag);
+        }
+      }
+
+      if ($isParagraphNode(blockNode)) {
+        setBlockType("paragraph");
+      }
+
+      if ($isListNode(blockNode)) {
+        if (blockNode.__listType === "number") {
+          setBlockType("number");
+        }
+        if (blockNode.__listType === "bullet") {
+          setBlockType("bullet");
+        }
+      }
+
       // Update links
       // const node = getSelectedNode(selection);
       // const parent = node.getParent();
@@ -100,9 +130,12 @@ export default function ToolbarPlugin() {
   }, []);
 
   const blockTypeToBlockName = {
-    bullet: "Bulleted List",
-    number: "Numbered List",
+    bullet: "Bullet List",
+    number: "Number List",
     paragraph: "Normal",
+    h1: "Heading 1",
+    h2: "Heading 2",
+    h3: "Heading 3",
   };
 
   const [blockType, setBlockType] =
@@ -111,15 +144,34 @@ export default function ToolbarPlugin() {
   const formatList = (listType: "bullet" | "number") => {
     if (listType === "number" && blockType !== "number") {
       editor.dispatchCommand(INSERT_ORDERED_LIST_COMMAND, undefined);
-      setBlockType("number");
     } else if (listType === "bullet" && blockType !== "bullet") {
       editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND, undefined);
-      setBlockType("bullet");
     } else {
       editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined);
-      setBlockType("paragraph");
     }
   };
+
+  function insertLink(url: string) {
+    editor.update(() => {
+      const selection = $getSelection();
+
+      if ($isRangeSelection(selection)) {
+        const anchorNode = selection.anchor.getNode();
+
+        // Create the link node with the specified URL
+        const linkNode = $createLinkNode(url);
+
+        // Create a text node with placeholder text for the link
+        const textNode = $createTextNode("Link");
+
+        // Append the text node to the link node
+        linkNode.append(textNode);
+
+        // Insert the link node at the anchor point
+        anchorNode.insertAfter(linkNode);
+      }
+    });
+  }
 
   useEffect(() => {
     return mergeRegister(
@@ -155,9 +207,27 @@ export default function ToolbarPlugin() {
     );
   }, [editor, $updateToolbar]);
 
+  const formatParagraph = () => {
+    editor.update(() => {
+      const selection = $getSelection();
+      if ($isRangeSelection(selection)) {
+        $setBlocksType(selection, () => $createParagraphNode());
+      }
+    });
+  };
+
+  const formatHeading = (type: "h1" | "h2" | "h3") => {
+    if (blockType !== type) {
+      editor.update(() => {
+        const selection = $getSelection();
+        $setBlocksType(selection, () => $createHeadingNode(type));
+      });
+    }
+  };
+
   return (
     <div
-      className="bg-grey-600 rounded-lg h-9 overflow-hidden w-full flex"
+      className="bg-grey-600 rounded-lg h-9 overflow-hidden w-full flex px-1"
       ref={toolbarRef}
     >
       <button
@@ -186,6 +256,31 @@ export default function ToolbarPlugin() {
           weight="bold"
         />
       </button>
+      <Divider />
+      <select
+        value={blockType}
+        onChange={(e) => {
+          setBlockType(e.target.value as keyof typeof blockTypeToBlockName);
+          console.log(e.target.value);
+          if (["h1", "h2", "h3"].includes(e.target.value)) {
+            return formatHeading(e.target.value as "h1" | "h2" | "h3");
+          }
+
+          if (["bullet", "number"].includes(e.target.value)) {
+            return formatList(e.target.value as "bullet" | "number");
+          }
+
+          formatParagraph();
+        }}
+        className="bg-transparent outline-none text-sm font-semibold"
+      >
+        <option value="paragraph">Normal</option>
+        <option value="h1">Heading 1</option>
+        <option value="h2">Heading 2</option>
+        <option value="h3">Heading 3</option>
+        <option value="bullet">Bullet List</option>
+        <option value="number">Number List</option>
+      </select>
       <Divider />
       <button
         onClick={() => {
@@ -243,31 +338,6 @@ export default function ToolbarPlugin() {
       </button>
       <Divider />
       <button
-        onClick={() => {
-          formatList("bullet");
-        }}
-        className="h-full aspect-square flex items-center justify-center group cursor-pointer"
-        aria-label="Insert Unordered List"
-      >
-        <ListBullets
-          className="w-4 h-4 text-grey-400 group-hover:text-white transition-colors"
-          weight="bold"
-        />
-      </button>
-      <button
-        onClick={() => {
-          formatList("number");
-        }}
-        className="h-full aspect-square flex items-center justify-center group cursor-pointer"
-        aria-label="Insert Ordered List"
-      >
-        <ListNumbers
-          className="w-4 h-4 text-grey-400 group-hover:text-white transition-colors"
-          weight="bold"
-        />
-      </button>
-      <Divider />
-      <button
         onClick={() => setIsLinkModalOpen(true)}
         className="h-full aspect-square flex items-center justify-center group cursor-pointer"
       >
@@ -317,11 +387,8 @@ export default function ToolbarPlugin() {
               <Button
                 animate="bg"
                 onClick={() => {
-                  // instead of toggle link, create one
-                  editor.dispatchCommand(
-                    TOGGLE_LINK_COMMAND,
-                    "https://nouns.gg/"
-                  );
+                  insertLink(linkUrl);
+
                   setIsLinkModalOpen(false);
                   setLinkName("");
                   setLinkUrl("");
@@ -347,8 +414,10 @@ export default function ToolbarPlugin() {
         <input
           type="file"
           accept="image/*"
-          onChange={(event) => {
+          onChange={async (event) => {
             const files = event.target.files;
+
+            console.log("Inserting image");
 
             if (files && files.length > 0) {
               const file = files[0];
@@ -359,13 +428,41 @@ export default function ToolbarPlugin() {
                 return;
               }
 
-              // Pin to IPFS
-              const pinnedFile = "";
+              console.log("running");
 
-              editor.dispatchCommand(INSERT_IMAGE_COMMAND, {
-                altText: "",
-                src: "https://nouns.gg/logo/logo.svg",
-              });
+              try {
+                const formData = new FormData();
+                formData.append("file", file);
+
+                const response = await fetch(
+                  "https://api.pinata.cloud/pinning/pinFileToIPFS",
+                  {
+                    method: "POST",
+                    headers: {
+                      Authorization: `Bearer ${env.NEXT_PUBLIC_PINATA_JWT}`,
+                    },
+                    body: formData,
+                  }
+                );
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                  throw new Error("Could not upload file");
+                }
+
+                console.log(data);
+
+                editor.dispatchCommand(INSERT_IMAGE_COMMAND, {
+                  altText: "",
+                  src: `https://ipfs.nouns.gg/ipfs/${data.IpfsHash}`,
+                });
+              } catch (error) {
+                toast.error("Could not upload image");
+                console.log(error);
+              }
+
+              event.target.value = "";
             }
           }}
           style={{ display: "none" }}

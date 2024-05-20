@@ -35,7 +35,7 @@ export default function Navbar() {
       <NavigationMenu.Root className="pointer-events-auto">
         <NavigationMenu.List
           className={twMerge(
-            "flex items-center bg-black border-grey-800 border rounded-full p-1.5 max-sm:p-1 z-50"
+            "flex items-center bg-black border-grey-800 border rounded-full p-1.5 max-sm:p-1 z-50 relative"
           )}
         >
           <NavGroup title="Explore">

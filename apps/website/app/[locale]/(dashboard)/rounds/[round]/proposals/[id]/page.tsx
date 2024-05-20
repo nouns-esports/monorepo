@@ -34,7 +34,7 @@ export default async function Proposal(props: {
         <ArrowLeft className="w-5 h-5 text-red group-hover:-translate-x-1 transition-transform" />
         Back to round
       </Link>
-      <div className="flex flex-col gap-2 bg-grey-800 rounded-xl p-4">
+      <div className="flex flex-col gap-4 bg-grey-800 rounded-xl p-6 max-sm:p-3">
         <h2 className="text-white font-luckiest-guy text-3xl">
           {proposal.title}
         </h2>

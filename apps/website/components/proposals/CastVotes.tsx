@@ -86,9 +86,9 @@ export default function CastVotes(props: {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex justify-between items-center w-full gap-4">
+      <div className="flex justify-between items-center w-full gap-4 max-sm:flex-col max-sm:items-start">
         <h3 className="text-white font-luckiest-guy text-3xl">Proposals</h3>
-        <div className="flex gap-4 items-center">
+        <div className="flex gap-4 items-center max-sm:justify-between max-sm:w-full">
           <p className="text-white">
             {props.status === "proposing" && yourProposal
               ? "You can edit your proposal until voting starts"
@@ -152,10 +152,12 @@ export default function CastVotes(props: {
       <div className="flex flex-col gap-4">
         {props.proposals
           .toSorted((a, b) => {
-            if (a.user.id === user?.id && b.user.id !== user?.id) {
-              return -1;
-            } else if (b.user.id === user?.id && a.user.id !== user?.id) {
-              return 1;
+            if (props.status !== "ended") {
+              if (a.user.id === user?.id && b.user.id !== user?.id) {
+                return -1;
+              } else if (b.user.id === user?.id && a.user.id !== user?.id) {
+                return 1;
+              }
             }
 
             if (a.votes > 0 || b.votes > 0) {
@@ -168,11 +170,33 @@ export default function CastVotes(props: {
             const [imageIndex, setImageIndex] = useState(0);
 
             return (
-              <div key={index} className="relative flex flex-col gap-4">
+              <Link
+                key={index}
+                href={`/rounds/${props.round}/proposals/${proposal.id}`}
+                className={twMerge(
+                  "relative w-full flex gap-4 bg-grey-800 rounded-xl px-4 pt-4 h-36 overflow-hidden max-sm:flex-col max-sm:p-0 max-sm:h-fit max-sm:gap-0",
+                  props.status === "ended" &&
+                    index < props.awardCount &&
+                    index === 0 &&
+                    "border-[3px] border-gold-500 bg-gold-900 text-white",
+                  props.status === "ended" &&
+                    index < props.awardCount &&
+                    index === 1 &&
+                    "border-[3px] border-silver-500 bg-silver-900 text-white",
+                  props.status === "ended" &&
+                    index < props.awardCount &&
+                    index === 2 &&
+                    "border-[3px] border-bronze-500 bg-bronze-900 text-white",
+                  props.status === "ended" &&
+                    index > 2 &&
+                    index < props.awardCount &&
+                    "border-[3px] border-blue-500 bg-blue-900 text-white"
+                )}
+              >
                 {props.status === "ended" && index < props.awardCount ? (
                   <div
                     className={twMerge(
-                      "absolute -top-2 -left-2 z-10 rounded-md bg-grey-600 font-bold text-white flex items-center justify-center w-9",
+                      "absolute -top-0.5 -right-0.5 z-10 rounded-bl-md bg-grey-600 font-bold text-white flex items-center justify-center w-9 max-sm:z-40",
                       index === 0 && "bg-gold-500 text-gold-900",
                       index === 1 && "bg-silver-500 text-silver-900",
                       index === 2 && "bg-bronze-500 text-bronze-900",
@@ -189,233 +213,86 @@ export default function CastVotes(props: {
                 ) : (
                   ""
                 )}
-                <Link
-                  href={`/rounds/${props.round}/proposals/${proposal.id}`}
-                  className={twMerge(
-                    "relative w-full flex gap-4 bg-grey-800 rounded-xl px-4 pt-4 h-36 overflow-hidden",
-                    props.status === "ended" &&
-                      index < props.awardCount &&
-                      index === 0 &&
-                      "border-[3px] border-gold-500 bg-gold-900 text-white",
-                    props.status === "ended" &&
-                      index < props.awardCount &&
-                      index === 1 &&
-                      "border-[3px] border-silver-500 bg-silver-900 text-white",
-                    props.status === "ended" &&
-                      index < props.awardCount &&
-                      index === 2 &&
-                      "border-[3px] border-bronze-500 bg-bronze-900 text-white",
-                    props.status === "ended" &&
-                      index > 2 &&
-                      index < props.awardCount &&
-                      "border-[3px] border-blue-500 bg-blue-900 text-white"
-                  )}
-                >
-                  {proposal.images.length > 0 ? (
-                    <div className="w-40 flex-shrink-0 h-[calc(100%_-_16px)] rounded-xl overflow-hidden z-20 relative group">
-                      {proposal.images.length > 1 ? (
-                        <div className="w-full top-0 absolute h-full flex items-center px-2 z-30">
-                          <div
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              setImageIndex(
-                                imageIndex === proposal.images.length - 1
-                                  ? 0
-                                  : imageIndex + 1
-                              );
-                              return false;
-                            }}
-                            className="flex items-center w-full h-full"
-                          >
-                            <CaretLeft
-                              className="text-white opacity-0 group-hover:opacity-100 transition-opacity h-6 w-6"
-                              weight="bold"
-                            />
-                          </div>
-                          <div
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              setImageIndex(
-                                imageIndex === 0
-                                  ? proposal.images.length - 1
-                                  : imageIndex - 1
-                              );
-                            }}
-                            className="flex items-center justify-end w-full h-full"
-                          >
-                            <CaretRight
-                              className="text-white opacity-0 group-hover:opacity-100 transition-opacity h-6 w-6"
-                              weight="bold"
-                            />
-                          </div>
+                {proposal.images.length > 0 ? (
+                  <div className="w-40 flex-shrink-0 h-[calc(100%_-_16px)] bg-[white] rounded-xl max-sm:rounded-b-none overflow-hidden z-20 relative group max-sm:w-full max-sm:h-40">
+                    {proposal.images.length > 1 ? (
+                      <div className="w-full top-0 absolute h-full flex items-center px-2 z-30 max-sm:hidden">
+                        <div
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setImageIndex(
+                              imageIndex === proposal.images.length - 1
+                                ? 0
+                                : imageIndex + 1
+                            );
+                            return false;
+                          }}
+                          className="flex items-center w-full h-full"
+                        >
+                          <CaretLeft
+                            className="text-white opacity-0 group-hover:opacity-100 transition-opacity h-6 w-6"
+                            weight="bold"
+                          />
                         </div>
-                      ) : (
-                        ""
-                      )}
-                      <img
-                        key={imageIndex}
-                        src={`${proposal.images[imageIndex]}?img-width=250`}
-                        className="w-full h-full object-cover object-center"
-                      />
-                      <div
-                        className={twMerge(
-                          "bg-black w-full h-full absolute top-0 opacity-0",
-                          proposal.images.length > 1 &&
-                            "group-hover:opacity-30 transition-opacity"
-                        )}
-                      />
-                    </div>
-                  ) : (
-                    ""
-                  )}
-                  <div className="w-full flex flex-col gap-1">
-                    <h4 className="text-2xl font-bebas-neue text-white">
-                      {proposal.title}
-                    </h4>
-                    {proposal.user.name && proposal.user.pfp ? (
-                      <div className="flex gap-2 items-center pl-1 py-0.5 pr-2 -ml-1 -mt-1 rounded-full w-fit">
-                        <img
-                          src={proposal.user.pfp}
-                          className="w-5 h-5 rounded-full"
-                        />
-                        <p className="text-white">{proposal.user.name}</p>
+                        <div
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setImageIndex(
+                              imageIndex === 0
+                                ? proposal.images.length - 1
+                                : imageIndex - 1
+                            );
+                          }}
+                          className="flex items-center justify-end w-full h-full"
+                        >
+                          <CaretRight
+                            className="text-white opacity-0 group-hover:opacity-100 transition-opacity h-6 w-6"
+                            weight="bold"
+                          />
+                        </div>
                       </div>
                     ) : (
                       ""
                     )}
-                    <div className="w-full overflow-hidden h-full">
-                      {proposal.markdown
-                        .replaceAll(/<[^>]*>/g, "")
-                        .slice(0, 500)}
-                    </div>
-                  </div>
-                  {props.status === "voting" || props.status === "ended" ? (
+                    <img
+                      key={imageIndex}
+                      src={`${proposal.images[imageIndex]}?img-width=250`}
+                      className="w-full h-full object-cover object-center"
+                    />
                     <div
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                      }}
-                      className="h-full items-center flex gap-4 z-20 relative pb-4"
-                    >
-                      <div
-                        className={twMerge(
-                          "h-full bg-grey-600 w-[1px]",
-                          props.status === "ended" &&
-                            index === 0 &&
-                            index < props.awardCount &&
-                            "bg-gold-500",
-                          props.status === "ended" &&
-                            index === 1 &&
-                            index < props.awardCount &&
-                            "bg-silver-500",
-                          props.status === "ended" &&
-                            index === 2 &&
-                            index < props.awardCount &&
-                            "bg-bronze-500",
-                          props.status === "ended" &&
-                            index > 2 &&
-                            index < props.awardCount &&
-                            "bg-blue-500"
-                        )}
+                      className={twMerge(
+                        "bg-black w-full h-full absolute top-0 opacity-0",
+                        proposal.images.length > 1 &&
+                          "group-hover:opacity-30 transition-opacity"
+                      )}
+                    />
+                  </div>
+                ) : (
+                  ""
+                )}
+                <div className="relative w-full flex flex-col gap-1 max-sm:px-3 max-sm:pt-3 max-sm:h-32">
+                  <h4 className="text-2xl font-bebas-neue text-white">
+                    {proposal.title}
+                  </h4>
+                  {proposal.user.name && proposal.user.pfp ? (
+                    <div className="flex gap-2 items-center pl-1 py-0.5 pr-2 -ml-1 -mt-1 rounded-full w-fit">
+                      <img
+                        src={proposal.user.pfp}
+                        className="w-5 h-5 rounded-full"
                       />
-                      <div
-                        className={twMerge(
-                          "flex flex-col items-center gap-2 w-14 flex-shrink-0"
-                        )}
-                      >
-                        {proposal.user?.id !== user?.id &&
-                        props.status === "voting" ? (
-                          <CaretUp
-                            onClick={() => {
-                              if (
-                                votesCast >
-                                props.voteAllocation.allocated - 1
-                              )
-                                return;
-
-                              setVotes({
-                                ...votes,
-                                [proposal.id]:
-                                  (votes[proposal.id]
-                                    ? votes[proposal.id]
-                                    : 0) + 1,
-                              });
-                            }}
-                            className="w-5 h-5 text-grey-200 hover:text-white transition-colors"
-                            weight="fill"
-                          />
-                        ) : (
-                          ""
-                        )}
-                        <p
-                          className={twMerge(
-                            "text-grey-200 text-2xl font-bebas-neue text-center text-nowrap",
-                            props.status === "ended" &&
-                              index < props.awardCount &&
-                              "text-white",
-
-                            (props.status === "ended" ||
-                              proposal.user?.id === user?.id) &&
-                              "flex flex-col items-center gap-2.5"
-                          )}
-                        >
-                          {proposal.votes}
-
-                          {votes[proposal.id] ? (
-                            <span className="text-white">
-                              {" "}
-                              + {votes[proposal.id]}
-                            </span>
-                          ) : (
-                            ""
-                          )}
-
-                          {props.status === "ended" ||
-                          (proposal.user?.id === user?.id &&
-                            props.status === "voting") ? (
-                            <ChartBarHorizontal
-                              className={twMerge(
-                                "w-5 h-5 text-grey-200 -rotate-90",
-                                props.status === "ended" &&
-                                  index < props.awardCount &&
-                                  "text-white"
-                              )}
-                              weight="fill"
-                            />
-                          ) : (
-                            ""
-                          )}
-                        </p>
-                        {proposal.user?.id !== user?.id &&
-                        props.status === "voting" ? (
-                          <CaretDown
-                            onClick={() => {
-                              if (
-                                (votes[proposal.id] ? votes[proposal.id] : 0) <
-                                1
-                              )
-                                return;
-                              setVotes({
-                                ...votes,
-                                [proposal.id]: votes[proposal.id] - 1,
-                              });
-                            }}
-                            className="w-5 h-5 text-grey-200 hover:text-white transition-colors"
-                            weight="fill"
-                          />
-                        ) : (
-                          ""
-                        )}
-                      </div>
+                      <p className="text-white">{proposal.user.name}</p>
                     </div>
                   ) : (
                     ""
                   )}
+                  <div className="w-full overflow-hidden h-full">
+                    {proposal.markdown.replaceAll(/<[^>]*>/g, "").slice(0, 500)}
+                  </div>
                   <div
                     className={twMerge(
-                      "absolute left-0 w-full bg-gradient-to-t from-grey-800 to-transparent h-10 bottom-0 z-10",
+                      "absolute left-0 w-full bg-gradient-to-t from-grey-800 to-transparent h-10 bottom-0 z-10 hidden max-sm:flex",
                       props.status === "ended" &&
                         index < props.awardCount &&
                         index === 0 &&
@@ -434,8 +311,146 @@ export default function CastVotes(props: {
                         "from-blue-900"
                     )}
                   />
-                </Link>
-              </div>
+                </div>
+                {props.status === "voting" || props.status === "ended" ? (
+                  <div
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }}
+                    className="h-full items-center flex gap-4 z-20 relative pb-4 max-sm:h-12 max-sm:w-full max-sm:justify-end max-sm:px-3 max-sm:pb-0 max-sm:border-t-grey-500"
+                  >
+                    <div
+                      className={twMerge(
+                        "h-full bg-grey-600 w-[1px] max-sm:hidden",
+                        props.status === "ended" &&
+                          index === 0 &&
+                          index < props.awardCount &&
+                          "bg-gold-500",
+                        props.status === "ended" &&
+                          index === 1 &&
+                          index < props.awardCount &&
+                          "bg-silver-500",
+                        props.status === "ended" &&
+                          index === 2 &&
+                          index < props.awardCount &&
+                          "bg-bronze-500",
+                        props.status === "ended" &&
+                          index > 2 &&
+                          index < props.awardCount &&
+                          "bg-blue-500"
+                      )}
+                    />
+                    <div
+                      className={twMerge(
+                        "flex flex-col items-center gap-2 w-14 flex-shrink-0 max-sm:flex-row max-sm:w-auto"
+                      )}
+                    >
+                      {proposal.user?.id !== user?.id &&
+                      props.status === "voting" ? (
+                        <CaretUp
+                          onClick={() => {
+                            if (votesCast > props.voteAllocation.allocated - 1)
+                              return;
+
+                            setVotes({
+                              ...votes,
+                              [proposal.id]:
+                                (votes[proposal.id] ? votes[proposal.id] : 0) +
+                                1,
+                            });
+                          }}
+                          className="w-5 h-5 text-grey-200 hover:text-white transition-colors max-sm:-rotate-90"
+                          weight="fill"
+                        />
+                      ) : (
+                        ""
+                      )}
+                      <p
+                        className={twMerge(
+                          "text-grey-200 text-2xl font-bebas-neue text-center text-nowrap max-sm:mt-1",
+                          props.status === "ended" &&
+                            index < props.awardCount &&
+                            "text-white",
+
+                          (props.status === "ended" ||
+                            proposal.user?.id === user?.id) &&
+                            "flex flex-col items-center gap-2.5 max-sm:flex-row"
+                        )}
+                      >
+                        {proposal.votes}
+
+                        {votes[proposal.id] ? (
+                          <span className="text-white">
+                            {" "}
+                            + {votes[proposal.id]}
+                          </span>
+                        ) : (
+                          ""
+                        )}
+
+                        {props.status === "ended" ||
+                        (proposal.user?.id === user?.id &&
+                          props.status === "voting") ? (
+                          <ChartBarHorizontal
+                            className={twMerge(
+                              "w-5 h-5 text-grey-200 -rotate-90",
+                              props.status === "ended" &&
+                                index < props.awardCount &&
+                                "text-white"
+                            )}
+                            weight="fill"
+                          />
+                        ) : (
+                          ""
+                        )}
+                      </p>
+                      {proposal.user?.id !== user?.id &&
+                      props.status === "voting" ? (
+                        <CaretDown
+                          onClick={() => {
+                            if (
+                              (votes[proposal.id] ? votes[proposal.id] : 0) < 1
+                            )
+                              return;
+                            setVotes({
+                              ...votes,
+                              [proposal.id]: votes[proposal.id] - 1,
+                            });
+                          }}
+                          className="w-5 h-5 text-grey-200 hover:text-white transition-colors max-sm:-rotate-90"
+                          weight="fill"
+                        />
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                  </div>
+                ) : (
+                  ""
+                )}
+                <div
+                  className={twMerge(
+                    "absolute left-0 w-full bg-gradient-to-t from-grey-800 to-transparent h-10 bottom-0 z-10 max-sm:hidden",
+                    props.status === "ended" &&
+                      index < props.awardCount &&
+                      index === 0 &&
+                      "from-gold-900",
+                    props.status === "ended" &&
+                      index < props.awardCount &&
+                      index === 1 &&
+                      "from-silver-900",
+                    props.status === "ended" &&
+                      index < props.awardCount &&
+                      index === 2 &&
+                      "from-bronze-900",
+                    props.status === "ended" &&
+                      index > 2 &&
+                      index < props.awardCount &&
+                      "from-blue-900"
+                  )}
+                />
+              </Link>
             );
           })}
         {props.proposals.length < 1 ? (

@@ -7,7 +7,7 @@ import Link from "./Link";
 
 export default function DashboardNavigation() {
   return (
-    <NavigationMenu.Root className="sticky top-28 max-sm:top-20 max-lg:flex hidden">
+    <NavigationMenu.Root className="relative z-50 max-lg:flex hidden">
       <NavigationMenu.List>
         <NavigationMenu.Item>
           <NavigationMenu.Trigger className="border border-grey-800 bg-black rounded-lg h-10 text-white flex w-[calc(100vw_-_64px)] max-sm:w-[calc(100vw_-_32px)] justify-between items-center px-4">
@@ -16,14 +16,14 @@ export default function DashboardNavigation() {
           </NavigationMenu.Trigger>
           <NavigationMenu.Content className="border border-grey-800 bg-black rounded-lg absolute left-0 w-[calc(100vw_-_32px)] mt-2 flex flex-col gap-4 p-4">
             <ul className="flex flex-col gap-1">
-              {/* <NavItem href="/dashboard">Dashboard</NavItem> */}
               <NavItem href="/rounds">Rounds</NavItem>
+              <NavItem href="/pass">Pass</NavItem>
               <NavItem href="/shop">Shop</NavItem>
               <NavItem href="/profile">Profile</NavItem>
             </ul>
             <div className="flex flex-col gap-2">
               <h2 className="text-white font-bebas-neue text-xl">Discussion</h2>
-              <ul className="grid grid-cols-10 gap-2">
+              <ul className="grid grid-cols-10 max-sm:grid-cols-6 gap-2">
                 <GameIcon src="/logo/logo.svg" href="/chat/nouns-esports" />
                 <GameIcon src="/nouns.png" href="/chat/nouns" />
                 <GameIcon src="/esports.png" href="/chat/esports" />

@@ -61,6 +61,11 @@ export const castVotes = onlyPassMemberAction(
           throw new Error("Proposal not found");
         }
 
+        if (proposal.user === input.user) {
+          tx.rollback();
+          throw new Error("You cannot vote on your own proposal");
+        }
+
         if (proposal.round !== input.round) {
           tx.rollback();
           throw new Error("You can only vote on proposals in the same round");

@@ -106,7 +106,7 @@ export default function MarkdownEditor(props: {
             max={Infinity}
           />
         </div>
-        <div className="relative bg-grey-800 border border-grey-600 rounded-xl overflow-hidden p-2 ">
+        <div className="relative bg-grey-800 border border-grey-600 rounded-xl overflow-hidden p-2 min-h-60">
           <Markdown
             markdown={editorState}
             readOnly={false}
