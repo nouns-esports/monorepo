@@ -87,6 +87,13 @@ export const castVotes = onlyPassMemberAction(
             timestamp: now,
           },
         ]);
+
+        await tx
+          .update(proposals)
+          .set({
+            totalVotes: proposal.totalVotes + vote.count,
+          })
+          .where(eq(proposals.id, vote.proposal));
       }
     });
 

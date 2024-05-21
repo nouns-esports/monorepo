@@ -9,7 +9,7 @@ import { revalidateTag } from "next/cache";
 export const createProposal = onlyUserAction(
   z.object({
     title: z.string().min(10).max(100),
-    description: z.string().min(500),
+    content: z.string().min(500),
     round: z.string().min(1),
     user: z.string().min(1),
     value: z.string().optional(),
@@ -46,10 +46,14 @@ export const createProposal = onlyUserAction(
       throw new Error("You have already proposed for this round");
     }
 
+    const { image, description } = parseLexicalState(input.content);
+
     await db.insert(proposals).values([
       {
         title: input.title,
-        description: input.description,
+        content: input.content,
+        description,
+        image,
         round: input.round,
         user: input.user,
         value: input.value ?? "0",
@@ -60,16 +64,3 @@ export const createProposal = onlyUserAction(
     revalidateTag("proposals");
   }
 );
-
-// export const seedProposals = action(z.undefined(), async () => {
-//   return db.insert(proposals).values([
-//     {
-//       title: "Test Propoasl",
-//       description: "This is a proposal",
-//       round: "goml-2024",
-//       user: "sam",
-//       value: "0",
-//       createdAt: new Date(),
-//     },
-//   ]);
-// });

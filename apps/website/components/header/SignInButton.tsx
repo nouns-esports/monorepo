@@ -1,10 +1,8 @@
 "use client";
 
-import Text from "@/components/Text";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Loading from "../Loading";
 import { useLogin, usePrivy } from "@privy-io/react-auth";
-import { WarningCircle } from "phosphor-react-sc";
 
 export default function SignInButton() {
   const { authenticated, user, logout, ready } = usePrivy();
@@ -12,18 +10,17 @@ export default function SignInButton() {
   const { login } = useLogin({
     onComplete: (user, isNewUser, wasAlreadyAuthenticated, loginMethod) => {
       if (isNewUser && loginMethod !== "farcaster") {
-        router.push(`/${params.locale}/profile`);
+        router.push("/profile");
       }
     },
   });
 
   const router = useRouter();
-  const params = useParams();
 
   return (
     <button
       onClick={() => {
-        if (authenticated) router.push(`/${params.locale}/profile`);
+        if (authenticated) router.push("/profile");
         else login();
       }}
       style={{
@@ -56,7 +53,7 @@ export default function SignInButton() {
           <Loading />
         </div>
       ) : (
-        <Text en="Sign in" pt="Entrar" />
+        "Sign in"
       )}
     </button>
   );

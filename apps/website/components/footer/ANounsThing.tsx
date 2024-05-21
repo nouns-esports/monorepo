@@ -1,18 +1,14 @@
 "use client";
 
 import Link from "@/components/Link";
-import Text from "@/components/Text";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useMouse } from "@uidotdev/usehooks";
-import { PrimaryColorContext } from "@/providers/PrimaryColor";
 
 export default function ANounsThing() {
   const [mouse, ref] = useMouse();
 
   const [rotate, setRotate] = useState(0);
   const [lockRotation, setLockRotation] = useState(false);
-
-  const primaryColor = useContext(PrimaryColorContext);
 
   useEffect(() => {
     if (window.innerWidth > 768 && !lockRotation) {
@@ -31,7 +27,7 @@ export default function ANounsThing() {
       href="https://nouns.wtf"
       className="flex gap-2 items-center select-none text-white w-fit font-londrina-solid"
     >
-      <Text en="A" pt="É sobre" />
+      A
       <div
         // @ts-ignore
         ref={ref}
@@ -41,7 +37,7 @@ export default function ANounsThing() {
         <svg viewBox="0 0 16 6" fill="none">
           <path
             d="M3 3V6H9V3H10V6H16V0H10V2H9V0H3V2H0V5H1V3H3Z"
-            fill={primaryColor}
+            fill="#E93737"
             className="transition-colors"
           />
           <path d="M3.99982 5V1H5.99982V5H3.99982Z" fill="white" />
@@ -50,8 +46,7 @@ export default function ANounsThing() {
           <path d="M12.9998 5V1H14.9998V5H12.9998Z" fill="black" />
         </svg>
       </div>
-
-      <Text en="thing" pt="" />
+      thing
     </Link>
   );
 }

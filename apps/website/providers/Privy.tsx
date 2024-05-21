@@ -1,22 +1,10 @@
 "use client";
 
-import { PrivyProvider } from "@privy-io/react-auth";
-import { WagmiProvider } from "@privy-io/wagmi";
+import { PrivyProvider, usePrivy } from "@privy-io/react-auth";
 import { env } from "@/env";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { createConfig } from "@privy-io/wagmi";
-import { http } from "wagmi";
 import { base, baseSepolia } from "viem/chains";
-
-const queryClient = new QueryClient();
-
-const wagmiConfig = createConfig({
-  chains: [env.NEXT_PUBLIC_ENVIRONMENT === "production" ? base : baseSepolia],
-  transports: {
-    [base.id]: http(),
-    [baseSepolia.id]: http(),
-  },
-});
+// import { useEffect } from "react";
+// import { identify } from "@multibase/js"
 
 export default function Privy(props: { children: React.ReactNode }) {
   return (
@@ -36,9 +24,7 @@ export default function Privy(props: { children: React.ReactNode }) {
         },
       }}
     >
-      <QueryClientProvider client={queryClient}>
-        <WagmiProvider config={wagmiConfig}>{props.children}</WagmiProvider>
-      </QueryClientProvider>
+      {props.children}
     </PrivyProvider>
   );
 }

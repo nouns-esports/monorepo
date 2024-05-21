@@ -11,17 +11,17 @@ import { useRouter } from "next/navigation";
 import { usePrivy } from "@privy-io/react-auth";
 import LimitMeter from "../LimitMeter";
 import Markdown from "../lexical/Mardown";
-import { Proposal } from "@/db/schema";
 import { updateProposal } from "@/server/actions/updateProposal";
+import { getProposal } from "@/server/queries/proposals";
 
 export default function MarkdownEditor(props: {
   round: string;
-  proposal?: Proposal;
+  proposal?: Awaited<ReturnType<typeof getProposal>>;
 }) {
   const [title, setTitle] = useState(props.proposal?.title ?? "");
 
   const [editorState, setEditorState] = useState(
-    props.proposal?.description ??
+    props.proposal?.content ??
       JSON.stringify({
         children: [
           {
@@ -43,7 +43,7 @@ export default function MarkdownEditor(props: {
   );
 
   const [parsedMarkdown, setParsedMarkdown] = useState(
-    props.proposal?.description ?? ""
+    props.proposal?.content ?? ""
   );
 
   const router = useRouter();
@@ -149,14 +149,14 @@ export default function MarkdownEditor(props: {
                 round: props.round,
                 proposal: props.proposal.id,
                 title,
-                description: editorState,
+                content: editorState,
               });
               return;
             }
 
             executeCreateProposal({
               title,
-              description: editorState,
+              content: editorState,
               round: props.round,
               user: user.id,
             });

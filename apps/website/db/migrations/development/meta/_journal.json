@@ -211,6 +211,48 @@
       "when": 1715962561070,
       "tag": "0029_burly_gideon",
       "breakpoints": true
+    },
+    {
+      "idx": 30,
+      "version": "6",
+      "when": 1716250673642,
+      "tag": "0030_conscious_white_tiger",
+      "breakpoints": true
+    },
+    {
+      "idx": 31,
+      "version": "6",
+      "when": 1716250871168,
+      "tag": "0031_far_firebrand",
+      "breakpoints": true
+    },
+    {
+      "idx": 32,
+      "version": "6",
+      "when": 1716252244447,
+      "tag": "0032_keen_cannonball",
+      "breakpoints": true
+    },
+    {
+      "idx": 33,
+      "version": "6",
+      "when": 1716257492409,
+      "tag": "0033_thick_spot",
+      "breakpoints": true
+    },
+    {
+      "idx": 34,
+      "version": "6",
+      "when": 1716257530141,
+      "tag": "0034_third_abomination",
+      "breakpoints": true
+    },
+    {
+      "idx": 35,
+      "version": "6",
+      "when": 1716267572815,
+      "tag": "0035_cool_solo",
+      "breakpoints": true
     }
   ]
 }

@@ -1,4 +1,4 @@
-import { db, rounds } from "@/db/schema";
+import { Round, db, rounds } from "@/db/schema";
 import { eq, gt, and, lt, asc, desc } from "drizzle-orm";
 import { unstable_cache as cache } from "next/cache";
 

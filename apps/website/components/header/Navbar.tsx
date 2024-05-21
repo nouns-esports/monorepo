@@ -39,46 +39,40 @@ export default function Navbar() {
           )}
         >
           <NavGroup title="Explore">
-            <NavGroupItem href={`/${params.locale}/rounds`} icon="⌛">
+            <NavGroupItem href="/rounds" icon="⌛">
               Rounds
             </NavGroupItem>
             <NavGroupItem href="/shop" icon="🛒">
               Shop
             </NavGroupItem>
-            <NavGroupItem href={`/${params.locale}/#projects`} icon="🛠️">
+            <NavGroupItem href="/#projects" icon="🛠️">
               Projects
             </NavGroupItem>
-            <NavGroupItem href={`/${params.locale}/partners`} icon="🤝">
+            <NavGroupItem href="/partners" icon="🤝">
               Partners
             </NavGroupItem>
           </NavGroup>
           <NavGroup title="Rosters">
-            <NavGroupItem
-              href={`/${params.locale}/rosters/cs2`}
-              icon="/games/icons/cs2.png"
-            >
+            <NavGroupItem href="rosters/cs2" icon="/games/icons/cs2.png">
               CS2
             </NavGroupItem>
-            <NavGroupItem
-              href={`/${params.locale}/rosters/dota-2`}
-              icon="/games/icons/dota-2.png"
-            >
+            <NavGroupItem href="/rosters/dota-2" icon="/games/icons/dota-2.png">
               Dota 2
             </NavGroupItem>
             <NavGroupItem
-              href={`/${params.locale}/rosters/smash-melee`}
+              href="/rosters/smash-melee"
               icon="/games/icons/smash-melee.png"
             >
               Smash Melee
             </NavGroupItem>
             <NavGroupItem
-              href={`/${params.locale}/rosters/street-fighter`}
+              href="/rosters/street-fighter"
               icon="/games/street-fighter.webp"
             >
               Street Fighter
             </NavGroupItem>
           </NavGroup>
-          <NavItem href={`/${params.locale}/pass`} icon="/logo/logo-white.svg">
+          <NavItem href="/pass" icon="/logo/logo-white.svg">
             Pass
           </NavItem>
           <SignInButton />
@@ -112,34 +106,28 @@ export default function Navbar() {
           </p>
         </Link> */}
         <MenuGroup title="Explore">
-          <MenuGroupItem href={`/${params.locale}/#events`} icon="📅">
+          <MenuGroupItem href="/#events" icon="📅">
             Events
           </MenuGroupItem>
           <MenuGroupItem href="/shop" icon="🛒">
             Shop
           </MenuGroupItem>
-          <MenuGroupItem href={`/${params.locale}/#projects`} icon="🛠️">
+          <MenuGroupItem href="/#projects" icon="🛠️">
             Projects
           </MenuGroupItem>
-          <MenuGroupItem href={`/${params.locale}/partners`} icon="🤝">
+          <MenuGroupItem href="/partners" icon="🤝">
             Partners
           </MenuGroupItem>
         </MenuGroup>
         <MenuGroup title="Rosters">
-          <MenuGroupItem
-            href={`/${params.locale}/rosters/cs2`}
-            icon="/games/icons/cs2.png"
-          >
+          <MenuGroupItem href="/rosters/cs2" icon="/games/icons/cs2.png">
             CS2
           </MenuGroupItem>
-          <MenuGroupItem
-            href={`/${params.locale}/rosters/dota-2`}
-            icon="/games/icons/dota-2.png"
-          >
+          <MenuGroupItem href="/rosters/dota-2" icon="/games/icons/dota-2.png">
             Dota 2
           </MenuGroupItem>
           <MenuGroupItem
-            href={`/${params.locale}/rosters/smash-melee`}
+            href="/rosters/smash-melee"
             icon="/games/icons/smash-melee.png"
           >
             Smash Melee

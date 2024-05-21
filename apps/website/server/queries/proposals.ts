@@ -1,6 +1,17 @@
-import { db, proposals } from "@/db/schema";
-import { and, asc, eq } from "drizzle-orm";
+import { Proposal, db, proposals } from "@/db/schema";
+import { and, asc, desc, eq } from "drizzle-orm";
 import { unstable_cache as cache } from "next/cache";
+import { getUser } from "./users";
+import { getRound } from "./rounds";
+
+async function proposalWithUser(proposal: Proposal) {
+  const user = await getUser({ id: proposal.user });
+
+  return {
+    ...proposal,
+    user,
+  };
+}
 
 export const getProposal = cache(
   async (input: { id?: number; user?: string }) => {
@@ -9,31 +20,46 @@ export const getProposal = cache(
     }
 
     if (input.id) {
-      return db.query.proposals.findFirst({
+      const proposal = await db.query.proposals.findFirst({
         where: eq(proposals.id, input.id),
       });
+
+      if (!proposal) return;
+
+      return proposalWithUser(proposal);
     }
 
     if (input.user) {
-      return db.query.proposals.findFirst({
+      const proposal = await db.query.proposals.findFirst({
         where: eq(proposals.user, input.user),
       });
+
+      if (!proposal) return;
+
+      return proposalWithUser(proposal);
     }
   },
-  ["proposal"],
-  { tags: ["proposal"], revalidate: 1 }
+  ["proposals"],
+  { tags: ["proposals"] }
 );
 
 export const getProposals = cache(
   async (input: { round: string }) => {
-    return db.query.proposals.findMany({
+    const round = await getRound({ id: input.round });
+
+    if (!round) {
+      throw new Error("Round not found");
+    }
+
+    const data = await db.query.proposals.findMany({
       where: and(eq(proposals.round, input.round), eq(proposals.hidden, false)),
-      orderBy: asc(proposals.createdAt),
-      with: {
-        votes: true,
-      },
+      orderBy: [desc(proposals.totalVotes), asc(proposals.createdAt)],
     });
+
+    return Promise.all(
+      data.map(async (proposal) => proposalWithUser(proposal))
+    );
   },
   ["proposals"],
-  { tags: ["proposals"], revalidate: 1 }
+  { tags: ["proposals"] }
 );

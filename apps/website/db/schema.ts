@@ -1,7 +1,6 @@
 import { drizzle } from "drizzle-orm/node-postgres";
 import {
   boolean,
-  char,
   pgTable,
   text,
   timestamp,
@@ -20,7 +19,6 @@ export const games = pgTable("games", {
   active: boolean("active").notNull(),
   name: text("name").notNull(),
   image: text("image").notNull(),
-  color: char("color", { length: 7 }).notNull(),
 });
 
 export const gamesRelations = relations(games, ({ many }) => ({
@@ -111,7 +109,8 @@ export const pass = pgTable("pass", {
 export const rounds = pgTable("rounds", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
-  description: text("description").notNull(),
+  description: text("description").default("").notNull(),
+  content: text("content").notNull(),
   start: timestamp("start", { mode: "date" }).notNull(),
   votingStart: timestamp("voting_start", { mode: "date" }).notNull(),
   end: timestamp("end", { mode: "date" }),
@@ -131,28 +130,6 @@ export const roundsRelations = relations(rounds, ({ many }) => ({
 // An ERC1155: eip155:8453:0xADDRESS:2
 // Value with precision 78 is the min value to account for a uint256
 // If place is 0, it is an infinite round
-
-export const tokenList: Record<
-  string,
-  { name: string; image: string; decimals: number }
-> = {
-  "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913": {
-    name: "USDC",
-    image: "https://cryptologos.cc/logos/usd-coin-usdc-logo.png",
-    decimals: 6,
-  },
-  "0xb15e3327351ea46ab314f809652076f9c37ece07": {
-    name: "Nouns Esports Builders",
-    image:
-      "https://i.seadn.io/s/raw/files/000d9574d11b6f6669c753729bb5adf0.png?auto=format&dpr=1&w=1000",
-    decimals: 0,
-  },
-  "0x0000000000000000000000000000000000000000": {
-    name: "ETH",
-    image: "https://cdn.worldvectorlogo.com/logos/ethereum-eth.svg",
-    decimals: 18,
-  },
-};
 
 export const awards = pgTable("awards", {
   id: serial("id").primaryKey(),
@@ -175,11 +152,14 @@ export const proposals = pgTable("proposals", {
   user: text("user").notNull(),
   round: text("round").notNull(),
   title: text("title").notNull(),
-  description: text("description").notNull(),
+  description: text("description").default("").notNull(),
+  content: text("content").notNull(),
   value: numeric("value", { precision: 78 }).notNull(),
   createdAt: timestamp("created_at", { mode: "date" }).notNull(),
-  hidden: boolean("hidden").default(false),
-  published: boolean("published").default(true),
+  hidden: boolean("hidden").notNull().default(false),
+  published: boolean("published").notNull().default(true),
+  totalVotes: smallint("total_votes").notNull().default(0),
+  image: text("image").notNull().default(""),
 });
 
 export const proposalsRelations = relations(proposals, ({ one, many }) => ({

@@ -1,18 +1,12 @@
 "use client";
 
-import { useParams } from "next/navigation";
+export default function DateComponent(props: { timestamp: string }) {
+  const date = new Date(props.timestamp);
 
-export default function Date(props: { timestamp: string }) {
-  const { locale } = useParams();
-
-  const date = new (typeof window === "undefined" ? global : window).Date(
-    props.timestamp
-  );
-
-  return `${date.toLocaleDateString(locale, {
+  return `${date.toLocaleDateString("en", {
     dateStyle: "medium",
   })} -
-  ${date.toLocaleTimeString(locale, {
+  ${date.toLocaleTimeString("en", {
     timeStyle: "short",
   })}`;
 }

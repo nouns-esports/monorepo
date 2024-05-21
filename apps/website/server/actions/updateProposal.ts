@@ -12,7 +12,7 @@ export const updateProposal = onlyUserAction(
     round: z.string().min(1),
     proposal: z.number().gt(0),
     title: z.string().min(10).max(100),
-    description: z.string().min(500),
+    content: z.string().min(500),
   }),
   async (input) => {
     const round = await db.query.rounds.findFirst({
@@ -30,11 +30,15 @@ export const updateProposal = onlyUserAction(
       throw new Error("Proposing has closed");
     }
 
+    const { image, description } = parseLexicalState(input.content);
+
     await db
       .update(proposals)
       .set({
         title: input.title,
-        description: input.description,
+        content: input.content,
+        description,
+        image,
       })
       .where(eq(proposals.id, input.proposal));
 
