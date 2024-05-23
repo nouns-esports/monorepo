@@ -4,20 +4,20 @@ import { notFound } from "next/navigation";
 import { ArrowLeft } from "phosphor-react-sc";
 import AwardScroller from "@/components/rounds/AwardScroller";
 import CastVotes from "@/components/proposals/CastVotes";
-import Markdown from "@/components/lexical/Mardown";
+import Markdown from "@/components/lexical/Markdown";
 import { twMerge } from "tailwind-merge";
 import { formatUnits } from "viem";
 import { getFrameMetadata } from "frog/next";
 import type { Metadata } from "next";
 import { getRound } from "@/server/queries/rounds";
-import { getAwards } from "@/server/queries/awards";
 import { getProposals } from "@/server/queries/proposals";
-import { getUserIdFromSession } from "@/server/actions";
-import { getVoteAllocation } from "@/server/queries/votes";
+import { getUserVotes } from "@/server/queries/votes";
 import { roundState } from "@/utils/roundState";
 import { numberToOrdinal } from "@/utils/numberToOrdinal";
 import { awardTypeToToken } from "@/utils/awardTypeToToken";
 import { mergeAwards } from "@/utils/mergeAwards";
+import { getAuthenticatedUser } from "@/server/queries/users";
+import { canClaimAward } from "@/server/queries/awards";
 
 export async function generateMetadata(props: {
   params: { round: string };
@@ -30,9 +30,8 @@ export async function generateMetadata(props: {
 }
 
 export default async function Round(props: { params: { round: string } }) {
-  const [round, awards, proposals] = await Promise.all([
+  const [round, proposals] = await Promise.all([
     getRound({ id: props.params.round }),
-    getAwards({ round: props.params.round }),
     getProposals({ round: props.params.round }),
   ]);
 
@@ -42,13 +41,18 @@ export default async function Round(props: { params: { round: string } }) {
 
   const state = roundState(round);
 
-  let user = "";
+  const user = await getAuthenticatedUser();
 
-  try {
-    user = await getUserIdFromSession();
-  } catch (error) {
-    console.log(error);
-  }
+  const userState = user
+    ? {
+        id: user,
+        canClaimAward: await canClaimAward({ user, round: props.params.round }),
+        votes: await getUserVotes({
+          round: props.params.round,
+          user,
+        }),
+      }
+    : undefined;
 
   return (
     <div className="flex flex-col gap-4">
@@ -103,15 +107,20 @@ export default async function Round(props: { params: { round: string } }) {
               </div>
               <div className="flex flex-col gap-2 items-center justify-center h-full bg-grey-800 rounded-xl overflow-hidden w-36 flex-shrink-0 max-md:w-full max-md:flex-shrink">
                 <p className="text-sm whitespace-nowrap">Total prizes</p>
-                {mergeAwards(awards).map(({ totalValue, token }, index) => (
-                  <div
-                    key={index}
-                    className="flex gap-2 items-center text-white"
-                  >
-                    <img src={token.image} className="w-4 h-4 rounded-[4px]" />
-                    {formatUnits(BigInt(totalValue), token.decimals)}
-                  </div>
-                ))}
+                {mergeAwards(round.awards).map(
+                  ({ totalValue, token }, index) => (
+                    <div
+                      key={index}
+                      className="flex gap-2 items-center text-white"
+                    >
+                      <img
+                        src={token.image}
+                        className="w-4 h-4 rounded-[4px]"
+                      />
+                      {formatUnits(BigInt(totalValue), token.decimals)}
+                    </div>
+                  )
+                )}
               </div>
             </div>
             <div className="flex gap-6 items-center justify-center h-full bg-grey-800 rounded-xl overflow-hidden w-full p-4 pt-5">
@@ -119,7 +128,8 @@ export default async function Round(props: { params: { round: string } }) {
                 <div className="flex flex-col gap-1 items-center">
                   <p className="text-sm whitespace-nowrap">Awards</p>
                   <p className="text-white whitespace-nowrap">
-                    {awards.length} winner{awards.length === 1 ? "" : "s"}
+                    {round.awards.length} winner
+                    {round.awards.length === 1 ? "" : "s"}
                   </p>
                 </div>
                 <AwardScroller />
@@ -129,7 +139,7 @@ export default async function Round(props: { params: { round: string } }) {
                 id="awards"
                 className="w-full flex gap-4 overflow-x-scroll scrollbar-hidden pt-3 -mt-3 scroll-smooth"
               >
-                {awards.map((award, index) => {
+                {round.awards.map((award, index) => {
                   const { decimals, image } = awardTypeToToken(award.type);
 
                   return (
@@ -164,13 +174,12 @@ export default async function Round(props: { params: { round: string } }) {
         </div>
         <CastVotes
           proposals={proposals}
-          round={props.params.round}
-          state={state}
-          awardCount={awards.length}
-          voteAllocation={await getVoteAllocation({
-            round: props.params.round,
-            user,
-          })}
+          round={{
+            id: props.params.round,
+            awardCount: round.awards.length,
+            state,
+          }}
+          user={userState}
         />
       </div>
     </div>

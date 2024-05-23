@@ -1,19 +1,19 @@
 import { NextRequest, NextResponse, userAgent } from "next/server";
 
-export function middleware(request: NextRequest) {
-  const response = NextResponse.next();
+export async function middleware(request: NextRequest) {
+  if (request.url === "/") {
+    const { device } = userAgent(request);
 
-  const { device } = userAgent(request);
+    return NextResponse.next({
+      headers: {
+        "x-device-type": device.type === "mobile" ? "mobile" : "desktop",
+      },
+    });
+  }
 
-  response.headers.set(
-    "x-device-type",
-    device.type === "mobile" ? "mobile" : "desktop"
-  );
-
-  return response;
+  return NextResponse.next();
 }
 
-// only apply this middleware to files in the app directory
 export const config = {
-  matcher: "/((?!api|static|.*\\..*|_next|frames|refresh).*)",
+  matcher: "/((?!api|static|.*\\..*|_next|frames).*)",
 };

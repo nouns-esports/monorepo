@@ -2,7 +2,7 @@ import { db, pass, votes } from "@/db/schema";
 import { and, eq } from "drizzle-orm";
 import { unstable_cache as cache } from "next/cache";
 
-export const getVoteAllocation = cache(
+export const getUserVotes = cache(
   async (input: { round: string; user: string }) => {
     const previousVotes = await db.query.votes.findMany({
       where: and(eq(votes.user, input.user), eq(votes.round, input.round)),
@@ -13,14 +13,14 @@ export const getVoteAllocation = cache(
       0
     );
 
-    const passData = await db.query.pass.findFirst({
+    const nexus = await db.query.pass.findFirst({
       where: eq(pass.user, input.user),
     });
 
-    const allottedVotes = passData
-      ? passData.tier === 0
+    const allottedVotes = nexus
+      ? nexus.tier === 0
         ? 1
-        : passData.tier === 1
+        : nexus.tier === 1
           ? 3
           : 10
       : 0;
@@ -31,5 +31,5 @@ export const getVoteAllocation = cache(
     };
   },
   ["votes"],
-  { tags: ["votes"], revalidate: 1 }
+  { tags: ["votes"] }
 );

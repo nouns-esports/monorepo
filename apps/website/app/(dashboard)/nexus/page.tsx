@@ -8,10 +8,9 @@ import { usePrivy } from "@privy-io/react-auth";
 import { CheckCircle, Circle } from "phosphor-react-sc";
 import { useQuery } from "@/hooks/useQuery";
 import { twMerge } from "tailwind-merge";
-import { useAction } from "next-safe-action/hooks";
-import { grantPass } from "@/server/actions/grantPass";
+import { grantExplorer } from "@/server/actions/grantExplorer";
 
-export default function Pass() {
+export default function Nexus() {
   const { user, login, linkDiscord } = usePrivy();
 
   const { data: inDiscord, mutate } = useQuery({
@@ -21,14 +20,12 @@ export default function Pass() {
     canQuery: !!user?.discord,
   });
 
-  const { execute } = useAction(grantPass);
-
   return (
     <div className="w-full flex flex-col gap-8">
       <div className="relative h-[250px] w-full">
         <Globe />
         <h1 className="absolute top-0 w-full h-full flex items-center justify-center font-luckiest-guy text-white text-5xl">
-          Nouns Esports Pass
+          Enter the Nexus
         </h1>
         <div className="absolute top-0 left-0 w-full h-full flex items-center justify-start">
           <img src="/left.png" className="h-[75%]" />
@@ -89,7 +86,7 @@ export default function Pass() {
                 return mutate();
               }
 
-              execute({ user: user.id });
+              grantExplorer({ user: user.id });
             }}
           >
             {user
@@ -108,19 +105,19 @@ export default function Pass() {
         </h2>
         <div className="w-full flex gap-4 justify-between">
           <div className="w-full flex flex-col bg-blue-500/20 rounded-xl py-3 px-4 border-2 border-transparent hover:border-blue-500 transition-all hover:scale-105 cursor-pointer">
-            <h2 className="text-blue-500 text-lg font-semibold">Rookie</h2>
+            <h2 className="text-blue-500 text-lg font-semibold">Explorer</h2>
             <ul className="text-white text-sm list-disc pl-4">
               <li>Propose and vote on rounds in the community</li>
             </ul>
           </div>
           <div className="w-full flex flex-col bg-purple/20 rounded-xl py-3 px-4 border-2 border-transparent hover:border-purple transition-all hover:scale-105 cursor-pointer">
-            <h2 className="text-purple text-lg font-semibold">Rising Star</h2>
+            <h2 className="text-purple text-lg font-semibold">Challenger</h2>
             <ul className="text-white text-sm list-disc pl-4">
               <li>Get 3x the votes per round</li>
             </ul>
           </div>
           <div className="w-full flex flex-col bg-red/20 rounded-xl py-3 px-4 border-2 border-transparent hover:border-red transition-all hover:scale-105 cursor-pointer">
-            <h2 className="text-red text-lg font-semibold">Champion</h2>
+            <h2 className="text-red text-lg font-semibold">Elite</h2>
             <ul className="text-white text-sm list-disc pl-4">
               <li>Get 10x the votes per round</li>
             </ul>

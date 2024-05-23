@@ -1,25 +1,32 @@
 import Link from "@/components/Link";
-import Markdown from "@/components/lexical/Mardown";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "phosphor-react-sc";
 import { getFrameMetadata } from "frog/next";
 import type { Metadata } from "next";
 import { getProposal } from "@/server/queries/proposals";
+import dynamic from "next/dynamic";
+
+const Markdown = dynamic(() => import("@/components/lexical/Markdown"), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full before:-translate-x-full before:bg-gradient-to-r before:from-transparent before:via-white/5 before:to-transparent before:animate-shimmer rounded-xl relative before:absolute before:inset-0 overflow-hidden" />
+  ),
+});
 
 export async function generateMetadata(props: {
-  params: { round: string; id: string };
+  params: { round: string; proposal: string };
 }): Promise<Metadata> {
   return {
     other: await getFrameMetadata(
-      `http://localhost:3000/frames/round/${props.params.round}/proposal${props.params.id}`
+      `http://localhost:3000/frames/round/${props.params.round}/proposal${props.params.proposal}`
     ),
   };
 }
 
 export default async function Proposal(props: {
-  params: { round: string; id: string };
+  params: { round: string; proposal: string };
 }) {
-  const proposal = await getProposal({ id: Number(props.params.id) });
+  const proposal = await getProposal({ id: Number(props.params.proposal) });
 
   if (!proposal) {
     return notFound();
@@ -34,7 +41,7 @@ export default async function Proposal(props: {
         <ArrowLeft className="w-5 h-5 text-red group-hover:-translate-x-1 transition-transform" />
         Back to round
       </Link>
-      <div className="flex flex-col gap-4 bg-grey-800 rounded-xl p-6 max-sm:p-3">
+      <div className="flex flex-col gap-4 bg-grey-800 rounded-xl p-6 max-sm:p-3 min-h-96">
         <h2 className="text-white font-luckiest-guy text-3xl">
           {proposal.title}
         </h2>

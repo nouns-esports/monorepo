@@ -6,31 +6,35 @@ import { CaretUp, CaretDown, ChartBarHorizontal } from "phosphor-react-sc";
 import Button from "../Button";
 import { twMerge } from "tailwind-merge";
 import { usePrivy } from "@privy-io/react-auth";
-import { useAction } from "next-safe-action/hooks";
 import { castVotes } from "@/server/actions/castVotes";
 import toast from "react-hot-toast";
-import { User } from "@/server/queries/users";
 import { useRouter } from "next/navigation";
-import { useMutation } from "@tanstack/react-query";
-import { canClaimAward } from "@/server/queries/awards";
-import { useQuery } from "@/hooks/useQuery";
 import { getProposals } from "@/server/queries/proposals";
 import { roundState } from "@/utils/roundState";
 import { numberToOrdinal } from "@/utils/numberToOrdinal";
+import { useOptimistic } from "react";
 
 export default function CastVotes(props: {
-  round: string;
-  proposals: Awaited<ReturnType<typeof getProposals>>;
-  state: ReturnType<typeof roundState>;
-  voteAllocation: {
-    allocated: number;
-    remaining: number;
+  round: {
+    id: string;
+    state: ReturnType<typeof roundState>;
+    awardCount: number;
   };
-  awardCount: number;
+  proposals: Awaited<ReturnType<typeof getProposals>>;
+  user?: {
+    id: string;
+    canClaimAward: boolean;
+    votes: {
+      allocated: number;
+      remaining: number;
+    };
+  };
 }) {
   const [votes, setVotes] = useState<Record<string, number>>({});
+  const [optimisticVotes, setOptimisticVotes] = useOptimistic(votes);
+
   const [previousVotes, setPreviousVotes] = useState(
-    props.voteAllocation.allocated - props.voteAllocation.remaining
+    props.user ? props.user.votes.allocated - props.user.votes.remaining : 0
   );
 
   const votesCast = useMemo(
@@ -42,32 +46,19 @@ export default function CastVotes(props: {
     [votes, previousVotes]
   );
 
-  const { user } = usePrivy();
-
-  const yourProposal = props.proposals.find(
-    (proposal) => proposal?.user.id === user?.id
+  const userProposal = props.proposals.find(
+    (proposal) => proposal.user.id === props.user?.id
   );
+
+  const { authenticated } = usePrivy();
 
   const router = useRouter();
 
-  const { execute, status } = useAction(castVotes, {
-    onSuccess: () => {
-      setPreviousVotes(votesCast + previousVotes);
-      setVotes({});
+  useEffect(() => {
+    if (authenticated && !props.user) {
       router.refresh();
-    },
-    onError: (error) => {
-      console.error(error);
-      toast.error("Failed to cast votes");
-    },
-  });
-
-  const { data: canClaim } = useQuery({
-    key: "canClaimAward",
-    queryFn: canClaimAward,
-    args: { user: user?.id, round: props.round },
-    canQuery: props.state === "ended" && !!user,
-  });
+    }
+  }, [authenticated]);
 
   return (
     <div className="flex flex-col gap-4">
@@ -75,50 +66,51 @@ export default function CastVotes(props: {
         <h3 className="text-white font-luckiest-guy text-3xl">Proposals</h3>
         <div className="flex gap-4 items-center max-sm:justify-between max-sm:w-full">
           <p className="text-white">
-            {props.state === "proposing" && yourProposal
+            {props.round.state === "proposing" && userProposal
               ? "You can edit your proposal until voting starts"
-              : props.state === "voting"
-                ? props.voteAllocation.allocated === 0
-                  ? "You don't have any votes"
-                  : `${props.voteAllocation.allocated - votesCast}/${
-                      props.voteAllocation.allocated
-                    } votes
+              : ""}
+            {props.round.state === "voting" && props.user
+              ? props.user.votes.allocated === 0
+                ? "You don't have any votes"
+                : `${props.user?.votes.allocated - votesCast}/${props.user
+                    ?.votes.allocated} votes
               remaining`
-                : canClaim
-                  ? "Your proposal won!"
-                  : ""}
+              : ""}
+            {props.round.state === "ended" && props.user?.canClaimAward
+              ? "Your proposal won!"
+              : ""}
           </p>
-          {props.state === "proposing" ? (
-            yourProposal ? (
-              <Button href={`/rounds/${props.round}/create`} animate="bg">
-                Edit Proposal
-              </Button>
-            ) : (
-              <Button
-                href={`/rounds/${props.round}/create`}
-                animate="bg"
-                scroll={false}
-              >
-                Create Proposal
-              </Button>
-            )
-          ) : canClaim ? (
+          {props.round.state === "proposing" ? (
+            <Button href={`/rounds/${props.round.id}/create`} animate="bg">
+              {userProposal ? "Edit Proposal" : "Create Proposal"}
+            </Button>
+          ) : (
+            ""
+          )}
+          {props.round.state === "ended" && props.user?.canClaimAward ? (
             <Button href="/discord" animate="bg">
               Claim Awards
             </Button>
           ) : (
             ""
           )}
-          {props.state === "voting" ? (
+          {props.round.state === "voting" ? (
             <Button
-              loading={status === "executing"}
-              disabled={votesCast < 1 || !user}
-              onClick={() => {
-                if (!user) return;
+              loading={false} // FIX
+              disabled={votesCast < 1 || !props.user}
+              onClick={async () => {
+                if (!props.user) return;
 
-                execute({
-                  user: user?.id,
-                  round: props.round,
+                // setOptimisticVotes((prev) => {
+                //   return {
+                //     ...prev,
+                //     [userProposal.id]: props.user?.votes.allocated - votesCast,
+                //   };
+                // });
+
+                await castVotes({
+                  user: props.user.id,
+                  round: props.round.id,
                   votes: Object.entries(votes).map(([id, count]) => ({
                     proposal: Number(id),
                     count,
@@ -137,12 +129,18 @@ export default function CastVotes(props: {
       <div className="flex flex-col gap-4">
         {props.proposals
           .toSorted((a, b) => {
-            if (props.state !== "ended") {
-              if (a.user.id === user?.id && b.user.id !== user?.id) {
+            if (props.round.state !== "ended") {
+              if (
+                a.user.id === props.user?.id &&
+                b.user.id !== props.user?.id
+              ) {
                 return -1;
               }
 
-              if (b.user.id === user?.id && a.user.id !== user?.id) {
+              if (
+                b.user.id === props.user?.id &&
+                a.user.id !== props.user?.id
+              ) {
                 return 1;
               }
             }
@@ -152,28 +150,29 @@ export default function CastVotes(props: {
           .map((proposal, index) => (
             <Link
               key={index}
-              href={`/rounds/${props.round}/proposals/${proposal.id}`}
+              href={`/rounds/${props.round.id}/proposals/${proposal.id}`}
               className={twMerge(
                 "relative w-full flex gap-4 bg-grey-800 rounded-xl px-4 pt-4 h-36 overflow-hidden max-sm:flex-col max-sm:p-0 max-sm:h-fit max-sm:gap-0",
-                props.state === "ended" &&
-                  index < props.awardCount &&
+                props.round.state === "ended" &&
+                  index < props.round.awardCount &&
                   index === 0 &&
                   "border-[3px] border-gold-500 bg-gold-900 text-white",
-                props.state === "ended" &&
-                  index < props.awardCount &&
+                props.round.state === "ended" &&
+                  index < props.round.awardCount &&
                   index === 1 &&
                   "border-[3px] border-silver-500 bg-silver-900 text-white",
-                props.state === "ended" &&
-                  index < props.awardCount &&
+                props.round.state === "ended" &&
+                  index < props.round.awardCount &&
                   index === 2 &&
                   "border-[3px] border-bronze-500 bg-bronze-900 text-white",
-                props.state === "ended" &&
+                props.round.state === "ended" &&
                   index > 2 &&
-                  index < props.awardCount &&
+                  index < props.round.awardCount &&
                   "border-[3px] border-blue-500 bg-blue-900 text-white"
               )}
             >
-              {props.state === "ended" && index < props.awardCount ? (
+              {props.round.state === "ended" &&
+              index < props.round.awardCount ? (
                 <div
                   className={twMerge(
                     "absolute -top-0.5 -right-0.5 z-10 rounded-bl-md bg-grey-600 font-bold text-white flex items-center justify-center w-9 max-sm:z-40",
@@ -219,26 +218,27 @@ export default function CastVotes(props: {
                 <div
                   className={twMerge(
                     "absolute left-0 w-full bg-gradient-to-t from-grey-800 to-transparent h-10 bottom-0 z-10 hidden max-sm:flex",
-                    props.state === "ended" &&
-                      index < props.awardCount &&
+                    props.round.state === "ended" &&
+                      index < props.round.awardCount &&
                       index === 0 &&
                       "from-gold-900",
-                    props.state === "ended" &&
-                      index < props.awardCount &&
+                    props.round.state === "ended" &&
+                      index < props.round.awardCount &&
                       index === 1 &&
                       "from-silver-900",
-                    props.state === "ended" &&
-                      index < props.awardCount &&
+                    props.round.state === "ended" &&
+                      index < props.round.awardCount &&
                       index === 2 &&
                       "from-bronze-900",
-                    props.state === "ended" &&
+                    props.round.state === "ended" &&
                       index > 2 &&
-                      index < props.awardCount &&
+                      index < props.round.awardCount &&
                       "from-blue-900"
                   )}
                 />
               </div>
-              {props.state === "voting" || props.state === "ended" ? (
+              {props.round.state === "voting" ||
+              props.round.state === "ended" ? (
                 <div
                   onClick={(e) => {
                     e.preventDefault();
@@ -249,21 +249,21 @@ export default function CastVotes(props: {
                   <div
                     className={twMerge(
                       "h-full bg-grey-600 w-[1px] max-sm:hidden",
-                      props.state === "ended" &&
+                      props.round.state === "ended" &&
                         index === 0 &&
-                        index < props.awardCount &&
+                        index < props.round.awardCount &&
                         "bg-gold-500",
-                      props.state === "ended" &&
+                      props.round.state === "ended" &&
                         index === 1 &&
-                        index < props.awardCount &&
+                        index < props.round.awardCount &&
                         "bg-silver-500",
-                      props.state === "ended" &&
+                      props.round.state === "ended" &&
                         index === 2 &&
-                        index < props.awardCount &&
+                        index < props.round.awardCount &&
                         "bg-bronze-500",
-                      props.state === "ended" &&
+                      props.round.state === "ended" &&
                         index > 2 &&
-                        index < props.awardCount &&
+                        index < props.round.awardCount &&
                         "bg-blue-500"
                     )}
                   />
@@ -272,11 +272,13 @@ export default function CastVotes(props: {
                       "flex flex-col items-center gap-2 w-14 flex-shrink-0 max-sm:flex-row max-sm:w-auto"
                     )}
                   >
-                    {proposal.user?.id !== user?.id &&
-                    props.state === "voting" ? (
+                    {proposal.user?.id !== props.user?.id &&
+                    props.round.state === "voting" ? (
                       <CaretUp
                         onClick={() => {
-                          if (votesCast > props.voteAllocation.allocated - 1)
+                          if (!props.user) return;
+
+                          if (votesCast > props.user.votes.allocated - 1)
                             return;
 
                           setVotes({
@@ -294,12 +296,12 @@ export default function CastVotes(props: {
                     <p
                       className={twMerge(
                         "text-grey-200 text-2xl font-bebas-neue text-center text-nowrap max-sm:mt-1",
-                        props.state === "ended" &&
-                          index < props.awardCount &&
+                        props.round.state === "ended" &&
+                          index < props.round.awardCount &&
                           "text-white",
 
-                        (props.state === "ended" ||
-                          proposal.user?.id === user?.id) &&
+                        (props.round.state === "ended" ||
+                          proposal.user?.id === props.user?.id) &&
                           "flex flex-col items-center gap-2.5 max-sm:flex-row"
                       )}
                     >
@@ -312,14 +314,14 @@ export default function CastVotes(props: {
                       ) : (
                         ""
                       )}
-                      {props.state === "ended" ||
-                      (proposal.user?.id === user?.id &&
-                        props.state === "voting") ? (
+                      {props.round.state === "ended" ||
+                      (proposal.user?.id === props.user?.id &&
+                        props.round.state === "voting") ? (
                         <ChartBarHorizontal
                           className={twMerge(
                             "w-5 h-5 text-grey-200 -rotate-90",
-                            props.state === "ended" &&
-                              index < props.awardCount &&
+                            props.round.state === "ended" &&
+                              index < props.round.awardCount &&
                               "text-white"
                           )}
                           weight="fill"
@@ -328,8 +330,8 @@ export default function CastVotes(props: {
                         ""
                       )}
                     </p>
-                    {proposal.user?.id !== user?.id &&
-                    props.state === "voting" ? (
+                    {proposal.user?.id !== props.user?.id &&
+                    props.round.state === "voting" ? (
                       <CaretDown
                         onClick={() => {
                           if ((votes[proposal.id] ? votes[proposal.id] : 0) < 1)
@@ -353,21 +355,21 @@ export default function CastVotes(props: {
               <div
                 className={twMerge(
                   "absolute left-0 w-full bg-gradient-to-t from-grey-800 to-transparent h-10 bottom-0 z-10 max-sm:hidden",
-                  props.state === "ended" &&
-                    index < props.awardCount &&
+                  props.round.state === "ended" &&
+                    index < props.round.awardCount &&
                     index === 0 &&
                     "from-gold-900",
-                  props.state === "ended" &&
-                    index < props.awardCount &&
+                  props.round.state === "ended" &&
+                    index < props.round.awardCount &&
                     index === 1 &&
                     "from-silver-900",
-                  props.state === "ended" &&
-                    index < props.awardCount &&
+                  props.round.state === "ended" &&
+                    index < props.round.awardCount &&
                     index === 2 &&
                     "from-bronze-900",
-                  props.state === "ended" &&
+                  props.round.state === "ended" &&
                     index > 2 &&
-                    index < props.awardCount &&
+                    index < props.round.awardCount &&
                     "from-blue-900"
                 )}
               />
@@ -378,7 +380,9 @@ export default function CastVotes(props: {
             <img src="/fire-sticker.png" alt="" className="h-32" />
             <p className="text-grey-200 text-lg max-w-80">
               There are no proposals yet.{" "}
-              {props.state === "proposing" ? "Be the first to propose?" : ""}
+              {props.round.state === "proposing"
+                ? "Be the first to propose?"
+                : ""}
             </p>
           </div>
         ) : (

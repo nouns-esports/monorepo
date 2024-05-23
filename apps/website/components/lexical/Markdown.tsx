@@ -18,7 +18,6 @@ import { AutoLinkPlugin } from "@lexical/react/LexicalAutoLinkPlugin";
 import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import ImagePlugin from "./plugins/ImagePlugin";
 import ToolbarPlugin from "./plugins/ToolbarPlugin";
-import { useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 export default function Markdown(props: {
@@ -68,7 +67,7 @@ export default function Markdown(props: {
               }
             }}
             className={twMerge(
-              "outline-none flex flex-col prose max-w-none",
+              "outline-none flex flex-col h-full prose max-w-none",
               "prose-strong:text-white prose-a:text-red prose-p:text-grey-200 marker:text-grey-200 prose-p:leading-snug prose-headings:text-white prose-li:text-grey-200 prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl",
               "prose-p:m-0 prose-p:mb-2 prose-h1:mb-4 prose-h2:mb-2 prose-h3:mb-2 prose-headings:mt-4 prose-ul:my-2 prose-ol:my-2 prose-li:m-0",
               "prose-img:rounded-xl prose-img:m-0",
@@ -77,7 +76,7 @@ export default function Markdown(props: {
           />
         }
         placeholder={
-          <div className="text-grey-400 pointer-events-none absolute top-12 pl-1">
+          <div className="text-grey-400 pointer-events-none absolute top-[51px] pl-1">
             Enter proposal here
           </div>
         }

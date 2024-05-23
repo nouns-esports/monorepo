@@ -67,9 +67,15 @@ const config: Config = {
           from: { backgroundPosition: "0% 0" },
           to: { backgroundPosition: "100% 0" },
         },
+        shimmer: {
+          "100%": {
+            transform: "translateX(100%)",
+          },
+        },
       },
       animation: {
         marquee: "marquee 20s linear infinite",
+        shimmer: "shimmer 1s infinite",
       },
     },
   },

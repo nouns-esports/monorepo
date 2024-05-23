@@ -1,18 +1,10 @@
 import Link from "@/components/Link";
-import dynamic from "next/dynamic";
 import { ArrowLeft } from "phosphor-react-sc";
-import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { getRound } from "@/server/queries/rounds";
 import { getProposal } from "@/server/queries/proposals";
-import { getUserIdFromSession } from "@/server/actions";
-
-const ProposalEditor = dynamic(
-  () => import("@/components/proposals/ProposalEditor"),
-  {
-    ssr: false,
-  }
-);
+import { getAuthenticatedUser } from "@/server/queries/users";
+import ProposalEditor from "@/components/proposals/ProposalEditor";
 
 export default async function Create(props: { params: { round: string } }) {
   const round = await getRound({ id: props.params.round });
@@ -21,14 +13,7 @@ export default async function Create(props: { params: { round: string } }) {
     return notFound();
   }
 
-  let user = "";
-
-  try {
-    user = await getUserIdFromSession();
-  } catch (error) {
-    console.log(error);
-  }
-
+  const user = await getAuthenticatedUser();
   const proposal = user ? await getProposal({ user }) : undefined;
 
   return (
@@ -78,9 +63,11 @@ export default async function Create(props: { params: { round: string } }) {
           </div>
         </div>
       </div>
-      <Suspense fallback={null}>
-        <ProposalEditor round={props.params.round} proposal={proposal} />
-      </Suspense>
+      <ProposalEditor
+        round={props.params.round}
+        proposal={proposal}
+        user={user}
+      />
     </div>
   );
 }

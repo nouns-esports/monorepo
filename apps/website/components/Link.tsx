@@ -1,46 +1,21 @@
-// import { redirects } from "@/next.config";
 import NextLink from "next/link";
+import { twMerge } from "tailwind-merge";
 
 export default function Link(
-  props: {
-    href: string;
-    scroll?: boolean;
-    newTab?: boolean;
-  } & React.AnchorHTMLAttributes<HTMLAnchorElement>
+  props: React.ComponentProps<typeof NextLink> & { newTab?: boolean }
 ) {
-  const newTab = props.newTab; //?? isNewTab(props.href);
-
-  const Component = newTab ? "a" : NextLink;
+  const newTab = props.newTab;
 
   return (
-    <Component
+    <NextLink
       {...props}
       target={newTab ? "_blank" : ""}
       rel={newTab ? "noopener noreferrer" : ""}
       draggable={false}
       scroll={props.scroll}
-      style={{
-        userSelect: "none",
-        ...props.style,
-      }}
+      className={twMerge("select-none", props.className)}
     >
       {props.children}
-    </Component>
+    </NextLink>
   );
 }
-
-// function isNewTab(url: string) {
-//   // Check for Vercel HTTP redirects
-//   for (const redirect of Vercel.redirects) {
-//     if (redirect.source === url) {
-//       return true;
-//     }
-//   }
-
-//   // Check for protocol
-//   if (url.includes("://")) {
-//     return true;
-//   }
-
-//   return false;
-// }

@@ -15,8 +15,9 @@ import {
 } from "phosphor-react-sc";
 import { usePathname, useParams } from "next/navigation";
 import { twMerge } from "tailwind-merge";
+import { User } from "@privy-io/server-auth";
 
-export default function Navbar() {
+export default function Navbar(props: { user?: User }) {
   const [open, setOpen] = useState(false);
 
   const pathname = usePathname();
@@ -53,7 +54,7 @@ export default function Navbar() {
             </NavGroupItem>
           </NavGroup>
           <NavGroup title="Rosters">
-            <NavGroupItem href="rosters/cs2" icon="/games/icons/cs2.png">
+            <NavGroupItem href="/rosters/cs2" icon="/games/icons/cs2.png">
               CS2
             </NavGroupItem>
             <NavGroupItem href="/rosters/dota-2" icon="/games/icons/dota-2.png">
@@ -72,10 +73,10 @@ export default function Navbar() {
               Street Fighter
             </NavGroupItem>
           </NavGroup>
-          <NavItem href="/pass" icon="/logo/logo-white.svg">
-            Pass
+          <NavItem href="/nexus" icon="/logo/logo-white.svg">
+            Nexus
           </NavItem>
-          <SignInButton />
+          <SignInButton user={props.user} />
           <div onClick={() => setOpen(!open)} className="max-sm:flex hidden">
             {open ? (
               <X className="w-6 h-6 mx-2" />
@@ -93,18 +94,8 @@ export default function Navbar() {
           opacity: open ? "100%" : "0",
           pointerEvents: open ? "all" : "none",
         }}
-        // onClick={() => setOpen(!open)}
         className="bg-black left-0 top-0 w-full h-screen absolute -z-10 pt-24 p-4 flex flex-col gap-8"
       >
-        {/* <Link
-          className="bg-grey-800 rounded-lg w-full min-h-40 overflow-hidden relative"
-          href="/pass"
-        >
-          <img src="/pass.webp" alt="" className="w-full h-full object-cover" />
-          <p className="text-white font-luckiest-guy text-4xl text-center flex items-center justify-center absolute top-0 w-full h-40">
-            Become a pass member
-          </p>
-        </Link> */}
         <MenuGroup title="Explore">
           <MenuGroupItem href="/#events" icon="📅">
             Events
@@ -195,18 +186,17 @@ function NavGroup(props: { title: string; children: React.ReactNode }) {
 function NavGroupItem(props: { children: string; href: string; icon: string }) {
   return (
     <NavigationMenu.Item key={props.children}>
-      <NavigationMenu.Link
-        href={props.href}
-        className="group flex items-center gap-3"
-      >
-        {props.icon.includes("/") ? (
-          <img className="w-4 h-4 rounded-sm" src={props.icon} />
-        ) : (
-          <p>{props.icon}</p>
-        )}
-        <p className="group-hover:text-white text-white/30 text-nowrap transition-colors">
-          {props.children}
-        </p>
+      <NavigationMenu.Link asChild>
+        <Link href={props.href} className="group flex items-center gap-3">
+          {props.icon.includes("/") ? (
+            <img className="w-4 h-4 rounded-sm" src={props.icon} />
+          ) : (
+            <p>{props.icon}</p>
+          )}
+          <p className="group-hover:text-white text-white/30 text-nowrap transition-colors">
+            {props.children}
+          </p>
+        </Link>
       </NavigationMenu.Link>
     </NavigationMenu.Item>
   );

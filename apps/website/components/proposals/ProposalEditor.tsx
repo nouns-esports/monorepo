@@ -1,21 +1,28 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TextInput from "../form/TextInput";
 import Button from "../Button";
-import { useAction } from "next-safe-action/hooks";
 import { createProposal } from "@/server/actions/createProposal";
 import { $generateHtmlFromNodes } from "@lexical/html";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { usePrivy } from "@privy-io/react-auth";
 import LimitMeter from "../LimitMeter";
-import Markdown from "../lexical/Mardown";
 import { updateProposal } from "@/server/actions/updateProposal";
 import { getProposal } from "@/server/queries/proposals";
+import dynamic from "next/dynamic";
+
+const Markdown = dynamic(() => import("../lexical/Markdown"), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full before:-translate-x-full before:bg-gradient-to-r before:from-transparent before:via-white/5 before:to-transparent before:animate-shimmer rounded-xl relative before:absolute before:inset-0 overflow-hidden" />
+  ),
+});
 
 export default function MarkdownEditor(props: {
   round: string;
+  user?: string;
   proposal?: Awaited<ReturnType<typeof getProposal>>;
 }) {
   const [title, setTitle] = useState(props.proposal?.title ?? "");
@@ -46,35 +53,15 @@ export default function MarkdownEditor(props: {
     props.proposal?.content ?? ""
   );
 
+  const { user, authenticated } = usePrivy();
+
   const router = useRouter();
 
-  const { execute: executeCreateProposal, status: createProposalStatus } =
-    useAction(createProposal, {
-      onSuccess: () => {
-        router.push(`/rounds/${props.round}`);
-      },
-      onError: (error) => {
-        console.error(error);
-        toast.error(
-          error.fetchError ?? error.serverError ?? "An error occurred"
-        );
-      },
-    });
-
-  const { execute: executeUpdateProposal, status: updateProposalStatus } =
-    useAction(updateProposal, {
-      onSuccess: () => {
-        router.push(`/rounds/${props.round}`);
-      },
-      onError: (error) => {
-        console.error(error);
-        toast.error(
-          error.fetchError ?? error.serverError ?? "An error occurred"
-        );
-      },
-    });
-
-  const { user } = usePrivy();
+  useEffect(() => {
+    if (authenticated && !user) {
+      router.refresh();
+    }
+  }, [authenticated]);
 
   return (
     <div className="flex flex-col gap-8">
@@ -133,33 +120,34 @@ export default function MarkdownEditor(props: {
         </div>
         <Button
           animate="bg"
-          loading={
-            createProposalStatus === "executing" ||
-            updateProposalStatus === "executing"
-          }
+          loading={false}
           disabled={
             title.length < 15 || parsedMarkdown.split(" ").length - 1 < 150
           }
-          onClick={() => {
-            if (!user) return;
+          onClick={async () => {
+            if (!props.user) return;
 
             if (props.proposal) {
-              executeUpdateProposal({
-                user: user.id,
+              await updateProposal({
+                user: props.user,
                 round: props.round,
-                proposal: props.proposal.id,
                 title,
                 content: editorState,
               });
+
+              router.push(`/rounds/${props.round}`);
+
               return;
             }
 
-            executeCreateProposal({
+            await createProposal({
               title,
               content: editorState,
               round: props.round,
-              user: user.id,
+              user: props.user,
             });
+
+            router.push(`/rounds/${props.round}`);
           }}
         >
           {props.proposal ? "Update Proposal" : "Create Proposal"}

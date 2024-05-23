@@ -304,10 +304,7 @@ async function ScheduleCard(props: { event: Event }) {
         <h3 className="drop-shadow-2xl text-4xl font-bebas-neue max-[500px]:text-2xl max-[350px]:text-xl">
           {props.event.summary?.replace(`[${type}]`, "")}
         </h3>
-        <div
-          style={{ backgroundColor: game?.color ?? "#E93737" }}
-          className="text-xs font-cabin font-semibold px-2 py-1 rounded-full w-min mb-2 max-[500px]:mb-1 whitespace-nowrap"
-        >
+        <div className="text-xs font-cabin font-semibold px-2 py-1 bg-red rounded-full w-min mb-2 max-[500px]:mb-1 whitespace-nowrap">
           {type}
         </div>
       </div>
