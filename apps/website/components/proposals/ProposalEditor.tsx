@@ -12,12 +12,11 @@ import LimitMeter from "../LimitMeter";
 import { updateProposal } from "@/server/actions/updateProposal";
 import { getProposal } from "@/server/queries/proposals";
 import dynamic from "next/dynamic";
+import Shimmer from "../Shimmer";
 
 const Markdown = dynamic(() => import("../lexical/Markdown"), {
   ssr: false,
-  loading: () => (
-    <div className="w-full h-full before:-translate-x-full before:bg-gradient-to-r before:from-transparent before:via-white/5 before:to-transparent before:animate-shimmer rounded-xl relative before:absolute before:inset-0 overflow-hidden" />
-  ),
+  loading: () => <Shimmer />,
 });
 
 export default function MarkdownEditor(props: {

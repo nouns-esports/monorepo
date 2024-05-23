@@ -5,12 +5,11 @@ import { getFrameMetadata } from "frog/next";
 import type { Metadata } from "next";
 import { getProposal } from "@/server/queries/proposals";
 import dynamic from "next/dynamic";
+import Shimmer from "@/components/Shimmer";
 
 const Markdown = dynamic(() => import("@/components/lexical/Markdown"), {
   ssr: false,
-  loading: () => (
-    <div className="w-full h-full before:-translate-x-full before:bg-gradient-to-r before:from-transparent before:via-white/5 before:to-transparent before:animate-shimmer rounded-xl relative before:absolute before:inset-0 overflow-hidden" />
-  ),
+  loading: () => <Shimmer />,
 });
 
 export async function generateMetadata(props: {

@@ -4,7 +4,6 @@ import { notFound } from "next/navigation";
 import { ArrowLeft } from "phosphor-react-sc";
 import AwardScroller from "@/components/rounds/AwardScroller";
 import CastVotes from "@/components/proposals/CastVotes";
-import Markdown from "@/components/lexical/Markdown";
 import { twMerge } from "tailwind-merge";
 import { formatUnits } from "viem";
 import { getFrameMetadata } from "frog/next";
@@ -18,6 +17,13 @@ import { awardTypeToToken } from "@/utils/awardTypeToToken";
 import { mergeAwards } from "@/utils/mergeAwards";
 import { getAuthenticatedUser } from "@/server/queries/users";
 import { canClaimAward } from "@/server/queries/awards";
+import dynamic from "next/dynamic";
+import Shimmer from "@/components/Shimmer";
+
+const Markdown = dynamic(() => import("@/components/lexical/Markdown"), {
+  ssr: false,
+  loading: () => <Shimmer />,
+});
 
 export async function generateMetadata(props: {
   params: { round: string };
@@ -71,7 +77,7 @@ export default async function Round(props: { params: { round: string } }) {
               <h2 className="w-full text-white font-luckiest-guy text-3xl">
                 {round.name}
               </h2>
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-2 min-h-96">
                 <Markdown markdown={round.content} readOnly />
               </div>
             </div>
