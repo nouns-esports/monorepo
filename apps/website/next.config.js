@@ -28,6 +28,11 @@ const nextConfig = {
       "permanent": true
     },
     {
+      "source": "/matchabracket",
+      "destination": "https://www.start.gg/admin/tournament/matcha-cup-west-coast/brackets/1137386/1659977/2473563",
+      "permanent": true
+    },
+    {
       "source": "/shop",
       "destination": "https://shop.nouns.gg",
       "permanent": true
