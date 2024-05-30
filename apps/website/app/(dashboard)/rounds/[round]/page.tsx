@@ -3,7 +3,7 @@ import Link from "@/components/Link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "phosphor-react-sc";
 import AwardScroller from "@/components/rounds/AwardScroller";
-import CastVotes from "@/components/proposals/CastVotes";
+import CastVotes from "@/components/proposals/Proposals";
 import { twMerge } from "tailwind-merge";
 import { formatUnits } from "viem";
 import { getFrameMetadata } from "frog/next";
@@ -15,14 +15,15 @@ import { roundState } from "@/utils/roundState";
 import { numberToOrdinal } from "@/utils/numberToOrdinal";
 import { awardTypeToToken } from "@/utils/awardTypeToToken";
 import { mergeAwards } from "@/utils/mergeAwards";
-import { getAuthenticatedUser } from "@/server/queries/users";
+import { getAuthenticatedUser, getUserProfile } from "@/server/queries/users";
 import { canClaimAward } from "@/server/queries/awards";
 import dynamic from "next/dynamic";
 import Shimmer from "@/components/Shimmer";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 const Markdown = dynamic(() => import("@/components/lexical/Markdown"), {
   ssr: false,
-  loading: () => <Shimmer />,
+  loading: () => <Shimmer className="min-h-96" />,
 });
 
 export async function generateMetadata(props: {
@@ -60,9 +61,20 @@ export default async function Round(props: { params: { round: string } }) {
       }
     : undefined;
 
+  const proposalsWithUser = await Promise.all(
+    proposals.map(async (proposal) => {
+      const user = await getUserProfile({ id: proposal.user });
+
+      return {
+        ...proposal,
+        user: user ?? { id: proposal.user },
+      };
+    })
+  );
+
   return (
     <div className="flex flex-col gap-4">
-      <Link href={"/rounds"} className="text-red flex items-center gap-1 group">
+      <Link href="/rounds" className="text-red flex items-center gap-1 group">
         <ArrowLeft className="w-5 h-5 text-red group-hover:-translate-x-1 transition-transform" />
         Back to rounds
       </Link>
@@ -70,14 +82,14 @@ export default async function Round(props: { params: { round: string } }) {
         <div className="flex flex-col gap-4">
           <div className="bg-grey-800 rounded-xl overflow-hidden">
             <img
-              src={round.image}
+              src={round.banner}
               className="w-full h-48 object-cover object-center max-sm:h-32"
             />
             <div className="flex flex-col gap-2 p-4">
               <h2 className="w-full text-white font-luckiest-guy text-3xl">
                 {round.name}
               </h2>
-              <div className="flex flex-col gap-2 min-h-96">
+              <div className="flex flex-col gap-2">
                 <Markdown markdown={round.content} readOnly />
               </div>
             </div>
@@ -138,7 +150,7 @@ export default async function Round(props: { params: { round: string } }) {
                     {round.awards.length === 1 ? "" : "s"}
                   </p>
                 </div>
-                <AwardScroller />
+                {round.awards.length > 1 ? <AwardScroller /> : ""}
               </div>
               <div className="bg-grey-600 h-full w-[1px]" />
               <div
@@ -179,7 +191,7 @@ export default async function Round(props: { params: { round: string } }) {
           </div>
         </div>
         <CastVotes
-          proposals={proposals}
+          proposals={proposalsWithUser}
           round={{
             id: props.params.round,
             awardCount: round.awards.length,

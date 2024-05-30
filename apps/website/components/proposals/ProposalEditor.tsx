@@ -1,13 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import TextInput from "../form/TextInput";
 import Button from "../Button";
 import { createProposal } from "@/server/actions/createProposal";
 import { $generateHtmlFromNodes } from "@lexical/html";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { usePrivy } from "@privy-io/react-auth";
 import LimitMeter from "../LimitMeter";
 import { updateProposal } from "@/server/actions/updateProposal";
 import { getProposal } from "@/server/queries/proposals";
@@ -52,15 +51,16 @@ export default function MarkdownEditor(props: {
     props.proposal?.content ?? ""
   );
 
-  const { user, authenticated } = usePrivy();
-
   const router = useRouter();
 
-  useEffect(() => {
-    if (authenticated && !user) {
-      router.refresh();
-    }
-  }, [authenticated]);
+  const [loading, setLoading] = useState(false);
+
+  const onChangeCallback = useCallback(
+    (value: any) => {
+      if (value.length <= 100) setTitle(value);
+    },
+    [title]
+  );
 
   return (
     <div className="flex flex-col gap-8">
@@ -76,9 +76,7 @@ export default function MarkdownEditor(props: {
         </div>
         <TextInput
           placeholder="Enter a title for your proposal"
-          onChange={(value) => {
-            if (value.length <= 100) setTitle(value);
-          }}
+          onChange={onChangeCallback}
           value={title}
         />
       </div>
@@ -118,35 +116,61 @@ export default function MarkdownEditor(props: {
           </p>
         </div>
         <Button
+          loading={loading}
           animate="bg"
-          loading={false}
           disabled={
-            title.length < 15 || parsedMarkdown.split(" ").length - 1 < 150
+            loading ||
+            title.length < 15 ||
+            parsedMarkdown.split(" ").length - 1 < 150
           }
           onClick={async () => {
             if (!props.user) return;
 
             if (props.proposal) {
-              await updateProposal({
-                user: props.user,
-                round: props.round,
-                title,
-                content: editorState,
-              });
-
-              router.push(`/rounds/${props.round}`);
+              setLoading(true);
+              toast.promise(
+                updateProposal({
+                  user: props.user,
+                  round: props.round,
+                  title,
+                  content: editorState,
+                }),
+                {
+                  loading: "Updating proposal",
+                  success: () => {
+                    router.push(`/rounds/${props.round}`);
+                    return "Successfully updated proposal";
+                  },
+                  error: () => {
+                    setLoading(false);
+                    return "Failed to update proposal";
+                  },
+                }
+              );
 
               return;
             }
 
-            await createProposal({
-              title,
-              content: editorState,
-              round: props.round,
-              user: props.user,
-            });
-
-            router.push(`/rounds/${props.round}`);
+            setLoading(true);
+            toast.promise(
+              createProposal({
+                title,
+                content: editorState,
+                round: props.round,
+                user: props.user,
+              }),
+              {
+                loading: "Creating proposal",
+                success: () => {
+                  router.push(`/rounds/${props.round}`);
+                  return "Successfully created proposal";
+                },
+                error: () => {
+                  setLoading(false);
+                  return "Failed to create proposal";
+                },
+              }
+            );
           }}
         >
           {props.proposal ? "Update Proposal" : "Create Proposal"}

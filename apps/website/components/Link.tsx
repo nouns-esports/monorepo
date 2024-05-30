@@ -9,8 +9,8 @@ export default function Link(
   return (
     <NextLink
       {...props}
-      target={newTab ? "_blank" : ""}
-      rel={newTab ? "noopener noreferrer" : ""}
+      target={newTab ? "_blank" : undefined}
+      rel={newTab ? "noopener noreferrer" : undefined}
       draggable={false}
       scroll={props.scroll}
       className={twMerge("select-none", props.className)}

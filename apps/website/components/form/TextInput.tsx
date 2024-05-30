@@ -1,6 +1,7 @@
 import { twMerge } from "tailwind-merge";
 
 export default function TextInput(props: {
+  name?: string;
   label?: string;
   placeholder: string;
   onChange?: (value: string) => void;
@@ -13,12 +14,16 @@ export default function TextInput(props: {
   return (
     <div className={twMerge("flex flex-col gap-2 w-full", props.className)}>
       {props.label ? (
-        <label className="text-white font-lg font-bold">{props.label}</label>
+        <label htmlFor={props.name} className="text-white font-lg font-bold">
+          {props.label}
+        </label>
       ) : (
         ""
       )}
       <input
+        key={props.name}
         type="text"
+        name={props.name}
         value={props.value}
         onChange={(e) => props.onChange?.(e.target.value)}
         onBlur={props.onBlur}

@@ -1,26 +1,34 @@
 "use client";
 
 import Link from "../Link";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState, useTransition } from "react";
 import { CaretUp, CaretDown, ChartBarHorizontal } from "phosphor-react-sc";
 import Button from "../Button";
 import { twMerge } from "tailwind-merge";
-import { usePrivy } from "@privy-io/react-auth";
 import { castVotes } from "@/server/actions/castVotes";
 import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
 import { getProposals } from "@/server/queries/proposals";
 import { roundState } from "@/utils/roundState";
 import { numberToOrdinal } from "@/utils/numberToOrdinal";
 import { useOptimistic } from "react";
 
-export default function CastVotes(props: {
+export default function Proposals(props: {
   round: {
     id: string;
     state: ReturnType<typeof roundState>;
     awardCount: number;
   };
-  proposals: Awaited<ReturnType<typeof getProposals>>;
+  proposals: Array<
+    Omit<Awaited<ReturnType<typeof getProposals>>[number], "user"> & {
+      user:
+        | {
+            id: string;
+            name: string;
+            pfp: string;
+          }
+        | { id: string };
+    }
+  >;
   user?: {
     id: string;
     canClaimAward: boolean;
@@ -30,35 +38,33 @@ export default function CastVotes(props: {
     };
   };
 }) {
-  const [votes, setVotes] = useState<Record<string, number>>({});
-  const [optimisticVotes, setOptimisticVotes] = useOptimistic(votes);
-
-  const [previousVotes, setPreviousVotes] = useState(
-    props.user ? props.user.votes.allocated - props.user.votes.remaining : 0
+  const [remainingVotes, setRemainingVotes] = useOptimistic(
+    props.user?.votes.remaining ?? 0
   );
+
+  const [votes, setVotes] = useOptimistic<Record<string, number>>(
+    props.proposals.reduce((votes: Record<string, number>, proposal) => {
+      votes[proposal.id] = votes[proposal.id] ?? 0 + proposal.totalVotes;
+      return votes;
+    }, {})
+  );
+
+  const [userVotes, setUserVotes] = useState<Record<string, number>>({});
 
   const votesCast = useMemo(
     () =>
-      Object.values(votes).reduce(
+      Object.values(userVotes).reduce(
         (totalVotes: number, currentVotes: number) => totalVotes + currentVotes,
         0
-      ) + previousVotes,
-    [votes, previousVotes]
+      ),
+    [userVotes]
   );
 
   const userProposal = props.proposals.find(
     (proposal) => proposal.user.id === props.user?.id
   );
 
-  const { authenticated } = usePrivy();
-
-  const router = useRouter();
-
-  useEffect(() => {
-    if (authenticated && !props.user) {
-      router.refresh();
-    }
-  }, [authenticated]);
+  const [loading, startTransition] = useTransition();
 
   return (
     <div className="flex flex-col gap-4">
@@ -66,13 +72,17 @@ export default function CastVotes(props: {
         <h3 className="text-white font-luckiest-guy text-3xl">Proposals</h3>
         <div className="flex gap-4 items-center max-sm:justify-between max-sm:w-full">
           <p className="text-white">
-            {props.round.state === "proposing" && userProposal
-              ? "You can edit your proposal until voting starts"
+            {props.round.state === "proposing"
+              ? props.user?.votes.allocated === 0
+                ? "Enter the Nexus to propose"
+                : userProposal
+                  ? "You can edit your proposal until voting starts"
+                  : ""
               : ""}
             {props.round.state === "voting" && props.user
               ? props.user.votes.allocated === 0
                 ? "You don't have any votes"
-                : `${props.user?.votes.allocated - votesCast}/${props.user
+                : `${remainingVotes - (loading ? 0 : votesCast)}/${props.user
                     ?.votes.allocated} votes
               remaining`
               : ""}
@@ -81,8 +91,19 @@ export default function CastVotes(props: {
               : ""}
           </p>
           {props.round.state === "proposing" ? (
-            <Button href={`/rounds/${props.round.id}/create`} animate="bg">
-              {userProposal ? "Edit Proposal" : "Create Proposal"}
+            <Button
+              href={
+                props.user?.votes.allocated === 0
+                  ? `/nexus`
+                  : `/rounds/${props.round.id}/create`
+              }
+              animate="bg"
+            >
+              {props.user?.votes.allocated === 0
+                ? "Get Started"
+                : userProposal
+                  ? "Edit Proposal"
+                  : "Create Proposal"}
             </Button>
           ) : (
             ""
@@ -96,25 +117,48 @@ export default function CastVotes(props: {
           )}
           {props.round.state === "voting" ? (
             <Button
-              loading={false} // FIX
-              disabled={votesCast < 1 || !props.user}
-              onClick={async () => {
-                if (!props.user) return;
+              disabled={loading || votesCast < 1 || !props.user}
+              onClick={() => {
+                const submit = new Promise((resolve, reject) => {
+                  setRemainingVotes(remainingVotes - votesCast);
 
-                // setOptimisticVotes((prev) => {
-                //   return {
-                //     ...prev,
-                //     [userProposal.id]: props.user?.votes.allocated - votesCast,
-                //   };
-                // });
+                  startTransition(async () => {
+                    setVotes({
+                      ...votes,
+                      ...Object.entries(userVotes).reduce(
+                        (userVotes: Record<string, number>, [id, count]) => {
+                          userVotes[id] = (votes[id] ?? 0) + count;
 
-                await castVotes({
-                  user: props.user.id,
-                  round: props.round.id,
-                  votes: Object.entries(votes).map(([id, count]) => ({
-                    proposal: Number(id),
-                    count,
-                  })),
+                          return userVotes;
+                        },
+                        {}
+                      ),
+                    });
+
+                    await castVotes({
+                      // @ts-ignore
+                      user: props.user.id,
+                      round: props.round.id,
+                      votes: Object.entries(userVotes).map(([id, count]) => ({
+                        proposal: Number(id),
+                        count,
+                      })),
+                    })
+                      .then(resolve)
+                      .catch(reject);
+                  });
+                });
+
+                toast.promise(submit, {
+                  loading: "Casting votes",
+                  success: () => {
+                    setUserVotes({});
+                    return "Successfully cast votes";
+                  },
+                  error: () => {
+                    setUserVotes({});
+                    return "Failed to cast votes";
+                  },
                 });
               }}
               animate="bg"
@@ -129,18 +173,28 @@ export default function CastVotes(props: {
       <div className="flex flex-col gap-4">
         {props.proposals
           .toSorted((a, b) => {
-            if (props.round.state !== "ended") {
+            if (props.round.state === "proposing") {
               if (
-                a.user.id === props.user?.id &&
-                b.user.id !== props.user?.id
+                a.user?.id === props.user?.id &&
+                b.user?.id !== props.user?.id
               ) {
                 return -1;
               }
 
               if (
-                b.user.id === props.user?.id &&
-                a.user.id !== props.user?.id
+                b.user?.id === props.user?.id &&
+                a.user?.id !== props.user?.id
               ) {
+                return 1;
+              }
+            }
+
+            if (props.round.state === "voting") {
+              if (votes[a.id] > votes[b.id]) {
+                return -1;
+              }
+
+              if (votes[b.id] > votes[a.id]) {
                 return 1;
               }
             }
@@ -190,7 +244,7 @@ export default function CastVotes(props: {
               {proposal.image ? (
                 <img
                   src={`${proposal.image}?img-width=250`}
-                  className="w-40 flex-shrink-0 h-[calc(100%_-_16px)] bg-[white] rounded-xl max-sm:rounded-b-none overflow-hidden z-20 relative group max-sm:w-full max-sm:h-40 object-cover object-center"
+                  className="w-40 flex-shrink-0 h-[calc(100%_-_16px)] rounded-xl max-sm:rounded-b-none overflow-hidden z-20 relative group max-sm:w-full max-sm:h-40 object-cover object-center"
                 />
               ) : (
                 ""
@@ -199,7 +253,11 @@ export default function CastVotes(props: {
                 <h4 className="text-2xl font-bebas-neue text-white">
                   {proposal.title}
                 </h4>
-                {proposal.user.name && proposal.user.pfp ? (
+                {/* {(() => {
+                  console.log(proposal.user);
+                  return "";
+                })()} */}
+                {"name" in proposal.user ? (
                   <div className="flex gap-2 items-center pl-1 py-0.5 pr-2 -ml-1 -mt-1 rounded-full w-fit">
                     <img
                       src={proposal.user.pfp}
@@ -278,13 +336,14 @@ export default function CastVotes(props: {
                         onClick={() => {
                           if (!props.user) return;
 
-                          if (votesCast > props.user.votes.allocated - 1)
-                            return;
+                          if (remainingVotes - votesCast < 1) return;
 
-                          setVotes({
-                            ...votes,
+                          setUserVotes({
+                            ...userVotes,
                             [proposal.id]:
-                              (votes[proposal.id] ? votes[proposal.id] : 0) + 1,
+                              (userVotes[proposal.id]
+                                ? userVotes[proposal.id]
+                                : 0) + 1,
                           });
                         }}
                         className="w-5 h-5 text-grey-200 hover:text-white transition-colors max-sm:-rotate-90"
@@ -305,11 +364,11 @@ export default function CastVotes(props: {
                           "flex flex-col items-center gap-2.5 max-sm:flex-row"
                       )}
                     >
-                      {proposal.totalVotes}
-                      {votes[proposal.id] ? (
+                      {votes[proposal.id] ?? 0}
+                      {!loading && userVotes[proposal.id] ? (
                         <span className="text-white">
                           {" "}
-                          + {votes[proposal.id]}
+                          + {userVotes[proposal.id]}
                         </span>
                       ) : (
                         ""
@@ -334,11 +393,10 @@ export default function CastVotes(props: {
                     props.round.state === "voting" ? (
                       <CaretDown
                         onClick={() => {
-                          if ((votes[proposal.id] ? votes[proposal.id] : 0) < 1)
-                            return;
-                          setVotes({
-                            ...votes,
-                            [proposal.id]: votes[proposal.id] - 1,
+                          if ((userVotes[proposal.id] ?? 0) < 1) return;
+                          setUserVotes({
+                            ...userVotes,
+                            [proposal.id]: userVotes[proposal.id] - 1,
                           });
                         }}
                         className="w-5 h-5 text-grey-200 hover:text-white transition-colors max-sm:-rotate-90"

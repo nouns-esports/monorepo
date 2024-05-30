@@ -1,9 +1,10 @@
 "use server";
 
-import { db, proposals, rounds } from "@/db/schema";
+import { db, proposals, rounds, nexus as nexusTable } from "@/db/schema";
 import { and, eq } from "drizzle-orm";
 import { revalidateTag } from "next/cache";
 import { getAuthenticatedUser } from "../queries/users";
+import { parseLexicalState } from "@/utils/parseLexicalState";
 
 export async function createProposal(input: {
   title: string;
@@ -40,6 +41,14 @@ export async function createProposal(input: {
 
   if (now > votingStart) {
     throw new Error("Proposing has closed");
+  }
+
+  const nexus = await db.query.nexus.findFirst({
+    where: eq(nexusTable.user, input.user),
+  });
+
+  if (!nexus) {
+    throw new Error("You must enter the Nexus to propose");
   }
 
   const hasProposed = await db.query.proposals.findFirst({

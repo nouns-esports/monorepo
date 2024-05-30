@@ -11,9 +11,12 @@ import Wagmi from "./Wagmi";
 //   init(env.NEXT_PUBLIC_MULTIBASE_API_KEY);
 // }
 
-export default function Providers(props: { children: React.ReactNode }) {
+export default function Providers(props: {
+  user?: string;
+  children: React.ReactNode;
+}) {
   return (
-    <Privy>
+    <Privy user={props.user}>
       <ReactQuery>
         <Wagmi>
           {props.children}

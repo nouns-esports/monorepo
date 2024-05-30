@@ -4,6 +4,7 @@ import { db, proposals, rounds } from "@/db/schema";
 import { and, eq } from "drizzle-orm";
 import { revalidateTag } from "next/cache";
 import { getAuthenticatedUser } from "../queries/users";
+import { parseLexicalState } from "@/utils/parseLexicalState";
 
 export async function updateProposal(input: {
   user: string;

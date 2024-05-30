@@ -46,6 +46,7 @@ import toast from "react-hot-toast";
 import Button from "@/components/Button";
 import { env } from "@/env";
 import { $createHeadingNode, $isHeadingNode } from "@lexical/rich-text";
+import { pinImage } from "@/server/actions/pinImage";
 
 const LowPriority = 1;
 
@@ -417,8 +418,6 @@ export default function ToolbarPlugin() {
           onChange={async (event) => {
             const files = event.target.files;
 
-            console.log("Inserting image");
-
             if (files && files.length > 0) {
               const file = files[0];
 
@@ -428,34 +427,15 @@ export default function ToolbarPlugin() {
                 return;
               }
 
-              console.log("running");
+              const formData = new FormData();
+              formData.append("file", file);
 
               try {
-                const formData = new FormData();
-                formData.append("file", file);
-
-                const response = await fetch(
-                  "https://api.pinata.cloud/pinning/pinFileToIPFS",
-                  {
-                    method: "POST",
-                    headers: {
-                      Authorization: `Bearer ${env.NEXT_PUBLIC_PINATA_JWT}`,
-                    },
-                    body: formData,
-                  }
-                );
-
-                const data = await response.json();
-
-                if (!response.ok) {
-                  throw new Error("Could not upload file");
-                }
-
-                console.log(data);
+                const hash = await pinImage(formData);
 
                 editor.dispatchCommand(INSERT_IMAGE_COMMAND, {
                   altText: "",
-                  src: `https://ipfs.nouns.gg/ipfs/${data.IpfsHash}`,
+                  src: `https://ipfs.nouns.gg/ipfs/${hash}`,
                 });
               } catch (error) {
                 toast.error("Could not upload image");

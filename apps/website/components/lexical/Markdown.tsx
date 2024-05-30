@@ -10,7 +10,6 @@ import { TabIndentationPlugin } from "@lexical/react/LexicalTabIndentationPlugin
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
-import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import type { EditorState, LexicalEditor } from "lexical";
 import { LinkPlugin } from "@lexical/react/LexicalLinkPlugin";
@@ -28,7 +27,7 @@ export default function Markdown(props: {
   return (
     <LexicalComposer
       initialConfig={{
-        namespace: "Nouns Esports Proposals",
+        namespace: "Nouns Esports",
         theme: {},
         onError: (error) => {
           console.error(error);
@@ -51,7 +50,6 @@ export default function Markdown(props: {
         <>
           <HistoryPlugin />
           <ToolbarPlugin />
-          <AutoFocusPlugin />
           <OnChangePlugin onChange={props.onChange ?? (() => {})} />
           <TabIndentationPlugin />
         </>

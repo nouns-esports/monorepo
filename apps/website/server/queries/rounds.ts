@@ -11,8 +11,8 @@ export const getRound = cache(
       },
     });
   },
-  ["round"],
-  { tags: ["round"], revalidate: 60 * 10 }
+  ["rounds"],
+  { tags: ["rounds"], revalidate: 60 * 10 }
 );
 
 export const getRounds = cache(

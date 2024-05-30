@@ -3,12 +3,15 @@ import Logo from "../Logo";
 import Banner from "./Banner";
 import Navbar from "./Navbar";
 import { getEvents } from "@/server/queries/events";
-import { getAuthenticatedUser } from "@/server/queries/users";
+import { getAuthenticatedUser, getUserProfile } from "@/server/queries/users";
 
 export default async function Header() {
   const events = await getEvents();
 
-  const user = await getAuthenticatedUser(true);
+  const user = await getAuthenticatedUser();
+  const profile = user ? await getUserProfile({ id: user }) : undefined;
+
+  const userWithProfile = user ? { id: user, profile } : undefined;
 
   return (
     <>
@@ -25,7 +28,7 @@ export default async function Header() {
                 Nouns
               </div>
             </Link>
-            <Navbar user={user} />
+            <Navbar user={userWithProfile} />
           </div>
         </div>
       </header>

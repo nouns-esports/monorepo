@@ -1,12 +1,16 @@
 "use client";
 
-import { PrivyProvider, usePrivy } from "@privy-io/react-auth";
+import { PrivyProvider, getAccessToken, usePrivy } from "@privy-io/react-auth";
 import { env } from "@/env";
 import { base, baseSepolia } from "viem/chains";
-// import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 // import { identify } from "@multibase/js"
 
-export default function Privy(props: { children: React.ReactNode }) {
+export default function Privy(props: {
+  user?: string;
+  children: React.ReactNode;
+}) {
   return (
     <PrivyProvider
       appId={env.NEXT_PUBLIC_PRIVY_APP_ID}
@@ -24,7 +28,28 @@ export default function Privy(props: { children: React.ReactNode }) {
         },
       }}
     >
-      {props.children}
+      <PrivySync>{props.children}</PrivySync>
     </PrivyProvider>
   );
+}
+
+function PrivySync(props: { children: React.ReactNode; user?: string }) {
+  const { user, authenticated } = usePrivy();
+
+  const router = useRouter();
+
+  useEffect(() => {
+    async function refresh() {
+      const token = await getAccessToken();
+
+      if (token) {
+        router.refresh();
+      }
+    }
+    if (authenticated && !props.user) {
+      refresh();
+    }
+  }, [authenticated, user]);
+
+  return props.children;
 }

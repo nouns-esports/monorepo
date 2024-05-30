@@ -253,6 +253,20 @@
       "when": 1716267572815,
       "tag": "0035_cool_solo",
       "breakpoints": true
+    },
+    {
+      "idx": 36,
+      "version": "6",
+      "when": 1716487858079,
+      "tag": "0036_lively_whirlwind",
+      "breakpoints": true
+    },
+    {
+      "idx": 37,
+      "version": "6",
+      "when": 1716487919383,
+      "tag": "0037_mighty_pyro",
+      "breakpoints": true
     }
   ]
 }

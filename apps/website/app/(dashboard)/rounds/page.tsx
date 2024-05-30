@@ -5,7 +5,7 @@ import { getRounds } from "@/server/queries/rounds";
 import { formatUnits } from "viem";
 import { mergeAwards } from "@/utils/mergeAwards";
 import { roundState } from "@/utils/roundState";
-import { revalidateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
 
 export default async function Rounds() {
   const [activeRounds, upcomingRounds, endedRounds] = await Promise.all([

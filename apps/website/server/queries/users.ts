@@ -1,12 +1,13 @@
 import { unstable_cache as cache } from "next/cache";
 import { privyClient } from "@/server/clients/privy";
-import { User as PrivyUser } from "@privy-io/server-auth";
+import { User } from "@privy-io/server-auth";
 import { cookies } from "next/headers";
+import { userToProfile } from "@/utils/userToProfile";
 
-export const getUser = cache(
+export const getUserProfile = cache(
   async (input: { id: string }) => {
     try {
-      let privyUser: PrivyUser | null;
+      let privyUser: User | null;
 
       if (input.id.startsWith("0x")) {
         privyUser = await privyClient.getUserByWalletAddress(input.id);
@@ -14,20 +15,10 @@ export const getUser = cache(
         privyUser = await privyClient.getUser(input.id);
       }
 
-      if (!privyUser) throw new Error("User not found");
+      if (!privyUser) return;
 
-      return {
-        id: privyUser.id,
-        name: privyUser.farcaster?.displayName,
-        pfp: privyUser.farcaster?.pfp,
-      };
-    } catch (e) {
-      return {
-        id: input.id,
-        name: undefined,
-        pfp: undefined,
-      };
-    }
+      return userToProfile(privyUser);
+    } catch (e) {}
   },
   ["users"],
   { tags: ["users"], revalidate: 60 * 10 }
@@ -35,7 +26,7 @@ export const getUser = cache(
 
 export function getAuthenticatedUser(
   withUserObject: true
-): Promise<PrivyUser | undefined>;
+): Promise<User | undefined>;
 export function getAuthenticatedUser(
   withUserObject?: false
 ): Promise<string | undefined>;
@@ -43,9 +34,7 @@ export async function getAuthenticatedUser(withUserObject?: boolean) {
   const session = cookies().get("privy-token")?.value;
 
   try {
-    if (!session) {
-      throw new Error("No Privy session found");
-    }
+    if (!session) return;
 
     const user = await privyClient.verifyAuthToken(session);
 

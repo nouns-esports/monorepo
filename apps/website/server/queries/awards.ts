@@ -1,10 +1,9 @@
 "use server";
 
 import { awards, db, proposals, rounds, votes } from "@/db/schema";
-import { eq, asc, and } from "drizzle-orm";
+import { eq, asc, desc } from "drizzle-orm";
 import { unstable_cache as cache } from "next/cache";
 import { unstable_noStore as noStore } from "next/cache";
-import { getAuthenticatedUser } from "./users";
 
 export const getAwards = cache(
   async (input: { round: string }) => {
@@ -20,73 +19,46 @@ export const getAwards = cache(
 export async function canClaimAward(input: { user: string; round: string }) {
   noStore();
 
-  const user = await getAuthenticatedUser();
-
-  if (!user) {
-    throw new Error("No user session found");
-  }
-
-  if (user !== input.user) {
-    throw new Error("You can only check claimed awards for yourself");
-  }
-
-  const proposal = await db.query.proposals.findFirst({
-    where: and(eq(proposals.round, input.round), eq(proposals.user, user)),
-  });
-
-  if (!proposal) {
-    return false;
-  }
-
-  const [allAwards, round, allVotes] = await Promise.all([
+  const [allAwards, round, proposalVotes] = await Promise.all([
     db.query.awards.findMany({
       where: eq(awards.round, input.round),
       orderBy: asc(awards.place),
+      columns: {
+        claimed: true,
+      },
     }),
     db.query.rounds.findFirst({
+      columns: {
+        end: true,
+      },
       where: eq(rounds.id, input.round),
     }),
-    db.query.votes.findMany({
-      where: eq(votes.round, input.round),
+    await db.query.proposals.findMany({
+      where: eq(proposals.round, input.round),
+      columns: {
+        user: true,
+        totalVotes: true,
+      },
+      orderBy: desc(proposals.totalVotes),
     }),
   ]);
 
   if (!round) {
-    throw new Error("Round not found");
+    return false;
   }
 
   if (new Date() < new Date(round.end ?? 0)) {
-    throw new Error("Round has not ended");
+    return false;
   }
 
-  const proposalsWithVotes: Record<number, { id: number; count: number }> = {};
-
-  for (const vote of allVotes) {
-    if (proposalsWithVotes[vote.proposal]) {
-      proposalsWithVotes[vote.proposal] = {
-        id: vote.proposal,
-        count: proposalsWithVotes[vote.proposal].count + vote.count,
-      };
-    } else {
-      proposalsWithVotes[vote.proposal] = {
-        id: vote.proposal,
-        count: vote.count,
-      };
-    }
-  }
-
-  const sortedProposals = Object.values(proposalsWithVotes).sort(
-    (a, b) => b.count - a.count
-  );
-
-  for (let i = 0; i < sortedProposals.length; i++) {
+  for (let i = 0; i < proposalVotes.length; i++) {
     const award = allAwards[i];
 
     if (!award) {
       break;
     }
 
-    if (sortedProposals[i].id === proposal.id && !award.claimed) {
+    if (proposalVotes[i].user === input.user && !award.claimed) {
       return true;
     }
   }

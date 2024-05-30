@@ -9,6 +9,7 @@ import {
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import Providers from "@/providers";
+import { getAuthenticatedUser } from "@/server/queries/users";
 
 const cabin = Cabin({ subsets: ["latin"], variable: "--font-cabin" });
 
@@ -69,12 +70,14 @@ export const viewport = {
 } satisfies Viewport;
 
 export default async function RootLayout(props: { children: React.ReactNode }) {
+  const user = await getAuthenticatedUser();
+
   return (
     <html lang="en" className="scroll-smooth overflow-x-hidden">
       <body
         className={`${cabin.variable} ${luckiestGuy.variable} ${bebasNeue.variable} ${londrinaSolid.variable} bg-black text-grey-400 font-cabin selection:text-white selection:bg-red flex flex-col w-full h-full`}
       >
-        <Providers>
+        <Providers user={user}>
           <Header />
           <main className="flex flex-col w-full min-h-[calc(100vh_-_224px)] h-full">
             {props.children}

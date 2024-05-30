@@ -3,7 +3,7 @@
 import { db, votes, proposals, rounds } from "@/db/schema";
 import { getAuthenticatedUser } from "@/server/queries/users";
 import { and, eq } from "drizzle-orm";
-import { revalidateTag } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { getNexus } from "../queries/nexus";
 
 export async function castVotes(input: {
@@ -26,8 +26,6 @@ export async function castVotes(input: {
   if (!nexus) {
     throw new Error("A Nexus membership is required to perform this action");
   }
-
-  const allottedVotes = nexus.tier === 0 ? 1 : nexus.tier === 1 ? 3 : 10;
 
   const [round, previousVotes] = await Promise.all([
     db.query.rounds.findFirst({
@@ -77,7 +75,7 @@ export async function castVotes(input: {
         throw new Error("You can only vote on proposals in the same round");
       }
 
-      if (votesUsed + vote.count > allottedVotes) {
+      if (votesUsed + vote.count > nexus.votes) {
         tx.rollback();
         throw new Error("You have used all your votes");
       }
@@ -103,6 +101,7 @@ export async function castVotes(input: {
     }
   });
 
+  revalidatePath(`/rounds/${input.round}`);
   revalidateTag("votes");
   revalidateTag("proposals");
 }

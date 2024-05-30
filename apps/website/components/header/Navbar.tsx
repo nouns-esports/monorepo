@@ -1,10 +1,10 @@
 "use client";
 
-import { List, X } from "phosphor-react-sc";
+import { CurrencyEth, List, X } from "phosphor-react-sc";
 import SignInButton from "@/components/header/SignInButton";
 import Link from "../Link";
 import * as NavigationMenu from "@radix-ui/react-navigation-menu";
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import {
   TwitchLogo,
   TwitterLogo,
@@ -16,8 +16,11 @@ import {
 import { usePathname, useParams } from "next/navigation";
 import { twMerge } from "tailwind-merge";
 import { User } from "@privy-io/server-auth";
+import { getUserProfile } from "@/server/queries/users";
 
-export default function Navbar(props: { user?: User }) {
+export default function Navbar(props: {
+  user?: { id: string; profile?: Awaited<ReturnType<typeof getUserProfile>> };
+}) {
   const [open, setOpen] = useState(false);
 
   const pathname = usePathname();
@@ -73,7 +76,10 @@ export default function Navbar(props: { user?: User }) {
               Street Fighter
             </NavGroupItem>
           </NavGroup>
-          <NavItem href="/nexus" icon="/logo/logo-white.svg">
+          <NavItem
+            href="/nexus"
+            icon={<CurrencyEth className="w-4 h-4 text-white" weight="fill" />}
+          >
             Nexus
           </NavItem>
           <SignInButton user={props.user} />
@@ -155,11 +161,23 @@ export default function Navbar(props: { user?: User }) {
   );
 }
 
-function NavItem(props: { href: string; icon: string; children: string }) {
+function NavItem(props: {
+  href: string;
+  icon: string | ReactNode;
+  children: string;
+}) {
   return (
     <NavigationMenu.Item className="max-sm:hidden flex items-center mr-4 justify-center text-white/30 hover:bg-white/5 px-4 rounded-full hover:text-white h-10 transition-colors">
       <Link href={props.href} className="flex items-center gap-1.5 text-white">
-        <img className="w-4 h-4" src={props.icon} />
+        {typeof props.icon === "string" ? (
+          props.icon.includes("/") ? (
+            <img className="w-4 h-4 rounded-sm" src={props.icon} />
+          ) : (
+            <p>{props.icon}</p>
+          )
+        ) : (
+          props.icon
+        )}
         {props.children}
       </Link>
     </NavigationMenu.Item>
@@ -183,15 +201,23 @@ function NavGroup(props: { title: string; children: React.ReactNode }) {
   );
 }
 
-function NavGroupItem(props: { children: string; href: string; icon: string }) {
+function NavGroupItem(props: {
+  children: string;
+  href: string;
+  icon: string | ReactNode;
+}) {
   return (
     <NavigationMenu.Item key={props.children}>
       <NavigationMenu.Link asChild>
         <Link href={props.href} className="group flex items-center gap-3">
-          {props.icon.includes("/") ? (
-            <img className="w-4 h-4 rounded-sm" src={props.icon} />
+          {typeof props.icon === "string" ? (
+            props.icon.includes("/") ? (
+              <img className="w-4 h-4 rounded-sm" src={props.icon} />
+            ) : (
+              <p>{props.icon}</p>
+            )
           ) : (
-            <p>{props.icon}</p>
+            props.icon
           )}
           <p className="group-hover:text-white text-white/30 text-nowrap transition-colors">
             {props.children}

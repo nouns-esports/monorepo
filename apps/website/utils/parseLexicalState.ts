@@ -1,4 +1,4 @@
-function parseLexicalState(state: any) {
+export function parseLexicalState(state: any) {
   let description = "";
   let image = "";
 

@@ -100,7 +100,7 @@ export const snapshots = pgTable("snapshots", {
   metadata: json("metadata"),
 });
 
-export const pass = pgTable("pass", {
+export const nexus = pgTable("nexus", {
   user: text("user").primaryKey(),
   tier: smallint("tier").notNull(),
 });
@@ -116,6 +116,7 @@ export const rounds = pgTable("rounds", {
   end: timestamp("end", { mode: "date" }),
   tags: text("tags").array().notNull(),
   image: text("image").notNull(),
+  banner: text("banner").notNull(),
 });
 
 export const roundsRelations = relations(rounds, ({ many }) => ({
@@ -214,7 +215,7 @@ export const db = drizzle(
       votesRelations,
       snapshots,
       badges,
-      pass,
+      nexus,
     },
   }
 );
@@ -230,4 +231,4 @@ export type Proposal = typeof proposals.$inferSelect;
 export type Vote = typeof votes.$inferSelect;
 export type Snapshot = typeof snapshots.$inferSelect;
 export type Badge = typeof badges.$inferSelect;
-export type Pass = typeof pass.$inferSelect;
+export type Nexus = typeof nexus.$inferSelect;

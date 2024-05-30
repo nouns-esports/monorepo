@@ -1,6 +1,6 @@
 "use server";
 
-import { db, pass } from "@/db/schema";
+import { db, nexus } from "@/db/schema";
 import { revalidateTag } from "next/cache";
 import { isInServer } from "../queries/discord";
 import { getAuthenticatedUser } from "../queries/users";
@@ -26,7 +26,7 @@ export async function grantExplorer(input: { user: string }) {
     throw new Error("Not in discord");
   }
 
-  await db.insert(pass).values({
+  await db.insert(nexus).values({
     user: user.id,
     tier: 0,
   });

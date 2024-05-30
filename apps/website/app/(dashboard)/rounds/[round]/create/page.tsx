@@ -14,7 +14,9 @@ export default async function Create(props: { params: { round: string } }) {
   }
 
   const user = await getAuthenticatedUser();
-  const proposal = user ? await getProposal({ user }) : undefined;
+  const proposal = user
+    ? await getProposal({ user, round: props.params.round })
+    : undefined;
 
   return (
     <div className="flex flex-col gap-4">
