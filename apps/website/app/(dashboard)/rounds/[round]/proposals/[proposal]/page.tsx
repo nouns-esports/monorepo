@@ -25,7 +25,7 @@ export async function generateMetadata(props: {
 export default async function Proposal(props: {
   params: { round: string; proposal: string };
 }) {
-  const proposal = await getProposal({ id: Number(props.params.proposal) });
+  const proposal = await getProposal({ id: Number(props.params.proposal)});
 
   if (!proposal) {
     return notFound();

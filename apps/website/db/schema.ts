@@ -138,7 +138,7 @@ export const awards = pgTable("awards", {
   place: smallint("place").notNull(),
   type: text("type").notNull(),
   value: numeric("value", { precision: 78 }).notNull(),
-  claimed: boolean("claimed").default(false),
+  claimed: boolean("claimed").notNull().default(false),
 });
 
 export const awardsRelations = relations(awards, ({ one }) => ({

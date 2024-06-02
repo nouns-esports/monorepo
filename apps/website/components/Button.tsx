@@ -10,7 +10,7 @@ export default function Button(props: {
   backgroundColor?: string;
   scroll?: boolean;
   form?: boolean;
-  large?: boolean;
+  size?: "sm" | "md" | "lg";
   animate: "hover" | "bg";
   loading?: boolean;
   children: React.ReactNode;
@@ -44,8 +44,9 @@ export default function Button(props: {
       <div
         className={twMerge(
           "relative select-none text-grey-800 bg-white rounded-full flex items-center justify-center leading-none font-bebas-neue whitespace-nowrap",
-          props.large ? "py-3 px-[22px] text-xl" : "py-1.5 px-4 text-xl",
-
+          props.size === "lg" && "py-3 px-[22px] text-xl",
+          (props.size === "md" || !props.size) && "py-1.5 px-4 text-xl",
+          props.size === "sm" && "py-1 px-3 text-lg",
           props.disabled
             ? "brightness-50 cursor-not-allowed"
             : props.animate === "hover"

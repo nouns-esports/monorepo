@@ -49,9 +49,6 @@ export default function Navbar(props: {
             <NavGroupItem href="/shop" icon="🛒">
               Shop
             </NavGroupItem>
-            <NavGroupItem href="/#projects" icon="🛠️">
-              Projects
-            </NavGroupItem>
             <NavGroupItem href="/partners" icon="🤝">
               Partners
             </NavGroupItem>
@@ -103,14 +100,11 @@ export default function Navbar(props: {
         className="bg-black left-0 top-0 w-full h-screen absolute -z-10 pt-24 p-4 flex flex-col gap-8"
       >
         <MenuGroup title="Explore">
-          <MenuGroupItem href="/#events" icon="📅">
-            Events
+          <MenuGroupItem href="/rounds" icon="⌛">
+            Rounds
           </MenuGroupItem>
           <MenuGroupItem href="/shop" icon="🛒">
             Shop
-          </MenuGroupItem>
-          <MenuGroupItem href="/#projects" icon="🛠️">
-            Projects
           </MenuGroupItem>
           <MenuGroupItem href="/partners" icon="🤝">
             Partners

@@ -25,47 +25,33 @@ export default async function DashboardLayout(props: {
           </div>
         </div>
         <aside className="flex flex-col gap-4 sticky h-full top-32 flex-shrink-0 max-[1350px]:hidden">
-          <div className="relative flex flex-shrink-0 gap-4 h-48 w-80 bg-red rounded-xl">
-            <div className="p-4 flex flex-col gap-4 justify-center h-full w-full">
-              <p className="font-bebas-neue text-white text-3xl leading-none">
-                Enter the Nexus
-              </p>
-              <p className="text-white text-sm leading-snug max-w-[180px]">
-                Help shape the future of Nouns Esports
-              </p>
-              <Button href="/pass" animate="bg">
-                Get Started
-              </Button>
-            </div>
-            <img
-              src="/squirtles.png"
-              className="h-[calc(100%_+_8px)] absolute right-2 -top-4"
-            />
+          <div className="relative flex flex-shrink-0 gap-4 h-48 w-80 items-center justify-center bg-white rounded-xl">
+            Placeholder Image
           </div>
           <div className="flex flex-col gap-2 bg-blue-500 rounded-xl p-4">
             <p className="font-bebas-neue text-white text-[1.75rem] leading-none">
-              Follow our Socials!
+              Join the community!
             </p>
             <div className="flex gap-3">
-              <Link href="/discord">
+              <Link href="/discord" newTab>
                 <DiscordLogo
                   className="w-8 h-8 text-white hover:text-white/60 cursor-pointer transition-colors"
                   weight="fill"
                 />
               </Link>
-              <Link href="/instagram">
+              <Link href="/instagram" newTab>
                 <InstagramLogo
                   className="w-8 h-8 text-white hover:text-white/60 cursor-pointer transition-colors"
                   weight="fill"
                 />
               </Link>
-              <Link href="/twitter">
+              <Link href="/twitter" newTab>
                 <TwitterLogo
                   className="w-8 h-8 text-white hover:text-white/60 cursor-pointer transition-colors"
                   weight="fill"
                 />
               </Link>
-              <Link href="/youtube">
+              <Link href="/youtube" newTab>
                 <YoutubeLogo
                   className="w-8 h-8 text-white hover:text-white/60 cursor-pointer transition-colors"
                   weight="fill"

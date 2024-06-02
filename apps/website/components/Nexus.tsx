@@ -1,21 +1,27 @@
 "use client";
 
 import {
+  ArrowClockwise,
   DiscordLogo,
   LinkBreak,
   LinkSimple,
+  Plus,
   TwitterLogo,
 } from "phosphor-react-sc";
 import Button from "./Button";
-import { useLinkAccount, usePrivy, useWallets } from "@privy-io/react-auth";
+import { useLinkAccount, usePrivy } from "@privy-io/react-auth";
 import { useRouter } from "next/navigation";
 import { getNexus } from "@/server/queries/nexus";
 import { twMerge } from "tailwind-merge";
-import { User } from "@privy-io/server-auth";
+import { User, WalletWithMetadata } from "@privy-io/server-auth";
 import { userToProfile } from "@/utils/userToProfile";
 import toast from "react-hot-toast";
 import Countdown from "./rounds/Countdown";
 import { nextFridayAt3PM } from "@/utils/nextFridayAt3PM";
+import { shortenAddress } from "@/utils/shortenAddress";
+import { useContext } from "react";
+import { LoginMethodContext } from "@/providers/Privy";
+import { grantExplorer } from "@/server/actions/grantExplorer";
 
 export default function Nexus(props: {
   user?: User;
@@ -26,23 +32,28 @@ export default function Nexus(props: {
 
   const { linkFarcaster, linkWallet, linkTwitter, linkDiscord } =
     useLinkAccount({
+      onError: () => {
+        setOnlyCoinbaseWallet(false);
+      },
       onSuccess: () => {
         router.refresh();
+        setOnlyCoinbaseWallet(false);
       },
     });
 
   const { unlinkDiscord, unlinkTwitter, unlinkFarcaster, unlinkWallet } =
     usePrivy();
 
-  const { wallets } = useWallets();
-
-  const linkedWallets = wallets.filter(
-    (wallet) => wallet.linked && wallet.walletClientType !== "privy"
-  );
+  const linkedWallets = (props.user?.linkedAccounts.filter(
+    (account) =>
+      account.type === "wallet" && account.walletClientType !== "privy"
+  ) ?? []) as WalletWithMetadata[];
 
   const profile = userToProfile(props.user);
 
-  if (!props.requirements?.inDiscord) {
+  const { setOnlyCoinbaseWallet } = useContext(LoginMethodContext);
+
+  if (!props.nexus) {
     return (
       <div className="w-full flex flex-col gap-8">
         <div className="h-[250px] w-full bg-white rounded-xl flex items-center justify-center text-black text-xl">
@@ -57,14 +68,53 @@ export default function Nexus(props: {
             tincidunt, odio ex ultricies felis, nec fermentum lacus ligula ac
             mi.
           </p>
-          <Button
-            onClick={() => {
-              linkDiscord();
-            }}
-            animate="bg"
-          >
-            Get Started
-          </Button>
+          <div className="flex flex-col gap-3 items-center">
+            <Button
+              onClick={() => {
+                if (!props.user?.discord?.username) {
+                  linkDiscord();
+                  return;
+                }
+
+                if (!props.requirements?.inDiscord) {
+                  router.refresh();
+                  return;
+                }
+
+                toast.promise(
+                  grantExplorer({ user: props.user.id }).then(() => {
+                    router.refresh();
+                  }),
+                  {
+                    loading: "Granting access",
+                    success: "Successfully granted access",
+                    error: "Failed to grant access",
+                  }
+                );
+              }}
+              animate="bg"
+            >
+              {!props.user?.discord ? "Get Started" : ""}
+              {props.user?.discord && !props.requirements?.inDiscord ? (
+                <>
+                  <ArrowClockwise className="w-5 h-5 mr-2" weight="bold" />{" "}
+                  Check
+                </>
+              ) : (
+                ""
+              )}
+              {props.user?.discord && props.requirements?.inDiscord
+                ? "Enter the Nexus"
+                : ""}
+            </Button>
+            {props.user?.discord && !props.requirements?.inDiscord ? (
+              <small className="text-red">
+                You must join the Discord server to begin
+              </small>
+            ) : (
+              ""
+            )}
+          </div>
         </div>
         <div className="flex flex-col gap-4">
           <h2 className="font-luckiest-guy text-white text-3xl flex items-center justify-center w-full">
@@ -97,6 +147,8 @@ export default function Nexus(props: {
       </div>
     );
   }
+
+  console.log(props.nexus.tier);
 
   return (
     <div className="flex flex-col items-center">
@@ -133,47 +185,81 @@ export default function Nexus(props: {
         ) : (
           ""
         )}
-        {props.nexus ? (
-          <div className="flex gap-4 w-full items-center h-20">
-            <div className="bg-grey-800 rounded-xl flex flex-col items-center justify-center w-full h-full">
-              <p className="text-grey-400">Your Tier</p>
-              <p
-                className={twMerge(
-                  "text-lg",
-                  props.nexus.tier === "Explorer" && "text-blue-500",
-                  props.nexus.tier === "Challenger" && "text-red",
-                  props.nexus.tier === "Elite" && "text-purple"
-                )}
-              >
-                {props.nexus.tier}
-              </p>
-            </div>
-            <div className="bg-grey-800 rounded-xl flex flex-col items-center justify-center w-full h-full">
-              <p className="text-grey-400">Your Votes</p>
-              <p className="text-white text-lg">{props.nexus.votes}</p>
-            </div>
-            <div className="bg-grey-800 rounded-xl flex flex-col items-center justify-center w-full h-full">
-              <p className="text-grey-400">Updates Weekly</p>
-              <p className="text-white text-lg">
-                <Countdown date={nextFridayAt3PM()} />
-              </p>
-            </div>
+
+        <div className="flex gap-4 w-full items-center h-20">
+          <div className="bg-grey-800 rounded-xl flex flex-col items-center justify-center w-full h-full">
+            <p className="text-grey-400">Your Tier</p>
+            <p
+              className={twMerge(
+                "text-lg",
+                props.nexus.tier === "Explorer" && "text-blue-500",
+                props.nexus.tier === "Challenger" && "text-red",
+                props.nexus.tier === "Elite" && "text-purple"
+              )}
+            >
+              {props.nexus.tier}
+            </p>
+          </div>
+          <div className="bg-grey-800 rounded-xl flex flex-col items-center justify-center w-full h-full">
+            <p className="text-grey-400">Your Votes</p>
+            <p className="text-white text-lg">{props.nexus.votes}</p>
+          </div>
+          <div className="bg-grey-800 rounded-xl flex flex-col items-center justify-center w-full h-full">
+            <p className="text-grey-400">Updates Weekly</p>
+            <p className="text-white text-lg">
+              <Countdown date={nextFridayAt3PM()} />
+            </p>
+          </div>
+        </div>
+
+        {props.nexus.tier !== "Elite" ? (
+          <div className="bg-grey-800 rounded-xl flex flex-col w-full p-6">
+            <h2 className="font-bebas-neue text-2xl text-white mb-2">
+              Steps to level up
+            </h2>
+            <ul className="text-white list-disc">
+              {props.nexus.tier === "Explorer" ? (
+                <>
+                  <li className="ml-4">
+                    Be an active voter in 3 of the last 5 rounds
+                  </li>
+                </>
+              ) : (
+                ""
+              )}
+              {props.nexus.tier === "Challenger" ? (
+                <>
+                  <li className="ml-4">
+                    Connect a Discord, Twitter, Farcaster, and Ethereum wallet
+                  </li>
+                </>
+              ) : (
+                ""
+              )}
+            </ul>
           </div>
         ) : (
           ""
         )}
         <div className="flex flex-col justify-between w-full gap-4 rounded-xl bg-grey-800 py-6 px-6">
           <h2 className="text-2xl font-bebas-neue text-white">
-            Linked Accounts
+            Connected Accounts
           </h2>
           <ul className="flex flex-col gap-4">
             <li className="flex items-center text-white justify-between">
-              <div className="text-lg font-semibold flex gap-3 items-center">
-                <DiscordLogo className="w-6 h-6" weight="fill" />
-                Discord
+              <div className="flex items-center gap-4">
+                <div className="text-lg font-semibold flex gap-3 items-center">
+                  <DiscordLogo className="w-6 h-6" weight="fill" />
+                  Discord
+                </div>
+                {props.user?.discord ? (
+                  <p className="text-green">{props.user.discord.username}</p>
+                ) : (
+                  ""
+                )}
               </div>
               <div className="flex gap-4 items-center">
-                <button
+                <Button
                   onClick={() => {
                     if (props.user?.discord)
                       toast.promise(
@@ -188,24 +274,27 @@ export default function Nexus(props: {
                       );
                     else linkDiscord();
                   }}
-                  className="text-red hover:text-red/80 transition-colors flex items-center gap-1"
+                  animate="bg"
+                  size="sm"
                 >
-                  {props.user?.discord ? (
-                    <LinkBreak className="w-5 h-5" />
-                  ) : (
-                    <LinkSimple className="w-5 h-5" />
-                  )}
-                  {props.user?.discord ? "Unlink" : "Link"}
-                </button>
+                  {props.user?.discord ? "Remove" : "Connect"}
+                </Button>
               </div>
             </li>
             <li className="flex items-center text-white justify-between">
-              <div className="text-lg font-semibold flex gap-3 items-center">
-                <TwitterLogo className="w-6 h-6" weight="fill" />
-                Twitter
+              <div className="flex items-center gap-4">
+                <div className="text-lg font-semibold flex gap-3 items-center">
+                  <TwitterLogo className="w-6 h-6" weight="fill" />
+                  Twitter
+                </div>
+                {props.user?.twitter ? (
+                  <p className="text-green">@{props.user.twitter.username}</p>
+                ) : (
+                  ""
+                )}
               </div>
               <div className="flex gap-4 items-center">
-                <button
+                <Button
                   onClick={() => {
                     if (props.user?.twitter) {
                       toast.promise(
@@ -220,53 +309,30 @@ export default function Nexus(props: {
                       );
                     } else linkTwitter();
                   }}
-                  className="text-red hover:text-red/80 transition-colors flex items-center gap-1"
+                  animate="bg"
+                  size="sm"
                 >
-                  {props.user?.twitter ? (
-                    <LinkBreak className="w-5 h-5" />
-                  ) : (
-                    <LinkSimple className="w-5 h-5" />
-                  )}
-                  {props.user?.twitter ? "Unlink" : "Link"}
-                </button>
+                  {props.user?.twitter ? "Remove" : "Connect"}
+                </Button>
               </div>
             </li>
+
             <li className="flex items-center text-white justify-between">
-              <div className="text-lg font-semibold flex gap-3 items-center">
-                <img src="/ethereum.png" className="h-6 w-6 object-contain" />
-                Wallet
-              </div>
-              <button
-                onClick={() => {
-                  if (linkedWallets.length > 0) {
-                    toast.promise(
-                      unlinkWallet(linkedWallets[0].address).then(() =>
-                        router.refresh()
-                      ),
-                      {
-                        loading: "Unlinking wallet",
-                        success: "Successfully unlinked wallet",
-                        error: "Failed to unlink wallet",
-                      }
-                    );
-                  } else linkWallet();
-                }}
-                className="text-red hover:text-red/80 transition-colors flex items-center gap-1"
-              >
-                {linkedWallets.length > 0 ? (
-                  <LinkBreak className="w-5 h-5" />
+              <div className="flex items-center gap-4">
+                <div className="text-lg font-semibold flex gap-3 items-center">
+                  <img
+                    src="/farcaster.svg"
+                    className="h-5 w-6 object-contain"
+                  />
+                  Farcaster
+                </div>
+                {props.user?.farcaster ? (
+                  <p className="text-green">@{props.user.farcaster.username}</p>
                 ) : (
-                  <LinkSimple className="w-5 h-5" />
+                  ""
                 )}
-                {linkedWallets.length > 0 ? "Unlink" : "Link"}
-              </button>
-            </li>
-            <li className="flex items-center text-white justify-between">
-              <div className="text-lg font-semibold flex gap-3 items-center">
-                <img src="/farcaster.svg" className="h-5 w-6 object-contain" />
-                Farcaster
               </div>
-              <button
+              <Button
                 onClick={() => {
                   if (props.user?.farcaster?.fid) {
                     toast.promise(
@@ -281,15 +347,70 @@ export default function Nexus(props: {
                     );
                   } else linkFarcaster();
                 }}
-                className="text-red hover:text-red/80 transition-colors flex items-center gap-1"
+                animate="bg"
+                size="sm"
               >
-                {props.user?.farcaster ? (
-                  <LinkBreak className="w-5 h-5" />
+                {props.user?.farcaster ? "Remove" : "Connect"}
+              </Button>
+            </li>
+            <li className="flex items-center text-white justify-between">
+              <div className="flex items-center gap-4">
+                <div className="text-lg font-semibold flex gap-3 items-center">
+                  <img src="/ethereum.png" className="h-6 w-6 object-contain" />
+                  Wallet
+                </div>
+                {linkedWallets.length > 0 ? (
+                  <p className="text-green">
+                    {shortenAddress(linkedWallets[0].address)}
+                  </p>
                 ) : (
-                  <LinkSimple className="w-5 h-5" />
+                  ""
                 )}
-                {props.user?.farcaster ? "Unlink" : "Link"}
-              </button>
+              </div>
+              <div className="flex gap-4 items-center">
+                {linkedWallets.length < 1 ? (
+                  <div className="flex gap-4 items-center">
+                    <button
+                      onClick={() => {
+                        setOnlyCoinbaseWallet(true);
+                        linkWallet();
+                      }}
+                      className="text-red hover:text-red/80 transition-colors flex items-center gap-1"
+                    >
+                      <Plus className="w-4 h-4" weight="bold" />
+                      Create a new wallet
+                    </button>
+                    <Button
+                      onClick={() => {
+                        linkWallet();
+                      }}
+                      animate="bg"
+                      size="sm"
+                    >
+                      Connect
+                    </Button>
+                  </div>
+                ) : (
+                  <Button
+                    onClick={() => {
+                      toast.promise(
+                        unlinkWallet(linkedWallets[0].address).then(() =>
+                          router.refresh()
+                        ),
+                        {
+                          loading: "Unlinking wallet",
+                          success: "Successfully unlinked wallet",
+                          error: "Failed to unlink wallet",
+                        }
+                      );
+                    }}
+                    animate="bg"
+                    size="sm"
+                  >
+                    Remove
+                  </Button>
+                )}
+              </div>
             </li>
           </ul>
         </div>

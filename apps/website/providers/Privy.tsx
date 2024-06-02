@@ -4,32 +4,56 @@ import { PrivyProvider, getAccessToken, usePrivy } from "@privy-io/react-auth";
 import { env } from "@/env";
 import { base, baseSepolia } from "viem/chains";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import {
+  createContext,
+  useEffect,
+  useState,
+  Dispatch,
+  SetStateAction,
+} from "react";
 // import { identify } from "@multibase/js"
+
+export const LoginMethodContext = createContext({
+  onlyCoinbaseWallet: false,
+  setOnlyCoinbaseWallet: ((value) => {}) as Dispatch<SetStateAction<boolean>>,
+});
 
 export default function Privy(props: {
   user?: string;
   children: React.ReactNode;
 }) {
+  const [onlyCoinbaseWallet, setOnlyCoinbaseWallet] = useState(false);
+
   return (
-    <PrivyProvider
-      appId={env.NEXT_PUBLIC_PRIVY_APP_ID}
-      config={{
-        loginMethods: ["discord", "twitter", "email", "wallet", "farcaster"],
-        defaultChain:
-          env.NEXT_PUBLIC_ENVIRONMENT === "production" ? base : baseSepolia,
-        supportedChains: [
-          env.NEXT_PUBLIC_ENVIRONMENT === "production" ? base : baseSepolia,
-        ],
-        appearance: {
-          theme: "#040404",
-          accentColor: "#E93737",
-          logo: "/logo/logo.svg",
-        },
-      }}
+    <LoginMethodContext.Provider
+      value={{ onlyCoinbaseWallet, setOnlyCoinbaseWallet }}
     >
-      <PrivySync>{props.children}</PrivySync>
-    </PrivyProvider>
+      <PrivyProvider
+        appId={env.NEXT_PUBLIC_PRIVY_APP_ID}
+        config={{
+          loginMethods: ["discord", "twitter", "email", "wallet", "farcaster"],
+
+          defaultChain:
+            env.NEXT_PUBLIC_ENVIRONMENT === "production" ? base : baseSepolia,
+          supportedChains: [
+            env.NEXT_PUBLIC_ENVIRONMENT === "production" ? base : baseSepolia,
+          ],
+          appearance: {
+            theme: "#040404",
+            accentColor: "#E93737",
+            logo: "/logo/logo.svg",
+            walletList: onlyCoinbaseWallet ? ["coinbase_wallet"] : undefined,
+          },
+          externalWallets: {
+            coinbaseWallet: {
+              connectionOptions: "all",
+            },
+          },
+        }}
+      >
+        <PrivySync>{props.children}</PrivySync>
+      </PrivyProvider>
+    </LoginMethodContext.Provider>
   );
 }
 
