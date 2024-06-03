@@ -139,7 +139,7 @@ const nextConfig = {
     },
     {
       "source": "/matchacup",
-      "destination": "https://www.start.gg/tournament/matcha-cup-west-coast/details",
+      "destination": "https://www.start.gg/tournament/matcha-cup-east-coast/details",
       "permanent": true
     },
     {
