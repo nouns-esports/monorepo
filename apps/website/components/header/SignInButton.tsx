@@ -3,14 +3,15 @@
 import { useRouter } from "next/navigation";
 import Loading from "../Loading";
 import { usePrivy } from "@privy-io/react-auth";
-import { getUserProfile } from "@/server/queries/users";
+import { userToProfile } from "@/utils/userToProfile";
+import { User } from "@privy-io/server-auth";
 
-export default function SignInButton(props: {
-  user?: { id: string; profile?: Awaited<ReturnType<typeof getUserProfile>> };
-}) {
+export default function SignInButton(props: { user?: User }) {
   const { login, authenticated } = usePrivy();
 
   const router = useRouter();
+
+  const profile = userToProfile(props.user);
 
   return (
     <button
@@ -19,23 +20,23 @@ export default function SignInButton(props: {
         else login();
       }}
       style={{
-        paddingTop: props.user?.profile ? "6px" : "10px",
-        paddingBottom: props.user?.profile ? "6px" : "10px",
-        paddingLeft: props.user?.profile ? "6px" : "16px",
-        paddingRight: props.user?.profile ? "14px" : "16px",
+        paddingTop: profile ? "6px" : "10px",
+        paddingBottom: profile ? "6px" : "10px",
+        paddingLeft: profile ? "6px" : "16px",
+        paddingRight: profile ? "14px" : "16px",
       }}
       className="flex items-center gap-2 select-none text-grey-800 py-1.5 pl-1.5 pr-3.5 text-xl bg-white hover:bg-white/80 transition-colors rounded-full justify-center leading-none font-bebas-neue whitespace-nowrap"
     >
       {props.user ? (
-        props.user.profile ? (
+        profile ? (
           <>
             <img
-              src={props.user.profile.pfp}
+              src={profile.pfp}
               alt="User avatar"
               className="rounded-full w-7 h-7 select-none object-center object-cover"
               draggable={false}
             />
-            {props.user?.profile.name}
+            {profile.name}
           </>
         ) : (
           "Enter the Nexus"

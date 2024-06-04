@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import TextInput from "../form/TextInput";
 import Button from "../Button";
 import { createProposal } from "@/server/actions/createProposal";
@@ -55,13 +55,6 @@ export default function MarkdownEditor(props: {
 
   const [loading, setLoading] = useState(false);
 
-  const onChangeCallback = useCallback(
-    (value: any) => {
-      if (value.length <= 100) setTitle(value);
-    },
-    [title]
-  );
-
   return (
     <div className="flex flex-col gap-8">
       <div className="flex flex-col gap-2">
@@ -76,7 +69,9 @@ export default function MarkdownEditor(props: {
         </div>
         <TextInput
           placeholder="Enter a title for your proposal"
-          onChange={onChangeCallback}
+          onChange={(value) => {
+            if (value.length <= 100) setTitle(value);
+          }}
           value={title}
         />
       </div>

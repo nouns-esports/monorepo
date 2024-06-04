@@ -19,6 +19,30 @@ import ImagePlugin from "./plugins/ImagePlugin";
 import ToolbarPlugin from "./plugins/ToolbarPlugin";
 import { twMerge } from "tailwind-merge";
 
+// THIS MUST BE DEFINED OUTSIDE OF THE COMPONENT OR YOU WILL WASTE HOURS OF YOUR LIFE TRYING TO FIGURE OUT WHY REACT FORCE FOCUSES THE LEXICAL EDITOR ON EVERY RERENDER
+const MATCHERS = [
+  (text: string) => {
+    const URL_MATCHER =
+      /((https?:\/\/(www\.)?)|(www\.))[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/;
+
+    const match = URL_MATCHER.exec(text);
+
+    if (match === null) {
+      return null;
+    }
+
+    const fullMatch = match[0];
+
+    return {
+      index: match.index,
+      length: fullMatch.length,
+      text: fullMatch,
+      url: fullMatch.startsWith("http") ? fullMatch : `https://${fullMatch}`,
+      attributes: { rel: "noreferrer", target: "_blank" },
+    };
+  },
+];
+
 export default function Markdown(props: {
   markdown: string;
   readOnly: boolean;
@@ -81,32 +105,7 @@ export default function Markdown(props: {
         ErrorBoundary={LexicalErrorBoundary}
       />
       <LinkPlugin />
-      <AutoLinkPlugin
-        matchers={[
-          (text) => {
-            const URL_MATCHER =
-              /((https?:\/\/(www\.)?)|(www\.))[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/;
-
-            const match = URL_MATCHER.exec(text);
-
-            if (match === null) {
-              return null;
-            }
-
-            const fullMatch = match[0];
-
-            return {
-              index: match.index,
-              length: fullMatch.length,
-              text: fullMatch,
-              url: fullMatch.startsWith("http")
-                ? fullMatch
-                : `https://${fullMatch}`,
-              attributes: { rel: "noreferrer", target: "_blank" },
-            };
-          },
-        ]}
-      />
+      <AutoLinkPlugin matchers={MATCHERS} />
       <ListPlugin />
       <ImagePlugin />
     </LexicalComposer>

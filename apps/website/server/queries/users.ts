@@ -21,7 +21,7 @@ export const getUserProfile = cache(
     } catch (e) {}
   },
   ["users"],
-  { tags: ["users"], revalidate: 60 * 10 }
+  { tags: ["users"], revalidate: 60 * 15 }
 );
 
 export function getAuthenticatedUser(

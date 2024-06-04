@@ -16,11 +16,8 @@ import {
 import { usePathname, useParams } from "next/navigation";
 import { twMerge } from "tailwind-merge";
 import { User } from "@privy-io/server-auth";
-import { getUserProfile } from "@/server/queries/users";
 
-export default function Navbar(props: {
-  user?: { id: string; profile?: Awaited<ReturnType<typeof getUserProfile>> };
-}) {
+export default function Navbar(props: { user?: User }) {
   const [open, setOpen] = useState(false);
 
   const pathname = usePathname();

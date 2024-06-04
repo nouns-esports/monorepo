@@ -9,7 +9,7 @@ import {
   TwitterLogo,
 } from "phosphor-react-sc";
 import Button from "./Button";
-import { useLinkAccount, usePrivy } from "@privy-io/react-auth";
+import { useLinkAccount, useLogin, usePrivy } from "@privy-io/react-auth";
 import { useRouter } from "next/navigation";
 import { getNexus } from "@/server/queries/nexus";
 import { twMerge } from "tailwind-merge";
@@ -41,8 +41,19 @@ export default function Nexus(props: {
       },
     });
 
-  const { unlinkDiscord, unlinkTwitter, unlinkFarcaster, unlinkWallet } =
-    usePrivy();
+  const { login } = useLogin({
+    onComplete: () => {
+      router.refresh();
+    },
+  });
+
+  const {
+    unlinkDiscord,
+    unlinkTwitter,
+    unlinkFarcaster,
+    unlinkWallet,
+    authenticated,
+  } = usePrivy();
 
   const linkedWallets = (props.user?.linkedAccounts.filter(
     (account) =>
@@ -71,6 +82,11 @@ export default function Nexus(props: {
           <div className="flex flex-col gap-3 items-center">
             <Button
               onClick={() => {
+                if (!authenticated) {
+                  login();
+                  return;
+                }
+
                 if (!props.user?.discord?.username) {
                   linkDiscord();
                   return;
@@ -148,8 +164,6 @@ export default function Nexus(props: {
     );
   }
 
-  console.log(props.nexus.tier);
-
   return (
     <div className="flex flex-col items-center">
       <div className="flex flex-col gap-4 justify-center w-full max-w-2xl">
@@ -186,8 +200,8 @@ export default function Nexus(props: {
           ""
         )}
 
-        <div className="flex gap-4 w-full items-center h-20">
-          <div className="bg-grey-800 rounded-xl flex flex-col items-center justify-center w-full h-full">
+        <div className="flex gap-4 w-full items-center h-20 max-sm:flex-col max-sm:h-auto">
+          <div className="bg-grey-800 rounded-xl flex flex-col items-center justify-center w-full h-full max-sm:h-20">
             <p className="text-grey-400">Your Tier</p>
             <p
               className={twMerge(
@@ -200,11 +214,11 @@ export default function Nexus(props: {
               {props.nexus.tier}
             </p>
           </div>
-          <div className="bg-grey-800 rounded-xl flex flex-col items-center justify-center w-full h-full">
+          <div className="bg-grey-800 rounded-xl flex flex-col items-center justify-center w-full h-full max-sm:h-20">
             <p className="text-grey-400">Your Votes</p>
             <p className="text-white text-lg">{props.nexus.votes}</p>
           </div>
-          <div className="bg-grey-800 rounded-xl flex flex-col items-center justify-center w-full h-full">
+          <div className="bg-grey-800 rounded-xl flex flex-col items-center justify-center w-full h-full max-sm:h-20">
             <p className="text-grey-400">Updates Weekly</p>
             <p className="text-white text-lg">
               <Countdown date={nextFridayAt3PM()} />
@@ -230,7 +244,8 @@ export default function Nexus(props: {
               {props.nexus.tier === "Challenger" ? (
                 <>
                   <li className="ml-4">
-                    Connect a Discord, Twitter, Farcaster, and Ethereum wallet
+                    Complete your profile by connecting all of your accounts
+                    (Discord, Twitter, Farcaster, and Ethereum wallet)
                   </li>
                 </>
               ) : (

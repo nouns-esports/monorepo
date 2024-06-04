@@ -11,7 +11,6 @@ import {
   Dispatch,
   SetStateAction,
 } from "react";
-// import { identify } from "@multibase/js"
 
 export const LoginMethodContext = createContext({
   onlyCoinbaseWallet: false,
@@ -31,7 +30,7 @@ export default function Privy(props: {
       <PrivyProvider
         appId={env.NEXT_PUBLIC_PRIVY_APP_ID}
         config={{
-          loginMethods: ["discord", "twitter", "email", "wallet", "farcaster"],
+          loginMethods: ["discord"],
 
           defaultChain:
             env.NEXT_PUBLIC_ENVIRONMENT === "production" ? base : baseSepolia,
