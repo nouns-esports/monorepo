@@ -18,7 +18,7 @@ export async function generateMetadata(props: {
 }): Promise<Metadata> {
   return {
     other: await getFrameMetadata(
-      `http://localhost:3000/frames/round/${props.params.round}/proposal${props.params.proposal}`
+      `http://localhost:3000/frames/proposal/${props.params.proposal}`
     ),
   };
 }
