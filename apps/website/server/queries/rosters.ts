@@ -1,4 +1,4 @@
-import { db, rosters } from "@/db/schema";
+import { db, rosters } from "~/packages/db/schema";
 import { and, eq } from "drizzle-orm";
 import { unstable_cache as cache } from "next/cache";
 

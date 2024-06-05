@@ -1,6 +1,6 @@
 "use server";
 
-import { env } from "@/env";
+import { env } from "~/env";
 import { getAuthenticatedUser } from "../queries/users";
 import { getNexus } from "../queries/nexus";
 
@@ -19,8 +19,8 @@ export async function pinImage(formData: FormData) {
 
   const image = formData.get("file") as File;
 
-  // 5 MB in bytes
-  if (image.size > 5 * 1024 * 1024) {
+  // 25 MB in bytes
+  if (image.size > 25 * 1024 * 1024) {
     throw new Error("Image is too large");
   }
 

@@ -1,4 +1,4 @@
-import { env } from "@/env";
+import { env } from "~/env";
 import { unstable_cache as cache } from "next/cache";
 
 export type Event = {

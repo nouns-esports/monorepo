@@ -1,6 +1,6 @@
 "use server";
 
-import { awards, db, proposals, rounds, votes } from "@/db/schema";
+import { awards, db, proposals, rounds, votes } from "~/packages/db/schema";
 import { eq, asc, desc } from "drizzle-orm";
 import { unstable_cache as cache } from "next/cache";
 import { unstable_noStore as noStore } from "next/cache";

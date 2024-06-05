@@ -1,4 +1,4 @@
-import { db, proposals } from "@/db/schema";
+import { db, proposals } from "~/packages/db/schema";
 import { and, asc, desc, eq } from "drizzle-orm";
 import { unstable_cache as cache } from "next/cache";
 
@@ -22,7 +22,7 @@ export const getProposal = cache(
     throw new Error("You must provide either an id or a user");
   },
   ["proposals"],
-  { tags: ["proposals"] }
+  { tags: ["proposals"], revalidate: 60 * 10 }
 );
 
 export const getProposals = cache(
@@ -33,5 +33,5 @@ export const getProposals = cache(
     });
   },
   ["proposals"],
-  { tags: ["proposals"] }
+  { tags: ["proposals"], revalidate: 60 * 10 }
 );

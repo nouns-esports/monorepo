@@ -44,7 +44,6 @@ import { mergeRegister } from "@lexical/utils";
 import { INSERT_IMAGE_COMMAND } from "./ImagePlugin";
 import toast from "react-hot-toast";
 import Button from "@/components/Button";
-import { env } from "@/env";
 import { $createHeadingNode, $isHeadingNode } from "@lexical/rich-text";
 import { pinImage } from "@/server/actions/pinImage";
 
@@ -54,22 +53,6 @@ function Divider() {
   return (
     <div className="w-[1px] h-[calc(100%_-_16px)] my-2 bg-grey-500 mx-2" />
   );
-}
-
-function getSelectedNode(selection: RangeSelection): TextNode | ElementNode {
-  const anchor = selection.anchor;
-  const focus = selection.focus;
-  const anchorNode = selection.anchor.getNode();
-  const focusNode = selection.focus.getNode();
-  if (anchorNode === focusNode) {
-    return anchorNode;
-  }
-  const isBackward = selection.isBackward();
-  if (isBackward) {
-    return $isAtNodeEnd(focus) ? anchorNode : focusNode;
-  } else {
-    return $isAtNodeEnd(anchor) ? anchorNode : focusNode;
-  }
 }
 
 export default function ToolbarPlugin() {
@@ -421,9 +404,9 @@ export default function ToolbarPlugin() {
             if (files && files.length > 0) {
               const file = files[0];
 
-              // 5 MB in bytes
-              if (file.size > 5 * 1024 * 1024) {
-                toast.error("Image size should be less than 5 MB");
+              // 25 MB in bytes
+              if (file.size > 25 * 1024 * 1024) {
+                toast.error("Image size should be less than 25 MB");
                 return;
               }
 

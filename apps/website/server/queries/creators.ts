@@ -1,4 +1,4 @@
-import { creators, db } from "@/db/schema";
+import { creators, db } from "~/packages/db/schema";
 import { eq, asc, and } from "drizzle-orm";
 import { unstable_cache as cache } from "next/cache";
 

@@ -12,7 +12,7 @@ import {
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { Pool } from "pg";
-import { env } from "@/env";
+import { env } from "~/env";
 
 export const games = pgTable("games", {
   id: text("id").primaryKey(),

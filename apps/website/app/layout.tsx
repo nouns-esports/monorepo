@@ -11,7 +11,7 @@ import Footer from "@/components/footer";
 import Providers from "@/providers";
 import { getAuthenticatedUser } from "@/server/queries/users";
 import Script from "next/script";
-import { env } from "@/env";
+import { env } from "~/env";
 
 const cabin = Cabin({ subsets: ["latin"], variable: "--font-cabin" });
 

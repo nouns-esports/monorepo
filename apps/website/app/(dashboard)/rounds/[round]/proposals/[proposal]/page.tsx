@@ -6,10 +6,11 @@ import type { Metadata } from "next";
 import { getProposal } from "@/server/queries/proposals";
 import dynamic from "next/dynamic";
 import Shimmer from "@/components/Shimmer";
+import { revalidatePath } from "next/cache";
 
 const Markdown = dynamic(() => import("@/components/lexical/Markdown"), {
   ssr: false,
-  loading: () => <Shimmer />,
+  loading: () => <Shimmer className="min-h-60" />,
 });
 
 export async function generateMetadata(props: {
@@ -25,7 +26,7 @@ export async function generateMetadata(props: {
 export default async function Proposal(props: {
   params: { round: string; proposal: string };
 }) {
-  const proposal = await getProposal({ id: Number(props.params.proposal)});
+  const proposal = await getProposal({ id: Number(props.params.proposal) });
 
   if (!proposal) {
     return notFound();
@@ -40,7 +41,7 @@ export default async function Proposal(props: {
         <ArrowLeft className="w-5 h-5 text-red group-hover:-translate-x-1 transition-transform" />
         Back to round
       </Link>
-      <div className="flex flex-col gap-4 bg-grey-800 rounded-xl p-6 max-sm:p-3 min-h-96">
+      <div className="flex flex-col gap-4 bg-grey-800 rounded-xl p-6 max-sm:p-3">
         <h2 className="text-white font-luckiest-guy text-3xl">
           {proposal.title}
         </h2>

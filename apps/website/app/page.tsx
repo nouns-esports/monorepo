@@ -9,7 +9,7 @@ import {
   InstagramLogo,
 } from "phosphor-react-sc";
 import Link from "@/components/Link";
-import { Creator, Project } from "@/db/schema";
+import { Creator, Project } from "~/packages/db/schema";
 import Date from "@/components/Date";
 import { headers } from "next/headers";
 import Image from "next/image";

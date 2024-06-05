@@ -1,7 +1,7 @@
 "use client";
 
 import { PrivyProvider, getAccessToken, usePrivy } from "@privy-io/react-auth";
-import { env } from "@/env";
+import { env } from "~/env";
 import { base, baseSepolia } from "viem/chains";
 import { useRouter } from "next/navigation";
 import {

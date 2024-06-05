@@ -1,6 +1,6 @@
 "use server";
 
-import { db, votes, proposals, rounds } from "@/db/schema";
+import { db, votes, proposals, rounds } from "~/packages/db/schema";
 import { getAuthenticatedUser } from "@/server/queries/users";
 import { and, eq } from "drizzle-orm";
 import { revalidatePath, revalidateTag } from "next/cache";

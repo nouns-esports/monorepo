@@ -1,4 +1,4 @@
-import { db, games } from "@/db/schema";
+import { db, games } from "~/packages/db/schema";
 import { and, asc, eq } from "drizzle-orm";
 import { unstable_cache as cache } from "next/cache";
 

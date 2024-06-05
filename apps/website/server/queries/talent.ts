@@ -1,4 +1,4 @@
-import { db, talent } from "@/db/schema";
+import { db, talent } from "~/packages/db/schema";
 import { eq, and, asc } from "drizzle-orm";
 import { unstable_cache as cache } from "next/cache";
 

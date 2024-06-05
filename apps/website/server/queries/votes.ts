@@ -1,4 +1,4 @@
-import { db, nexus as nexusTable, votes } from "@/db/schema";
+import { db, nexus as nexusTable, votes } from "~/packages/db/schema";
 import { and, eq } from "drizzle-orm";
 import { unstable_noStore as noStore } from "next/cache";
 

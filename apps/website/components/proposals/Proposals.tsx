@@ -243,7 +243,7 @@ export default function Proposals(props: {
               )}
               {proposal.image ? (
                 <img
-                  src={`${proposal.image}?img-width=250`}
+                  src={`${proposal.image}?img-width=250&img-onerror=redirect`}
                   className="w-40 flex-shrink-0 h-[calc(100%_-_16px)] rounded-xl max-sm:rounded-b-none overflow-hidden z-20 relative group max-sm:w-full max-sm:h-40 object-cover object-center"
                 />
               ) : (
@@ -253,10 +253,6 @@ export default function Proposals(props: {
                 <h4 className="text-2xl font-bebas-neue text-white">
                   {proposal.title}
                 </h4>
-                {/* {(() => {
-                  console.log(proposal.user);
-                  return "";
-                })()} */}
                 {"name" in proposal.user ? (
                   <div className="flex gap-2 items-center pl-1 py-0.5 pr-2 -ml-1 -mt-1 rounded-full w-fit">
                     <img

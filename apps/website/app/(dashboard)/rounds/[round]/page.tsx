@@ -3,7 +3,7 @@ import Link from "@/components/Link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "phosphor-react-sc";
 import AwardScroller from "@/components/rounds/AwardScroller";
-import CastVotes from "@/components/proposals/Proposals";
+import Proposals from "@/components/proposals/Proposals";
 import { twMerge } from "tailwind-merge";
 import { formatUnits } from "viem";
 import { getFrameMetadata } from "frog/next";
@@ -71,6 +71,8 @@ export default async function Round(props: { params: { round: string } }) {
       };
     })
   );
+
+  revalidatePath(`/rounds/${props.params.round}`);
 
   return (
     <div className="flex flex-col gap-4">
@@ -190,7 +192,7 @@ export default async function Round(props: { params: { round: string } }) {
             </div>
           </div>
         </div>
-        <CastVotes
+        <Proposals
           proposals={proposalsWithUser}
           round={{
             id: props.params.round,

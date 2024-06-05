@@ -1,6 +1,6 @@
 "use server";
 
-import { db, nexus } from "@/db/schema";
+import { db, nexus } from "~/packages/db/schema";
 import { revalidateTag } from "next/cache";
 import { isInServer } from "../queries/discord";
 import { getAuthenticatedUser } from "../queries/users";

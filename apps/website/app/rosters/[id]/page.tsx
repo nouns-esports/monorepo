@@ -1,4 +1,4 @@
-import { Game, Talent } from "@/db/schema";
+import { Game, Talent } from "~/packages/db/schema";
 import { ArrowSquareOut } from "phosphor-react-sc";
 import { metadata } from "@/app/layout";
 import { Metadata } from "next";

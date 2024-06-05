@@ -3,7 +3,7 @@
 import Privy from "@/providers/Privy";
 import { Toaster } from "react-hot-toast";
 // import { init } from "@multibase/js";
-// import { env } from "@/env";
+// import { env } from "~/env";
 import ReactQuery from "./ReactQuery";
 import Wagmi from "./Wagmi";
 

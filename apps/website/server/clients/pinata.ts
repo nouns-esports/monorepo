@@ -1,4 +1,4 @@
-import { env } from "@/env";
+import { env } from "~/env";
 import pinataSDK from "@pinata/sdk";
 
 export const pinataClient = new pinataSDK({

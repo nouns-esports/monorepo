@@ -1,6 +1,6 @@
 "use server";
 
-import { env } from "@/env";
+import { env } from "~/env";
 import { unstable_noStore as noStore } from "next/cache";
 
 export async function isInServer(input: { user: string }) {

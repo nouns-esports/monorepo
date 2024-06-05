@@ -1,7 +1,7 @@
 "use client";
 
 import { WagmiProvider } from "@privy-io/wagmi";
-import { env } from "@/env";
+import { env } from "~/env";
 import { createConfig } from "@privy-io/wagmi";
 import { http } from "wagmi";
 import { base, baseSepolia } from "viem/chains";

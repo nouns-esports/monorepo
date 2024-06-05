@@ -1,4 +1,4 @@
-import { db, nexus } from "@/db/schema";
+import { db, nexus } from "~/packages/db/schema";
 import { eq } from "drizzle-orm";
 import { unstable_cache as cache } from "next/cache";
 
