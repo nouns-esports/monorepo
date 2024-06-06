@@ -8,8 +8,8 @@ import {
   createContext,
   useEffect,
   useState,
-  Dispatch,
-  SetStateAction,
+  type Dispatch,
+  type SetStateAction,
 } from "react";
 
 export const LoginMethodContext = createContext({
