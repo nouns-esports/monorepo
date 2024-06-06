@@ -23,16 +23,6 @@ const nextConfig = {
   async redirects() {
     return [
     {
-      "source": "/getfunded",
-      "destination": "https://prop.house/0x1034a90081f8c4972637516a3f420564a4b2ab64",
-      "permanent": true
-    },
-    {
-      "source": "/matchabracket",
-      "destination": "https://www.start.gg/admin/tournament/matcha-cup-west-coast/brackets/1137386/1659977/2473563",
-      "permanent": true
-    },
-    {
       "source": "/shop",
       "destination": "https://shop.nouns.gg",
       "permanent": true
@@ -93,23 +83,13 @@ const nextConfig = {
       "permanent": true
     },
     {
-      "source": "/GOML",
-      "destination": "https://prop.house/0x3830a19ec7aa113cdc9e8fa84aeb0a5080c66bb2",
-      "permanent": true
-    },
-    {
       "source": "/goml",
       "destination": "https://prop.house/0x3830a19ec7aa113cdc9e8fa84aeb0a5080c66bb2",
       "permanent": true
     },
     {
       "source": "/tippedoff",
-      "destination": "https://prop.house/0x972fe18d946cbba02e398aa1749e0c400100deb1",
-      "permanent": true
-    },
-    {
-      "source": "/combo-breaker",
-      "destination": "https://prop.house/0x2b46d2a078ab53972c9e68153998159fea21bbc2",
+      "destination": "https://zora.co/collect/base:0x464d11eee395e08c1d377ed9cfab3f9051b7dca0/1",
       "permanent": true
     },
     {
