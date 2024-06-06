@@ -144,7 +144,7 @@ const nextConfig = {
     },
     {
       "source": "/duffcity",
-      "destination": "https://www.start.gg/tournament/duff-city-volume-2/details",
+      "destination": "https://www.start.gg/tournament/duff-city-volume-3/details",
       "permanent": true
     },
     {
