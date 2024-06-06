@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development drizzle-kit studio --host 127.0.0.1",
     "studio:production": "cross-env NODE_ENV=production drizzle-kit studio --host 127.0.0.1",
-    "migrate:production": "cross-env NODE_ENV=production drizzle-kit generate && cross-env NODE_ENV=production node -r esbuild-register ./db/migrate.ts",
-    "migrate:development": "cross-env NODE_ENV=development drizzle-kit generate && cross-env NODE_ENV=development node -r esbuild-register ./db/migrate.ts"
+    "migrate:production": "cross-env NODE_ENV=production drizzle-kit generate && cross-env NODE_ENV=production bun run ./migrate.ts",
+    "migrate:development": "cross-env NODE_ENV=development drizzle-kit generate && cross-env NODE_ENV=development bun run ./migrate.ts"
   }
 }

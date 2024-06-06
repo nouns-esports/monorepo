@@ -5,13 +5,8 @@ node_modules
 .pnp
 .pnp.js
 
-# Local env files
-.env
-.env.local
-.env.development.local
+# ENV
 .env.development
-.env.test.local
-.env.production.local
 .env.production
 
 # Testing
@@ -19,9 +14,6 @@ coverage
 
 # Turbo
 .turbo
-
-# Vercel
-.vercel
 
 # Build Outputs
 .next/

@@ -15,6 +15,11 @@ export const tokens = {
     image: "https://cdn.worldvectorlogo.com/logos/ethereum-eth.svg",
     decimals: 18,
   },
+  "nouns-fest-showcase": {
+    name: "Nouns Fest Showcase",
+    image: "/rounds/nouns-fest/logo.jpg",
+    decimals: 0,
+  },
 };
 
 export function awardTypeToToken(type: string) {

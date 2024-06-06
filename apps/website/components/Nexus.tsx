@@ -268,7 +268,9 @@ export default function Nexus(props: {
                   Discord
                 </div>
                 {props.user?.discord ? (
-                  <p className="text-green">{props.user.discord.username}</p>
+                  <p className="text-green">
+                    {props.user.discord.username?.split("#")[0]}
+                  </p>
                 ) : (
                   ""
                 )}

@@ -1,6 +1,6 @@
 "use server";
 
-import { awards, db, proposals, rounds, votes } from "~/packages/db/schema";
+import { awards, db, proposals, rounds } from "~/packages/db/schema";
 import { eq, asc, desc } from "drizzle-orm";
 import { unstable_cache as cache } from "next/cache";
 import { unstable_noStore as noStore } from "next/cache";
@@ -10,6 +10,9 @@ export const getAwards = cache(
     return db.query.awards.findMany({
       where: eq(awards.round, input.round),
       orderBy: asc(awards.place),
+      with: {
+        asset: true,
+      },
     });
   },
   ["awards"],

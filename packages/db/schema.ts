@@ -124,18 +124,13 @@ export const roundsRelations = relations(rounds, ({ many }) => ({
   proposals: many(proposals),
 }));
 
-// type is defined as a CAIP-10 string with an optional ID for 1155 token ids
-// See https://docs.farcaster.xyz/reference/frames/spec#mint
-// USDC on Base: eip155:8453:0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913
-// ETH on Base: eip155:8453:0x0000000000000000000000000000000000000000
-// An ERC1155: eip155:8453:0xADDRESS:2
-// Value with precision 78 is the min value to account for a uint256
 // If place is 0, it is an infinite round
 
 export const awards = pgTable("awards", {
   id: serial("id").primaryKey(),
   round: text("round").notNull(),
   place: smallint("place").notNull(),
+  asset: text("asset").notNull().default(""),
   type: text("type").notNull(),
   value: numeric("value", { precision: 78 }).notNull(),
   claimed: boolean("claimed").notNull().default(false),
@@ -146,7 +141,21 @@ export const awardsRelations = relations(awards, ({ one }) => ({
     fields: [awards.round],
     references: [rounds.id],
   }),
+  asset: one(assets, {
+    fields: [awards.asset],
+    references: [assets.id],
+  }),
 }));
+
+export const assets = pgTable("assets", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  image: text("image").notNull(),
+  decimals: smallint("decimals"),
+  chainId: integer("chain_id"),
+  address: text("address"),
+  tokenId: text("token_id"),
+});
 
 export const proposals = pgTable("proposals", {
   id: serial("id").primaryKey(),

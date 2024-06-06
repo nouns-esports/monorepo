@@ -5,11 +5,7 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "studio:production": "cross-env NODE_ENV=production npx --prefix ./packages/db drizzle-kit studio --host 127.0.0.1",
-    "studio:development": "cross-env NODE_ENV=development npx --prefix ./packages/db drizzle-kit studio --host 127.0.0.1",
-    "migrate:production": "cross-env NODE_ENV=production npx --prefix ./packages/db drizzle-kit generate && cross-env NODE_ENV=production node -r esbuild-register ./packages/db/migrate.ts",
-    "migrate:development": "cross-env NODE_ENV=development npx --prefix ./packages/db drizzle-kit generate && cross-env NODE_ENV=development node -r esbuild-register ./packages/db/migrate.ts"
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
     "@types/node": "^20.14.1",

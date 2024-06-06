@@ -267,6 +267,20 @@
       "when": 1716487919383,
       "tag": "0037_mighty_pyro",
       "breakpoints": true
+    },
+    {
+      "idx": 38,
+      "version": "6",
+      "when": 1717635630015,
+      "tag": "0038_good_punisher",
+      "breakpoints": true
+    },
+    {
+      "idx": 39,
+      "version": "6",
+      "when": 1717635792865,
+      "tag": "0039_small_kylun",
+      "breakpoints": true
     }
   ]
 }

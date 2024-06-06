@@ -1,6 +1,6 @@
 import Countdown from "@/components/rounds/Countdown";
 import Link from "@/components/Link";
-import { Award, Round } from "~/packages/db/schema";
+import type { Award, Round } from "~/packages/db/schema";
 import { getRounds } from "@/server/queries/rounds";
 import { formatUnits } from "viem";
 import { mergeAwards } from "@/utils/mergeAwards";
