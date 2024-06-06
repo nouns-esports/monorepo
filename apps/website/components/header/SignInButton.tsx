@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import Loading from "../Loading";
 import { usePrivy } from "@privy-io/react-auth";
 import { userToProfile } from "@/utils/userToProfile";
-import { User } from "@privy-io/server-auth";
+import type { User } from "@privy-io/server-auth";
 
 export default function SignInButton(props: { user?: User }) {
   const { login, authenticated } = usePrivy();

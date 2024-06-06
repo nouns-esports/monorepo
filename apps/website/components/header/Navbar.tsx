@@ -4,7 +4,7 @@ import { CurrencyEth, List, X } from "phosphor-react-sc";
 import SignInButton from "@/components/header/SignInButton";
 import Link from "../Link";
 import * as NavigationMenu from "@radix-ui/react-navigation-menu";
-import { ReactNode, useEffect, useState } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import {
   TwitchLogo,
   TwitterLogo,
@@ -15,7 +15,7 @@ import {
 } from "phosphor-react-sc";
 import { usePathname, useParams } from "next/navigation";
 import { twMerge } from "tailwind-merge";
-import { User } from "@privy-io/server-auth";
+import type { User } from "@privy-io/server-auth";
 
 export default function Navbar(props: { user?: User }) {
   const [open, setOpen] = useState(false);

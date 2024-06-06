@@ -2,7 +2,7 @@
 
 import Link from "@/components/Link";
 import { ArrowRight, Dot } from "phosphor-react-sc";
-import { type Event } from "@/server/queries/events";
+import type { Event } from "@/server/queries/events";
 import { usePathname } from "next/navigation";
 
 export default function Banner(props: { events: Event[] }) {
