@@ -1,6 +1,6 @@
 import { unstable_cache as cache } from "next/cache";
 import { privyClient } from "@/server/clients/privy";
-import { User } from "@privy-io/server-auth";
+import type { User } from "@privy-io/server-auth";
 import { cookies } from "next/headers";
 import { userToProfile } from "@/utils/userToProfile";
 
