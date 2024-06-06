@@ -28,6 +28,11 @@ const nextConfig = {
       "permanent": true
     },
     {
+      "source": "/cup",
+      "destination": "https://start.gg/matchacup",
+      "permanent": true
+    },
+    {
       "source": "/jerseys",
       "destination": "https://raven.gg/stores/nounsesports/",
       "permanent": true
