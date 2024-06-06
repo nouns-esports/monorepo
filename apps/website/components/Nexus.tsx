@@ -13,7 +13,7 @@ import { useLinkAccount, useLogin, usePrivy } from "@privy-io/react-auth";
 import { useRouter } from "next/navigation";
 import { getNexus } from "@/server/queries/nexus";
 import { twMerge } from "tailwind-merge";
-import { User, WalletWithMetadata } from "@privy-io/server-auth";
+import type { User, WalletWithMetadata } from "@privy-io/server-auth";
 import { userToProfile } from "@/utils/userToProfile";
 import toast from "react-hot-toast";
 import Countdown from "./rounds/Countdown";

@@ -1,4 +1,4 @@
-import { User } from "@privy-io/server-auth";
+import type { User } from "@privy-io/server-auth";
 
 export function userToProfile(user?: User) {
   if (user?.farcaster) {

@@ -1,4 +1,4 @@
-import { Award } from "~/packages/db/schema";
+import type { Award } from "~/packages/db/schema";
 import { awardTypeToToken } from "./awardTypeToToken";
 
 export function mergeAwards(awards: Award[]) {

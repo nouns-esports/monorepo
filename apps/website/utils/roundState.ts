@@ -1,4 +1,4 @@
-import { Round } from "~/packages/db/schema";
+import type { Round } from "~/packages/db/schema";
 
 export function roundState(round: Round) {
   const now = new Date().getTime();
