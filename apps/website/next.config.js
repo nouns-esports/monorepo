@@ -113,6 +113,11 @@ const nextConfig = {
       "permanent": true
     },
     {
+      "source": "/bracket",
+      "destination": "https://shorturl.at/jOzr7",
+      "permanent": true
+    },
+    {
       "source": "/artwork-tweet",
       "destination": "https://fxtwitter.com/nounsesports/status/1754574652335161635",
       "permanent": true
