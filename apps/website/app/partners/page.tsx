@@ -1,7 +1,7 @@
 import Button from "@/components/Button";
 import Link from "@/components/Link";
 import { DownloadSimple, TwitterLogo, DiscordLogo } from "phosphor-react-sc";
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import { metadata as baseMetadata } from "@/app/layout";
 
 export const metadata: Metadata = {

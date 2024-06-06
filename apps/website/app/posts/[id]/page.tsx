@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { Tweet } from "react-tweet";
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import { getPost, type Node } from "@/server/queries/posts";
 
 export async function generateMetadata(props: { params: { id: string } }) {

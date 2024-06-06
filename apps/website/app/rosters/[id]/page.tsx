@@ -1,7 +1,7 @@
-import { Game, Talent } from "~/packages/db/schema";
+import type { Game, Talent } from "~/packages/db/schema";
 import { ArrowSquareOut } from "phosphor-react-sc";
 import { metadata } from "@/app/layout";
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import Link from "@/components/Link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
