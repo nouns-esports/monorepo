@@ -19,7 +19,7 @@ import { getAuthenticatedUser, getUserProfile } from "@/server/queries/users";
 import { canClaimAward } from "@/server/queries/awards";
 import dynamic from "next/dynamic";
 import Shimmer from "@/components/Shimmer";
-// import { revalidatePath } from "next/cache";
+import { revalidatePath } from "next/cache";
 
 const Markdown = dynamic(() => import("@/components/lexical/Markdown"), {
   ssr: false,
@@ -72,7 +72,7 @@ export default async function Round(props: { params: { round: string } }) {
     })
   );
 
-  // revalidatePath(`/rounds/${props.params.round}`);
+  revalidatePath(`/rounds/${props.params.round}`);
 
   return (
     <div className="flex flex-col gap-4">
@@ -128,16 +128,18 @@ export default async function Round(props: { params: { round: string } }) {
               <div className="flex flex-col gap-2 items-center justify-center h-full bg-grey-800 rounded-xl overflow-hidden w-36 flex-shrink-0 max-md:w-full max-md:flex-shrink">
                 <p className="text-sm whitespace-nowrap">Total prizes</p>
                 {mergeAwards(round.awards).map(
-                  ({ totalValue, token }, index) => (
+                  ({ totalValue, award }, index) => (
                     <div
                       key={index}
                       className="flex gap-2 items-center text-white"
                     >
                       <img
-                        src={token.image}
+                        src={award.asset.image}
                         className="w-4 h-4 rounded-[4px]"
                       />
-                      {formatUnits(BigInt(totalValue), token.decimals)}
+                      {award.asset.decimals
+                        ? formatUnits(BigInt(totalValue), award.asset.decimals)
+                        : totalValue}
                     </div>
                   )
                 )}
@@ -159,35 +161,33 @@ export default async function Round(props: { params: { round: string } }) {
                 id="awards"
                 className="w-full flex gap-4 overflow-x-scroll scrollbar-hidden pt-3 -mt-3 scroll-smooth"
               >
-                {round.awards.map((award, index) => {
-                  const { decimals, image } = awardTypeToToken(award.type);
-
-                  return (
+                {round.awards.map((award, index) => (
+                  <div
+                    key={index}
+                    className="relative flex flex-col items-center flex-shrink-0 gap-2 border-grey-600 border rounded-xl p-2 px-4"
+                  >
+                    <img
+                      src={award.asset.image}
+                      className="w-7 h-7 rounded-md object-cover object-center"
+                    />
+                    <p className="text-white whitespace-nowrap text-sm">
+                      {award.asset.decimals
+                        ? formatUnits(BigInt(award.value), award.asset.decimals)
+                        : award.value}
+                    </p>
                     <div
-                      key={index}
-                      className="relative flex flex-col items-center flex-shrink-0 gap-2 border-grey-600 border rounded-xl p-2 px-4"
+                      className={twMerge(
+                        "absolute -top-3 -right-3 rounded-md bg-grey-600 font-bold text-white text-xs flex items-center justify-center w-[30px] py-0.5",
+                        index === 0 && "bg-gold-500 text-gold-900",
+                        index === 1 && "bg-silver-500 text-silver-900",
+                        index === 2 && "bg-bronze-500 text-bronze-900",
+                        index > 2 && "bg-blue-500 text-blue-900"
+                      )}
                     >
-                      <img
-                        src={image}
-                        className="w-7 h-7 rounded-md object-cover object-center"
-                      />
-                      <p className="text-white whitespace-nowrap text-sm">
-                        {formatUnits(BigInt(award.value), decimals)}
-                      </p>
-                      <div
-                        className={twMerge(
-                          "absolute -top-3 -right-3 rounded-md bg-grey-600 font-bold text-white text-xs flex items-center justify-center w-[30px] py-0.5",
-                          index === 0 && "bg-gold-500 text-gold-900",
-                          index === 1 && "bg-silver-500 text-silver-900",
-                          index === 2 && "bg-bronze-500 text-bronze-900",
-                          index > 2 && "bg-blue-500 text-blue-900"
-                        )}
-                      >
-                        {numberToOrdinal(award.place)}
-                      </div>
+                      {numberToOrdinal(award.place)}
                     </div>
-                  );
-                })}
+                  </div>
+                ))}
               </div>
             </div>
           </div>

@@ -218,6 +218,7 @@ export const db = drizzle(
       roundsRelations,
       awards,
       awardsRelations,
+      assets,
       proposals,
       proposalsRelations,
       votes,
@@ -236,6 +237,7 @@ export type Project = typeof projects.$inferSelect;
 export type Creator = typeof creators.$inferSelect;
 export type Round = typeof rounds.$inferSelect;
 export type Award = typeof awards.$inferSelect;
+export type Asset = typeof assets.$inferSelect;
 export type Proposal = typeof proposals.$inferSelect;
 export type Vote = typeof votes.$inferSelect;
 export type Snapshot = typeof snapshots.$inferSelect;

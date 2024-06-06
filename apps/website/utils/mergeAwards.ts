@@ -1,24 +1,23 @@
-import type { Award } from "~/packages/db/schema";
-import { awardTypeToToken } from "./awardTypeToToken";
+import type { Asset, Award } from "~/packages/db/schema";
 
-export function mergeAwards(awards: Award[]) {
-  const tokens: Record<
+export function mergeAwards(awards: (Award & { asset: Asset })[]) {
+  const mergedAwards: Record<
     string,
     {
-      token: ReturnType<typeof awardTypeToToken>;
+      award: Award & { asset: Asset };
       totalValue: number;
     }
   > = {};
 
   for (const award of awards) {
-    const token = awardTypeToToken(award.type);
-
-    tokens[token.address] = {
+    mergedAwards[award.asset.id] = {
       totalValue:
-        (tokens[token.address]?.totalValue ?? 0) + Number(award.value),
-      token,
+        (mergedAwards[award.asset.id]?.totalValue ?? 0) + Number(award.value),
+      award,
     };
   }
 
-  return Object.values(tokens);
+  // console.log(mergedAwards["nouns-fest-showcase-winner"]);
+
+  return Object.values(mergedAwards);
 }

@@ -7,7 +7,11 @@ export const getRound = cache(
     return db.query.rounds.findFirst({
       where: eq(rounds.id, input.id),
       with: {
-        awards: true,
+        awards: {
+          with: {
+            asset: true,
+          },
+        },
       },
     });
   },
@@ -28,7 +32,11 @@ export const getRounds = cache(
             limit: input.max ?? undefined,
             orderBy: asc(rounds.end),
             with: {
-              awards: true,
+              awards: {
+                with: {
+                  asset: true,
+                },
+              },
             },
           });
         case "upcoming":
@@ -37,7 +45,11 @@ export const getRounds = cache(
             limit: input.max ?? undefined,
             orderBy: asc(rounds.start),
             with: {
-              awards: true,
+              awards: {
+                with: {
+                  asset: true,
+                },
+              },
             },
           });
         case "ended":
@@ -46,7 +58,11 @@ export const getRounds = cache(
             limit: input.max ?? undefined,
             orderBy: desc(rounds.end),
             with: {
-              awards: true,
+              awards: {
+                with: {
+                  asset: true,
+                },
+              },
             },
           });
       }
@@ -56,7 +72,11 @@ export const getRounds = cache(
       limit: input.max ?? undefined,
       orderBy: asc(rounds.end),
       with: {
-        awards: true,
+        awards: {
+          with: {
+            asset: true,
+          },
+        },
       },
     });
   },

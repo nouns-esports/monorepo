@@ -1,11 +1,11 @@
 import Countdown from "@/components/rounds/Countdown";
 import Link from "@/components/Link";
-import type { Award, Round } from "~/packages/db/schema";
+import type { Asset, Award, Round } from "~/packages/db/schema";
 import { getRounds } from "@/server/queries/rounds";
 import { formatUnits } from "viem";
 import { mergeAwards } from "@/utils/mergeAwards";
 import { roundState } from "@/utils/roundState";
-// import { revalidatePath } from "next/cache";
+import { revalidatePath } from "next/cache";
 
 export default async function Rounds() {
   const [activeRounds, upcomingRounds, endedRounds] = await Promise.all([
@@ -14,7 +14,7 @@ export default async function Rounds() {
     getRounds({ stage: "ended" }),
   ]);
 
-  // revalidatePath("/rounds");
+  revalidatePath("/rounds");
 
   return (
     <div className="flex flex-col gap-8">
@@ -54,7 +54,9 @@ export default async function Rounds() {
   );
 }
 
-function RoundCard(props: { round: Round & { awards: Award[] } }) {
+function RoundCard(props: {
+  round: Round & { awards: (Award & { asset: Asset })[] };
+}) {
   const state = roundState(props.round);
 
   return (
@@ -110,10 +112,15 @@ function RoundCard(props: { round: Round & { awards: Award[] } }) {
           <div className="flex flex-col gap-2 items-center justify-center h-full max-sm:w-full">
             <p className="text-sm whitespace-nowrap">Total prizes</p>
             {mergeAwards(props.round.awards).map(
-              ({ totalValue, token }, index) => (
+              ({ totalValue, award }, index) => (
                 <div key={index} className="flex gap-2 items-center text-white">
-                  <img src={token.image} className="w-4 h-4 rounded-[4px]" />
-                  {formatUnits(BigInt(totalValue), token.decimals)}
+                  <img
+                    src={award.asset.image}
+                    className="w-4 h-4 rounded-[4px]"
+                  />
+                  {award.asset.decimals
+                    ? formatUnits(BigInt(totalValue), award.asset.decimals)
+                    : totalValue}
                 </div>
               )
             )}
