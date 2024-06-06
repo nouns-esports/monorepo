@@ -9,7 +9,7 @@ import {
   REDO_COMMAND,
   FORMAT_TEXT_COMMAND,
   ElementNode,
-  RangeSelection,
+  type RangeSelection,
   TextNode,
   $createParagraphNode,
   $isParagraphNode,
