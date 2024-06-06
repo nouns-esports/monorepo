@@ -19,7 +19,7 @@ import { getAuthenticatedUser, getUserProfile } from "@/server/queries/users";
 import { canClaimAward } from "@/server/queries/awards";
 import dynamic from "next/dynamic";
 import Shimmer from "@/components/Shimmer";
-import { revalidatePath, revalidateTag } from "next/cache";
+// import { revalidatePath } from "next/cache";
 
 const Markdown = dynamic(() => import("@/components/lexical/Markdown"), {
   ssr: false,
@@ -72,7 +72,7 @@ export default async function Round(props: { params: { round: string } }) {
     })
   );
 
-  revalidatePath(`/rounds/${props.params.round}`);
+  // revalidatePath(`/rounds/${props.params.round}`);
 
   return (
     <div className="flex flex-col gap-4">

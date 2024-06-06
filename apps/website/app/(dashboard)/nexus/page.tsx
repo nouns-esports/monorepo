@@ -1,8 +1,7 @@
-import { getAuthenticatedUser, getUserProfile } from "@/server/queries/users";
+import { getAuthenticatedUser } from "@/server/queries/users";
 import { isInServer } from "@/server/queries/discord";
 import Nexus from "@/components/Nexus";
 import { getNexus } from "@/server/queries/nexus";
-import { revalidatePath } from "next/cache";
 
 export default async function NexusPage() {
   const user = await getAuthenticatedUser(true);

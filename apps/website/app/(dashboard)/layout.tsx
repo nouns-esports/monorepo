@@ -1,4 +1,3 @@
-import Button from "@/components/Button";
 import DashboardNavigation from "@/components/DashboardNavbar";
 import Link from "@/components/Link";
 import Sidebar from "@/components/Sidebar";

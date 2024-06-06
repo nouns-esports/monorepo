@@ -6,7 +6,6 @@ import type { Metadata } from "next";
 import { getProposal } from "@/server/queries/proposals";
 import dynamic from "next/dynamic";
 import Shimmer from "@/components/Shimmer";
-import { revalidatePath } from "next/cache";
 
 const Markdown = dynamic(() => import("@/components/lexical/Markdown"), {
   ssr: false,
