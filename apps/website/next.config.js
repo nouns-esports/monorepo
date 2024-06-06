@@ -89,7 +89,7 @@ const nextConfig = {
     },
     {
       "source": "/tippedoff",
-      "destination": "https://zora.co/collect/base:0x464d11eee395e08c1d377ed9cfab3f9051b7dca0/1",
+      "destination": "https://shorturl.at/s3BZl",
       "permanent": true
     },
     {
