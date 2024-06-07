@@ -143,6 +143,11 @@ const nextConfig = {
       "permanent": true
     },
     {
+      "source": "/dc",
+      "destination": "https://start.gg/duffcity",
+      "permanent": true
+    },
+    {
       "source": "/matcha",
       "destination": "https://x.com/nounsesports/status/1785700745154830376",
       "permanent": true
