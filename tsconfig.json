@@ -17,12 +17,16 @@
     // Best practices
     "strict": true,
     "skipLibCheck": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
 
     // Some stricter flags
     // "noUnusedLocals": true,
     // "noUnusedParameters": true,
     // "noPropertyAccessFromIndexSignature": true
+
+    "paths": {
+      "~/*": ["./*"]
+    }
   },
   "include": ["**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]

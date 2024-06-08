@@ -52,8 +52,8 @@ export async function createProposal(input: {
     where: eq(nexusTable.user, input.user),
   });
 
-  if (!nexus) {
-    throw new Error("You must enter the Nexus to propose");
+  if (!nexus || !nexus.active) {
+    throw new Error("An active Nexus membership is required to propose");
   }
 
   const hasProposed = await db.query.proposals.findFirst({

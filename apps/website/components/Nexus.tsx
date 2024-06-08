@@ -22,6 +22,7 @@ import { shortenAddress } from "@/utils/shortenAddress";
 import { useContext } from "react";
 import { LoginMethodContext } from "@/providers/Privy";
 import { grantExplorer } from "@/server/actions/grantExplorer";
+import Link from "./Link";
 
 export default function Nexus(props: {
   user?: User;
@@ -60,24 +61,22 @@ export default function Nexus(props: {
       account.type === "wallet" && account.walletClientType !== "privy"
   ) ?? []) as WalletWithMetadata[];
 
-  const profile = userToProfile(props.user);
+  const profile = props.user ? userToProfile(props.user) : undefined;
 
   const { setOnlyCoinbaseWallet } = useContext(LoginMethodContext);
 
-  if (!props.nexus) {
+  if (props.nexus?.tier === "Inactive" || !props.nexus) {
     return (
       <div className="w-full flex flex-col gap-8">
-        <div className="h-[250px] w-full bg-white rounded-xl flex items-center justify-center text-black text-xl">
-          Placeholder Graphic
-        </div>
-        <div className="w-full flex flex-col gap-4 items-center">
+        <img src="/nexus-banner.webp" className="w-full rounded-xl" />
+        <div className="w-full flex flex-col gap-8 items-center">
           <p className="text-center w-full text-white">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-            auctor, nisl ac dignissim tincidunt, odio ex ultricies felis, nec
-            fermentum lacus ligula ac mi. Sed nec nunc euismod, ultricies tortor
-            et, luctus libero. Nulla facilisi. Nullam auctor, nisl ac dignissim
-            tincidunt, odio ex ultricies felis, nec fermentum lacus ligula ac
-            mi.
+            Join our esports journey at Nouns Esports! We're offering a unique
+            opportunity for esports enthusiasts to directly influence our major
+            decisions. Enter the Nexus and you'll be given the power to vote on
+            key organizational decisions, making you an active participant in
+            shaping our future. Don't miss out on this chance to be part of our
+            community-driven approach to esports.
           </p>
           <div className="flex flex-col gap-3 items-center">
             <Button
@@ -136,7 +135,7 @@ export default function Nexus(props: {
           <h2 className="font-luckiest-guy text-white text-3xl flex items-center justify-center w-full">
             Unlock exclusive perks
           </h2>
-          <div className="w-full flex gap-4 justify-between">
+          <div className="w-full flex gap-4 justify-between max-sm:flex-col">
             <div className="w-full flex flex-col bg-blue-500/20 rounded-xl py-3 px-4 border-2 border-transparent hover:border-blue-500 transition-all hover:scale-105 cursor-pointer">
               <h2 className="text-blue-500 text-lg font-semibold">Explorer</h2>
               <ul className="text-white text-sm list-disc pl-4">
@@ -225,7 +224,6 @@ export default function Nexus(props: {
             </p>
           </div>
         </div>
-
         {props.nexus.tier !== "Elite" ? (
           <div className="bg-grey-800 rounded-xl flex flex-col w-full p-6">
             <h2 className="font-bebas-neue text-2xl text-white mb-2">
@@ -277,20 +275,21 @@ export default function Nexus(props: {
               </div>
               <div className="flex gap-4 items-center">
                 <Button
-                  onClick={() => {
-                    if (props.user?.discord)
-                      toast.promise(
-                        unlinkDiscord(props.user.discord.subject).then(() =>
-                          router.refresh()
-                        ),
-                        {
-                          loading: "Unlinking Discord",
-                          success: "Successfully unlinked Discord",
-                          error: "Failed to unlink Discord",
-                        }
-                      );
-                    else linkDiscord();
-                  }}
+                  // onClick={() => {
+                  //   if (props.user?.discord)
+                  //     toast.promise(
+                  //       unlinkDiscord(props.user.discord.subject).then(() =>
+                  //         router.refresh()
+                  //       ),
+                  //       {
+                  //         loading: "Unlinking Discord",
+                  //         success: "Successfully unlinked Discord",
+                  //         error: "Failed to unlink Discord",
+                  //       }
+                  //     );
+                  //   else linkDiscord();
+                  // }}
+                  disabled
                   animate="bg"
                   size="sm"
                 >

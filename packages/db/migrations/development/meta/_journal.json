@@ -281,6 +281,27 @@
       "when": 1717635792865,
       "tag": "0039_small_kylun",
       "breakpoints": true
+    },
+    {
+      "idx": 40,
+      "version": "6",
+      "when": 1717820493596,
+      "tag": "0040_wandering_bulldozer",
+      "breakpoints": true
+    },
+    {
+      "idx": 41,
+      "version": "6",
+      "when": 1717820548822,
+      "tag": "0041_overconfident_slyde",
+      "breakpoints": true
+    },
+    {
+      "idx": 42,
+      "version": "6",
+      "when": 1717881682652,
+      "tag": "0042_yellow_tinkerer",
+      "breakpoints": true
     }
   ]
 }

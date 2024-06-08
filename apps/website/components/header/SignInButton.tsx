@@ -11,7 +11,7 @@ export default function SignInButton(props: { user?: User }) {
 
   const router = useRouter();
 
-  const profile = userToProfile(props.user);
+  const profile = props.user ? userToProfile(props.user) : undefined;
 
   return (
     <button

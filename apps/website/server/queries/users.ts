@@ -2,9 +2,8 @@ import { unstable_cache as cache } from "next/cache";
 import { privyClient } from "@/server/clients/privy";
 import type { User } from "@privy-io/server-auth";
 import { cookies } from "next/headers";
-import { userToProfile } from "@/utils/userToProfile";
 
-export const getUserProfile = cache(
+export const getUser = cache(
   async (input: { id: string }) => {
     try {
       let privyUser: User | null;
@@ -17,7 +16,7 @@ export const getUserProfile = cache(
 
       if (!privyUser) return;
 
-      return userToProfile(privyUser);
+      return privyUser;
     } catch (e) {}
   },
   ["users"],

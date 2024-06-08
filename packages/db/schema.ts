@@ -103,6 +103,8 @@ export const snapshots = pgTable("snapshots", {
 export const nexus = pgTable("nexus", {
   user: text("user").primaryKey(),
   tier: smallint("tier").notNull(),
+  updated: timestamp("updated", { mode: "date" }).notNull(),
+  active: boolean("active").notNull().default(true),
 });
 
 // An infinite round is defined as a round with a null end timestamp and votingStart = start, respecitive proposals will include a value

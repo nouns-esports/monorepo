@@ -13,9 +13,8 @@ import { getProposals } from "@/server/queries/proposals";
 import { getUserVotes } from "@/server/queries/votes";
 import { roundState } from "@/utils/roundState";
 import { numberToOrdinal } from "@/utils/numberToOrdinal";
-import { awardTypeToToken } from "@/utils/awardTypeToToken";
 import { mergeAwards } from "@/utils/mergeAwards";
-import { getAuthenticatedUser, getUserProfile } from "@/server/queries/users";
+import { getAuthenticatedUser, getUser } from "@/server/queries/users";
 import { canClaimAward } from "@/server/queries/awards";
 import dynamic from "next/dynamic";
 import Shimmer from "@/components/Shimmer";
@@ -63,7 +62,7 @@ export default async function Round(props: { params: { round: string } }) {
 
   const proposalsWithUser = await Promise.all(
     proposals.map(async (proposal) => {
-      const user = await getUserProfile({ id: proposal.user });
+      const user = await getUser({ id: proposal.user });
 
       return {
         ...proposal,

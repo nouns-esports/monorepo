@@ -23,8 +23,8 @@ export async function castVotes(input: {
 
   const nexus = await getNexus({ user });
 
-  if (!nexus) {
-    throw new Error("A Nexus membership is required to perform this action");
+  if (!nexus || nexus.tier === "Inactive") {
+    throw new Error("An active Nexus membership is required to vote");
   }
 
   const [round, previousVotes] = await Promise.all([

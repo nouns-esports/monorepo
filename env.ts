@@ -19,6 +19,7 @@ export const env = createEnv({
     DISCORD_GUILD_ID: z.string().min(1),
     DISCORD_CLIENT_ID: z.string().min(1),
     PINATA_JWT: z.string().min(1),
+    UPLOADTHING_SECRET: z.string().min(1),
   },
   client: {
     NEXT_PUBLIC_ENVIRONMENT: z.enum(["development", "production"]),

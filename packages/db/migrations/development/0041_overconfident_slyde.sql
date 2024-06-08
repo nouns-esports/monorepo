@@ -1,0 +1,1 @@
+ALTER TABLE "nexus" ALTER COLUMN "updated" SET NOT NULL;

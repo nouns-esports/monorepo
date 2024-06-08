@@ -4,8 +4,9 @@ import { db, nexus } from "~/packages/db/schema";
 import { revalidateTag } from "next/cache";
 import { isInServer } from "../queries/discord";
 import { getAuthenticatedUser } from "../queries/users";
+import { eq } from "drizzle-orm";
 
-export async function grantExplorer(input: { user: string }) {
+export async function reactivateNexus(input: { user: string }) {
   const user = await getAuthenticatedUser(true);
 
   if (!user) {
@@ -13,7 +14,7 @@ export async function grantExplorer(input: { user: string }) {
   }
 
   if (user.id !== input.user) {
-    throw new Error("You can only grant Nexus to yourself");
+    throw new Error("You can only reactivate your own Nexus");
   }
 
   if (!user.discord?.username) {
@@ -26,11 +27,13 @@ export async function grantExplorer(input: { user: string }) {
     throw new Error("Not in discord");
   }
 
-  await db.insert(nexus).values({
-    user: user.id,
-    tier: 0,
-    updated: new Date(),
-  });
+  await db
+    .update(nexus)
+    .set({
+      updated: new Date(),
+      active: true,
+    })
+    .where(eq(nexus.user, user.id));
 
   revalidateTag("nexus");
   revalidateTag("votes");

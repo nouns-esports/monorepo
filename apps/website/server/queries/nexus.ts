@@ -10,11 +10,18 @@ export const getNexus = cache(
 
     if (!data) return;
 
+    if (!data.active) {
+      return {
+        tier: "Inactive",
+        votes: 0,
+      } as const;
+    }
+
     return {
       tier:
         data.tier === 0 ? "Explorer" : data.tier === 1 ? "Challenger" : "Elite",
       votes: data.tier === 0 ? 1 : data.tier === 1 ? 3 : 10,
-    };
+    } as const;
   },
   ["nexus"],
   { tags: ["nexus"], revalidate: 60 * 10 }
