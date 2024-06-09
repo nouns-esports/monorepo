@@ -1,7 +1,7 @@
 import { db, proposals, rounds, votes } from "~/packages/db/schema";
-import { and, desc, eq, gt, inArray, lt } from "drizzle-orm";
+import { and, desc, eq, gt, inArray, lt, or } from "drizzle-orm";
 import { unstable_cache as cache } from "next/cache";
-import type { User } from "@privy-io/server-auth";
+import type { User, WalletWithMetadata } from "@privy-io/server-auth";
 // import { addRole, removeRole } from "../actions/manageRoles";
 
 const elites: Record<string, boolean> = {
@@ -106,7 +106,6 @@ const challengers: Record<string, boolean> = {
 
 export const getNexus = cache(
   async (input: { user: User; discordId: string }) => {
-    console.error("I am not cached!!!");
     if (elites[input.discordId]) {
       return {
         tier: "Elite",
@@ -134,10 +133,17 @@ export const getNexus = cache(
       },
     });
 
+    const wallet = input.user.linkedAccounts.find(
+      (account) => account.type === "wallet"
+    ) as WalletWithMetadata | undefined;
+
     const [proposalActivity, voteActivity] = await Promise.all([
       db.query.proposals.findMany({
         where: and(
-          eq(proposals.user, input.user.id),
+          or(
+            eq(proposals.user, input.user.id),
+            wallet ? eq(proposals.user, wallet.address) : undefined
+          ),
           inArray(
             proposals.round,
             completedRounds.map((r) => r.id)
@@ -150,7 +156,10 @@ export const getNexus = cache(
       }),
       db.query.votes.findMany({
         where: and(
-          eq(votes.user, input.user.id),
+          or(
+            eq(votes.user, input.user.id),
+            wallet ? eq(votes.user, wallet.address) : undefined
+          ),
           inArray(
             votes.round,
             completedRounds.map((r) => r.id)
@@ -182,7 +191,7 @@ export const getNexus = cache(
         input.user.discord &&
         input.user.twitter &&
         input.user.farcaster &&
-        input.user.linkedAccounts.find((account) => account.type === "wallet")
+        wallet
       ) {
         tier = "Elite";
       }
