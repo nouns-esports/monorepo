@@ -1,10 +1,8 @@
 {
-  "id": "5d3a6aed-8c88-498f-be8d-276501bd4ff9",
-  "prevId": "61df7f58-d5e2-41a1-b18b-702e6d2b14fa",
-  "version": "5",
-  "dialect": "pg",
+  "version": "6",
+  "dialect": "postgresql",
   "tables": {
-    "applicationResponses": {
+    "public.applicationResponses": {
       "name": "applicationResponses",
       "schema": "",
       "columns": {
@@ -44,7 +42,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "creators": {
+    "public.creators": {
       "name": "creators",
       "schema": "",
       "columns": {
@@ -114,7 +112,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "games": {
+    "public.games": {
       "name": "games",
       "schema": "",
       "columns": {
@@ -154,7 +152,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "projects": {
+    "public.projects": {
       "name": "projects",
       "schema": "",
       "columns": {
@@ -194,7 +192,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "rosters": {
+    "public.rosters": {
       "name": "rosters",
       "schema": "",
       "columns": {
@@ -234,7 +232,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "talent": {
+    "public.talent": {
       "name": "talent",
       "schema": "",
       "columns": {
@@ -316,7 +314,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "users": {
+    "public.users": {
       "name": "users",
       "schema": "",
       "columns": {
@@ -345,29 +343,32 @@
       "uniqueConstraints": {
         "users_id_unique": {
           "name": "users_id_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "id"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       }
     }
   },
   "enums": {
-    "pass": {
+    "public.pass": {
       "name": "pass",
-      "values": {
-        "og": "og",
-        "vip": "vip",
-        "community": "community",
-        "premium": "premium"
-      }
+      "schema": "public",
+      "values": [
+        "og",
+        "vip",
+        "community",
+        "premium"
+      ]
     }
   },
   "schemas": {},
   "_meta": {
-    "columns": {},
     "schemas": {},
-    "tables": {}
-  }
+    "tables": {},
+    "columns": {}
+  },
+  "id": "5d3a6aed-8c88-498f-be8d-276501bd4ff9",
+  "prevId": "61df7f58-d5e2-41a1-b18b-702e6d2b14fa"
 }

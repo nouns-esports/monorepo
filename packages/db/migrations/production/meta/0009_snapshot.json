@@ -1,40 +1,54 @@
 {
+  "id": "e411bb8b-6b08-4e6a-9957-59ba1e982b01",
+  "prevId": "4bf44bfa-3798-4ac5-9fd0-d71f0c7d3556",
   "version": "6",
   "dialect": "postgresql",
   "tables": {
-    "public.applicationResponses": {
-      "name": "applicationResponses",
+    "public.assets": {
+      "name": "assets",
       "schema": "",
       "columns": {
-        "user": {
-          "name": "user",
+        "id": {
+          "name": "id",
           "type": "text",
           "primaryKey": true,
           "notNull": true
         },
-        "whatGameDoYouPlayTheMost": {
-          "name": "whatGameDoYouPlayTheMost",
+        "name": {
+          "name": "name",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "whoAreYouAndWhatIsYourEsportsBackground": {
-          "name": "whoAreYouAndWhatIsYourEsportsBackground",
+        "image": {
+          "name": "image",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "whatDoYouThinkIsNeededToPushTheEsportsIndustryForward": {
-          "name": "whatDoYouThinkIsNeededToPushTheEsportsIndustryForward",
-          "type": "text",
+        "decimals": {
+          "name": "decimals",
+          "type": "smallint",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
-        "whatThingsWouldYouLikeToSeeFundedByNouns": {
-          "name": "whatThingsWouldYouLikeToSeeFundedByNouns",
+        "chain_id": {
+          "name": "chain_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "address": {
+          "name": "address",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
+        },
+        "token_id": {
+          "name": "token_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -46,6 +60,12 @@
       "name": "awards",
       "schema": "",
       "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
         "round": {
           "name": "round",
           "type": "text",
@@ -58,17 +78,25 @@
           "primaryKey": false,
           "notNull": true
         },
-        "type": {
-          "name": "type",
+        "asset": {
+          "name": "asset",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "''"
         },
         "value": {
           "name": "value",
           "type": "numeric(78)",
           "primaryKey": false,
           "notNull": true
+        },
+        "claimed": {
+          "name": "claimed",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
         }
       },
       "indexes": {},
@@ -213,12 +241,6 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
-        },
-        "color": {
-          "name": "color",
-          "type": "char(7)",
-          "primaryKey": false,
-          "notNull": true
         }
       },
       "indexes": {},
@@ -270,10 +292,16 @@
       "name": "proposals",
       "schema": "",
       "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
         "user": {
           "name": "user",
           "type": "text",
-          "primaryKey": true,
+          "primaryKey": false,
           "notNull": true
         },
         "round": {
@@ -288,14 +316,15 @@
           "primaryKey": false,
           "notNull": true
         },
-        "who": {
-          "name": "who",
+        "description": {
+          "name": "description",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "''"
         },
-        "why": {
-          "name": "why",
+        "content": {
+          "name": "content",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -305,6 +334,40 @@
           "type": "numeric(78)",
           "primaryKey": false,
           "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "hidden": {
+          "name": "hidden",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "published": {
+          "name": "published",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "total_votes": {
+          "name": "total_votes",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "image": {
+          "name": "image",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
         }
       },
       "indexes": {},
@@ -372,6 +435,13 @@
           "name": "description",
           "type": "text",
           "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        },
+        "content": {
+          "name": "content",
+          "type": "text",
+          "primaryKey": false,
           "notNull": true
         },
         "start": {
@@ -380,20 +450,32 @@
           "primaryKey": false,
           "notNull": true
         },
-        "end": {
-          "name": "end",
+        "voting_start": {
+          "name": "voting_start",
           "type": "timestamp",
           "primaryKey": false,
           "notNull": true
         },
-        "category": {
-          "name": "category",
-          "type": "text",
+        "end": {
+          "name": "end",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
           "primaryKey": false,
           "notNull": true
         },
         "image": {
           "name": "image",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "banner": {
+          "name": "banner",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -414,6 +496,12 @@
           "primaryKey": true,
           "notNull": true
         },
+        "user": {
+          "name": "user",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
         "type": {
           "name": "type",
           "type": "text",
@@ -426,11 +514,11 @@
           "primaryKey": false,
           "notNull": true
         },
-        "user": {
-          "name": "user",
-          "type": "text",
+        "metadata": {
+          "name": "metadata",
+          "type": "json",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         }
       },
       "indexes": {},
@@ -520,36 +608,26 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "public.users": {
-      "name": "users",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "pass": {
-          "name": "pass",
-          "type": "pass",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
     "public.votes": {
       "name": "votes",
       "schema": "",
       "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
         "user": {
           "name": "user",
           "type": "text",
-          "primaryKey": true,
+          "primaryKey": false,
+          "notNull": true
+        },
+        "proposal": {
+          "name": "proposal",
+          "type": "integer",
+          "primaryKey": false,
           "notNull": true
         },
         "round": {
@@ -563,6 +641,12 @@
           "type": "smallint",
           "primaryKey": false,
           "notNull": true
+        },
+        "timestamp": {
+          "name": "timestamp",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
         }
       },
       "indexes": {},
@@ -571,24 +655,11 @@
       "uniqueConstraints": {}
     }
   },
-  "enums": {
-    "public.pass": {
-      "name": "pass",
-      "schema": "public",
-      "values": [
-        "og",
-        "vip",
-        "community",
-        "premium"
-      ]
-    }
-  },
+  "enums": {},
   "schemas": {},
   "_meta": {
+    "columns": {},
     "schemas": {},
-    "tables": {},
-    "columns": {}
-  },
-  "id": "b023b26c-1fe1-4287-9bf7-bb28544b536b",
-  "prevId": "b9375e6a-4b5b-4567-9080-db25bef7e2be"
+    "tables": {}
+  }
 }

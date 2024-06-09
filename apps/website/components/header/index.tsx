@@ -13,7 +13,7 @@ export default async function Header() {
   return (
     <>
       <Banner events={events} />
-      <header className="sticky top-0 w-full z-20 flex justify-center">
+      <header className="sticky top-0 w-full z-[60] flex justify-center">
         <div className="relative w-full max-w-[1920px]">
           <div className="pointer-events-none absolute top-0 w-full flex items-center justify-between p-8 max-sm:p-4 z-40">
             <Link

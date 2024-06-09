@@ -1,10 +1,8 @@
 {
-  "id": "7ee7a27c-8eb6-4c17-b309-36807776d0df",
-  "prevId": "00000000-0000-0000-0000-000000000000",
-  "version": "5",
-  "dialect": "pg",
+  "version": "6",
+  "dialect": "postgresql",
   "tables": {
-    "applicationResponses": {
+    "public.applicationResponses": {
       "name": "applicationResponses",
       "schema": "",
       "columns": {
@@ -38,7 +36,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "creators": {
+    "public.creators": {
       "name": "creators",
       "schema": "",
       "columns": {
@@ -108,7 +106,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "games": {
+    "public.games": {
       "name": "games",
       "schema": "",
       "columns": {
@@ -148,7 +146,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "projects": {
+    "public.projects": {
       "name": "projects",
       "schema": "",
       "columns": {
@@ -188,7 +186,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "rosters": {
+    "public.rosters": {
       "name": "rosters",
       "schema": "",
       "columns": {
@@ -228,7 +226,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "talent": {
+    "public.talent": {
       "name": "talent",
       "schema": "",
       "columns": {
@@ -310,7 +308,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "users": {
+    "public.users": {
       "name": "users",
       "schema": "",
       "columns": {
@@ -340,20 +338,23 @@
     }
   },
   "enums": {
-    "pass": {
+    "public.pass": {
       "name": "pass",
-      "values": {
-        "og": "og",
-        "vip": "vip",
-        "community": "community",
-        "premium": "premium"
-      }
+      "schema": "public",
+      "values": [
+        "og",
+        "vip",
+        "community",
+        "premium"
+      ]
     }
   },
   "schemas": {},
   "_meta": {
-    "columns": {},
     "schemas": {},
-    "tables": {}
-  }
+    "tables": {},
+    "columns": {}
+  },
+  "id": "7ee7a27c-8eb6-4c17-b309-36807776d0df",
+  "prevId": "00000000-0000-0000-0000-000000000000"
 }

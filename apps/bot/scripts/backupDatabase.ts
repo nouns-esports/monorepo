@@ -1,11 +1,13 @@
 import path from "path";
 import { db } from "~/packages/db/schema";
-import { UTApi } from "uploadthing/server";
-import { env } from "~/env";
-import archiver from "archiver";
 import fs from "fs";
+// import { UTApi } from "uploadthing/server";
+// import { env } from "~/env";
+// import archiver from "archiver";
 
-const uploadThingClient = new UTApi({ apiKey: env.UPLOADTHING_SECRET });
+// const uploadThingClient = new UTApi({ apiKey: env.UPLOADTHING_SECRET });
+
+backupDatabase();
 
 export async function backupDatabase() {
   const tables = Object.keys(db.query) as Array<keyof typeof db.query>;
@@ -28,46 +30,46 @@ export async function backupDatabase() {
   }
   writer.write("}");
 
-  const zipFile = archiver("zip", { zlib: { level: 9 } });
+  // const zipFile = archiver("zip", { zlib: { level: 9 } });
 
-  zipFile.on("warning", (error) => {
-    console.log("warning:", error);
-  });
+  // zipFile.on("warning", (error) => {
+  //   console.log("warning:", error);
+  // });
 
-  zipFile.on("error", (error) => {
-    console.error("error occurred :", error);
-  });
+  // zipFile.on("error", (error) => {
+  //   console.error("error occurred :", error);
+  // });
 
-  const name = new Date().toTimeString().replaceAll(":", "_");
+  // const name = new Date().toTimeString().replaceAll(":", "_");
 
-  const writeStream = fs.createWriteStream(
-    path.join(__dirname, `../cache/${name}.zip`)
-  );
-  zipFile.pipe(writeStream);
+  // const writeStream = fs.createWriteStream(
+  //   path.join(__dirname, `../cache/${name}.zip`)
+  // );
+  // zipFile.pipe(writeStream);
 
-  zipFile.append(
-    fs.createReadStream(path.join(__dirname, `../cache/backup.json`)),
-    { name: "backup.json" }
-  );
+  // zipFile.append(
+  //   fs.createReadStream(path.join(__dirname, `../cache/backup.json`)),
+  //   { name: "backup.json" }
+  // );
 
-  await zipFile.finalize();
+  // await zipFile.finalize();
 
-  const stream = fs.createReadStream(
-    path.join(__dirname, `../cache/${name}.zip`)
-  );
+  // const stream = fs.createReadStream(
+  //   path.join(__dirname, `../cache/${name}.zip`)
+  // );
 
-  const chunks: any[] = [];
+  // const chunks: any[] = [];
 
-  stream.on("data", (chunk) => {
-    chunks.push(chunk);
-  });
+  // stream.on("data", (chunk) => {
+  //   chunks.push(chunk);
+  // });
 
-  stream.on("end", async () => {
-    const buffer = Buffer.concat(chunks);
-    const final = new File([buffer], `${name}.zip`, {
-      type: "application/zip",
-    });
+  // stream.on("end", async () => {
+  //   const buffer = Buffer.concat(chunks);
+  //   const final = new File([buffer], `${name}.zip`, {
+  //     type: "application/zip",
+  //   });
 
-    await uploadThingClient.uploadFiles(final);
-  });
+  //   await uploadThingClient.uploadFiles(final);
+  // });
 }

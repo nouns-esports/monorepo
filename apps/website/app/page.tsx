@@ -121,7 +121,7 @@ export default async function Home() {
         className="px-16 max-sm:px-0 pb-32 max-sm:py-16 text-center text-white text-5xl font-luckiest-guy flex flex-col gap-20 max-sm:gap-10 items-center"
       >
         Our Creators
-        <div className="flex flex-wrap max-sm:flex-nowrap max-sm:overflow-x-scroll //max-sm:justify-start justify-center max-w-[1920px] gap-16 w-full max-2xl:gap-8">
+        <div className="flex flex-wrap max-sm:flex-nowrap max-sm:overflow-x-scroll justify-center max-w-[1920px] gap-16 w-full max-2xl:gap-8">
           {creators.map((creator) => (
             <CreatorCard key={creator.id} creator={creator} />
           ))}
@@ -133,13 +133,13 @@ export default async function Home() {
           alt="2024 proposal background image"
           sizes="100vw"
           placeholder="blur"
-          className="absolute top-0 w-full h-full select-none object-cover object-center -z-10 brightness-[50%]"
+          className="absolute -z-10 top-0 w-full h-full select-none object-cover object-center brightness-[50%]"
         />
         <div className="relative z-10 grid place-items-center gap-10 max-sm:gap-6 px-16 max-sm:px-8">
           <h2 className="text-white font-luckiest-guy text-5xl max-sm:text-3xl text-center">
             Join the Nouns Esports Discord server!
           </h2>
-          <p className="max-w-[600px] px-8 text-center text-[#AAAAAA] text-lg max-sm:text-base leading-tight [text-shadow:black_0_0_50px]">
+          <p className="max-w-[600px] px-8 text-center text-grey-200 text-lg max-sm:text-base leading-tight [text-shadow:black_0_0_50px]">
             Get involved with the Nouns Esports community and stay up to date
             with our latest events and announcements!
           </p>
@@ -147,7 +147,7 @@ export default async function Home() {
             Join Now
           </Button>
         </div>
-        <div className="from-black via-black/70/ to-transparent bg-gradient-to-b h-64 w-full top-0 absolute" />
+        <div className="from-black to-transparent bg-gradient-to-b h-64 w-full top-0 absolute" />
         <div className="from-transparent to-black bg-gradient-to-b h-64 w-full bottom-0 absolute" />
       </div>
 
