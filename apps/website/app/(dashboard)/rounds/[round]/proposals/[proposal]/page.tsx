@@ -14,15 +14,15 @@ const Markdown = dynamic(() => import("@/components/lexical/Markdown"), {
   loading: () => <Shimmer className="min-h-60" />,
 });
 
-export async function generateMetadata(props: {
-  params: { round: string; proposal: string };
-}): Promise<Metadata> {
-  return {
-    other: await getFrameMetadata(
-      `http://localhost:3000/frames/proposal/${props.params.proposal}`
-    ),
-  };
-}
+// export async function generateMetadata(props: {
+//   params: { round: string; proposal: string };
+// }): Promise<Metadata> {
+//   return {
+//     other: await getFrameMetadata(
+//       `http://localhost:3000/frames/proposal/${props.params.proposal}`
+//     ),
+//   };
+// }
 
 export default async function Proposal(props: {
   params: { round: string; proposal: string };

@@ -23,7 +23,7 @@ export default function Sidebar() {
         </Button>
         <Button
           route="/nexus"
-          icon={<CurrencyEth className="w-5 h-5 text-white" weight="fill" />}
+          icon={<img src="/nexus-logo.png" className="w-5 h-5" />}
         >
           Nexus
         </Button>

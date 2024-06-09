@@ -11,24 +11,6 @@ const app = new Frog({
   basePath: "/",
 });
 
-// app.frame("/", (c) => {
-//   return c.res({
-//     image: (
-//       <div
-//         style={{
-//           color: "white",
-//           backgroundColor: "red",
-//           display: "flex",
-//           fontSize: 60,
-//         }}
-//       >
-//         Hello World!
-//       </div>
-//     ),
-//     intents: [<Button>Hello World</Button>],
-//   });
-// });
-
 app.frame("/frames/round/:id", async (c) => {
   const round = await getRound({ id: c.req.param("id") });
 
@@ -120,35 +102,35 @@ app.frame("/frames/round/:id", async (c) => {
   });
 });
 
-app.frame("/frames/proposal/:id", async (c) => {
-  const proposal = await getProposal({ id: Number(c.req.param("id")) });
+// app.frame("/frames/proposal/:id", async (c) => {
+//   const proposal = await getProposal({ id: Number(c.req.param("id")) });
 
-  if (!proposal) {
-    return c.error({ statusCode: 404, message: "Proposal not found" });
-  }
+//   if (!proposal) {
+//     return c.error({ statusCode: 404, message: "Proposal not found" });
+//   }
 
-  return c.res({
-    image: (
-      <div
-        style={{
-          color: "white",
-          backgroundColor: "black",
-          display: "flex",
-          padding: 32,
-          fontSize: 60,
-        }}
-      >
-        {proposal.title}
-      </div>
-    ),
-    intents: [
-      <Button.Link href={`/rounds/${proposal.round}/proposals/${proposal.id}`}>
-        Read
-      </Button.Link>,
-      <Button.Link href={`/rounds/${proposal.round}`}>View Round</Button.Link>,
-    ],
-  });
-});
+//   return c.res({
+//     image: (
+//       <div
+//         style={{
+//           color: "white",
+//           backgroundColor: "black",
+//           display: "flex",
+//           padding: 32,
+//           fontSize: 60,
+//         }}
+//       >
+//         {proposal.title}
+//       </div>
+//     ),
+//     intents: [
+//       <Button.Link href={`/rounds/${proposal.round}/proposals/${proposal.id}`}>
+//         Read
+//       </Button.Link>,
+//       <Button.Link href={`/rounds/${proposal.round}`}>View Round</Button.Link>,
+//     ],
+//   });
+// });
 
 devtools(app, { serveStatic });
 

@@ -19,6 +19,7 @@ import { canClaimAward } from "@/server/queries/awards";
 import dynamic from "next/dynamic";
 import Shimmer from "@/components/Shimmer";
 import { revalidatePath } from "next/cache";
+import { env } from "~/env";
 
 const Markdown = dynamic(() => import("@/components/lexical/Markdown"), {
   ssr: false,
@@ -29,9 +30,7 @@ export async function generateMetadata(props: {
   params: { round: string };
 }): Promise<Metadata> {
   return {
-    other: await getFrameMetadata(
-      `http://localhost:3000/frames/round/${props.params.round}`
-    ),
+    other: await getFrameMetadata(`/frames/round/${props.params.round}`),
   };
 }
 

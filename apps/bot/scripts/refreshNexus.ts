@@ -49,12 +49,17 @@ export async function refreshNexus() {
           tx.update(nexus)
             .set({ tier: 1, updated: new Date() })
             .where(eq(nexus.user, nexusUser.user));
+
+          await addRole(inDiscord, "challenger");
+          await removeRole(inDiscord, "explorer");
+
           continue;
         }
 
         tx.update(nexus)
           .set({ updated: new Date() })
           .where(eq(nexus.user, nexusUser.user));
+
         continue;
       }
 
@@ -65,6 +70,9 @@ export async function refreshNexus() {
           tx.update(nexus)
             .set({ tier: 2, updated: new Date() })
             .where(eq(nexus.user, nexusUser.user));
+
+          await addRole(inDiscord, "elite");
+          await removeRole(inDiscord, "challenger");
 
           continue;
         }
@@ -92,10 +100,13 @@ export async function refreshNexus() {
       // Bump the user down to tier 0 if they haven't met the requirements in 30 days
       if (daysSinceUpdated > 30) {
         tx.update(nexus)
-          .set({ tier: 0, updated: new Date(), active: inDiscord })
+          .set({ tier: 0, updated: new Date(), active: !!inDiscord })
           .where(eq(nexus.user, nexusUser.user));
         continue;
       }
+
+      // Wait half a second between each user to avoid rate limiting
+      await new Promise((resolve) => setTimeout(resolve, 500));
     }
   });
 }
@@ -151,11 +162,9 @@ async function isInDiscord(user: string) {
 
   for (const member of members) {
     if (member.user.username === user.split("#")[0]) {
-      return true;
+      return member.user.id as string;
     }
   }
-
-  return false;
 }
 
 function completedProfile(user: User) {
@@ -176,4 +185,34 @@ function completedProfile(user: User) {
   }
 
   return true;
+}
+
+async function addRole(
+  user: string,
+  type: "explorer" | "challenger" | "elite"
+) {
+  await fetch(
+    `https://discord.com/api/guilds/${env.DISCORD_GUILD_ID}/members/${user}/roles/${type === "explorer" ? 1245110318603042950 : type === "challenger" ? 1245122417903534228 : 1245122576645361817}`,
+    {
+      headers: {
+        Authorization: `Bot ${env.DISCORD_TOKEN}`,
+        method: "PUT",
+      },
+    }
+  );
+}
+
+async function removeRole(
+  user: string,
+  type: "explorer" | "challenger" | "elite"
+) {
+  await fetch(
+    `https://discord.com/api/guilds/${env.DISCORD_GUILD_ID}/members/${user}/roles/${type === "explorer" ? 1245110318603042950 : type === "challenger" ? 1245122417903534228 : 1245122576645361817}`,
+    {
+      headers: {
+        Authorization: `Bot ${env.DISCORD_TOKEN}`,
+        method: "DELETE",
+      },
+    }
+  );
 }

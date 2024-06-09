@@ -3,8 +3,6 @@
 import {
   ArrowClockwise,
   DiscordLogo,
-  LinkBreak,
-  LinkSimple,
   Plus,
   TwitterLogo,
 } from "phosphor-react-sc";
@@ -16,17 +14,13 @@ import { twMerge } from "tailwind-merge";
 import type { User, WalletWithMetadata } from "@privy-io/server-auth";
 import { userToProfile } from "@/utils/userToProfile";
 import toast from "react-hot-toast";
-import Countdown from "./rounds/Countdown";
-import { nextFridayAt3PM } from "@/utils/nextFridayAt3PM";
 import { shortenAddress } from "@/utils/shortenAddress";
 import { useContext } from "react";
 import { LoginMethodContext } from "@/providers/Privy";
-import { grantExplorer } from "@/server/actions/grantExplorer";
-import Link from "./Link";
 
 export default function Nexus(props: {
   user?: User;
-  requirements?: { inDiscord: boolean };
+  discordId?: string;
   nexus?: Awaited<ReturnType<typeof getNexus>>;
 }) {
   const router = useRouter();
@@ -65,7 +59,7 @@ export default function Nexus(props: {
 
   const { setOnlyCoinbaseWallet } = useContext(LoginMethodContext);
 
-  if (props.nexus?.tier === "Inactive" || !props.nexus) {
+  if (!props.nexus) {
     return (
       <div className="w-full flex flex-col gap-8">
         <img src="/nexus-banner.webp" className="w-full rounded-xl" />
@@ -91,26 +85,15 @@ export default function Nexus(props: {
                   return;
                 }
 
-                if (!props.requirements?.inDiscord) {
+                if (!props.discordId) {
                   router.refresh();
                   return;
                 }
-
-                toast.promise(
-                  grantExplorer({ user: props.user.id }).then(() => {
-                    router.refresh();
-                  }),
-                  {
-                    loading: "Granting access",
-                    success: "Successfully granted access",
-                    error: "Failed to grant access",
-                  }
-                );
               }}
               animate="bg"
             >
               {!props.user?.discord ? "Get Started" : ""}
-              {props.user?.discord && !props.requirements?.inDiscord ? (
+              {props.user?.discord && !props.discordId ? (
                 <>
                   <ArrowClockwise className="w-5 h-5 mr-2" weight="bold" />{" "}
                   Check
@@ -118,11 +101,9 @@ export default function Nexus(props: {
               ) : (
                 ""
               )}
-              {props.user?.discord && props.requirements?.inDiscord
-                ? "Enter the Nexus"
-                : ""}
+              {/* {props.user?.discord && props.discordId ? "Enter the Nexus" : ""} */}
             </Button>
-            {props.user?.discord && !props.requirements?.inDiscord ? (
+            {props.user?.discord && !props.discordId ? (
               <small className="text-red">
                 You must join the Discord server to begin
               </small>
@@ -217,12 +198,6 @@ export default function Nexus(props: {
             <p className="text-grey-400">Your Votes</p>
             <p className="text-white text-lg">{props.nexus.votes}</p>
           </div>
-          <div className="bg-grey-800 rounded-xl flex flex-col items-center justify-center w-full h-full max-sm:h-20">
-            <p className="text-grey-400">Updates Weekly</p>
-            <p className="text-white text-lg">
-              <Countdown date={nextFridayAt3PM()} />
-            </p>
-          </div>
         </div>
         {props.nexus.tier !== "Elite" ? (
           <div className="bg-grey-800 rounded-xl flex flex-col w-full p-6">
@@ -233,7 +208,8 @@ export default function Nexus(props: {
               {props.nexus.tier === "Explorer" ? (
                 <>
                   <li className="ml-4">
-                    Be an active voter in 3 of the last 5 rounds
+                    Vote or propose in at least 3 rounds held in the last 3
+                    months
                   </li>
                 </>
               ) : (

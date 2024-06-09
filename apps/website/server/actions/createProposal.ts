@@ -10,6 +10,8 @@ import { and, eq } from "drizzle-orm";
 import { revalidateTag } from "next/cache";
 import { getAuthenticatedUser } from "../queries/users";
 import { parseLexicalState } from "@/utils/parseLexicalState";
+import { getUserId } from "../queries/discord";
+import { getNexus } from "../queries/nexus";
 
 export async function createProposal(input: {
   title: string;
@@ -18,13 +20,13 @@ export async function createProposal(input: {
   user: string;
   value?: string;
 }) {
-  const user = await getAuthenticatedUser();
+  const user = await getAuthenticatedUser(true);
 
   if (!user) {
     throw new Error("No user session found");
   }
 
-  if (user !== input.user) {
+  if (user.id !== input.user) {
     throw new Error("You can only create a proposal for yourself");
   }
 
@@ -48,16 +50,18 @@ export async function createProposal(input: {
     throw new Error("Proposing has closed");
   }
 
-  const nexus = await db.query.nexus.findFirst({
-    where: eq(nexusTable.user, input.user),
-  });
+  const discordId = user.discord?.username
+    ? await getUserId({ user: user.discord.username })
+    : undefined;
 
-  if (!nexus || !nexus.active) {
-    throw new Error("An active Nexus membership is required to propose");
+  const nexus = discordId ? await getNexus({ user, discordId }) : undefined;
+
+  if (!nexus) {
+    throw new Error("A Nexus membership is required to propose");
   }
 
   const hasProposed = await db.query.proposals.findFirst({
-    where: and(eq(proposals.round, input.round), eq(proposals.user, user)),
+    where: and(eq(proposals.round, input.round), eq(proposals.user, user.id)),
   });
 
   if (hasProposed) {
@@ -73,7 +77,7 @@ export async function createProposal(input: {
       description,
       image,
       round: input.round,
-      user,
+      user: user.id,
       value: input.value ?? "0",
       createdAt: new Date(),
     },

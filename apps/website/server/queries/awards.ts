@@ -1,5 +1,3 @@
-"use server";
-
 import { awards, db, proposals, rounds } from "~/packages/db/schema";
 import { eq, asc, desc } from "drizzle-orm";
 import { unstable_cache as cache } from "next/cache";
