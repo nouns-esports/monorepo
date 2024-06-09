@@ -1,0 +1,1 @@
+ALTER TABLE "nexus" ADD COLUMN "active" boolean DEFAULT true NOT NULL;

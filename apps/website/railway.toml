@@ -1,11 +1,11 @@
 [build.nixpacksPlan.phases.install]
 dependsOn = ["setup"]
 
-cmds = ["npm install"]
+cmds = ["bun install"]
 
 [build]
 builder = "NIXPACKS"
-buildCommand = "npm run build"
+buildCommand = "bun run build"
 
 [deploy]
-startCommand = "npm run --prefix ./apps/website start"
+startCommand = "bun run start"

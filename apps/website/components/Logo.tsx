@@ -1,11 +1,4 @@
-"use client";
-
-import { PrimaryColorContext } from "@/providers/PrimaryColor";
-import { useContext } from "react";
-
 export default function Logo(props: { className?: string }) {
-  const primaryColor = useContext(PrimaryColorContext);
-
   return (
     <svg
       width="100%"
@@ -31,8 +24,7 @@ export default function Logo(props: { className?: string }) {
         <g mask="url(#mask0_270_366)">
           <path
             d="M100 200C155.228 200 200 155.228 200 100C200 44.7715 155.228 0 100 0C44.7715 0 0 44.7715 0 100C0 155.228 44.7715 200 100 200Z"
-            fill={primaryColor}
-            className="transition-colors"
+            fill="#E93737"
           ></path>
           <path
             d="M100 179C143.63 179 179 143.63 179 100C179 56.3695 143.63 21 100 21C56.3695 21 21 56.3695 21 100C21 143.63 56.3695 179 100 179Z"

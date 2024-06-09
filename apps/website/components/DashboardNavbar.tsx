@@ -1,29 +1,30 @@
 "use client";
 
-import { useState } from "react";
 import { CaretDown } from "phosphor-react-sc";
 import * as NavigationMenu from "@radix-ui/react-navigation-menu";
 import Link from "./Link";
 
 export default function DashboardNavigation() {
   return (
-    <NavigationMenu.Root className="sticky top-28 max-sm:top-20 max-lg:flex hidden">
+    <NavigationMenu.Root className="relative z-50 max-lg:flex hidden">
       <NavigationMenu.List>
         <NavigationMenu.Item>
-          <NavigationMenu.Trigger className="border border-darkgrey bg-black rounded-lg h-10 text-white flex w-[calc(100vw_-_64px)] max-sm:w-[calc(100vw_-_32px)] justify-between items-center px-4">
+          <NavigationMenu.Trigger className="border border-grey-800 bg-black rounded-lg h-10 text-white flex w-[calc(100vw_-_64px)] max-sm:w-[calc(100vw_-_32px)] justify-between items-center px-4">
             Dashboard
             <CaretDown className="w-5 h-5 text-white" />
           </NavigationMenu.Trigger>
-          <NavigationMenu.Content className="border border-darkgrey bg-black rounded-lg absolute left-0 w-[calc(100vw_-_32px)] mt-2 flex flex-col gap-4 p-4">
+          <NavigationMenu.Content className="border border-grey-800 bg-black rounded-lg absolute left-0 w-[calc(100vw_-_32px)] mt-2 flex flex-col gap-4 p-4">
             <ul className="flex flex-col gap-1">
-              <NavItem href="/dashboard">Dashboard</NavItem>
               <NavItem href="/rounds">Rounds</NavItem>
-              <NavItem href="/shop">Shop</NavItem>
-              <NavItem href="/profile">Profile</NavItem>
+              <NavItem href="/nexus">Nexus</NavItem>
+              <NavItem href="/shop" newTab>
+                Shop
+              </NavItem>
+              {/* <NavItem href="/profile">Profile</NavItem> */}
             </ul>
             <div className="flex flex-col gap-2">
               <h2 className="text-white font-bebas-neue text-xl">Discussion</h2>
-              <ul className="grid grid-cols-6 gap-2">
+              <ul className="grid grid-cols-10 max-sm:grid-cols-6 gap-2">
                 <GameIcon src="/logo/logo.svg" href="/chat/nouns-esports" />
                 <GameIcon src="/nouns.png" href="/chat/nouns" />
                 <GameIcon src="/esports.png" href="/chat/esports" />
@@ -58,11 +59,12 @@ export default function DashboardNavigation() {
   );
 }
 
-function NavItem(props: { children: string; href: string }) {
+function NavItem(props: { children: string; href: string; newTab?: boolean }) {
   return (
     <NavigationMenu.Link className="group" asChild>
       <Link
         href={props.href}
+        newTab={props.newTab}
         className="group-hover:text-white flex items-center gap-3 text-white/30 text-nowrap transition-colors"
       >
         {props.children}
@@ -76,7 +78,8 @@ function GameIcon(props: { src: string; href: string }) {
     <NavigationMenu.Link className="group" asChild>
       <Link
         href={props.href}
-        className="w-full aspect-square rounded-lg p-1 border border-grey"
+        newTab
+        className="w-full aspect-square rounded-lg p-1 border border-grey-600"
       >
         <img
           className="w-full h-full object-cover object-center rounded-full"

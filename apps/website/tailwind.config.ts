@@ -1,5 +1,6 @@
 import type { Config } from "tailwindcss";
 import plugin from "tailwindcss/plugin";
+import typography from "@tailwindcss/typography";
 
 const config: Config = {
   future: {
@@ -17,13 +18,33 @@ const config: Config = {
       red: "#E93737",
       pink: "#f26262",
       purple: "#BC30ED",
-      blue: "#4080E0",
+      // blue: "#4080E0",
       green: "#4CC87D",
       yellow: "#F8C648",
       transparent: "transparent",
-      lightgrey: "#454647",
-      grey: "#1C1C1C",
-      darkgrey: "#0C0C0C",
+      blue: {
+        500: "#789AF4",
+        900: "#002688",
+      },
+      grey: {
+        200: "#808080",
+        400: "#4D4D4D",
+        500: "#333333",
+        600: "#1A1A1A",
+        800: "#0C0C0C",
+      },
+      gold: {
+        500: "#EEAF36",
+        900: "#664300",
+      },
+      silver: {
+        500: "#CBD4D7",
+        900: "#656565",
+      },
+      bronze: {
+        500: "#D4682B",
+        900: "#5B2100",
+      },
     },
     fontFamily: {
       "luckiest-guy": ["var(--font-luckiest-guy)"],
@@ -41,14 +62,44 @@ const config: Config = {
       cursor: {
         crosshair: "url('/crosshair.svg') 16 16, auto",
       },
+      keyframes: {
+        marquee: {
+          from: { backgroundPosition: "0% 0" },
+          to: { backgroundPosition: "100% 0" },
+        },
+        shimmer: {
+          "100%": {
+            transform: "translateX(100%)",
+          },
+        },
+      },
+      animation: {
+        marquee: "marquee 20s linear infinite",
+        shimmer: "shimmer 1s infinite",
+      },
     },
   },
   plugins: [
-    plugin(({ matchUtilities }) => {
+    typography,
+    plugin(({ matchUtilities, addUtilities }) => {
       matchUtilities({
         perspective: (value) => ({
           perspective: value,
         }),
+      });
+      addUtilities({
+        ".scrollbar-hidden": {
+          /* IE and Edge */
+          "-ms-overflow-style": "none",
+
+          /* Firefox */
+          "scrollbar-width": "none",
+
+          /* Safari and Chrome */
+          "&::-webkit-scrollbar": {
+            display: "none",
+          },
+        },
       });
     }),
   ],
