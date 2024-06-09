@@ -30,7 +30,7 @@ export default function Privy(props: {
       <PrivyProvider
         appId={env.NEXT_PUBLIC_PRIVY_APP_ID}
         config={{
-          loginMethods: ["discord", "twitter", "wallet", "farcaster"],
+          loginMethods: ["discord", "twitter", "wallet", "farcaster", "email"],
 
           defaultChain:
             env.NEXT_PUBLIC_ENVIRONMENT === "production" ? base : baseSepolia,
