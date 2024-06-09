@@ -58,12 +58,12 @@ export const metadata = {
   metadataBase: new URL("https://nouns.gg"),
   openGraph: {
     type: "website",
-    images: ["/pokemon.webp"],
+    images: ["/og-banner.webp"],
   },
   twitter: {
     site: "@NounsEsports",
     card: "summary_large_image",
-    images: ["/pokemon.webp"],
+    images: ["/og-banner.webp"],
   },
 } satisfies Metadata;
 

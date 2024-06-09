@@ -22,14 +22,13 @@ const nextConfig = {
   async redirects() {
     return [
       {
-        source: "/getfunded",
-        destination:
-          "https://prop.house/0x1034a90081f8c4972637516a3f420564a4b2ab64",
+        source: "/shop",
+        destination: "https://shop.nouns.gg",
         permanent: true,
       },
       {
-        source: "/shop",
-        destination: "https://shop.nouns.gg",
+        source: "/cup",
+        destination: "https://start.gg/matchacup",
         permanent: true,
       },
       {
@@ -73,6 +72,11 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: "/smashprop",
+        destination: "https://nouns.wtf/vote/534",
+        permanent: true,
+      },
+      {
         source: "/instagram",
         destination: "https://www.instagram.com/nouns_esports/",
         permanent: true,
@@ -83,36 +87,6 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: "/collision",
-        destination:
-          "https://prop.house/0xfd160cf822a940bf554e8d5d02e10864b87556b2",
-        permanent: true,
-      },
-      {
-        source: "/BoBC",
-        destination:
-          "https://prop.house/0x61e25db1e668ffe4d5d3afba1a7ec0b7b19689e0",
-        permanent: true,
-      },
-      {
-        source: "/bobc",
-        destination:
-          "https://prop.house/0x61e25db1e668ffe4d5d3afba1a7ec0b7b19689e0",
-        permanent: true,
-      },
-      {
-        source: "/evo-japan",
-        destination:
-          "https://prop.house/0xc668cb2ad23accf8da50c72a4ccc8efe264e7779",
-        permanent: true,
-      },
-      {
-        source: "/GOML",
-        destination:
-          "https://prop.house/0x3830a19ec7aa113cdc9e8fa84aeb0a5080c66bb2",
-        permanent: true,
-      },
-      {
         source: "/goml",
         destination:
           "https://prop.house/0x3830a19ec7aa113cdc9e8fa84aeb0a5080c66bb2",
@@ -120,36 +94,18 @@ const nextConfig = {
       },
       {
         source: "/tippedoff",
-        destination:
-          "https://prop.house/0x972fe18d946cbba02e398aa1749e0c400100deb1",
+        destination: "https://shorturl.at/s3BZl",
         permanent: true,
       },
       {
-        source: "/combo-breaker",
+        source: "/combo",
         destination:
           "https://prop.house/0x2b46d2a078ab53972c9e68153998159fea21bbc2",
         permanent: true,
       },
       {
-        source: "/pokemon-contest",
-        destination:
-          "https://prop.house/0x617a72bf73233234a140381129c1e160a182c251",
-        permanent: true,
-      },
-      {
-        source: "/foxes",
-        destination:
-          "https://shop.nouns.gg/products/pre-sale-nouns-foxes-t-shirt",
-        permanent: true,
-      },
-      {
         source: "/signup",
-        destination: "https://forms.nouns.gg/signup/",
-        permanent: true,
-      },
-      {
-        source: "/signup-jp",
-        destination: "https://forms.nouns.gg/signup-jp/",
+        destination: "https://forms.nouns.gg/signup",
         permanent: true,
       },
       {
@@ -158,14 +114,13 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: "/art-contest",
-        destination:
-          "https://prop.house/0x810a108e4f827817a4063ba4f7bd8b13a4ddf13b",
+        source: "/mint/art-contest",
+        destination: "https://shorturl.at/hvyVZ",
         permanent: true,
       },
       {
-        source: "/mint/art-contest",
-        destination: "https://shorturl.at/hvyVZ",
+        source: "/bracket",
+        destination: "https://shorturl.at/jOzr7",
         permanent: true,
       },
       {
@@ -175,9 +130,46 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: "/matchacup",
+        destination:
+          "https://www.start.gg/tournament/matcha-cup-east-coast/details",
+        permanent: true,
+      },
+      {
+        source: "/duffcity",
+        destination:
+          "https://www.start.gg/tournament/duff-city-volume-3/details",
+        permanent: true,
+      },
+      {
+        source: "/davidscup",
+        destination: "https://shorturl.at/glyNS",
+        permanent: true,
+      },
+      {
+        source: "/dc",
+        destination: "https://start.gg/duffcity",
+        permanent: true,
+      },
+      {
+        source: "/matcha",
+        destination: "https://x.com/nounsesports/status/1785700745154830376",
+        permanent: true,
+      },
+      {
         source: "/party",
         destination:
           "https://rooms.party.app/party/0x66eD9EF8434771A451D44609304dBf865B82A68a",
+        permanent: true,
+      },
+      {
+        source: "/davids-cup",
+        destination: "https://shorturl.at/glyNS",
+        permanent: true,
+      },
+      {
+        source: "/donate",
+        destination: "https://tilt.fyi/zNgsRsgiDQ",
         permanent: true,
       },
     ];
