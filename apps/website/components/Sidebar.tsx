@@ -134,7 +134,9 @@ function Button(props: {
     <Link href={props.route} newTab={props.newTab}>
       <li
         style={{
-          backgroundColor: pathname.includes(props.route)
+          backgroundColor: pathname.match(
+            new RegExp(`^${props.route}(\\/.*)?$`)
+          )
             ? "#E93737"
             : undefined,
         }}

@@ -29,8 +29,6 @@ export async function removeRole(input: {
   user: string;
   role: "Explorer" | "Challenger" | "Elite";
 }) {
-  console.log(input.user);
-
   const response = await fetch(
     `https://discord.com/api/guilds/${env.DISCORD_GUILD_ID}/members/${input.user}/roles/${roles[input.role]}`,
     {

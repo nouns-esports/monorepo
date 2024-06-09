@@ -10,7 +10,7 @@ import { getFrameMetadata } from "frog/next";
 import type { Metadata } from "next";
 import { getRound } from "@/server/queries/rounds";
 import { getProposals } from "@/server/queries/proposals";
-import { getUserVotes } from "@/server/queries/votes";
+import { getPriorVotes } from "@/server/queries/votes";
 import { roundState } from "@/utils/roundState";
 import { numberToOrdinal } from "@/utils/numberToOrdinal";
 import { mergeAwards } from "@/utils/mergeAwards";
@@ -19,7 +19,9 @@ import { canClaimAward } from "@/server/queries/awards";
 import dynamic from "next/dynamic";
 import Shimmer from "@/components/Shimmer";
 import { revalidatePath } from "next/cache";
-import { env } from "~/env";
+import { getUserId } from "@/server/queries/discord";
+import { getNexus } from "@/server/queries/nexus";
+import { environmentToProtocol } from "@/utils/environmentToProtocol";
 
 const Markdown = dynamic(() => import("@/components/lexical/Markdown"), {
   ssr: false,
@@ -30,7 +32,9 @@ export async function generateMetadata(props: {
   params: { round: string };
 }): Promise<Metadata> {
   return {
-    other: await getFrameMetadata(`/frames/round/${props.params.round}`),
+    other: await getFrameMetadata(
+      `${environmentToProtocol()}/frames/round/${props.params.round}`
+    ),
   };
 }
 
@@ -46,18 +50,22 @@ export default async function Round(props: { params: { round: string } }) {
 
   const state = roundState(round);
 
-  const user = await getAuthenticatedUser();
+  const user = await getAuthenticatedUser(true);
 
-  const userState = user
-    ? {
-        id: user,
-        canClaimAward: await canClaimAward({ user, round: props.params.round }),
-        votes: await getUserVotes({
-          round: props.params.round,
-          user,
-        }),
-      }
+  const discordId = user?.discord?.username
+    ? await getUserId({ user: user.discord.username })
     : undefined;
+
+  const nexus =
+    user && discordId ? await getNexus({ user, discordId }) : undefined;
+
+  const priorVotes = user
+    ? await getPriorVotes({ user: user.id, round: props.params.round })
+    : 0;
+
+  const canClaim = user
+    ? await canClaimAward({ user: user.id, round: props.params.round })
+    : false;
 
   const proposalsWithUser = await Promise.all(
     proposals.map(async (proposal) => {
@@ -197,7 +205,18 @@ export default async function Round(props: { params: { round: string } }) {
             awardCount: round.awards.length,
             state,
           }}
-          user={userState}
+          user={
+            user && nexus
+              ? {
+                  id: user?.id,
+                  canClaimAward: canClaim,
+                  votes: {
+                    remaining: nexus.votes - priorVotes,
+                    allocated: nexus.votes,
+                  },
+                }
+              : undefined
+          }
         />
       </div>
     </div>

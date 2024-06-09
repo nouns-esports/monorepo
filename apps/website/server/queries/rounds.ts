@@ -1,4 +1,4 @@
-import { db, rounds } from "~/packages/db/schema";
+import { awards, db, rounds } from "~/packages/db/schema";
 import { eq, gt, and, lt, asc, desc } from "drizzle-orm";
 import { unstable_cache as cache } from "next/cache";
 
@@ -8,6 +8,7 @@ export const getRound = cache(
       where: eq(rounds.id, input.id),
       with: {
         awards: {
+          orderBy: asc(awards.place),
           with: {
             asset: true,
           },

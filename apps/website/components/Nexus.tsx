@@ -208,7 +208,7 @@ export default function Nexus(props: {
               {props.nexus.tier === "Explorer" ? (
                 <>
                   <li className="ml-4">
-                    Vote or propose in at least 3 rounds held in the last 3
+                    Vote or propose in at least 3 rounds held within the last 3
                     months
                   </li>
                 </>

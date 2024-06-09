@@ -14,7 +14,7 @@ export default async function Rounds() {
     getRounds({ stage: "ended" }),
   ]);
 
-  revalidatePath("/rounds");
+  // revalidatePath("/rounds");
 
   return (
     <div className="flex flex-col gap-8">

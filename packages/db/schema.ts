@@ -100,13 +100,6 @@ export const snapshots = pgTable("snapshots", {
   metadata: json("metadata"),
 });
 
-export const nexus = pgTable("nexus", {
-  user: text("user").primaryKey(),
-  tier: smallint("tier").notNull(),
-  updated: timestamp("updated", { mode: "date" }).notNull(),
-  active: boolean("active").notNull().default(true),
-});
-
 // An infinite round is defined as a round with a null end timestamp and votingStart = start, respecitive proposals will include a value
 export const rounds = pgTable("rounds", {
   id: text("id").primaryKey(),
@@ -133,7 +126,6 @@ export const awards = pgTable("awards", {
   round: text("round").notNull(),
   place: smallint("place").notNull(),
   asset: text("asset").notNull().default(""),
-  type: text("type").notNull(),
   value: numeric("value", { precision: 78 }).notNull(),
   claimed: boolean("claimed").notNull().default(false),
 });
@@ -227,7 +219,6 @@ export const db = drizzle(
       votesRelations,
       snapshots,
       badges,
-      nexus,
     },
   }
 );
@@ -244,4 +235,3 @@ export type Proposal = typeof proposals.$inferSelect;
 export type Vote = typeof votes.$inferSelect;
 export type Snapshot = typeof snapshots.$inferSelect;
 export type Badge = typeof badges.$inferSelect;
-export type Nexus = typeof nexus.$inferSelect;

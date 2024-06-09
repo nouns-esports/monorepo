@@ -20,6 +20,7 @@ export const env = createEnv({
     DISCORD_CLIENT_ID: z.string().min(1),
     PINATA_JWT: z.string().min(1),
     UPLOADTHING_SECRET: z.string().min(1),
+    RAILWAY_PUBLIC_DOMAIN: z.string().min(1),
   },
   client: {
     NEXT_PUBLIC_ENVIRONMENT: z.enum(["development", "production"]),
