@@ -5,7 +5,6 @@ import { getRounds } from "@/server/queries/rounds";
 import { formatUnits } from "viem";
 import { mergeAwards } from "@/utils/mergeAwards";
 import { roundState } from "@/utils/roundState";
-import { revalidatePath } from "next/cache";
 
 export default async function Rounds() {
   const [activeRounds, upcomingRounds, endedRounds] = await Promise.all([
@@ -13,8 +12,6 @@ export default async function Rounds() {
     getRounds({ stage: "upcoming" }),
     getRounds({ stage: "ended" }),
   ]);
-
-  // revalidatePath("/rounds");
 
   return (
     <div className="flex flex-col gap-8">

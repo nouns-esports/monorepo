@@ -18,10 +18,10 @@ import { getAuthenticatedUser, getUser } from "@/server/queries/users";
 import { canClaimAward } from "@/server/queries/awards";
 import dynamic from "next/dynamic";
 import Shimmer from "@/components/Shimmer";
-import { revalidatePath } from "next/cache";
 import { getUserId } from "@/server/queries/discord";
 import { getNexus } from "@/server/queries/nexus";
 import { environmentToProtocol } from "@/utils/environmentToProtocol";
+import type { WalletWithMetadata } from "@privy-io/server-auth";
 
 const Markdown = dynamic(() => import("@/components/lexical/Markdown"), {
   ssr: false,
@@ -77,8 +77,6 @@ export default async function Round(props: { params: { round: string } }) {
       };
     })
   );
-
-  revalidatePath(`/rounds/${props.params.round}`);
 
   return (
     <div className="flex flex-col gap-4">
@@ -210,6 +208,11 @@ export default async function Round(props: { params: { round: string } }) {
               ? {
                   id: user?.id,
                   canClaimAward: canClaim,
+                  wallet: (
+                    user.linkedAccounts.find(
+                      (account) => account.type === "wallet"
+                    ) as WalletWithMetadata
+                  )?.address,
                   votes: {
                     remaining: nexus.votes - priorVotes,
                     allocated: nexus.votes,

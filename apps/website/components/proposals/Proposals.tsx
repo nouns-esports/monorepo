@@ -32,6 +32,7 @@ export default function Proposals(props: {
   user?: {
     id: string;
     canClaimAward: boolean;
+    wallet?: string;
     votes: {
       allocated: number;
       remaining: number;
@@ -82,12 +83,15 @@ export default function Proposals(props: {
             {props.round.state === "voting" && props.user
               ? props.user.votes.allocated === 0
                 ? "You don't have any votes"
-                : `${remainingVotes - (loading ? 0 : votesCast)}/${props.user
-                    ?.votes.allocated} votes
+                : `${remainingVotes - (loading ? 0 : votesCast)}/${
+                    props.user?.votes.allocated
+                  } votes
               remaining`
               : ""}
             {props.round.state === "ended" && props.user?.canClaimAward
-              ? "Your proposal won!"
+              ? props.user?.wallet
+                ? "Your proposal won!"
+                : "Add a wallet to your Nexus to claim your award"
               : ""}
           </p>
           {props.round.state === "proposing" ? (
@@ -109,8 +113,11 @@ export default function Proposals(props: {
             ""
           )}
           {props.round.state === "ended" && props.user?.canClaimAward ? (
-            <Button href="/discord" animate="bg">
-              Claim Awards
+            <Button
+              href={props.user?.wallet ? "/discord" : "/nexus"}
+              animate="bg"
+            >
+              {props.user?.wallet ? "Claim Awards" : "Add Wallet"}
             </Button>
           ) : (
             ""
