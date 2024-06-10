@@ -67,6 +67,8 @@ export default function Proposals(props: {
 
   const [loading, startTransition] = useTransition();
 
+  console.log(props.user?.votes);
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex justify-between items-center w-full gap-4 max-sm:flex-col max-sm:items-start">
@@ -74,11 +76,11 @@ export default function Proposals(props: {
         <div className="flex gap-4 items-center max-sm:justify-between max-sm:w-full">
           <p className="text-white">
             {props.round.state === "proposing"
-              ? props.user?.votes.allocated === 0
-                ? "Enter the Nexus to propose"
-                : userProposal
-                  ? "You can edit your proposal until voting starts"
-                  : ""
+              ? userProposal
+                ? "You can edit your proposal until voting starts"
+                : props.user?.votes
+                  ? ""
+                  : "Enter the Nexus to propose"
               : ""}
             {props.round.state === "voting" && props.user
               ? props.user.votes.allocated === 0
@@ -97,17 +99,17 @@ export default function Proposals(props: {
           {props.round.state === "proposing" ? (
             <Button
               href={
-                props.user?.votes.allocated === 0
-                  ? `/nexus`
-                  : `/rounds/${props.round.id}/create`
+                props.user?.votes
+                  ? `/rounds/${props.round.id}/create`
+                  : "/nexus"
               }
               animate="bg"
             >
-              {props.user?.votes.allocated === 0
-                ? "Get Started"
-                : userProposal
-                  ? "Edit Proposal"
-                  : "Create Proposal"}
+              {userProposal
+                ? "Edit Proposal"
+                : props.user?.votes
+                  ? "Create Proposal"
+                  : "Get Started"}
             </Button>
           ) : (
             ""
