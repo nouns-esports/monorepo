@@ -42,7 +42,10 @@ export default async function DashboardLayout(props: {
               className="h-[calc(100%_+_8px)] absolute right-2 -top-4"
             />
           </div>
-          <Link href="https://matcha.xyz/" newTab>
+          <Link
+            href="https://matcha.xyz/?utm_source=nouns&utm_campaign=2q24"
+            newTab
+          >
             <img src="/matcha-sidebar.png" className="w-80 rounded-xl" />
           </Link>
           <div className="flex flex-col gap-2 bg-blue-500 rounded-xl p-4">
