@@ -96,7 +96,7 @@ export default function Nexus(props: {
               animate="bg"
             >
               {!props.user ? "Sign in" : ""}
-              {props.user && !props.user?.discord ? "Get Started" : ""}
+              {props.user && !props.user?.discord ? "Connect Discord" : ""}
               {props.user?.discord && !props.discordId ? "Check" : ""}
             </Button>
             {props.user?.discord && !props.discordId ? (
