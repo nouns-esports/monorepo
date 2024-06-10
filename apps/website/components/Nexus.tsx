@@ -95,16 +95,9 @@ export default function Nexus(props: {
               }}
               animate="bg"
             >
-              {!props.user?.discord ? "Get Started" : ""}
-              {props.user?.discord && !props.discordId ? (
-                <>
-                  <ArrowClockwise className="w-5 h-5 mr-2" weight="bold" />{" "}
-                  Check
-                </>
-              ) : (
-                ""
-              )}
-              {/* {props.user?.discord && props.discordId ? "Enter the Nexus" : ""} */}
+              {!props.user ? "Sign in" : ""}
+              {props.user && !props.user?.discord ? "Get Started" : ""}
+              {props.user?.discord && !props.discordId ? "Check" : ""}
             </Button>
             {props.user?.discord && !props.discordId ? (
               <small className="text-red">
