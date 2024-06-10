@@ -13,9 +13,8 @@ export async function getUserId(input: { user: string }) {
     }
   );
 
-  console.log("getUserId status", response.status);
+  // console.log("getUserId status", response.status);
   console.log("getUserId user", input.user);
-  // console.log("getUserId response", await response.json());
 
   const members = await response.json();
 
