@@ -29,7 +29,7 @@ export default async function Create(props: { params: { round: string } }) {
       </Link>
       <div className="flex flex-col bg-grey-800 rounded-xl overflow-hidden">
         <img
-          src={round.image}
+          src={round.banner}
           className="w-full h-48 object-cover object-center"
         />
         <div className="flex flex-col gap-4 p-4">
