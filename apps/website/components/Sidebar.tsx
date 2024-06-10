@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  CurrencyEth,
-  HouseSimple,
-  ShoppingCartSimple,
-  Ticket,
-  Trophy,
-  User,
-} from "phosphor-react-sc";
+import { ShoppingCartSimple, Trophy } from "phosphor-react-sc";
 import Link from "./Link";
 import { usePathname } from "next/navigation";
 
@@ -36,12 +29,6 @@ export default function Sidebar() {
         >
           Shop
         </Button>
-        {/* <Button
-          route="/profile"
-          icon={<User className="w-5 h-5 text-white" weight="fill" />}
-        >
-          Profile
-        </Button> */}
       </ul>
       <div className="flex flex-col gap-2 bg-grey-800 p-4 rounded-xl">
         <h2 className="font-bebas-neue text-xl text-white">Discussion</h2>

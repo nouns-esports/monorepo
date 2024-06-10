@@ -20,35 +20,49 @@ export default function DashboardNavigation() {
               <NavItem href="/shop" newTab>
                 Shop
               </NavItem>
-              {/* <NavItem href="/profile">Profile</NavItem> */}
             </ul>
             <div className="flex flex-col gap-2">
               <h2 className="text-white font-bebas-neue text-xl">Discussion</h2>
               <ul className="grid grid-cols-10 max-sm:grid-cols-6 gap-2">
-                <GameIcon src="/logo/logo.svg" href="/chat/nouns-esports" />
-                <GameIcon src="/nouns.png" href="/chat/nouns" />
-                <GameIcon src="/esports.png" href="/chat/esports" />
-                <GameIcon src="/games/icons/dota-2.png" href="/chat/dota-2" />
+                <GameIcon
+                  src="/logo/logo.svg"
+                  href="https://warpcast.com/~/channel/nouns-esports"
+                />
+                <GameIcon
+                  src="/nouns.png"
+                  href="https://warpcast.com/~/channel/nouns"
+                />
+                <GameIcon
+                  src="/esports.png"
+                  href="https://warpcast.com/~/channel/esports"
+                />
+                <GameIcon
+                  src="/games/icons/dota-2.png"
+                  href="https://warpcast.com/~/channel/dota2"
+                />
                 <GameIcon
                   src="/games/icons/rocket-league.png"
-                  href="/chat/rocket-league"
+                  href="https://warpcast.com/~/channel/rocketleague"
                 />
                 <GameIcon
                   src="/games/icons/smash-melee.png"
-                  href="/chat/smash"
+                  href="https://warpcast.com/~/channel/smash"
                 />
-                <GameIcon src="/games/icons/cs2.png" href="/chat/cs2" />
+                <GameIcon
+                  src="/games/icons/cs2.png"
+                  href="https://warpcast.com/~/channel/cs2"
+                />
                 <GameIcon
                   src="/games/icons/valorant.png"
-                  href="/chat/valorant"
+                  href="https://warpcast.com/~/channel/valorant"
                 />
                 <GameIcon
                   src="/games/icons/league-of-legends.png"
-                  href="/chat/league"
+                  href="https://warpcast.com/~/channel/league"
                 />
                 <GameIcon
                   src="/games/icons/street-fighter.png"
-                  href="/chat/streetfighter"
+                  href="https://warpcast.com/~/channel/streetfighter"
                 />
               </ul>
             </div>
