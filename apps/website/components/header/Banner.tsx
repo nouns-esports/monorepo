@@ -19,7 +19,7 @@ export default function Banner(props: { events: Event[] }) {
     return (
       <Link
         newTab={live}
-        href={live ? props.events[0].htmlLink : "/nexus"}
+        href={live ? props.events[0].htmlLink : "/rounds"}
         className="bg-red relative z-30 h-9 hover:brightness-[85%] transition-all text-white text-sm font-semibold w-full whitespace-nowrap flex items-center justify-center"
       >
         <div className="flex items-center justify-center">
