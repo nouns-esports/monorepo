@@ -44,7 +44,7 @@ export default async function Create(props: { params: { round: string } }) {
               Your proposal should include
             </h2>
             <ul className="list-disc pl-6 text-grey-200">
-              <li>A detailed desciption of your background</li>
+              <li>A detailed desciption of who you are</li>
               <li>
                 A convincing argument as to why someone should vote for you
               </li>
@@ -55,11 +55,21 @@ export default async function Create(props: { params: { round: string } }) {
               How to increase your odds of being voted for
             </h2>
             <ul className="list-disc pl-6 text-grey-200">
-              <li>Verify your identity with Farcaster</li>
+              <li>Connect social accounts to your Nexus</li>
               <li>Include images of you or your achivements</li>
               <li>
-                Engage with the Nouns Esports community through our Discord
-                server or Farcaster channels
+                Engage with the Nouns Esports community through our{" "}
+                <Link href="/discord" className="text-red">
+                  Discord server
+                </Link>{" "}
+                or{" "}
+                <Link
+                  href="https://warpcast.com/~/channel/nouns-esports"
+                  className="text-red"
+                >
+                  Farcaster
+                </Link>{" "}
+                channel
               </li>
             </ul>
           </div>
