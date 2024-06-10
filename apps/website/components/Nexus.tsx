@@ -59,6 +59,9 @@ export default function Nexus(props: {
 
   const { setOnlyCoinbaseWallet } = useContext(LoginMethodContext);
 
+  console.log("in discord", props.discordId);
+  console.log("user", props.user);
+
   if (!props.nexus) {
     return (
       <div className="w-full flex flex-col gap-8">

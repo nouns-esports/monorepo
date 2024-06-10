@@ -13,5 +13,9 @@ export default async function NexusPage() {
   const nexus =
     user && discordId ? await getNexus({ user, discordId }) : undefined;
 
+  console.log("s user", user);
+  console.log("s discordId", discordId);
+  console.log("s nexus", nexus);
+
   return <Nexus user={user} discordId={discordId} nexus={nexus} />;
 }
