@@ -5,7 +5,7 @@ import { getAuthenticatedUser } from "@/server/queries/users";
 import { and, eq } from "drizzle-orm";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { getNexus } from "../queries/nexus";
-import { getUserId } from "../queries/discord";
+import { isInServer } from "../queries/discord";
 
 export async function castVotes(input: {
   user: string;
@@ -22,11 +22,11 @@ export async function castVotes(input: {
     throw new Error("You can only cast votes for yourself");
   }
 
-  const discordId = user.discord?.username
-    ? await getUserId({ user: user.discord.username })
+  const inServer = user.discord
+    ? await isInServer({ user: user.discord.subject })
     : undefined;
 
-  const nexus = discordId ? await getNexus({ user, discordId }) : undefined;
+  const nexus = inServer ? await getNexus({ user, inServer }) : undefined;
 
   if (!nexus) {
     throw new Error("A Nexus membership is required to vote");

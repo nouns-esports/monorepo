@@ -1,21 +1,17 @@
 import { getAuthenticatedUser } from "@/server/queries/users";
-import { getUserId } from "@/server/queries/discord";
+import { isInServer } from "@/server/queries/discord";
 import Nexus from "@/components/Nexus";
 import { getNexus } from "@/server/queries/nexus";
 
 export default async function NexusPage() {
   const user = await getAuthenticatedUser(true);
 
-  const discordId = user?.discord?.username
-    ? await getUserId({ user: user.discord.username })
-    : undefined;
+  const inServer = user?.discord
+    ? await isInServer({ user: user.discord.subject })
+    : false;
 
   const nexus =
-    user && discordId ? await getNexus({ user, discordId }) : undefined;
+    user && inServer ? await getNexus({ user, inServer }) : undefined;
 
-  console.log("s user", user);
-  console.log("s discordId", discordId);
-  console.log("s nexus", nexus);
-
-  return <Nexus user={user} discordId={discordId} nexus={nexus} />;
+  return <Nexus user={user} inServer={inServer} nexus={nexus} />;
 }

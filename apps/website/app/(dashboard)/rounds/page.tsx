@@ -2,9 +2,8 @@ import Countdown from "@/components/rounds/Countdown";
 import Link from "@/components/Link";
 import type { Asset, Award, Round } from "~/packages/db/schema";
 import { getRounds } from "@/server/queries/rounds";
-import { formatUnits } from "viem";
-import { mergeAwards } from "@/utils/mergeAwards";
 import { roundState } from "@/utils/roundState";
+import { twMerge } from "tailwind-merge";
 
 export default async function Rounds() {
   const [activeRounds, upcomingRounds, endedRounds] = await Promise.all([
@@ -77,21 +76,39 @@ function RoundCard(props: {
           </div>
         </div>
         <div className="w-0.5 bg-grey-600 h-[calc(100%_-_16px)] max-sm:hidden flex-shrink-0" />
-        <div className="flex flex-col gap-4 items-center px-4 pb-4 aspect-square h-full max-sm:flex-row max-sm:w-full max-sm:h-24">
+        <div className="flex flex-col gap-4 justify-center items-center px-4 pb-4 aspect-square h-full max-sm:flex-row max-sm:w-full max-sm:h-24">
+          {state === "Proposing" || state === "Voting" ? (
+            <>
+              <div className="flex items-center justify-center">
+                <div
+                  className={twMerge(
+                    "flex text-center text-white font-semibold text-xs rounded-full leading-none px-3 py-2",
+                    state === "Proposing" && "bg-blue-700",
+                    state === "Voting" && "bg-purple"
+                  )}
+                >
+                  {state}
+                </div>
+              </div>
+              <div className="w-0.5 bg-grey-600 h-full hidden max-sm:flex flex-shrink-0" />
+            </>
+          ) : (
+            ""
+          )}
           <div className="flex flex-col gap-2 items-center max-sm:w-full">
             <p className="text-sm whitespace-nowrap">
-              {state === "starting" ? "Round starts" : ""}
-              {state === "proposing" ? "Proposing ends" : ""}
-              {state === "voting" ? "Round ends" : ""}
-              {state === "ended" ? "Round ended" : ""}
+              {state === "Starting" ? "Round starts" : ""}
+              {state === "Proposing" ? "Voting starts" : ""}
+              {state === "Voting" ? "Round ends" : ""}
+              {state === "Ended" ? "Round ended" : ""}
             </p>
             <p className="text-white whitespace-nowrap">
-              {state !== "ended" ? (
+              {state !== "Ended" ? (
                 <Countdown
                   date={
-                    state === "starting"
+                    state === "Starting"
                       ? new Date(props.round.start)
-                      : state === "proposing"
+                      : state === "Proposing"
                         ? new Date(props.round.votingStart)
                         : new Date(props.round.end ?? Infinity)
                   }
@@ -104,23 +121,6 @@ function RoundCard(props: {
                 }).format(new Date(props.round.end ?? Infinity))
               )}
             </p>
-          </div>
-          <div className="w-0.5 bg-grey-600 h-full hidden max-sm:flex flex-shrink-0" />
-          <div className="flex flex-col gap-2 items-center justify-center h-full max-sm:w-full">
-            <p className="text-sm whitespace-nowrap">Total prizes</p>
-            {mergeAwards(props.round.awards).map(
-              ({ totalValue, award }, index) => (
-                <div key={index} className="flex gap-2 items-center text-white">
-                  <img
-                    src={award.asset.image}
-                    className="w-4 h-4 rounded-[4px]"
-                  />
-                  {award.asset.decimals
-                    ? formatUnits(BigInt(totalValue), award.asset.decimals)
-                    : totalValue}
-                </div>
-              )
-            )}
           </div>
         </div>
       </div>

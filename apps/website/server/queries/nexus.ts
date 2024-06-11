@@ -105,15 +105,17 @@ const challengers: Record<string, boolean> = {
 };
 
 export const getNexus = cache(
-  async (input: { user: User; discordId: string }) => {
-    if (elites[input.discordId]) {
+  async (input: { user: User; inServer: boolean }) => {
+    if (!input.user.discord) return;
+
+    if (elites[input.user.discord.subject]) {
       return {
         tier: "Elite",
         votes: 10,
       } as const;
     }
 
-    if (challengers[input.discordId]) {
+    if (challengers[input.user.discord.subject]) {
       return {
         tier: "Challenger",
         votes: 3,

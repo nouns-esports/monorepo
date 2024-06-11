@@ -3,7 +3,7 @@
 import { env } from "~/env";
 import { getAuthenticatedUser } from "../queries/users";
 import { getNexus } from "../queries/nexus";
-import { getUserId } from "../queries/discord";
+import { isInServer } from "../queries/discord";
 
 export async function pinImage(formData: FormData) {
   const user = await getAuthenticatedUser(true);
@@ -12,11 +12,11 @@ export async function pinImage(formData: FormData) {
     throw new Error("No user session found");
   }
 
-  const discordId = user.discord?.username
-    ? await getUserId({ user: user.discord.username })
+  const inServer = user.discord
+    ? await isInServer({ user: user.discord.subject })
     : undefined;
 
-  const nexus = discordId ? await getNexus({ user, discordId }) : undefined;
+  const nexus = inServer ? await getNexus({ user, inServer }) : undefined;
 
   if (!nexus) {
     throw new Error("User has not entered the Nexus");

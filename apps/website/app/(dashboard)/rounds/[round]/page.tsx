@@ -13,12 +13,11 @@ import { getProposals } from "@/server/queries/proposals";
 import { getPriorVotes } from "@/server/queries/votes";
 import { roundState } from "@/utils/roundState";
 import { numberToOrdinal } from "@/utils/numberToOrdinal";
-import { mergeAwards } from "@/utils/mergeAwards";
 import { getAuthenticatedUser, getUser } from "@/server/queries/users";
 import { canClaimAward } from "@/server/queries/awards";
 import dynamic from "next/dynamic";
 import Shimmer from "@/components/Shimmer";
-import { getUserId } from "@/server/queries/discord";
+import { isInServer } from "@/server/queries/discord";
 import { getNexus } from "@/server/queries/nexus";
 import { environmentToProtocol } from "@/utils/environmentToProtocol";
 import type { WalletWithMetadata } from "@privy-io/server-auth";
@@ -52,12 +51,12 @@ export default async function Round(props: { params: { round: string } }) {
 
   const user = await getAuthenticatedUser(true);
 
-  const discordId = user?.discord?.username
-    ? await getUserId({ user: user.discord.username })
+  const inServer = user?.discord
+    ? await isInServer({ user: user.discord.subject })
     : undefined;
 
   const nexus =
-    user && discordId ? await getNexus({ user, discordId }) : undefined;
+    user && inServer ? await getNexus({ user, inServer }) : undefined;
 
   const priorVotes = user
     ? await getPriorVotes({ user: user.id, round: props.params.round })
@@ -104,18 +103,18 @@ export default async function Round(props: { params: { round: string } }) {
             <div className="flex gap-4 max-md:w-full">
               <div className="flex flex-col gap-2 items-center justify-center bg-grey-800 rounded-xl overflow-hidden min-w-36 p-4 flex-shrink-0 max-md:w-full max-md:flex-shrink">
                 <p className="text-sm whitespace-nowrap">
-                  {state === "starting" ? "Round starts" : ""}
-                  {state === "proposing" ? "Proposing ends" : ""}
-                  {state === "voting" ? "Round ends" : ""}
-                  {state === "ended" ? "Round ended" : ""}
+                  {state === "Starting" ? "Round starts" : ""}
+                  {state === "Proposing" ? "Proposing ends" : ""}
+                  {state === "Voting" ? "Round ends" : ""}
+                  {state === "Ended" ? "Round ended" : ""}
                 </p>
                 <p className="text-white whitespace-nowrap">
-                  {state !== "ended" ? (
+                  {state !== "Ended" ? (
                     <Countdown
                       date={
-                        state === "starting"
+                        state === "Starting"
                           ? new Date(round.start)
-                          : state === "proposing"
+                          : state === "Proposing"
                             ? new Date(round.votingStart)
                             : new Date(round.end ?? Infinity)
                       }
@@ -130,23 +129,18 @@ export default async function Round(props: { params: { round: string } }) {
                 </p>
               </div>
               <div className="flex flex-col gap-2 items-center justify-center h-full bg-grey-800 rounded-xl overflow-hidden w-36 flex-shrink-0 max-md:w-full max-md:flex-shrink">
-                <p className="text-sm whitespace-nowrap">Total prizes</p>
-                {mergeAwards(round.awards).map(
-                  ({ totalValue, award }, index) => (
-                    <div
-                      key={index}
-                      className="flex gap-2 items-center text-white"
-                    >
-                      <img
-                        src={award.asset.image}
-                        className="w-4 h-4 rounded-[4px]"
-                      />
-                      {award.asset.decimals
-                        ? formatUnits(BigInt(totalValue), award.asset.decimals)
-                        : totalValue}
-                    </div>
-                  )
-                )}
+                <p className="text-sm whitespace-nowrap">Round Status</p>
+                <div className="flex items-center justify-center">
+                  <div
+                    className={twMerge(
+                      "flex text-center text-white font-semibold text-xs rounded-full leading-none px-3 py-2",
+                      state === "Proposing" && "bg-blue-700",
+                      state === "Voting" && "bg-purple"
+                    )}
+                  >
+                    {state}
+                  </div>
+                </div>
               </div>
             </div>
             <div className="flex gap-6 items-center justify-center h-full bg-grey-800 rounded-xl overflow-hidden w-full p-4 pt-5">

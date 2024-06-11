@@ -15,12 +15,13 @@ import type { User, WalletWithMetadata } from "@privy-io/server-auth";
 import { userToProfile } from "@/utils/userToProfile";
 import toast from "react-hot-toast";
 import { shortenAddress } from "@/utils/shortenAddress";
-import { useContext } from "react";
+import { useContext, useState, useTransition } from "react";
 import { LoginMethodContext } from "@/providers/Privy";
+import Link from "./Link";
 
 export default function Nexus(props: {
   user?: User;
-  discordId?: string;
+  inServer?: boolean;
   nexus?: Awaited<ReturnType<typeof getNexus>>;
 }) {
   const router = useRouter();
@@ -59,8 +60,7 @@ export default function Nexus(props: {
 
   const { setOnlyCoinbaseWallet } = useContext(LoginMethodContext);
 
-  console.log("in discord", props.discordId);
-  console.log("user", props.user);
+  const [loading, startTransition] = useTransition();
 
   if (!props.nexus) {
     return (
@@ -77,6 +77,7 @@ export default function Nexus(props: {
           </p>
           <div className="flex flex-col gap-3 items-center">
             <Button
+              loading={loading}
               onClick={() => {
                 if (!authenticated) {
                   login();
@@ -88,8 +89,10 @@ export default function Nexus(props: {
                   return;
                 }
 
-                if (!props.discordId) {
-                  router.refresh();
+                if (!props.inServer) {
+                  startTransition(() => {
+                    router.refresh();
+                  });
                   return;
                 }
               }}
@@ -97,12 +100,12 @@ export default function Nexus(props: {
             >
               {!props.user ? "Sign in" : ""}
               {props.user && !props.user?.discord ? "Connect Discord" : ""}
-              {props.user?.discord && !props.discordId ? "Check" : ""}
+              {props.user?.discord && !props.inServer ? "Check" : ""}
             </Button>
-            {props.user?.discord && !props.discordId ? (
-              <small className="text-red">
+            {props.user?.discord && !props.inServer && !loading ? (
+              <Link href="/discord" newTab className="text-red text-sm">
                 You must join the Discord server to begin
-              </small>
+              </Link>
             ) : (
               ""
             )}

@@ -67,22 +67,20 @@ export default function Proposals(props: {
 
   const [loading, startTransition] = useTransition();
 
-  console.log(props.user?.votes);
-
   return (
     <div className="flex flex-col gap-4">
       <div className="flex justify-between items-center w-full gap-4 max-sm:flex-col max-sm:items-start">
         <h3 className="text-white font-luckiest-guy text-3xl">Proposals</h3>
         <div className="flex gap-4 items-center max-sm:justify-between max-sm:w-full">
           <p className="text-white">
-            {props.round.state === "proposing"
+            {props.round.state === "Proposing"
               ? userProposal
                 ? "You can edit your proposal until voting starts"
                 : props.user?.votes
                   ? ""
                   : "Enter the Nexus to propose"
               : ""}
-            {props.round.state === "voting" && props.user
+            {props.round.state === "Voting" && props.user
               ? props.user.votes.allocated === 0
                 ? "You don't have any votes"
                 : `${remainingVotes - (loading ? 0 : votesCast)}/${
@@ -90,13 +88,13 @@ export default function Proposals(props: {
                   } votes
               remaining`
               : ""}
-            {props.round.state === "ended" && props.user?.canClaimAward
+            {props.round.state === "Ended" && props.user?.canClaimAward
               ? props.user?.wallet
                 ? "Your proposal won!"
                 : "Add a wallet to your Nexus to claim your award"
               : ""}
           </p>
-          {props.round.state === "proposing" ? (
+          {props.round.state === "Proposing" ? (
             <Button
               href={
                 props.user?.votes
@@ -114,7 +112,7 @@ export default function Proposals(props: {
           ) : (
             ""
           )}
-          {props.round.state === "ended" && props.user?.canClaimAward ? (
+          {props.round.state === "Ended" && props.user?.canClaimAward ? (
             <Button
               href={props.user?.wallet ? "/discord" : "/nexus"}
               animate="bg"
@@ -124,7 +122,7 @@ export default function Proposals(props: {
           ) : (
             ""
           )}
-          {props.round.state === "voting" ? (
+          {props.round.state === "Voting" ? (
             <Button
               disabled={loading || votesCast < 1 || !props.user}
               onClick={() => {
@@ -182,7 +180,7 @@ export default function Proposals(props: {
       <div className="flex flex-col gap-4">
         {props.proposals
           .toSorted((a, b) => {
-            if (props.round.state === "proposing") {
+            if (props.round.state === "Proposing") {
               if (
                 a.user?.id === props.user?.id &&
                 b.user?.id !== props.user?.id
@@ -198,7 +196,7 @@ export default function Proposals(props: {
               }
             }
 
-            if (props.round.state === "voting") {
+            if (props.round.state === "Voting") {
               if (votes[a.id] > votes[b.id]) {
                 return -1;
               }
@@ -216,25 +214,25 @@ export default function Proposals(props: {
               href={`/rounds/${props.round.id}/proposals/${proposal.id}`}
               className={twMerge(
                 "relative w-full flex gap-4 bg-grey-800 rounded-xl px-4 pt-4 h-36 overflow-hidden max-sm:flex-col max-sm:p-0 max-sm:h-fit max-sm:gap-0",
-                props.round.state === "ended" &&
+                props.round.state === "Ended" &&
                   index < props.round.awardCount &&
                   index === 0 &&
                   "border-[3px] border-gold-500 bg-gold-900 text-white",
-                props.round.state === "ended" &&
+                props.round.state === "Ended" &&
                   index < props.round.awardCount &&
                   index === 1 &&
                   "border-[3px] border-silver-500 bg-silver-900 text-white",
-                props.round.state === "ended" &&
+                props.round.state === "Ended" &&
                   index < props.round.awardCount &&
                   index === 2 &&
                   "border-[3px] border-bronze-500 bg-bronze-900 text-white",
-                props.round.state === "ended" &&
+                props.round.state === "Ended" &&
                   index > 2 &&
                   index < props.round.awardCount &&
                   "border-[3px] border-blue-500 bg-blue-900 text-white"
               )}
             >
-              {props.round.state === "ended" &&
+              {props.round.state === "Ended" &&
               index < props.round.awardCount ? (
                 <div
                   className={twMerge(
@@ -281,27 +279,27 @@ export default function Proposals(props: {
                 <div
                   className={twMerge(
                     "absolute left-0 w-full bg-gradient-to-t from-grey-800 to-transparent h-10 bottom-0 z-10 hidden max-sm:flex",
-                    props.round.state === "ended" &&
+                    props.round.state === "Ended" &&
                       index < props.round.awardCount &&
                       index === 0 &&
                       "from-gold-900",
-                    props.round.state === "ended" &&
+                    props.round.state === "Ended" &&
                       index < props.round.awardCount &&
                       index === 1 &&
                       "from-silver-900",
-                    props.round.state === "ended" &&
+                    props.round.state === "Ended" &&
                       index < props.round.awardCount &&
                       index === 2 &&
                       "from-bronze-900",
-                    props.round.state === "ended" &&
+                    props.round.state === "Ended" &&
                       index > 2 &&
                       index < props.round.awardCount &&
                       "from-blue-900"
                   )}
                 />
               </div>
-              {props.round.state === "voting" ||
-              props.round.state === "ended" ? (
+              {props.round.state === "Voting" ||
+              props.round.state === "Ended" ? (
                 <div
                   onClick={(e) => {
                     e.preventDefault();
@@ -312,19 +310,19 @@ export default function Proposals(props: {
                   <div
                     className={twMerge(
                       "h-full bg-grey-600 w-[1px] max-sm:hidden",
-                      props.round.state === "ended" &&
+                      props.round.state === "Ended" &&
                         index === 0 &&
                         index < props.round.awardCount &&
                         "bg-gold-500",
-                      props.round.state === "ended" &&
+                      props.round.state === "Ended" &&
                         index === 1 &&
                         index < props.round.awardCount &&
                         "bg-silver-500",
-                      props.round.state === "ended" &&
+                      props.round.state === "Ended" &&
                         index === 2 &&
                         index < props.round.awardCount &&
                         "bg-bronze-500",
-                      props.round.state === "ended" &&
+                      props.round.state === "Ended" &&
                         index > 2 &&
                         index < props.round.awardCount &&
                         "bg-blue-500"
@@ -336,7 +334,7 @@ export default function Proposals(props: {
                     )}
                   >
                     {proposal.user?.id !== props.user?.id &&
-                    props.round.state === "voting" ? (
+                    props.round.state === "Voting" ? (
                       <CaretUp
                         onClick={() => {
                           if (!props.user) return;
@@ -360,11 +358,11 @@ export default function Proposals(props: {
                     <p
                       className={twMerge(
                         "text-grey-200 text-2xl font-bebas-neue text-center text-nowrap max-sm:mt-1",
-                        props.round.state === "ended" &&
+                        props.round.state === "Ended" &&
                           index < props.round.awardCount &&
                           "text-white",
 
-                        (props.round.state === "ended" ||
+                        (props.round.state === "Ended" ||
                           proposal.user?.id === props.user?.id) &&
                           "flex flex-col items-center gap-2.5 max-sm:flex-row"
                       )}
@@ -378,13 +376,13 @@ export default function Proposals(props: {
                       ) : (
                         ""
                       )}
-                      {props.round.state === "ended" ||
+                      {props.round.state === "Ended" ||
                       (proposal.user?.id === props.user?.id &&
-                        props.round.state === "voting") ? (
+                        props.round.state === "Voting") ? (
                         <ChartBarHorizontal
                           className={twMerge(
                             "w-5 h-5 text-grey-200 -rotate-90",
-                            props.round.state === "ended" &&
+                            props.round.state === "Ended" &&
                               index < props.round.awardCount &&
                               "text-white"
                           )}
@@ -395,7 +393,7 @@ export default function Proposals(props: {
                       )}
                     </p>
                     {proposal.user?.id !== props.user?.id &&
-                    props.round.state === "voting" ? (
+                    props.round.state === "Voting" ? (
                       <CaretDown
                         onClick={() => {
                           if ((userVotes[proposal.id] ?? 0) < 1) return;
@@ -418,19 +416,19 @@ export default function Proposals(props: {
               <div
                 className={twMerge(
                   "absolute left-0 w-full bg-gradient-to-t from-grey-800 to-transparent h-10 bottom-0 z-10 max-sm:hidden",
-                  props.round.state === "ended" &&
+                  props.round.state === "Ended" &&
                     index < props.round.awardCount &&
                     index === 0 &&
                     "from-gold-900",
-                  props.round.state === "ended" &&
+                  props.round.state === "Ended" &&
                     index < props.round.awardCount &&
                     index === 1 &&
                     "from-silver-900",
-                  props.round.state === "ended" &&
+                  props.round.state === "Ended" &&
                     index < props.round.awardCount &&
                     index === 2 &&
                     "from-bronze-900",
-                  props.round.state === "ended" &&
+                  props.round.state === "Ended" &&
                     index > 2 &&
                     index < props.round.awardCount &&
                     "from-blue-900"
@@ -443,7 +441,7 @@ export default function Proposals(props: {
             <img src="/fire-sticker.png" alt="" className="h-32" />
             <p className="text-grey-200 text-lg max-w-80">
               There are no proposals yet.{" "}
-              {props.round.state === "proposing"
+              {props.round.state === "Proposing"
                 ? "Be the first to propose?"
                 : ""}
             </p>

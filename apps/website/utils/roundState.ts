@@ -9,12 +9,12 @@ export function roundState(round: Round) {
 
   const state =
     now < roundStart
-      ? "starting"
+      ? "Starting"
       : now < votingStart
-        ? "proposing"
+        ? "Proposing"
         : now < roundEnd
-          ? "voting"
-          : "ended";
+          ? "Voting"
+          : "Ended";
 
   return state;
 }
