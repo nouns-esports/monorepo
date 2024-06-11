@@ -104,7 +104,7 @@ export default async function Round(props: { params: { round: string } }) {
               <div className="flex flex-col gap-2 items-center justify-center bg-grey-800 rounded-xl overflow-hidden min-w-36 p-4 flex-shrink-0 max-md:w-full max-md:flex-shrink">
                 <p className="text-sm whitespace-nowrap">
                   {state === "Starting" ? "Round starts" : ""}
-                  {state === "Proposing" ? "Proposing ends" : ""}
+                  {state === "Proposing" ? "Voting starts" : ""}
                   {state === "Voting" ? "Round ends" : ""}
                   {state === "Ended" ? "Round ended" : ""}
                 </p>
@@ -128,20 +128,24 @@ export default async function Round(props: { params: { round: string } }) {
                   )}
                 </p>
               </div>
-              <div className="flex flex-col gap-2 items-center justify-center h-full bg-grey-800 rounded-xl overflow-hidden w-36 flex-shrink-0 max-md:w-full max-md:flex-shrink">
-                <p className="text-sm whitespace-nowrap">Round Status</p>
-                <div className="flex items-center justify-center">
-                  <div
-                    className={twMerge(
-                      "flex text-center text-white font-semibold text-xs rounded-full leading-none px-3 py-2",
-                      state === "Proposing" && "bg-blue-700",
-                      state === "Voting" && "bg-purple"
-                    )}
-                  >
-                    {state}
+              {state === "Proposing" || state === "Voting" ? (
+                <div className="flex flex-col gap-2 items-center justify-center h-full bg-grey-800 rounded-xl overflow-hidden w-36 flex-shrink-0 max-md:w-full max-md:flex-shrink">
+                  <p className="text-sm whitespace-nowrap">Round Status</p>
+                  <div className="flex items-center justify-center">
+                    <div
+                      className={twMerge(
+                        "flex text-center text-white font-semibold text-xs rounded-full leading-none px-3 py-2",
+                        state === "Proposing" && "bg-blue-700",
+                        state === "Voting" && "bg-purple"
+                      )}
+                    >
+                      {state}
+                    </div>
                   </div>
                 </div>
-              </div>
+              ) : (
+                ""
+              )}
             </div>
             <div className="flex gap-6 items-center justify-center h-full bg-grey-800 rounded-xl overflow-hidden w-full p-4 pt-5">
               <div className="flex flex-col gap-2 items-center pl-4 pr-2">
