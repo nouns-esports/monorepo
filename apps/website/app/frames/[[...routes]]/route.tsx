@@ -54,11 +54,11 @@ app.frame("/frames/round/:id", async (c) => {
               display: "flex",
               flexDirection: "column",
               backgroundColor:
-                state === "starting"
+                state === "Starting"
                   ? "#789AF4"
-                  : state === "proposing"
+                  : state === "Proposing"
                     ? "#4CC87D"
-                    : state === "voting"
+                    : state === "Voting"
                       ? "#BC30ED"
                       : "#E93737",
               borderRadius: "10000",
@@ -69,10 +69,10 @@ app.frame("/frames/round/:id", async (c) => {
               fontSize: 32,
             }}
           >
-            {state === "starting" ? "Starting" : ""}
-            {state === "proposing" ? "Proposing" : ""}
-            {state === "voting" ? "Voting" : ""}
-            {state === "ended" ? "Round Ended" : ""}
+            {state === "Starting" ? "Starting" : ""}
+            {state === "Proposing" ? "Proposing" : ""}
+            {state === "Voting" ? "Voting" : ""}
+            {state === "Ended" ? "Round Ended" : ""}
           </div>
         </div>
         <div
