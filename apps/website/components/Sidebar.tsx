@@ -31,7 +31,7 @@ export default function Sidebar() {
         </Button>
       </ul>
       <div className="flex flex-col gap-2 bg-grey-800 p-4 rounded-xl">
-        <h2 className="font-bebas-neue text-xl text-white">Discussion</h2>
+        <h2 className="font-bebas-neue text-xl text-white">Communities</h2>
         <ul className="flex flex-col gap-2">
           <Button
             route="https://warpcast.com/~/channel/nouns-esports"

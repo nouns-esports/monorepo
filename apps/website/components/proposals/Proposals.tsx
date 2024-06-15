@@ -11,6 +11,8 @@ import { getProposals } from "@/server/queries/proposals";
 import { roundState } from "@/utils/roundState";
 import { numberToOrdinal } from "@/utils/numberToOrdinal";
 import { useOptimistic } from "react";
+import { useLogin } from "@privy-io/react-auth";
+import { useRouter } from "next/navigation";
 
 export default function Proposals(props: {
   round: {
@@ -65,6 +67,14 @@ export default function Proposals(props: {
 
   const [loading, startTransition] = useTransition();
 
+  const router = useRouter();
+
+  const { login } = useLogin({
+    onComplete: () => {
+      router.refresh();
+    },
+  });
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex justify-between items-center w-full gap-4 max-sm:flex-col max-sm:items-start">
@@ -73,6 +83,19 @@ export default function Proposals(props: {
           {(() => {
             if (props.round.state === "Proposing") {
               if (!props.user) {
+                return (
+                  <>
+                    <p className="text-white">
+                      You must be signed in to propose
+                    </p>
+                    <Button onClick={() => login()} animate="bg">
+                      Sign In
+                    </Button>
+                  </>
+                );
+              }
+
+              if (props.user.votes.allocated < 1) {
                 return (
                   <>
                     <p className="text-white">Enter the Nexus to propose</p>
@@ -108,6 +131,17 @@ export default function Proposals(props: {
 
             if (props.round.state === "Voting") {
               if (!props.user) {
+                return (
+                  <>
+                    <p className="text-white">You must be signed in to vote</p>
+                    <Button onClick={() => login()} animate="bg">
+                      Sign In
+                    </Button>
+                  </>
+                );
+              }
+
+              if (props.user.votes.allocated < 1) {
                 return (
                   <>
                     <p className="text-white">Enter the Nexus to vote</p>
