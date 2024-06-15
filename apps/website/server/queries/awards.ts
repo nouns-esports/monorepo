@@ -1,7 +1,6 @@
-import { awards, db, proposals, rounds } from "~/packages/db/schema";
-import { eq, asc, desc } from "drizzle-orm";
+import { awards, db, proposals, type Award } from "~/packages/db/schema";
+import { eq, asc, desc, and, gt } from "drizzle-orm";
 import { unstable_cache as cache } from "next/cache";
-import { unstable_noStore as noStore } from "next/cache";
 
 export const getAwards = cache(
   async (input: { round: string }) => {
@@ -17,52 +16,64 @@ export const getAwards = cache(
   { tags: ["awards"], revalidate: 60 * 10 }
 );
 
-export async function canClaimAward(input: { user: string; round: string }) {
-  noStore();
-
-  const [allAwards, round, proposalVotes] = await Promise.all([
-    db.query.awards.findMany({
-      where: eq(awards.round, input.round),
-      orderBy: asc(awards.place),
-      columns: {
-        claimed: true,
+export const getUserAwards = cache(
+  async (input: { user: string }) => {
+    const applicableRounds = await db.query.proposals.findMany({
+      where: and(eq(proposals.user, input.user), gt(proposals.totalVotes, 0)),
+      with: {
+        round: {
+          with: {
+            awards: true,
+            proposals: {
+              orderBy: desc(proposals.totalVotes),
+              where: gt(proposals.totalVotes, 0),
+              columns: {
+                user: true,
+              },
+            },
+          },
+          columns: {
+            id: true,
+            end: true,
+            name: true,
+            image: true,
+          },
+        },
       },
-    }),
-    db.query.rounds.findFirst({
-      columns: {
-        end: true,
-      },
-      where: eq(rounds.id, input.round),
-    }),
-    await db.query.proposals.findMany({
-      where: eq(proposals.round, input.round),
-      columns: {
-        user: true,
-        totalVotes: true,
-      },
-      orderBy: desc(proposals.totalVotes),
-    }),
-  ]);
+      columns: {},
+    });
 
-  if (!round) {
-    return false;
-  }
+    const userAwards: Array<
+      Omit<Award, "round"> & {
+        round: {
+          id: string;
+          name: string;
+          image: string;
+        };
+      }
+    > = [];
 
-  if (new Date() < new Date(round.end ?? 0)) {
-    return false;
-  }
+    for (const { round } of applicableRounds) {
+      if (new Date() < new Date(round.end ?? 0)) {
+        continue;
+      }
 
-  for (let i = 0; i < proposalVotes.length; i++) {
-    const award = allAwards[i];
-
-    if (!award) {
-      break;
+      for (let i = 0; i < round.awards.length; i++) {
+        if (round.proposals[i].user === input.user) {
+          userAwards.push({
+            ...round.awards[i],
+            round: {
+              id: round.id,
+              name: round.name,
+              image: round.image,
+            },
+          });
+        }
+      }
     }
 
-    if (proposalVotes[i].user === input.user && !award.claimed) {
-      return true;
-    }
-  }
-
-  return false;
-}
+    return userAwards;
+  },
+  ["awards"],
+  { tags: ["awards"], revalidate: 60 * 10 }
+);

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "../Link";
-import { useMemo, useState, useTransition } from "react";
+import React, { useCallback, useMemo, useState, useTransition } from "react";
 import { CaretUp, CaretDown, ChartBarHorizontal } from "phosphor-react-sc";
 import Button from "../Button";
 import { twMerge } from "tailwind-merge";
@@ -31,8 +31,6 @@ export default function Proposals(props: {
   >;
   user?: {
     id: string;
-    canClaimAward: boolean;
-    wallet?: string;
     votes: {
       allocated: number;
       remaining: number;
@@ -72,109 +70,133 @@ export default function Proposals(props: {
       <div className="flex justify-between items-center w-full gap-4 max-sm:flex-col max-sm:items-start">
         <h3 className="text-white font-luckiest-guy text-3xl">Proposals</h3>
         <div className="flex gap-4 items-center max-sm:justify-between max-sm:w-full">
-          <p className="text-white">
-            {props.round.state === "Proposing"
-              ? userProposal
-                ? "You can edit your proposal until voting starts"
-                : props.user?.votes
-                  ? ""
-                  : "Enter the Nexus to propose"
-              : ""}
-            {props.round.state === "Voting" && props.user
-              ? props.user.votes.allocated === 0
-                ? "You don't have any votes"
-                : `${remainingVotes - (loading ? 0 : votesCast)}/${
-                    props.user?.votes.allocated
-                  } votes
-              remaining`
-              : ""}
-            {props.round.state === "Ended" && props.user?.canClaimAward
-              ? props.user?.wallet
-                ? "Your proposal won!"
-                : "Add a wallet to your Nexus to claim your award"
-              : ""}
-          </p>
-          {props.round.state === "Proposing" ? (
-            <Button
-              href={
-                props.user?.votes
-                  ? `/rounds/${props.round.id}/create`
-                  : "/nexus"
+          {(() => {
+            if (props.round.state === "Proposing") {
+              if (!props.user) {
+                return (
+                  <>
+                    <p className="text-white">Enter the Nexus to propose</p>
+                    <Button href="/nexus" animate="bg">
+                      Get Started
+                    </Button>
+                  </>
+                );
               }
-              animate="bg"
-            >
-              {userProposal
-                ? "Edit Proposal"
-                : props.user?.votes
-                  ? "Create Proposal"
-                  : "Get Started"}
-            </Button>
-          ) : (
-            ""
-          )}
-          {props.round.state === "Ended" && props.user?.canClaimAward ? (
-            <Button
-              href={props.user?.wallet ? "/discord" : "/nexus"}
-              animate="bg"
-            >
-              {props.user?.wallet ? "Claim Awards" : "Add Wallet"}
-            </Button>
-          ) : (
-            ""
-          )}
-          {props.round.state === "Voting" ? (
-            <Button
-              disabled={loading || votesCast < 1 || !props.user}
-              onClick={() => {
-                const submit = new Promise((resolve, reject) => {
-                  setRemainingVotes(remainingVotes - votesCast);
 
-                  startTransition(async () => {
-                    setVotes({
-                      ...votes,
-                      ...Object.entries(userVotes).reduce(
-                        (userVotes: Record<string, number>, [id, count]) => {
-                          userVotes[id] = (votes[id] ?? 0) + count;
+              if (userProposal) {
+                return (
+                  <>
+                    <p className="text-white">
+                      You can edit your proposal until voting starts
+                    </p>
+                    <Button
+                      href={`/rounds/${props.round.id}/create`}
+                      animate="bg"
+                    >
+                      Edit Proposal
+                    </Button>
+                  </>
+                );
+              }
 
-                          return userVotes;
+              return (
+                <Button href={`/rounds/${props.round.id}/create`} animate="bg">
+                  Create Proposal
+                </Button>
+              );
+            }
+
+            if (props.round.state === "Voting") {
+              if (!props.user) {
+                return (
+                  <>
+                    <p className="text-white">Enter the Nexus to vote</p>
+                    <Button href="/nexus" animate="bg">
+                      Get Started
+                    </Button>
+                  </>
+                );
+              }
+
+              return (
+                <>
+                  <p className="text-white">
+                    {remainingVotes - (loading ? 0 : votesCast)}/
+                    {props.user?.votes.allocated} votes remaining
+                  </p>
+                  <Button
+                    disabled={loading || votesCast < 1}
+                    onClick={() => {
+                      const submit = new Promise((resolve, reject) => {
+                        setRemainingVotes(remainingVotes - votesCast);
+
+                        startTransition(async () => {
+                          setVotes({
+                            ...votes,
+                            ...Object.entries(userVotes).reduce(
+                              (
+                                userVotes: Record<string, number>,
+                                [id, count]
+                              ) => {
+                                userVotes[id] = (votes[id] ?? 0) + count;
+
+                                return userVotes;
+                              },
+                              {}
+                            ),
+                          });
+
+                          await castVotes({
+                            // @ts-ignore
+                            user: props.user.id,
+                            round: props.round.id,
+                            votes: Object.entries(userVotes).map(
+                              ([id, count]) => ({
+                                proposal: Number(id),
+                                count,
+                              })
+                            ),
+                          })
+                            .then(resolve)
+                            .catch(reject);
+                        });
+                      });
+
+                      toast.promise(submit, {
+                        loading: "Casting votes",
+                        success: () => {
+                          setUserVotes({});
+                          return "Successfully cast votes";
                         },
-                        {}
-                      ),
-                    });
+                        error: () => {
+                          setUserVotes({});
+                          return "Failed to cast votes";
+                        },
+                      });
+                    }}
+                    animate="bg"
+                  >
+                    Submit Votes
+                  </Button>
+                </>
+              );
+            }
 
-                    await castVotes({
-                      // @ts-ignore
-                      user: props.user.id,
-                      round: props.round.id,
-                      votes: Object.entries(userVotes).map(([id, count]) => ({
-                        proposal: Number(id),
-                        count,
-                      })),
-                    })
-                      .then(resolve)
-                      .catch(reject);
-                  });
-                });
-
-                toast.promise(submit, {
-                  loading: "Casting votes",
-                  success: () => {
-                    setUserVotes({});
-                    return "Successfully cast votes";
-                  },
-                  error: () => {
-                    setUserVotes({});
-                    return "Failed to cast votes";
-                  },
-                });
-              }}
-              animate="bg"
-            >
-              Submit Votes
-            </Button>
-          ) : (
-            ""
-          )}
+            if (props.round.state === "Ended") {
+              for (let i = 0; i < props.round.awardCount; i++) {
+                if (props.proposals[i].user.id === props.user?.id) {
+                  return (
+                    <>
+                      <p className="text-white">Your proposal won!</p>
+                      <Button href="/nexus" animate="bg">
+                        View Rewards
+                      </Button>
+                    </>
+                  );
+                }
+              }
+            }
+          })()}
         </div>
       </div>
       <div className="flex flex-col gap-4">

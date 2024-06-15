@@ -15,14 +15,16 @@ import type { User, WalletWithMetadata } from "@privy-io/server-auth";
 import { userToProfile } from "@/utils/userToProfile";
 import toast from "react-hot-toast";
 import { shortenAddress } from "@/utils/shortenAddress";
-import { useContext, useState, useTransition } from "react";
+import { useContext, useTransition } from "react";
 import { LoginMethodContext } from "@/providers/Privy";
 import Link from "./Link";
+import type { getUserAwards } from "@/server/queries/awards";
 
 export default function Nexus(props: {
   user?: User;
   inServer?: boolean;
   nexus?: Awaited<ReturnType<typeof getNexus>>;
+  awards?: Awaited<ReturnType<typeof getUserAwards>>;
 }) {
   const router = useRouter();
 
@@ -225,6 +227,15 @@ export default function Nexus(props: {
                 ""
               )}
             </ul>
+          </div>
+        ) : (
+          ""
+        )}
+        {props.awards && props.awards.length > 0 ? (
+          <div className="bg-grey-800 rounded-xl flex flex-col w-full p-6">
+            <h2 className="font-bebas-neue text-2xl text-white mb-2">
+              Your Awards
+            </h2>
           </div>
         ) : (
           ""

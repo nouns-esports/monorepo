@@ -14,13 +14,11 @@ import { getPriorVotes } from "@/server/queries/votes";
 import { roundState } from "@/utils/roundState";
 import { numberToOrdinal } from "@/utils/numberToOrdinal";
 import { getAuthenticatedUser, getUser } from "@/server/queries/users";
-import { canClaimAward } from "@/server/queries/awards";
 import dynamic from "next/dynamic";
 import Shimmer from "@/components/Shimmer";
 import { isInServer } from "@/server/queries/discord";
 import { getNexus } from "@/server/queries/nexus";
 import { environmentToProtocol } from "@/utils/environmentToProtocol";
-import type { WalletWithMetadata } from "@privy-io/server-auth";
 
 const Markdown = dynamic(() => import("@/components/lexical/Markdown"), {
   ssr: false,
@@ -61,10 +59,6 @@ export default async function Round(props: { params: { round: string } }) {
   const priorVotes = user
     ? await getPriorVotes({ user: user.id, round: props.params.round })
     : 0;
-
-  const canClaim = user
-    ? await canClaimAward({ user: user.id, round: props.params.round })
-    : false;
 
   const proposalsWithUser = await Promise.all(
     proposals.map(async (proposal) => {
@@ -205,12 +199,6 @@ export default async function Round(props: { params: { round: string } }) {
             user && nexus
               ? {
                   id: user?.id,
-                  canClaimAward: canClaim,
-                  wallet: (
-                    user.linkedAccounts.find(
-                      (account) => account.type === "wallet"
-                    ) as WalletWithMetadata
-                  )?.address,
                   votes: {
                     remaining: nexus.votes - priorVotes,
                     allocated: nexus.votes,
