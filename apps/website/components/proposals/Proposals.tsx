@@ -405,7 +405,7 @@ export default function Proposals(props: {
                                 : 0) + 1,
                           });
                         }}
-                        className="w-5 h-5 text-grey-200 hover:text-white transition-colors max-sm:-rotate-90"
+                        className="w-5 h-5 text-grey-200 hover:text-white transition-colors"
                         weight="fill"
                       />
                     ) : (
@@ -458,7 +458,7 @@ export default function Proposals(props: {
                             [proposal.id]: userVotes[proposal.id] - 1,
                           });
                         }}
-                        className="w-5 h-5 text-grey-200 hover:text-white transition-colors max-sm:-rotate-90"
+                        className="w-5 h-5 text-grey-200 hover:text-white transition-colors"
                         weight="fill"
                       />
                     ) : (
