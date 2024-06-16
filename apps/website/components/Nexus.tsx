@@ -236,6 +236,44 @@ export default function Nexus(props: {
             <h2 className="font-bebas-neue text-2xl text-white mb-2">
               Your Awards
             </h2>
+            <ul className="flex flex-col gap-4">
+              {props.awards.map((award) => (
+                <li
+                  key={award.id}
+                  className="flex items-center justify-between w-ful"
+                >
+                  <Link
+                    href={`/rounds/${award.round.id}`}
+                    className="flex gap-3 items-center text-white font-semibold"
+                  >
+                    <img
+                      src={award.round.image}
+                      className="w-8 h-8 rounded-md"
+                    />
+                    {award.round.id.replaceAll("-", " ")}
+                  </Link>
+                  <div className="flex items-center gap-4">
+                    <div className="text-white gap-2 flex items-center">
+                      <img
+                        src={award.asset.image}
+                        className="w-5 h-5 rounded-md"
+                      />
+                      {award.value}
+                    </div>
+                    <div
+                      className={twMerge(
+                        "rounded-full px-2.5 py-0.5 text-sm font-semibold",
+                        award.claimed
+                          ? "text-white bg-green"
+                          : "text-white bg-blue-700"
+                      )}
+                    >
+                      {award.claimed ? "Paid" : "Queued"}
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
           </div>
         ) : (
           ""

@@ -18,12 +18,49 @@ export const getAwards = cache(
 
 export const getUserAwards = cache(
   async (input: { user: string }) => {
+    return [
+      {
+        id: 1,
+        asset: {
+          image: "/assets/usdc.svg",
+        },
+        value: 1000,
+        round: {
+          id: "riptide-2024",
+          name: "Round 1",
+          image: "/rounds/riptide-2024/logo.png",
+        },
+        claimed: false,
+      },
+      {
+        id: 1,
+        asset: {
+          image: "/assets/usdc.svg",
+        },
+        value: 250,
+        round: {
+          id: "genesis-x",
+          name: "Round 1",
+          image: "/rounds/genesis-x/logo.png",
+        },
+        claimed: true,
+      },
+    ];
+
     const applicableRounds = await db.query.proposals.findMany({
       where: and(eq(proposals.user, input.user), gt(proposals.totalVotes, 0)),
       with: {
         round: {
           with: {
-            awards: true,
+            awards: {
+              with: {
+                asset: {
+                  columns: {
+                    image: true,
+                  },
+                },
+              },
+            },
             proposals: {
               orderBy: desc(proposals.totalVotes),
               where: gt(proposals.totalVotes, 0),
@@ -44,10 +81,13 @@ export const getUserAwards = cache(
     });
 
     const userAwards: Array<
-      Omit<Award, "round"> & {
+      Omit<Omit<Award, "round">, "asset"> & {
         round: {
           id: string;
           name: string;
+          image: string;
+        };
+        asset: {
           image: string;
         };
       }

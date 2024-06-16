@@ -3,8 +3,9 @@
 import { CaretDown } from "phosphor-react-sc";
 import * as NavigationMenu from "@radix-ui/react-navigation-menu";
 import Link from "./Link";
+import type { Channel } from "@neynar/nodejs-sdk/build/neynar-api/v2";
 
-export default function DashboardNavigation() {
+export default function DashboardNavigation(props: { channels: Channel[] }) {
   return (
     <NavigationMenu.Root className="relative z-50 max-lg:flex hidden">
       <NavigationMenu.List>
@@ -24,46 +25,13 @@ export default function DashboardNavigation() {
             <div className="flex flex-col gap-2">
               <h2 className="text-white font-bebas-neue text-xl">Discussion</h2>
               <ul className="grid grid-cols-10 max-sm:grid-cols-6 gap-2">
-                <GameIcon
-                  src="/logo/logo.svg"
-                  href="https://warpcast.com/~/channel/nouns-esports"
-                />
-                <GameIcon
-                  src="/nouns.png"
-                  href="https://warpcast.com/~/channel/nouns"
-                />
-                <GameIcon
-                  src="/esports.png"
-                  href="https://warpcast.com/~/channel/esports"
-                />
-                <GameIcon
-                  src="/games/icons/dota-2.png"
-                  href="https://warpcast.com/~/channel/dota2"
-                />
-                <GameIcon
-                  src="/games/icons/rocket-league.png"
-                  href="https://warpcast.com/~/channel/rocketleague"
-                />
-                <GameIcon
-                  src="/games/icons/smash-melee.png"
-                  href="https://warpcast.com/~/channel/smash"
-                />
-                <GameIcon
-                  src="/games/icons/cs2.png"
-                  href="https://warpcast.com/~/channel/cs2"
-                />
-                <GameIcon
-                  src="/games/icons/valorant.png"
-                  href="https://warpcast.com/~/channel/valorant"
-                />
-                <GameIcon
-                  src="/games/icons/league-of-legends.png"
-                  href="https://warpcast.com/~/channel/league"
-                />
-                <GameIcon
-                  src="/games/icons/street-fighter.png"
-                  href="https://warpcast.com/~/channel/streetfighter"
-                />
+                {props.channels.map((channel) => (
+                  <GameIcon
+                    key={channel.id}
+                    src={channel.image_url ?? ""}
+                    href={`/chat/${channel.id}`}
+                  />
+                ))}
               </ul>
             </div>
           </NavigationMenu.Content>
