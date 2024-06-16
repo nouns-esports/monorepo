@@ -179,7 +179,7 @@ export default async function Home() {
           <Link href="https://nouns.wtf">
             <img src="/nouns-partner-logo.png" className="h-10" />
           </Link>
-          <Link href="https://matcha.xyz">
+          <Link href="/matcha">
             <img src="/matcha.svg" className="h-8" />
           </Link>
         </div>

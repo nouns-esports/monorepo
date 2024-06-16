@@ -26,7 +26,7 @@ export default function Banner(props: { events: Event[] }) {
           {live ? <Dot className="-mr-5 w-16 h-16 animate-pulse" /> : ""}
           {live
             ? `${props.events[0].summary.split("] ")[1]} is happening now`
-            : "We just launched the Nexus. Explore rounds, vote for your favorite proposals, and more!"}
+            : "Explore rounds, vote for your favorite proposals, and more!"}
           <ArrowRight weight="bold" className="w-4 h-4 ml-1.5" />
         </div>
       </Link>

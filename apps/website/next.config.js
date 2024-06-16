@@ -72,24 +72,8 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: "/smashprop",
-        destination: "https://nouns.wtf/vote/534",
-        permanent: true,
-      },
-      {
         source: "/instagram",
         destination: "https://www.instagram.com/nouns_esports/",
-        permanent: true,
-      },
-      {
-        source: "/2024",
-        destination: "https://nouns.wtf/vote/466",
-        permanent: true,
-      },
-      {
-        source: "/goml",
-        destination:
-          "https://prop.house/0x3830a19ec7aa113cdc9e8fa84aeb0a5080c66bb2",
         permanent: true,
       },
       {
@@ -98,35 +82,8 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: "/combo",
-        destination:
-          "https://prop.house/0x2b46d2a078ab53972c9e68153998159fea21bbc2",
-        permanent: true,
-      },
-      {
-        source: "/signup",
-        destination: "https://forms.nouns.gg/signup",
-        permanent: true,
-      },
-      {
-        source: "/mint/partnership-deck-2024",
-        destination: "https://shorturl.at/bpG09",
-        permanent: true,
-      },
-      {
-        source: "/mint/art-contest",
-        destination: "https://shorturl.at/hvyVZ",
-        permanent: true,
-      },
-      {
         source: "/bracket",
         destination: "https://shorturl.at/jOzr7",
-        permanent: true,
-      },
-      {
-        source: "/artwork-tweet",
-        destination:
-          "https://fxtwitter.com/nounsesports/status/1754574652335161635",
         permanent: true,
       },
       {
@@ -142,34 +99,13 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: "/davidscup",
-        destination: "https://shorturl.at/glyNS",
-        permanent: true,
-      },
-      {
         source: "/dc",
         destination: "https://start.gg/duffcity",
         permanent: true,
       },
       {
         source: "/matcha",
-        destination: "https://x.com/nounsesports/status/1785700745154830376",
-        permanent: true,
-      },
-      {
-        source: "/party",
-        destination:
-          "https://rooms.party.app/party/0x66eD9EF8434771A451D44609304dBf865B82A68a",
-        permanent: true,
-      },
-      {
-        source: "/davids-cup",
-        destination: "https://shorturl.at/glyNS",
-        permanent: true,
-      },
-      {
-        source: "/donate",
-        destination: "https://tilt.fyi/zNgsRsgiDQ",
+        destination: "https://matcha.xyz/?utm_source=nouns&utm_campaign=2q24",
         permanent: true,
       },
     ];

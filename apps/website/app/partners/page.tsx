@@ -130,7 +130,7 @@ export default function Partners() {
               infrastructure.
             </p>
             <div className="flex gap-6">
-              <Button href="https://matcha.xyz" animate="hover">
+              <Button href="/matcha" animate="hover">
                 Visit
               </Button>
               <div className="flex items-center gap-4">
