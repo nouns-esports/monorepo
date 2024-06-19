@@ -196,13 +196,15 @@ export default async function Round(props: { params: { round: string } }) {
             state,
           }}
           user={
-            user && nexus
+            user
               ? {
                   id: user?.id,
-                  votes: {
-                    remaining: nexus.votes - priorVotes,
-                    allocated: nexus.votes,
-                  },
+                  votes: nexus
+                    ? {
+                        remaining: nexus.votes - priorVotes,
+                        allocated: nexus.votes,
+                      }
+                    : { remaining: 0, allocated: 0 },
                 }
               : undefined
           }
