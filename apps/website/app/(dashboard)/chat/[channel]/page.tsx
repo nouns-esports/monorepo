@@ -36,6 +36,11 @@ export default async function Channel(props: { params: { channel: string } }) {
                 weight="fill"
               />
             </div>
+            {cast.embeds.length > 0 ? (
+              <img src={cast.embeds[0].url} className="mb-4 w-32 rounded-lg" />
+            ) : (
+              ""
+            )}
             <div className="relative flex flex-col gap-2">
               <div className="flex gap-2 items-center">
                 <img
