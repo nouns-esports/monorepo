@@ -7,7 +7,12 @@ import {
   TwitterLogo,
 } from "phosphor-react-sc";
 import Button from "./Button";
-import { useLinkAccount, useLogin, usePrivy } from "@privy-io/react-auth";
+import {
+  useLinkAccount,
+  useLogin,
+  useLogout,
+  usePrivy,
+} from "@privy-io/react-auth";
 import { useRouter } from "next/navigation";
 import { getNexus } from "@/server/queries/nexus";
 import { twMerge } from "tailwind-merge";
@@ -45,13 +50,14 @@ export default function Nexus(props: {
     },
   });
 
-  const {
-    unlinkDiscord,
-    unlinkTwitter,
-    unlinkFarcaster,
-    unlinkWallet,
-    authenticated,
-  } = usePrivy();
+  const { logout } = useLogout({
+    onSuccess: () => {
+      router.refresh();
+    },
+  });
+
+  const { unlinkTwitter, unlinkFarcaster, unlinkWallet, authenticated } =
+    usePrivy();
 
   const linkedWallets = (props.user?.linkedAccounts.filter(
     (account) =>
@@ -241,9 +247,19 @@ export default function Nexus(props: {
           ""
         )}
         <div className="flex flex-col justify-between w-full gap-4 rounded-xl bg-grey-800 py-6 px-6">
-          <h2 className="text-2xl font-bebas-neue text-white">
-            Connected Accounts
-          </h2>
+          <div className="flex w-full justify-between items-center">
+            <h2 className="text-2xl font-bebas-neue text-white">
+              Connected Accounts
+            </h2>
+            <button
+              className="text-red"
+              onClick={() => {
+                logout();
+              }}
+            >
+              Sign out
+            </button>
+          </div>
           <ul className="flex flex-col gap-4">
             <li className="flex items-center text-white justify-between">
               <div className="flex items-center gap-4">
