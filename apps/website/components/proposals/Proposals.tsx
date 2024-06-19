@@ -95,17 +95,6 @@ export default function Proposals(props: {
                 );
               }
 
-              if (props.user.votes.allocated < 1) {
-                return (
-                  <>
-                    <p className="text-white">Enter the Nexus to propose</p>
-                    <Button href="/nexus" animate="bg">
-                      Get Started
-                    </Button>
-                  </>
-                );
-              }
-
               if (userProposal) {
                 return (
                   <>

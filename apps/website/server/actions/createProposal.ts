@@ -5,8 +5,6 @@ import { and, eq } from "drizzle-orm";
 import { revalidateTag } from "next/cache";
 import { getAuthenticatedUser } from "../queries/users";
 import { parseLexicalState } from "@/utils/parseLexicalState";
-import { isInServer } from "../queries/discord";
-import { getNexus } from "../queries/nexus";
 
 export async function createProposal(input: {
   title: string;
@@ -43,16 +41,6 @@ export async function createProposal(input: {
 
   if (now > votingStart) {
     throw new Error("Proposing has closed");
-  }
-
-  const inServer = user.discord
-    ? await isInServer({ user: user.discord.subject })
-    : undefined;
-
-  const nexus = inServer ? await getNexus({ user, inServer }) : undefined;
-
-  if (!nexus) {
-    throw new Error("A Nexus membership is required to propose");
   }
 
   const hasProposed = await db.query.proposals.findFirst({
