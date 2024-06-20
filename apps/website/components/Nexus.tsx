@@ -7,12 +7,7 @@ import {
   TwitterLogo,
 } from "phosphor-react-sc";
 import Button from "./Button";
-import {
-  useLinkAccount,
-  useLogin,
-  useLogout,
-  usePrivy,
-} from "@privy-io/react-auth";
+import { useLinkAccount, useLogin, usePrivy } from "@privy-io/react-auth";
 import { useRouter } from "next/navigation";
 import { getNexus } from "@/server/queries/nexus";
 import { twMerge } from "tailwind-merge";
@@ -50,14 +45,13 @@ export default function Nexus(props: {
     },
   });
 
-  const { logout } = useLogout({
-    onSuccess: () => {
-      router.refresh();
-    },
-  });
-
-  const { unlinkTwitter, unlinkFarcaster, unlinkWallet, authenticated } =
-    usePrivy();
+  const {
+    unlinkDiscord,
+    unlinkTwitter,
+    unlinkFarcaster,
+    unlinkWallet,
+    authenticated,
+  } = usePrivy();
 
   const linkedWallets = (props.user?.linkedAccounts.filter(
     (account) =>
@@ -242,24 +236,52 @@ export default function Nexus(props: {
             <h2 className="font-bebas-neue text-2xl text-white mb-2">
               Your Awards
             </h2>
+            <ul className="flex flex-col gap-4">
+              {props.awards.map((award) => (
+                <li
+                  key={award.id}
+                  className="flex items-center justify-between w-ful"
+                >
+                  <Link
+                    href={`/rounds/${award.round.id}`}
+                    className="flex gap-3 items-center text-white font-semibold"
+                  >
+                    <img
+                      src={award.round.image}
+                      className="w-8 h-8 rounded-md"
+                    />
+                    {award.round.id.replaceAll("-", " ")}
+                  </Link>
+                  <div className="flex items-center gap-4">
+                    <div className="text-white gap-2 flex items-center">
+                      <img
+                        src={award.asset.image}
+                        className="w-5 h-5 rounded-md"
+                      />
+                      {award.value}
+                    </div>
+                    <div
+                      className={twMerge(
+                        "rounded-full px-2.5 py-0.5 text-sm font-semibold",
+                        award.claimed
+                          ? "text-white bg-green/90"
+                          : "text-white bg-blue-700"
+                      )}
+                    >
+                      {award.claimed ? "Paid" : "Queued"}
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
           </div>
         ) : (
           ""
         )}
         <div className="flex flex-col justify-between w-full gap-4 rounded-xl bg-grey-800 py-6 px-6">
-          <div className="flex w-full justify-between items-center">
-            <h2 className="text-2xl font-bebas-neue text-white">
-              Connected Accounts
-            </h2>
-            <button
-              className="text-red"
-              onClick={() => {
-                logout();
-              }}
-            >
-              Sign out
-            </button>
-          </div>
+          <h2 className="text-2xl font-bebas-neue text-white">
+            Connected Accounts
+          </h2>
           <ul className="flex flex-col gap-4">
             <li className="flex items-center text-white justify-between">
               <div className="flex items-center gap-4">
