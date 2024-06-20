@@ -1,8 +1,10 @@
 import { neynarClient } from "../clients/neynar";
 import { unstable_cache as cache } from "next/cache";
+
 export const channels = [
   "nouns-esports",
   "nouns",
+  "nouncraft",
   "smash",
   "dota2",
   "cs2",
