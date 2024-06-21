@@ -89,7 +89,7 @@ const nextConfig = {
       {
         source: "/matchacup",
         destination:
-          "https://www.start.gg/tournament/matcha-cup-east-coast/details",
+          "https://www.start.gg/tournament/matcha-cup-combined-coasts/details",
         permanent: true,
       },
       {
