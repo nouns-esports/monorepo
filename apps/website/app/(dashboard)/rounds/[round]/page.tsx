@@ -16,7 +16,6 @@ import { numberToOrdinal } from "@/utils/numberToOrdinal";
 import { getAuthenticatedUser, getUser } from "@/server/queries/users";
 import dynamic from "next/dynamic";
 import Shimmer from "@/components/Shimmer";
-import { isInServer } from "@/server/queries/discord";
 import { getNexus } from "@/server/queries/nexus";
 import { environmentToProtocol } from "@/utils/environmentToProtocol";
 
@@ -198,10 +197,12 @@ export default async function Round(props: { params: { round: string } }) {
             user
               ? {
                   id: user,
-                  votes: {
-                    remaining: nexus.votes - priorVotes,
-                    allocated: nexus.votes,
-                  },
+                  votes: nexus
+                    ? {
+                        remaining: nexus.votes - priorVotes,
+                        allocated: nexus.votes,
+                      }
+                    : { remaining: 0, allocated: 0 },
                 }
               : undefined
           }
