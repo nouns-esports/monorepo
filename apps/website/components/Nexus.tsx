@@ -282,7 +282,7 @@ export default function Nexus(props: {
                       className={twMerge(
                         "rounded-full px-2.5 py-0.5 text-sm font-semibold",
                         award.claimed
-                          ? "text-white bg-green"
+                          ? "text-white bg-green/90"
                           : "text-white bg-blue-700"
                       )}
                     >

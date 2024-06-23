@@ -58,7 +58,7 @@ export default async function Home() {
           driven <span className="text-red">esports</span>
         </h1>
         <div className="flex gap-8 max-md:flex-col items-center">
-          <Button href="/discord" animate="hover">
+          <Button href="/rounds" animate="hover">
             Get Involved
           </Button>
           <Link
@@ -137,14 +137,16 @@ export default async function Home() {
         />
         <div className="relative z-10 grid place-items-center gap-10 max-sm:gap-6 px-16 max-sm:px-8">
           <h2 className="text-white font-luckiest-guy text-5xl max-sm:text-3xl text-center">
-            Join the Nouns Esports Discord server!
+            Welcome to the Nexus!
           </h2>
           <p className="max-w-[600px] px-8 text-center text-grey-200 text-lg max-sm:text-base leading-tight [text-shadow:black_0_0_50px]">
-            Get involved with the Nouns Esports community and stay up to date
-            with our latest events and announcements!
+            We're offering a unique opportunity for esports enthusiasts to
+            directly influence our major decisions. You'll be given the power to
+            vote on key organizational decisions, making you an active
+            participant in shaping our future.
           </p>
-          <Button href="/discord" animate="hover">
-            Join Now
+          <Button href="/nexus" animate="hover">
+            Get Started
           </Button>
         </div>
         <div className="from-black to-transparent bg-gradient-to-b h-64 w-full top-0 absolute" />

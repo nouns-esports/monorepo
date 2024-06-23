@@ -195,7 +195,7 @@ export default async function Round(props: { params: { round: string } }) {
             state,
           }}
           user={
-            user && nexus
+            user
               ? {
                   id: user,
                   votes: {
