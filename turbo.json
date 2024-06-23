@@ -13,6 +13,8 @@
       "cache": false,
       "persistent": true
     },
-    "start": { "cache": false, "persistent": true }
+    "start": { "cache": false, "persistent": true },
+    "start:website": { "cache": false, "persistent": true },
+    "start:bot": { "cache": false, "persistent": true }
   }
 }
