@@ -6,6 +6,6 @@
     "dev": "next dev",
     "frog": "frog dev",
     "build": "next build",
-    "start": "next start"
+    "start:website": "next start"
   }
 }
