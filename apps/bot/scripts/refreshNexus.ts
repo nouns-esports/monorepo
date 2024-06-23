@@ -6,13 +6,13 @@ import { env } from "~/env";
 import { GuildMember, Routes } from "discord.js";
 
 const roles = {
-  // Explorer: "1245110318603042950",
-  // Challenger: "1245122417903534228",
-  // Elite: "1245122576645361817",
+  Explorer: "1245110318603042950",
+  Challenger: "1245122417903534228",
+  Elite: "1245122576645361817",
   // Test roles
-  Elite: "1253532214784819240",
-  Challenger: "1253778440100909118",
-  Explorer: "1253778462511202365",
+  // Elite: "1253532214784819240",
+  // Challenger: "1253778440100909118",
+  // Explorer: "1253778462511202365",
 } as const;
 
 const elites: Record<string, boolean> = {
