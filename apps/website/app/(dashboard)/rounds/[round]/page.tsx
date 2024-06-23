@@ -47,17 +47,12 @@ export default async function Round(props: { params: { round: string } }) {
 
   const state = roundState(round);
 
-  const user = await getAuthenticatedUser(true);
+  const user = await getAuthenticatedUser();
 
-  const inServer = user?.discord
-    ? await isInServer({ user: user.discord.subject })
-    : undefined;
-
-  const nexus =
-    user && inServer ? await getNexus({ user, inServer }) : undefined;
+  const nexus = user ? await getNexus({ user }) : undefined;
 
   const priorVotes = user
-    ? await getPriorVotes({ user: user.id, round: props.params.round })
+    ? await getPriorVotes({ user, round: props.params.round })
     : 0;
 
   const proposalsWithUser = await Promise.all(
@@ -96,7 +91,7 @@ export default async function Round(props: { params: { round: string } }) {
           <div className="flex gap-4 w-full h-fit max-md:flex-col">
             <div className="flex gap-4 max-md:w-full">
               <div className="flex flex-col gap-2 items-center justify-center bg-grey-800 rounded-xl overflow-hidden min-w-36 p-4 flex-shrink-0 max-md:w-full max-md:flex-shrink">
-                <p className="text-sm whitespace-nowrap">
+                <p className="text-sm whitespace-nowrap text-grey-200">
                   {state === "Starting" ? "Round starts" : ""}
                   {state === "Proposing" ? "Voting starts" : ""}
                   {state === "Voting" ? "Round ends" : ""}
@@ -124,7 +119,9 @@ export default async function Round(props: { params: { round: string } }) {
               </div>
               {state === "Proposing" || state === "Voting" ? (
                 <div className="flex flex-col gap-2 items-center justify-center h-full bg-grey-800 rounded-xl overflow-hidden w-36 flex-shrink-0 max-md:w-full max-md:flex-shrink">
-                  <p className="text-sm whitespace-nowrap">Round Status</p>
+                  <p className="text-sm whitespace-nowrap text-grey-200">
+                    Round Status
+                  </p>
                   <div className="flex items-center justify-center">
                     <div
                       className={twMerge(
@@ -144,7 +141,9 @@ export default async function Round(props: { params: { round: string } }) {
             <div className="flex gap-6 items-center justify-center h-full bg-grey-800 rounded-xl overflow-hidden w-full p-4 pt-5">
               <div className="flex flex-col gap-2 items-center pl-4 pr-2">
                 <div className="flex flex-col gap-1 items-center">
-                  <p className="text-sm whitespace-nowrap">Awards</p>
+                  <p className="text-sm whitespace-nowrap text-grey-200">
+                    Awards
+                  </p>
                   <p className="text-white whitespace-nowrap">
                     {round.awards.length} winner
                     {round.awards.length === 1 ? "" : "s"}
@@ -198,7 +197,7 @@ export default async function Round(props: { params: { round: string } }) {
           user={
             user && nexus
               ? {
-                  id: user?.id,
+                  id: user,
                   votes: {
                     remaining: nexus.votes - priorVotes,
                     allocated: nexus.votes,

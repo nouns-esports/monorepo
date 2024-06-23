@@ -2,9 +2,10 @@
   "name": "monorepo",
   "private": true,
   "scripts": {
-    "build": "turbo build",
     "dev": "turbo dev",
-    "start": "turbo start",
+    "build": "turbo build",
+    "start:website": "turbo start --filter=./apps/website/*",
+    "start:bot": "turbo start --filter=./apps/bot/*",
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
@@ -48,6 +49,7 @@
     "arweave": "^1.14.4",
     "autoprefixer": "^10.4.17",
     "cross-env": "^7.0.3",
+    "discord.js": "^14.15.3",
     "dotenv": "^16.4.1",
     "drizzle-kit": "^0.21.2",
     "drizzle-orm": "^0.30.10",

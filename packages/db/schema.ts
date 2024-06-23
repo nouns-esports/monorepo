@@ -9,6 +9,7 @@ import {
   smallint,
   integer,
   json,
+  pgEnum,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { Pool } from "pg";
@@ -174,6 +175,17 @@ export const proposalsRelations = relations(proposals, ({ one, many }) => ({
   votes: many(votes),
 }));
 
+export const nexusTiers = pgEnum("nexusTiers", [
+  "Explorer",
+  "Challenger",
+  "Elite",
+]);
+
+export const nexus = pgTable("nexus", {
+  user: text("user").primaryKey(),
+  tier: nexusTiers("tier").notNull(),
+});
+
 export const votes = pgTable("votes", {
   id: serial("id").primaryKey(),
   user: text("user").notNull(),
@@ -219,6 +231,7 @@ export const db = drizzle(
       votesRelations,
       snapshots,
       badges,
+      nexus,
     },
   }
 );
@@ -235,3 +248,4 @@ export type Proposal = typeof proposals.$inferSelect;
 export type Vote = typeof votes.$inferSelect;
 export type Snapshot = typeof snapshots.$inferSelect;
 export type Badge = typeof badges.$inferSelect;
+export type Nexus = typeof nexus.$inferSelect;

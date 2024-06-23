@@ -70,7 +70,7 @@ function RoundCard(props: {
           <h3 className="font-bebas-neue text-3xl text-white leading-none">
             {props.round.name}
           </h3>
-          <div className="relative h-full max-sm:h-24 overflow-hidden flex flex-col gap-1">
+          <div className="relative h-full max-sm:h-24 overflow-hidden flex flex-col gap-1 text-grey-200">
             {props.round.description}
             <div className="absolute w-full bg-gradient-to-t from-grey-800 to-transparent h-10 bottom-0" />
           </div>
@@ -96,7 +96,7 @@ function RoundCard(props: {
             ""
           )}
           <div className="flex flex-col gap-2 items-center max-sm:w-full">
-            <p className="text-sm whitespace-nowrap">
+            <p className="text-sm whitespace-nowrap text-grey-200">
               {state === "Starting" ? "Round starts" : ""}
               {state === "Proposing" ? "Voting starts" : ""}
               {state === "Voting" ? "Round ends" : ""}

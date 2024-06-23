@@ -27,13 +27,13 @@ export default function Sidebar(props: { channels: Channel[] }) {
         >
           Nexus
         </Button>
-        <Button
+        {/* <Button
           route="/quests"
           icon={<Scroll className="w-5 h-5 text-white" weight="fill" />}
           newTab
         >
           Quests
-        </Button>
+        </Button> */}
         <Button
           route="/shop"
           icon={
@@ -43,13 +43,6 @@ export default function Sidebar(props: { channels: Channel[] }) {
         >
           Shop
         </Button>
-        <Button
-          route="/profile"
-          icon={<User className="w-5 h-5 text-white" weight="fill" />}
-          newTab
-        >
-          Profile
-        </Button>
       </ul>
       <div className="flex flex-col gap-2 bg-grey-800 p-4 rounded-xl">
         <h2 className="font-bebas-neue text-xl text-white">Communities</h2>
@@ -57,8 +50,10 @@ export default function Sidebar(props: { channels: Channel[] }) {
           {props.channels.map((channel) => (
             <Button
               key={channel.id}
-              route={`/chat/${channel.id}`}
+              // route={`/chat/${channel.id}`}
+              route={`https://warpcast.com/~/channel/${channel.id}`}
               icon={channel.image_url}
+              newTab
             >
               {channel.name}
             </Button>

@@ -1,227 +1,288 @@
-// import { desc, lt, inArray, and, eq } from "drizzle-orm";
-// import { db, rounds, proposals, votes, nexus } from "~/packages/db/schema";
-// import { PrivyClient, type User } from "@privy-io/server-auth";
-// import { env } from "~/env";
+import { db, nexus, proposals, rounds, votes } from "~/packages/db/schema";
+import { discordClient, privyClient, rest } from "..";
+import { and, desc, eq, gt, inArray, lt, or } from "drizzle-orm";
+import type { WalletWithMetadata } from "@privy-io/server-auth";
+import { env } from "~/env";
+import { GuildMember, Routes } from "discord.js";
 
-// export const privyClient = new PrivyClient(
-//   env.NEXT_PUBLIC_PRIVY_APP_ID,
-//   env.PRIVY_APP_SECRET
-// );
+const roles = {
+  // Explorer: "1245110318603042950",
+  // Challenger: "1245122417903534228",
+  // Elite: "1245122576645361817",
+  // Test roles
+  Elite: "1253532214784819240",
+  Challenger: "1253778440100909118",
+  Explorer: "1253778462511202365",
+} as const;
 
-// export async function refreshNexus() {
-//   return db.transaction(async (tx) => {
-//     const nexusUsers = await db.query.nexus.findMany();
+const elites: Record<string, boolean> = {
+  // Peter
+  "135377635168616448": true,
+  // Sam
+  "174640628456620032": true,
+  // Sasquatch
+  "95704393151680512": true,
+  // Gatsby
+  "239409933466992641": true,
+  // Chan
+  "147996270097596416": true,
+  // Ohan
+  "835989319701233704": true,
+  // Pat
+  "116974832247111689": true,
+  // Oni
+  "162709914966294528": true,
+  // Mach
+  "507035501576847361": true,
+  // Mike
+  "230522416571482112": true,
+  // Gunnar
+  "98915589824720896": true,
+  // Lelis
+  "145597126812893184": true,
+  // Tal
+  "167973568422871041": true,
+  // Yuma
+  "226553021813751808": true,
+  // Copy
+  "252141512131870720": true,
+  // Adren
+  "131301664152879106": true,
+  // Carson
+  "135599935402803201": true,
+  // CJ
+  "544147832698044416": true,
+  // Jeorge
+  "176812686368047104": true,
+  // Junior
+  "180486076773695490": true,
+  // Rush
+  "154891812115447808": true,
+  // Semphis
+  "175510055800537088": true,
+  // Taki
+  "434447978602692608": true,
+  // Salt
+  "275164459289411585": true,
+  // AKlo
+  "405120207300853761": true,
+  // Cody
+  "209462125968490496": true,
+  // Smug
+  "329493563308113920": true,
+  // Jesscas
+  "139946879403163648": true,
+  // Lunari
+  "1089081542799802368": true,
+  // Ashe
+  "184466373420908544": true,
+  // Onter
+  "224661017739788290": true,
+  // Katalyst
+  "254672814798405642": true,
+  // Adesu
+  "103629588353007616": true,
+  // Blaine
+  "230377318407733248": true,
+  // Bruv
+  "237275237299912704": true,
+  // ToonSlim
+  "117388754368331779": true,
+  // Ghatlue
+  "286483887390195714": true,
+  // Keo
+  "153701297214849024": true,
+};
 
-//     const completedRounds = await db.query.rounds.findMany({
-//       where: lt(rounds.end, new Date()),
-//       limit: 5,
-//       orderBy: desc(rounds.end),
-//       columns: {
-//         id: true,
-//       },
-//     });
+const challengers: Record<string, boolean> = {
+  // Chaler
+  "205749146173308928": true,
+  // Paladin
+  "153694306719367169": true,
+  // Max
+  "223396766920212481": true,
+  // Happymealz
+  "132635343219326977": true,
+  // Zaferino
+  "162236149048410112": true,
+  // Hamtarro
+  "177843705619677185": true,
+  // MattTaylor
+  "938952067656069151": true,
+  // PumeyArts
+  "402516115890372629": true,
+  // Ben Latsko
+  "837247961200459786": true,
+};
 
-//     for (const nexusUser of nexusUsers) {
-//       let privyUser: User;
+export async function refreshNexus() {
+  try {
+    const users = await privyClient.getUsers();
+    // const userss = await db.query.nexus.findMany();
 
-//       try {
-//         privyUser = await privyClient.getUser(nexusUser.user);
-//       } catch (error) {
-//         console.error(`No user found for ${nexusUser.user}`, error);
-//         continue;
-//       }
+    const guild = await discordClient.guilds.fetch(env.DISCORD_GUILD_ID);
 
-//       const active = await wasActive(
-//         nexusUser.user,
-//         completedRounds.map((r) => r.id)
-//       );
+    await db.transaction(async (tx) => {
+      for (const user of users) {
+        if (!user.discord) continue;
 
-//       const inDiscord = privyUser.discord?.username
-//         ? await isInDiscord(privyUser.discord.username)
-//         : false;
+        let member: GuildMember;
 
-//       const hasCompletedProfile = completedProfile(privyUser);
+        try {
+          member = await guild.members.fetch(user.discord.subject);
+        } catch (error) {
+          await tx.insert(nexus).values({ user: user.id, tier: "Explorer" });
+          continue;
+        }
 
-//       // The user is tier 0 and maintains its requirements
-//       if (nexusUser.tier === 0 && inDiscord) {
-//         // The user is tier 0 and exceeds the requirements
-//         if (active) {
-//           tx.update(nexus)
-//             .set({ tier: 1, updated: new Date() })
-//             .where(eq(nexus.user, nexusUser.user));
+        const existingNexus = await db.query.nexus.findFirst({
+          where: eq(nexus.user, user.id),
+        });
 
-//           await addRole(inDiscord, "challenger");
-//           await removeRole(inDiscord, "explorer");
+        if (!existingNexus) {
+          continue;
+        }
 
-//           continue;
-//         }
+        if (elites[user.discord.subject]) {
+          await toggleRole(user.discord.subject, "Elite");
+          await tx
+            .update(nexus)
+            .set({ tier: "Elite" })
+            .where(eq(nexus.user, user.id));
 
-//         tx.update(nexus)
-//           .set({ updated: new Date() })
-//           .where(eq(nexus.user, nexusUser.user));
+          continue;
+        }
 
-//         continue;
-//       }
+        if (challengers[user.discord.subject]) {
+          await toggleRole(user.discord.subject, "Challenger");
+          await tx
+            .update(nexus)
+            .set({ tier: "Challenger" })
+            .where(eq(nexus.user, user.id));
 
-//       // The user is tier 1 and maintains its requirements
-//       if (nexusUser.tier === 1 && active && inDiscord) {
-//         // The user is tier 1 and exceeds the requirements
-//         if (hasCompletedProfile) {
-//           tx.update(nexus)
-//             .set({ tier: 2, updated: new Date() })
-//             .where(eq(nexus.user, nexusUser.user));
+          continue;
+        }
 
-//           await addRole(inDiscord, "elite");
-//           await removeRole(inDiscord, "challenger");
+        const now = new Date();
+        const threeMonthsAgo = new Date(
+          now.getTime() - 1000 * 60 * 60 * 24 * 30 * 3
+        );
 
-//           continue;
-//         }
+        const completedRounds = await db.query.rounds.findMany({
+          where: and(lt(rounds.end, now), gt(rounds.end, threeMonthsAgo)),
+          orderBy: desc(rounds.end),
+          columns: {
+            id: true,
+          },
+        });
 
-//         tx.update(nexus)
-//           .set({ updated: new Date() })
-//           .where(eq(nexus.user, nexusUser.user));
-//         continue;
-//       }
+        const wallet = user.linkedAccounts.find(
+          (account) => account.type === "wallet"
+        ) as WalletWithMetadata | undefined;
 
-//       // The user is tier 2 and maintains its requirements
-//       if (nexusUser.tier === 2 && active && inDiscord && hasCompletedProfile) {
-//         tx.update(nexus)
-//           .set({ updated: new Date() })
-//           .where(eq(nexus.user, nexusUser.user));
-//         continue;
-//       }
+        const [proposalActivity, voteActivity] = await Promise.all([
+          db.query.proposals.findMany({
+            where: and(
+              or(
+                eq(proposals.user, user.id),
+                wallet ? eq(proposals.user, wallet.address) : undefined
+              ),
+              inArray(
+                proposals.round,
+                completedRounds.map((r) => r.id)
+              )
+            ),
+            columns: {
+              id: true,
+              round: true,
+            },
+          }),
+          db.query.votes.findMany({
+            where: and(
+              or(
+                eq(votes.user, user.id),
+                wallet ? eq(votes.user, wallet.address) : undefined
+              ),
+              inArray(
+                votes.round,
+                completedRounds.map((r) => r.id)
+              )
+            ),
+            columns: {
+              id: true,
+              round: true,
+            },
+          }),
+        ]);
 
-//       const now = new Date();
-//       const lastUpdated = new Date(nexusUser.updated);
-//       const daysSinceUpdated = Math.ceil(
-//         Math.abs(now.getTime() - lastUpdated.getTime()) / (1000 * 60 * 60 * 24)
-//       );
+        const roundsActive: string[] = [];
 
-//       // Bump the user down to tier 0 if they haven't met the requirements in 30 days
-//       if (daysSinceUpdated > 30) {
-//         tx.update(nexus)
-//           .set({ tier: 0, updated: new Date(), active: !!inDiscord })
-//           .where(eq(nexus.user, nexusUser.user));
+        for (const action of [...proposalActivity, ...voteActivity]) {
+          if (roundsActive.includes(action.round)) {
+            continue;
+          }
 
-//         if (inDiscord) {
-//           await addRole(inDiscord, "explorer");
-//           await removeRole(
-//             inDiscord,
-//             nexusUser.tier === 1 ? "challenger" : "elite"
-//           );
-//         }
+          roundsActive.push(action.round);
+        }
 
-//         continue;
-//       }
+        let tier: "Explorer" | "Challenger" | "Elite" = "Explorer";
 
-//       // Wait half a second between each user to avoid rate limiting
-//       await new Promise((resolve) => setTimeout(resolve, 500));
-//     }
-//   });
-// }
+        if (roundsActive.length >= 3) {
+          tier = "Challenger";
 
-// async function wasActive(user: string, completedRounds: string[]) {
-//   const proposalActivity = await db.query.proposals.findMany({
-//     where: and(
-//       eq(proposals.user, user),
-//       inArray(proposals.round, completedRounds)
-//     ),
-//     columns: {
-//       id: true,
-//       round: true,
-//     },
-//   });
+          if (user.discord && user.twitter && user.farcaster && wallet) {
+            tier = "Elite";
+          }
+        }
 
-//   const voteActivity = await db.query.votes.findMany({
-//     where: and(eq(votes.user, user), inArray(votes.round, completedRounds)),
-//     columns: {
-//       id: true,
-//       round: true,
-//     },
-//   });
+        await toggleRole(user.discord.subject, tier);
+        await tx.update(nexus).set({ tier }).where(eq(nexus.user, user.id));
 
-//   let roundsActive: string[] = [];
+        console.log("Updated: ", user.discord.subject, tier);
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      }
+    });
+  } catch (error) {
+    return error as Error;
+  }
+}
 
-//   for (const action of [...proposalActivity, ...voteActivity]) {
-//     if (roundsActive.includes(action.round)) {
-//       continue;
-//     }
+async function toggleRole(
+  user: string,
+  role: "Explorer" | "Challenger" | "Elite"
+) {
+  await addRole({ user, role });
 
-//     roundsActive.push(action.round);
-//   }
+  if (role === "Explorer") {
+    await removeRole({ user, role: "Challenger" });
+    await removeRole({ user, role: "Elite" });
+  }
 
-//   if (roundsActive.length < 3) {
-//     return false;
-//   }
+  if (role === "Challenger") {
+    await removeRole({ user, role: "Explorer" });
+    await removeRole({ user, role: "Elite" });
+  }
 
-//   return true;
-// }
+  if (role === "Elite") {
+    await removeRole({ user, role: "Explorer" });
+    await removeRole({ user, role: "Challenger" });
+  }
+}
 
-// async function isInDiscord(user: string) {
-//   const response = await fetch(
-//     `https://discord.com/api/guilds/${env.DISCORD_GUILD_ID}/members/search?query=${user}`,
-//     {
-//       headers: {
-//         Authorization: `Bot ${env.DISCORD_TOKEN}`,
-//       },
-//     }
-//   );
+async function addRole(input: {
+  user: string;
+  role: "Explorer" | "Challenger" | "Elite";
+}) {
+  return rest.put(
+    Routes.guildMemberRole(env.DISCORD_GUILD_ID, input.user, roles[input.role])
+  );
+}
 
-//   const members: any = await response.json();
-
-//   for (const member of members) {
-//     if (member.user.username === user.split("#")[0]) {
-//       return member.user.id as string;
-//     }
-//   }
-// }
-
-// function completedProfile(user: User) {
-//   if (!user.discord) {
-//     return false;
-//   }
-
-//   if (!user.twitter) {
-//     return false;
-//   }
-
-//   if (!user.farcaster) {
-//     return false;
-//   }
-
-//   if (!user.linkedAccounts.find((account) => account.type === "wallet")) {
-//     return false;
-//   }
-
-//   return true;
-// }
-
-// async function addRole(
-//   user: string,
-//   type: "explorer" | "challenger" | "elite"
-// ) {
-//   await fetch(
-//     `https://discord.com/api/guilds/${env.DISCORD_GUILD_ID}/members/${user}/roles/${type === "explorer" ? 1245110318603042950 : type === "challenger" ? 1245122417903534228 : 1245122576645361817}`,
-//     {
-//       headers: {
-//         Authorization: `Bot ${env.DISCORD_TOKEN}`,
-//         method: "PUT",
-//       },
-//     }
-//   );
-// }
-
-// async function removeRole(
-//   user: string,
-//   type: "explorer" | "challenger" | "elite"
-// ) {
-//   await fetch(
-//     `https://discord.com/api/guilds/${env.DISCORD_GUILD_ID}/members/${user}/roles/${type === "explorer" ? 1245110318603042950 : type === "challenger" ? 1245122417903534228 : 1245122576645361817}`,
-//     {
-//       headers: {
-//         Authorization: `Bot ${env.DISCORD_TOKEN}`,
-//         method: "DELETE",
-//       },
-//     }
-//   );
-// }
+async function removeRole(input: {
+  user: string;
+  role: "Explorer" | "Challenger" | "Elite";
+}) {
+  return rest.delete(
+    Routes.guildMemberRole(env.DISCORD_GUILD_ID, input.user, roles[input.role])
+  );
+}

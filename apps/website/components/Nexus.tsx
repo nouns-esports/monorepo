@@ -19,10 +19,10 @@ import { useContext, useTransition } from "react";
 import { LoginMethodContext } from "@/providers/Privy";
 import Link from "./Link";
 import type { getUserAwards } from "@/server/queries/awards";
+import { grantNexus } from "@/server/actions/grantNexus";
 
 export default function Nexus(props: {
   user?: User;
-  inServer?: boolean;
   nexus?: Awaited<ReturnType<typeof getNexus>>;
   awards?: Awaited<ReturnType<typeof getUserAwards>>;
 }) {
@@ -91,26 +91,44 @@ export default function Nexus(props: {
                   return;
                 }
 
-                if (!props.inServer) {
-                  startTransition(() => {
-                    router.refresh();
+                const grant = new Promise((resolve, reject) => {
+                  startTransition(async () => {
+                    console.log("user iddd", props.user?.id);
+                    // @ts-ignore
+                    await grantNexus({ user: props.user.id })
+                      .then(resolve)
+                      .catch(reject);
+
+                    // router.refresh();
                   });
-                  return;
-                }
+                });
+
+                toast.promise(grant, {
+                  loading: "Checking eligibility",
+                  success: () => {
+                    return "Welcome to the Nexus";
+                  },
+                  error: (e) => {
+                    console.log("ErrrrrrrrrrrrrrrrrrrrRROR", e);
+                    return "You must join the Discord server to begin";
+                  },
+                });
+
+                return;
               }}
               animate="bg"
             >
               {!props.user ? "Sign in" : ""}
               {props.user && !props.user?.discord ? "Connect Discord" : ""}
-              {props.user?.discord && !props.inServer ? "Check" : ""}
+              {props.user?.discord && !props.nexus ? "Check Eligibility" : ""}
             </Button>
-            {props.user?.discord && !props.inServer && !loading ? (
+            {/* {props.user?.discord && !props.nexus && !loading ? (
               <Link href="/discord" newTab className="text-red text-sm">
                 You must join the Discord server to begin
               </Link>
             ) : (
               ""
-            )}
+            )} */}
           </div>
         </div>
         <div className="flex flex-col gap-4">
