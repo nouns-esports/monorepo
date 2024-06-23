@@ -13,13 +13,13 @@ export async function createProposal(input: {
   user: string;
   value?: string;
 }) {
-  const user = await getAuthenticatedUser(true);
+  const user = await getAuthenticatedUser();
 
   if (!user) {
     throw new Error("No user session found");
   }
 
-  if (user.id !== input.user) {
+  if (user !== input.user) {
     throw new Error("You can only create a proposal for yourself");
   }
 
@@ -44,7 +44,7 @@ export async function createProposal(input: {
   }
 
   const hasProposed = await db.query.proposals.findFirst({
-    where: and(eq(proposals.round, input.round), eq(proposals.user, user.id)),
+    where: and(eq(proposals.round, input.round), eq(proposals.user, user)),
   });
 
   if (hasProposed) {
@@ -60,7 +60,7 @@ export async function createProposal(input: {
       description,
       image,
       round: input.round,
-      user: user.id,
+      user,
       value: input.value ?? "0",
       createdAt: new Date(),
     },

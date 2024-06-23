@@ -258,7 +258,7 @@ export default function Proposals(props: {
               key={index}
               href={`/rounds/${props.round.id}/proposals/${proposal.id}`}
               className={twMerge(
-                "relative w-full flex gap-4 bg-grey-800 rounded-xl px-4 pt-4 h-36 overflow-hidden max-sm:flex-col max-sm:p-0 max-sm:h-fit max-sm:gap-0",
+                "relative w-full flex gap-4 bg-grey-800 text-grey-200 rounded-xl px-4 pt-4 h-36 overflow-hidden max-sm:flex-col max-sm:p-0 max-sm:h-fit max-sm:gap-0",
                 props.round.state === "Ended" &&
                   index < props.round.awardCount &&
                   index === 0 &&

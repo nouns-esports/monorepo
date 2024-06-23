@@ -1,10 +1,17 @@
 "use client";
 
-import { ShoppingCartSimple, Trophy } from "phosphor-react-sc";
+import {
+  PersonSimple,
+  Scroll,
+  ShoppingCartSimple,
+  Trophy,
+  User,
+} from "phosphor-react-sc";
 import Link from "./Link";
 import { usePathname } from "next/navigation";
+import type { Channel } from "@neynar/nodejs-sdk/build/neynar-api/v2";
 
-export default function Sidebar() {
+export default function Sidebar(props: { channels: Channel[] }) {
   return (
     <>
       <ul className="flex flex-col gap-2 bg-grey-800 p-4 rounded-xl">
@@ -20,6 +27,13 @@ export default function Sidebar() {
         >
           Nexus
         </Button>
+        {/* <Button
+          route="/quests"
+          icon={<Scroll className="w-5 h-5 text-white" weight="fill" />}
+          newTab
+        >
+          Quests
+        </Button> */}
         <Button
           route="/shop"
           icon={
@@ -33,76 +47,17 @@ export default function Sidebar() {
       <div className="flex flex-col gap-2 bg-grey-800 p-4 rounded-xl">
         <h2 className="font-bebas-neue text-xl text-white">Communities</h2>
         <ul className="flex flex-col gap-2">
-          <Button
-            route="https://warpcast.com/~/channel/nouns-esports"
-            icon="/logo/logo.svg"
-            newTab
-          >
-            Nouns Esports
-          </Button>
-          <Button
-            route="https://warpcast.com/~/channel/nouns"
-            icon="/nouns.png"
-            newTab
-          >
-            Nouns
-          </Button>
-          <Button
-            route="https://warpcast.com/~/channel/esports"
-            icon="/esports.png"
-            newTab
-          >
-            Esports
-          </Button>
-          <Button
-            route="https://warpcast.com/~/channel/dota-2"
-            icon="/games/icons/dota-2.png"
-            newTab
-          >
-            Dota 2
-          </Button>
-          <Button
-            route="https://warpcast.com/~/channel/rocket-legaue"
-            icon="/games/icons/rocket-league.png"
-            newTab
-          >
-            Rocket League
-          </Button>
-          <Button
-            route="https://warpcast.com/~/channel/smash"
-            icon="/games/icons/smash-melee.png"
-            newTab
-          >
-            Smash
-          </Button>
-          <Button
-            route="https://warpcast.com/~/channel/cs2"
-            icon="/games/icons/cs2.png"
-            newTab
-          >
-            CS 2
-          </Button>
-          <Button
-            route="https://warpcast.com/~/channel/valorant"
-            icon="/games/icons/valorant.png"
-            newTab
-          >
-            Valorant
-          </Button>
-          <Button
-            route="https://warpcast.com/~/channel/league"
-            icon="/games/icons/league-of-legends.png"
-            newTab
-          >
-            League of Legends
-          </Button>
-          <Button
-            route="https://warpcast.com/~/channel/streetfighter"
-            icon="/games/icons/street-fighter.png"
-            newTab
-          >
-            Street Fighter
-          </Button>
+          {props.channels.map((channel) => (
+            <Button
+              key={channel.id}
+              // route={`/chat/${channel.id}`}
+              route={`https://warpcast.com/~/channel/${channel.id}`}
+              icon={channel.image_url}
+              newTab
+            >
+              {channel.name}
+            </Button>
+          ))}
         </ul>
       </div>
     </>

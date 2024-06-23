@@ -12,21 +12,17 @@ export async function castVotes(input: {
   round: string;
   votes: { proposal: number; count: number }[];
 }) {
-  const user = await getAuthenticatedUser(true);
+  const user = await getAuthenticatedUser();
 
   if (!user) {
     throw new Error("No user session found");
   }
 
-  if (user.id !== input.user) {
+  if (user !== input.user) {
     throw new Error("You can only cast votes for yourself");
   }
 
-  const inServer = user.discord
-    ? await isInServer({ user: user.discord.subject })
-    : undefined;
-
-  const nexus = inServer ? await getNexus({ user, inServer }) : undefined;
+  const nexus = await getNexus({ user: user });
 
   if (!nexus) {
     throw new Error("A Nexus membership is required to vote");
@@ -37,7 +33,7 @@ export async function castVotes(input: {
       where: eq(rounds.id, input.round),
     }),
     db.query.votes.findMany({
-      where: and(eq(votes.user, user.id), eq(votes.round, input.round)),
+      where: and(eq(votes.user, user), eq(votes.round, input.round)),
     }),
   ]);
 
@@ -70,7 +66,7 @@ export async function castVotes(input: {
         throw new Error("Proposal not found");
       }
 
-      if (proposal.user === user.id) {
+      if (proposal.user === user) {
         tx.rollback();
         throw new Error("You cannot vote on your own proposal");
       }
@@ -89,7 +85,7 @@ export async function castVotes(input: {
 
       await tx.insert(votes).values([
         {
-          user: user.id,
+          user,
           proposal: vote.proposal,
           round: round.id,
           count: vote.count,

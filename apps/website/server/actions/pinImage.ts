@@ -4,7 +4,7 @@ import { env } from "~/env";
 import { getAuthenticatedUser } from "../queries/users";
 
 export async function pinImage(formData: FormData) {
-  const user = await getAuthenticatedUser(true);
+  const user = await getAuthenticatedUser();
 
   if (!user) {
     throw new Error("No user session found");

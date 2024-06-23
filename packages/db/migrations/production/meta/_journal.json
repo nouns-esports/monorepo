@@ -71,6 +71,13 @@
       "when": 1717968845624,
       "tag": "0009_redundant_orphan",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "6",
+      "when": 1719102378624,
+      "tag": "0010_light_zarek",
+      "breakpoints": true
     }
   ]
 }
