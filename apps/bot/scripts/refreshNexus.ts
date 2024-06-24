@@ -117,9 +117,9 @@ const challengers: Record<string, boolean> = {
 
 export async function refreshNexus() {
   try {
-    const users = await privyClient.getUsers();
+    const users = await db.query.nexus.findMany();
 
-    console.log("Refresh users: ", users);
+    console.log("Refresh users: ", users.length);
 
     const guild = await discordClient.guilds.fetch(env.DISCORD_GUILD_ID);
 
@@ -127,43 +127,39 @@ export async function refreshNexus() {
 
     await db.transaction(async (tx) => {
       for (const user of users) {
-        if (!user.discord) continue;
+        const privyUser = await privyClient.getUser(user.user);
+        if (!privyUser.discord) {
+          await tx.delete(nexus).where(eq(nexus.user, user.user));
+          continue;
+        }
 
         let member: GuildMember;
 
         try {
-          member = await guild.members.fetch(user.discord.subject);
+          member = await guild.members.fetch(privyUser.discord.subject);
 
           console.log("Refresh member: ", member);
         } catch (error) {
-          await tx.insert(nexus).values({ user: user.id, tier: "Explorer" });
+          await tx.delete(nexus).where(eq(nexus.user, user.user));
           continue;
         }
 
-        const existingNexus = await db.query.nexus.findFirst({
-          where: eq(nexus.user, user.id),
-        });
-
-        if (!existingNexus) {
-          continue;
-        }
-
-        if (elites[user.discord.subject]) {
-          await toggleRole(user.discord.subject, "Elite");
+        if (elites[privyUser.discord.subject]) {
+          await toggleRole(privyUser.discord.subject, "Elite");
           await tx
             .update(nexus)
             .set({ tier: "Elite" })
-            .where(eq(nexus.user, user.id));
+            .where(eq(nexus.user, user.user));
 
           continue;
         }
 
-        if (challengers[user.discord.subject]) {
-          await toggleRole(user.discord.subject, "Challenger");
+        if (challengers[privyUser.discord.subject]) {
+          await toggleRole(privyUser.discord.subject, "Challenger");
           await tx
             .update(nexus)
             .set({ tier: "Challenger" })
-            .where(eq(nexus.user, user.id));
+            .where(eq(nexus.user, user.user));
 
           continue;
         }
@@ -181,7 +177,7 @@ export async function refreshNexus() {
           },
         });
 
-        const wallet = user.linkedAccounts.find(
+        const wallet = privyUser.linkedAccounts.find(
           (account) => account.type === "wallet"
         ) as WalletWithMetadata | undefined;
 
@@ -189,7 +185,7 @@ export async function refreshNexus() {
           db.query.proposals.findMany({
             where: and(
               or(
-                eq(proposals.user, user.id),
+                eq(proposals.user, user.user),
                 wallet ? eq(proposals.user, wallet.address) : undefined
               ),
               inArray(
@@ -205,7 +201,7 @@ export async function refreshNexus() {
           db.query.votes.findMany({
             where: and(
               or(
-                eq(votes.user, user.id),
+                eq(votes.user, user.user),
                 wallet ? eq(votes.user, wallet.address) : undefined
               ),
               inArray(
@@ -235,15 +231,20 @@ export async function refreshNexus() {
         if (roundsActive.length >= 3) {
           tier = "Challenger";
 
-          if (user.discord && user.twitter && user.farcaster && wallet) {
+          if (
+            privyUser.discord &&
+            privyUser.twitter &&
+            privyUser.farcaster &&
+            wallet
+          ) {
             tier = "Elite";
           }
         }
 
-        await toggleRole(user.discord.subject, tier);
-        await tx.update(nexus).set({ tier }).where(eq(nexus.user, user.id));
+        await toggleRole(privyUser.discord.subject, tier);
+        await tx.update(nexus).set({ tier }).where(eq(nexus.user, user.user));
 
-        console.log("Updated: ", user.discord.subject, tier);
+        console.log("Updated: ", privyUser.discord.subject, tier);
         await new Promise((resolve) => setTimeout(resolve, 1000));
       }
     });
