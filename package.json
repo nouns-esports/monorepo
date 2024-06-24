@@ -4,8 +4,8 @@
   "scripts": {
     "dev": "turbo dev",
     "build": "turbo build",
-    "start:website": "turbo start:website",
-    "start:bot": "turbo start:bot",
+    "start:website": "turbo start --filter=website",
+    "start:bot": "turbo start --filter=bot",
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },

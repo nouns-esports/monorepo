@@ -4,6 +4,6 @@
   "type": "module",
   "scripts": {
     "dev": "cross-env NODE_ENV=development bun index.ts",
-    "start:bot": "cross-env NODE_ENV=production bun index.ts"
+    "start": "cross-env NODE_ENV=production bun index.ts"
   }
 }
