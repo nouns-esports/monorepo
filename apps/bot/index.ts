@@ -44,9 +44,9 @@ discordClient.on("interactionCreate", async (interaction) => {
     const error = await refreshNexus();
 
     if (error) {
-      await interaction.editReply(`Error: ${error.message}`);
+      return interaction.editReply(`Error: ${error.message}`);
     }
 
-    await interaction.editReply("Refreshed the Nexus! 🚀");
+    return interaction.editReply("Refreshed the Nexus! 🚀");
   }
 });

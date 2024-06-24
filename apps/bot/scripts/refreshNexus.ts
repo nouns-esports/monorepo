@@ -118,9 +118,12 @@ const challengers: Record<string, boolean> = {
 export async function refreshNexus() {
   try {
     const users = await privyClient.getUsers();
-    // const userss = await db.query.nexus.findMany();
+
+    console.log("Refresh users: ", users);
 
     const guild = await discordClient.guilds.fetch(env.DISCORD_GUILD_ID);
+
+    console.log("Refresh guild: ", guild);
 
     await db.transaction(async (tx) => {
       for (const user of users) {
@@ -130,6 +133,8 @@ export async function refreshNexus() {
 
         try {
           member = await guild.members.fetch(user.discord.subject);
+
+          console.log("Refresh member: ", member);
         } catch (error) {
           await tx.insert(nexus).values({ user: user.id, tier: "Explorer" });
           continue;
