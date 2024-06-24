@@ -17,22 +17,22 @@ import { getAuthenticatedUser, getUser } from "@/server/queries/users";
 import dynamic from "next/dynamic";
 import Shimmer from "@/components/Shimmer";
 import { getNexus } from "@/server/queries/nexus";
-import { environmentToProtocol } from "@/utils/environmentToProtocol";
+// import { environmentToProtocol } from "@/utils/environmentToProtocol";
 
 const Markdown = dynamic(() => import("@/components/lexical/Markdown"), {
   ssr: false,
   loading: () => <Shimmer className="min-h-96" />,
 });
 
-export async function generateMetadata(props: {
-  params: { round: string };
-}): Promise<Metadata> {
-  return {
-    other: await getFrameMetadata(
-      `${environmentToProtocol()}/frames/round/${props.params.round}`
-    ),
-  };
-}
+// export async function generateMetadata(props: {
+//   params: { round: string };
+// }): Promise<Metadata> {
+//   return {
+//     other: await getFrameMetadata(
+//       `${environmentToProtocol()}/frames/round/${props.params.round}`
+//     ),
+//   };
+// }
 
 export default async function Round(props: { params: { round: string } }) {
   const [round, proposals] = await Promise.all([
