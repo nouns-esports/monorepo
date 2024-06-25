@@ -92,6 +92,8 @@ const elites: Record<string, boolean> = {
   "286483887390195714": true,
   // Keo
   "153701297214849024": true,
+  // Brennen
+  "270147458737242112": true,
 };
 
 const challengers: Record<string, boolean> = {

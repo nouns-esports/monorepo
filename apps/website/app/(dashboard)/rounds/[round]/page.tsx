@@ -40,12 +40,12 @@ export async function generateMetadata(props: {
     metadataBase: new URL(env.PUBLIC_DOMAIN),
     openGraph: {
       type: "website",
-      images: [round.image],
+      images: [round.banner],
     },
     twitter: {
       site: "@NounsEsports",
       card: "summary_large_image",
-      images: [round.image],
+      images: [round.banner],
     },
     other: await getFrameMetadata(
       `${environmentToProtocol()}/frames/round/${props.params.round}`
