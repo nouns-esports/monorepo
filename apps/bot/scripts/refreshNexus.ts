@@ -102,6 +102,8 @@ const elites: Record<string, boolean> = {
   "357667384342872074": true,
   // Will
   "139573816471977984": true,
+  // Teague
+  "826147107894853672": true,
 };
 
 const challengers: Record<string, boolean> = {
