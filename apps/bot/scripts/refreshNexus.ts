@@ -96,6 +96,12 @@ const elites: Record<string, boolean> = {
   "270147458737242112": true,
   // Otto
   "179059054956642305": true,
+  // Boosh
+  "530592897905459233": true,
+  // Maty
+  "357667384342872074": true,
+  // Will
+  "139573816471977984": true,
 };
 
 const challengers: Record<string, boolean> = {
