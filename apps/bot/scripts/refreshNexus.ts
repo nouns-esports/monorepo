@@ -119,11 +119,7 @@ export async function refreshNexus() {
   try {
     const users = await db.query.nexus.findMany();
 
-    console.log("Refresh users: ", users.length);
-
     const guild = await discordClient.guilds.fetch(env.DISCORD_GUILD_ID);
-
-    console.log("Refresh guild: ", guild);
 
     await db.transaction(async (tx) => {
       for (const user of users) {
@@ -133,12 +129,8 @@ export async function refreshNexus() {
           continue;
         }
 
-        let member: GuildMember;
-
         try {
-          member = await guild.members.fetch(privyUser.discord.subject);
-
-          console.log("Refresh member: ", member);
+          await guild.members.fetch(privyUser.discord.subject);
         } catch (error) {
           await tx.delete(nexus).where(eq(nexus.user, user.user));
           continue;
@@ -245,7 +237,7 @@ export async function refreshNexus() {
         await tx.update(nexus).set({ tier }).where(eq(nexus.user, user.user));
 
         console.log("Updated: ", privyUser.discord.subject, tier);
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 250));
       }
     });
   } catch (error) {
