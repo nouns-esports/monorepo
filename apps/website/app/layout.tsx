@@ -55,7 +55,7 @@ export const metadata = {
     "dao",
     "governance",
   ],
-  metadataBase: new URL("https://nouns.gg"),
+  metadataBase: new URL(env.PUBLIC_DOMAIN),
   openGraph: {
     type: "website",
     images: ["/og-banner.webp"],

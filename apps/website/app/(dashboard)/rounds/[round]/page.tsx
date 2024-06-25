@@ -18,6 +18,7 @@ import dynamic from "next/dynamic";
 import Shimmer from "@/components/Shimmer";
 import { getNexus } from "@/server/queries/nexus";
 import { environmentToProtocol } from "@/utils/environmentToProtocol";
+import { env } from "~/env";
 
 const Markdown = dynamic(() => import("@/components/lexical/Markdown"), {
   ssr: false,
@@ -27,7 +28,25 @@ const Markdown = dynamic(() => import("@/components/lexical/Markdown"), {
 export async function generateMetadata(props: {
   params: { round: string };
 }): Promise<Metadata> {
+  const round = await getRound({ id: props.params.round });
+
+  if (!round) {
+    return notFound();
+  }
+
   return {
+    title: round.name,
+    description: round.description,
+    metadataBase: new URL(env.PUBLIC_DOMAIN),
+    openGraph: {
+      type: "website",
+      images: [round.image],
+    },
+    twitter: {
+      site: "@NounsEsports",
+      card: "summary_large_image",
+      images: [round.image],
+    },
     other: await getFrameMetadata(
       `${environmentToProtocol()}/frames/round/${props.params.round}`
     ),
