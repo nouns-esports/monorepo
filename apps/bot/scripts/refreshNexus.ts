@@ -137,6 +137,10 @@ export async function refreshNexus() {
         }
 
         if (elites[privyUser.discord.subject]) {
+          if (user.tier === "Elite") {
+            continue;
+          }
+
           await toggleRole(privyUser.discord.subject, "Elite");
           await tx
             .update(nexus)
@@ -147,6 +151,10 @@ export async function refreshNexus() {
         }
 
         if (challengers[privyUser.discord.subject]) {
+          if (user.tier === "Challenger") {
+            continue;
+          }
+
           await toggleRole(privyUser.discord.subject, "Challenger");
           await tx
             .update(nexus)
@@ -231,6 +239,10 @@ export async function refreshNexus() {
           ) {
             tier = "Elite";
           }
+        }
+
+        if (user.tier === tier) {
+          continue;
         }
 
         await toggleRole(privyUser.discord.subject, tier);
