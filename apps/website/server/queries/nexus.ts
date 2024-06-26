@@ -7,7 +7,7 @@ export const getNexus = cache(
     const userNexus = await db.query.nexus.findFirst({
       where: eq(nexus.user, input.user),
     });
-    // --
+
     if (!userNexus) return;
 
     return {

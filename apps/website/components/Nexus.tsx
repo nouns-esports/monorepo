@@ -206,8 +206,8 @@ export default function Nexus(props: {
               className={twMerge(
                 "text-lg",
                 props.nexus.tier === "Explorer" && "text-blue-500",
-                props.nexus.tier === "Challenger" && "text-red",
-                props.nexus.tier === "Champion" && "text-purple"
+                props.nexus.tier === "Challenger" && "text-purple",
+                props.nexus.tier === "Champion" && "text-red"
               )}
             >
               {props.nexus.tier}
