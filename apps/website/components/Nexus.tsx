@@ -151,7 +151,7 @@ export default function Nexus(props: {
               </ul>
             </div>
             <div className="w-full flex flex-col bg-red/20 rounded-xl py-3 px-4 border-2 border-transparent hover:border-red transition-all hover:scale-105 cursor-pointer">
-              <h2 className="text-red text-lg font-semibold">Elite</h2>
+              <h2 className="text-red text-lg font-semibold">Champion</h2>
               <ul className="text-white text-sm list-disc pl-4">
                 <li>10x the votes per round</li>
                 <li>An exclusive role in the Discord server</li>
@@ -207,7 +207,7 @@ export default function Nexus(props: {
                 "text-lg",
                 props.nexus.tier === "Explorer" && "text-blue-500",
                 props.nexus.tier === "Challenger" && "text-red",
-                props.nexus.tier === "Elite" && "text-purple"
+                props.nexus.tier === "Champion" && "text-purple"
               )}
             >
               {props.nexus.tier}
@@ -218,7 +218,7 @@ export default function Nexus(props: {
             <p className="text-white text-lg">{props.nexus.votes}</p>
           </div>
         </div>
-        {props.nexus.tier !== "Elite" ? (
+        {props.nexus.tier !== "Champion" ? (
           <div className="bg-grey-800 rounded-xl flex flex-col w-full p-6">
             <h2 className="font-bebas-neue text-2xl text-white mb-2">
               Steps to level up

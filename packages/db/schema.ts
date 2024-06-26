@@ -178,7 +178,7 @@ export const proposalsRelations = relations(proposals, ({ one, many }) => ({
 export const nexusTiers = pgEnum("nexusTiers", [
   "Explorer",
   "Challenger",
-  "Elite",
+  "Champion",
 ]);
 
 export const nexus = pgTable("nexus", {

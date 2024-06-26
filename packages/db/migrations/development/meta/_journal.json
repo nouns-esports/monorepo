@@ -316,6 +316,13 @@
       "when": 1718994034725,
       "tag": "0044_shiny_ultron",
       "breakpoints": true
+    },
+    {
+      "idx": 45,
+      "version": "6",
+      "when": 1719431356016,
+      "tag": "0045_bent_nightcrawler",
+      "breakpoints": true
     }
   ]
 }

@@ -8,14 +8,14 @@ import { GuildMember, Routes } from "discord.js";
 const roles = {
   Explorer: "1245110318603042950",
   Challenger: "1245122417903534228",
-  Elite: "1245122576645361817",
+  Champion: "1245122576645361817",
   // Test roles
-  // Elite: "1253532214784819240",
+  // Champion: "1253532214784819240",
   // Challenger: "1253778440100909118",
   // Explorer: "1253778462511202365",
 } as const;
 
-const elites: Record<string, boolean> = {
+const champions: Record<string, boolean> = {
   // Peter
   "135377635168616448": true,
   // Sam
@@ -148,15 +148,15 @@ export async function refreshNexus() {
           continue;
         }
 
-        if (elites[privyUser.discord.subject]) {
-          if (user.tier === "Elite") {
+        if (champions[privyUser.discord.subject]) {
+          if (user.tier === "Champion") {
             continue;
           }
 
-          await toggleRole(privyUser.discord.subject, "Elite");
+          await toggleRole(privyUser.discord.subject, "Champion");
           await tx
             .update(nexus)
-            .set({ tier: "Elite" })
+            .set({ tier: "Champion" })
             .where(eq(nexus.user, user.user));
 
           continue;
@@ -238,7 +238,7 @@ export async function refreshNexus() {
           roundsActive.push(action.round);
         }
 
-        let tier: "Explorer" | "Challenger" | "Elite" = "Explorer";
+        let tier: "Explorer" | "Challenger" | "Champion" = "Explorer";
 
         if (roundsActive.length >= 3) {
           tier = "Challenger";
@@ -249,7 +249,7 @@ export async function refreshNexus() {
             privyUser.farcaster &&
             wallet
           ) {
-            tier = "Elite";
+            tier = "Champion";
           }
         }
 
@@ -271,21 +271,21 @@ export async function refreshNexus() {
 
 async function toggleRole(
   user: string,
-  role: "Explorer" | "Challenger" | "Elite"
+  role: "Explorer" | "Challenger" | "Champion"
 ) {
   await addRole({ user, role });
 
   if (role === "Explorer") {
     await removeRole({ user, role: "Challenger" });
-    await removeRole({ user, role: "Elite" });
+    await removeRole({ user, role: "Champion" });
   }
 
   if (role === "Challenger") {
     await removeRole({ user, role: "Explorer" });
-    await removeRole({ user, role: "Elite" });
+    await removeRole({ user, role: "Champion" });
   }
 
-  if (role === "Elite") {
+  if (role === "Champion") {
     await removeRole({ user, role: "Explorer" });
     await removeRole({ user, role: "Challenger" });
   }
@@ -293,7 +293,7 @@ async function toggleRole(
 
 async function addRole(input: {
   user: string;
-  role: "Explorer" | "Challenger" | "Elite";
+  role: "Explorer" | "Challenger" | "Champion";
 }) {
   return rest.put(
     Routes.guildMemberRole(env.DISCORD_GUILD_ID, input.user, roles[input.role])
@@ -302,7 +302,7 @@ async function addRole(input: {
 
 async function removeRole(input: {
   user: string;
-  role: "Explorer" | "Challenger" | "Elite";
+  role: "Explorer" | "Challenger" | "Champion";
 }) {
   return rest.delete(
     Routes.guildMemberRole(env.DISCORD_GUILD_ID, input.user, roles[input.role])
