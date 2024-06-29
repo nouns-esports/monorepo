@@ -184,6 +184,9 @@ export default async function Home() {
           <Link href="/matcha">
             <img src="/matcha.svg" className="h-8" />
           </Link>
+          <Link href="https://adidas.com">
+            <img src="/adidas.svg" className="h-12" />
+          </Link>
         </div>
       </div>
       <div className="flex items-center justify-center">

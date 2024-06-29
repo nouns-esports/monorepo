@@ -156,6 +156,37 @@ export default function Partners() {
             </div>
           </div>
         </div>
+        <div className="flex max-sm:flex-col gap-8 max-w-5xl">
+          <img
+            src="/adidas.png"
+            className="rounded-lg w-96 max-sm:w-full max-xl:w-80 max-lg:w-60 aspect-video max-lg:h-auto h-min object-cover"
+          />
+          <div className="flex flex-col justify-center gap-4 py-4 max-xl:py-0 max-xl:gap-2 max-lg:gap-4">
+            <h2 className="text-white leading-none max-lg:text-2xl font-luckiest-guy text-3xl">
+              Adidas
+            </h2>
+            <p className="max-lg:text-sm">
+              adidas is a global leader in the sporting goods industry, renowned
+              for its innovative footwear, apparel, and accessories designed to
+              enhance athletic performance and lifestyle. Committed to
+              sustainability and cutting-edge technology, adidas continues to
+              inspire athletes and fashion enthusiasts worldwide.
+            </p>
+            <div className="flex gap-6">
+              <Button href="https://adidas.com/" animate="hover">
+                Visit
+              </Button>
+              <div className="flex items-center gap-4">
+                <Link href="https://twitter.com/adidas">
+                  <TwitterLogo
+                    className="w-8 h-8 text-white hover:text-white/60 cursor-pointer transition-colors"
+                    weight="fill"
+                  />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
