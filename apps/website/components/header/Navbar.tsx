@@ -71,10 +71,15 @@ export default function Navbar(props: { user?: User }) {
             </NavGroupItem>
           </NavGroup>
           <NavItem
-            href="/nexus"
-            icon={<img src="/nexus-logo.png" className="w-5 h-5 mr-1" />}
+            href="/rounds"
+            icon={
+              <img
+                src="/logo/logo-white.svg"
+                className="w-[18px] h-[18px] mr-0.5"
+              />
+            }
           >
-            Nexus
+            Rounds
           </NavItem>
           <SignInButton user={props.user} />
           <div onClick={() => setOpen(!open)} className="max-sm:flex hidden">

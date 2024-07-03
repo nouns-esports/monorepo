@@ -175,6 +175,7 @@ export const proposalsRelations = relations(proposals, ({ one, many }) => ({
   votes: many(votes),
 }));
 
+// use numbers instead in the future
 export const nexusTiers = pgEnum("nexusTiers", [
   "Explorer",
   "Challenger",

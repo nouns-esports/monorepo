@@ -31,6 +31,7 @@ discordClient.once("ready", async () => {
     }
   );
   console.log("Discord bot is ready! 🤖");
+  
 });
 
 discordClient.on("interactionCreate", async (interaction) => {
