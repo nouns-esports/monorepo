@@ -6,7 +6,8 @@ export function userToProfile(user: User) {
     name:
       user.farcaster?.displayName ??
       user.discord?.username?.split("#")[0] ??
-      "Profile",
+      user.twitter?.username ??
+      `${user.id.substring(10, 15)}`,
     pfp:
       user.farcaster?.pfp ??
       `https://api.cloudnouns.com/v1/pfp?text=${user.id}&background=1`,
