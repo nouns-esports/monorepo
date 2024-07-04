@@ -4,6 +4,7 @@ import { db, nexus } from "~/packages/db/schema";
 import { getAuthenticatedUser } from "../queries/users";
 import { isInServer } from "../queries/discord";
 import { revalidatePath } from "next/cache";
+import { eq } from "drizzle-orm";
 
 export async function grantNexus(input: { user: string }) {
   const user = await getAuthenticatedUser(true);
@@ -22,7 +23,7 @@ export async function grantNexus(input: { user: string }) {
   const inServer = await isInServer({ user: user.discord.subject });
 
   if (!inServer) {
-    throw new Error("You must be in the server to receive enter the Nexus");
+    throw new Error("You must be in the server to enter the Nexus");
   }
 
   await db.insert(nexus).values({ user: input.user, tier: "Explorer" });
