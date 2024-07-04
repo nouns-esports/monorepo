@@ -4,7 +4,6 @@ import { db, nexus } from "~/packages/db/schema";
 import { getAuthenticatedUser } from "../queries/users";
 import { isInServer } from "../queries/discord";
 import { revalidatePath } from "next/cache";
-import { eq } from "drizzle-orm";
 
 export async function grantNexus(input: { user: string }) {
   const user = await getAuthenticatedUser(true);
