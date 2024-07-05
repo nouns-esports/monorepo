@@ -90,6 +90,8 @@ const champions: Record<string, boolean> = {
   "117388754368331779": true,
   // Ghatlue
   "286483887390195714": true,
+  //Sareyu
+  "1126572357776048148": true,
   // Keo
   "153701297214849024": true,
   // Brennen
