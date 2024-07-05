@@ -19,6 +19,7 @@ export async function grantNexus(input: { user: string }) {
   if (!user.discord) {
     throw new Error("You must connect your Discord account to enter the Nexus");
   }
+
   const inServer = await isInServer({ user: user.discord.subject });
 
   if (!inServer) {
