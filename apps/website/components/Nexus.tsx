@@ -20,6 +20,7 @@ import { LoginMethodContext } from "@/providers/Privy";
 import Link from "./Link";
 import type { getUserAwards } from "@/server/queries/awards";
 import { grantNexus } from "@/server/actions/grantNexus";
+import { formatUnits } from "viem";
 
 export default function Nexus(props: {
   user?: User;
@@ -276,7 +277,10 @@ export default function Nexus(props: {
                         src={award.asset.image}
                         className="w-5 h-5 rounded-md"
                       />
-                      {award.value}
+                      {formatUnits(
+                        BigInt(award.value),
+                        award.asset.decimals ?? 0
+                      )}
                     </div>
                     <div
                       className={twMerge(

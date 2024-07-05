@@ -57,6 +57,7 @@ export const getUserAwards = cache(
                 asset: {
                   columns: {
                     image: true,
+                    decimals: true,
                   },
                 },
               },
@@ -89,6 +90,7 @@ export const getUserAwards = cache(
         };
         asset: {
           image: string;
+          decimals: number | null;
         };
       }
     > = [];

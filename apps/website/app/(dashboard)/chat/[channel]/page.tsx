@@ -35,28 +35,21 @@ export default async function Channel(props: { params: { channel: string } }) {
               <Link
                 href={`/chat/${props.params.channel}/${cast.hash.substring(0, 10)}`}
                 key={cast.hash}
-                className="flex gap-4 bg-grey-800 rounded-xl px-4 pt-4 max-h-40"
+                className="flex gap-4 bg-grey-800 rounded-xl px-4 pt-4 h-28"
               >
-                <div className="flex flex-col items-center gap-1.5">
+                <div className="flex flex-col items-center gap-2 h-full justify-center">
                   <ArrowFatUp
-                    className="w-[18px] h-[18px] text-grey-500 hover:text-red transition-colors"
+                    className="w-[18px] text-grey-500 hover:text-red transition-colors"
                     weight="fill"
                   />
                   {cast.reactions.likes_count}
                   <ArrowFatDown
-                    className="w-[18px] h-[18px] text-grey-500 hover:text-red transition-colors mb-4"
+                    className="w-[18px] text-grey-500 hover:text-red transition-colors mb-4"
                     weight="fill"
                   />
                 </div>
-                {image ? (
-                  <img
-                    src={image}
-                    className="mb-4 w-32 rounded-lg object-cover object-center"
-                  />
-                ) : (
-                  ""
-                )}
-                <div className="relative flex flex-col gap-2">
+
+                <div className="relative flex flex-col gap-2 w-full overflow-hidden">
                   <div className="flex gap-2 items-center">
                     <img
                       src={cast.author.pfp_url}
@@ -67,6 +60,14 @@ export default async function Channel(props: { params: { channel: string } }) {
                   <p className="text-grey-200">{cast.text}</p>
                   <div className="absolute w-full bg-gradient-to-t from-grey-800 to-transparent h-10 bottom-0" />
                 </div>
+                {image ? (
+                  <img
+                    src={image}
+                    className="h-[calc(100%_-_16px)] aspect-video rounded-lg object-cover object-center"
+                  />
+                ) : (
+                  ""
+                )}
               </Link>
             );
           }),
