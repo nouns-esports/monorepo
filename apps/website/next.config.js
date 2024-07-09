@@ -95,7 +95,7 @@ const nextConfig = {
       {
         source: "/duffcity",
         destination:
-          "https://www.start.gg/tournament/duff-city-volume-3/details",
+          "https://www.start.gg/tournament/duff-city-volume-4/details",
         permanent: true,
       },
       {
