@@ -31,7 +31,7 @@ export function userToProfile(user: User) {
   if (user.discord?.username) {
     return {
       id: user.id,
-      name: user.discord.username,
+      name: user.discord.username.replace("#0", ""),
       pfp: `https://api.cloudnouns.com/v1/pfp?text=${user.id}&background=1`,
       socials,
     };
