@@ -99,6 +99,7 @@ app.frame("/frames/round/:id", async (c) => {
       <Button.Link href={`/rounds/${round.id}`}>View</Button.Link>,
       <Button.Link href={`/rounds`}>All Rounds</Button.Link>,
     ],
+    title: round.name,
   });
 });
 
