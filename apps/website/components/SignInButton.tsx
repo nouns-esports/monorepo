@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import Loading from "../Loading";
+import Loading from "@/components/Loading";
 import { usePrivy } from "@privy-io/react-auth";
 import { userToProfile } from "@/utils/userToProfile";
 import type { User } from "@privy-io/server-auth";

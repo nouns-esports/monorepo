@@ -1,7 +1,7 @@
 import type { Config } from "tailwindcss";
 import plugin from "tailwindcss/plugin";
 import typography from "@tailwindcss/typography";
-
+import animate from "tailwindcss-animate";
 const config: Config = {
   future: {
     hoverOnlyWhenSupported: true,
@@ -67,6 +67,14 @@ const config: Config = {
           from: { backgroundPosition: "0% 0" },
           to: { backgroundPosition: "100% 0" },
         },
+        scroll: {
+          from: { transform: "translateX(0%)" },
+          to: { transform: "translateX(-100%)" },
+        },
+        "scroll-reverse": {
+          from: { transform: "translateX(0%)" },
+          to: { transform: "translateX(100%)" },
+        },
         shimmer: {
           "100%": {
             transform: "translateX(100%)",
@@ -76,11 +84,14 @@ const config: Config = {
       animation: {
         marquee: "marquee 20s linear infinite",
         shimmer: "shimmer 1s infinite",
+        scroll: "scroll 20s linear infinite",
+        "scroll-reverse": "scroll-reverse 20s linear infinite",
       },
     },
   },
   plugins: [
     typography,
+    animate,
     plugin(({ matchUtilities, addUtilities }) => {
       matchUtilities({
         perspective: (value) => ({

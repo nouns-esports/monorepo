@@ -100,6 +100,7 @@ app.frame("/frames/round/:id", async (c) => {
       <Button.Link href={`/rounds`}>All Rounds</Button.Link>,
     ],
     title: round.name,
+    ogImage: round.banner,
   });
 });
 

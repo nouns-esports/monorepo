@@ -28,7 +28,7 @@ export const getEvents = cache(
           orderBy: "startTime",
           timeMin: new Date().toISOString(),
           maxResults: "3",
-          key: env.GOOGLE_CALENDAR_API_KEY,
+          key: env.GOOGLE_API_KEY,
         })
     );
 

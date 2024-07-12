@@ -11,7 +11,7 @@ dotenv.config({
 
 export const env = createEnv({
   server: {
-    GOOGLE_CALENDAR_API_KEY: z.string().min(1),
+    GOOGLE_API_KEY: z.string().min(1),
     NEYNAR_API_KEY: z.string().min(1),
     DATABASE_URL: z.string().url(),
     PRIVY_APP_SECRET: z.string().min(1),

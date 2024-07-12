@@ -1,31 +1,29 @@
 import Link from "@/components/Link";
 import {
-  TwitchLogo,
   TwitterLogo,
   YoutubeLogo,
-  TiktokLogo,
   DiscordLogo,
   InstagramLogo,
 } from "phosphor-react-sc";
-import ANounsThing from "@/components/footer/ANounsThing";
-import Logo from "../Logo";
+import ANounsThing from "@/components/ANounsThing";
 import { getGames } from "@/server/queries/games";
-import FooterLink from "@/components/footer/FooterLink";
-import FooterSection from "@/components/footer/FooterSection";
 
 export default async function Footer() {
   const games = await getGames();
 
   return (
     <footer className="flex justify-center w-full">
-      <div className="flex max-w-[1920px] w-full max-lg:flex-col gap-16 justify-between items-center py-8 px-32 max-xl:px-16 relative /z-20">
+      <div className="flex max-w-[1920px] w-full max-lg:flex-col gap-16 justify-between items-center py-8 px-16">
         <div className="flex flex-col gap-8 max-lg:items-center">
           <div className="flex flex-col gap-4">
             <Link
               href=""
               className="flex gap-3 group max-lg:justify-center items-center cursor-pointer select-none"
             >
-              <Logo className="group-hover:rotate-[14deg] w-10 transition-transform duration-150" />
+              <img
+                src="/logo/logo.svg"
+                className="group-hover:rotate-[14deg] w-10 transition-transform duration-150"
+              />
               <p className="text-white font-luckiest-guy text-3xl select-none">
                 Nouns
               </p>
@@ -37,35 +35,17 @@ export default async function Footer() {
           <ANounsThing />
         </div>
         <div className="flex gap-40 max-2xl:gap-20 max-[500px]:flex-col max-[500px]:gap-8">
-          <FooterSection title="Explore">
-            <FooterLink href="/getfunded">Get Funded</FooterLink>
-            <FooterLink href="https://www.youtube.com/watch?v=SAXzMQ8pPvE">
-              About
-            </FooterLink>
-            <FooterLink href="/shop">Shop</FooterLink>
-          </FooterSection>
-          <FooterSection title="Rosters">
-            {games.map((game, index) =>
-              index < 3 ? (
-                <FooterLink key={game.id} href={`/rosters/${game.id}`}>
-                  {game.name}
-                </FooterLink>
-              ) : (
-                ""
-              )
-            )}
-            {games.length > 3 ? (
-              <FooterLink href={`/#rosters`}>All</FooterLink>
-            ) : (
-              ""
-            )}
-          </FooterSection>
-          <FooterSection title="Contribute">
-            <FooterLink href={`/partners`}>Partners</FooterLink>
-            <FooterLink href="https://app.safe.global/eth:0x8b45D1CACcb3593E9F1015BA8e97AFB68DE3a0d1/balances">
-              Treasury
-            </FooterLink>
-          </FooterSection>
+          <Group title="About Us">
+            <Item href="/about">Our Story</Item>
+            <Item href="/partners">Partners</Item>
+          </Group>
+          <Group title="Get Involved">
+            <Item href="/rounds">Rounds</Item>
+            <Item href="/quests">Quests</Item>
+            <Item href="/art">Art</Item>
+            <Item href="/Events">Events</Item>
+          </Group>
+          <Group title="Communities"></Group>
         </div>
         <div className="flex max-lg:flex-row max-[300px]:flex-col gap-4 items-center justify-center text-white">
           <div className="flex flex-col gap-4 max-lg:flex-row">
@@ -97,5 +77,29 @@ export default async function Footer() {
         </div>
       </div>
     </footer>
+  );
+}
+
+function Group(props: { title: React.ReactNode; children: React.ReactNode }) {
+  return (
+    <div className="flex flex-col max-[500px]:items-center gap-2">
+      <h3 className="text-2xl font-bebas-neue text-white max-lg:text-center">
+        {props.title}
+      </h3>
+      <div className="flex flex-col gap-2 max-[500px]:flex-row max-[500px]:gap-6">
+        {props.children}
+      </div>
+    </div>
+  );
+}
+
+function Item(props: { href: string; children: React.ReactNode }) {
+  return (
+    <Link
+      href={props.href}
+      className="hover:text-white select-none transition-colors max-lg:text-center text-nowrap"
+    >
+      {props.children}
+    </Link>
   );
 }
