@@ -219,7 +219,7 @@ export default function ToolbarPlugin() {
         onClick={() => {
           editor.dispatchCommand(UNDO_COMMAND, undefined);
         }}
-        className="h-full aspect-square flex items-center justify-center group cursor-pointer"
+        className="h-full aspect-square flex items-center justify-center group cursor-pointer max-sm:hidden"
         aria-label="Undo"
       >
         <ArrowCounterClockwise
@@ -232,7 +232,7 @@ export default function ToolbarPlugin() {
         onClick={() => {
           editor.dispatchCommand(REDO_COMMAND, undefined);
         }}
-        className="h-full aspect-square flex items-center justify-center group cursor-pointer"
+        className="h-full aspect-square flex items-center justify-center group cursor-pointer max-sm:hidden"
         aria-label="Redo"
       >
         <ArrowClockwise
