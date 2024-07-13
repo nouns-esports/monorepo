@@ -3,6 +3,12 @@ import { getAuthenticatedUser } from "@/server/queries/users";
 import SignInButton from "./SignInButton";
 import { Shapes, Users, ShoppingBag, ArrowRight } from "lucide-react";
 
+const events = [
+  { image: "", title: "Cody", type: "live" },
+  { image: "", title: "Matcha Cup", type: "event" },
+  { image: "", title: "Contributor Call", type: "event" },
+];
+
 export default async function Header() {
   const user = await getAuthenticatedUser(true);
 
@@ -21,18 +27,32 @@ export default async function Header() {
       <header className="sticky top-0 w-full z-[60] flex justify-center">
         <div className="relative w-full max-w-[1920px]">
           <div className="pointer-events-none absolute top-0 w-full flex items-center justify-between px-16 h-32 max-xl:h-28 max-xl:px-8 max-sm:px-4 max-sm:h-20 z-40">
-            <Link
-              href="/"
-              className="pointer-events-auto flex gap-4 max-sm:gap-3 group items-center cursor-pointer select-none"
-            >
-              <img
-                src="/logo/logo.svg"
-                className="group-hover:rotate-[14deg] w-12 max-sm:w-10 transition-transform duration-150"
-              />
-              <div className="text-white font-luckiest-guy text-4xl max-sm:text-3xl select-none">
-                Nouns
-              </div>
-            </Link>
+            <div className="flex gap-8 items-center">
+              <Link
+                href="/"
+                className="pointer-events-auto flex gap-4 max-sm:gap-3 group items-center cursor-pointer select-none"
+              >
+                <img
+                  src="/logo/logo.svg"
+                  className="group-hover:rotate-[14deg] w-12 max-sm:w-10 transition-transform duration-150"
+                />
+                <div className="text-white font-luckiest-guy text-4xl max-sm:text-3xl select-none">
+                  Nouns
+                </div>
+              </Link>
+              <ul className="relative group w-40 h-14">
+                {events.map((event, index) => (
+                  <li
+                    style={{
+                      scale: 1 - index * 0.1,
+                      top: index * 6,
+                      zIndex: -index,
+                    }}
+                    className="absolute bg-grey-800 rounded-lg w-full h-full border border-grey-500 transition-transform group-hover:top-20"
+                  ></li>
+                ))}
+              </ul>
+            </div>
             <nav className="pointer-events-auto flex items-center gap-8">
               <ul className="flex gap-6 items-center text-white">
                 <Group title="About Us" image="/logo/logo-white.svg">

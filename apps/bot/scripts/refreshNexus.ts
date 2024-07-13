@@ -1,9 +1,9 @@
 import { db, nexus, proposals, rounds, votes } from "~/packages/db/schema";
-import { discordClient, privyClient, rest } from "..";
+import { discordClient, privyClient, rest } from "../";
 import { and, desc, eq, gt, inArray, lt, or } from "drizzle-orm";
 import type { WalletWithMetadata } from "@privy-io/server-auth";
 import { env } from "~/env";
-import { GuildMember, Routes } from "discord.js";
+import { Routes } from "discord.js";
 
 const roles = {
   Explorer: "1245110318603042950",
@@ -108,27 +108,6 @@ const champions: Record<string, boolean> = {
   "826147107894853672": true,
 };
 
-const challengers: Record<string, boolean> = {
-  // Chaler
-  "205749146173308928": true,
-  // Paladin
-  "153694306719367169": true,
-  // Max
-  "223396766920212481": true,
-  // Happymealz
-  "132635343219326977": true,
-  // Zaferino
-  "162236149048410112": true,
-  // Hamtarro
-  "177843705619677185": true,
-  // MattTaylor
-  "938952067656069151": true,
-  // PumeyArts
-  "402516115890372629": true,
-  // Ben Latsko
-  "837247961200459786": true,
-};
-
 export async function refreshNexus() {
   try {
     const users = await db.query.nexus.findMany();
@@ -159,20 +138,6 @@ export async function refreshNexus() {
           await tx
             .update(nexus)
             .set({ tier: "Champion" })
-            .where(eq(nexus.user, user.user));
-
-          continue;
-        }
-
-        if (challengers[privyUser.discord.subject]) {
-          if (user.tier === "Challenger") {
-            continue;
-          }
-
-          await toggleRole(privyUser.discord.subject, "Challenger");
-          await tx
-            .update(nexus)
-            .set({ tier: "Challenger" })
             .where(eq(nexus.user, user.user));
 
           continue;

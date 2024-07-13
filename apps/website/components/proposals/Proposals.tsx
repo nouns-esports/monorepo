@@ -88,9 +88,7 @@ export default function Proposals(props: {
                     <p className="text-white">
                       You must be signed in to propose
                     </p>
-                    <Button onClick={() => login()} animate="bg">
-                      Sign In
-                    </Button>
+                    <Button onClick={() => login()}>Sign In</Button>
                   </>
                 );
               }
@@ -101,10 +99,7 @@ export default function Proposals(props: {
                     <p className="text-white">
                       You can edit your proposal until voting starts
                     </p>
-                    <Button
-                      href={`/rounds/${props.round.id}/create`}
-                      animate="bg"
-                    >
+                    <Button href={`/rounds/${props.round.id}/create`}>
                       Edit Proposal
                     </Button>
                   </>
@@ -112,7 +107,7 @@ export default function Proposals(props: {
               }
 
               return (
-                <Button href={`/rounds/${props.round.id}/create`} animate="bg">
+                <Button href={`/rounds/${props.round.id}/create`}>
                   Create Proposal
                 </Button>
               );
@@ -123,9 +118,7 @@ export default function Proposals(props: {
                 return (
                   <>
                     <p className="text-white">You must be signed in to vote</p>
-                    <Button onClick={() => login()} animate="bg">
-                      Sign In
-                    </Button>
+                    <Button onClick={() => login()}>Sign In</Button>
                   </>
                 );
               }
@@ -134,9 +127,7 @@ export default function Proposals(props: {
                 return (
                   <>
                     <p className="text-white">Enter the Nexus to vote</p>
-                    <Button href="/nexus" animate="bg">
-                      Get Started
-                    </Button>
+                    <Button href="/nexus">Get Started</Button>
                   </>
                 );
               }
@@ -197,7 +188,6 @@ export default function Proposals(props: {
                         },
                       });
                     }}
-                    animate="bg"
                   >
                     Submit Votes
                   </Button>
@@ -211,9 +201,7 @@ export default function Proposals(props: {
                   return (
                     <>
                       <p className="text-white">Your proposal won!</p>
-                      <Button href="/nexus" animate="bg">
-                        View Rewards
-                      </Button>
+                      <Button href="/nexus">View Rewards</Button>
                     </>
                   );
                 }

@@ -36,9 +36,7 @@ export default async function DashboardLayout(props: {
               <p className="text-white text-sm leading-snug max-w-[180px]">
                 Help shape the future of Nouns Esports
               </p>
-              <Button href="/nexus" animate="bg">
-                Get Started
-              </Button>
+              <Button href="/nexus">Get Started</Button>
             </div>
             <img
               src="/squirtles.png"

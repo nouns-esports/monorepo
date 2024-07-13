@@ -11,9 +11,7 @@ export default function Gallery() {
           </h1>
         </div>
         <div className="flex items-center justify-between pointer-events-auto">
-          <Button href="/about" animate="bg">
-            Learn more
-          </Button>
+          <Button href="/about">Learn more</Button>
           <div className="flex gap-1 pr-6">
             <div className="w-3 h-3 rounded-full bg-white" />
             <div className="w-3 h-3 rounded-full bg-white" />

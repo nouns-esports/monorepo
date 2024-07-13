@@ -11,7 +11,7 @@ import {
   json,
   pgEnum,
 } from "drizzle-orm/pg-core";
-import { relations } from "drizzle-orm";
+import { name, relations } from "drizzle-orm";
 import { Pool } from "pg";
 import { env } from "~/env";
 
@@ -105,6 +105,7 @@ export const snapshots = pgTable("snapshots", {
 export const rounds = pgTable("rounds", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
+  // shortName: text("short_name").notNull(),
   description: text("description").default("").notNull(),
   content: text("content").notNull(),
   start: timestamp("start", { mode: "date" }).notNull(),
@@ -187,6 +188,18 @@ export const nexus = pgTable("nexus", {
   tier: nexusTiers("tier").notNull(),
 });
 
+// export const users = pgTable("users", {
+//   user: text("user").primaryKey(),
+//   xp: integer("xp").notNull().default(0),
+//   // 0 = Explorer, 1 = Challenger, 2 = Champion
+//   rank: smallint("rank").notNull(),
+//   division: smallint("division").notNull(),
+//   // string, $farcaster, $discord, $twitter
+//   image: text("image"),
+//   // string, $farcaster, $discord, $twitter
+//   name: text("name").notNull(),
+// });
+
 export const votes = pgTable("votes", {
   id: serial("id").primaryKey(),
   user: text("user").notNull(),
@@ -206,6 +219,15 @@ export const votesRelations = relations(votes, ({ one }) => ({
     references: [rounds.id],
   }),
 }));
+
+// export const art = pgTable("art", {
+//   // IPFS hash
+//   id: text("id").primaryKey(),
+//   // Privy id
+//   artist: text("artist").notNull(),
+//   // Links to another art table id, useful for creating variants (cropped, modified, etc) while still pointing to the original table entry
+//   original: text("original"),
+// });
 
 export const db = drizzle(
   new Pool({

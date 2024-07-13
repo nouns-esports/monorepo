@@ -11,7 +11,6 @@ export default function Button(props: {
   scroll?: boolean;
   form?: boolean;
   size?: "sm" | "md" | "lg";
-  animate: "hover" | "bg";
   loading?: boolean;
   children: React.ReactNode;
   fill?: boolean;
@@ -31,16 +30,6 @@ export default function Button(props: {
         props.fill && "w-full"
       )}
     >
-      {props.animate === "hover" ? (
-        <div
-          style={{
-            backgroundColor: props.backgroundColor,
-          }}
-          className="absolute w-full h-full rounded-full bg-red"
-        />
-      ) : (
-        ""
-      )}
       <div
         className={twMerge(
           "relative select-none text-grey-800 bg-white rounded-full flex items-center justify-center leading-none font-bebas-neue whitespace-nowrap",
@@ -49,9 +38,7 @@ export default function Button(props: {
           props.size === "sm" && "py-1 px-3 text-lg",
           props.disabled
             ? "brightness-50 cursor-not-allowed"
-            : props.animate === "hover"
-              ? "hover:translate-x-1 hover:-translate-y-1 transition-transform"
-              : "hover:brightness-75 transition-all",
+            : "hover:brightness-75 transition-all",
 
           props.loading && "gap-2 pl-5 pr-6"
         )}
