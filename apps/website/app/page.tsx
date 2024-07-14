@@ -26,13 +26,17 @@ export default async function Home() {
     <main className="flex flex-col gap-16 mb-16">
       <div className="flex max-[900px]:flex-col gap-4 h-96 w-full">
         <Gallery />
-        <div className="bg-grey-800 rounded-xl w-full p-4 px-5">
+        <div className="bg-grey-800 rounded-xl w-full p-4 px-5 animate-in fade-in-15 zoom-in-90 delay-100">
           <div className="flex items-center text-2xl font-luckiest-guy gap-3 text-white">
-            <img src="/farcaster.svg" className="w-6 h-6" />
+            <img
+              src="/farcaster.svg"
+              draggable={false}
+              className="w-6 h-6 select-none"
+            />
             Discussion
           </div>
         </div>
-        <div className="bg-grey-800 rounded-xl w-80 flex-shrink-0 max-[1400px]:hidden px-4 pt-3 flex flex-col gap-4 h-full">
+        <div className="bg-grey-800 rounded-xl w-80 flex-shrink-0 max-[1400px]:hidden px-4 pt-3 flex flex-col gap-4 h-full animate-in fade-in-15 zoom-in-90 delay-200">
           <div className="flex items-center text-2xl font-luckiest-guy gap-2 text-white">
             <History className="w-6 h-6" />
             Activity
@@ -43,7 +47,8 @@ export default async function Home() {
                 <Link href={""} className="flex items-center gap-2 text-white">
                   <img
                     src={activity.user.pfp}
-                    className="w-5 h-5 rounded-full"
+                    draggable={false}
+                    className="w-5 h-5 rounded-full select-none"
                   />
                   {activity.user.name}
                 </Link>
@@ -51,7 +56,8 @@ export default async function Home() {
                 <Link href={""} className="flex items-center gap-2 text-white">
                   <img
                     src={activity.round.image}
-                    className="w-5 h-5 rounded-md"
+                    draggable={false}
+                    className="w-5 h-5 rounded-md select-none"
                   />
                   {activity.round.id}
                 </Link>
@@ -66,7 +72,7 @@ export default async function Home() {
           {videos.map((video) => (
             <li
               key={video.id}
-              className="w-full bg-transparent hover:bg-grey-800 hover:scale-[102%] transition-all rounded-xl overflow-hidden p-2 h-min hover:drop-shadow-2xl"
+              className="w-full bg-transparent hover:bg-grey-800 hover:scale-[95%] transition-all rounded-xl overflow-hidden p-2 h-min hover:drop-shadow-2xl"
             >
               <Link
                 href={`https://youtube.com/watch?v=${video.id}`}
@@ -74,9 +80,10 @@ export default async function Home() {
                 newTab
               >
                 <img
+                  draggable={false}
                   src={video.thumbnail}
                   alt={video.title}
-                  className="rounded-xl"
+                  className="rounded-xl select-none"
                 />
                 <h3>{video.title}</h3>
               </Link>
@@ -109,13 +116,25 @@ export default async function Home() {
         <h3 className="text-white text-4xl font-luckiest-guy ">Partners</h3>
         <div className="flex justify-center items-center gap-10 w-full">
           <Link href="https://nouns.wtf">
-            <img src="/nouns-partner-logo.png" className="h-10" />
+            <img
+              draggable={false}
+              src="/nouns-partner-logo.png"
+              className="h-10 select-none"
+            />
           </Link>
           <Link href="/matcha">
-            <img src="/matcha.svg" className="h-8" />
+            <img
+              draggable={false}
+              src="/matcha.svg"
+              className="h-8 select-none"
+            />
           </Link>
           <Link href="https://adidas.com">
-            <img src="/adidas.svg" className="h-12" />
+            <img
+              draggable={false}
+              src="/adidas.svg"
+              className="h-12 select-none"
+            />
           </Link>
         </div>
       </div>
@@ -137,10 +156,11 @@ export default async function Home() {
             "https://ipfs.nouns.gg/ipfs/QmYeLkcYghV4qkRBeMY12Z352EoLJwzbLWK8JsvbREHfo3",
             "/projects/noggles-cup.webp",
           ].map((image) => (
-            <Link href={image} className="relative h-full group">
+            <Link key={image} href={image} className="relative h-full group">
               <img
                 src={image}
-                className="h-full max-w-none object-cover rounded-xl"
+                draggable={false}
+                className="h-full max-w-none object-cover rounded-xl select-none"
               />
               <div className="absolute top-3 right-3 h-7 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity">
                 <Attribution />
@@ -163,10 +183,11 @@ export default async function Home() {
             "https://ipfs.nouns.gg/ipfs/QmbKGhDNHSujAJeqJtURW29DuDWtKoFcfx1Eprkjk1movp",
             "https://ipfs.nouns.gg/ipfs/QmUE853Ad1yns6UAUCbYjK6iBtxx5e5EihJfCFAAUh5aYb",
           ].map((image) => (
-            <Link href={image} className="relative h-full group">
+            <Link key={image} href={image} className="relative h-full group">
               <img
                 src={image}
-                className="h-full max-w-none object-cover rounded-xl"
+                draggable={false}
+                className="h-full max-w-none object-cover rounded-xl select-none"
               />
               <div className="absolute top-3 right-3 h-7 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity">
                 <Attribution />
@@ -187,6 +208,7 @@ export default async function Home() {
               sizes="100vw"
               alt="Pokemon wearing Nouns noggles"
               placeholder="blur"
+              draggable={false}
               className="w-full select-none"
             />
             <div className="absolute z-10 top-8 right-16 h-8 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity">
@@ -210,7 +232,8 @@ function ExploreCard(props: { image: string; title: string; href: string }) {
         <img
           src={props.image}
           alt={props.title}
-          className="w-full h-full object-cover group-hover:scale-105 scale-100 transition-transform"
+          draggable={false}
+          className="w-full h-full object-cover group-hover:scale-105 scale-100 transition-transform select-none"
         />
         <div className="absolute bottom-4 left-4 z-10">
           <Button href={props.href}>{props.title}</Button>

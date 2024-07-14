@@ -57,7 +57,8 @@ export default async function Header() {
               >
                 <img
                   src="/logo/logo.svg"
-                  className="group-hover:rotate-[14deg] w-12 max-sm:w-10 transition-transform duration-150"
+                  draggable={false}
+                  className="group-hover:rotate-[14deg] w-12 max-sm:w-10 transition-transform duration-150 select-none"
                 />
                 <div className="text-white font-luckiest-guy text-4xl max-sm:text-3xl select-none">
                   Nouns
@@ -67,6 +68,7 @@ export default async function Header() {
                 <ul className="relative group w-48 hover:h-40 pointer-events-auto">
                   {events.map((event, index) => (
                     <li
+                      key={index}
                       className={twMerge(
                         "absolute bg-grey-800 rounded-lg w-full transition-all h-14 border border-grey-600 z-50",
                         index === 1 &&
@@ -76,7 +78,7 @@ export default async function Header() {
                       )}
                     >
                       <Link
-                        href={`/events/${event.title.toLowerCase()}`}
+                        href={`/events/${event.title}`}
                         className="flex items-center justify-between h-full pl-2 py-2 pr-1"
                       >
                         <div className="flex gap-2 items-center h-full">
@@ -90,7 +92,7 @@ export default async function Header() {
                               {event.title}
                             </p>
                             <p className="text-xs text-red flex items-center gap-1">
-                              <div className="w-1.5 h-1.5 bg-red rounded-full animate-pulse" />
+                              <span className="w-1.5 h-1.5 bg-red rounded-full animate-pulse" />
                               Live
                             </p>
                           </div>

@@ -64,7 +64,7 @@ export default function Gallery() {
   }, [index, backwards]);
 
   return (
-    <div className="relative rounded-xl h-96 max-lg:h-80 aspect-[7/4] flex-shrink-0 overflow-hidden">
+    <div className="relative rounded-xl h-96 max-lg:h-80 aspect-[7/4] flex-shrink-0 overflow-hidden animate-in fade-in-15 zoom-in-90">
       <div className="absolute z-10 top-0 left-0 w-full h-full flex flex-col justify-between p-6 pointer-events-none">
         <div>
           <p className="text-white text-lg">{slides[index].sub}</p>

@@ -22,7 +22,8 @@ export default async function Footer() {
             >
               <img
                 src="/logo/logo.svg"
-                className="group-hover:rotate-[14deg] w-10 transition-transform duration-150"
+                draggable={false}
+                className="group-hover:rotate-[14deg] w-10 transition-transform duration-150 select-none"
               />
               <p className="text-white font-luckiest-guy text-3xl select-none">
                 Nouns
@@ -45,7 +46,7 @@ export default async function Footer() {
             <Item href="/art">Art</Item>
             <Item href="/Events">Events</Item>
           </Group>
-          <Group title="Communities"></Group>
+          {/* <Group title="Communities"></Group> */}
         </div>
         <div className="flex max-lg:flex-row max-[300px]:flex-col gap-4 items-center justify-center text-white">
           <div className="flex flex-col gap-4 max-lg:flex-row">
