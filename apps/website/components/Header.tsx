@@ -2,6 +2,7 @@ import Link from "@/components/Link";
 import { getAuthenticatedUser } from "@/server/queries/users";
 import SignInButton from "./SignInButton";
 import { Shapes, Users, ShoppingBag, ArrowRight } from "lucide-react";
+import { twMerge } from "tailwind-merge";
 
 const events = [
   { image: "", title: "Cody", type: "live" },
@@ -43,13 +44,16 @@ export default async function Header() {
               <ul className="relative group w-40 h-14">
                 {events.map((event, index) => (
                   <li
-                    style={{
-                      scale: 1 - index * 0.1,
-                      top: index * 6,
-                      zIndex: -index,
-                    }}
-                    className="absolute bg-grey-800 rounded-lg w-full h-full border border-grey-500 transition-transform group-hover:top-20"
-                  ></li>
+                    className={twMerge(
+                      "absolute bg-grey-800 rounded-lg w-full h-full border border-grey-500 transition-all pointer-events-auto",
+                      index === 1 &&
+                        "scale-95 top-1.5 -z-10 group-hover:top-16 group-hover:scale-100",
+                      index === 2 &&
+                        "scale-90 top-3 -z-20 group-hover:top-32 group-hover:scale-100"
+                    )}
+                  >
+                    <Link href={""}></Link>
+                  </li>
                 ))}
               </ul>
             </div>

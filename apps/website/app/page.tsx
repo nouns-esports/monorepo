@@ -142,7 +142,7 @@ export default async function Home() {
                 src={image}
                 className="h-full max-w-none object-cover rounded-xl"
               />
-              <div className="absolute top-3 right-3 w-7 h-7 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity">
+              <div className="absolute top-3 right-3 h-7 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity">
                 <Attribution />
               </div>
             </Link>
@@ -168,7 +168,7 @@ export default async function Home() {
                 src={image}
                 className="h-full max-w-none object-cover rounded-xl"
               />
-              <div className="absolute top-3 right-3 w-7 h-7 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity">
+              <div className="absolute top-3 right-3 h-7 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity">
                 <Attribution />
               </div>
             </Link>
@@ -189,7 +189,7 @@ export default async function Home() {
               placeholder="blur"
               className="w-full select-none"
             />
-            <div className="absolute z-10 top-8 right-16 w-8 h-8 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity">
+            <div className="absolute z-10 top-8 right-16 h-8 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity">
               <Attribution />
             </div>
           </Link>
