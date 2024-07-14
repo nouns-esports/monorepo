@@ -1,13 +1,35 @@
 import Link from "@/components/Link";
 import { getAuthenticatedUser } from "@/server/queries/users";
 import SignInButton from "./SignInButton";
-import { Shapes, Users, ShoppingBag, ArrowRight } from "lucide-react";
+import {
+  Shapes,
+  Users,
+  ShoppingBag,
+  ArrowRight,
+  Dot,
+  ChevronRight,
+} from "lucide-react";
 import { twMerge } from "tailwind-merge";
 
 const events = [
-  { image: "", title: "Cody", type: "live" },
-  { image: "", title: "Matcha Cup", type: "event" },
-  { image: "", title: "Contributor Call", type: "event" },
+  {
+    image:
+      "https://pbs.twimg.com/profile_images/1499195152639926276/t4_WbYMx_400x400.jpg",
+    title: "Cody",
+    type: "live",
+  },
+  {
+    image:
+      "https://pbs.twimg.com/profile_images/1661386831986929666/7rLLJevv_400x400.jpg",
+    title: "Matcha Cup",
+    type: "event",
+  },
+  {
+    image:
+      "https://pbs.twimg.com/profile_images/1747421219639476224/Y3tlMuWt_400x400.jpg",
+    title: "Contributor Call",
+    type: "event",
+  },
 ];
 
 export default async function Header() {
@@ -41,21 +63,44 @@ export default async function Header() {
                   Nouns
                 </div>
               </Link>
-              <ul className="relative group w-40 h-14">
-                {events.map((event, index) => (
-                  <li
-                    className={twMerge(
-                      "absolute bg-grey-800 rounded-lg w-full h-full border border-grey-500 transition-all pointer-events-auto",
-                      index === 1 &&
-                        "scale-95 top-1.5 -z-10 group-hover:top-16 group-hover:scale-100",
-                      index === 2 &&
-                        "scale-90 top-3 -z-20 group-hover:top-32 group-hover:scale-100"
-                    )}
-                  >
-                    <Link href={""}></Link>
-                  </li>
-                ))}
-              </ul>
+              <div className="h-14">
+                <ul className="relative group w-48 hover:h-40 pointer-events-auto">
+                  {events.map((event, index) => (
+                    <li
+                      className={twMerge(
+                        "absolute bg-grey-800 rounded-lg w-full transition-all h-14 border border-grey-600 z-50",
+                        index === 1 &&
+                          "scale-95 top-1.5 -z-10 group-hover:top-16 group-hover:scale-100 group-hover:z-40",
+                        index === 2 &&
+                          "scale-90 top-3 -z-20 group-hover:top-32 group-hover:scale-100 group-hover:z-30"
+                      )}
+                    >
+                      <Link
+                        href={`/events/${event.title.toLowerCase()}`}
+                        className="flex items-center justify-between h-full pl-2 py-2 pr-1"
+                      >
+                        <div className="flex gap-2 items-center h-full">
+                          <img
+                            src={event.image}
+                            alt={`${event.title} is ${event.type === "live" ? "live" : "happening now"}`}
+                            className="h-full rounded-full"
+                          />
+                          <div className="flex flex-col gap-0.5">
+                            <p className="text-sm text-white font-semibold">
+                              {event.title}
+                            </p>
+                            <p className="text-xs text-red flex items-center gap-1">
+                              <div className="w-1.5 h-1.5 bg-red rounded-full animate-pulse" />
+                              Live
+                            </p>
+                          </div>
+                        </div>
+                        <ChevronRight className="h-6" />
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
             <nav className="pointer-events-auto flex items-center gap-8">
               <ul className="flex gap-6 items-center text-white">
