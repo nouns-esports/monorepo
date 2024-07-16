@@ -21,7 +21,7 @@ export default function Button(props: {
     <Component
       disabled={props.disabled}
       onClick={props.onClick}
-      // @ts-ignore
+      // @ts-ignoredoe
       href={props.href}
       type={props.form ? "submit" : undefined}
       scroll={(!!props.href ?? undefined) && (props.scroll ?? undefined)}

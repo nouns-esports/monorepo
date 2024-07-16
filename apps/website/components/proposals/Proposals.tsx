@@ -20,17 +20,7 @@ export default function Proposals(props: {
     state: ReturnType<typeof roundState>;
     awardCount: number;
   };
-  proposals: Array<
-    Omit<Awaited<ReturnType<typeof getProposals>>[number], "user"> & {
-      user:
-        | {
-            id: string;
-            name: string;
-            pfp: string;
-          }
-        | { id: string };
-    }
-  >;
+  proposals: Array<Awaited<ReturnType<typeof getProposals>>[number]>;
   user?: {
     id: string;
     votes: {
@@ -62,7 +52,7 @@ export default function Proposals(props: {
   );
 
   const userProposal = props.proposals.find(
-    (proposal) => proposal.user.id === props.user?.id
+    (proposal) => proposal.user === props.user?.id
   );
 
   const [loading, startTransition] = useTransition();
@@ -197,7 +187,7 @@ export default function Proposals(props: {
 
             if (props.round.state === "Ended") {
               for (let i = 0; i < props.round.awardCount; i++) {
-                if (props.proposals[i].user.id === props.user?.id) {
+                if (props.proposals[i].user === props.user?.id) {
                   return (
                     <>
                       <p className="text-white">Your proposal won!</p>
@@ -214,17 +204,11 @@ export default function Proposals(props: {
         {props.proposals
           .toSorted((a, b) => {
             if (props.round.state === "Proposing") {
-              if (
-                a.user?.id === props.user?.id &&
-                b.user?.id !== props.user?.id
-              ) {
+              if (a.user === props.user?.id && b.user !== props.user?.id) {
                 return -1;
               }
 
-              if (
-                b.user?.id === props.user?.id &&
-                a.user?.id !== props.user?.id
-              ) {
+              if (b.user === props.user?.id && a.user !== props.user?.id) {
                 return 1;
               }
             }
@@ -244,7 +228,8 @@ export default function Proposals(props: {
           .map((proposal, index) => (
             <Link
               key={index}
-              href={`/rounds/${props.round.id}/proposals/${proposal.id}`}
+              href={`/rounds/${props.round.id}?p=${proposal.id}`}
+              scroll={false}
               className={twMerge(
                 "relative w-full flex gap-4 bg-grey-800 text-grey-200 rounded-xl px-4 pt-4 h-36 overflow-hidden max-sm:flex-col max-sm:p-0 max-sm:h-fit max-sm:gap-0",
                 props.round.state === "Ended" &&
@@ -293,17 +278,6 @@ export default function Proposals(props: {
                 <h4 className="text-2xl font-bebas-neue text-white">
                   {proposal.title}
                 </h4>
-                {"name" in proposal.user ? (
-                  <div className="flex gap-2 items-center pl-1 py-0.5 pr-2 -ml-1 -mt-1 rounded-full w-fit">
-                    <img
-                      src={proposal.user.pfp}
-                      className="w-5 h-5 rounded-full"
-                    />
-                    <p className="text-white">{proposal.user.name}</p>
-                  </div>
-                ) : (
-                  ""
-                )}
                 <div className="w-full overflow-hidden h-full">
                   {proposal.description
                     .replaceAll(/<[^>]*>/g, "")
@@ -366,7 +340,7 @@ export default function Proposals(props: {
                       "flex flex-col items-center gap-2 w-14 flex-shrink-0 max-sm:flex-row max-sm:w-auto"
                     )}
                   >
-                    {proposal.user?.id !== props.user?.id &&
+                    {proposal.user !== props.user?.id &&
                     props.round.state === "Voting" ? (
                       <CaretUp
                         onClick={() => {
@@ -396,7 +370,7 @@ export default function Proposals(props: {
                           "text-white",
 
                         (props.round.state === "Ended" ||
-                          proposal.user?.id === props.user?.id) &&
+                          proposal.user === props.user?.id) &&
                           "flex flex-col items-center gap-2.5 max-sm:flex-row"
                       )}
                     >
@@ -410,7 +384,7 @@ export default function Proposals(props: {
                         ""
                       )}
                       {props.round.state === "Ended" ||
-                      (proposal.user?.id === props.user?.id &&
+                      (proposal.user === props.user?.id &&
                         props.round.state === "Voting") ? (
                         <ChartBarHorizontal
                           className={twMerge(
@@ -425,7 +399,7 @@ export default function Proposals(props: {
                         ""
                       )}
                     </p>
-                    {proposal.user?.id !== props.user?.id &&
+                    {proposal.user !== props.user?.id &&
                     props.round.state === "Voting" ? (
                       <CaretDown
                         onClick={() => {

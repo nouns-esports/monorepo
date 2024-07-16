@@ -8,6 +8,7 @@ import {
   ArrowRight,
   Dot,
   ChevronRight,
+  Trophy,
 } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 
@@ -50,27 +51,52 @@ export default async function Header() {
       <header className="sticky top-0 w-full z-[60] flex justify-center">
         <div className="relative w-full max-w-[1920px]">
           <div className="pointer-events-none absolute top-0 w-full flex items-center justify-between px-16 h-32 max-xl:h-28 max-xl:px-8 max-sm:px-4 max-sm:h-20 z-40">
-            <div className="flex gap-8 items-center">
+            <div className="flex gap-16 max-xl:gap-8 items-center">
               <Link
                 href="/"
-                className="pointer-events-auto flex gap-4 max-sm:gap-3 group items-center cursor-pointer select-none"
+                className="pointer-events-auto flex gap-4 h-12 max-sm:h-10 max-sm:gap-3 group items-center cursor-pointer select-none"
               >
                 <img
                   src="/logo/logo.svg"
                   draggable={false}
-                  className="group-hover:rotate-[14deg] w-12 max-sm:w-10 transition-transform duration-150 select-none"
+                  className="group-hover:rotate-[14deg] h-full transition-transform duration-150 select-none"
                 />
-                <div className="text-white font-luckiest-guy text-4xl max-sm:text-3xl select-none">
+                <div className="text-white font-luckiest-guy text-4xl max-sm:text-3xl select-none max-xl:hidden">
                   Nouns
                 </div>
               </Link>
-              <div className="h-14">
+              <nav className="pointer-events-auto flex items-center gap-8">
+                <ul className="flex gap-6 items-center text-white">
+                  <Group title="Esports" icon={<Trophy className="w-5 h-5" />}>
+                    About Us
+                  </Group>
+                  <Group
+                    title="Get Involved"
+                    icon={<Shapes className="w-5 h-5" />}
+                  >
+                    About Us
+                  </Group>
+                  <Group
+                    title="Communities"
+                    icon={<Users className="w-5 h-5" />}
+                  >
+                    About Us
+                  </Group>
+                  <Link href="/shop">
+                    <li className="flex gap-2 items-center opacity-100 hover:opacity-80 transition-opacity">
+                      <ShoppingBag className="w-5 h-5" />
+                      Shop
+                    </li>
+                  </Link>
+                </ul>
+              </nav>
+              {/* <div className="h-14">
                 <ul className="relative group w-48 hover:h-40 pointer-events-auto">
                   {events.map((event, index) => (
                     <li
                       key={index}
                       className={twMerge(
-                        "absolute bg-grey-800 rounded-lg w-full transition-all h-14 border border-grey-600 z-50",
+                        "absolute bg-grey-800 rounded-lg w-full transition-all h-14 border border-grey-600 z-50 hover:bg-grey-600",
                         index === 1 &&
                           "scale-95 top-1.5 -z-10 group-hover:top-16 group-hover:scale-100 group-hover:z-40",
                         index === 2 &&
@@ -102,31 +128,10 @@ export default async function Header() {
                     </li>
                   ))}
                 </ul>
-              </div>
+              </div> */}
             </div>
-            <nav className="pointer-events-auto flex items-center gap-8">
-              <ul className="flex gap-6 items-center text-white">
-                <Group title="About Us" image="/logo/logo-white.svg">
-                  About Us
-                </Group>
-                <Group
-                  title="Get Involved"
-                  icon={<Shapes className="w-5 h-5" />}
-                >
-                  About Us
-                </Group>
-                <Group title="Communities" icon={<Users className="w-5 h-5" />}>
-                  About Us
-                </Group>
-                <Link href="/shop">
-                  <li className="flex gap-2 items-center opacity-100 hover:opacity-80 transition-opacity">
-                    <ShoppingBag className="w-5 h-5" />
-                    Shop
-                  </li>
-                </Link>
-              </ul>
-              <SignInButton user={user} />
-            </nav>
+
+            <SignInButton user={user} />
           </div>
         </div>
       </header>

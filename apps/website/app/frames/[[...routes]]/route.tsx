@@ -101,6 +101,7 @@ app.frame("/frames/round/:id", async (c) => {
     ],
     title: round.name,
     ogImage: round.banner,
+    
   });
 });
 

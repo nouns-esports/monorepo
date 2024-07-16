@@ -13,6 +13,7 @@ export const getVideos = cache(
           key: env.GOOGLE_API_KEY,
           playlistId: "PL1TvZNBv-He36ROcHf1PP4G15KdIq8s_K",
           part: "snippet",
+          maxResults: "4",
         })
     );
 

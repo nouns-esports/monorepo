@@ -4,13 +4,11 @@ import { twMerge } from "tailwind-merge";
 export default function Link(
   props: React.ComponentProps<typeof NextLink> & { newTab?: boolean }
 ) {
-  const newTab = props.newTab;
-
   return (
     <NextLink
       {...props}
-      target={newTab ? "_blank" : undefined}
-      rel={newTab ? "noopener noreferrer" : undefined}
+      target={props.newTab ? "_blank" : undefined}
+      rel={props.newTab ? "noopener noreferrer" : undefined}
       draggable={false}
       scroll={props.scroll}
       className={twMerge("select-none", props.className)}

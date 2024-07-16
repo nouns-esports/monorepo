@@ -14,19 +14,15 @@ import Pokemon from "@/public/pokemon.webp";
 import Gallery from "@/components/Gallery";
 import { getVideos } from "@/server/queries/youtube";
 import Attribution from "@/components/Attribution";
-import { getLatestActivity } from "@/server/queries/activity";
-import { History } from "lucide-react";
 
 export default async function Home() {
   const videos = await getVideos();
 
-  const latestActivity = await getLatestActivity();
-
   return (
-    <main className="flex flex-col gap-16 mb-16">
-      <div className="flex max-[900px]:flex-col gap-4 h-96 w-full">
+    <div className="flex flex-col gap-16 mb-16">
+      <div className="flex gap-4 h-[30vw] max-h-[600px] w-full animate-in fade-in-15 zoom-in-90 delay-100">
         <Gallery />
-        <div className="bg-grey-800 rounded-xl w-full p-4 px-5 animate-in fade-in-15 zoom-in-90 delay-100">
+        <div className="bg-grey-800 rounded-xl w-full h-full p-4 px-5">
           <div className="flex items-center text-2xl font-luckiest-guy gap-3 text-white">
             <img
               src="/farcaster.svg"
@@ -36,64 +32,36 @@ export default async function Home() {
             Discussion
           </div>
         </div>
-        <div className="bg-grey-800 rounded-xl w-80 flex-shrink-0 max-[1400px]:hidden px-4 pt-3 flex flex-col gap-4 h-full animate-in fade-in-15 zoom-in-90 delay-200">
-          <div className="flex items-center text-2xl font-luckiest-guy gap-2 text-white">
-            <History className="w-6 h-6" />
-            Activity
-          </div>
-          <ul className="flex flex-col gap-2 overflow-hidden">
-            {latestActivity.map((activity, index) => (
-              <li key={index} className="flex gap-2">
-                <Link href={""} className="flex items-center gap-2 text-white">
-                  <img
-                    src={activity.user.pfp}
-                    draggable={false}
-                    className="w-5 h-5 rounded-full select-none"
-                  />
-                  {activity.user.name}
-                </Link>
-                {activity.type === "vote" ? "voted on" : "proposed in"}
-                <Link href={""} className="flex items-center gap-2 text-white">
-                  <img
-                    src={activity.round.image}
-                    draggable={false}
-                    className="w-5 h-5 rounded-md select-none"
-                  />
-                  {activity.round.id}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
       </div>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 animate-in fade-in-15 zoom-in-90 delay-200">
         <h2 className="font-luckiest-guy text-white text-4xl">Videos</h2>
-        <ul className="flex justify-between">
+        <ul className="flex gap-4 justify-between">
           {videos.map((video) => (
-            <li
-              key={video.id}
-              className="w-full bg-transparent hover:bg-grey-800 hover:scale-[95%] transition-all rounded-xl overflow-hidden p-2 h-min hover:drop-shadow-2xl"
-            >
+            <li key={video.id} className="w-full h-min group">
               <Link
                 href={`https://youtube.com/watch?v=${video.id}`}
-                className="flex flex-col gap-2"
+                className="flex flex-col gap-2 w-full"
                 newTab
               >
-                <img
-                  draggable={false}
-                  src={video.thumbnail}
-                  alt={video.title}
-                  className="rounded-xl select-none"
-                />
-                <h3>{video.title}</h3>
+                <div className="rounded-xl overflow-hidden w-full rotate-[0.01deg]">
+                  <img
+                    draggable={false}
+                    src={video.thumbnail}
+                    alt={video.title}
+                    className="rounded-xl select-none group-hover:scale-105 transition-transform w-full"
+                  />
+                </div>
+                <h3 className="group-hover:text-white transition-colors">
+                  {video.title}
+                </h3>
               </Link>
             </li>
           ))}
         </ul>
       </div>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 animate-in fade-in-15 delay-300 zoom-in-90">
         <h2 className="font-luckiest-guy text-white text-4xl">Explore</h2>
-        <ul className="flex justify-between gap-4">
+        <ul className="flex justify-between gap-4 rotate-[0.01deg]">
           <ExploreCard href="/shop" title="Shop" image="/explore-shop.png" />
           <ExploreCard
             href="/rosters"
@@ -119,21 +87,21 @@ export default async function Home() {
             <img
               draggable={false}
               src="/nouns-partner-logo.png"
-              className="h-10 select-none"
+              className="h-10 select-none hover:opacity-70 transition-opacity"
             />
           </Link>
           <Link href="/matcha">
             <img
               draggable={false}
               src="/matcha.svg"
-              className="h-8 select-none"
+              className="h-8 select-none hover:opacity-70 transition-opacity"
             />
           </Link>
           <Link href="https://adidas.com">
             <img
               draggable={false}
               src="/adidas.svg"
-              className="h-12 select-none"
+              className="h-12 select-none hover:opacity-70 transition-opacity"
             />
           </Link>
         </div>
@@ -218,17 +186,14 @@ export default async function Home() {
           <div className="from-transparent to-black bg-gradient-to-b h-2/5 w-full bottom-0 absolute pointer-events-none" />
         </div>
       </div>
-    </main>
+    </div>
   );
 }
 
 function ExploreCard(props: { image: string; title: string; href: string }) {
   return (
-    <li className="w-full group">
-      <Link
-        href={props.href}
-        className="relative aspect-[3/4] flex items-end flex-col rounded-xl overflow-hidden"
-      >
+    <li className="w-full group relative aspect-[3/4] rounded-xl overflow-hidden">
+      <Link href={props.href} className="flex h-full items-end flex-col">
         <img
           src={props.image}
           alt={props.title}

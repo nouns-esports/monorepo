@@ -12,7 +12,7 @@ export default async function Footer() {
   const games = await getGames();
 
   return (
-    <footer className="flex justify-center w-full">
+    <footer className="flex justify-center w-full mt-8">
       <div className="flex max-w-[1920px] w-full max-lg:flex-col gap-16 justify-between items-center py-8 px-16">
         <div className="flex flex-col gap-8 max-lg:items-center">
           <div className="flex flex-col gap-4">
