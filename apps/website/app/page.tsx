@@ -20,7 +20,7 @@ export default async function Home() {
 
   return (
     <div className="flex flex-col gap-16 mb-16">
-      <div className="flex gap-4 h-[30vw] max-h-[600px] w-full animate-in fade-in-15 zoom-in-90 fill-mode-forwards">
+      <div className="flex gap-4 h-[30vw] max-h-[600px] w-full animate-in fade-in-15 zoom-in-90 fill-mode-forwards delay-100">
         <Gallery />
         <div className="bg-grey-800 rounded-xl w-full h-full p-4 px-5">
           <div className="flex items-center text-2xl font-luckiest-guy gap-3 text-white">
@@ -33,7 +33,7 @@ export default async function Home() {
           </div>
         </div>
       </div>
-      <div className="flex flex-col gap-4 animate-in fade-in-15 zoom-in-90 delay-100 fill-mode-forwards">
+      <div className="flex flex-col gap-4 animate-in fade-in-15 zoom-in-90 delay-200 fill-mode-forwards">
         <h2 className="font-luckiest-guy text-white text-4xl">Videos</h2>
         <ul className="flex gap-4 justify-between">
           {videos.map((video) => (
@@ -59,7 +59,7 @@ export default async function Home() {
           ))}
         </ul>
       </div>
-      <div className="flex flex-col gap-4 animate-in fade-in-15 delay-200 zoom-in-90 fill-mode-forwards">
+      <div className="flex flex-col gap-4 animate-in fade-in-15 delay-300 zoom-in-90 fill-mode-forwards">
         <h2 className="font-luckiest-guy text-white text-4xl">Explore</h2>
         <ul className="flex justify-between gap-4 rotate-[0.01deg]">
           <ExploreCard href="/shop" title="Shop" image="/explore-shop.png" />
