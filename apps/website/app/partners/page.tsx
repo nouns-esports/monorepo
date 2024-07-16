@@ -61,9 +61,7 @@ export default function Partners() {
           the opportunity and become a partner today!
         </p>
         <div className="flex gap-6 items-center max-[400px]:flex-col">
-          <Button href="mailto:partners@nouns.gg" animate="hover">
-            Contact Us
-          </Button>
+          <Button href="mailto:partners@nouns.gg">Contact Us</Button>
           <Link
             href="https://docsend.com/view/6nsudfgjdg5ezr2a"
             className="flex items-center gap-2 select-none text-white group font-cabin hover:text-white/80 transition-colors"
@@ -94,9 +92,7 @@ export default function Partners() {
               and brands, Nouns is for everyone.
             </p>
             <div className="flex items-center gap-6">
-              <Button href="https://nouns.wtf/vote/466" animate="hover">
-                Visit
-              </Button>
+              <Button href="https://nouns.wtf/vote/466">Visit</Button>
               <div className="flex items-center gap-4">
                 <Link href="https://twitter.com/nounsdao">
                   <TwitterLogo
@@ -130,9 +126,7 @@ export default function Partners() {
               infrastructure.
             </p>
             <div className="flex gap-6">
-              <Button href="/matcha" animate="hover">
-                Visit
-              </Button>
+              <Button href="/matcha">Visit</Button>
               <div className="flex items-center gap-4">
                 <Link href="https://twitter.com/matchaxyz">
                   <TwitterLogo
@@ -173,9 +167,7 @@ export default function Partners() {
               inspire athletes and fashion enthusiasts worldwide.
             </p>
             <div className="flex gap-6">
-              <Button href="https://adidas.com/" animate="hover">
-                Visit
-              </Button>
+              <Button href="https://adidas.com/">Visit</Button>
               <div className="flex items-center gap-4">
                 <Link href="https://twitter.com/adidas">
                   <TwitterLogo
