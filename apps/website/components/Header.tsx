@@ -131,7 +131,9 @@ export default async function Header() {
               </div> */}
             </div>
 
-            <SignInButton user={user} />
+            <div className="pointer-events-auto flex items-center">
+              <SignInButton user={user} />
+            </div>
           </div>
         </div>
       </header>
