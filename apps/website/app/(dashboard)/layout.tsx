@@ -14,7 +14,7 @@ export default async function DashboardLayout(props: {
   children: React.ReactNode;
 }) {
   const channels = await getChannels();
-  //
+
   return (
     <div className="flex flex-col items-center w-full my-32 max-sm:my-24">
       <div className="w-full flex gap-36 max-[1920px]:gap-16 max-2xl:gap-8 px-16 max-2xl:px-8 max-sm:px-4 max-w-[1920px]">
