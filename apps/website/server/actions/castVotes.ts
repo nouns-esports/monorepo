@@ -30,7 +30,7 @@ export async function castVotes(input: {
 
   if (user.discord?.subject && checkDiscordAccountAge(user.discord.subject)) {
     throw new Error(
-      "Your Discord account must be at least 3 months old to vote"
+      `Privy user ${user.id} and discord account ${user.discord.subject} is less than 30 days old`
     );
   }
 
