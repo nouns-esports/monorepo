@@ -28,7 +28,7 @@ export async function castVotes(input: {
     throw new Error("A Nexus membership is required to vote");
   }
 
-  if (user.discord?.subject && checkDiscordAccountAge(user.discord.subject)) {
+  if (user.discord?.subject && !checkDiscordAccountAge(user.discord.subject)) {
     throw new Error(
       `Privy user ${user.id} and discord account ${user.discord.subject} is less than 30 days old`
     );
