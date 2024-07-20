@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Button from "./Button";
 import { twMerge } from "tailwind-merge";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import Image from "next/image";
 
 const slides = [
   {
@@ -19,15 +20,15 @@ const slides = [
     title: "Nouns Fest Showcase",
     sub: "Coming in October",
     href: "/about",
-    button: "Learn more",
+    button: "View Event",
     type: "image",
-    url: "/artwork/1.png",
+    url: "/nouns-fest-showcase.png",
   },
   {
-    title: "We're redefining esports",
-    sub: "Learn about our mission",
+    title: "Matcha x Nouns",
+    sub: "Start trading today",
     href: "/about",
-    button: "Learn more",
+    button: "Get Started",
     type: "image",
     url: "/artwork/2.png",
   },
@@ -64,7 +65,7 @@ export default function Gallery() {
   }, [index, backwards]);
 
   return (
-    <div className="relative rounded-xl h-full flex-shrink-0 aspect-video overflow-hidden">
+    <div className="relative rounded-xl h-full flex-shrink-0 aspect-video max-lg:w-full max-lg:h-auto overflow-hidden select-none">
       <div className="absolute z-10 top-0 left-0 w-full h-full flex flex-col justify-between p-6 pointer-events-none">
         <div>
           <p className="text-white text-lg">{slides[index].sub}</p>
@@ -156,6 +157,7 @@ export default function Gallery() {
             <img
               key={slideIndex}
               src={slide.url}
+              alt={slide.title}
               draggable={false}
               className="object-cover w-full h-full snap-center"
             />

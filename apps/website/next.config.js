@@ -12,6 +12,8 @@ const nextConfig = {
         hostname: "storage.googleapis.com",
         pathname: "**",
       },
+      { protocol: "https", hostname: "i.ytimg.com", pathname: "**" },
+      { protocol: "https", hostname: "ipfs.nouns.gg", pathname: "**" },
     ],
   },
   logging: {
@@ -88,8 +90,7 @@ const nextConfig = {
       },
       {
         source: "/matchacup",
-        destination:
-          "https://www.start.gg/tournament/matcha-cup-west-coast-1",
+        destination: "https://www.start.gg/tournament/matcha-cup-west-coast-1",
         permanent: true,
       },
       {

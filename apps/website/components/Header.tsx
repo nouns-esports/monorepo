@@ -10,7 +10,10 @@ import {
   ChevronRight,
   Trophy,
 } from "lucide-react";
-import { twMerge } from "tailwind-merge";
+import Banner from "./Banner";
+import { getGames } from "@/server/queries/games";
+import Image from "next/image";
+import { communities } from "@/server/queries/discussion";
 
 const events = [
   {
@@ -36,22 +39,15 @@ const events = [
 export default async function Header() {
   const user = await getAuthenticatedUser(true);
 
+  const games = await getGames();
+
   return (
     <>
-      <Link
-        newTab
-        href="/rounds"
-        className="bg-red relative z-30 h-9 hover:brightness-[85%] transition-all text-white text-sm font-semibold w-full whitespace-nowrap flex items-center justify-center"
-      >
-        <div className="flex items-center justify-center">
-          Explore rounds, vote for your favorite proposals, and more!
-          <ArrowRight className="w-4 h-4 ml-1.5" />
-        </div>
-      </Link>
+      <Banner />
       <header className="sticky top-0 w-full z-[60] flex justify-center">
         <div className="relative w-full max-w-[1920px]">
           <div className="pointer-events-none absolute top-0 w-full flex items-center justify-between px-16 h-32 max-xl:h-28 max-xl:px-8 max-sm:px-4 max-sm:h-20 z-40">
-            <div className="flex gap-16 max-xl:gap-8 items-center">
+            <div className="flex gap-16 max-xl:gap-8 max-[430px]:gap-4 items-center">
               <Link
                 href="/"
                 className="pointer-events-auto flex gap-4 h-12 max-sm:h-10 max-sm:gap-3 group items-center cursor-pointer select-none"
@@ -66,24 +62,116 @@ export default async function Header() {
                 </div>
               </Link>
               <nav className="pointer-events-auto flex items-center gap-8">
-                <ul className="flex gap-6 items-center text-white">
+                <img
+                  src="/menu.svg"
+                  alt=""
+                  className="w-6 h-6 hidden max-md:flex"
+                />
+                <ul className="flex gap-6 items-center text-white max-md:gap-0">
                   <Group title="Esports" icon={<Trophy className="w-5 h-5" />}>
-                    About Us
+                    <div className="flex flex-col gap-0">
+                      <Link
+                        href="/about"
+                        className="text-nowrap hover:bg-grey-500 transition-colors py-3 px-3 rounded-lg"
+                      >
+                        <p className="font-bebas-neue text-lg">Our Story</p>
+                        <p className="text-grey-200">
+                          Learn more about our mission
+                        </p>
+                      </Link>
+                      <Link
+                        href="/partners"
+                        className="text-nowrap hover:bg-grey-500 transition-colors py-3 px-3 rounded-lg"
+                      >
+                        <p className="font-bebas-neue text-lg">Partners</p>
+                        <p className="text-grey-200">Partner with us</p>
+                      </Link>
+                      <Link
+                        href="/events"
+                        className="text-nowrap hover:bg-grey-500 transition-colors py-3 px-3 rounded-lg"
+                      >
+                        <p className="font-bebas-neue text-lg">Events</p>
+                        <p className="text-grey-200">
+                          Past and upcoming events
+                        </p>
+                      </Link>
+                      <div className="text-nowrap gap-2 flex flex-col py-3 px-3">
+                        <p className="font-bebas-neue text-lg">Rosters</p>
+                        <div className="flex gap-2">
+                          {games.map((game) => (
+                            <Link
+                              href={`/rosters/${game.id}`}
+                              className="relative flex items-center justify-center gap-2 h-16 w-24 overflow-hidden rounded-md"
+                            >
+                              <p className="relative z-10 text-lg font-bebas-neue pointer-events-none">
+                                {game.name}
+                              </p>
+
+                              <img
+                                src={game.image}
+                                alt={`Our ${game.name} roster`}
+                                className="absolute top-0 left-0 w-full h-full object-cover brightness-90 hover:scale-105 transition-transform"
+                              />
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
                   </Group>
                   <Group
                     title="Get Involved"
                     icon={<Shapes className="w-5 h-5" />}
                   >
-                    About Us
+                    <ul className="flex flex-col gap-0">
+                      <li className="text-nowrap hover:bg-grey-500 transition-colors py-3 px-3 rounded-lg">
+                        <Link href="/rounds">
+                          <p className="font-bebas-neue text-lg">Rounds</p>
+                          <p className="text-grey-200">
+                            Govern who and what we fund
+                          </p>
+                        </Link>
+                      </li>
+                      <li className="text-nowrap hover:bg-grey-500 transition-colors py-3 px-3 rounded-lg">
+                        <Link href="/discord">
+                          <p className="font-bebas-neue text-lg">Discord</p>
+                          <p className="text-grey-200">
+                            Join the Discord server
+                          </p>
+                        </Link>
+                      </li>
+                      <li className="text-nowrap hover:bg-grey-500 transition-colors py-3 px-3 rounded-lg">
+                        <Link href="/art">
+                          <p className="font-bebas-neue text-lg">Artwork</p>
+                          <p className="text-grey-200">
+                            Explore our community of artists
+                          </p>
+                        </Link>
+                      </li>
+                    </ul>
                   </Group>
                   <Group
                     title="Communities"
                     icon={<Users className="w-5 h-5" />}
                   >
-                    About Us
+                    <div className="grid grid-cols-2 w-[22rem]">
+                      {Object.values(communities).map((community) => (
+                        <Link
+                          key={community.name}
+                          href={community.url}
+                          className="flex items-center gap-2 rounded-lg px-2 py-2 hover:bg-grey-500 transition-colors w-full"
+                        >
+                          <img
+                            src={community.image}
+                            alt={community.name}
+                            className="w-6 h-6 rounded-md object-cover"
+                          />
+                          <p className="text-nowrap">{community.name}</p>
+                        </Link>
+                      ))}
+                    </div>
                   </Group>
                   <Link href="/shop">
-                    <li className="flex gap-2 items-center opacity-100 hover:opacity-80 transition-opacity">
+                    <li className="flex gap-2 items-center opacity-100 hover:opacity-80 transition-opacity max-[430px]:hidden">
                       <ShoppingBag className="w-5 h-5" />
                       Shop
                     </li>
@@ -148,16 +236,20 @@ function Group(
   )
 ) {
   return (
-    <li className="relative group cursor-pointer opacity-100 hover:opacity-80 transition-opacity font-semibold flex justify-center gap-2 items-center">
-      {"icon" in props ? props.icon : ""}
-      {"image" in props ? (
-        <img src={props.image} className="w-5 h-5 rounded-full" />
-      ) : (
-        ""
-      )}
-      {props.title}
-      <div className="absolute top-8 pt-8 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">
-        {props.children}
+    <li className="relative group flex">
+      <div className="cursor-pointer opacity-100 hover:opacity-80 transition-opacity font-semibold flex justify-center gap-2 items-center max-md:hidden">
+        {"icon" in props ? props.icon : ""}
+        {"image" in props ? (
+          <img src={props.image} className="w-5 h-5 rounded-full" />
+        ) : (
+          ""
+        )}
+        {props.title}
+      </div>
+      <div className="absolute top-6 -left-8 pt-4 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">
+        <div className="bg-grey-600 rounded-xl p-3 flex gap-2">
+          {props.children}
+        </div>
       </div>
     </li>
   );

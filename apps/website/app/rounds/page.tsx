@@ -13,7 +13,7 @@ export default async function Rounds() {
   ]);
 
   return (
-    <div className="flex gap-32 w-full">
+    <div className="flex gap-16 w-full">
       <div className="flex flex-col gap-8 w-full">
         {activeRounds.length > 0 ? (
           <div className="flex flex-col gap-4">
@@ -48,7 +48,7 @@ export default async function Rounds() {
           ))}
         </div>
       </div>
-      <div className="flex items-center justify-center bg-white rounded-xl text-black w-full h-96">
+      <div className="flex items-center justify-center bg-white rounded-xl text-black w-full h-96 max-xl:hidden max-2xl:w-[40%] max-2xl:flex-shrink-0">
         Round Explainer
       </div>
     </div>

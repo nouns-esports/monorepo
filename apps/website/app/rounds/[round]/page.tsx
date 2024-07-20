@@ -229,9 +229,9 @@ export default async function Round(props: {
           />
         </div>
       </div>
-      <div className="sticky top-32 justify-center h-[calc(100vh_-_12rem)] mt-9 w-full">
+      <div className="sticky top-32 justify-center h-[calc(100vh_-_12rem)] mt-9 w-full max-xl:pointer-events-none max-xl:fixed max-xl:top-0 max-xl:mt-0 max-xl:left-0 max-xl:z-[60] max-xl:w-screen max-xl:h-screen">
         {selectedProposal ? (
-          <div className="flex flex-col gap-4 rounded-xl h-full overflow-hidden">
+          <div className="flex flex-col gap-4 rounded-xl h-full overflow-hidden max-xl:pointer-events-auto max-xl:rounded-none">
             <div className="relative flex flex-col gap-4 bg-grey-800 rounded-xl p-6 max-sm:p-3 h-full">
               <div className="flex items-start justify-between gap-8">
                 <h2 className="text-white font-luckiest-guy text-3xl">
@@ -239,6 +239,7 @@ export default async function Round(props: {
                 </h2>
                 <Link
                   href={`/rounds/${props.params.round}`}
+                  scroll={false}
                   className="bg-grey-200 rounded-md p-1 flex items-center justify-center w-min"
                 >
                   <X className="text-grey-600 w-5 h-5" />
@@ -282,11 +283,11 @@ export default async function Round(props: {
                   <Markdown markdown={selectedProposal.content} readOnly />
                 </div>
               </div>
-              <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-grey-800 to-transparent h-10 z-10" />
+              <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-grey-800 to-transparent h-10 z-10 max-xl:hidden" />
             </div>
           </div>
         ) : (
-          <div className="w-full h-full bg-white text-black rounded-xl flex items-center">
+          <div className="w-full h-full bg-white text-black rounded-xl flex items-center max-xl:hidden">
             Round Discussion
           </div>
         )}

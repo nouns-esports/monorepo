@@ -14,6 +14,7 @@ import {
 import { name, relations } from "drizzle-orm";
 import { Pool } from "pg";
 import { env } from "~/env";
+import { hash } from "crypto";
 
 export const games = pgTable("games", {
   id: text("id").primaryKey(),
@@ -220,14 +221,23 @@ export const votesRelations = relations(votes, ({ one }) => ({
   }),
 }));
 
-// export const art = pgTable("art", {
-//   // IPFS hash
-//   id: text("id").primaryKey(),
-//   // Privy id
-//   artist: text("artist").notNull(),
-//   // Links to another art table id, useful for creating variants (cropped, modified, etc) while still pointing to the original table entry
-//   original: text("original"),
-// });
+export const art = pgTable("art", {
+  // First 10 characters of the IPFS hash
+  id: text("id").primaryKey(),
+  // IPFS hash
+  hash: text("hash").notNull(),
+  // Privy id
+  artist: text("artist"),
+  // Links to another art table id, useful for creating variants (cropped, modified, etc) while still pointing to the original table entry
+  original: text("original"),
+});
+
+export const artRelations = relations(art, ({ one }) => ({
+  original: one(art, {
+    fields: [art.original],
+    references: [art.id],
+  }),
+}));
 
 export const db = drizzle(
   new Pool({
@@ -255,6 +265,7 @@ export const db = drizzle(
       snapshots,
       badges,
       nexus,
+      art,
     },
   }
 );
@@ -272,3 +283,4 @@ export type Vote = typeof votes.$inferSelect;
 export type Snapshot = typeof snapshots.$inferSelect;
 export type Badge = typeof badges.$inferSelect;
 export type Nexus = typeof nexus.$inferSelect;
+export type Art = typeof art.$inferSelect;

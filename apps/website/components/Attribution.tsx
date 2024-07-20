@@ -1,15 +1,25 @@
+import type { getArtist } from "@/server/queries/art";
 import { Diamond } from "lucide-react";
 
-export default function Attribution(props: { small?: boolean }) {
+export default function Attribution(props: {
+  artist?: Awaited<ReturnType<typeof getArtist>>;
+}) {
   return (
-    <div className="rounded-md w-full h-full flex drop-shadow-lg overflow-hidden bg-gradient-to-br from-[#F3B5FD] to-[#F66FD0] text-white font-semibold items-center gap-2 pr-2">
-      <img
-        src="https://pbs.twimg.com/profile_images/1672093318598266881/JH1ZbbDM_400x400.jpg"
-        draggable={false}
-        className="h-full select-none"
-      />
-      Pumey
-      {/* <Diamond className="text-[#E651E9] pr-2 h-full flex aspect-square" /> */}
+    <div className="rounded-md w-full h-full flex drop-shadow-lg overflow-hidden bg-gradient-to-br from-[#F3B5FD] to-[#F66FD0] group/tag text-white font-semibold items-center">
+      {props.artist ? (
+        <>
+          <img
+            src={props.artist.pfp}
+            draggable={false}
+            className="h-full select-none"
+          />
+          <p className="w-full h-full bg-transparent group-hover/tag:bg-black/15 transition-colors z-10 relative px-2 flex items-center">
+            {props.artist.name}
+          </p>
+        </>
+      ) : (
+        <Diamond className="w-full h-full p-1.5" />
+      )}
     </div>
   );
 }

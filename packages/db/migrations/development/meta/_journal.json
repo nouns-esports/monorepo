@@ -323,6 +323,27 @@
       "when": 1719431356016,
       "tag": "0045_bent_nightcrawler",
       "breakpoints": true
+    },
+    {
+      "idx": 46,
+      "version": "6",
+      "when": 1721433173104,
+      "tag": "0046_yielding_steel_serpent",
+      "breakpoints": true
+    },
+    {
+      "idx": 47,
+      "version": "6",
+      "when": 1721434830561,
+      "tag": "0047_lumpy_quasimodo",
+      "breakpoints": true
+    },
+    {
+      "idx": 48,
+      "version": "6",
+      "when": 1721437401684,
+      "tag": "0048_faithful_mysterio",
+      "breakpoints": true
     }
   ]
 }
