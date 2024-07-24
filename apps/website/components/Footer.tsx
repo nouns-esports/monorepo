@@ -6,13 +6,10 @@ import {
   InstagramLogo,
 } from "phosphor-react-sc";
 import ANounsThing from "@/components/ANounsThing";
-import { getGames } from "@/server/queries/games";
 
 export default async function Footer() {
-  const games = await getGames();
-
   return (
-    <footer className="flex justify-center w-full mt-8">
+    <footer className="flex justify-center w-full mt-8 relative z-10">
       <div className="flex max-w-[1920px] w-full max-lg:flex-col gap-16 justify-between items-center py-8 px-16">
         <div className="flex flex-col gap-8 max-lg:items-center">
           <div className="flex flex-col gap-4">
@@ -36,17 +33,16 @@ export default async function Footer() {
           <ANounsThing />
         </div>
         <div className="flex gap-40 max-2xl:gap-20 max-[500px]:flex-col max-[500px]:gap-8">
-          <Group title="About Us">
+          <Group title="Esports">
             <Item href="/about">Our Story</Item>
             <Item href="/partners">Partners</Item>
+            <Item href="/rosters">Rosters</Item>
           </Group>
           <Group title="Get Involved">
             <Item href="/rounds">Rounds</Item>
-            <Item href="/quests">Quests</Item>
-            <Item href="/art">Art</Item>
-            <Item href="/Events">Events</Item>
+            <Item href="/discord">Discord</Item>
+            <Item href="/creations">Creations</Item>
           </Group>
-          {/* <Group title="Communities"></Group> */}
         </div>
         <div className="flex max-lg:flex-row max-[300px]:flex-col gap-4 items-center justify-center text-white">
           <div className="flex flex-col gap-4 max-lg:flex-row">

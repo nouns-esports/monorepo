@@ -344,6 +344,48 @@
       "when": 1721437401684,
       "tag": "0048_faithful_mysterio",
       "breakpoints": true
+    },
+    {
+      "idx": 49,
+      "version": "6",
+      "when": 1721586597411,
+      "tag": "0049_empty_surge",
+      "breakpoints": true
+    },
+    {
+      "idx": 50,
+      "version": "6",
+      "when": 1721748940058,
+      "tag": "0050_lush_ares",
+      "breakpoints": true
+    },
+    {
+      "idx": 51,
+      "version": "6",
+      "when": 1721752471938,
+      "tag": "0051_clever_rage",
+      "breakpoints": true
+    },
+    {
+      "idx": 52,
+      "version": "6",
+      "when": 1721752692041,
+      "tag": "0052_dry_mojo",
+      "breakpoints": true
+    },
+    {
+      "idx": 53,
+      "version": "6",
+      "when": 1721847593764,
+      "tag": "0053_simple_the_executioner",
+      "breakpoints": true
+    },
+    {
+      "idx": 54,
+      "version": "6",
+      "when": 1721847948717,
+      "tag": "0054_long_violations",
+      "breakpoints": true
     }
   ]
 }

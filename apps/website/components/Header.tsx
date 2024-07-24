@@ -11,9 +11,9 @@ import {
   Trophy,
 } from "lucide-react";
 import Banner from "./Banner";
-import { getGames } from "@/server/queries/games";
+import { getCommunities } from "@/server/queries/communities";
 import Image from "next/image";
-import { communities } from "@/server/queries/discussion";
+import { getRosters } from "@/server/queries/rosters";
 
 const events = [
   {
@@ -39,7 +39,9 @@ const events = [
 export default async function Header() {
   const user = await getAuthenticatedUser(true);
 
-  const games = await getGames();
+  const communities = await getCommunities();
+
+  const rosters = await getRosters({ limit: 4 });
 
   return (
     <>
@@ -86,32 +88,31 @@ export default async function Header() {
                         <p className="font-bebas-neue text-lg">Partners</p>
                         <p className="text-grey-200">Partner with us</p>
                       </Link>
-                      <Link
-                        href="/events"
-                        className="text-nowrap hover:bg-grey-500 transition-colors py-3 px-3 rounded-lg"
-                      >
-                        <p className="font-bebas-neue text-lg">Events</p>
-                        <p className="text-grey-200">
-                          Past and upcoming events
-                        </p>
-                      </Link>
-                      <div className="text-nowrap gap-2 flex flex-col py-3 px-3">
-                        <p className="font-bebas-neue text-lg">Rosters</p>
-                        <div className="flex gap-2">
-                          {games.map((game) => (
-                            <Link
-                              href={`/rosters/${game.id}`}
-                              className="relative flex items-center justify-center gap-2 h-16 w-24 overflow-hidden rounded-md"
-                            >
-                              <p className="relative z-10 text-lg font-bebas-neue pointer-events-none">
-                                {game.name}
-                              </p>
 
+                      <div className="text-nowrap gap-2 flex flex-col py-3">
+                        <div className="flex justify-between items-center px-3">
+                          <p className="font-bebas-neue text-lg">Rosters</p>
+                          <Link
+                            href="/rosters"
+                            className="text-red text-sm flex gap-1 items-center group/rosters"
+                          >
+                            View All
+                            <ArrowRight className="w-4 h-4 group-hover/rosters:translate-x-0.5 transition-transform" />
+                          </Link>
+                        </div>
+                        <div className="px-1.5 grid grid-cols-2 w-80">
+                          {rosters.map((roster) => (
+                            <Link
+                              key={roster.id}
+                              href={`/rosters/${roster.id}`}
+                              className="flex items-center gap-2 rounded-lg px-2 py-2 hover:bg-grey-500 transition-colors w-full"
+                            >
                               <img
-                                src={game.image}
-                                alt={`Our ${game.name} roster`}
-                                className="absolute top-0 left-0 w-full h-full object-cover brightness-90 hover:scale-105 transition-transform"
+                                src={roster.community.image}
+                                alt={`Our ${roster.name} roster`}
+                                className="w-6 h-6 rounded-md object-cover"
                               />
+                              <p className="text-nowrap">{roster.name}</p>
                             </Link>
                           ))}
                         </div>
@@ -139,11 +140,19 @@ export default async function Header() {
                           </p>
                         </Link>
                       </li>
+                      {/* <li className="text-nowrap hover:bg-grey-500 transition-colors py-3 px-3 rounded-lg">
+                        <Link href="/moments">
+                          <p className="font-bebas-neue text-lg">Moments</p>
+                          <p className="text-grey-200">
+                            Past and upcoming events
+                          </p>
+                        </Link>
+                      </li> */}
                       <li className="text-nowrap hover:bg-grey-500 transition-colors py-3 px-3 rounded-lg">
                         <Link href="/art">
-                          <p className="font-bebas-neue text-lg">Artwork</p>
+                          <p className="font-bebas-neue text-lg">Creations</p>
                           <p className="text-grey-200">
-                            Explore our community of artists
+                            Explore our community of creators
                           </p>
                         </Link>
                       </li>
@@ -154,10 +163,10 @@ export default async function Header() {
                     icon={<Users className="w-5 h-5" />}
                   >
                     <div className="grid grid-cols-2 w-[22rem]">
-                      {Object.values(communities).map((community) => (
+                      {communities.map((community) => (
                         <Link
                           key={community.name}
-                          href={community.url}
+                          href={`https://warpcast.com/~/${community.channels[0]}`}
                           className="flex items-center gap-2 rounded-lg px-2 py-2 hover:bg-grey-500 transition-colors w-full"
                         >
                           <img

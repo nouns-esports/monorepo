@@ -3,11 +3,27 @@ import { and, eq } from "drizzle-orm";
 import { unstable_cache as cache } from "next/cache";
 
 export const getRosters = cache(
-  async (input: { game: string }) => {
+  async (input?: { community?: string; limit?: number }) => {
+    if (input?.community) {
+      return db.query.rosters.findMany({
+        where: and(
+          eq(rosters.community, input.community),
+          eq(rosters.active, true)
+        ),
+        with: {
+          community: true,
+        },
+      });
+    }
+
     return db.query.rosters.findMany({
-      where: and(eq(rosters.game, input.game), eq(rosters.active, true)),
+      where: eq(rosters.active, true),
+      limit: input?.limit,
+      with: {
+        community: true,
+      },
     });
   },
-  ["rosters"],
+  ["getRosters"],
   { revalidate: 60 * 10 }
 );

@@ -11,23 +11,29 @@ import {
 import Link from "@/components/Link";
 import Image from "next/image";
 import PokemonImage from "@/public/pokemon.webp";
-import NounsPartnerImage from "@/public/nouns-partner-logo.png";
-import MatchaPartnerImage from "@/public/matcha.svg";
-import AdidasPartnerImage from "@/public/adidas.svg";
+import NounsPartnerImage from "@/public/partners/nouns/wordmark.png";
+import MatchaPartnerImage from "@/public/partners/matcha/wordmark.svg";
+import AdidasPartnerImage from "@/public/partners/adidas/wordmark.svg";
 import Gallery from "@/components/Gallery";
 import { getVideos } from "@/server/queries/youtube";
 import Attribution from "@/components/Attribution";
 import { getTrendingPosts } from "@/server/queries/discussion";
-import { ArrowUpWideNarrow, ChevronUp } from "lucide-react";
+import { ArrowRight, ArrowUpWideNarrow, ChevronUp } from "lucide-react";
 import { getArtist } from "@/server/queries/art";
+import type { Round } from "~/packages/db/schema";
+import { roundState } from "@/utils/roundState";
+import { getRounds } from "@/server/queries/rounds";
+import { twMerge } from "tailwind-merge";
 
 export default async function Home() {
   const videos = await getVideos();
 
   const trendingPosts = await getTrendingPosts();
 
+  const rounds = await getRounds({ limit: 4 });
+
   return (
-    <div className="flex flex-col gap-16 mb-16 max-lg:gap-12">
+    <div className="flex flex-col gap-16 mb-16 max-lg:gap-12 pt-32 max-xl:pt-28 max-sm:pt-20">
       <div className="flex gap-4 h-[30vw] max-h-[600px] max-lg:h-auto max-lg:max-h-none w-full px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4 max-lg:flex-col">
         <Gallery />
         <div className="flex flex-col gap-2 bg-gradient-to-b from-[#8A63D2] to-[#473072] rounded-xl overflow-hidden w-full h-full max-lg:hidden">
@@ -74,9 +80,66 @@ export default async function Home() {
         </div>
       </div>
       <div className="flex flex-col gap-4 px-32 max-2xl:px-16 max-xl:px-8 max-lg:px-0">
-        <h2 className="font-luckiest-guy text-white text-4xl max-lg:pl-8 max-sm:pl-4">
-          Videos
-        </h2>
+        <div className="flex justify-between items-center max-lg:px-8 max-sm:px-4">
+          <h2 className="font-luckiest-guy text-white text-4xl">Rounds</h2>
+          <Link
+            href="/rounds"
+            className="text-red flex gap-1 items-center group"
+          >
+            View All
+            <ArrowRight className="w-[1.15rem] h-[1.15rem] group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </div>
+        <ul className="flex gap-4 justify-between max-lg:w-full max-lg:overflow-x-scroll max-lg:px-8 max-sm:px-4 max-lg:scrollbar-hidden">
+          {rounds.map((round) => {
+            const state = roundState(round);
+
+            return (
+              <li className="flex w-full">
+                <Link
+                  href={`/rounds/${round.id}`}
+                  className="flex flex-col gap-6 p-4 bg-grey-800 rounded-xl w-full hover:bg-grey-600 transition-colors h-52 group"
+                >
+                  <div className="flex justify-between items-center">
+                    <img
+                      src={round.image}
+                      className="w-12 h-12 rounded-lg object-cover"
+                    />
+                    <p
+                      className={twMerge(
+                        "bg-red rounded-full px-3 py-1 text-sm text-white font-semibold",
+                        state === "Proposing" && "bg-blue-700",
+                        state === "Voting" && "bg-purple"
+                      )}
+                    >
+                      {state}
+                    </p>
+                  </div>
+                  <div className="relative flex flex-col gap-1 overflow-hidden">
+                    <h3 className="text-[1.4rem] leading-7 font-bebas-neue text-white">
+                      {round.name}
+                    </h3>
+                    <p>{round.description}</p>
+                    <div className="from-transparent to-grey-800 opacity-100 group-hover:opacity-0 transition-opacity bg-gradient-to-b h-8 w-full bottom-0 absolute pointer-events-none" />
+                    <div className="from-transparent to-grey-600 opacity-0 group-hover:opacity-100 transition-opacity bg-gradient-to-b h-8 w-full bottom-0 absolute pointer-events-none" />
+                  </div>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+      <div className="flex flex-col gap-4 px-32 max-2xl:px-16 max-xl:px-8 max-lg:px-0">
+        <div className="flex justify-between items-center max-lg:px-8 max-sm:px-4">
+          <h2 className="font-luckiest-guy text-white text-4xl">Videos</h2>
+          <Link
+            href="/youtube"
+            className="text-red flex gap-1 items-center group"
+          >
+            View All
+            <ArrowRight className="w-[1.15rem] h-[1.15rem] group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </div>
         <ul className="flex gap-4 justify-between max-lg:w-full max-lg:overflow-x-scroll max-lg:px-8 max-sm:px-4 max-lg:scrollbar-hidden">
           {videos.map((video) => (
             <li key={video.id} className="w-full h-min group">
@@ -107,21 +170,21 @@ export default async function Home() {
           Explore
         </h2>
         <ul className="flex gap-4 rotate-[0.01deg] max-lg:overflow-x-scroll max-lg:px-8 max-sm:px-4 max-lg:scrollbar-hidden">
-          <ExploreCard href="/shop" title="Shop" image="/explore-shop.png" />
+          <ExploreCard href="/shop" title="Shop" image="/explore/shop.png" />
           <ExploreCard
             href="/rosters"
             title="Our Rosters"
-            image="/explore-rosters.png"
+            image="/explore/rosters.png"
           />
           <ExploreCard
             href="/events"
             title="Events"
-            image="/explore-events.png"
+            image="/explore/events.png"
           />
           <ExploreCard
             href="/partners"
             title="Become a partner"
-            image="/explore-partners.png"
+            image="/explore/partners.png"
           />
         </ul>
       </div>
@@ -173,7 +236,7 @@ export default async function Home() {
               "QmYeLkcYghV4qkRBeMY12Z352EoLJwzbLWK8JsvbREHfo3",
               "QmdiWQoQpy3D5wpi9pSn6n2uJXyugwcv8rvQoaZnWhotKz",
             ].map(async (image) => {
-              const artist = await getArtist({ art: image.substring(0, 10) });
+              const artist = await getArtist({ art: image });
 
               return (
                 <Link
@@ -188,7 +251,7 @@ export default async function Home() {
                     className="h-full max-w-none object-cover rounded-xl select-none"
                   />
                   <div className="absolute top-3 right-3 h-7 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity">
-                    <Attribution artist={artist} />
+                    <Attribution id={image} artist={artist} />
                   </div>
                 </Link>
               );
@@ -211,7 +274,7 @@ export default async function Home() {
               "QmbKGhDNHSujAJeqJtURW29DuDWtKoFcfx1Eprkjk1movp",
               "QmUE853Ad1yns6UAUCbYjK6iBtxx5e5EihJfCFAAUh5aYb",
             ].map(async (image) => {
-              const artist = await getArtist({ art: image.substring(0, 10) });
+              const artist = await getArtist({ art: image });
 
               return (
                 <Link
@@ -226,7 +289,7 @@ export default async function Home() {
                     className="h-full max-w-none object-cover rounded-xl select-none"
                   />
                   <div className="absolute top-3 right-3 h-7 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity">
-                    <Attribution artist={artist} />
+                    <Attribution id={image} artist={artist} />
                   </div>
                 </Link>
               );
@@ -250,7 +313,7 @@ export default async function Home() {
               className="w-full select-none"
             />
             <div className="absolute z-10 top-8 right-16 h-8 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity">
-              <Attribution />
+              <Attribution id="" />
             </div>
           </Link>
           <div className="from-transparent to-black bg-gradient-to-b h-2/5 w-full bottom-0 absolute pointer-events-none" />

@@ -77,7 +77,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
       >
         <Providers user={user}>
           <Header />
-          <main className="flex flex-col w-full min-h-[calc(100vh_-_224px)] h-full max-w-[1920px] pt-32 max-xl:pt-28 max-sm:pt-20">
+          <main className="flex flex-col w-full min-h-[calc(100vh_-_224px)] h-full max-w-[1920px]">
             {props.children}
           </main>
           <Footer />

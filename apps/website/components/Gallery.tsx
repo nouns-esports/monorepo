@@ -13,8 +13,8 @@ const slides = [
     href: "/about",
     button: "Learn more",
     type: "video",
-    mp4: "/landing.mp4",
-    webp: "/landing.webm",
+    mp4: "/gallery/landing.mp4",
+    webp: "/gallery/landing.webm",
   },
   {
     title: "Nouns Fest Showcase",
@@ -22,15 +22,15 @@ const slides = [
     href: "/about",
     button: "View Event",
     type: "image",
-    url: "/nouns-fest-showcase.png",
+    url: "/gallery/nouns-fest-showcase.png",
   },
   {
     title: "Matcha x Nouns",
     sub: "Start trading today",
-    href: "/about",
-    button: "Get Started",
+    href: "https://blog.matcha.xyz/article/matcha-partners-with-nouns-esports",
+    button: "Read article",
     type: "image",
-    url: "/artwork/2.png",
+    url: "/gallery/matcha-x-nouns.jpg",
   },
 ] satisfies Array<
   { title: string; sub: string; href: string; button: string } & (
@@ -57,7 +57,7 @@ export default function Gallery() {
       }
 
       backgroundRef.current?.scrollTo({
-        left: backgroundRef.current.clientWidth * (index + 1),
+        left: backgroundRef.current.clientWidth * (index + 1) + 1,
         behavior: "smooth",
       });
     }, 5000);
@@ -68,8 +68,10 @@ export default function Gallery() {
     <div className="relative rounded-xl h-full flex-shrink-0 aspect-video max-lg:w-full max-lg:h-auto overflow-hidden select-none">
       <div className="absolute z-10 top-0 left-0 w-full h-full flex flex-col justify-between p-6 pointer-events-none">
         <div>
-          <p className="text-white text-lg">{slides[index].sub}</p>
-          <h1 className="text-white font-luckiest-guy text-4xl">
+          <p className="text-white text-lg drop-shadow-[0_4px_4px_rgba(0,0,0,0.4)]">
+            {slides[index].sub}
+          </p>
+          <h1 className="text-white font-luckiest-guy text-4xl drop-shadow-[0_4px_4px_rgba(0,0,0,0.4)]">
             {slides[index].title}
           </h1>
         </div>
@@ -110,7 +112,7 @@ export default function Gallery() {
                 if (index > slides.length) return;
 
                 backgroundRef.current?.scrollTo({
-                  left: backgroundRef.current.clientWidth * (index + 1),
+                  left: backgroundRef.current.clientWidth * (index + 1) + 1,
                   behavior: "smooth",
                 });
               }}
@@ -159,7 +161,7 @@ export default function Gallery() {
               src={slide.url}
               alt={slide.title}
               draggable={false}
-              className="object-cover w-full h-full snap-center"
+              className="object-cover w-full min-w-full last:min-w-[calc(100%_+_1px)] last:w-[calc(100%_+_1px)] snap-center"
             />
           );
         })}

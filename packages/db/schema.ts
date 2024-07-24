@@ -11,19 +11,19 @@ import {
   json,
   pgEnum,
 } from "drizzle-orm/pg-core";
-import { name, relations } from "drizzle-orm";
+import { relations } from "drizzle-orm";
 import { Pool } from "pg";
 import { env } from "~/env";
-import { hash } from "crypto";
 
-export const games = pgTable("games", {
+export const communities = pgTable("communities", {
   id: text("id").primaryKey(),
-  active: boolean("active").notNull(),
-  name: text("name").notNull(),
   image: text("image").notNull(),
+  name: text("name").notNull(),
+  // Farcaster channel ids
+  channels: text("channels").array().notNull(),
 });
 
-export const gamesRelations = relations(games, ({ many }) => ({
+export const communityRelations = relations(communities, ({ many }) => ({
   rosters: many(rosters),
 }));
 
@@ -31,18 +31,19 @@ export const rosters = pgTable("rosters", {
   id: text("id").primaryKey(),
   active: boolean("active").notNull(),
   name: text("name").notNull(),
-  game: text("game").notNull(),
+  community: text("community").notNull(),
   liquipedia: text("liquipedia").notNull(),
 });
 
 export const rostersRelations = relations(rosters, ({ one, many }) => ({
-  game: one(games, {
-    fields: [rosters.game],
-    references: [games.id],
-  }),
   talent: many(talent),
+  community: one(communities, {
+    fields: [rosters.community],
+    references: [communities.id],
+  }),
 }));
 
+// Deprecate this, require players to create nouns.gg accounts and use that on the roster page
 export const talent = pgTable("talent", {
   id: text("id").primaryKey(),
   active: boolean("active").notNull(),
@@ -65,41 +66,12 @@ export const talentRelations = relations(talent, ({ one }) => ({
   }),
 }));
 
-export const creators = pgTable("creators", {
-  id: text("id").primaryKey(),
-  active: boolean("active").notNull(),
-  name: text("name").notNull(),
-  image: text("image").notNull(),
-  liquipedia: text("liquipedia"),
-  twitch: text("twitch"),
-  twitter: text("twitter"),
-  youtube: text("youtube"),
-  tiktok: text("tiktok"),
-  instagram: text("instagram"),
-});
-
-export const projects = pgTable("projects", {
-  id: text("id").primaryKey(),
-  active: boolean("active").notNull(),
-  name: text("name").notNull(),
-  image: text("image").notNull(),
-  url: text("url").notNull(),
-});
-
 export const badges = pgTable("badges", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
   description: text("description").notNull(),
   image: text("image").notNull(),
   timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
-});
-
-export const snapshots = pgTable("snapshots", {
-  id: serial("id").primaryKey(),
-  user: text("user").notNull(),
-  type: text("type").notNull(),
-  timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
-  metadata: json("metadata"),
 });
 
 // An infinite round is defined as a round with a null end timestamp and votingStart = start, respecitive proposals will include a value
@@ -221,15 +193,51 @@ export const votesRelations = relations(votes, ({ one }) => ({
   }),
 }));
 
+export const shape = pgEnum("shape", ["square", "wide", "tall"]);
+
 export const art = pgTable("art", {
-  // First 10 characters of the IPFS hash
-  id: text("id").primaryKey(),
   // IPFS hash
-  hash: text("hash").notNull(),
+  id: text("id").primaryKey(),
   // Privy id
   artist: text("artist"),
+  // Title of the art piece
+  title: text("title"),
   // Links to another art table id, useful for creating variants (cropped, modified, etc) while still pointing to the original table entry
   original: text("original"),
+  // When the art was created
+  createdAt: timestamp("created_at", { mode: "date" }),
+  // Search tags, only required for top level art pieces
+  tags: text("tags").array().notNull(),
+  // Shape of the art piece
+  shape: shape("shape").default("square"),
+});
+
+export const creationType = pgEnum("creationType", [
+  "art",
+  "photograph",
+  // video/clip
+  // emotes
+]);
+
+export const creations = pgTable("creations", {
+  // IPFS hash
+  id: text("id").primaryKey(),
+  // Privy id
+  creator: text("creator"),
+  // Type of creation
+  type: creationType("type").notNull(),
+  // Title of the creation
+  title: text("title"),
+  // When it was created
+  createdAt: timestamp("created_at", { mode: "date" }),
+  // Links to another creation, useful for creating variants (cropped, modified, etc) while still pointing to the original entry
+  original: text("original"),
+  // Search tags, only required for top level creations
+  tags: text("tags").array().notNull(),
+  // Width
+  width: integer("width"),
+  // Height
+  height: integer("height"),
 });
 
 export const artRelations = relations(art, ({ one }) => ({
@@ -245,14 +253,12 @@ export const db = drizzle(
   }),
   {
     schema: {
-      games,
-      gamesRelations,
+      communities,
+      communityRelations,
       rosters,
       rostersRelations,
       talent,
       talentRelations,
-      creators,
-      projects,
       rounds,
       roundsRelations,
       awards,
@@ -262,25 +268,22 @@ export const db = drizzle(
       proposalsRelations,
       votes,
       votesRelations,
-      snapshots,
       badges,
       nexus,
       art,
+      creations,
     },
   }
 );
 
-export type Game = typeof games.$inferSelect;
+export type Community = typeof communities.$inferSelect;
 export type Roster = typeof rosters.$inferSelect;
 export type Talent = typeof talent.$inferSelect;
-export type Project = typeof projects.$inferSelect;
-export type Creator = typeof creators.$inferSelect;
 export type Round = typeof rounds.$inferSelect;
 export type Award = typeof awards.$inferSelect;
 export type Asset = typeof assets.$inferSelect;
 export type Proposal = typeof proposals.$inferSelect;
 export type Vote = typeof votes.$inferSelect;
-export type Snapshot = typeof snapshots.$inferSelect;
 export type Badge = typeof badges.$inferSelect;
 export type Nexus = typeof nexus.$inferSelect;
 export type Art = typeof art.$inferSelect;

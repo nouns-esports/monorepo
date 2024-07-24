@@ -78,7 +78,7 @@ export default function Partners() {
       <div className="p-16 max-lg:p-8 max-sm:p-4 flex flex-col gap-16 w-full items-center">
         <div className="flex max-sm:flex-col gap-8 max-w-5xl">
           <img
-            src="/nouns-partner.png"
+            src="/partners/nouns/banner.png"
             className="rounded-lg w-96 max-sm:w-full max-xl:w-80 max-lg:w-60 max-lg:h-auto  h-min aspect-video object-cover"
           />
           <div className="flex flex-col justify-center gap-4 py-4 max-xl:py-0 max-lg:gap-4 max-xl:gap-2">
@@ -112,7 +112,7 @@ export default function Partners() {
         </div>
         <div className="flex max-sm:flex-col gap-8 max-w-5xl">
           <img
-            src="/matcha-banner.svg"
+            src="/partners/matcha/banner.svg"
             className="rounded-lg w-96 max-sm:w-full max-xl:w-80 max-lg:w-60 aspect-video max-lg:h-auto h-min object-cover"
           />
           <div className="flex flex-col justify-center gap-4 py-4 max-xl:py-0 max-xl:gap-2 max-lg:gap-4">
@@ -152,7 +152,7 @@ export default function Partners() {
         </div>
         <div className="flex max-sm:flex-col gap-8 max-w-5xl">
           <img
-            src="/adidas.png"
+            src="/partners/adidas/banner.png"
             className="rounded-lg w-96 max-sm:w-full max-xl:w-80 max-lg:w-60 aspect-video max-lg:h-auto h-min object-cover"
           />
           <div className="flex flex-col justify-center gap-4 py-4 max-xl:py-0 max-xl:gap-2 max-lg:gap-4">
