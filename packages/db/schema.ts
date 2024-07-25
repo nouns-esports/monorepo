@@ -78,7 +78,6 @@ export const badges = pgTable("badges", {
 export const rounds = pgTable("rounds", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
-  // shortName: text("short_name").notNull(),
   description: text("description").default("").notNull(),
   content: text("content").notNull(),
   start: timestamp("start", { mode: "date" }).notNull(),
@@ -193,25 +192,6 @@ export const votesRelations = relations(votes, ({ one }) => ({
   }),
 }));
 
-export const shape = pgEnum("shape", ["square", "wide", "tall"]);
-
-export const art = pgTable("art", {
-  // IPFS hash
-  id: text("id").primaryKey(),
-  // Privy id
-  artist: text("artist"),
-  // Title of the art piece
-  title: text("title"),
-  // Links to another art table id, useful for creating variants (cropped, modified, etc) while still pointing to the original table entry
-  original: text("original"),
-  // When the art was created
-  createdAt: timestamp("created_at", { mode: "date" }),
-  // Search tags, only required for top level art pieces
-  tags: text("tags").array().notNull(),
-  // Shape of the art piece
-  shape: shape("shape").default("square"),
-});
-
 export const creationType = pgEnum("creationType", [
   "art",
   "photograph",
@@ -235,15 +215,15 @@ export const creations = pgTable("creations", {
   // Search tags, only required for top level creations
   tags: text("tags").array().notNull(),
   // Width
-  width: integer("width"),
+  width: integer("width").notNull(),
   // Height
-  height: integer("height"),
+  height: integer("height").notNull(),
 });
 
-export const artRelations = relations(art, ({ one }) => ({
-  original: one(art, {
-    fields: [art.original],
-    references: [art.id],
+export const creationRelations = relations(creations, ({ one }) => ({
+  original: one(creations, {
+    fields: [creations.original],
+    references: [creations.id],
   }),
 }));
 
@@ -270,8 +250,8 @@ export const db = drizzle(
       votesRelations,
       badges,
       nexus,
-      art,
       creations,
+      creationRelations,
     },
   }
 );
@@ -286,4 +266,4 @@ export type Proposal = typeof proposals.$inferSelect;
 export type Vote = typeof votes.$inferSelect;
 export type Badge = typeof badges.$inferSelect;
 export type Nexus = typeof nexus.$inferSelect;
-export type Art = typeof art.$inferSelect;
+export type Creation = typeof creations.$inferSelect;

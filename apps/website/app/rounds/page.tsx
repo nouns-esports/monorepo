@@ -13,8 +13,8 @@ export default async function Rounds() {
   ]);
 
   return (
-    <div className="flex gap-16 w-full pt-32 max-xl:pt-28 max-sm:pt-20 px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
-      <div className="flex flex-col gap-8 w-full">
+    <div className="flex justify-center gap-16 w-full pt-32 max-xl:pt-28 max-sm:pt-20 px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
+      <div className="flex flex-col gap-8 w-full max-w-3xl">
         {activeRounds.length > 0 ? (
           <div className="flex flex-col gap-4">
             <h2 className="text-white font-luckiest-guy text-3xl">
@@ -47,9 +47,6 @@ export default async function Rounds() {
             <RoundCard key={round.id} round={round} />
           ))}
         </div>
-      </div>
-      <div className="flex items-center justify-center bg-white rounded-xl text-black w-full h-96 max-xl:hidden max-2xl:w-[40%] max-2xl:flex-shrink-0">
-        Round Explainer
       </div>
     </div>
   );

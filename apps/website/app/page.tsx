@@ -1,13 +1,4 @@
 import Button from "@/components/Button";
-import {
-  TwitchLogo,
-  TwitterLogo,
-  YoutubeLogo,
-  TiktokLogo,
-  DiscordLogo,
-  PlayCircle,
-  InstagramLogo,
-} from "phosphor-react-sc";
 import Link from "@/components/Link";
 import Image from "next/image";
 import PokemonImage from "@/public/pokemon.webp";
@@ -18,12 +9,12 @@ import Gallery from "@/components/Gallery";
 import { getVideos } from "@/server/queries/youtube";
 import Attribution from "@/components/Attribution";
 import { getTrendingPosts } from "@/server/queries/discussion";
-import { ArrowRight, ArrowUpWideNarrow, ChevronUp } from "lucide-react";
-import { getArtist } from "@/server/queries/art";
-import type { Round } from "~/packages/db/schema";
+import { ArrowRight, ChevronUp } from "lucide-react";
 import { roundState } from "@/utils/roundState";
 import { getRounds } from "@/server/queries/rounds";
 import { twMerge } from "tailwind-merge";
+import { getUser } from "@/server/queries/users";
+import { userToProfile } from "@/utils/userToProfile";
 
 export default async function Home() {
   const videos = await getVideos();
@@ -95,7 +86,7 @@ export default async function Home() {
             const state = roundState(round);
 
             return (
-              <li className="flex w-full">
+              <li className="flex w-full" key={round.id}>
                 <Link
                   href={`/rounds/${round.id}`}
                   className="flex flex-col gap-6 p-4 bg-grey-800 rounded-xl w-full hover:bg-grey-600 transition-colors h-52 group"
@@ -188,9 +179,9 @@ export default async function Home() {
           />
         </ul>
       </div>
-      <div className="flex flex-col items-center gap-4 py-16">
-        <h3 className="text-white text-4xl font-luckiest-guy ">Partners</h3>
-        <div className="flex justify-center items-center gap-10 w-full">
+      <div className="flex flex-col items-center gap-4 py-16 max-[450px]:gap-8">
+        <h3 className="text-white text-4xl font-luckiest-guy">Partners</h3>
+        <div className="flex justify-center items-center gap-10 w-full max-[450px]:flex-col max-[450px]:gap-6">
           <Link href="https://nouns.wtf">
             <Image
               draggable={false}
@@ -236,8 +227,6 @@ export default async function Home() {
               "QmYeLkcYghV4qkRBeMY12Z352EoLJwzbLWK8JsvbREHfo3",
               "QmdiWQoQpy3D5wpi9pSn6n2uJXyugwcv8rvQoaZnWhotKz",
             ].map(async (image) => {
-              const artist = await getArtist({ art: image });
-
               return (
                 <Link
                   key={image}
@@ -251,7 +240,7 @@ export default async function Home() {
                     className="h-full max-w-none object-cover rounded-xl select-none"
                   />
                   <div className="absolute top-3 right-3 h-7 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity">
-                    <Attribution id={image} artist={artist} />
+                    <Attribution id={image} />
                   </div>
                 </Link>
               );
@@ -274,8 +263,6 @@ export default async function Home() {
               "QmbKGhDNHSujAJeqJtURW29DuDWtKoFcfx1Eprkjk1movp",
               "QmUE853Ad1yns6UAUCbYjK6iBtxx5e5EihJfCFAAUh5aYb",
             ].map(async (image) => {
-              const artist = await getArtist({ art: image });
-
               return (
                 <Link
                   key={image}
@@ -289,7 +276,7 @@ export default async function Home() {
                     className="h-full max-w-none object-cover rounded-xl select-none"
                   />
                   <div className="absolute top-3 right-3 h-7 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity">
-                    <Attribution id={image} artist={artist} />
+                    <Attribution id={image} />
                   </div>
                 </Link>
               );

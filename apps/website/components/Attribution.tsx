@@ -1,4 +1,4 @@
-import type { getArtist } from "@/server/queries/art";
+import type { getArtist } from "@/server/queries/creations";
 import { Diamond } from "lucide-react";
 import Link from "./Link";
 

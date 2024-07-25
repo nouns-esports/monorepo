@@ -14,6 +14,7 @@ import Banner from "./Banner";
 import { getCommunities } from "@/server/queries/communities";
 import Image from "next/image";
 import { getRosters } from "@/server/queries/rosters";
+import Menu from "./Menu";
 
 const events = [
   {
@@ -57,18 +58,14 @@ export default async function Header() {
                 <img
                   src="/logo/logo.svg"
                   draggable={false}
-                  className="group-hover:rotate-[14deg] h-full transition-transform duration-150 select-none"
+                  className="group-hover:rotate-[14deg] h-full transition-transform duration-150 select-none relative z-[60]"
                 />
                 <div className="text-white font-luckiest-guy text-4xl max-sm:text-3xl select-none max-xl:hidden">
                   Nouns
                 </div>
               </Link>
               <nav className="pointer-events-auto flex items-center gap-8">
-                <img
-                  src="/menu.svg"
-                  alt=""
-                  className="w-6 h-6 hidden max-md:flex"
-                />
+                <Menu />
                 <ul className="flex gap-6 items-center text-white max-md:gap-0">
                   <Group title="Esports" icon={<Trophy className="w-5 h-5" />}>
                     <div className="flex flex-col gap-0">
@@ -140,16 +137,8 @@ export default async function Header() {
                           </p>
                         </Link>
                       </li>
-                      {/* <li className="text-nowrap hover:bg-grey-500 transition-colors py-3 px-3 rounded-lg">
-                        <Link href="/moments">
-                          <p className="font-bebas-neue text-lg">Moments</p>
-                          <p className="text-grey-200">
-                            Past and upcoming events
-                          </p>
-                        </Link>
-                      </li> */}
                       <li className="text-nowrap hover:bg-grey-500 transition-colors py-3 px-3 rounded-lg">
-                        <Link href="/art">
+                        <Link href="/creations">
                           <p className="font-bebas-neue text-lg">Creations</p>
                           <p className="text-grey-200">
                             Explore our community of creators
@@ -180,7 +169,7 @@ export default async function Header() {
                     </div>
                   </Group>
                   <Link href="/shop">
-                    <li className="flex gap-2 items-center opacity-100 hover:opacity-80 transition-opacity max-[430px]:hidden">
+                    <li className="flex gap-2 items-center opacity-100 hover:opacity-80 transition-opacity max-[430px]:hidden relative z-[60]">
                       <ShoppingBag className="w-5 h-5" />
                       Shop
                     </li>
@@ -228,7 +217,7 @@ export default async function Header() {
               </div> */}
             </div>
 
-            <div className="pointer-events-auto flex items-center">
+            <div className="pointer-events-auto flex items-center relative z-[60]">
               <SignInButton user={user} />
             </div>
           </div>

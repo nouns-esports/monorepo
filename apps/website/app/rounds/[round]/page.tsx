@@ -82,8 +82,8 @@ export default async function Round(props: {
     : undefined;
 
   return (
-    <div className="relative flex gap-16 w-full pt-32 max-xl:pt-28 max-sm:pt-20 px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
-      <div className="flex flex-col gap-4 w-full">
+    <div className="relative flex justify-center gap-16 w-full pt-32 max-xl:pt-28 max-sm:pt-20 px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
+      <div className="flex flex-col gap-4 w-full max-w-3xl">
         <Link href="/rounds" className="text-red flex items-center gap-1 group">
           <ArrowLeft className="w-5 h-5 text-red group-hover:-translate-x-1 transition-transform" />
           Back to rounds
@@ -229,9 +229,14 @@ export default async function Round(props: {
           />
         </div>
       </div>
-      <div className="sticky top-32 justify-center h-[calc(100vh_-_12rem)] mt-9 w-full max-xl:pointer-events-none max-xl:fixed max-xl:top-0 max-xl:mt-0 max-xl:left-0 max-xl:z-[60] max-xl:w-screen max-xl:h-screen">
+      <div
+        className={twMerge(
+          "fixed top-0 left-0 flex items-center justify-center h-screen w-full bg-black/50 z-[60] max-xl:w-screen max-xl:h-screen opacity-0 pointer-events-none transition-opacity duration-150",
+          selectedProposal && "opacity-100 pointer-events-auto"
+        )}
+      >
         {selectedProposal ? (
-          <div className="flex flex-col gap-4 rounded-xl h-full overflow-hidden max-xl:pointer-events-auto max-xl:rounded-none">
+          <div className="flex flex-col gap-4 w-2/3 rounded-xl h-2/3 max-xl:w-full max-xl:h-full overflow-hidden max-xl:rounded-none">
             <div className="relative flex flex-col gap-4 bg-grey-800 rounded-xl p-6 max-sm:p-3 h-full">
               <div className="flex items-start justify-between gap-8">
                 <h2 className="text-white font-luckiest-guy text-3xl">
@@ -279,7 +284,7 @@ export default async function Round(props: {
               )} */}
               <div className="relative flex flex-col h-full">
                 <div className="absolute top-0 left-0 w-full bg-gradient-to-b from-grey-800 to-transparent h-10 z-10" />
-                <div className="h-full overflow-y-scroll scrollbar-hidden py-8">
+                <div className="h-full overflow-y-scroll scrollbar-hidden py-8 mb-4">
                   <Markdown markdown={selectedProposal.content} readOnly />
                 </div>
               </div>
@@ -287,9 +292,7 @@ export default async function Round(props: {
             </div>
           </div>
         ) : (
-          <div className="w-full h-full bg-white text-black rounded-xl flex items-center max-xl:hidden">
-            Round Discussion
-          </div>
+          ""
         )}
       </div>
     </div>

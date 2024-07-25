@@ -1,9 +1,9 @@
 import Link from "@/components/Link";
-import { getArt } from "@/server/queries/art";
+import { getCreations } from "@/server/queries/creations";
 import { twMerge } from "tailwind-merge";
 
-export default async function Art() {
-  const art = await getArt();
+export default async function Creations() {
+  const creations = await getCreations();
 
   return (
     <div className="flex flex-col gap-8 pt-48 max-xl:pt-32 max-sm:pt-24 px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4 max-lg:flex-col">
@@ -21,19 +21,19 @@ export default async function Art() {
           content="https://nouns.gg/frames/artwork?n=1"
         />
       </head> */}
-      <h1 className="text-white font-luckiest-guy text-4xl">Artwork</h1>
+      <h1 className="text-white font-luckiest-guy text-4xl">Creations</h1>
       <div className="grid grid-cols-4 grid-flow-dense gap-4">
-        {art.map((piece) => (
+        {creations.map((creation) => (
           <Link
-            href={`/art/${piece.id.substring(0, 10)}`}
+            href={`/art/${creation.id.substring(0, 10)}`}
             className={twMerge(
               "rounded-xl overflow-hidden",
-              piece.shape === "wide" && "col-span-2"
+              creation.width / creation.height > 1.3 && "col-span-2"
             )}
           >
             <img
-              key={piece.id}
-              src={`https://ipfs.nouns.gg/ipfs/${piece.id}`}
+              key={creation.id}
+              src={`https://ipfs.nouns.gg/ipfs/${creation.id}`}
               className="w-full h-full object-cover hover:scale-105 transition-transform"
             />
           </Link>
