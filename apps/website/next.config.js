@@ -42,6 +42,11 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: "/raffle",
+        destination: "https://app.rep3.gg/matcha/quest/Matchaon0xv2",
+        permanent: true,
+      },
+      {
         source: "/mint",
         destination: "https://shorturl.at/mJKPS",
         permanent: true,
