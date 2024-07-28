@@ -7,6 +7,8 @@
     "start": "cross-env NODE_ENV=production bun index.ts",
     "uniqueVoters": "cross-env NODE_ENV=production bun ./scripts/analytics/uniqueVoters.ts",
     "proposalCount": "cross-env NODE_ENV=production bun ./scripts/analytics/proposalCount.ts",
-    "totalUniqueInteractions": "cross-env NODE_ENV=production bun ./scripts/analytics/totalUniqueInteractions.ts"
+    "totalUniqueInteractions": "cross-env NODE_ENV=production bun ./scripts/analytics/totalUniqueInteractions.ts",
+    "botCheck": "cross-env NODE_ENV=production bun ./scripts/analytics/botCheck.ts",
+    "purgeVotes": "cross-env NODE_ENV=production bun ./scripts/analytics/purgeVotes.ts"
   }
 }

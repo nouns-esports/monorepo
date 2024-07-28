@@ -1,7 +1,7 @@
 import Button from "@/components/Button";
 import Link from "@/components/Link";
 import Image from "next/image";
-import PokemonImage from "@/public/pokemon.webp";
+import PokemonImage from "@/public/pokemon3.jpg";
 import NounsPartnerImage from "@/public/partners/nouns/wordmark.png";
 import MatchaPartnerImage from "@/public/partners/matcha/wordmark.svg";
 import AdidasPartnerImage from "@/public/partners/adidas/wordmark.svg";
@@ -28,13 +28,22 @@ export default async function Home() {
       <div className="flex gap-4 h-[30vw] max-h-[600px] max-lg:h-auto max-lg:max-h-none w-full px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4 max-lg:flex-col">
         <Gallery />
         <div className="flex flex-col gap-2 bg-gradient-to-b from-[#8A63D2] to-[#473072] rounded-xl overflow-hidden w-full h-full max-lg:hidden">
-          <div className="flex items-center text-2xl font-luckiest-guy gap-3 text-white px-4 pt-3">
-            <img
-              src="/farcaster.svg"
-              draggable={false}
-              className="w-6 h-6 select-none"
-            />
-            Discussion
+          <div className="flex items-center justify-between px-4 pt-3">
+            <div className="flex items-center text-2xl font-luckiest-guy gap-3 text-white ">
+              <img
+                src="/farcaster.svg"
+                draggable={false}
+                className="w-6 h-6 select-none"
+              />
+              Discussion
+            </div>
+            <Link
+              href="https://warpcast.com/~/channel/nouns-esports"
+              className="flex text-white font-semibold gap-1 items-center group hover:opacity-70 transition-opacity"
+            >
+              View More
+              <ArrowRight className="w-[1.15rem] h-[1.15rem] group-hover:translate-x-1 transition-transform" />
+            </Link>
           </div>
           <ul className="relative flex flex-col h-full overflow-hidden px-2">
             {trendingPosts.map((post) => (
@@ -86,10 +95,13 @@ export default async function Home() {
             const state = roundState(round);
 
             return (
-              <li className="flex w-full" key={round.id}>
+              <li
+                className="flex px-4 pt-4 w-full group bg-grey-800 rounded-xl hover:bg-grey-600 transition-colors h-56 max-lg:aspect-[14/9] max-lg:w-auto max-lg:h-52"
+                key={round.id}
+              >
                 <Link
                   href={`/rounds/${round.id}`}
-                  className="flex flex-col gap-6 p-4 bg-grey-800 rounded-xl w-full hover:bg-grey-600 transition-colors h-52 group"
+                  className="flex flex-col gap-6 w-full"
                 >
                   <div className="flex justify-between items-center">
                     <img
@@ -111,8 +123,8 @@ export default async function Home() {
                       {round.name}
                     </h3>
                     <p>{round.description}</p>
-                    <div className="from-transparent to-grey-800 opacity-100 group-hover:opacity-0 transition-opacity bg-gradient-to-b h-8 w-full bottom-0 absolute pointer-events-none" />
-                    <div className="from-transparent to-grey-600 opacity-0 group-hover:opacity-100 transition-opacity bg-gradient-to-b h-8 w-full bottom-0 absolute pointer-events-none" />
+                    <div className="from-transparent to-grey-800 via-grey-800/60 bg-gradient-to-b h-16 w-full bottom-0 absolute pointer-events-none" />
+                    <div className="from-transparent to-grey-600 via-grey-600/60 opacity-0 z-10 group-hover:opacity-100 transition-opacity bg-gradient-to-b h-16 w-full bottom-0 absolute pointer-events-none" />
                   </div>
                 </Link>
               </li>
@@ -208,7 +220,7 @@ export default async function Home() {
           </Link>
         </div>
       </div>
-      <div className="flex flex-col gap-4 w-full overflow-hidden">
+      <div className="relative flex flex-col gap-4 w-full overflow-hidden">
         <div className="flex gap-4 w-full h-60 animate-art-marquee-top">
           {await Promise.all(
             [
@@ -286,25 +298,25 @@ export default async function Home() {
         <div className="relative">
           <div className="flex flex-col items-center pt-32 gap-8 bg-gradient-to-t from-[#171717] to-black px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
             <h3 className="font-luckiest-guy text-4xl text-white text-center">
-              Explore our community of artists
+              Explore our community of creators
             </h3>
-            <Button href="/art">Explore</Button>
+            <Button href="/creations">Explore</Button>
           </div>
-          <Link href={""} className="relative group">
-            <Image
-              src={PokemonImage}
-              sizes="100vw"
+          <Link href="/creations/QmV83sDpdb" className="relative group">
+            <img
+              src="https://ipfs.nouns.gg/ipfs/QmV83sDpdbU2E23txL1hY7F6W81SjD4Egz41yCB5YQibQg"
               alt="Pokemon wearing Nouns noggles"
-              placeholder="blur"
               draggable={false}
-              className="w-full select-none"
+              className="w-full select-none max-md:w-auto max-md:h-80 max-md:object-cover"
             />
             <div className="absolute z-10 top-8 right-16 h-8 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity">
-              <Attribution id="" />
+              <Attribution id="QmV83sDpdb" />
             </div>
           </Link>
           <div className="from-transparent to-black bg-gradient-to-b h-2/5 w-full bottom-0 absolute pointer-events-none" />
         </div>
+        <div className="from-transparent to-black bg-gradient-to-r w-32 h-full right-0 bottom-0 absolute pointer-events-none max-[1920px]:hidden flex" />
+        <div className="from-transparent to-black bg-gradient-to-l w-32 h-full left-0 bottom-0 absolute pointer-events-none max-[1920px]:hidden flex" />
       </div>
     </div>
   );

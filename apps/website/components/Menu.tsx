@@ -36,7 +36,7 @@ export default function Menu() {
       )}
       <div
         className={twMerge(
-          "fixed w-full h-full bg-black top-0 left-0 pointer-events-none opacity-0 transition-opacity",
+          "absolute w-full h-screen bg-black top-0 left-0 pointer-events-none opacity-0 transition-opacity",
           open && "opacity-100 pointer-events-auto"
         )}
       ></div>

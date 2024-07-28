@@ -9,6 +9,8 @@ import {
   Dot,
   ChevronRight,
   Trophy,
+  Diamond,
+  Handshake,
 } from "lucide-react";
 import Banner from "./Banner";
 import { getCommunities } from "@/server/queries/communities";
@@ -50,7 +52,7 @@ export default async function Header() {
       <header className="sticky top-0 w-full z-[60] flex justify-center">
         <div className="relative w-full max-w-[1920px]">
           <div className="pointer-events-none absolute top-0 w-full flex items-center justify-between px-16 h-32 max-xl:h-28 max-xl:px-8 max-sm:px-4 max-sm:h-20 z-40">
-            <div className="flex gap-16 max-xl:gap-8 max-[430px]:gap-4 items-center">
+            <div className="flex gap-16 max-xl:gap-8 max-sm:gap-4 items-center">
               <Link
                 href="/"
                 className="pointer-events-auto flex gap-4 h-12 max-sm:h-10 max-sm:gap-3 group items-center cursor-pointer select-none"
@@ -71,19 +73,30 @@ export default async function Header() {
                     <div className="flex flex-col gap-0">
                       <Link
                         href="/about"
-                        className="text-nowrap hover:bg-grey-500 transition-colors py-3 px-3 rounded-lg"
+                        className="text-nowrap hover:bg-grey-500 transition-colors py-1.5 px-3 rounded-lg flex gap-4 items-center"
                       >
-                        <p className="font-bebas-neue text-lg">Our Story</p>
-                        <p className="text-grey-200">
-                          Learn more about our mission
-                        </p>
+                        <img
+                          src="/logo/logo-square.png"
+                          className="h-10 w-10 rounded-md"
+                        />
+                        <div>
+                          <p className="font-bebas-neue text-lg">Our Story</p>
+                          <p className="text-grey-200">
+                            Learn more about our mission
+                          </p>
+                        </div>
                       </Link>
                       <Link
                         href="/partners"
-                        className="text-nowrap hover:bg-grey-500 transition-colors py-3 px-3 rounded-lg"
+                        className="text-nowrap hover:bg-grey-500 transition-colors py-1.5 px-3 rounded-lg flex gap-4 items-center"
                       >
-                        <p className="font-bebas-neue text-lg">Partners</p>
-                        <p className="text-grey-200">Partner with us</p>
+                        <div className="rounded-md w-10 h-10 flex overflow-hidden bg-purple text-white items-center">
+                          <Handshake className="w-full h-full p-2" />
+                        </div>
+                        <div>
+                          <p className="font-bebas-neue text-lg">Partners</p>
+                          <p className="text-grey-200">Partner with us</p>
+                        </div>
                       </Link>
 
                       <div className="text-nowrap gap-2 flex flex-col py-3">
@@ -120,29 +133,54 @@ export default async function Header() {
                     title="Get Involved"
                     icon={<Shapes className="w-5 h-5" />}
                   >
-                    <ul className="flex flex-col gap-0">
-                      <li className="text-nowrap hover:bg-grey-500 transition-colors py-3 px-3 rounded-lg">
-                        <Link href="/rounds">
-                          <p className="font-bebas-neue text-lg">Rounds</p>
-                          <p className="text-grey-200">
-                            Govern who and what we fund
-                          </p>
+                    <ul className="flex flex-col gap-0 w-80">
+                      <li className="text-nowrap hover:bg-grey-500 transition-colors py-1.5 px-3 rounded-lg">
+                        <Link
+                          href="/rounds"
+                          className="flex gap-4 items-center"
+                        >
+                          <div className="rounded-md w-10 h-10 flex overflow-hidden bg-gold-500 text-white items-center">
+                            <Trophy className="w-full h-full p-2" />
+                          </div>
+                          <div>
+                            <p className="font-bebas-neue text-lg">Rounds</p>
+                            <p className="text-grey-200">
+                              Govern who and what we fund
+                            </p>
+                          </div>
                         </Link>
                       </li>
-                      <li className="text-nowrap hover:bg-grey-500 transition-colors py-3 px-3 rounded-lg">
-                        <Link href="/discord">
-                          <p className="font-bebas-neue text-lg">Discord</p>
-                          <p className="text-grey-200">
-                            Join the Discord server
-                          </p>
+                      <li className="text-nowrap hover:bg-grey-500 transition-colors py-1.5 px-3 rounded-lg">
+                        <Link
+                          href="/creations"
+                          className="flex items-center gap-4"
+                        >
+                          <div className="rounded-md w-10 h-10 flex overflow-hidden bg-gradient-to-br from-[#F3B5FD] to-[#F66FD0] text-white items-center">
+                            <Diamond className="w-full h-full p-2" />
+                          </div>
+                          <div>
+                            <p className="font-bebas-neue text-lg">Creations</p>
+                            <p className="text-grey-200">
+                              Explore our community of creators
+                            </p>
+                          </div>
                         </Link>
                       </li>
-                      <li className="text-nowrap hover:bg-grey-500 transition-colors py-3 px-3 rounded-lg">
-                        <Link href="/creations">
-                          <p className="font-bebas-neue text-lg">Creations</p>
-                          <p className="text-grey-200">
-                            Explore our community of creators
-                          </p>
+                      <li className="text-nowrap hover:bg-grey-500 transition-colors py-1.5 px-3 rounded-lg">
+                        <Link
+                          href="/discord"
+                          className="flex items-center gap-4"
+                        >
+                          <img
+                            src="/discord.jpg"
+                            className="h-10 w-10 rounded-md"
+                          />
+                          <div>
+                            <p className="font-bebas-neue text-lg">Discord</p>
+                            <p className="text-grey-200">
+                              Join the Discord server
+                            </p>
+                          </div>
                         </Link>
                       </li>
                     </ul>

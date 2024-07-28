@@ -66,12 +66,10 @@ export default function Gallery() {
 
   return (
     <div className="relative rounded-xl h-full flex-shrink-0 aspect-video max-lg:w-full max-lg:h-auto overflow-hidden select-none">
-      <div className="absolute z-10 top-0 left-0 w-full h-full flex flex-col justify-between p-6 pointer-events-none">
+      <div className="absolute z-10 top-0 left-0 w-full h-full flex flex-col justify-between p-6 max-sm:p-4 pointer-events-none">
         <div>
-          <p className="text-white text-lg drop-shadow-[0_4px_4px_rgba(0,0,0,0.4)]">
-            {slides[index].sub}
-          </p>
-          <h1 className="text-white font-luckiest-guy text-4xl drop-shadow-[0_4px_4px_rgba(0,0,0,0.4)]">
+          <p className="text-white text-lg">{slides[index].sub}</p>
+          <h1 className="text-white font-luckiest-guy text-4xl">
             {slides[index].title}
           </h1>
         </div>
@@ -161,7 +159,7 @@ export default function Gallery() {
               src={slide.url}
               alt={slide.title}
               draggable={false}
-              className="object-cover w-full min-w-full last:min-w-[calc(100%_+_1px)] last:w-[calc(100%_+_1px)] snap-center"
+              className="object-cover w-full min-w-full last:min-w-[calc(100%_+_1px)] last:w-[calc(100%_+_1px)] snap-center brightness-75"
             />
           );
         })}

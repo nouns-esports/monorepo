@@ -36,7 +36,7 @@ export const getTrendingPosts = cache(
 
         channelCount[post.channel.id] = ++channelCount[post.channel.id] || 0;
 
-        if (channelCount[post.channel.id] > 5) {
+        if (channelCount[post.channel.id] > 6) {
           return false;
         }
 
