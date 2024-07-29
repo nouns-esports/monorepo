@@ -97,12 +97,8 @@ app.frame("/frames/round/:id", async (c) => {
       </div>
     ),
     intents: [
-      <Button.Link href={`https://beta.nouns.gg/rounds/${round.id}`}>
-        View
-      </Button.Link>,
-      <Button.Link href={`https://beta.nouns.gg/rounds`}>
-        All Rounds
-      </Button.Link>,
+      <Button.Link href={`/rounds/${round.id}`}>View</Button.Link>,
+      <Button.Link href={`/rounds`}>All Rounds</Button.Link>,
     ],
     title: round.name,
     ogImage: round.banner,
