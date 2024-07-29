@@ -17,7 +17,7 @@ import { getAuthenticatedUser, getUser } from "@/server/queries/users";
 import dynamic from "next/dynamic";
 import Shimmer from "@/components/Shimmer";
 import { getNexus } from "@/server/queries/nexus";
-import { environmentToProtocol } from "@/utils/environmentToProtocol";
+import { relativeToAbsoluteURL } from "@/utils/relativeToAbsoluteURL";
 import { env } from "~/env";
 import { X } from "lucide-react";
 
@@ -49,7 +49,7 @@ export async function generateMetadata(props: {
       images: [round.banner],
     },
     other: await getFrameMetadata(
-      `${environmentToProtocol()}/frames/round/${props.params.round}`
+      relativeToAbsoluteURL(`/frames/round/${props.params.round}`)
     ),
   };
 }
