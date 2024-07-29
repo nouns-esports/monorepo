@@ -6,7 +6,7 @@ import AwardScroller from "@/components/rounds/AwardScroller";
 import Proposals from "@/components/proposals/Proposals";
 import { twMerge } from "tailwind-merge";
 import { formatUnits } from "viem";
-import { getFrameMetadata } from "frog/next";
+// import { getFrameMetadata, isFrameRequest } from "frog/next";
 import type { Metadata } from "next";
 import { getRound } from "@/server/queries/rounds";
 import { getProposals } from "@/server/queries/proposals";
@@ -17,9 +17,10 @@ import { getAuthenticatedUser, getUser } from "@/server/queries/users";
 import dynamic from "next/dynamic";
 import Shimmer from "@/components/Shimmer";
 import { getNexus } from "@/server/queries/nexus";
-import { relativeToAbsoluteURL } from "@/utils/relativeToAbsoluteURL";
+// import { relativeToAbsoluteURL } from "@/utils/relativeToAbsoluteURL";
 import { env } from "~/env";
 import { X } from "lucide-react";
+// import { headers } from "next/headers";
 
 const Markdown = dynamic(() => import("@/components/lexical/Markdown"), {
   ssr: false,
@@ -48,9 +49,9 @@ export async function generateMetadata(props: {
       card: "summary_large_image",
       images: [round.banner],
     },
-    other: await getFrameMetadata(
-      relativeToAbsoluteURL(`/frames/round/${props.params.round}`)
-    ),
+    // other: await getFrameMetadata(
+    //   relativeToAbsoluteURL(`/frames/round/${props.params.round}`)
+    // ),
   };
 }
 
@@ -58,6 +59,8 @@ export default async function Round(props: {
   params: { round: string };
   searchParams: { p?: string };
 }) {
+  // if (isFrameRequest(headers())) return null;
+
   const [round, proposals] = await Promise.all([
     getRound({ id: props.params.round }),
     getProposals({ round: props.params.round }),
