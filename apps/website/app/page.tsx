@@ -41,7 +41,7 @@ export default async function Home() {
               href="https://warpcast.com/~/channel/nouns-esports"
               className="flex text-white font-semibold gap-1 items-center group hover:opacity-70 transition-opacity"
             >
-              View More
+              View All
               <ArrowRight className="w-[1.15rem] h-[1.15rem] group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>

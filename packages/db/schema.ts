@@ -166,10 +166,20 @@ export const nexus = pgTable("nexus", {
 //   // 0 = Explorer, 1 = Challenger, 2 = Champion
 //   rank: smallint("rank").notNull(),
 //   division: smallint("division").notNull(),
-//   // string, $farcaster, $discord, $twitter
+//   // string
 //   image: text("image"),
-//   // string, $farcaster, $discord, $twitter
+//   // string
 //   name: text("name").notNull(),
+//   // string
+//   bio: text("bio"),
+//   // string
+//   wallet: text("wallet"),
+// });
+
+// export const quests = pgTable("quests", {
+//   id: text("id").primaryKey(),
+//   // API endpoint to check if the quest is completed
+//   endpoint: text("endpoint").notNull(),
 // });
 
 export const votes = pgTable("votes", {
