@@ -9,6 +9,7 @@ import { roundState } from "@/utils/roundState";
 
 const app = new Frog({
   basePath: "/",
+  title: "Nouns Esports",
 });
 
 app.frame("/frames/round/:id", async (c) => {
@@ -101,7 +102,6 @@ app.frame("/frames/round/:id", async (c) => {
     ],
     title: round.name,
     ogImage: round.banner,
-    
   });
 });
 
