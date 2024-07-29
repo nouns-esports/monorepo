@@ -6,7 +6,6 @@ import { serveStatic } from "frog/serve-static";
 import { getProposal } from "@/server/queries/proposals";
 import { getRound } from "@/server/queries/rounds";
 import { roundState } from "@/utils/roundState";
-import { relativeToAbsoluteURL } from "@/utils/relativeToAbsoluteURL";
 
 const app = new Frog({
   basePath: "/",
@@ -98,10 +97,10 @@ app.frame("/frames/round/:id", async (c) => {
       </div>
     ),
     intents: [
-      <Button.Link href={relativeToAbsoluteURL(`/rounds/${round.id}`)}>
+      <Button.Link href={`https://beta.nouns.gg/rounds/${round.id}`}>
         View
       </Button.Link>,
-      <Button.Link href={relativeToAbsoluteURL(`/rounds`)}>
+      <Button.Link href={`https://beta.nouns.gg/rounds`}>
         All Rounds
       </Button.Link>,
     ],
