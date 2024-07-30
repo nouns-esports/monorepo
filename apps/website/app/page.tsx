@@ -242,7 +242,7 @@ export default async function Home() {
               return (
                 <Link
                   key={image}
-                  href={`/art/${image.substring(0, 10)}`}
+                  href={`/creations/${image.substring(0, 10)}`}
                   className="relative h-full w-auto group"
                 >
                   <img
@@ -278,7 +278,7 @@ export default async function Home() {
               return (
                 <Link
                   key={image}
-                  href={`/art/${image.substring(0, 10)}`}
+                  href={`/creations/${image.substring(0, 10)}`}
                   className="relative h-full w-auto group"
                 >
                   <img
