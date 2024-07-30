@@ -11,7 +11,7 @@ import {
   json,
   pgEnum,
 } from "drizzle-orm/pg-core";
-import { relations } from "drizzle-orm";
+import { desc, relations } from "drizzle-orm";
 import { Pool } from "pg";
 import { env } from "~/env";
 
@@ -176,11 +176,36 @@ export const nexus = pgTable("nexus", {
 //   wallet: text("wallet"),
 // });
 
+// export const actions = pgTable("actions", {
+//   // endpoint is api/quests/actions/action-id
+//   id: text("id").primaryKey(),
+//   name: text("name").notNull(),
+//   description: text("description").notNull(),
+//   quest: text("quest").notNull(),
+// });
+
+// export const actionRelations = relations(actions, ({ one, many }) => ({
+//   quest: one(quests, {
+//     fields: [actions.quest],
+//     references: [quests.id],
+//   }),
+//   quests: many(quests),
+// }));
+
+// Potential headwinds
+// - Timelock certain actions (so users cant spam xp for things list casting which can be infinitely done unlike voting). This may be formatted like daily or weekly quests (think rocket league)
+// - Actions may have xp and quests its own xp
+// - Should make sure to track when users are awarded not just an xp count, maybe an xp table with relations for actions and quests
+
 // export const quests = pgTable("quests", {
 //   id: text("id").primaryKey(),
-//   // API endpoint to check if the quest is completed
-//   endpoint: text("endpoint").notNull(),
+//   name: text("name").notNull(),
+//   description: text("description").notNull(),
 // });
+
+// export const questRelations = relations(quests, ({ many }) => ({
+//   actions: many(actions),
+// }));
 
 export const votes = pgTable("votes", {
   id: serial("id").primaryKey(),

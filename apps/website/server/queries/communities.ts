@@ -11,3 +11,23 @@ export const getCommunities = cache(
   ["getCommunities"],
   { revalidate: 60 * 10 }
 );
+
+export const getCommunity = cache(
+  async (input: { id: string }) => {
+    return db.query.communities.findFirst({
+      where: eq(communities.id, input.id),
+    });
+  },
+  ["getCommunity"],
+  { revalidate: 60 * 10 }
+);
+
+export const getCommunityRosters = cache(
+  async (input: { community: string }) => {
+    return db.query.rosters.findMany({
+      where: and(eq(communities.id, input.community)),
+    });
+  },
+  ["getCommunityRosters"],
+  { revalidate: 60 * 10 }
+);

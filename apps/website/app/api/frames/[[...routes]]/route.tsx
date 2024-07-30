@@ -8,11 +8,11 @@ import { getRound } from "@/server/queries/rounds";
 import { roundState } from "@/utils/roundState";
 
 const app = new Frog({
-  basePath: "/",
+  basePath: "/api/frames",
   title: "Nouns Esports",
 });
 
-app.frame("/frames/round/:id", async (c) => {
+app.frame("/round/:id", async (c) => {
   const round = await getRound({ id: c.req.param("id") });
 
   if (!round) {
@@ -105,7 +105,7 @@ app.frame("/frames/round/:id", async (c) => {
   });
 });
 
-// app.frame("/frames/proposal/:id", async (c) => {
+// app.frame("/proposal/:id", async (c) => {
 //   const proposal = await getProposal({ id: Number(c.req.param("id")) });
 
 //   if (!proposal) {
