@@ -41,7 +41,7 @@ export default async function Footer() {
           <Group title="Get Involved">
             <Item href="/rounds">Rounds</Item>
             <Item href="/discord">Discord</Item>
-            <Item href="/creations">Creations</Item>
+            <Item href="/creations">Creator Spotlight</Item>
           </Group>
         </div>
         <div className="flex max-lg:flex-row max-[300px]:flex-col gap-4 items-center justify-center text-white">

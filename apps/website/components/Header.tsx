@@ -159,7 +159,9 @@ export default async function Header() {
                             <Diamond className="w-full h-full p-2" />
                           </div>
                           <div>
-                            <p className="font-bebas-neue text-lg">Creations</p>
+                            <p className="font-bebas-neue text-lg">
+                              Creator Spotlight
+                            </p>
                             <p className="text-grey-200">
                               Explore our community of creators
                             </p>
