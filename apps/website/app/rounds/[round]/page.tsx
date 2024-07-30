@@ -36,6 +36,11 @@ export async function generateMetadata(props: {
     return notFound();
   }
 
+  console.log(
+    "metadata",
+    relativeToAbsoluteURL(`/api/frames/round/${props.params.round}`)
+  );
+
   return {
     title: round.name,
     description: round.description,
