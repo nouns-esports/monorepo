@@ -17,7 +17,6 @@ import { getAuthenticatedUser, getUser } from "@/server/queries/users";
 import dynamic from "next/dynamic";
 import Shimmer from "@/components/Shimmer";
 import { getNexus } from "@/server/queries/nexus";
-import { relativeToAbsoluteURL } from "@/utils/relativeToAbsoluteURL";
 import { env } from "~/env";
 import { X } from "lucide-react";
 import { headers } from "next/headers";
@@ -36,11 +35,6 @@ export async function generateMetadata(props: {
     return notFound();
   }
 
-  console.log(
-    "metadata",
-    relativeToAbsoluteURL(`/api/frames/round/${props.params.round}`)
-  );
-
   return {
     title: round.name,
     description: round.description,
@@ -55,7 +49,7 @@ export async function generateMetadata(props: {
       images: [round.banner],
     },
     other: await getFrameMetadata(
-      relativeToAbsoluteURL(`/api/frames/round/${props.params.round}`)
+      `${env.PUBLIC_DOMAIN}/api/frames/round/${props.params.round}`
     ),
   };
 }
