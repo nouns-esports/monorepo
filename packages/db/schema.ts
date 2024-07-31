@@ -232,6 +232,8 @@ export const creationType = pgEnum("creationType", [
   "photograph",
   // video/clip
   // emotes
+  // Stickers
+  // GIFs
 ]);
 
 export const creations = pgTable("creations", {

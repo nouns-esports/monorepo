@@ -32,6 +32,7 @@ export const getTrendingPosts = cache(
 
     const filtered = posts
       .filter((post) => {
+        if (post.text.length < 1) return false;
         if (!post.channel) return false;
 
         channelCount[post.channel.id] = ++channelCount[post.channel.id] || 0;

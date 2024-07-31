@@ -67,7 +67,7 @@ export default async function Header() {
                 </div>
               </Link>
               <nav className="pointer-events-auto flex items-center gap-8">
-                <Menu />
+                <Menu rosters={rosters} communities={communities} />
                 <ul className="flex gap-6 items-center text-white max-md:gap-0">
                   <Group title="Esports" icon={<Trophy className="w-5 h-5" />}>
                     <div className="flex flex-col gap-0">
@@ -267,21 +267,15 @@ export default async function Header() {
   );
 }
 
-function Group(
-  props: { title: string; children: React.ReactNode } & (
-    | { icon?: React.ReactNode }
-    | { image?: string }
-  )
-) {
+function Group(props: {
+  title: string;
+  children: React.ReactNode;
+  icon: React.ReactNode;
+}) {
   return (
     <li className="relative group flex">
       <div className="cursor-pointer opacity-100 hover:opacity-80 transition-opacity font-semibold flex justify-center gap-2 items-center max-md:hidden">
-        {"icon" in props ? props.icon : ""}
-        {"image" in props ? (
-          <img src={props.image} className="w-5 h-5 rounded-full" />
-        ) : (
-          ""
-        )}
+        {props.icon}
         {props.title}
       </div>
       <div className="absolute top-6 -left-8 pt-4 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">
