@@ -11,6 +11,28 @@ import { env } from "~/env";
 const app = new Frog({
   basePath: "/api/frames",
   title: "Nouns Esports",
+  imageOptions: {
+    fonts: [
+      {
+        name: "Luckiest Guy",
+        source: "google",
+      },
+      {
+        name: "Bebas Neue",
+        source: "google",
+      },
+      {
+        name: "Cabin",
+        weight: 500,
+        source: "google",
+      },
+      {
+        name: "Cabin",
+        weight: 600,
+        source: "google",
+      },
+    ],
+  },
 });
 
 app.frame("/round/:id", async (c) => {
@@ -55,20 +77,22 @@ app.frame("/round/:id", async (c) => {
             style={{
               display: "flex",
               flexDirection: "column",
+              fontFamily: "Cabin",
               backgroundColor:
                 state === "Starting"
                   ? "#789AF4"
                   : state === "Proposing"
-                    ? "#4CC87D"
+                    ? "#3569ee"
                     : state === "Voting"
-                      ? "#BC30ED"
+                      ? "#bc30ed"
                       : "#E93737",
               borderRadius: "10000",
-              paddingLeft: 24,
-              paddingRight: 24,
-              paddingTop: 12,
-              paddingBottom: 12,
+              paddingLeft: 32,
+              paddingRight: 32,
+              paddingTop: 16,
+              paddingBottom: 16,
               fontSize: 32,
+              fontWeight: 600,
             }}
           >
             {state === "Starting" ? "Starting" : ""}
@@ -86,14 +110,25 @@ app.frame("/round/:id", async (c) => {
         >
           <h1
             style={{
-              fontSize: 48,
+              fontSize: 64,
               fontWeight: 600,
               margin: 0,
+              fontFamily: "Bebas Neue",
             }}
           >
             {round.name}
           </h1>
-          <p style={{ fontSize: 32, margin: 0 }}>{round.description}</p>
+          <p
+            style={{
+              fontSize: 36,
+              margin: 0,
+              color: "#909497",
+              weight: 500,
+              fontFamily: "Cabin",
+            }}
+          >
+            {round.description}
+          </p>
         </div>
       </div>
     ),
@@ -106,7 +141,7 @@ app.frame("/round/:id", async (c) => {
       </Button.Link>,
     ],
     title: round.name,
-    ogImage: round.banner,
+    // ogImage: round.banner,
   });
 });
 
