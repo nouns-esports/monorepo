@@ -4,23 +4,30 @@ import { useEffect, useRef, useState } from "react";
 import Button from "./Button";
 import { twMerge } from "tailwind-merge";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import Image from "next/image";
 
 const slides = [
   {
     title: "We're redefining esports",
     sub: "Learn about our mission",
-    href: "/about",
+    href: "https://www.youtube.com/watch?v=SAXzMQ8pPvE",
     button: "Learn more",
     type: "video",
     mp4: "/gallery/landing.mp4",
     webp: "/gallery/landing.webm",
   },
   {
+    title: "Win a trip to The International",
+    sub: "An exclusive experience",
+    href: "/rounds/ti",
+    button: "View Round",
+    type: "image",
+    url: "https://ipfs.nouns.gg/ipfs/Qmf8W7VVrLdQUBpEK27PeAfcXKu9q6KUriBKQ3uzja3xye",
+  },
+  {
     title: "Nouns Fest Showcase",
     sub: "Coming in October",
-    href: "/about",
-    button: "View Event",
+    href: "https://twitter.com/nounsesports/status/1786230284884881664",
+    button: "View Details",
     type: "image",
     url: "/gallery/nouns-fest-showcase.png",
   },
@@ -31,6 +38,14 @@ const slides = [
     button: "Visit Matcha",
     type: "image",
     url: "/gallery/matcha-x-nouns.jpg",
+  },
+  {
+    title: "Get our 2024 jersey",
+    sub: "Shop now",
+    href: "/shop",
+    button: "Shop",
+    type: "image",
+    url: "/partners.png",
   },
 ] satisfies Array<
   { title: string; sub: string; href: string; button: string } & (
