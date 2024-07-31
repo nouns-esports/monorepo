@@ -44,12 +44,14 @@ app.frame("/round/:id", async (c) => {
 
   const state = roundState(round);
 
+  const start = new Date(round.start);
+
   return c.res({
     image: (
       <div
         style={{
           color: "white",
-          backgroundColor: "#0C0C0C",
+          backgroundColor: "#121213",
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
@@ -68,38 +70,69 @@ app.frame("/round/:id", async (c) => {
           <img
             src={round.image}
             style={{
-              width: 120,
-              height: 120,
+              width: 150,
+              height: 150,
               borderRadius: 12,
             }}
           />
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              fontFamily: "Cabin",
-              backgroundColor:
-                state === "Starting"
-                  ? "#789AF4"
-                  : state === "Proposing"
+          {state === "Starting" ? (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-end",
+              }}
+            >
+              <p
+                style={{
+                  fontFamily: "Cabin",
+                  weight: 500,
+                  fontSize: 36,
+                  lineHeight: 0.6,
+                  color: "#909497",
+                }}
+              >
+                Starts
+              </p>
+              <p
+                style={{
+                  fontFamily: "Cabin",
+                  weight: 500,
+                  fontSize: 40,
+                  lineHeight: 0.6,
+                  color: "white",
+                }}
+              >
+                {start.toLocaleString("default", { month: "long" })}{" "}
+                {start.getDate()}
+              </p>
+            </div>
+          ) : (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                fontFamily: "Cabin",
+                backgroundColor:
+                  state === "Proposing"
                     ? "#3569ee"
                     : state === "Voting"
                       ? "#bc30ed"
                       : "#E93737",
-              borderRadius: "10000",
-              paddingLeft: 32,
-              paddingRight: 32,
-              paddingTop: 16,
-              paddingBottom: 16,
-              fontSize: 32,
-              fontWeight: 600,
-            }}
-          >
-            {state === "Starting" ? "Starting" : ""}
-            {state === "Proposing" ? "Proposing" : ""}
-            {state === "Voting" ? "Voting" : ""}
-            {state === "Ended" ? "Round Ended" : ""}
-          </div>
+                borderRadius: "10000",
+                paddingLeft: 32,
+                paddingRight: 32,
+                paddingTop: 16,
+                paddingBottom: 16,
+                fontSize: 32,
+                fontWeight: 600,
+              }}
+            >
+              {state === "Proposing" ? "Proposing" : ""}
+              {state === "Voting" ? "Voting" : ""}
+              {state === "Ended" ? "Ended" : ""}
+            </div>
+          )}
         </div>
         <div
           style={{
