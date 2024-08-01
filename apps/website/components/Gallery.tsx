@@ -15,14 +15,14 @@ const slides = [
     mp4: "/gallery/landing.mp4",
     webp: "/gallery/landing.webm",
   },
-  {
-    title: "Win a trip to The International",
-    sub: "An exclusive experience",
-    href: "/rounds/ti",
-    button: "View Round",
-    type: "image",
-    url: "https://ipfs.nouns.gg/ipfs/Qmf8W7VVrLdQUBpEK27PeAfcXKu9q6KUriBKQ3uzja3xye",
-  },
+  // {
+  //   title: "Win a trip to The International",
+  //   sub: "An exclusive experience",
+  //   href: "/rounds/ti",
+  //   button: "View Round",
+  //   type: "image",
+  //   url: "https://ipfs.nouns.gg/ipfs/Qmf8W7VVrLdQUBpEK27PeAfcXKu9q6KUriBKQ3uzja3xye",
+  // },
   {
     title: "Nouns Fest Showcase",
     sub: "Coming in October",
@@ -39,14 +39,14 @@ const slides = [
     type: "image",
     url: "/gallery/matcha-x-nouns.jpg",
   },
-  {
-    title: "Get our 2024 jersey",
-    sub: "Shop now",
-    href: "/shop",
-    button: "Shop",
-    type: "image",
-    url: "/partners.png",
-  },
+  // {
+  //   title: "Get our 2024 jersey",
+  //   sub: "Shop now",
+  //   href: "/shop",
+  //   button: "Shop",
+  //   type: "image",
+  //   url: "/partners.png",
+  // },
 ] satisfies Array<
   { title: string; sub: string; href: string; button: string } & (
     | { type: "video"; mp4: string; webp: string }

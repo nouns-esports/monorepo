@@ -227,7 +227,7 @@ export default async function Home() {
         </div>
       </div>
       <div className="relative flex flex-col gap-4 w-full overflow-hidden">
-        <div className="flex gap-4 w-full h-60 animate-art-marquee-top">
+        <div className="flex gap-4 w-full h-60 max-sm:h-40 animate-art-marquee-top">
           {await Promise.all(
             [
               "QmUMouSSMHhmuPrEs3QUSUjNvfssPoe5k9iXj2dqtXQQ8v",
@@ -265,7 +265,7 @@ export default async function Home() {
             })
           )}
         </div>
-        <div className="flex flex-row-reverse gap-4 h-60 animate-art-marquee-bottom">
+        <div className="flex flex-row-reverse gap-4 h-60 max-sm:h-40 animate-art-marquee-bottom">
           {await Promise.all(
             [
               "QmYfT8Wh7o5YtsfpjYmzWeVpuNVkz2UGYPMti2aEBoMFWs",
