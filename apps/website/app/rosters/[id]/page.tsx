@@ -48,7 +48,7 @@ export default async function RosterPage(props: { params: { id: string } }) {
   const community = rosters[0].community;
 
   return (
-    <div className="flex flex-col gap-12 max-lg:gap-8 pt-36 max-xl:pt-28 max-sm:pt-20 px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
+    <div className="flex flex-col gap-12 max-lg:gap-8 pt-36 max-xl:pt-28 max-sm:pt-24 px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
       <div className="flex gap-4 items-center">
         <img src={community.image} className="h-12 aspect-square rounded-lg" />
         <h1 className="font-luckiest-guy text-white text-4xl">
@@ -74,7 +74,7 @@ export default async function RosterPage(props: { params: { id: string } }) {
                   <Link
                     key={person.id}
                     href={person.liquipedia ?? ""}
-                    className="relative bg-red select-none aspect-[21/30] w-full flex max-lg:w-60 max-lg:flex-shrink-0 rounded-xl border-fix group cursor-pointer overflow-hidden"
+                    className="relative bg-red max-lg:bg-grey-800 select-none aspect-[21/30] w-full flex max-lg:w-60 max-lg:flex-shrink-0 rounded-xl border-fix group cursor-pointer overflow-hidden"
                     style={{
                       maxWidth: roster.talent.length < 5 ? "18rem" : "100%",
                     }}

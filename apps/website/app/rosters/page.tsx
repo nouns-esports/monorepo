@@ -6,7 +6,7 @@ export default async function Rosters() {
   const rosters = await getRosters();
 
   return (
-    <div className="flex flex-col gap-4 pt-32 max-xl:pt-28 max-sm:pt-20 px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
+    <div className="flex flex-col gap-4 pt-32 max-xl:pt-28 max-sm:pt-24 px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
       <h1 className="text-4xl text-white font-luckiest-guy">Rosters</h1>
       <div className="grid grid-cols-3 gap-4 max-xl:grid-cols-2 max-sm:grid-cols-1">
         {rosters.map((roster) => (
