@@ -15,14 +15,14 @@ const slides = [
     mp4: "/gallery/landing.mp4",
     webp: "/gallery/landing.webm",
   },
-  // {
-  //   title: "Win a trip to The International",
-  //   sub: "An exclusive experience",
-  //   href: "/rounds/ti",
-  //   button: "View Round",
-  //   type: "image",
-  //   url: "https://ipfs.nouns.gg/ipfs/Qmf8W7VVrLdQUBpEK27PeAfcXKu9q6KUriBKQ3uzja3xye",
-  // },
+  {
+    title: "Win a trip to The International",
+    sub: "An exclusive experience",
+    href: "/rounds/ti",
+    button: "View Round",
+    type: "image",
+    url: "https://ipfs.nouns.gg/ipfs/QmYP15gaVMexJsnnFNRKNudLQZJ2RupDuw83H8oDzKoaqM",
+  },
   {
     title: "Nouns Fest Showcase",
     sub: "Coming in October",
@@ -84,7 +84,7 @@ export default function Gallery() {
       <div className="absolute z-10 top-0 left-0 w-full h-full flex flex-col justify-between p-6 max-sm:p-4 pointer-events-none">
         <div>
           <p className="text-white text-lg">{slides[index].sub}</p>
-          <h1 className="text-white font-luckiest-guy text-4xl max-sm:text-3xl">
+          <h1 className="text-white font-luckiest-guy text-4xl max-sm:text-3xl max-sm:leading-none">
             {slides[index].title}
           </h1>
         </div>
