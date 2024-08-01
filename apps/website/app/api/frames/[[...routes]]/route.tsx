@@ -174,7 +174,7 @@ app.frame("/round/:id", async (c) => {
       </Button.Link>,
     ],
     title: round.name,
-    // ogImage: round.banner,
+    ogImage: round.banner,
   });
 });
 

@@ -216,47 +216,7 @@ export default async function Header() {
                   </Link>
                 </ul>
               </nav>
-              {/* <div className="h-14">
-                <ul className="relative group w-48 hover:h-40 pointer-events-auto">
-                  {events.map((event, index) => (
-                    <li
-                      key={index}
-                      className={twMerge(
-                        "absolute bg-grey-800 rounded-lg w-full transition-all h-14 border border-grey-600 z-50 hover:bg-grey-600",
-                        index === 1 &&
-                          "scale-95 top-1.5 -z-10 group-hover:top-16 group-hover:scale-100 group-hover:z-40",
-                        index === 2 &&
-                          "scale-90 top-3 -z-20 group-hover:top-32 group-hover:scale-100 group-hover:z-30"
-                      )}
-                    >
-                      <Link
-                        href={`/events/${event.title}`}
-                        className="flex items-center justify-between h-full pl-2 py-2 pr-1"
-                      >
-                        <div className="flex gap-2 items-center h-full">
-                          <img
-                            src={event.image}
-                            alt={`${event.title} is ${event.type === "live" ? "live" : "happening now"}`}
-                            className="h-full rounded-full"
-                          />
-                          <div className="flex flex-col gap-0.5">
-                            <p className="text-sm text-white font-semibold">
-                              {event.title}
-                            </p>
-                            <p className="text-xs text-red flex items-center gap-1">
-                              <span className="w-1.5 h-1.5 bg-red rounded-full animate-pulse" />
-                              Live
-                            </p>
-                          </div>
-                        </div>
-                        <ChevronRight className="h-6" />
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div> */}
             </div>
-
             <div className="pointer-events-auto flex items-center relative z-[60]">
               <SignInButton user={user} />
             </div>
@@ -278,7 +238,7 @@ function Group(props: {
         {props.icon}
         {props.title}
       </div>
-      <div className="absolute top-6 -left-8 pt-4 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">
+      <div className="absolute top-6 -left-8 pt-4 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto max-md:hidden">
         <div className="bg-grey-600 rounded-xl p-3 flex gap-2">
           {props.children}
         </div>
