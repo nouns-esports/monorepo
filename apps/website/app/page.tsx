@@ -24,7 +24,7 @@ export default async function Home() {
   const rounds = await getRounds({ limit: 4 });
 
   return (
-    <div className="flex flex-col gap-16 mb-16 max-lg:gap-12 pt-32 max-xl:pt-28 max-sm:pt-20">
+    <div className="flex flex-col gap-16 mb-16 max-sm:mb-8 max-lg:gap-12 pt-32 max-xl:pt-28 max-sm:pt-20">
       <div className="flex gap-4 h-[30vw] max-h-[600px] max-lg:h-auto max-lg:max-h-none w-full px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4 max-lg:flex-col">
         <Gallery />
         <div className="flex flex-col gap-2 bg-gradient-to-b from-[#8A63D2] to-[#473072] rounded-xl overflow-hidden w-full h-full max-lg:hidden">
@@ -195,7 +195,7 @@ export default async function Home() {
           />
         </ul>
       </div>
-      <div className="flex flex-col items-center gap-4 py-16 max-[450px]:gap-8">
+      <div className="flex flex-col items-center gap-4 py-16 max-sm:py-8 max-[450px]:gap-8">
         <h3 className="text-white text-4xl font-luckiest-guy max-sm:text-3xl">
           Partners
         </h3>
@@ -302,7 +302,7 @@ export default async function Home() {
           )}
         </div>
         <div className="relative">
-          <div className="flex flex-col items-center pt-32 gap-8 bg-gradient-to-t from-[#171717] to-black px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
+          <div className="flex flex-col items-center pt-32 max-sm:pt-16 gap-8 bg-gradient-to-t from-[#171717] to-black px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
             <h3 className="font-luckiest-guy text-4xl max-sm:text-3xl text-white text-center">
               Explore our community of creators
             </h3>
