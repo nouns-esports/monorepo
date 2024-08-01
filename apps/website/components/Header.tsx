@@ -209,7 +209,7 @@ export default async function Header() {
                     </div>
                   </Group>
                   <Link href="/shop">
-                    <li className="flex gap-2 items-center opacity-100 hover:opacity-80 transition-opacity max-[430px]:hidden relative z-[60]">
+                    <li className="flex gap-2 items-center opacity-100 hover:opacity-80 transition-opacity max-[400px]:hidden relative z-[60]">
                       <ShoppingBag className="w-5 h-5" />
                       Shop
                     </li>
