@@ -81,7 +81,9 @@ export default async function Home() {
       </div>
       <div className="flex flex-col gap-4 px-32 max-2xl:px-16 max-xl:px-8 max-lg:px-0">
         <div className="flex justify-between items-center max-lg:px-8 max-sm:px-4">
-          <h2 className="font-luckiest-guy text-white text-4xl">Rounds</h2>
+          <h2 className="font-luckiest-guy text-white text-4xl max-sm:text-3xl">
+            Rounds
+          </h2>
           <Link
             href="/rounds"
             className="text-red flex gap-1 items-center group"
@@ -134,7 +136,9 @@ export default async function Home() {
       </div>
       <div className="flex flex-col gap-4 px-32 max-2xl:px-16 max-xl:px-8 max-lg:px-0">
         <div className="flex justify-between items-center max-lg:px-8 max-sm:px-4">
-          <h2 className="font-luckiest-guy text-white text-4xl">Videos</h2>
+          <h2 className="font-luckiest-guy text-white text-4xl max-sm:text-3xl">
+            Videos
+          </h2>
           <Link
             href="/youtube"
             className="text-red flex gap-1 items-center group"
@@ -169,7 +173,7 @@ export default async function Home() {
         </ul>
       </div>
       <div className="flex flex-col gap-4 px-32 max-2xl:px-16 max-xl:px-8 max-lg:px-0">
-        <h2 className="font-luckiest-guy text-white text-4xl max-lg:pl-8 max-sm:pl-4">
+        <h2 className="font-luckiest-guy text-white text-4xl max-lg:pl-8 max-sm:pl-4 max-sm:text-3xl">
           Explore
         </h2>
         <ul className="flex gap-4 rotate-[0.01deg] max-lg:overflow-x-scroll max-lg:px-8 max-sm:px-4 max-lg:scrollbar-hidden">
@@ -192,14 +196,16 @@ export default async function Home() {
         </ul>
       </div>
       <div className="flex flex-col items-center gap-4 py-16 max-[450px]:gap-8">
-        <h3 className="text-white text-4xl font-luckiest-guy">Partners</h3>
-        <div className="flex justify-center items-center gap-10 w-full max-[450px]:flex-col max-[450px]:gap-6">
+        <h3 className="text-white text-4xl font-luckiest-guy max-sm:text-3xl">
+          Partners
+        </h3>
+        <div className="flex justify-center items-center gap-10 w-full max-[450px]:gap-6">
           <Link href="https://nouns.wtf">
             <Image
               draggable={false}
               alt="NounsDAO"
               src={NounsPartnerImage}
-              className="h-10 max-sm:h-8 select-none hover:opacity-70 transition-opacity w-auto"
+              className="h-10 max-sm:h-8 max-[450px]:h-6 select-none hover:opacity-70 transition-opacity w-auto"
             />
           </Link>
           <Link href="/matcha">
@@ -207,7 +213,7 @@ export default async function Home() {
               alt="Matcha"
               draggable={false}
               src={MatchaPartnerImage}
-              className="h-8 max-sm:h-6 select-none hover:opacity-70 transition-opacity w-auto"
+              className="h-8 max-sm:h-6 max-[450px]:h-5 select-none hover:opacity-70 transition-opacity w-auto"
             />
           </Link>
           <Link href="https://adidas.com">
@@ -215,7 +221,7 @@ export default async function Home() {
               alt="Adidas"
               draggable={false}
               src={AdidasPartnerImage}
-              className="h-12 max-sm:h-10 select-none hover:opacity-70 transition-opacity w-auto"
+              className="h-12 max-sm:h-10 max-[450px]:h-8 select-none hover:opacity-70 transition-opacity w-auto"
             />
           </Link>
         </div>
