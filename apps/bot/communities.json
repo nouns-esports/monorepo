@@ -1,0 +1,44 @@
+[
+  {
+    "id": "nouns",
+    "image": "https://warpcast.com/~/channel-images/nouns.png",
+    "name": "Nouns",
+    "channels": ["nouns-esports", "nouncraft", "nounsfe"]
+  },
+  {
+    "id": "smash",
+    "image": "https://i.imgur.com/EORKiMw.png",
+    "name": "Smash",
+    "channels": ["smash"]
+  },
+  {
+    "id": "dota",
+    "image": "https://i.imgur.com/iw2cO2E.png",
+    "name": "Dota",
+    "channels": ["dota2"]
+  },
+  {
+    "id": "cs",
+    "image": "https://i.imgur.com/sZov7v0.png",
+    "name": "Counter-Strike",
+    "channels": ["cs2"]
+  },
+  {
+    "id": "street-fighter",
+    "image": "https://i.imgur.com/JFrMO5l.png",
+    "name": "Street Fighter",
+    "channels": ["streetfighter"]
+  },
+  {
+    "id": "rocket-league",
+    "image": "https://i.imgur.com/r1wIA3S.png",
+    "name": "Rocket League",
+    "channels": ["rocketleague"]
+  },
+  {
+    "id": "pokemon",
+    "image": "https://imagedelivery.net/BXluQx4ige9GuW0Ia56BHw/40a9b6c3-2425-4d53-969f-1ac85edcea00/original",
+    "name": "Pokémon",
+    "channels": ["unite"]
+  }
+]

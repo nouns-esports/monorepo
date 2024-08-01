@@ -10,6 +10,7 @@
     "totalUniqueInteractions": "cross-env NODE_ENV=production bun ./scripts/analytics/totalUniqueInteractions.ts",
     "botCheck": "cross-env NODE_ENV=production bun ./scripts/analytics/botCheck.ts",
     "purgeVotes": "cross-env NODE_ENV=production bun ./scripts/analytics/purgeVotes.ts",
-    "updateImages": "cross-env NODE_ENV=development bun ./scripts/analytics/updateImages.ts"
+    "updateImages": "cross-env NODE_ENV=development bun ./scripts/analytics/updateImages.ts",
+    "getData": "cross-env NODE_ENV=development bun ./scripts/analytics/getData.ts"
   }
 }
