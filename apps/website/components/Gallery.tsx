@@ -84,7 +84,7 @@ export default function Gallery() {
       <div className="absolute z-10 top-0 left-0 w-full h-full flex flex-col justify-between p-6 max-sm:p-4 pointer-events-none">
         <div>
           <p className="text-white text-lg">{slides[index].sub}</p>
-          <h1 className="text-white font-luckiest-guy text-4xl">
+          <h1 className="text-white font-luckiest-guy text-4xl max-sm:text-3xl">
             {slides[index].title}
           </h1>
         </div>
