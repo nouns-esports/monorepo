@@ -303,7 +303,7 @@ export default async function Home() {
         </div>
         <div className="relative">
           <div className="flex flex-col items-center pt-32 gap-8 bg-gradient-to-t from-[#171717] to-black px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
-            <h3 className="font-luckiest-guy text-4xl text-white text-center">
+            <h3 className="font-luckiest-guy text-4xl max-sm:text-3xl text-white text-center">
               Explore our community of creators
             </h3>
             <Button href="/creations">Explore</Button>
