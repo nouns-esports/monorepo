@@ -1,4 +1,4 @@
-import { db, communities } from "~/packages/db/schema";
+import { db, communities, rosters, talent } from "~/packages/db/schema";
 import { and, asc, eq } from "drizzle-orm";
 import { unstable_cache as cache } from "next/cache";
 
@@ -25,7 +25,16 @@ export const getCommunity = cache(
 export const getCommunityRosters = cache(
   async (input: { community: string }) => {
     return db.query.rosters.findMany({
-      where: and(eq(communities.id, input.community)),
+      where: and(
+        eq(rosters.community, input.community),
+        eq(rosters.active, true)
+      ),
+      with: {
+        community: true,
+        talent: {
+          where: eq(talent.active, true),
+        },
+      },
     });
   },
   ["getCommunityRosters"],

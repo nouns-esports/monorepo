@@ -114,7 +114,7 @@ export default async function Header() {
                           {rosters.map((roster) => (
                             <Link
                               key={roster.id}
-                              href={`/rosters/${roster.id}`}
+                              href={`/rosters/${roster.community.id}`}
                               className="flex items-center gap-2 rounded-lg px-2 py-2 hover:bg-grey-500 transition-colors w-full"
                             >
                               <img
