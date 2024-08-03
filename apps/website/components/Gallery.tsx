@@ -9,7 +9,7 @@ const slides = [
   {
     title: "We're redefining esports",
     sub: "Learn about our mission",
-    href: "https://www.youtube.com/watch?v=SAXzMQ8pPvE",
+    href: "/about",
     button: "Learn more",
     type: "video",
     mp4: "/gallery/landing.mp4",

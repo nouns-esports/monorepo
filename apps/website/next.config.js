@@ -121,6 +121,11 @@ const nextConfig = {
           "https://calendar.google.com/calendar/embed?src=2gl6iku9kcb2qjdrtgdthgng3s%40group.calendar.google.com",
         permanent: true,
       },
+      {
+        source: "/about",
+        destination: "https://www.youtube.com/watch?v=SAXzMQ8pPvE",
+        permanent: true,
+      },
     ];
   },
 };
