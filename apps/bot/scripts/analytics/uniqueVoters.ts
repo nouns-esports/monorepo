@@ -36,19 +36,7 @@ for (const vote of allVotes) {
 let output = "";
 
 for (const round in rounds) {
-  output += `${round},`;
-}
-
-output += "\n";
-
-for (const round in rounds) {
-  output += `${rounds[round].votes},`;
-}
-
-output += "\n";
-
-for (const round in rounds) {
-  output += `${rounds[round].start},`;
+  output += `${round},${rounds[round].votes},${rounds[round].start},\n`;
 }
 
 writeFileSync("uniqueVoters.csv", output);

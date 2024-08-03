@@ -1,0 +1,1 @@
+ALTER TABLE "art" ADD COLUMN "wide" boolean DEFAULT false NOT NULL;

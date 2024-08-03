@@ -69,9 +69,16 @@ function PrivySync(props: { children: React.ReactNode; user?: string }) {
         router.refresh();
       }
     }
+
     if (authenticated && !props.user) {
       refresh();
     }
+
+    const intervalId = setInterval(() => {
+      refresh();
+    }, 900_000);
+
+    return () => clearInterval(intervalId);
   }, [authenticated, user]);
 
   return props.children;

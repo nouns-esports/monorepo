@@ -11,18 +11,19 @@ import {
   json,
   pgEnum,
 } from "drizzle-orm/pg-core";
-import { relations } from "drizzle-orm";
+import { desc, relations } from "drizzle-orm";
 import { Pool } from "pg";
 import { env } from "~/env";
 
-export const games = pgTable("games", {
+export const communities = pgTable("communities", {
   id: text("id").primaryKey(),
-  active: boolean("active").notNull(),
-  name: text("name").notNull(),
   image: text("image").notNull(),
+  name: text("name").notNull(),
+  // Farcaster channel ids
+  channels: text("channels").array().notNull(),
 });
 
-export const gamesRelations = relations(games, ({ many }) => ({
+export const communityRelations = relations(communities, ({ many }) => ({
   rosters: many(rosters),
 }));
 
@@ -30,18 +31,19 @@ export const rosters = pgTable("rosters", {
   id: text("id").primaryKey(),
   active: boolean("active").notNull(),
   name: text("name").notNull(),
-  game: text("game").notNull(),
+  community: text("community").notNull(),
   liquipedia: text("liquipedia").notNull(),
 });
 
 export const rostersRelations = relations(rosters, ({ one, many }) => ({
-  game: one(games, {
-    fields: [rosters.game],
-    references: [games.id],
-  }),
   talent: many(talent),
+  community: one(communities, {
+    fields: [rosters.community],
+    references: [communities.id],
+  }),
 }));
 
+// Deprecate this, require players to create nouns.gg accounts and use that on the roster page
 export const talent = pgTable("talent", {
   id: text("id").primaryKey(),
   active: boolean("active").notNull(),
@@ -64,41 +66,12 @@ export const talentRelations = relations(talent, ({ one }) => ({
   }),
 }));
 
-export const creators = pgTable("creators", {
-  id: text("id").primaryKey(),
-  active: boolean("active").notNull(),
-  name: text("name").notNull(),
-  image: text("image").notNull(),
-  liquipedia: text("liquipedia"),
-  twitch: text("twitch"),
-  twitter: text("twitter"),
-  youtube: text("youtube"),
-  tiktok: text("tiktok"),
-  instagram: text("instagram"),
-});
-
-export const projects = pgTable("projects", {
-  id: text("id").primaryKey(),
-  active: boolean("active").notNull(),
-  name: text("name").notNull(),
-  image: text("image").notNull(),
-  url: text("url").notNull(),
-});
-
 export const badges = pgTable("badges", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
   description: text("description").notNull(),
   image: text("image").notNull(),
   timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
-});
-
-export const snapshots = pgTable("snapshots", {
-  id: serial("id").primaryKey(),
-  user: text("user").notNull(),
-  type: text("type").notNull(),
-  timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
-  metadata: json("metadata"),
 });
 
 // An infinite round is defined as a round with a null end timestamp and votingStart = start, respecitive proposals will include a value
@@ -187,6 +160,53 @@ export const nexus = pgTable("nexus", {
   tier: nexusTiers("tier").notNull(),
 });
 
+// export const users = pgTable("users", {
+//   user: text("user").primaryKey(),
+//   xp: integer("xp").notNull().default(0),
+//   // 0 = Explorer, 1 = Challenger, 2 = Champion
+//   rank: smallint("rank").notNull(),
+//   division: smallint("division").notNull(),
+//   // string
+//   image: text("image"),
+//   // string
+//   name: text("name").notNull(),
+//   // string
+//   bio: text("bio"),
+//   // string
+//   wallet: text("wallet"),
+// });
+
+// export const actions = pgTable("actions", {
+//   // endpoint is api/quests/actions/action-id
+//   id: text("id").primaryKey(),
+//   name: text("name").notNull(),
+//   description: text("description").notNull(),
+//   quest: text("quest").notNull(),
+// });
+
+// export const actionRelations = relations(actions, ({ one, many }) => ({
+//   quest: one(quests, {
+//     fields: [actions.quest],
+//     references: [quests.id],
+//   }),
+//   quests: many(quests),
+// }));
+
+// Potential headwinds
+// - Timelock certain actions (so users cant spam xp for things list casting which can be infinitely done unlike voting). This may be formatted like daily or weekly quests (think rocket league)
+// - Actions may have xp and quests its own xp
+// - Should make sure to track when users are awarded not just an xp count, maybe an xp table with relations for actions and quests
+
+// export const quests = pgTable("quests", {
+//   id: text("id").primaryKey(),
+//   name: text("name").notNull(),
+//   description: text("description").notNull(),
+// });
+
+// export const questRelations = relations(quests, ({ many }) => ({
+//   actions: many(actions),
+// }));
+
 export const votes = pgTable("votes", {
   id: serial("id").primaryKey(),
   user: text("user").notNull(),
@@ -207,20 +227,55 @@ export const votesRelations = relations(votes, ({ one }) => ({
   }),
 }));
 
+export const creationType = pgEnum("creationType", [
+  "art",
+  "photograph",
+  // video/clip
+  // emotes
+  // Stickers
+  // GIFs
+]);
+
+export const creations = pgTable("creations", {
+  // IPFS hash
+  id: text("id").primaryKey(),
+  // Privy id
+  creator: text("creator"),
+  // Type of creation
+  type: creationType("type").notNull(),
+  // Title of the creation
+  title: text("title"),
+  // When it was created
+  createdAt: timestamp("created_at", { mode: "date" }),
+  // Links to another creation, useful for creating variants (cropped, modified, etc) while still pointing to the original entry
+  original: text("original"),
+  // Search tags, only required for top level creations
+  tags: text("tags").array().notNull(),
+  // Width
+  width: integer("width").notNull(),
+  // Height
+  height: integer("height").notNull(),
+});
+
+export const creationRelations = relations(creations, ({ one }) => ({
+  original: one(creations, {
+    fields: [creations.original],
+    references: [creations.id],
+  }),
+}));
+
 export const db = drizzle(
   new Pool({
     connectionString: env.DATABASE_URL,
   }),
   {
     schema: {
-      games,
-      gamesRelations,
+      communities,
+      communityRelations,
       rosters,
       rostersRelations,
       talent,
       talentRelations,
-      creators,
-      projects,
       rounds,
       roundsRelations,
       awards,
@@ -230,23 +285,22 @@ export const db = drizzle(
       proposalsRelations,
       votes,
       votesRelations,
-      snapshots,
       badges,
       nexus,
+      creations,
+      creationRelations,
     },
   }
 );
 
-export type Game = typeof games.$inferSelect;
+export type Community = typeof communities.$inferSelect;
 export type Roster = typeof rosters.$inferSelect;
 export type Talent = typeof talent.$inferSelect;
-export type Project = typeof projects.$inferSelect;
-export type Creator = typeof creators.$inferSelect;
 export type Round = typeof rounds.$inferSelect;
 export type Award = typeof awards.$inferSelect;
 export type Asset = typeof assets.$inferSelect;
 export type Proposal = typeof proposals.$inferSelect;
 export type Vote = typeof votes.$inferSelect;
-export type Snapshot = typeof snapshots.$inferSelect;
 export type Badge = typeof badges.$inferSelect;
 export type Nexus = typeof nexus.$inferSelect;
+export type Creation = typeof creations.$inferSelect;

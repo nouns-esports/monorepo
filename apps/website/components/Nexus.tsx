@@ -117,7 +117,6 @@ export default function Nexus(props: {
 
                 return;
               }}
-              animate="bg"
             >
               {!props.user ? "Sign in" : ""}
               {props.user && !props.user?.discord ? "Connect Discord" : ""}
@@ -194,14 +193,12 @@ export default function Nexus(props: {
             </div>
             {props.user?.farcaster ? (
               <Button
-                animate="bg"
                 href={`https://warpcast.com/${props.user.farcaster?.username}`}
               >
                 View on Warpcast
               </Button>
             ) : (
               <Button
-                animate="bg"
                 onClick={() => {
                   linkFarcaster();
                 }}
@@ -361,7 +358,6 @@ export default function Nexus(props: {
                   //   else linkDiscord();
                   // }}
                   disabled
-                  animate="bg"
                   size="sm"
                 >
                   {props.user?.discord ? "Remove" : "Connect"}
@@ -396,7 +392,6 @@ export default function Nexus(props: {
                       );
                     } else linkTwitter();
                   }}
-                  animate="bg"
                   size="sm"
                 >
                   {props.user?.twitter ? "Remove" : "Connect"}
@@ -434,7 +429,6 @@ export default function Nexus(props: {
                     );
                   } else linkFarcaster();
                 }}
-                animate="bg"
                 size="sm"
               >
                 {props.user?.farcaster ? "Remove" : "Connect"}
@@ -471,7 +465,6 @@ export default function Nexus(props: {
                       onClick={() => {
                         linkWallet();
                       }}
-                      animate="bg"
                       size="sm"
                     >
                       Connect
@@ -491,7 +484,6 @@ export default function Nexus(props: {
                         }
                       );
                     }}
-                    animate="bg"
                     size="sm"
                   >
                     Remove

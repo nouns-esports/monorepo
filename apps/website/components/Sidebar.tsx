@@ -27,13 +27,6 @@ export default function Sidebar(props: { channels: Channel[] }) {
         >
           Nexus
         </Button>
-        {/* <Button
-          route="/quests"
-          icon={<Scroll className="w-5 h-5 text-white" weight="fill" />}
-          newTab
-        >
-          Quests
-        </Button> */}
         <Button
           route="/shop"
           icon={

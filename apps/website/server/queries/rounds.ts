@@ -1,5 +1,5 @@
 import { awards, db, rounds } from "~/packages/db/schema";
-import { eq, gt, and, lt, asc, desc } from "drizzle-orm";
+import { eq, gt, and, lt, asc, desc, exists, isNotNull } from "drizzle-orm";
 import { unstable_cache as cache } from "next/cache";
 
 export const getRound = cache(
@@ -21,8 +21,11 @@ export const getRound = cache(
 );
 
 export const getRounds = cache(
-  async (input: { stage: "active" | "upcoming" | "ended"; max?: number }) => {
-    if (input.stage) {
+  async (input?: {
+    stage?: "active" | "upcoming" | "ended";
+    limit?: number;
+  }) => {
+    if (input?.stage) {
       switch (input.stage) {
         case "active":
           return db.query.rounds.findMany({
@@ -30,7 +33,7 @@ export const getRounds = cache(
               lt(rounds.start, new Date()),
               gt(rounds.end, new Date())
             ),
-            limit: input.max ?? undefined,
+            limit: input.limit,
             orderBy: asc(rounds.end),
             with: {
               awards: {
@@ -43,7 +46,7 @@ export const getRounds = cache(
         case "upcoming":
           return db.query.rounds.findMany({
             where: gt(rounds.start, new Date()),
-            limit: input.max ?? undefined,
+            limit: input.limit,
             orderBy: asc(rounds.start),
             with: {
               awards: {
@@ -56,7 +59,7 @@ export const getRounds = cache(
         case "ended":
           return db.query.rounds.findMany({
             where: lt(rounds.end, new Date()),
-            limit: input.max ?? undefined,
+            limit: input.limit,
             orderBy: desc(rounds.end),
             with: {
               awards: {
@@ -70,8 +73,9 @@ export const getRounds = cache(
     }
 
     return db.query.rounds.findMany({
-      limit: input.max ?? undefined,
-      orderBy: asc(rounds.end),
+      limit: input?.limit,
+      orderBy: desc(rounds.end),
+      where: and(lt(rounds.start, new Date()), isNotNull(rounds.end)),
       with: {
         awards: {
           with: {

@@ -6,8 +6,8 @@ import {
   Bebas_Neue,
   Londrina_Solid,
 } from "next/font/google";
-import Header from "@/components/header";
-import Footer from "@/components/footer";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import Providers from "@/providers";
 import { getAuthenticatedUser } from "@/server/queries/users";
 import Script from "next/script";
@@ -33,15 +33,12 @@ const londrinaSolid = Londrina_Solid({
   variable: "--font-londrina-solid",
 });
 
-const title = "Nouns Esports";
-const description = "Leading the revolution in community driven esports!";
-
 export const metadata = {
   title: {
-    default: title,
-    template: `${title} - %s`,
+    default: "Nouns Esports",
+    template: "Nouns Esports - %s",
   },
-  description,
+  description: "Leading the revolution in community driven esports!",
   keywords: [
     "esports",
     "nouns",
@@ -73,15 +70,14 @@ export const viewport = {
 
 export default async function RootLayout(props: { children: React.ReactNode }) {
   const user = await getAuthenticatedUser();
-
   return (
     <html lang="en" className="scroll-smooth overflow-x-hidden">
       <body
-        className={`${cabin.variable} ${luckiestGuy.variable} ${bebasNeue.variable} ${londrinaSolid.variable} bg-black text-grey-400 font-cabin selection:text-white selection:bg-red flex flex-col w-full h-full`}
+        className={`${cabin.variable} ${luckiestGuy.variable} ${bebasNeue.variable} ${londrinaSolid.variable} bg-black text-grey-200 font-cabin selection:text-white selection:bg-red flex flex-col items-center w-full h-full`}
       >
         <Providers user={user}>
           <Header />
-          <main className="flex flex-col w-full min-h-[calc(100vh_-_224px)] h-full">
+          <main className="flex flex-col w-full min-h-[calc(100vh_-_224px)] h-full max-w-[1920px]">
             {props.children}
           </main>
           <Footer />

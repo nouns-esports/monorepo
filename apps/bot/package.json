@@ -4,6 +4,14 @@
   "type": "module",
   "scripts": {
     "dev": "cross-env NODE_ENV=development bun index.ts",
-    "start": "cross-env NODE_ENV=production bun index.ts"
+    "start": "cross-env NODE_ENV=production bun index.ts",
+    "uniqueVoters": "cross-env NODE_ENV=production bun ./scripts/analytics/uniqueVoters.ts",
+    "proposalCount": "cross-env NODE_ENV=production bun ./scripts/analytics/proposalCount.ts",
+    "totalUniqueInteractions": "cross-env NODE_ENV=production bun ./scripts/analytics/totalUniqueInteractions.ts",
+    "botCheck": "cross-env NODE_ENV=production bun ./scripts/analytics/botCheck.ts",
+    "purgeVotes": "cross-env NODE_ENV=production bun ./scripts/analytics/purgeVotes.ts",
+    "updateImages": "cross-env NODE_ENV=development bun ./scripts/analytics/updateImages.ts",
+    "getData": "cross-env NODE_ENV=development bun ./scripts/analytics/getData.ts",
+    "checkNexus": "cross-env NODE_ENV=production bun ./scripts/checkNexus.ts"
   }
 }

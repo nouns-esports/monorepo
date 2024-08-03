@@ -61,9 +61,7 @@ export default function Partners() {
           the opportunity and become a partner today!
         </p>
         <div className="flex gap-6 items-center max-[400px]:flex-col">
-          <Button href="mailto:partners@nouns.gg" animate="hover">
-            Contact Us
-          </Button>
+          <Button href="mailto:partners@nouns.gg">Contact Us</Button>
           <Link
             href="https://docsend.com/view/6nsudfgjdg5ezr2a"
             className="flex items-center gap-2 select-none text-white group font-cabin hover:text-white/80 transition-colors"
@@ -80,7 +78,7 @@ export default function Partners() {
       <div className="p-16 max-lg:p-8 max-sm:p-4 flex flex-col gap-16 w-full items-center">
         <div className="flex max-sm:flex-col gap-8 max-w-5xl">
           <img
-            src="/nouns-partner.png"
+            src="/partners/nouns/banner.png"
             className="rounded-lg w-96 max-sm:w-full max-xl:w-80 max-lg:w-60 max-lg:h-auto  h-min aspect-video object-cover"
           />
           <div className="flex flex-col justify-center gap-4 py-4 max-xl:py-0 max-lg:gap-4 max-xl:gap-2">
@@ -94,9 +92,7 @@ export default function Partners() {
               and brands, Nouns is for everyone.
             </p>
             <div className="flex items-center gap-6">
-              <Button href="https://nouns.wtf/vote/466" animate="hover">
-                Visit
-              </Button>
+              <Button href="https://nouns.wtf/vote/466">Visit</Button>
               <div className="flex items-center gap-4">
                 <Link href="https://twitter.com/nounsdao">
                   <TwitterLogo
@@ -116,7 +112,7 @@ export default function Partners() {
         </div>
         <div className="flex max-sm:flex-col gap-8 max-w-5xl">
           <img
-            src="/matcha-banner.svg"
+            src="/partners/matcha/banner.svg"
             className="rounded-lg w-96 max-sm:w-full max-xl:w-80 max-lg:w-60 aspect-video max-lg:h-auto h-min object-cover"
           />
           <div className="flex flex-col justify-center gap-4 py-4 max-xl:py-0 max-xl:gap-2 max-lg:gap-4">
@@ -130,9 +126,7 @@ export default function Partners() {
               infrastructure.
             </p>
             <div className="flex gap-6">
-              <Button href="/matcha" animate="hover">
-                Visit
-              </Button>
+              <Button href="/matcha">Visit</Button>
               <div className="flex items-center gap-4">
                 <Link href="https://twitter.com/matchaxyz">
                   <TwitterLogo
@@ -158,7 +152,7 @@ export default function Partners() {
         </div>
         <div className="flex max-sm:flex-col gap-8 max-w-5xl">
           <img
-            src="/adidas.png"
+            src="/partners/adidas/banner.png"
             className="rounded-lg w-96 max-sm:w-full max-xl:w-80 max-lg:w-60 aspect-video max-lg:h-auto h-min object-cover"
           />
           <div className="flex flex-col justify-center gap-4 py-4 max-xl:py-0 max-xl:gap-2 max-lg:gap-4">
@@ -173,9 +167,7 @@ export default function Partners() {
               inspire athletes and fashion enthusiasts worldwide.
             </p>
             <div className="flex gap-6">
-              <Button href="https://adidas.com/" animate="hover">
-                Visit
-              </Button>
+              <Button href="https://adidas.com/">Visit</Button>
               <div className="flex items-center gap-4">
                 <Link href="https://twitter.com/adidas">
                   <TwitterLogo

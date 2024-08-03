@@ -369,7 +369,6 @@ export default function ToolbarPlugin() {
             </div>
             <div className="flex gap-4">
               <Button
-                animate="bg"
                 onClick={() => {
                   insertLink(linkUrl);
 

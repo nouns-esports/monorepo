@@ -1,7 +1,7 @@
 import type { Config } from "tailwindcss";
 import plugin from "tailwindcss/plugin";
 import typography from "@tailwindcss/typography";
-
+import animate from "tailwindcss-animate";
 const config: Config = {
   future: {
     hoverOnlyWhenSupported: true,
@@ -63,9 +63,13 @@ const config: Config = {
         crosshair: "url('/crosshair.svg') 16 16, auto",
       },
       keyframes: {
-        marquee: {
-          from: { backgroundPosition: "0% 0" },
-          to: { backgroundPosition: "100% 0" },
+        "art-marquee-top": {
+          from: { transform: "translateX(0%)" },
+          to: { transform: "translateX(calc(-2079.5px - 0.5rem))" },
+        },
+        "art-marquee-bottom": {
+          from: { transform: "translateX(0%)" },
+          to: { transform: "translateX(calc(2004.5px + 0.5rem))" },
         },
         shimmer: {
           "100%": {
@@ -74,13 +78,15 @@ const config: Config = {
         },
       },
       animation: {
-        marquee: "marquee 20s linear infinite",
         shimmer: "shimmer 1s infinite",
+        "art-marquee-top": "art-marquee-top 20s linear infinite",
+        "art-marquee-bottom": "art-marquee-bottom 20s linear infinite",
       },
     },
   },
   plugins: [
     typography,
+    animate,
     plugin(({ matchUtilities, addUtilities }) => {
       matchUtilities({
         perspective: (value) => ({

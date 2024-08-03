@@ -112,7 +112,6 @@ export default function MarkdownEditor(props: {
         </div>
         <Button
           loading={loading}
-          animate="bg"
           disabled={
             loading ||
             title.length < 15 ||

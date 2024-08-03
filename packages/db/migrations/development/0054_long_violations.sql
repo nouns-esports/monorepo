@@ -1,0 +1,1 @@
+ALTER TABLE "rosters" ADD COLUMN "community" text DEFAULT '' NOT NULL;

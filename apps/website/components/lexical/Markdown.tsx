@@ -50,6 +50,7 @@ export default function Markdown(props: {
 }) {
   return (
     <LexicalComposer
+      key={props.markdown}
       initialConfig={{
         namespace: "Nouns Esports",
         theme: {},
