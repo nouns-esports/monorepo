@@ -15,131 +15,25 @@ const roles = {
   // Explorer: "1253778462511202365",
 } as const;
 
-const champions: Record<string, boolean> = {
-  // Peter
-  "135377635168616448": true,
-  // Sam
-  "174640628456620032": true,
-  // Sasquatch
-  "95704393151680512": true,
-  // Gatsby
-  "239409933466992641": true,
-  // Chan
-  "147996270097596416": true,
-  // Ohan
-  "835989319701233704": true,
-  // Pat
-  "116974832247111689": true,
-  // Oni
-  "162709914966294528": true,
-  // Mach
-  "507035501576847361": true,
-  // Mike
-  "230522416571482112": true,
-  // Gunnar
-  "98915589824720896": true,
-  // Lelis
-  "145597126812893184": true,
-  // Tal
-  "167973568422871041": true,
-  // Yuma
-  "226553021813751808": true,
-  // Copy
-  "252141512131870720": true,
-  // Adren
-  "131301664152879106": true,
-  // Carson
-  "135599935402803201": true,
-  // CJ
-  "544147832698044416": true,
-  // Jeorge
-  "176812686368047104": true,
-  // Junior
-  "180486076773695490": true,
-  // Rush
-  "154891812115447808": true,
-  // Semphis
-  "175510055800537088": true,
-  // Taki
-  "434447978602692608": true,
-  // Salt
-  "275164459289411585": true,
-  // AKlo
-  "405120207300853761": true,
-  // Cody
-  "209462125968490496": true,
-  // Smug
-  "329493563308113920": true,
-  // Jesscas
-  "139946879403163648": true,
-  // Lunari
-  "1089081542799802368": true,
-  // Ashe
-  "184466373420908544": true,
-  // Onter
-  "224661017739788290": true,
-  // Katalyst
-  "254672814798405642": true,
-  // Adesu
-  "103629588353007616": true,
-  // Blaine
-  "230377318407733248": true,
-  // Bruv
-  "237275237299912704": true,
-  // ToonSlim
-  "117388754368331779": true,
-  // Ghatlue
-  "286483887390195714": true,
-  //Sareyu
-  "1126572357776048148": true,
-  // Keo
-  "153701297214849024": true,
-  // Brennen
-  "270147458737242112": true,
-  // Otto
-  "179059054956642305": true,
-  // Boosh
-  "530592897905459233": true,
-  // Maty
-  "357667384342872074": true,
-  // Will
-  "139573816471977984": true,
-  // Teague
-  "826147107894853672": true,
-};
-
 export async function refreshNexus() {
-  try {
-    const users = await db.query.nexus.findMany();
+  console.log("refreshing nexus");
 
-    const guild = await discordClient.guilds.fetch(env.DISCORD_GUILD_ID);
+  const users = await db.query.nexus.findMany();
 
-    await db.transaction(async (tx) => {
-      for (const user of users) {
+  const guild = await discordClient.guilds.fetch(env.DISCORD_GUILD_ID);
+
+  await db.transaction(async (tx) => {
+    for (const user of users) {
+      try {
         const privyUser = await privyClient.getUser(user.user);
+
         if (!privyUser.discord) {
-          await tx.delete(nexus).where(eq(nexus.user, user.user));
           continue;
         }
 
         try {
           await guild.members.fetch(privyUser.discord.subject);
         } catch (error) {
-          await tx.delete(nexus).where(eq(nexus.user, user.user));
-          continue;
-        }
-
-        if (champions[privyUser.discord.subject]) {
-          if (user.tier === "Champion") {
-            continue;
-          }
-
-          await toggleRole(privyUser.discord.subject, "Champion");
-          await tx
-            .update(nexus)
-            .set({ tier: "Champion" })
-            .where(eq(nexus.user, user.user));
-
           continue;
         }
 
@@ -210,12 +104,7 @@ export async function refreshNexus() {
         if (roundsActive.length >= 3) {
           tier = "Challenger";
 
-          if (
-            privyUser.discord &&
-            privyUser.twitter &&
-            privyUser.farcaster &&
-            wallet
-          ) {
+          if (roundsActive.length >= 5 && wallet) {
             tier = "Champion";
           }
         }
@@ -227,13 +116,15 @@ export async function refreshNexus() {
         await toggleRole(privyUser.discord.subject, tier);
         await tx.update(nexus).set({ tier }).where(eq(nexus.user, user.user));
 
-        console.log("Updated: ", privyUser.discord.subject, tier);
+        console.log("Updated: ", privyUser.discord.username, tier);
         await new Promise((resolve) => setTimeout(resolve, 250));
+      } catch (error) {
+        console.error(error);
       }
-    });
-  } catch (error) {
-    return error as Error;
-  }
+    }
+  });
+
+  console.log("Done refreshing nexus");
 }
 
 async function toggleRole(
