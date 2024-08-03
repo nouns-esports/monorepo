@@ -44,6 +44,11 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: "/raffle",
+        destination: "https://app.rep3.gg/matcha/quest/Matchaon0xv2",
+        permanent: true,
+      },
+      {
         source: "/mint",
         destination: "https://shorturl.at/mJKPS",
         permanent: true,
@@ -90,7 +95,8 @@ const nextConfig = {
       },
       {
         source: "/matchacup",
-        destination: "https://www.start.gg/tournament/matcha-cup-west-coast-1",
+        destination:
+          "https://www.start.gg/tournament/matcha-cup-east-coast-1/details",
         permanent: true,
       },
       {

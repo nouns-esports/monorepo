@@ -52,6 +52,7 @@ export default function Nexus(props: {
     unlinkFarcaster,
     unlinkWallet,
     authenticated,
+    logout,
   } = usePrivy();
 
   const linkedWallets = (props.user?.linkedAccounts.filter(
@@ -110,7 +111,6 @@ export default function Nexus(props: {
                     return "Welcome to the Nexus";
                   },
                   error: (e) => {
-                    console.log("ErrrrrrrrrrrrrrrrrrrrRROR", e);
                     return "You must join the Discord server to begin";
                   },
                 });
@@ -122,13 +122,27 @@ export default function Nexus(props: {
               {props.user && !props.user?.discord ? "Connect Discord" : ""}
               {props.user?.discord && !props.nexus ? "Check Eligibility" : ""}
             </Button>
-            {/* {props.user?.discord && !props.nexus && !loading ? (
-              <Link href="/discord" newTab className="text-red text-sm">
-                You must join the Discord server to begin
-              </Link>
+            {props.user ? (
+              <button
+                onClick={async () => {
+                  toast.promise(logout(), {
+                    loading: "Signing you out",
+                    success: () => {
+                      router.refresh();
+                      return "Successfully signed out";
+                    },
+                    error: () => {
+                      return "Something went wrong";
+                    },
+                  });
+                }}
+                className="text-red hover:text-red/80 transition-colors"
+              >
+                Sign out
+              </button>
             ) : (
               ""
-            )} */}
+            )}
           </div>
         </div>
         <div className="flex flex-col gap-4">
@@ -298,9 +312,20 @@ export default function Nexus(props: {
           ""
         )}
         <div className="flex flex-col justify-between w-full gap-4 rounded-xl bg-grey-800 py-6 px-6">
-          <h2 className="text-2xl font-bebas-neue text-white">
-            Connected Accounts
-          </h2>
+          <div className="flex justify-between items-center w-full">
+            <h2 className="text-2xl font-bebas-neue text-white">
+              Connected Accounts
+            </h2>
+            <button
+              onClick={async () => {
+                await logout();
+                router.refresh();
+              }}
+              className="text-red hover:text-red/80 transition-colors"
+            >
+              Sign out
+            </button>
+          </div>
           <ul className="flex flex-col gap-4">
             <li className="flex items-center text-white justify-between">
               <div className="flex items-center gap-4">

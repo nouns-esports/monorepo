@@ -5,27 +5,33 @@ import { getAuthenticatedUser } from "@/server/queries/users";
 import { and, eq } from "drizzle-orm";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { getNexus } from "../queries/nexus";
-import { isInServer } from "../queries/discord";
+import checkDiscordAccountAge from "@/utils/checkDiscordAccountAge";
 
 export async function castVotes(input: {
   user: string;
   round: string;
   votes: { proposal: number; count: number }[];
 }) {
-  const user = await getAuthenticatedUser();
+  const user = await getAuthenticatedUser(true);
 
   if (!user) {
     throw new Error("No user session found");
   }
 
-  if (user !== input.user) {
+  if (user.id !== input.user) {
     throw new Error("You can only cast votes for yourself");
   }
 
-  const nexus = await getNexus({ user: user });
+  const nexus = await getNexus({ user: user.id });
 
   if (!nexus) {
     throw new Error("A Nexus membership is required to vote");
+  }
+
+  if (user.discord?.subject && !checkDiscordAccountAge(user.discord.subject)) {
+    throw new Error(
+      `Privy user ${user.id} and discord account ${user.discord.subject} is less than 30 days old`
+    );
   }
 
   const [round, previousVotes] = await Promise.all([
@@ -33,7 +39,7 @@ export async function castVotes(input: {
       where: eq(rounds.id, input.round),
     }),
     db.query.votes.findMany({
-      where: and(eq(votes.user, user), eq(votes.round, input.round)),
+      where: and(eq(votes.user, user.id), eq(votes.round, input.round)),
     }),
   ]);
 
@@ -66,7 +72,7 @@ export async function castVotes(input: {
         throw new Error("Proposal not found");
       }
 
-      if (proposal.user === user) {
+      if (proposal.user === user.id) {
         tx.rollback();
         throw new Error("You cannot vote on your own proposal");
       }
@@ -85,7 +91,7 @@ export async function castVotes(input: {
 
       await tx.insert(votes).values([
         {
-          user,
+          user: user.id,
           proposal: vote.proposal,
           round: round.id,
           count: vote.count,
