@@ -247,6 +247,7 @@ export default async function Home() {
               "QmdiWQoQpy3D5wpi9pSn6n2uJXyugwcv8rvQoaZnWhotKz",
             ].map(async (image) => {
               const creator = await getCreator({ creationId: image });
+
               return (
                 <Link
                   key={image}
@@ -284,6 +285,7 @@ export default async function Home() {
               "QmUE853Ad1yns6UAUCbYjK6iBtxx5e5EihJfCFAAUh5aYb",
             ].map(async (image) => {
               const creator = await getCreator({ creationId: image });
+
               return (
                 <Link
                   key={image}
