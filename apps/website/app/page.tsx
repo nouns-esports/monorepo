@@ -15,6 +15,7 @@ import { getRounds } from "@/server/queries/rounds";
 import { twMerge } from "tailwind-merge";
 import { getUser } from "@/server/queries/users";
 import { userToProfile } from "@/utils/userToProfile";
+import { getCreator } from "@/server/queries/creations";
 
 export default async function Home() {
   const videos = await getVideos();
@@ -245,6 +246,7 @@ export default async function Home() {
               "QmYeLkcYghV4qkRBeMY12Z352EoLJwzbLWK8JsvbREHfo3",
               "QmdiWQoQpy3D5wpi9pSn6n2uJXyugwcv8rvQoaZnWhotKz",
             ].map(async (image) => {
+              const creator = await getCreator({ creationId: image });
               return (
                 <Link
                   key={image}
@@ -258,7 +260,7 @@ export default async function Home() {
                     className="h-full max-w-none object-cover rounded-xl select-none"
                   />
                   <div className="absolute top-3 right-3 h-7 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity">
-                    <Attribution id={image} />
+                    <Attribution id={image} creator={creator} />
                   </div>
                 </Link>
               );
@@ -281,6 +283,7 @@ export default async function Home() {
               "QmbKGhDNHSujAJeqJtURW29DuDWtKoFcfx1Eprkjk1movp",
               "QmUE853Ad1yns6UAUCbYjK6iBtxx5e5EihJfCFAAUh5aYb",
             ].map(async (image) => {
+              const creator = await getCreator({ creationId: image });
               return (
                 <Link
                   key={image}
@@ -294,7 +297,7 @@ export default async function Home() {
                     className="h-full max-w-none object-cover rounded-xl select-none"
                   />
                   <div className="absolute top-3 right-3 h-7 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity">
-                    <Attribution id={image} />
+                    <Attribution id={image} creator={creator} />
                   </div>
                 </Link>
               );
