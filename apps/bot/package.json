@@ -13,6 +13,7 @@
     "updateImages": "cross-env NODE_ENV=development bun ./scripts/analytics/updateImages.ts",
     "getData": "cross-env NODE_ENV=development bun ./scripts/analytics/getData.ts",
     "checkNexus": "cross-env NODE_ENV=production bun ./scripts/checkNexus.ts",
-    "insertData": "cross-env NODE_ENV=production bun ./scripts/insertData.ts"
+    "insertData": "cross-env NODE_ENV=production bun ./scripts/insertData.ts",
+    "votersForProposal": "cross-env NODE_ENV=production bun ./scripts/analytics/votersForProposal.ts"
   }
 }

@@ -296,13 +296,9 @@ export default async function Round(props: {
               ) : (
                 ""
               )}
-              <div className="relative flex flex-col h-full">
-                <div className="absolute top-0 left-0 w-full bg-gradient-to-b from-grey-800 to-transparent h-10 z-10" />
-                <div className="h-full overflow-y-scroll scrollbar-hidden py-8 mb-4">
-                  <Markdown markdown={selectedProposal.content} readOnly />
-                </div>
+              <div className="relative flex flex-col h-full overflow-y-scroll scrollbar-hidden">
+                <Markdown markdown={selectedProposal.content} readOnly />
               </div>
-              <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-grey-800 to-transparent h-10 z-10 max-xl:hidden" />
             </div>
           </div>
         ) : (
