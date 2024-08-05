@@ -246,8 +246,12 @@ export default async function Round(props: {
           selectedProposal && "opacity-100 pointer-events-auto"
         )}
       >
+        <Link
+          className="fixed top-0 left-0 w-full h-screen z-[70] max-sm:hidden"
+          href={`/rounds/${props.params.round}`}
+        />
         {selectedProposal ? (
-          <div className="flex flex-col gap-4 w-2/3 rounded-xl h-2/3 max-xl:w-full max-xl:h-full overflow-hidden max-xl:rounded-none">
+          <div className="flex flex-col gap-4 w-2/3 rounded-xl h-2/3 max-xl:w-full max-xl:h-full overflow-hidden max-xl:rounded-none z-[80]">
             <div className="relative flex flex-col gap-4 bg-grey-800 rounded-xl p-6 max-sm:p-3 h-full">
               <div className="flex items-start justify-between gap-8">
                 <h2 className="text-white font-luckiest-guy text-3xl">
