@@ -5,6 +5,7 @@ import { getUser } from "@/server/queries/users";
 import { userToProfile } from "@/utils/userToProfile";
 import { ArrowRight } from "lucide-react";
 import { notFound } from "next/navigation";
+import { TwitterLogo } from "phosphor-react-sc";
 import { twMerge } from "tailwind-merge";
 
 export default async function Creation(props: { params: { id: string } }) {
@@ -42,6 +43,28 @@ export default async function Creation(props: { params: { id: string } }) {
                   className="w-8 h-8 rounded-full"
                 />
                 {creatorProfile.name}
+              </div>
+              <div className="flex gap-3 items-center">
+                {creatorProfile.socials.twitter ? (
+                  <Link href={creatorProfile.socials.twitter} newTab>
+                    <TwitterLogo
+                      className="w-6 h-6 text-white hover:opacity-80 transition-opacity"
+                      weight="fill"
+                    />
+                  </Link>
+                ) : (
+                  ""
+                )}
+                {creatorProfile.socials.farcaster ? (
+                  <Link href={creatorProfile.socials.farcaster} newTab>
+                    <img
+                      src="/farcaster.svg"
+                      className="w-5 h-5  hover:opacity-80 transition-opacity"
+                    />
+                  </Link>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
           </div>

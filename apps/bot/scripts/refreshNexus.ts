@@ -15,8 +15,6 @@ const roles = {
   // Explorer: "1253778462511202365",
 } as const;
 
-const check = ["patyiutazza", "lskchan", "lunarifps"];
-
 export async function refreshNexus() {
   console.log("refreshing nexus");
 
@@ -121,18 +119,6 @@ export async function refreshNexus() {
 
         if (user.tier === tier) {
           continue;
-        }
-
-        if (
-          privyUser.discord.username &&
-          check.includes(privyUser.discord.username?.replace("#0", ""))
-        ) {
-          console.log(
-            "Logging:",
-            privyUser.discord.username,
-            tier,
-            roundsActive.length
-          );
         }
 
         await toggleRole(privyUser.discord.subject, tier);
