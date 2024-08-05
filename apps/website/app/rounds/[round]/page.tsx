@@ -20,6 +20,7 @@ import { getNexus } from "@/server/queries/nexus";
 import { env } from "~/env";
 import { X } from "lucide-react";
 import { headers } from "next/headers";
+import { userToProfile } from "@/utils/userToProfile";
 
 const Markdown = dynamic(() => import("@/components/lexical/Markdown"), {
   ssr: false,
@@ -81,6 +82,14 @@ export default async function Round(props: {
 
   const selectedProposal = props.searchParams.p
     ? proposals.find((proposal) => proposal.id === Number(props.searchParams.p))
+    : undefined;
+
+  const proposalUser = selectedProposal
+    ? await getUser({ id: selectedProposal.user })
+    : undefined;
+
+  const proposalProfile = proposalUser
+    ? userToProfile(proposalUser)
     : undefined;
 
   return (
@@ -252,15 +261,18 @@ export default async function Round(props: {
                   <X className="text-grey-600 w-5 h-5" />
                 </Link>
               </div>
-              {/* {profile ? (
+              {proposalProfile ? (
                 <div className="flex gap-8 items-center">
                   <div className="rounded-full flex items-center text-white gap-3 font-semibold text-lg">
-                    <img src={profile.pfp} className="rounded-full h-7 w-7" />
-                    {profile.name}
+                    <img
+                      src={proposalProfile.pfp}
+                      className="rounded-full h-7 w-7"
+                    />
+                    {proposalProfile.name}
                   </div>
                   <div className="flex gap-3 items-center">
-                    {profile.socials.twitter ? (
-                      <Link href={profile.socials.twitter} newTab>
+                    {proposalProfile.socials.twitter ? (
+                      <Link href={proposalProfile.socials.twitter} newTab>
                         <TwitterLogo
                           className="w-6 h-6 text-white hover:opacity-80 transition-opacity"
                           weight="fill"
@@ -269,8 +281,8 @@ export default async function Round(props: {
                     ) : (
                       ""
                     )}
-                    {profile.socials.farcaster ? (
-                      <Link href={profile.socials.farcaster} newTab>
+                    {proposalProfile.socials.farcaster ? (
+                      <Link href={proposalProfile.socials.farcaster} newTab>
                         <img
                           src="/farcaster.svg"
                           className="w-5 h-5  hover:opacity-80 transition-opacity"
@@ -283,7 +295,7 @@ export default async function Round(props: {
                 </div>
               ) : (
                 ""
-              )} */}
+              )}
               <div className="relative flex flex-col h-full">
                 <div className="absolute top-0 left-0 w-full bg-gradient-to-b from-grey-800 to-transparent h-10 z-10" />
                 <div className="h-full overflow-y-scroll scrollbar-hidden py-8 mb-4">
