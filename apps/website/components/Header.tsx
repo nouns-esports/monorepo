@@ -195,7 +195,7 @@ export default async function Header() {
                       {communities.map((community) => (
                         <Link
                           key={community.name}
-                          href={`https://warpcast.com/~/${community.channels[0]}`}
+                          href={`https://warpcast.com/~/channel/${community.channels[0]}`}
                           className="flex items-center gap-2 rounded-lg px-2 py-2 hover:bg-grey-500 transition-colors w-full"
                         >
                           <img
