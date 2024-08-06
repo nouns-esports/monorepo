@@ -99,12 +99,12 @@ export default async function Home() {
 
             return (
               <li
-                className="flex px-4 pt-4 w-full group bg-grey-800 rounded-xl hover:bg-grey-600 transition-colors h-56 max-lg:aspect-[14/9] max-lg:w-auto max-lg:h-52"
+                className="flex px-4 pt-4 w-full bg-grey-800 rounded-xl hover:bg-grey-600 transition-colors h-52 max-lg:aspect-[14/9] max-lg:w-auto max-lg:h-52"
                 key={round.id}
               >
                 <Link
                   href={`/rounds/${round.id}`}
-                  className="flex flex-col gap-6 w-full"
+                  className="flex flex-col w-full"
                 >
                   <div className="flex justify-between items-center">
                     <img
@@ -121,13 +121,11 @@ export default async function Home() {
                       {state}
                     </p>
                   </div>
-                  <div className="relative flex flex-col gap-1 overflow-hidden">
+                  <div className="flex h-full justify-center flex-col gap-1 overflow-hidden">
                     <h3 className="text-[1.4rem] leading-7 font-bebas-neue text-white">
                       {round.name}
                     </h3>
                     <p>{round.description}</p>
-                    <div className="from-transparent to-grey-800 via-grey-800/60 bg-gradient-to-b h-16 w-full bottom-0 absolute pointer-events-none" />
-                    <div className="from-transparent to-grey-600 via-grey-600/60 opacity-0 z-10 group-hover:opacity-100 transition-opacity bg-gradient-to-b h-16 w-full bottom-0 absolute pointer-events-none" />
                   </div>
                 </Link>
               </li>
