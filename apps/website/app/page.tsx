@@ -99,21 +99,21 @@ export default async function Home() {
 
             return (
               <li
-                className="flex px-4 pt-4 w-full bg-grey-800 rounded-xl hover:bg-grey-600 transition-colors h-52 max-lg:aspect-[14/9] max-lg:w-auto max-lg:h-52"
+                className="flex p-4 w-full bg-grey-800 rounded-xl hover:bg-grey-600 transition-colors min-h-56 max-2xl:min-h-[auto] max-lg:aspect-[14/9] max-lg:w-auto max-lg:h-52"
                 key={round.id}
               >
                 <Link
                   href={`/rounds/${round.id}`}
-                  className="flex flex-col w-full"
+                  className="flex gap-8 flex-col w-full"
                 >
                   <div className="flex justify-between items-center">
                     <img
                       src={round.image}
-                      className="w-12 h-12 rounded-lg object-cover"
+                      className="w-14 h-14 max-2xl:w-12 max-2xl:h-12 rounded-lg object-cover"
                     />
                     <p
                       className={twMerge(
-                        "bg-red rounded-full px-3 py-1 text-sm text-white font-semibold",
+                        "bg-red rounded-full px-3 py-1 text-[0.95rem] max-2xl:text-sm text-white font-semibold",
                         state === "Proposing" && "bg-blue-700",
                         state === "Voting" && "bg-purple"
                       )}
@@ -121,11 +121,11 @@ export default async function Home() {
                       {state}
                     </p>
                   </div>
-                  <div className="flex h-full justify-center flex-col gap-1 overflow-hidden">
-                    <h3 className="text-[1.4rem] leading-7 font-bebas-neue text-white">
+                  <div className="flex justify-center flex-col gap-1">
+                    <h3 className="text-2xl max-2xl:text-[1.4rem] max-2xl:leading-7 font-bebas-neue text-white line-clamp-1">
                       {round.name}
                     </h3>
-                    <p className="leading-snug text-[0.95rem]">
+                    <p className="text-[1.05rem] leading-snug max-2xl:text-[0.95rem] line-clamp-2">
                       {round.description}
                     </p>
                   </div>
