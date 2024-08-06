@@ -125,7 +125,9 @@ export default async function Home() {
                     <h3 className="text-[1.4rem] leading-7 font-bebas-neue text-white">
                       {round.name}
                     </h3>
-                    <p>{round.description}</p>
+                    <p className="leading-snug text-[0.95rem]">
+                      {round.description}
+                    </p>
                   </div>
                 </Link>
               </li>
