@@ -6,7 +6,7 @@ import { isInServer } from "../queries/discord";
 import { revalidatePath } from "next/cache";
 
 export async function grantNexus(input: { user: string }) {
-  const user = await getAuthenticatedUser(true);
+  const user = await getAuthenticatedUser();
 
   if (!user) {
     throw new Error("No user session found");

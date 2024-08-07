@@ -18,7 +18,7 @@ export async function updateProposal(input: {
     throw new Error("No user session found");
   }
 
-  if (input.user !== user) {
+  if (input.user !== user.id) {
     throw new Error("You can only update your own proposal");
   }
 
@@ -27,7 +27,7 @@ export async function updateProposal(input: {
       where: eq(rounds.id, input.round),
     }),
     await db.query.proposals.findFirst({
-      where: and(eq(proposals.round, input.round), eq(proposals.user, user)),
+      where: and(eq(proposals.round, input.round), eq(proposals.user, user.id)),
     }),
   ]);
 

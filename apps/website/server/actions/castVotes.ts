@@ -12,7 +12,7 @@ export async function castVotes(input: {
   round: string;
   votes: { proposal: number; count: number }[];
 }) {
-  const user = await getAuthenticatedUser(true);
+  const user = await getAuthenticatedUser();
 
   if (!user) {
     throw new Error("No user session found");
