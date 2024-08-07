@@ -327,7 +327,7 @@ function Proposal(props: {
 function VoterCard(props: { round: string; show: boolean; user?: string }) {
   return (
     <Dialog open={props.show && !!props.user} back={`/rounds/${props.round}`}>
-      <div className="relative z-[80] rounded-xl bg-black overflow-hidden flex flex-col gap-4 p-4 drop-shadow-2xl">
+      <div className="relative z-[80] rounded-xl bg-black overflow-hidden flex flex-col gap-4 p-4">
         <img
           src={`/api/frames/rounds/${props.round}/votes/${props.user}/img`}
           className="w-96 rounded-xl"
