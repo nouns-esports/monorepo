@@ -75,7 +75,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
       <body
         className={`${cabin.variable} ${luckiestGuy.variable} ${bebasNeue.variable} ${londrinaSolid.variable} bg-black text-grey-200 font-cabin selection:text-white selection:bg-red flex flex-col items-center w-full h-full`}
       >
-        <Providers user={user}>
+        <Providers user={user?.id}>
           <Header />
           <main className="flex flex-col w-full min-h-[calc(100vh_-_224px)] h-full max-w-[1920px]">
             {props.children}
