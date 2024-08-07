@@ -22,7 +22,7 @@ export default async function Create(props: { params: { round: string } }) {
 
   const user = await getAuthenticatedUser();
   const proposal = user
-    ? await getProposal({ user, round: props.params.round })
+    ? await getProposal({ user: user.id, round: props.params.round })
     : undefined;
 
   return (
@@ -52,7 +52,7 @@ export default async function Create(props: { params: { round: string } }) {
         <ProposalEditor
           round={props.params.round}
           proposal={proposal}
-          user={user}
+          user={user?.id}
         />
       </div>
     </div>
