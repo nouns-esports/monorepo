@@ -367,7 +367,7 @@ app.image("/rounds/:round/votes/:user/img", async (c) => {
                       fontFamily: "Cabin",
                     }}
                   >
-                    {vote.count}
+                    {vote.count.toString()}
                   </div>
                 </div>
               </div>
@@ -380,7 +380,7 @@ app.image("/rounds/:round/votes/:user/img", async (c) => {
                   fontFamily: "Cabin",
                 }}
               >
-                +{round.votes.length - 5} more
+                +{(round.votes.length - 5).toString()} more
               </div>
             ) : (
               ""
