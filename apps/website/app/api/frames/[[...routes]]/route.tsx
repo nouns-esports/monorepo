@@ -207,6 +207,7 @@ app.frame("/rounds/:round/votes/:user", async (c) => {
       </Button.Link>,
     ],
     imageAspectRatio: "1:1",
+    browserLocation: `/rounds/${c.req.param("round")}`,
   });
 });
 
