@@ -15,6 +15,7 @@ export const env = createEnv({
     NEYNAR_API_KEY: z.string().min(1),
     DATABASE_URL: z.string().url(),
     PRIVY_APP_SECRET: z.string().min(1),
+    PRIVY_VERIFICATION_KEY: z.string().min(1),
     DISCORD_TOKEN: z.string().min(1),
     DISCORD_GUILD_ID: z.string().min(1),
     DISCORD_CLIENT_ID: z.string().min(1),

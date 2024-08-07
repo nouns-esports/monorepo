@@ -122,6 +122,20 @@ export default function Proposals(props: {
                 );
               }
 
+              if (
+                props.user.votes.allocated > 0 &&
+                props.user.votes.remaining < 1
+              ) {
+                return (
+                  <>
+                    <p className="text-white">Your votes have been submitted</p>
+                    <Button href={`/rounds/${props.round.id}?votes=true`}>
+                      Share
+                    </Button>
+                  </>
+                );
+              }
+
               return (
                 <>
                   <p className="text-white">
@@ -186,12 +200,30 @@ export default function Proposals(props: {
             }
 
             if (props.round.state === "Ended") {
-              for (let i = 0; i < props.round.awardCount; i++) {
-                if (props.proposals[i].user === props.user?.id) {
+              if (props.user) {
+                for (let i = 0; i < props.round.awardCount; i++) {
+                  if (props.proposals[i]?.user === props.user.id) {
+                    return (
+                      <>
+                        <p className="text-white">Your proposal won!</p>
+                        <Button href="/nexus">View Rewards</Button>
+                      </>
+                    );
+                  }
+                }
+
+                if (
+                  props.user.votes.allocated > 0 &&
+                  props.user.votes.remaining < 1
+                ) {
                   return (
                     <>
-                      <p className="text-white">Your proposal won!</p>
-                      <Button href="/nexus">View Rewards</Button>
+                      <p className="text-white">
+                        Your votes have been submitted
+                      </p>
+                      <Button href={`/rounds/${props.round.id}?votes=true`}>
+                        Share
+                      </Button>
                     </>
                   );
                 }

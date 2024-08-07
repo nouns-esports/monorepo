@@ -3,7 +3,7 @@ import { writeFileSync } from "fs";
 import { db, votes } from "~/packages/db/schema";
 import { privyClient } from "../..";
 
-const proposal = 336;
+const proposal = 340;
 
 const voters = await db.query.votes.findMany({
   where: eq(votes.proposal, proposal),

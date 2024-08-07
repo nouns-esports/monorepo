@@ -4,7 +4,7 @@ import { getNexus } from "@/server/queries/nexus";
 import { getUserAwards } from "@/server/queries/awards";
 // Quests are part of nexus page
 export default async function NexusPage() {
-  const user = await getAuthenticatedUser(true);
+  const user = await getAuthenticatedUser();
 
   const nexus = user ? await getNexus({ user: user.id }) : undefined;
 

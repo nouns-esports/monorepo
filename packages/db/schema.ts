@@ -10,6 +10,7 @@ import {
   integer,
   json,
   pgEnum,
+  jsonb,
 } from "drizzle-orm/pg-core";
 import { desc, relations } from "drizzle-orm";
 import { Pool } from "pg";
@@ -91,6 +92,7 @@ export const rounds = pgTable("rounds", {
 export const roundsRelations = relations(rounds, ({ many }) => ({
   awards: many(awards),
   proposals: many(proposals),
+  votes: many(votes),
 }));
 
 // If place is 0, it is an infinite round
@@ -158,23 +160,61 @@ export const nexusTiers = pgEnum("nexusTiers", [
 export const nexus = pgTable("nexus", {
   user: text("user").primaryKey(),
   tier: nexusTiers("tier").notNull(),
+  // Remove tier ^
+  // xp: integer("xp").notNull().default(0),
+  // // string
+  // image: text("image"),
+  // // string
+  // name: text("name").notNull(),
+  // // string
+  // bio: text("bio"),
+  // // Users primary wallet
+  // primaryWallet: text("primary_wallet"),
 });
 
-// export const users = pgTable("users", {
-//   user: text("user").primaryKey(),
-//   xp: integer("xp").notNull().default(0),
-//   // 0 = Explorer, 1 = Challenger, 2 = Champion
-//   rank: smallint("rank").notNull(),
-//   division: smallint("division").notNull(),
-//   // string
-//   image: text("image"),
-//   // string
-//   name: text("name").notNull(),
-//   // string
-//   bio: text("bio"),
-//   // string
-//   wallet: text("wallet"),
+// export const nexusRelations = relations(nexus, ({ many }) => ({
+//   rankings: many(leaderboard),
+//   completedActions: many(completedActions),
+// }));
+
+// export const seasons = pgTable("seasons", {
+//   id: serial("id").primaryKey(),
+//   start: timestamp("start", { mode: "date" }).notNull(),
+//   end: timestamp("end", { mode: "date" }).notNull(),
 // });
+
+// export const seasonRelations = relations(seasons, ({ many }) => ({
+//   leaderboards: many(leaderboard),
+// }));
+
+// // export const ranks = pgTable("ranks", {
+// //   name: text("name").primaryKey(),
+// //   tier: smallint("tier").notNull(),
+// //   image: text("image").notNull(),
+// //   season: integer("season").notNull(),
+// // });
+
+// // export const ranksRelations = relations(ranks, ({ one }) => ({
+// //   season: one(seasons, {
+// //     fields: [ranks.season],
+// //     references: [seasons.id],
+// //   }),
+// // }));
+
+// // Latest timestamp for user is source of truth
+// export const leaderboard = pgTable("leaderboard", {
+//   id: serial("id").primaryKey(),
+//   user: text("user").notNull(),
+//   place: integer("place").notNull(),
+//   timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
+// });
+
+// export const leaderboardRelations = relations(leaderboard, ({ one }) => ({
+//   nexus: one(nexus, {
+//     fields: [leaderboard.user],
+//     references: [nexus.user],
+//   }),
+// }));
 
 // export const actions = pgTable("actions", {
 //   // endpoint is api/quests/actions/action-id
@@ -192,10 +232,27 @@ export const nexus = pgTable("nexus", {
 //   quests: many(quests),
 // }));
 
-// Potential headwinds
-// - Timelock certain actions (so users cant spam xp for things list casting which can be infinitely done unlike voting). This may be formatted like daily or weekly quests (think rocket league)
-// - Actions may have xp and quests its own xp
-// - Should make sure to track when users are awarded not just an xp count, maybe an xp table with relations for actions and quests
+// export const completedActions = pgTable("completed_actions", {
+//   id: serial("id").primaryKey(),
+//   user: text("user").notNull(),
+//   action: text("action").notNull(),
+//   timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
+// });
+
+// export const completedActionsRelations = relations(
+//   completedActions,
+//   ({ one }) => ({
+//     action: one(actions, {
+//       fields: [completedActions.action],
+//       references: [actions.id],
+//     }),
+//   })
+// );
+
+// // Potential headwinds
+// // - Timelock certain actions (so users cant spam xp for things list casting which can be infinitely done unlike voting). This may be formatted like daily or weekly quests (think rocket league)
+// // - Actions may have xp and quests its own xp
+// // - Should make sure to track when users are awarded not just an xp count, maybe an xp table with relations for actions and quests
 
 // export const quests = pgTable("quests", {
 //   id: text("id").primaryKey(),

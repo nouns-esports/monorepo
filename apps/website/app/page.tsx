@@ -13,7 +13,7 @@ import { ArrowRight, ChevronUp } from "lucide-react";
 import { roundState } from "@/utils/roundState";
 import { getRounds } from "@/server/queries/rounds";
 import { twMerge } from "tailwind-merge";
-import { getUser } from "@/server/queries/users";
+import { getAuthenticatedUser, getUser } from "@/server/queries/users";
 import { userToProfile } from "@/utils/userToProfile";
 import { getCreator } from "@/server/queries/creations";
 

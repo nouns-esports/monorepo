@@ -1,6 +1,8 @@
 import type { Round } from "~/packages/db/schema";
 
-export function roundState(round: Round) {
+export function roundState(
+  round: Pick<Round, "start" | "votingStart" | "end">
+) {
   const now = new Date().getTime();
 
   const roundStart = new Date(round.start).getTime();

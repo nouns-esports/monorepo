@@ -36,4 +36,11 @@ export function userToProfile(user: User) {
       socials,
     };
   }
+
+  return {
+    id: user.id,
+    name: user.id.substring(11, 16),
+    pfp: `https://api.cloudnouns.com/v1/pfp?text=${user.id}&background=1`,
+    socials,
+  };
 }

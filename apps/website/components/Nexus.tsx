@@ -68,108 +68,114 @@ export default function Nexus(props: {
 
   if (!props.nexus) {
     return (
-      <div className="w-full flex flex-col gap-8">
-        <img src="/nexus-banner.webp" className="w-full rounded-xl" />
-        <div className="w-full flex flex-col gap-8 items-center">
-          <p className="text-center w-full text-white">
-            Join our esports journey at Nouns Esports! We're offering a unique
-            opportunity for esports enthusiasts to directly influence our major
-            decisions. Enter the Nexus and you'll be given the power to vote on
-            key organizational decisions, making you an active participant in
-            shaping our future. Don't miss out on this chance to be part of our
-            community-driven approach to esports.
-          </p>
-          <div className="flex flex-col gap-3 items-center">
-            <Button
-              loading={loading}
-              onClick={() => {
-                if (!authenticated) {
-                  login();
-                  return;
-                }
+      <div className="flex flex-col items-center">
+        <div className="w-full flex flex-col gap-8 max-w-2xl">
+          <img src="/nexus-banner.webp" className="w-full rounded-xl" />
+          <div className="w-full flex flex-col gap-8 items-center">
+            <p className="text-center w-full text-white">
+              Join our esports journey at Nouns Esports! We're offering a unique
+              opportunity for esports enthusiasts to directly influence our
+              major decisions. Enter the Nexus and you'll be given the power to
+              vote on key organizational decisions, making you an active
+              participant in shaping our future. Don't miss out on this chance
+              to be part of our community-driven approach to esports.
+            </p>
+            <div className="flex flex-col gap-3 items-center">
+              <Button
+                loading={loading}
+                onClick={() => {
+                  if (!authenticated) {
+                    login();
+                    return;
+                  }
 
-                if (!props.user?.discord?.username) {
-                  linkDiscord();
-                  return;
-                }
+                  if (!props.user?.discord?.username) {
+                    linkDiscord();
+                    return;
+                  }
 
-                const grant = new Promise((resolve, reject) => {
-                  startTransition(async () => {
-                    console.log("user iddd", props.user?.id);
-                    // @ts-ignore
-                    await grantNexus({ user: props.user.id })
-                      .then(resolve)
-                      .catch(reject);
+                  const grant = new Promise((resolve, reject) => {
+                    startTransition(async () => {
+                      console.log("user iddd", props.user?.id);
+                      // @ts-ignore
+                      await grantNexus({ user: props.user.id })
+                        .then(resolve)
+                        .catch(reject);
 
-                    // router.refresh();
+                      // router.refresh();
+                    });
                   });
-                });
 
-                toast.promise(grant, {
-                  loading: "Checking eligibility",
-                  success: () => {
-                    return "Welcome to the Nexus";
-                  },
-                  error: (e) => {
-                    return "You must join the Discord server to begin";
-                  },
-                });
-
-                return;
-              }}
-            >
-              {!props.user ? "Sign in" : ""}
-              {props.user && !props.user?.discord ? "Connect Discord" : ""}
-              {props.user?.discord && !props.nexus ? "Check Eligibility" : ""}
-            </Button>
-            {props.user ? (
-              <button
-                onClick={async () => {
-                  toast.promise(logout(), {
-                    loading: "Signing you out",
+                  toast.promise(grant, {
+                    loading: "Checking eligibility",
                     success: () => {
-                      router.refresh();
-                      return "Successfully signed out";
+                      return "Welcome to the Nexus";
                     },
-                    error: () => {
-                      return "Something went wrong";
+                    error: (e) => {
+                      return "You must join the Discord server to begin";
                     },
                   });
+
+                  return;
                 }}
-                className="text-red hover:text-red/80 transition-colors"
               >
-                Sign out
-              </button>
-            ) : (
-              ""
-            )}
+                {!props.user ? "Sign in" : ""}
+                {props.user && !props.user?.discord ? "Connect Discord" : ""}
+                {props.user?.discord && !props.nexus ? "Check Eligibility" : ""}
+              </Button>
+              {props.user ? (
+                <button
+                  onClick={async () => {
+                    toast.promise(logout(), {
+                      loading: "Signing you out",
+                      success: () => {
+                        router.refresh();
+                        return "Successfully signed out";
+                      },
+                      error: () => {
+                        return "Something went wrong";
+                      },
+                    });
+                  }}
+                  className="text-red hover:text-red/80 transition-colors"
+                >
+                  Sign out
+                </button>
+              ) : (
+                ""
+              )}
+            </div>
           </div>
-        </div>
-        <div className="flex flex-col gap-4">
-          <h2 className="font-luckiest-guy text-white text-3xl flex items-center justify-center w-full">
-            Unlock exclusive perks
-          </h2>
-          <div className="w-full flex gap-4 justify-between max-sm:flex-col">
-            <div className="w-full flex flex-col bg-blue-500/20 rounded-xl py-3 px-4 border-2 border-transparent hover:border-blue-500 transition-all hover:scale-105 cursor-pointer">
-              <h2 className="text-blue-500 text-lg font-semibold">Explorer</h2>
-              <ul className="text-white text-sm list-disc pl-4">
-                <li>Propose and vote on rounds in the community</li>
-                <li>An exclusive role in the Discord server</li>
-              </ul>
-            </div>
-            <div className="w-full flex flex-col bg-purple/20 rounded-xl py-3 px-4 border-2 border-transparent hover:border-purple transition-all hover:scale-105 cursor-pointer">
-              <h2 className="text-purple text-lg font-semibold">Challenger</h2>
-              <ul className="text-white text-sm list-disc pl-4">
-                <li>3x the votes per round</li>
-                <li>An exclusive role in the Discord server</li>
-              </ul>
-            </div>
-            <div className="w-full flex flex-col bg-red/20 rounded-xl py-3 px-4 border-2 border-transparent hover:border-red transition-all hover:scale-105 cursor-pointer">
-              <h2 className="text-red text-lg font-semibold">Champion</h2>
-              <ul className="text-white text-sm list-disc pl-4">
-                <li>10x the votes per round</li>
-                <li>An exclusive role in the Discord server</li>
-              </ul>
+          <div className="flex flex-col gap-4">
+            <h2 className="font-luckiest-guy text-white text-3xl flex items-center justify-center w-full">
+              Unlock exclusive perks
+            </h2>
+            <div className="w-full flex gap-4 justify-between max-sm:flex-col">
+              <div className="w-full flex flex-col bg-blue-500/20 rounded-xl py-3 px-4 border-2 border-transparent hover:border-blue-500 transition-all hover:scale-105 cursor-pointer">
+                <h2 className="text-blue-500 text-lg font-semibold">
+                  Explorer
+                </h2>
+                <ul className="text-white text-sm list-disc pl-4">
+                  <li>Propose and vote on rounds in the community</li>
+                  <li>An exclusive role in the Discord server</li>
+                </ul>
+              </div>
+              <div className="w-full flex flex-col bg-purple/20 rounded-xl py-3 px-4 border-2 border-transparent hover:border-purple transition-all hover:scale-105 cursor-pointer">
+                <h2 className="text-purple text-lg font-semibold">
+                  Challenger
+                </h2>
+                <ul className="text-white text-sm list-disc pl-4">
+                  <li>3x the votes per round</li>
+                  <li>An exclusive role in the Discord server</li>
+                </ul>
+              </div>
+              <div className="w-full flex flex-col bg-red/20 rounded-xl py-3 px-4 border-2 border-transparent hover:border-red transition-all hover:scale-105 cursor-pointer">
+                <h2 className="text-red text-lg font-semibold">Champion</h2>
+                <ul className="text-white text-sm list-disc pl-4">
+                  <li>10x the votes per round</li>
+                  <li>An exclusive role in the Discord server</li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>

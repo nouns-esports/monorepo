@@ -24,7 +24,7 @@ for (const [id, member] of members) {
       if (user) {
         const vote = await db.query.votes.findFirst({
           where: and(
-            eq(votes.round, "nounsvitational-merch"),
+            eq(votes.round, "nouns-funds-tournaments-2"),
             eq(votes.user, user.id)
           ),
         });
