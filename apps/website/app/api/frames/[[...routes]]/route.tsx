@@ -393,7 +393,6 @@ app.image("/rounds/:round/votes/:user/img", async (c) => {
             fontSize: 36,
             margin: 0,
             color: "#909497",
-            weight: 500,
             fontFamily: "Cabin",
           }}
         >
