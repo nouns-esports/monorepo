@@ -298,16 +298,16 @@ app.image("/rounds/:round/votes/:user/img", async (c) => {
               src={profile.pfp}
               style={{ width: 90, height: 90, borderRadius: "100%" }}
             />
-            <h1
+            <div
               style={{
+                display: "flex",
                 fontSize: 64,
                 fontWeight: 600,
-                margin: 0,
                 fontFamily: "Bebas Neue",
               }}
             >
               {profile.name}'s Votes
-            </h1>
+            </div>
           </div>
 
           <div
@@ -332,17 +332,16 @@ app.image("/rounds/:round/votes/:user/img", async (c) => {
                   borderRadius: 16,
                 }}
               >
-                <p
+                <div
                   style={{
                     display: "block",
                     lineClamp: 1,
-                    margin: 0,
                     fontSize: 36,
                     fontFamily: "Cabin",
                   }}
                 >
                   {vote.proposal.title}
-                </p>
+                </div>
                 <div
                   style={{
                     display: "flex",
@@ -361,43 +360,43 @@ app.image("/rounds/:round/votes/:user/img", async (c) => {
                       fill="white"
                     />
                   </svg>
-                  <p
+                  <div
                     style={{
+                      display: "flex",
                       fontSize: 36,
-                      margin: 0,
                       fontFamily: "Cabin",
                     }}
                   >
                     {vote.count}
-                  </p>
+                  </div>
                 </div>
               </div>
             ))}
             {round.votes.length > 5 ? (
-              <p
+              <div
                 style={{
+                  display: "flex",
                   fontSize: 36,
-                  margin: 0,
                   fontFamily: "Cabin",
                 }}
               >
                 +{round.votes.length - 5} more
-              </p>
+              </div>
             ) : (
               ""
             )}
           </div>
         </div>
-        <p
+        <div
           style={{
             fontSize: 36,
-            margin: 0,
+            display: "flex",
             color: "#909497",
             fontFamily: "Cabin",
           }}
         >
           nouns.gg/rounds/{round.id}
-        </p>
+        </div>
       </div>
     ),
     imageOptions: {
