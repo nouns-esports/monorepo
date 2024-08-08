@@ -99,12 +99,12 @@ export default async function Home() {
 
             return (
               <li
-                className="flex p-4 w-full bg-grey-800 rounded-xl hover:bg-grey-600 transition-colors min-h-56 max-2xl:min-h-[auto] max-lg:aspect-[14/9] max-lg:w-auto max-lg:h-52"
+                className="flex w-full bg-grey-800 rounded-xl hover:bg-grey-600 transition-colors min-h-56 max-2xl:min-h-[auto] max-lg:aspect-[14/9] max-lg:w-auto max-lg:h-52"
                 key={round.id}
               >
                 <Link
                   href={`/rounds/${round.id}`}
-                  className="flex gap-8 flex-col w-full"
+                  className="flex gap-8 flex-col w-full p-4"
                 >
                   <div className="flex justify-between items-center">
                     <img
