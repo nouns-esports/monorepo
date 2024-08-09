@@ -6,3 +6,4 @@ export const publicClient = createPublicClient({
   chain: env.NEXT_PUBLIC_ENVIRONMENT === "development" ? baseSepolia : base,
   transport: http(),
 });
+//
