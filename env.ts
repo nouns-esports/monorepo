@@ -17,6 +17,8 @@ dotenv.config({
   }`,
 });
 
+console.log("env", process.env);
+
 export const env = createEnv({
   server: {
     GOOGLE_API_KEY: z.string().min(1),
