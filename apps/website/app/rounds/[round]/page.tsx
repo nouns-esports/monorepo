@@ -120,7 +120,7 @@ export default async function Round(props: {
               <div className="flex gap-4 max-md:w-full">
                 <div className="flex flex-col gap-2 items-center justify-center bg-grey-800 rounded-xl overflow-hidden min-w-36 p-4 flex-shrink-0 max-md:w-full max-md:flex-shrink">
                   <p className="text-sm whitespace-nowrap text-grey-200">
-                    {state === "Starting" ? "Round starts" : ""}
+                    {state === "Upcoming" ? "Round starts" : ""}
                     {state === "Proposing" ? "Voting starts" : ""}
                     {state === "Voting" ? "Round ends" : ""}
                     {state === "Ended" ? "Round ended" : ""}
@@ -129,7 +129,7 @@ export default async function Round(props: {
                     {state !== "Ended" ? (
                       <Countdown
                         date={
-                          state === "Starting"
+                          state === "Upcoming"
                             ? new Date(round.start)
                             : state === "Proposing"
                               ? new Date(round.votingStart)

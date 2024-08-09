@@ -84,7 +84,7 @@ app.frame("/rounds/:id", async (c) => {
               objectFit: "cover",
             }}
           />
-          {state === "Starting" ? (
+          {state === "Upcoming" ? (
             <div
               style={{
                 display: "flex",
@@ -442,7 +442,7 @@ app.image("/rounds/:round/votes/:user/img", async (c) => {
 //               borderRadius: 12,
 //             }}
 //           />
-//           {state === "Starting" ? (
+//           {state === "Upcoming" ? (
 //             <div
 //               style={{
 //                 display: "flex",

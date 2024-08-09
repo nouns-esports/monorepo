@@ -9,13 +9,14 @@ import Gallery from "@/components/Gallery";
 import { getVideos } from "@/server/queries/youtube";
 import Attribution from "@/components/Attribution";
 import { getTrendingPosts } from "@/server/queries/discussion";
-import { ArrowRight, ChevronUp } from "lucide-react";
+import { ArrowRight, ChevronUp, Timer } from "lucide-react";
 import { roundState } from "@/utils/roundState";
 import { getRounds } from "@/server/queries/rounds";
 import { twMerge } from "tailwind-merge";
 import { getAuthenticatedUser, getUser } from "@/server/queries/users";
 import { userToProfile } from "@/utils/userToProfile";
 import { getCreator } from "@/server/queries/creations";
+import RoundCard from "@/components/RoundCard";
 
 export default async function Home() {
   const videos = await getVideos();
@@ -93,47 +94,13 @@ export default async function Home() {
             <ArrowRight className="w-[1.15rem] h-[1.15rem] group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
-        <ul className="flex gap-4 justify-between max-lg:w-full max-lg:overflow-x-scroll max-lg:px-8 max-sm:px-4 max-lg:scrollbar-hidden">
-          {rounds.map((round) => {
-            const state = roundState(round);
-
-            return (
-              <li
-                className="flex w-full bg-grey-800 rounded-xl hover:bg-grey-600 transition-colors min-h-56 max-2xl:min-h-[auto] max-lg:aspect-[14/9] max-lg:w-auto max-lg:h-52"
-                key={round.id}
-              >
-                <Link
-                  href={`/rounds/${round.id}`}
-                  className="flex gap-8 flex-col w-full p-4"
-                >
-                  <div className="flex justify-between items-center">
-                    <img
-                      src={round.image}
-                      className="w-14 h-14 max-2xl:w-12 max-2xl:h-12 rounded-lg object-cover"
-                    />
-                    <p
-                      className={twMerge(
-                        "bg-red rounded-full px-3 py-1 text-[0.95rem] max-2xl:text-sm text-white font-semibold",
-                        state === "Proposing" && "bg-blue-700",
-                        state === "Voting" && "bg-purple"
-                      )}
-                    >
-                      {state}
-                    </p>
-                  </div>
-                  <div className="flex justify-center flex-col gap-1">
-                    <h3 className="text-2xl max-2xl:text-[1.4rem] max-2xl:leading-7 font-bebas-neue text-white line-clamp-1">
-                      {round.name}
-                    </h3>
-                    <p className="text-[1.05rem] leading-snug max-2xl:text-[0.95rem] line-clamp-2">
-                      {round.description}
-                    </p>
-                  </div>
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
+        <div className="flex gap-4 justify-between max-lg:w-full max-lg:overflow-x-scroll max-lg:px-8 max-sm:px-4 max-lg:scrollbar-hidden">
+          {rounds.map((round) => (
+            <div className="w-full max-lg:aspect-[14/9] max-lg:w-auto max-lg:h-52">
+              <RoundCard key={round.id} round={round} simple />
+            </div>
+          ))}
+        </div>
       </div>
       <div className="flex flex-col gap-4 px-32 max-2xl:px-16 max-xl:px-8 max-lg:px-0">
         <div className="flex justify-between items-center max-lg:px-8 max-sm:px-4">

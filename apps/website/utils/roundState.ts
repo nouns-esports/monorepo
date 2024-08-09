@@ -11,7 +11,7 @@ export function roundState(
 
   const state =
     now < roundStart
-      ? "Starting"
+      ? "Upcoming"
       : now < votingStart
         ? "Proposing"
         : now < roundEnd
