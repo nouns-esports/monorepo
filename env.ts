@@ -4,12 +4,12 @@ import path from "path";
 
 // console.log("env", process.env);
 
-// import dotenv from "dotenv";
-// dotenv.config({
-//   path: `${path.relative(process.cwd(), __dirname)}/.env.${
-//     process.env.NODE_ENV
-//   }`,
-// });
+import dotenv from "dotenv";
+dotenv.config({
+  path: `${path.relative(process.cwd(), __dirname)}/.env.${
+    process.env.NODE_ENV
+  }`,
+});
 
 export const env = createEnv({
   server: {
