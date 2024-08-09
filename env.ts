@@ -20,7 +20,6 @@ export const env = createEnv({
     DISCORD_GUILD_ID: z.string().min(1),
     DISCORD_CLIENT_ID: z.string().min(1),
     PINATA_JWT: z.string().min(1),
-    UPLOADTHING_SECRET: z.string().min(1),
     PUBLIC_DOMAIN: z.string().min(1),
   },
   client: {
