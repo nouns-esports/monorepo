@@ -1,21 +1,8 @@
 import { createEnv } from "@t3-oss/env-nextjs";
 import { z } from "zod";
 import path from "path";
-import fs from "fs";
 
 console.log("env", process.env);
-
-console.log(process.cwd(), __dirname);
-
-const files = fs.readdirSync(__dirname);
-files.forEach((file) => {
-  console.log("Looking for env", file);
-});
-
-console.log(
-  "path",
-  `${path.relative(process.cwd(), __dirname)}/.env.${process.env.NODE_ENV}`
-);
 
 // import dotenv from "dotenv";
 // dotenv.config({
