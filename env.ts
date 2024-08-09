@@ -2,8 +2,6 @@ import { createEnv } from "@t3-oss/env-nextjs";
 import { z } from "zod";
 import path from "path";
 
-// console.log("env", process.env);
-
 import dotenv from "dotenv";
 dotenv.config({
   path: `${path.relative(process.cwd(), __dirname)}/.env.${

@@ -1,5 +1,3 @@
-console.log("env", process.env);
-
 const createJiti = require("jiti");
 const jiti = createJiti(__filename);
 

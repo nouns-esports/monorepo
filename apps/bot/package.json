@@ -8,14 +8,12 @@
     "uniqueVoters": "cross-env NODE_ENV=production bun ./scripts/analytics/uniqueVoters.ts",
     "proposalCount": "cross-env NODE_ENV=production bun ./scripts/analytics/proposalCount.ts",
     "totalUniqueInteractions": "cross-env NODE_ENV=production bun ./scripts/analytics/totalUniqueInteractions.ts",
-    "botCheck": "cross-env NODE_ENV=production bun ./scripts/analytics/botCheck.ts",
-    "purgeVotes": "cross-env NODE_ENV=production bun ./scripts/analytics/purgeVotes.ts",
+    "botCheck": "cross-env NODE_ENV=production bun ./scripts/botting/botCheck.ts",
+    "purgeVotes": "cross-env NODE_ENV=production bun ./scripts/botting/purgeVotes.ts",
     "updateImages": "cross-env NODE_ENV=development bun ./scripts/analytics/updateImages.ts",
-    "getData": "cross-env NODE_ENV=development bun ./scripts/analytics/getData.ts",
     "checkNexus": "cross-env NODE_ENV=production bun ./scripts/checkNexus.ts",
-    "insertData": "cross-env NODE_ENV=production bun ./scripts/insertData.ts",
     "votersForProposal": "cross-env NODE_ENV=production bun ./scripts/analytics/votersForProposal.ts",
-    "flagPotentialBots": "cross-env NODE_ENV=production bun ./scripts/analytics/flagPotentialBots.ts",
-    "flagHardPotentialBots": "cross-env NODE_ENV=production bun ./scripts/analytics/flagHardPotentialBots.ts"
+    "flagPotentialBots": "cross-env NODE_ENV=production bun ./scripts/botting/flagPotentialBots.ts",
+    "flagHardPotentialBots": "cross-env NODE_ENV=production bun ./scripts/botting/flagHardPotentialBots.ts"
   }
 }
