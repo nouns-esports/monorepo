@@ -13,6 +13,7 @@ files.forEach((file) => {
 });
 
 console.log(
+  "path",
   `${path.relative(process.cwd(), __dirname)}/.env.${process.env.NODE_ENV}`
 );
 
