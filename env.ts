@@ -5,6 +5,8 @@ import fs from "fs";
 
 console.log("env", process.env);
 
+console.log(process.cwd(), __dirname);
+
 const files = fs.readdirSync(__dirname);
 files.forEach((file) => {
   console.log("Looking for env", file);
@@ -16,8 +18,6 @@ dotenv.config({
     process.env.NODE_ENV
   }`,
 });
-
-console.log("env", process.env);
 
 export const env = createEnv({
   server: {
