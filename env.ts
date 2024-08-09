@@ -12,6 +12,10 @@ files.forEach((file) => {
   console.log("Looking for env", file);
 });
 
+console.log(
+  `${path.relative(process.cwd(), __dirname)}/.env.${process.env.NODE_ENV}`
+);
+
 import dotenv from "dotenv";
 dotenv.config({
   path: `${path.relative(process.cwd(), __dirname)}/.env.${
