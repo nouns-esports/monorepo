@@ -3,6 +3,8 @@ import { z } from "zod";
 import path from "path";
 import fs from "fs";
 
+console.log("env", process.env);
+
 const files = fs.readdirSync(__dirname);
 files.forEach((file) => {
   console.log("Looking for env", file);
