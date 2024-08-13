@@ -100,9 +100,9 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: "/duffcity",
+        source: "/taki",
         destination:
-          "https://www.start.gg/tournament/duff-city-volume-4/details",
+          "https://nouns.gg/rounds/taki",
         permanent: true,
       },
       {
