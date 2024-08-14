@@ -47,6 +47,17 @@ export async function castVotes(input: {
     throw new Error("Round not found");
   }
 
+  if (round.minVoterRank === "Challenger" && nexus.tier === "Explorer") {
+    throw new Error("You are not eligible to vote in this round");
+  }
+
+  if (
+    round.minVoterRank === "Champion" &&
+    (nexus.tier === "Challenger" || nexus.tier === "Explorer")
+  ) {
+    throw new Error("You are not eligible to vote in this round");
+  }
+
   const now = new Date();
   const votingStart = new Date(round.votingStart);
   const roundEnd = new Date(round.end ?? Infinity);

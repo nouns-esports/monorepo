@@ -13,24 +13,26 @@ import { numberToOrdinal } from "@/utils/numberToOrdinal";
 import { useOptimistic } from "react";
 import { useLogin } from "@privy-io/react-auth";
 import { useRouter } from "next/navigation";
+import type { Nexus } from "~/packages/db/schema";
+import type { getNexus } from "@/server/queries/nexus";
 
 export default function Proposals(props: {
   round: {
     id: string;
     state: ReturnType<typeof roundState>;
     awardCount: number;
+    minProposerRank: Nexus["tier"];
+    minVoterRank: Nexus["tier"];
   };
   proposals: Array<Awaited<ReturnType<typeof getProposals>>[number]>;
   user?: {
     id: string;
-    votes: {
-      allocated: number;
-      remaining: number;
-    };
+    nexus: NonNullable<Awaited<ReturnType<typeof getNexus>>>;
+    priorVotes: number;
   };
 }) {
   const [remainingVotes, setRemainingVotes] = useOptimistic(
-    props.user?.votes.remaining ?? 0
+    props.user ? props.user.nexus.votes - props.user.priorVotes : 0
   );
 
   const [votes, setVotes] = useOptimistic<Record<string, number>>(
@@ -83,6 +85,40 @@ export default function Proposals(props: {
                 );
               }
 
+              if (props.user.nexus.votes < 1) {
+                return (
+                  <>
+                    <p className="text-white">Enter the Nexus to propose</p>
+                    <Button href="/nexus">Get Started</Button>
+                  </>
+                );
+              }
+
+              if (
+                props.round.minProposerRank === "Challenger" &&
+                props.user.nexus.tier === "Explorer"
+              ) {
+                return (
+                  <>
+                    <p className="text-white">Only Challengers can propose</p>
+                    <Button href="/nexus">View Nexus</Button>
+                  </>
+                );
+              }
+
+              if (
+                props.round.minProposerRank === "Champion" &&
+                (props.user.nexus.tier === "Challenger" ||
+                  props.user.nexus.tier === "Explorer")
+              ) {
+                return (
+                  <>
+                    <p className="text-white">Only Champions can propose</p>
+                    <Button href="/nexus">View Nexus</Button>
+                  </>
+                );
+              }
+
               if (userProposal) {
                 return (
                   <>
@@ -113,7 +149,7 @@ export default function Proposals(props: {
                 );
               }
 
-              if (props.user.votes.allocated < 1) {
+              if (props.user.nexus.votes < 1) {
                 return (
                   <>
                     <p className="text-white">Enter the Nexus to vote</p>
@@ -123,9 +159,31 @@ export default function Proposals(props: {
               }
 
               if (
-                props.user.votes.allocated > 0 &&
-                props.user.votes.remaining < 1
+                props.round.minVoterRank === "Challenger" &&
+                props.user.nexus.tier === "Explorer"
               ) {
+                return (
+                  <>
+                    <p className="text-white">Only Challengers can vote</p>
+                    <Button href="/nexus">View Nexus</Button>
+                  </>
+                );
+              }
+
+              if (
+                props.round.minVoterRank === "Champion" &&
+                (props.user.nexus.tier === "Challenger" ||
+                  props.user.nexus.tier === "Explorer")
+              ) {
+                return (
+                  <>
+                    <p className="text-white">Only Champions can vote</p>
+                    <Button href="/nexus">View Nexus</Button>
+                  </>
+                );
+              }
+
+              if (props.user.nexus.votes > 0 && remainingVotes < 1) {
                 return (
                   <>
                     <p className="text-white">Your votes have been submitted</p>
@@ -140,7 +198,7 @@ export default function Proposals(props: {
                 <>
                   <p className="text-white">
                     {remainingVotes - (loading ? 0 : votesCast)}/
-                    {props.user?.votes.allocated} votes remaining
+                    {props.user.nexus.votes} votes remaining
                   </p>
                   <Button
                     disabled={loading || votesCast < 1}
@@ -212,10 +270,7 @@ export default function Proposals(props: {
                   }
                 }
 
-                if (
-                  props.user.votes.allocated > 0 &&
-                  props.user.votes.remaining < 1
-                ) {
+                if (props.user.nexus.votes > 0 && remainingVotes < 1) {
                   return (
                     <>
                       <p className="text-white">

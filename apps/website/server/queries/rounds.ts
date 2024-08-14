@@ -4,6 +4,7 @@ import { unstable_cache as cache } from "next/cache";
 
 export const getRound = cache(
   async (input: { id: string }) => {
+    //
     return db.query.rounds.findFirst({
       where: eq(rounds.id, input.id),
       with: {
@@ -25,6 +26,7 @@ export const getRounds = cache(
     stage?: "active" | "upcoming" | "ended";
     limit?: number;
   }) => {
+    ////
     if (input?.stage) {
       switch (input.stage) {
         case "active":
@@ -41,6 +43,7 @@ export const getRounds = cache(
                   asset: true,
                 },
               },
+              community: true,
             },
           });
         case "upcoming":
@@ -54,6 +57,7 @@ export const getRounds = cache(
                   asset: true,
                 },
               },
+              community: true,
             },
           });
         case "ended":
@@ -67,6 +71,7 @@ export const getRounds = cache(
                   asset: true,
                 },
               },
+              community: true,
             },
           });
       }
@@ -82,9 +87,70 @@ export const getRounds = cache(
             asset: true,
           },
         },
+        community: true,
       },
     });
   },
   ["rounds"],
   { tags: ["rounds"], revalidate: 60 * 10 }
+);
+
+export const getStats = cache(
+  async () => {
+    const allRounds = await db.query.rounds.findMany({
+      where: isNotNull(rounds.end),
+      with: {
+        awards: {
+          columns: {
+            asset: true,
+            value: true,
+          },
+        },
+        proposals: {
+          columns: {
+            user: true,
+          },
+        },
+        votes: {
+          columns: {
+            user: true,
+          },
+        },
+      },
+      columns: {
+        id: true,
+      },
+    });
+
+    let fundsDeployed = 0;
+
+    const uniqueParticipants: Record<string, boolean> = {};
+
+    for (const round of allRounds) {
+      for (const award of round.awards) {
+        if (award.asset === "usdc") {
+          fundsDeployed += Number(award.value) / 1000000;
+        }
+      }
+
+      for (const proposal of round.proposals) {
+        uniqueParticipants[proposal.user] = true;
+      }
+
+      for (const vote of round.votes) {
+        uniqueParticipants[vote.user] = true;
+      }
+    }
+
+    return {
+      roundsCreated: allRounds.length,
+      fundsDeployed,
+      totalParticipants: Object.keys(uniqueParticipants).length,
+    };
+  },
+  ["getStats"],
+  {
+    tags: ["getStats"],
+    revalidate: 60 * 10,
+  }
 );

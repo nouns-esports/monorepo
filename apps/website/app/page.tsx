@@ -1,7 +1,6 @@
 import Button from "@/components/Button";
 import Link from "@/components/Link";
 import Image from "next/image";
-import PokemonImage from "@/public/pokemon3.jpg";
 import NounsPartnerImage from "@/public/partners/nouns/wordmark.png";
 import MatchaPartnerImage from "@/public/partners/matcha/wordmark.svg";
 import AdidasPartnerImage from "@/public/partners/adidas/wordmark.svg";
@@ -10,11 +9,7 @@ import { getVideos } from "@/server/queries/youtube";
 import Attribution from "@/components/Attribution";
 import { getTrendingPosts } from "@/server/queries/discussion";
 import { ArrowRight, ChevronUp, Timer } from "lucide-react";
-import { roundState } from "@/utils/roundState";
 import { getRounds } from "@/server/queries/rounds";
-import { twMerge } from "tailwind-merge";
-import { getAuthenticatedUser, getUser } from "@/server/queries/users";
-import { userToProfile } from "@/utils/userToProfile";
 import { getCreator } from "@/server/queries/creations";
 import RoundCard from "@/components/RoundCard";
 
@@ -97,7 +92,19 @@ export default async function Home() {
         <div className="flex gap-4 justify-between max-lg:w-full max-lg:overflow-x-scroll max-lg:px-8 max-sm:px-4 max-lg:scrollbar-hidden">
           {rounds.map((round) => (
             <div className="w-full max-lg:aspect-[14/9] max-lg:w-auto max-lg:h-52">
-              <RoundCard key={round.id} round={round} simple />
+              <RoundCard
+                key={round.id}
+                id={round.id}
+                image={round.image}
+                name={round.name}
+                start={round.start}
+                votingStart={round.votingStart}
+                end={round.end}
+                community={{
+                  name: round.community.name,
+                  image: round.community.image,
+                }}
+              />
             </div>
           ))}
         </div>

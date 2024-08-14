@@ -50,7 +50,11 @@ app.frame("/rounds/:id", async (c) => {
     return c.error({ statusCode: 404, message: "Round not found" });
   }
 
-  const state = roundState(round);
+  const state = roundState({
+    start: round.start,
+    votingStart: round.votingStart,
+    end: round.end,
+  });
 
   const start = new Date(round.start);
 
@@ -234,7 +238,11 @@ app.image("/rounds/:round/votes/:user/img", async (c) => {
 
   const profile = userToProfile(user);
 
-  const state = roundState(round);
+  const state = roundState({
+    start: round.start,
+    votingStart: round.votingStart,
+    end: round.end,
+  });
 
   return c.res({
     image: (
