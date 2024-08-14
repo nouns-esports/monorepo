@@ -20,15 +20,15 @@ export default function SignInButton(props: { user?: User }) {
         else login();
       }}
       style={{
-        paddingTop: profile ? "6px" : "10px",
-        paddingBottom: profile ? "6px" : "10px",
-        paddingLeft: profile ? "6px" : "16px",
-        paddingRight: profile ? "14px" : "16px",
+        paddingTop: props.user?.discord && profile ? "6px" : "10px",
+        paddingBottom: props.user?.discord && profile ? "6px" : "10px",
+        paddingLeft: props.user?.discord && profile ? "6px" : "16px",
+        paddingRight: props.user?.discord && profile ? "14px" : "16px",
       }}
       className="flex items-center gap-2 select-none text-grey-800 py-1.5 pl-1.5 pr-3.5 text-xl bg-white hover:bg-white/80 transition-colors rounded-full justify-center leading-none font-bebas-neue whitespace-nowrap"
     >
       {props.user ? (
-        profile ? (
+        props.user.discord && profile ? (
           <>
             <img
               src={profile.pfp}

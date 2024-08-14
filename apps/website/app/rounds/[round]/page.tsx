@@ -18,7 +18,7 @@ import dynamic from "next/dynamic";
 import Shimmer from "@/components/Shimmer";
 import { getNexus } from "@/server/queries/nexus";
 import { env } from "~/env";
-import { ArrowRight, X } from "lucide-react";
+import { ArrowRight, Lock, X } from "lucide-react";
 import { headers } from "next/headers";
 import { userToProfile } from "@/utils/userToProfile";
 import Dialog from "@/components/Dialog";
@@ -71,7 +71,11 @@ export default async function Round(props: {
     return notFound();
   }
 
-  const state = roundState(round);
+  const state = roundState({
+    start: round.start,
+    votingStart: round.votingStart,
+    end: round.end,
+  });
 
   const user = await getAuthenticatedUser();
 
@@ -224,17 +228,15 @@ export default async function Round(props: {
               id: props.params.round,
               awardCount: round.awards.length,
               state,
+              minProposerRank: round.minProposerRank,
+              minVoterRank: round.minVoterRank,
             }}
             user={
-              user
+              user && nexus
                 ? {
                     id: user.id,
-                    votes: nexus
-                      ? {
-                          remaining: nexus.votes - priorVotes,
-                          allocated: nexus.votes,
-                        }
-                      : { remaining: 0, allocated: 0 },
+                    nexus,
+                    priorVotes,
                   }
                 : undefined
             }
@@ -264,7 +266,7 @@ function Proposal(props: {
     <Dialog open={!!props.selectedProposal} back={`/rounds/${props.round}`}>
       {props.selectedProposal ? (
         <div className="flex flex-col gap-4 w-2/3 rounded-xl h-2/3 max-xl:w-full max-xl:h-full overflow-hidden max-xl:rounded-none z-[80]">
-          <div className="relative flex flex-col gap-4 bg-grey-800 rounded-xl p-6 max-sm:p-3 h-full">
+          <div className="relative flex flex-col gap-4 bg-grey-800 rounded-xl max-xl:rounded-none p-6 max-sm:p-3 h-full">
             <div className="flex items-start justify-between gap-8">
               <h2 className="text-white font-luckiest-guy text-3xl">
                 {props.selectedProposal.title}

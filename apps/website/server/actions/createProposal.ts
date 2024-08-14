@@ -5,6 +5,8 @@ import { and, eq } from "drizzle-orm";
 import { revalidateTag } from "next/cache";
 import { getAuthenticatedUser } from "../queries/users";
 import { parseLexicalState } from "@/utils/parseLexicalState";
+import { getNexus } from "../queries/nexus";
+import checkDiscordAccountAge from "@/utils/checkDiscordAccountAge";
 
 export async function createProposal(input: {
   title: string;
@@ -23,12 +25,35 @@ export async function createProposal(input: {
     throw new Error("You can only create a proposal for yourself");
   }
 
+  const nexus = await getNexus({ user: user.id });
+
+  if (!nexus) {
+    throw new Error("A Nexus membership is required to vote");
+  }
+
+  if (user.discord?.subject && !checkDiscordAccountAge(user.discord.subject)) {
+    throw new Error(
+      `Privy user ${user.id} and discord account ${user.discord.subject} is less than 30 days old`
+    );
+  }
+
   const round = await db.query.rounds.findFirst({
     where: eq(rounds.id, input.round),
   });
 
   if (!round) {
     throw new Error("Round not found");
+  }
+
+  if (round.minProposerRank === "Challenger" && nexus.tier === "Explorer") {
+    throw new Error("You are not eligible to propose in this round");
+  }
+
+  if (
+    round.minProposerRank === "Champion" &&
+    (nexus.tier === "Challenger" || nexus.tier === "Explorer")
+  ) {
+    throw new Error("You are not eligible to propose in this round");
   }
 
   const now = new Date();

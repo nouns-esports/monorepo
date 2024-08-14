@@ -20,12 +20,13 @@ export const communities = pgTable("communities", {
   id: text("id").primaryKey(),
   image: text("image").notNull(),
   name: text("name").notNull(),
-  // Farcaster channel ids
   channels: text("channels").array().notNull(),
 });
 
 export const communityRelations = relations(communities, ({ many }) => ({
   rosters: many(rosters),
+  rounds: many(rounds),
+  creations: many(creations),
 }));
 
 export const rosters = pgTable("rosters", {
@@ -75,6 +76,13 @@ export const badges = pgTable("badges", {
   timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
 });
 
+// Use numbers so we can compare 2 > 1
+export const nexusTiers = pgEnum("nexusTiers", [
+  "Explorer",
+  "Challenger",
+  "Champion",
+]);
+
 // An infinite round is defined as a round with a null end timestamp and votingStart = start, respecitive proposals will include a value
 export const rounds = pgTable("rounds", {
   id: text("id").primaryKey(),
@@ -84,15 +92,23 @@ export const rounds = pgTable("rounds", {
   start: timestamp("start", { mode: "date" }).notNull(),
   votingStart: timestamp("voting_start", { mode: "date" }).notNull(),
   end: timestamp("end", { mode: "date" }),
-  tags: text("tags").array().notNull(),
+  community: text("community").notNull().default(""),
   image: text("image").notNull(),
   banner: text("banner").notNull(),
+  minProposerRank: nexusTiers("min_proposer_rank")
+    .notNull()
+    .default("Explorer"),
+  minVoterRank: nexusTiers("min_voter_rank").notNull().default("Explorer"),
 });
 
-export const roundsRelations = relations(rounds, ({ many }) => ({
+export const roundsRelations = relations(rounds, ({ one, many }) => ({
   awards: many(awards),
   proposals: many(proposals),
   votes: many(votes),
+  community: one(communities, {
+    fields: [rounds.community],
+    references: [communities.id],
+  }),
 }));
 
 // If place is 0, it is an infinite round
@@ -149,13 +165,6 @@ export const proposalsRelations = relations(proposals, ({ one, many }) => ({
   }),
   votes: many(votes),
 }));
-
-// use numbers instead in the future
-export const nexusTiers = pgEnum("nexusTiers", [
-  "Explorer",
-  "Challenger",
-  "Champion",
-]);
 
 export const nexus = pgTable("nexus", {
   user: text("user").primaryKey(),
@@ -217,11 +226,12 @@ export const nexus = pgTable("nexus", {
 // }));
 
 // export const actions = pgTable("actions", {
-//   // endpoint is api/quests/actions/action-id
+//   // endpoint is api/quests/actions/action-id - this endpoint checks for completion
 //   id: text("id").primaryKey(),
 //   name: text("name").notNull(),
 //   description: text("description").notNull(),
 //   quest: text("quest").notNull(),
+//   place: smallint("place").notNull(),
 // });
 
 // export const actionRelations = relations(actions, ({ one, many }) => ({
@@ -253,6 +263,8 @@ export const nexus = pgTable("nexus", {
 // // - Timelock certain actions (so users cant spam xp for things list casting which can be infinitely done unlike voting). This may be formatted like daily or weekly quests (think rocket league)
 // // - Actions may have xp and quests its own xp
 // // - Should make sure to track when users are awarded not just an xp count, maybe an xp table with relations for actions and quests
+
+// GIVE XP FOR NON QUESTS maybe xp table with relations for quests or other types like account connections (only tables quests, actions, xp, rankings)
 
 // export const quests = pgTable("quests", {
 //   id: text("id").primaryKey(),
@@ -307,7 +319,7 @@ export const creations = pgTable("creations", {
   // Links to another creation, useful for creating variants (cropped, modified, etc) while still pointing to the original entry
   original: text("original"),
   // Search tags, only required for top level creations
-  tags: text("tags").array().notNull(),
+  community: text("community").notNull().default(""),
   // Width
   width: integer("width").notNull(),
   // Height
@@ -319,34 +331,40 @@ export const creationRelations = relations(creations, ({ one }) => ({
     fields: [creations.original],
     references: [creations.id],
   }),
+  community: one(communities, {
+    fields: [creations.community],
+    references: [communities.id],
+  }),
 }));
+
+const schema = {
+  communities,
+  communityRelations,
+  rosters,
+  rostersRelations,
+  talent,
+  talentRelations,
+  rounds,
+  roundsRelations,
+  awards,
+  awardsRelations,
+  assets,
+  proposals,
+  proposalsRelations,
+  votes,
+  votesRelations,
+  badges,
+  nexus,
+  creations,
+  creationRelations,
+};
 
 export const db = drizzle(
   new Pool({
     connectionString: env.DATABASE_URL,
   }),
   {
-    schema: {
-      communities,
-      communityRelations,
-      rosters,
-      rostersRelations,
-      talent,
-      talentRelations,
-      rounds,
-      roundsRelations,
-      awards,
-      awardsRelations,
-      assets,
-      proposals,
-      proposalsRelations,
-      votes,
-      votesRelations,
-      badges,
-      nexus,
-      creations,
-      creationRelations,
-    },
+    schema,
   }
 );
 
