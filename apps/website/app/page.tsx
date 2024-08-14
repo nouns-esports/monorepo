@@ -91,7 +91,7 @@ export default async function Home() {
         </div>
         <div className="flex gap-4 justify-between max-lg:w-full max-lg:overflow-x-scroll max-lg:px-8 max-sm:px-4 max-lg:scrollbar-hidden">
           {rounds.map((round) => (
-            <div className="w-full max-lg:aspect-[14/9] max-lg:w-auto max-lg:h-52">
+            <div className="w-full max-lg:aspect-[14/9] max-lg:w-auto h-[14rem]">
               <RoundCard
                 key={round.id}
                 id={round.id}

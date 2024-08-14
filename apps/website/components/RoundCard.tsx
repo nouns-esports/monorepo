@@ -24,7 +24,7 @@ export default function RoundCard(props: {
       href={`/rounds/${props.id}`}
       className="flex flex-col w-full group hover:opacity-80 transition-opacity bg-grey-600 rounded-xl overflow-hidden"
     >
-      <div className="flex flex-col gap-8 /group-hover:bg-grey-600 bg-grey-800 transition-colors p-4 h-full rounded-xl">
+      <div className="flex flex-col gap-8 bg-grey-800 transition-colors p-4 h-full rounded-xl">
         <div className="flex justify-between items-center">
           <img
             src={props.image}
