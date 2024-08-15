@@ -19,7 +19,7 @@ import { useContext, useTransition } from "react";
 import { LoginMethodContext } from "@/providers/Privy";
 import Link from "./Link";
 import type { getUserAwards } from "@/server/queries/awards";
-import { grantNexus } from "@/server/actions/grantNexus";
+import { grantNexus } from "@/server/mutations/grantNexus";
 import { formatUnits } from "viem";
 
 export default function Nexus(props: {

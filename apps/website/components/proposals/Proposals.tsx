@@ -5,7 +5,7 @@ import React, { useCallback, useMemo, useState, useTransition } from "react";
 import { CaretUp, CaretDown, ChartBarHorizontal } from "phosphor-react-sc";
 import Button from "../Button";
 import { twMerge } from "tailwind-merge";
-import { castVotes } from "@/server/actions/castVotes";
+import { castVotes } from "@/server/mutations/castVotes";
 import toast from "react-hot-toast";
 import { getProposals } from "@/server/queries/proposals";
 import { roundState } from "@/utils/roundState";

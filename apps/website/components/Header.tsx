@@ -6,38 +6,14 @@ import {
   Users,
   ShoppingBag,
   ArrowRight,
-  Dot,
-  ChevronRight,
   Trophy,
   Diamond,
   Handshake,
 } from "lucide-react";
 import Banner from "./Banner";
 import { getCommunities } from "@/server/queries/communities";
-import Image from "next/image";
 import { getRosters } from "@/server/queries/rosters";
 import Menu from "./Menu";
-
-const events = [
-  {
-    image:
-      "https://pbs.twimg.com/profile_images/1499195152639926276/t4_WbYMx_400x400.jpg",
-    title: "Cody",
-    type: "live",
-  },
-  {
-    image:
-      "https://pbs.twimg.com/profile_images/1661386831986929666/7rLLJevv_400x400.jpg",
-    title: "Matcha Cup",
-    type: "event",
-  },
-  {
-    image:
-      "https://pbs.twimg.com/profile_images/1747421219639476224/Y3tlMuWt_400x400.jpg",
-    title: "Contributor Call",
-    type: "event",
-  },
-];
 
 export default async function Header() {
   const user = await getAuthenticatedUser();
