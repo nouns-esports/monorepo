@@ -108,7 +108,7 @@ export default async function Round(props: {
           <div className="flex flex-col gap-4">
             <div className="bg-grey-800 rounded-xl overflow-hidden">
               <img
-                src={round.banner}
+                src={round.image}
                 className="w-full h-48 object-cover object-center max-sm:h-32"
               />
               <div className="flex flex-col gap-2 p-4">

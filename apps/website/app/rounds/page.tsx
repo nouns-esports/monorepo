@@ -67,6 +67,7 @@ export default async function Rounds(props: {
                 votingStart={round.votingStart}
                 end={round.end}
                 community={{
+                  id: round.community.id,
                   name: round.community.name,
                   image: round.community.image,
                 }}
@@ -93,6 +94,7 @@ export default async function Rounds(props: {
                 votingStart={round.votingStart}
                 end={round.end}
                 community={{
+                  id: round.community.id,
                   name: round.community.name,
                   image: round.community.image,
                 }}
@@ -116,6 +118,7 @@ export default async function Rounds(props: {
               votingStart={round.votingStart}
               end={round.end}
               community={{
+                id: round.community.id,
                 name: round.community.name,
                 image: round.community.image,
               }}

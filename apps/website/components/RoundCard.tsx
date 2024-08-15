@@ -3,6 +3,7 @@ import { Timer } from "lucide-react";
 import { roundState } from "@/utils/roundState";
 import Countdown from "@/components/rounds/Countdown";
 import type { Community, Round } from "~/packages/db/schema";
+import { twMerge } from "tailwind-merge";
 
 export default function RoundCard(props: {
   id: Round["id"];
@@ -11,7 +12,12 @@ export default function RoundCard(props: {
   start: Round["start"];
   votingStart: Round["votingStart"];
   end: Round["end"];
-  community: { name: Community["name"]; image: Community["image"] };
+  community: {
+    id: Community["id"];
+    name: Community["name"];
+    image: Community["image"];
+  };
+  className?: string;
 }) {
   const state = roundState({
     start: props.start,
@@ -20,55 +26,67 @@ export default function RoundCard(props: {
   });
 
   return (
-    <Link
-      href={`/rounds/${props.id}`}
-      className="flex flex-col w-full group hover:opacity-80 transition-opacity bg-grey-600 rounded-xl overflow-hidden"
+    <div
+      className={twMerge(
+        "relative flex flex-col bg-grey-800 hover:bg-grey-600 transition-colors rounded-xl overflow-hidden w-full group aspect-[49/50]",
+        props.className
+      )}
     >
-      <div className="flex flex-col gap-4 bg-grey-800 transition-colors p-4 h-full rounded-xl">
-        <div className="flex justify-between items-center">
-          <img
-            src={props.image}
-            className="w-14 h-14 max-2xl:w-12 max-2xl:h-12 rounded-lg object-cover"
-          />
-          <div className="bg-grey-600 py-2 pl-2 pr-3 rounded-full flex text-white items-center gap-2 text-sm font-semibold">
+      <Link
+        href={`/rounds/${props.id}`}
+        className="absolute z-10 top-0 left-0 w-full h-full"
+      />
+      <div className="flex flex-shrink-0 w-full h-36/ h-[40%] overflow-hidden">
+        <img
+          src={props.image}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+        />
+      </div>
+      <div className="flex flex-col p-4 h-full">
+        <div className="flex flex-col gap-4 h-full">
+          <p className="text-white text-[1.75rem] leading-tight font-bebas-neue">
+            {props.name}
+          </p>
+          <div className="w-full text-sm flex items-center gap-4 text-white">
+            <div className="flex gap-1.5">
+              <Timer className="w-4 h-4 text-grey-200" />
+              <p className="mt-[1px] leading-none text-grey-200">
+                {state === "Upcoming" ? "Round starts" : ""}
+                {state === "Proposing" ? "Voting starts" : ""}
+                {state === "Voting" ? "Round ends" : ""}
+                {state === "Ended" ? "Round ended" : ""}
+              </p>
+            </div>
+            {state === "Ended" ? (
+              new Intl.DateTimeFormat("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              }).format(new Date(props.end ?? Infinity))
+            ) : (
+              <Countdown
+                date={
+                  state === "Upcoming"
+                    ? new Date(props.start)
+                    : state === "Proposing"
+                      ? new Date(props.votingStart)
+                      : new Date(props.end ?? Infinity)
+                }
+              />
+            )}
+          </div>
+        </div>
+        <div className="flex h-full items-end">
+          <Link
+            href={`https://warpcast.com/~/channel/${props.community.id}`}
+            newTab
+            className="relative z-20 bg-grey-500 hover:bg-grey-400 transition-colors py-2 pl-2 pr-3 rounded-full flex text-white items-center gap-2 text-sm font-semibold w-fit"
+          >
             <img src={props.community.image} className="w-5 h-5 rounded-full" />
             {props.community.name}
-          </div>
-        </div>
-        <div className="flex justify-center flex-col gap-1">
-          <h3 className="text-2xl max-2xl:text-[1.4rem] font-bebas-neue text-white line-clamp-2 min-h-[2lh]">
-            {props.name}
-          </h3>
-        </div>
-        <div className="w-full text-sm flex justify-between items-center">
-          <div className="flex gap-1.5">
-            <Timer className="w-4 h-4" />
-            <p className="mt-[1px] leading-none">
-              {state === "Upcoming" ? "Round starts" : ""}
-              {state === "Proposing" ? "Voting starts" : ""}
-              {state === "Voting" ? "Round ends" : ""}
-              {state === "Ended" ? "Round ended" : ""}
-            </p>
-          </div>
-          {state === "Ended" ? (
-            new Intl.DateTimeFormat("en-US", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            }).format(new Date(props.end ?? Infinity))
-          ) : (
-            <Countdown
-              date={
-                state === "Upcoming"
-                  ? new Date(props.start)
-                  : state === "Proposing"
-                    ? new Date(props.votingStart)
-                    : new Date(props.end ?? Infinity)
-              }
-            />
-          )}
+          </Link>
         </div>
       </div>
-    </Link>
+    </div>
   );
 }
