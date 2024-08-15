@@ -24,7 +24,7 @@ export default function RoundCard(props: {
       href={`/rounds/${props.id}`}
       className="flex flex-col w-full group hover:opacity-80 transition-opacity bg-grey-600 rounded-xl overflow-hidden"
     >
-      <div className="flex flex-col gap-8 bg-grey-800 transition-colors p-4 h-full rounded-xl">
+      <div className="flex flex-col gap-4 bg-grey-800 transition-colors p-4 h-full rounded-xl">
         <div className="flex justify-between items-center">
           <img
             src={props.image}
@@ -40,34 +40,34 @@ export default function RoundCard(props: {
             {props.name}
           </h3>
         </div>
-      </div>
-      <div className="py-2.5 w-full text-grey-200 text-sm px-3 flex justify-between items-center">
-        <div className="flex gap-1.5">
-          <Timer className="w-4 h-4" />
-          <p className="mt-[1px] leading-none">
-            {state === "Upcoming" ? "Round starts" : ""}
-            {state === "Proposing" ? "Voting starts" : ""}
-            {state === "Voting" ? "Round ends" : ""}
-            {state === "Ended" ? "Round ended" : ""}
-          </p>
+        <div className="w-full text-sm flex justify-between items-center">
+          <div className="flex gap-1.5">
+            <Timer className="w-4 h-4" />
+            <p className="mt-[1px] leading-none">
+              {state === "Upcoming" ? "Round starts" : ""}
+              {state === "Proposing" ? "Voting starts" : ""}
+              {state === "Voting" ? "Round ends" : ""}
+              {state === "Ended" ? "Round ended" : ""}
+            </p>
+          </div>
+          {state === "Ended" ? (
+            new Intl.DateTimeFormat("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            }).format(new Date(props.end ?? Infinity))
+          ) : (
+            <Countdown
+              date={
+                state === "Upcoming"
+                  ? new Date(props.start)
+                  : state === "Proposing"
+                    ? new Date(props.votingStart)
+                    : new Date(props.end ?? Infinity)
+              }
+            />
+          )}
         </div>
-        {state === "Ended" ? (
-          new Intl.DateTimeFormat("en-US", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          }).format(new Date(props.end ?? Infinity))
-        ) : (
-          <Countdown
-            date={
-              state === "Upcoming"
-                ? new Date(props.start)
-                : state === "Proposing"
-                  ? new Date(props.votingStart)
-                  : new Date(props.end ?? Infinity)
-            }
-          />
-        )}
       </div>
     </Link>
   );
