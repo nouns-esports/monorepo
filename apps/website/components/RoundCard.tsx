@@ -44,7 +44,7 @@ export default function RoundCard(props: {
       </div>
       <div className="flex flex-col p-4 h-full">
         <div className="flex flex-col gap-4 h-full">
-          <p className="text-white text-[1.75rem] leading-tight font-bebas-neue">
+          <p className="text-white text-[1.75rem] leading-tight font-bebas-neue line-clamp-2">
             {props.name}
           </p>
           <div className="w-full text-sm flex items-center gap-4 text-white">
