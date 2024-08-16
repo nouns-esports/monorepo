@@ -225,15 +225,15 @@ app.image("/rounds/:round/votes/:user/img", async (c) => {
   ]);
 
   if (!round) {
-    return c.res({ image: <div></div> });
+    return c.res({ image: <div style={{ display: "flex" }}>Error</div> });
   }
 
   if (round.votes.length < 1) {
-    return c.res({ image: <div></div> });
+    return c.res({ image: <div style={{ display: "flex" }}>Error</div> });
   }
 
   if (!user) {
-    return c.res({ image: <div></div> });
+    return c.res({ image: <div style={{ display: "flex" }}>Error</div> });
   }
 
   const profile = userToProfile(user);
