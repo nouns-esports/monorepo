@@ -258,6 +258,7 @@ export default async function Round(props: {
                 <ToggleModal
                   id={`proposal-${proposal.id}`}
                   value={proposal.id.toString()}
+                  tabIndex={0}
                   className="bg-grey-200 rounded-md p-1 flex items-center justify-center w-min"
                 >
                   <X className="text-grey-600 w-5 h-5" />

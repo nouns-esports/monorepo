@@ -66,10 +66,12 @@ export function ToggleModal(props: {
   id: string;
   className?: string;
   children: React.ReactNode;
+  tabIndex?: number;
   value?: string;
 }) {
   return (
     <div
+      tabIndex={props.tabIndex}
       onClick={() => {
         const dialog = document.getElementById(
           `${props.id}-dialog`
