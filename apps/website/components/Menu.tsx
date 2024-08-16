@@ -15,25 +15,32 @@ import {
 } from "phosphor-react-sc";
 
 export default function Menu() {
+  const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(false);
 
   const pathname = usePathname();
   const params = useParams();
 
   useEffect(() => {
-    toggleMenu(false);
-  }, [params]);
+    if (!mounted) {
+      toggleMenu(false);
+    }
 
-  useEffect(() => {
-    toggleMenu(false);
-  }, [pathname]);
+    setMounted(true);
+  }, [params, pathname]);
 
   function toggleMenu(open: boolean) {
-    // if (open) {
-    //   document.documentElement.style.overflowY = "hidden";
-    // } else {
-    //   document.documentElement.style.overflowY = "auto";
-    // }
+    if (open) {
+      document.documentElement.classList.add(
+        "overflow-y-hidden",
+        "scrollbar-hidden"
+      );
+    } else {
+      document.documentElement.classList.remove(
+        "overflow-y-hidden",
+        "scrollbar-hidden"
+      );
+    }
 
     setOpen(open);
   }
