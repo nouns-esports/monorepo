@@ -24,6 +24,8 @@ export function Modal(props: {
       dialog.showModal();
 
       root.style.paddingRight = `${root.clientWidth - width}px`;
+
+      dialog.removeAttribute("inert");
     }
   }, []);
 
@@ -54,6 +56,8 @@ export function Modal(props: {
             url.searchParams.delete(props.queryParam);
             window.history.pushState({}, "", url);
           }
+
+          e.currentTarget.setAttribute("inert", "");
         }
       }}
     >
@@ -85,6 +89,7 @@ export function ToggleModal(props: {
           if (dialog.dataset.queryparam) {
             url.searchParams.delete(dialog.dataset.queryparam);
           }
+          dialog.setAttribute("inert", "");
         } else {
           const width = root.clientWidth;
           document.documentElement.classList.add("prevent-scroll");
@@ -95,6 +100,7 @@ export function ToggleModal(props: {
           if (dialog.dataset.queryparam && props.value) {
             url.searchParams.set(dialog.dataset.queryparam, props.value);
           }
+          dialog.removeAttribute("inert");
         }
 
         window.history.pushState({}, "", url);
