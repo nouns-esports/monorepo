@@ -19,10 +19,7 @@ export function Modal(props: {
       const root = document.documentElement;
       const width = root.clientWidth;
 
-      document.documentElement.classList.add(
-        "overflow-y-hidden",
-        "scrollbar-hidden"
-      );
+      document.documentElement.classList.add("prevent-scroll");
 
       dialog.showModal();
 
@@ -46,10 +43,7 @@ export function Modal(props: {
         ) {
           const root = document.documentElement;
 
-          document.documentElement.classList.remove(
-            "overflow-y-hidden",
-            "scrollbar-hidden"
-          );
+          document.documentElement.classList.remove("prevent-scroll");
 
           e.currentTarget.close();
 
@@ -85,10 +79,7 @@ export function ToggleModal(props: {
         const url = new URL(window.location.toString());
 
         if (dialog.open) {
-          document.documentElement.classList.remove(
-            "overflow-y-hidden",
-            "scrollbar-hidden"
-          );
+          document.documentElement.classList.remove("prevent-scroll");
           root.style.paddingRight = `0px`;
           dialog.close();
           if (dialog.dataset.queryparam) {
@@ -96,10 +87,7 @@ export function ToggleModal(props: {
           }
         } else {
           const width = root.clientWidth;
-          document.documentElement.classList.add(
-            "overflow-y-hidden",
-            "scrollbar-hidden"
-          );
+          document.documentElement.classList.add("prevent-scroll");
 
           dialog.showModal();
           root.style.paddingRight = `${root.clientWidth - width}px`;
