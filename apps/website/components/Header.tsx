@@ -67,7 +67,7 @@ export default async function Header() {
                 </div>
               </Link>
               <nav className="pointer-events-auto flex items-center gap-8">
-                <Menu rosters={rosters} communities={communities} />
+                <Menu />
                 <ul className="flex gap-6 items-center text-white max-md:gap-0">
                   <Group title="Esports" icon={<Trophy className="w-5 h-5" />}>
                     <div className="flex flex-col gap-0">

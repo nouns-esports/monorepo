@@ -22,6 +22,7 @@ import { ArrowRight, Lock, X } from "lucide-react";
 import { headers } from "next/headers";
 import { userToProfile } from "@/utils/userToProfile";
 import Dialog from "@/components/Dialog";
+import { Modal, ToggleModal } from "@/components/Modal";
 
 const Markdown = dynamic(() => import("@/components/lexical/Markdown"), {
   ssr: false,
@@ -87,14 +88,6 @@ export default async function Round(props: {
 
   const selectedProposal = props.searchParams.p
     ? proposals.find((proposal) => proposal.id === Number(props.searchParams.p))
-    : undefined;
-
-  const proposalUser = selectedProposal
-    ? await getUser({ id: selectedProposal.user })
-    : undefined;
-
-  const proposalProfile = proposalUser
-    ? userToProfile(proposalUser)
     : undefined;
 
   return (
@@ -243,86 +236,84 @@ export default async function Round(props: {
           />
         </div>
       </div>
-      <Proposal
-        round={props.params.round}
-        selectedProposal={selectedProposal}
-        proposalProfile={proposalProfile}
-      />
+      {await Promise.all([
+        proposals.map(async (proposal) => {
+          const proposalUser = selectedProposal
+            ? await getUser({ id: selectedProposal.user })
+            : undefined;
+
+          const proposalProfile = proposalUser
+            ? userToProfile(proposalUser)
+            : undefined;
+
+          return (
+            <Modal
+              key={proposal.id}
+              id={`proposal-${proposal.id}`}
+              queryParam="p"
+              showOnLoad={selectedProposal?.id === proposal.id}
+              className="flex-col gap-4 w-2/3 rounded-xl h-2/3 p-6 max-sm:p-3 max-h-none max-xl:max-w-none max-w-screen-lg bg-grey-800 max-xl:w-full max-xl:h-screen max-xl:rounded-none overflow-hidden"
+            >
+              <div className="flex justify-end mb-2">
+                <ToggleModal
+                  id={`proposal-${proposal.id}`}
+                  value={proposal.id.toString()}
+                  className="bg-grey-200 rounded-md p-1 flex items-center justify-center w-min"
+                >
+                  <X className="text-grey-600 w-5 h-5" />
+                </ToggleModal>
+              </div>
+              <div className="flex flex-col h-full overflow-y-scroll scrollbar-hidden gap-4">
+                <h2 className="text-white font-luckiest-guy text-3xl">
+                  {proposal.title}
+                </h2>
+                {proposalProfile ? (
+                  <div className="flex gap-8 items-center">
+                    <div className="rounded-full flex items-center text-white gap-3 font-semibold text-lg">
+                      <img
+                        src={proposalProfile.pfp}
+                        className="rounded-full h-7 w-7"
+                      />
+                      {proposalProfile.name}
+                    </div>
+                    <div className="flex gap-3 items-center">
+                      {proposalProfile.socials.twitter ? (
+                        <Link href={proposalProfile.socials.twitter} newTab>
+                          <TwitterLogo
+                            className="w-6 h-6 text-white hover:opacity-80 transition-opacity"
+                            weight="fill"
+                          />
+                        </Link>
+                      ) : (
+                        ""
+                      )}
+                      {proposalProfile.socials.farcaster ? (
+                        <Link href={proposalProfile.socials.farcaster} newTab>
+                          <img
+                            src="/farcaster.svg"
+                            className="w-5 h-5  hover:opacity-80 transition-opacity"
+                          />
+                        </Link>
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                  </div>
+                ) : (
+                  ""
+                )}
+                <Markdown markdown={proposal.content} readOnly />
+              </div>
+            </Modal>
+          );
+        }),
+      ])}
       <VoterCard
         round={props.params.round}
         show={!!props.searchParams.votes}
         user={user?.id}
       />
     </div>
-  );
-}
-
-function Proposal(props: {
-  round: string;
-  selectedProposal?: Awaited<ReturnType<typeof getProposals>>[number];
-  proposalProfile?: ReturnType<typeof userToProfile>;
-}) {
-  return (
-    <Dialog open={!!props.selectedProposal} back={`/rounds/${props.round}`}>
-      {props.selectedProposal ? (
-        <div className="flex flex-col gap-4 w-2/3 rounded-xl h-2/3 max-xl:w-full max-xl:h-full overflow-hidden max-xl:rounded-none z-[80]">
-          <div className="relative flex flex-col gap-4 bg-grey-800 rounded-xl max-xl:rounded-none p-6 max-sm:p-3 h-full">
-            <div className="flex items-start justify-between gap-8">
-              <h2 className="text-white font-luckiest-guy text-3xl">
-                {props.selectedProposal.title}
-              </h2>
-              <Link
-                href={`/rounds/${props.selectedProposal.round}`}
-                scroll={false}
-                className="bg-grey-200 rounded-md p-1 flex items-center justify-center w-min"
-              >
-                <X className="text-grey-600 w-5 h-5" />
-              </Link>
-            </div>
-            {props.proposalProfile ? (
-              <div className="flex gap-8 items-center">
-                <div className="rounded-full flex items-center text-white gap-3 font-semibold text-lg">
-                  <img
-                    src={props.proposalProfile.pfp}
-                    className="rounded-full h-7 w-7"
-                  />
-                  {props.proposalProfile.name}
-                </div>
-                <div className="flex gap-3 items-center">
-                  {props.proposalProfile.socials.twitter ? (
-                    <Link href={props.proposalProfile.socials.twitter} newTab>
-                      <TwitterLogo
-                        className="w-6 h-6 text-white hover:opacity-80 transition-opacity"
-                        weight="fill"
-                      />
-                    </Link>
-                  ) : (
-                    ""
-                  )}
-                  {props.proposalProfile.socials.farcaster ? (
-                    <Link href={props.proposalProfile.socials.farcaster} newTab>
-                      <img
-                        src="/farcaster.svg"
-                        className="w-5 h-5  hover:opacity-80 transition-opacity"
-                      />
-                    </Link>
-                  ) : (
-                    ""
-                  )}
-                </div>
-              </div>
-            ) : (
-              ""
-            )}
-            <div className="relative flex flex-col h-full overflow-y-scroll scrollbar-hidden">
-              <Markdown markdown={props.selectedProposal.content} readOnly />
-            </div>
-          </div>
-        </div>
-      ) : (
-        ""
-      )}
-    </Dialog>
   );
 }
 

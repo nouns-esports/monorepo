@@ -15,6 +15,7 @@ import { useLogin } from "@privy-io/react-auth";
 import { useRouter } from "next/navigation";
 import type { Nexus } from "~/packages/db/schema";
 import type { getNexus } from "@/server/queries/nexus";
+import { ToggleModal } from "../Modal";
 
 export default function Proposals(props: {
   round: {
@@ -313,10 +314,10 @@ export default function Proposals(props: {
             return 0;
           })
           .map((proposal, index) => (
-            <Link
+            <ToggleModal
               key={index}
-              href={`/rounds/${props.round.id}?p=${proposal.id}`}
-              scroll={false}
+              id={`proposal-${proposal.id}`}
+              value={proposal.id.toString()}
               className={twMerge(
                 "relative w-full flex gap-4 bg-grey-800 text-grey-200 rounded-xl px-4 pt-4 h-36 overflow-hidden max-sm:flex-col max-sm:p-0 max-sm:h-fit max-sm:gap-0",
                 props.round.state === "Ended" &&
@@ -528,7 +529,7 @@ export default function Proposals(props: {
                     "from-blue-900"
                 )}
               />
-            </Link>
+            </ToggleModal>
           ))}
         {props.proposals.length < 1 ? (
           <div className="mt-4 flex gap-4 justify-center items-center">
