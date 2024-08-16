@@ -96,7 +96,6 @@ export default function Nexus(props: {
 
                   const grant = new Promise((resolve, reject) => {
                     startTransition(async () => {
-                      console.log("user iddd", props.user?.id);
                       // @ts-ignore
                       await grantNexus({ user: props.user.id })
                         .then(resolve)

@@ -7,12 +7,13 @@ import { writeFileSync } from "fs";
 let output = "";
 
 const users = await db.query.nexus.findMany();
+const privyUsers = await privyClient.getUsers();
 
 for (const user of users) {
   try {
-    const privyUser = await privyClient.getUser(user.user);
+    const privyUser = privyUsers.find((u) => u.id === user.user);
 
-    if (!privyUser.discord) {
+    if (!privyUser?.discord) {
       continue;
     }
 
@@ -104,7 +105,6 @@ for (const user of users) {
     output += `${privyUser.discord.username},${tier}`;
 
     console.log("Updated: ", privyUser.discord.username, tier);
-    await new Promise((resolve) => setTimeout(resolve, 250));
   } catch (error) {
     console.error(error);
   }
