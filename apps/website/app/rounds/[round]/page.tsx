@@ -309,11 +309,11 @@ export default async function Round(props: {
           );
         }),
       ])}
-      <VoterCard
+      {/* <VoterCard
         round={props.params.round}
         show={!!props.searchParams.votes}
         user={user?.id}
-      />
+      /> */}
     </div>
   );
 }
