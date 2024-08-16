@@ -25,7 +25,7 @@ export function Modal(props: {
 
       root.style.paddingRight = `${root.clientWidth - width}px`;
 
-      dialog.removeAttribute("inert");
+      // dialog.removeAttribute("inert");
     }
   }, []);
 
@@ -34,6 +34,7 @@ export function Modal(props: {
       id={`${props.id}-dialog`}
       data-queryparam={props.queryParam}
       className={twMerge("outline-none", props.className)}
+      inert
       onClick={(e) => {
         const rect = e.currentTarget.getBoundingClientRect();
 
@@ -57,7 +58,7 @@ export function Modal(props: {
             window.history.pushState({}, "", url);
           }
 
-          e.currentTarget.setAttribute("inert", "");
+          // e.currentTarget.setAttribute("inert", "");
         }
       }}
     >
@@ -89,7 +90,7 @@ export function ToggleModal(props: {
           if (dialog.dataset.queryparam) {
             url.searchParams.delete(dialog.dataset.queryparam);
           }
-          dialog.setAttribute("inert", "");
+          // dialog.setAttribute("inert", "");
         } else {
           const width = root.clientWidth;
           document.documentElement.classList.add("prevent-scroll");
@@ -100,7 +101,7 @@ export function ToggleModal(props: {
           if (dialog.dataset.queryparam && props.value) {
             url.searchParams.set(dialog.dataset.queryparam, props.value);
           }
-          dialog.removeAttribute("inert");
+          // dialog.removeAttribute("inert");
         }
 
         window.history.pushState({}, "", url);
