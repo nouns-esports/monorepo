@@ -22,10 +22,10 @@ export default async function Rounds(props: {
         <div className="flex flex-col gap-4">
           <h1 className="font-luckiest-guy text-white text-4xl">Rounds</h1>
           <p className="max-w-screen-sm max-lg:max-w-none">
-            Welcome to Rounds, where the nouns community plays an active role in
+            Welcome to Rounds, where the Nouns community plays an active role in
             deciding who and what we fund, making a real impact with every vote.
             Here, anyone can submit a proposal, and everyone has the power to
-            vote! By participating and supporting nouns and our partners, you
+            vote! By participating and supporting Nouns and our partners, you
             can level up your account, gain additional voting power, and unlock
             unique opportunities.
           </p>
