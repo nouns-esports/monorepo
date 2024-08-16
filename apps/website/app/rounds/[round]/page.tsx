@@ -252,7 +252,7 @@ export default async function Round(props: {
               id={`proposal-${proposal.id}`}
               queryParam="p"
               showOnLoad={selectedProposal?.id === proposal.id}
-              className="flex-col gap-4 w-2/3 rounded-xl h-2/3 p-6 max-sm:p-3 max-h-none max-xl:max-w-none max-w-screen-lg bg-grey-800 max-xl:w-full max-xl:h-screen max-xl:rounded-none overflow-hidden"
+              className="flex-col gap-4 w-2/3 rounded-xl h-2/3 p-6 max-sm:p-3 max-h-none max-xl:max-w-none max-w-screen-lg bg-grey-800 max-xl:w-full max-xl:h-[100dvh] max-xl:rounded-none overflow-hidden"
             >
               <div className="flex justify-end mb-2">
                 <ToggleModal

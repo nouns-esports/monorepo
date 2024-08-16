@@ -62,7 +62,7 @@ export default function Menu() {
       )}
       <div
         className={twMerge(
-          "flex flex-col gap-8 pt-24 px-8 text-grey-200 fixed w-full h-screen bg-black top-0 left-0 pointer-events-none opacity-0 transition-opacity",
+          "flex flex-col gap-8 pt-24 px-8 text-grey-200 fixed w-full h-[100dvh] bg-black top-0 left-0 pointer-events-none opacity-0 transition-opacity",
           open && "opacity-100 pointer-events-auto"
         )}
       >
