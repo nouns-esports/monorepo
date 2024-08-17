@@ -45,7 +45,7 @@ import { INSERT_IMAGE_COMMAND } from "./ImagePlugin";
 import toast from "react-hot-toast";
 import Button from "@/components/Button";
 import { $createHeadingNode, $isHeadingNode } from "@lexical/rich-text";
-import { pinImage } from "@/server/actions/pinImage";
+import { pinImage } from "@/server/mutations/pinImage";
 
 const LowPriority = 1;
 

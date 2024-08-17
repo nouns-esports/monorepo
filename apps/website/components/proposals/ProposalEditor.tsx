@@ -3,12 +3,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import TextInput from "../form/TextInput";
 import Button from "../Button";
-import { createProposal } from "@/server/actions/createProposal";
+import { createProposal } from "@/server/mutations/createProposal";
 import { $generateHtmlFromNodes } from "@lexical/html";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import LimitMeter from "../LimitMeter";
-import { updateProposal } from "@/server/actions/updateProposal";
+import { updateProposal } from "@/server/mutations/updateProposal";
 import { getProposal } from "@/server/queries/proposals";
 import dynamic from "next/dynamic";
 import Shimmer from "../Shimmer";
