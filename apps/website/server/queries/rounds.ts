@@ -77,7 +77,7 @@ export const getRounds = cache(
 
     return db.query.rounds.findMany({
       limit: input?.limit,
-      orderBy: desc(rounds.end),
+      orderBy: asc(rounds.end),
       where: and(lt(rounds.start, new Date()), isNotNull(rounds.end)),
       with: {
         awards: {
