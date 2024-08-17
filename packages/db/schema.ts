@@ -8,10 +8,11 @@ import {
   serial,
   smallint,
   integer,
+  json,
   pgEnum,
-  decimal,
+  jsonb,
 } from "drizzle-orm/pg-core";
-import { min, relations } from "drizzle-orm";
+import { desc, relations } from "drizzle-orm";
 import { Pool } from "pg";
 import { env } from "~/env";
 
@@ -75,19 +76,29 @@ export const badges = pgTable("badges", {
   timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
 });
 
+// Use numbers so we can compare 2 > 1
+export const nexusTiers = pgEnum("nexusTiers", [
+  "Explorer",
+  "Challenger",
+  "Champion",
+]);
+
+// An infinite round is defined as a round with a null end timestamp and votingStart = start, respecitive proposals will include a value
 export const rounds = pgTable("rounds", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
-  description: text("description").default("").notNull(), // REMOVE
-  image: text("image").notNull(),
-  banner: text("banner").notNull(),
-  community: text("community").notNull().default(""),
-  content: text("content").notNull(), // RENAME TO DESCRIPTION
+  description: text("description").default("").notNull(),
+  content: text("content").notNull(),
   start: timestamp("start", { mode: "date" }).notNull(),
   votingStart: timestamp("voting_start", { mode: "date" }).notNull(),
   end: timestamp("end", { mode: "date" }),
-  minProposerRank: integer("min_proposer_rank").notNull().default(0), // REMOVE DEFAULT
-  minVoterRank: integer("min_voter_rank").notNull().default(0), // REMOVE DEFAULT
+  community: text("community").notNull().default(""),
+  image: text("image").notNull(),
+  banner: text("banner").notNull(),
+  minProposerRank: nexusTiers("min_proposer_rank")
+    .notNull()
+    .default("Explorer"),
+  minVoterRank: nexusTiers("min_voter_rank").notNull().default("Explorer"),
 });
 
 export const roundsRelations = relations(rounds, ({ one, many }) => ({
@@ -97,14 +108,6 @@ export const roundsRelations = relations(rounds, ({ one, many }) => ({
   community: one(communities, {
     fields: [rounds.community],
     references: [communities.id],
-  }),
-  minProposerRank: one(ranks, {
-    fields: [rounds.minProposerRank],
-    references: [ranks.id],
-  }),
-  minVoterRank: one(ranks, {
-    fields: [rounds.minVoterRank],
-    references: [ranks.id],
   }),
 }));
 
@@ -135,7 +138,7 @@ export const assets = pgTable("assets", {
   name: text("name").notNull(),
   image: text("image").notNull(),
   decimals: smallint("decimals"),
-  chainId: integer("chain_id"), // RENAME TO CHAIN
+  chainId: integer("chain_id"),
   address: text("address"),
   tokenId: text("token_id"),
 });
@@ -165,139 +168,113 @@ export const proposalsRelations = relations(proposals, ({ one, many }) => ({
 
 export const nexus = pgTable("nexus", {
   user: text("user").primaryKey(),
-
+  tier: nexusTiers("tier").notNull(),
   // Remove tier ^
-  xpTotal: integer("xp_total").notNull(),
-  image: text("image"),
-  name: text("name").notNull(),
-  bio: text("bio"),
-  primaryWallet: text("primary_wallet"),
+  // xp: integer("xp").notNull().default(0),
+  // // string
+  // image: text("image"),
+  // // string
+  // name: text("name").notNull(),
+  // // string
+  // bio: text("bio"),
+  // // Users primary wallet
+  // primaryWallet: text("primary_wallet"),
 });
 
-export const nexusRelations = relations(nexus, ({ many }) => ({
-  votes: many(votes),
-  proposals: many(proposals),
-  rankings: many(rankings),
-  xp: many(xp),
-}));
+// export const nexusRelations = relations(nexus, ({ many }) => ({
+//   rankings: many(leaderboard),
+//   completedActions: many(completedActions),
+// }));
 
-////////////////////////////////////////////////////
-//////////////// v WORKING SCHEMA v ////////////////
-////////////////////////////////////////////////////
+// export const seasons = pgTable("seasons", {
+//   id: serial("id").primaryKey(),
+//   start: timestamp("start", { mode: "date" }).notNull(),
+//   end: timestamp("end", { mode: "date" }).notNull(),
+// });
 
-export const seasons = pgTable("seasons", {
-  id: serial("id").primaryKey(),
-  start: timestamp("start", { mode: "date" }).notNull(),
-  end: timestamp("end", { mode: "date" }).notNull(),
-});
+// export const seasonRelations = relations(seasons, ({ many }) => ({
+//   leaderboards: many(leaderboard),
+// }));
 
-export const seasonRelations = relations(seasons, ({ many }) => ({
-  ranks: many(ranks),
-  rankings: many(rankings),
-  quests: many(quests),
-  xp: many(xp),
-}));
+// // export const ranks = pgTable("ranks", {
+// //   name: text("name").primaryKey(),
+// //   tier: smallint("tier").notNull(),
+// //   image: text("image").notNull(),
+// //   season: integer("season").notNull(),
+// // });
 
-export const ranks = pgTable("ranks", {
-  id: serial("id").primaryKey(),
-  name: text("name").notNull(), // ex: Explorer III
-  image: text("image").notNull(),
-  place: smallint("place").notNull(), // The position of this rank in the list of ranks
-  percentile: numeric("percentile", { precision: 3, scale: 2 }).notNull(), // ex: 0.30 === 30%
-  season: integer("season").notNull(),
-});
+// // export const ranksRelations = relations(ranks, ({ one }) => ({
+// //   season: one(seasons, {
+// //     fields: [ranks.season],
+// //     references: [seasons.id],
+// //   }),
+// // }));
 
-export const ranksRelations = relations(ranks, ({ one }) => ({
-  season: one(seasons, {
-    fields: [ranks.season],
-    references: [seasons.id],
-  }),
-}));
+// // Latest timestamp for user is source of truth
+// export const leaderboard = pgTable("leaderboard", {
+//   id: serial("id").primaryKey(),
+//   user: text("user").notNull(),
+//   place: integer("place").notNull(),
+//   timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
+// });
 
-export const quests = pgTable("quests", {
-  id: text("id").primaryKey(),
-  name: text("name").notNull(),
-  description: text("description").notNull(),
-  season: integer("season").notNull(),
-  community: text("community").notNull(),
-  hidden: boolean("hidden").notNull().default(false),
-  xp: integer("xp").notNull(),
-  actions: text("actions").array().notNull(),
-  sequential: boolean("sequential").notNull(), // Should actions be completed in order or not
-  minRank: integer("min_rank").notNull().default(0), // REMOVE DEFAULT
-  maxCompletions: smallint("max_completions").notNull(), // How many times the quest can be completed
-  cooldown: integer("cooldown").notNull(), // How long until the quest can be completed again by the same user
-});
+// export const leaderboardRelations = relations(leaderboard, ({ one }) => ({
+//   nexus: one(nexus, {
+//     fields: [leaderboard.user],
+//     references: [nexus.user],
+//   }),
+// }));
 
-export const questRelations = relations(quests, ({ one, many }) => ({
-  season: one(seasons, {
-    fields: [quests.season],
-    references: [seasons.id],
-  }),
-  community: one(communities, {
-    fields: [quests.community],
-    references: [communities.id],
-  }),
-  xp: many(xp),
-  minRank: one(ranks, {
-    fields: [quests.minRank],
-    references: [ranks.id],
-  }),
-}));
+// export const actions = pgTable("actions", {
+//   // endpoint is api/quests/actions/action-id - this endpoint checks for completion
+//   id: text("id").primaryKey(),
+//   name: text("name").notNull(),
+//   description: text("description").notNull(),
+//   quest: text("quest").notNull(),
+//   place: smallint("place").notNull(),
+// });
 
-export const xp = pgTable("xp", {
-  id: serial("id").primaryKey(),
-  user: text("user").notNull(),
-  xpEarned: integer("xp_earned").notNull(),
-  timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
-  season: text("season").notNull(),
-  // Only one of the following should be defined at a time
-  quest: text("quest"),
-  // purchase: text("purchase"),
-});
+// export const actionRelations = relations(actions, ({ one, many }) => ({
+//   quest: one(quests, {
+//     fields: [actions.quest],
+//     references: [quests.id],
+//   }),
+//   quests: many(quests),
+// }));
 
-export const xpRelations = relations(xp, ({ one }) => ({
-  user: one(nexus, {
-    fields: [xp.user],
-    references: [nexus.user],
-  }),
-  season: one(seasons, {
-    fields: [xp.season],
-    references: [seasons.id],
-  }),
-  quest: one(quests, {
-    fields: [xp.quest],
-    references: [quests.id],
-  }),
-}));
+// export const completedActions = pgTable("completed_actions", {
+//   id: serial("id").primaryKey(),
+//   user: text("user").notNull(),
+//   action: text("action").notNull(),
+//   timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
+// });
 
-export const rankings = pgTable("rankings", {
-  id: serial("id").primaryKey(),
-  user: text("user").notNull(),
-  season: integer("season").notNull(),
-  rank: integer("rank").notNull(),
-  xpSeasonal: integer("xp_seasonal").notNull().default(0),
-  timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
-});
+// export const completedActionsRelations = relations(
+//   completedActions,
+//   ({ one }) => ({
+//     action: one(actions, {
+//       fields: [completedActions.action],
+//       references: [actions.id],
+//     }),
+//   })
+// );
 
-export const rankingsRelations = relations(rankings, ({ one }) => ({
-  nexus: one(nexus, {
-    fields: [rankings.user],
-    references: [nexus.user],
-  }),
-  season: one(seasons, {
-    fields: [rankings.season],
-    references: [seasons.id],
-  }),
-  ranks: one(ranks, {
-    fields: [rankings.rank],
-    references: [ranks.id],
-  }),
-}));
+// // Potential headwinds
+// // - Timelock certain actions (so users cant spam xp for things list casting which can be infinitely done unlike voting). This may be formatted like daily or weekly quests (think rocket league)
+// // - Actions may have xp and quests its own xp
+// // - Should make sure to track when users are awarded not just an xp count, maybe an xp table with relations for actions and quests
 
-////////////////////////////////////////////////////
-//////////////// ^ WORKING SCHEMA ^ ////////////////
-////////////////////////////////////////////////////
+// GIVE XP FOR NON QUESTS maybe xp table with relations for quests or other types like account connections (only tables quests, actions, xp, rankings)
+
+// export const quests = pgTable("quests", {
+//   id: text("id").primaryKey(),
+//   name: text("name").notNull(),
+//   description: text("description").notNull(),
+// });
+
+// export const questRelations = relations(quests, ({ many }) => ({
+//   actions: many(actions),
+// }));
 
 export const votes = pgTable("votes", {
   id: serial("id").primaryKey(),
