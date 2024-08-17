@@ -184,16 +184,16 @@ export default function Proposals(props: {
                 );
               }
 
-              // if (props.user.nexus.votes > 0 && remainingVotes < 1) {
-              //   return (
-              //     <>
-              //       <p className="text-white">Your votes have been submitted</p>
-              //       <Button href={`/rounds/${props.round.id}?votes=true`}>
-              //         Share
-              //       </Button>
-              //     </>
-              //   );
-              // }
+              if (props.user.nexus.votes > 0 && remainingVotes < 1) {
+                return (
+                  <>
+                    <p className="text-white">Your votes have been submitted</p>
+                    <ToggleModal id="share-votes" value="true">
+                      <Button>Share</Button>
+                    </ToggleModal>
+                  </>
+                );
+              }
 
               return (
                 <>
@@ -271,18 +271,18 @@ export default function Proposals(props: {
                   }
                 }
 
-                // if (props.user.nexus.votes > 0 && remainingVotes < 1) {
-                //   return (
-                //     <>
-                //       <p className="text-white">
-                //         Your votes have been submitted
-                //       </p>
-                //       <Button href={`/rounds/${props.round.id}?votes=true`}>
-                //         Share
-                //       </Button>
-                //     </>
-                //   );
-                // }
+                if (props.user.nexus.votes > 0 && remainingVotes < 1) {
+                  return (
+                    <>
+                      <p className="text-white">
+                        Your votes have been submitted
+                      </p>
+                      <ToggleModal id="share-votes" value="true">
+                        <Button>Share</Button>
+                      </ToggleModal>
+                    </>
+                  );
+                }
               }
             }
           })()}

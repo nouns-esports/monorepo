@@ -1,12 +1,22 @@
 import { db, rounds, votes } from "~/packages/db/schema";
-import { and, desc, eq } from "drizzle-orm";
+import { and, desc, eq, or } from "drizzle-orm";
 import { unstable_noStore as noStore } from "next/cache";
 
-export async function getPriorVotes(input: { round: string; user: string }) {
+export async function getPriorVotes(input: {
+  round: string;
+  user: string;
+  wallet?: string;
+}) {
   noStore();
 
   const previousVotes = await db.query.votes.findMany({
-    where: and(eq(votes.user, input.user), eq(votes.round, input.round)),
+    where: and(
+      or(
+        eq(votes.user, input.user),
+        input.wallet ? eq(votes.user, input.wallet) : undefined
+      ),
+      eq(votes.round, input.round)
+    ),
     columns: { count: true },
   });
 
@@ -22,12 +32,16 @@ export async function getVotes(input: { round: string; user: string }) {
 export async function getUserVotesForRound(input: {
   round: string;
   user: string;
+  wallet?: string;
 }) {
   const round = await db.query.rounds.findFirst({
     where: eq(rounds.id, input.round),
     with: {
       votes: {
-        where: eq(votes.user, input.user),
+        where: or(
+          eq(votes.user, input.user),
+          input.wallet ? eq(votes.user, input.wallet) : undefined
+        ),
         orderBy: desc(votes.count),
         with: {
           proposal: {

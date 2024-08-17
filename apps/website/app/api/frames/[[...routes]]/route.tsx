@@ -216,24 +216,34 @@ app.frame("/rounds/:round/votes/:user", async (c) => {
 });
 
 app.image("/rounds/:round/votes/:user/img", async (c) => {
-  const [round, user] = await Promise.all([
-    getUserVotesForRound({
-      round: c.req.param("round"),
-      user: c.req.param("user"),
-    }),
-    getUser({ id: c.req.param("user") }),
-  ]);
+  const user = await getUser({ id: c.req.param("user") });
+
+  if (!user) {
+    return c.res({
+      image: <div style={{ display: "flex", color: "red" }}>No user found</div>,
+    });
+  }
+
+  const round = await getUserVotesForRound({
+    round: c.req.param("round"),
+    user: c.req.param("user"),
+    wallet: user.wallet?.address,
+  });
 
   if (!round) {
-    return c.res({ image: <div style={{ display: "flex" }}>Error</div> });
+    return c.res({
+      image: (
+        <div style={{ display: "flex", color: "red" }}>No round found</div>
+      ),
+    });
   }
 
   if (round.votes.length < 1) {
-    return c.res({ image: <div style={{ display: "flex" }}>Error</div> });
-  }
-
-  if (!user) {
-    return c.res({ image: <div style={{ display: "flex" }}>Error</div> });
+    return c.res({
+      image: (
+        <div style={{ display: "flex", color: "red" }}>User has no votes</div>
+      ),
+    });
   }
 
   const profile = userToProfile(user);

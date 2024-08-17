@@ -83,7 +83,11 @@ export default async function Round(props: {
   const nexus = user ? await getNexus({ user: user.id }) : undefined;
 
   const priorVotes = user
-    ? await getPriorVotes({ user: user.id, round: props.params.round })
+    ? await getPriorVotes({
+        user: user.id,
+        wallet: user.wallet?.address,
+        round: props.params.round,
+      })
     : 0;
 
   const selectedProposal = props.searchParams.p
@@ -309,36 +313,33 @@ export default async function Round(props: {
           );
         }),
       ])}
-      {/* <VoterCard
-        round={props.params.round}
-        show={!!props.searchParams.votes}
-        user={user?.id}
-      /> */}
+      {priorVotes > 0 ? (
+        <Modal
+          id="share-votes"
+          className="rounded-xl bg-black overflow-hidden flex-col gap-4 p-4"
+        >
+          <div className="relative z-[80] rounded-xl bg-black overflow-hidden flex flex-col gap-4 p-4">
+            <img
+              src={`/api/frames/rounds/${props.params.round}/votes/${user?.id}/img`}
+              className="w-96 rounded-xl"
+            />
+            <div className="flex justify-between text-white">
+              <Link
+                href={`https://warpcast.com/~/compose?embeds[]=${env.PUBLIC_DOMAIN}/api/frames/rounds/${props.params.round}/votes/${user?.id}/`}
+                className="flex gap-1 items-center group hover:opacity-80 transition-opacity"
+              >
+                Share this image on Warpcast{" "}
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
+              <ToggleModal id="share-votes" className="text-red">
+                Close
+              </ToggleModal>
+            </div>
+          </div>
+        </Modal>
+      ) : (
+        ""
+      )}
     </div>
-  );
-}
-
-function VoterCard(props: { round: string; show: boolean; user?: string }) {
-  return (
-    <Dialog open={props.show && !!props.user} back={`/rounds/${props.round}`}>
-      <div className="relative z-[80] rounded-xl bg-black overflow-hidden flex flex-col gap-4 p-4">
-        <img
-          src={`/api/frames/rounds/${props.round}/votes/${props.user}/img`}
-          className="w-96 rounded-xl"
-        />
-        <div className="flex justify-between text-white">
-          <Link
-            href={`https://warpcast.com/~/compose?embeds[]=${env.PUBLIC_DOMAIN}/api/frames/rounds/${props.round}/votes/${props.user}/`}
-            className="flex gap-1 items-center group hover:opacity-80 transition-opacity"
-          >
-            Share this image on Warpcast{" "}
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </Link>
-          <Link href={`/rounds/${props.round}`} className="text-red">
-            Close
-          </Link>
-        </div>
-      </div>
-    </Dialog>
   );
 }
