@@ -12,6 +12,7 @@
     "purgeVotes": "cross-env NODE_ENV=production bun ./scripts/botting/purgeVotes.ts",
     "updateImages": "cross-env NODE_ENV=development bun ./scripts/analytics/updateImages.ts",
     "checkNexus": "cross-env NODE_ENV=production bun ./scripts/checkNexus.ts",
+    "refreshNexus": "cross-env NODE_ENV=production bun ./scripts/refreshNexus.ts",
     "votersForProposal": "cross-env NODE_ENV=production bun ./scripts/analytics/votersForProposal.ts",
     "flagPotentialBots": "cross-env NODE_ENV=production bun ./scripts/botting/flagPotentialBots.ts",
     "flagHardPotentialBots": "cross-env NODE_ENV=production bun ./scripts/botting/flagHardPotentialBots.ts",

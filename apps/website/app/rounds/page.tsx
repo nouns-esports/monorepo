@@ -22,12 +22,12 @@ export default async function Rounds(props: {
         <div className="flex flex-col gap-4">
           <h1 className="font-luckiest-guy text-white text-4xl">Rounds</h1>
           <p className="max-w-screen-sm max-lg:max-w-none">
-            Welcome to Rounds, the place where the Nouns community actively
-            participates in deciding who and what we fund, making a real impact
-            with every vote. Proposers step into the spotlight, competing
-            head-to-head to win the community's support and secure the resources
-            they need to bring their vision to life. Get ready to be part of the
-            action and help drive the next big thing in Nouns!
+            Welcome to Rounds, where the Nouns community plays an active role in
+            deciding who and what we fund, making a real impact with every vote.
+            Here, anyone can submit a proposal, and everyone has the power to
+            vote! By participating and supporting Nouns and our partners, you
+            can level up your account, gain additional voting power, and unlock
+            unique opportunities.
           </p>
         </div>
         <div className="flex items-center gap-4 w-full max-w-screen-sm max-lg:max-w-none h-40 py-4">
@@ -67,6 +67,7 @@ export default async function Rounds(props: {
                 votingStart={round.votingStart}
                 end={round.end}
                 community={{
+                  id: round.community.id,
                   name: round.community.name,
                   image: round.community.image,
                 }}
@@ -93,6 +94,7 @@ export default async function Rounds(props: {
                 votingStart={round.votingStart}
                 end={round.end}
                 community={{
+                  id: round.community.id,
                   name: round.community.name,
                   image: round.community.image,
                 }}
@@ -116,6 +118,7 @@ export default async function Rounds(props: {
               votingStart={round.votingStart}
               end={round.end}
               community={{
+                id: round.community.id,
                 name: round.community.name,
                 image: round.community.image,
               }}

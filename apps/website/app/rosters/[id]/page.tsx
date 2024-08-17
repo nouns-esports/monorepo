@@ -39,8 +39,6 @@ export async function generateMetadata(props: { params: { id: string } }) {
 export default async function RosterPage(props: { params: { id: string } }) {
   const rosters = await getCommunityRosters({ community: props.params.id });
 
-  console.log(rosters);
-
   if (rosters.length < 1) {
     return notFound();
   }

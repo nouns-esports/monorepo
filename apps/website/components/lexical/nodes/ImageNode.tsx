@@ -111,7 +111,9 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
   }
 
   decorate(): JSX.Element {
-    return <img src={this.__src} alt={this.__altText} />;
+    return (
+      <img src={this.__src} alt={this.__altText} className="max-w-lg w-full" />
+    );
   }
 }
 

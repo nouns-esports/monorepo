@@ -91,23 +91,21 @@ export default async function Home() {
         </div>
         <div className="flex gap-4 justify-between max-lg:w-full max-lg:overflow-x-scroll max-lg:px-8 max-sm:px-4 max-lg:scrollbar-hidden">
           {rounds.map((round) => (
-            <div
+            <RoundCard
               key={round.id}
-              className="w-full max-lg:aspect-[14/9] max-lg:w-auto h-[14rem]"
-            >
-              <RoundCard
-                id={round.id}
-                image={round.image}
-                name={round.name}
-                start={round.start}
-                votingStart={round.votingStart}
-                end={round.end}
-                community={{
-                  name: round.community.name,
-                  image: round.community.image,
-                }}
-              />
-            </div>
+              id={round.id}
+              image={round.image}
+              name={round.name}
+              start={round.start}
+              votingStart={round.votingStart}
+              end={round.end}
+              community={{
+                id: round.community.id,
+                name: round.community.name,
+                image: round.community.image,
+              }}
+              className="max-xl:w-80 max-xl:flex-shrink-0"
+            />
           ))}
         </div>
       </div>

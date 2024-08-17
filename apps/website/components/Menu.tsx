@@ -1,15 +1,6 @@
 "use client";
 
-import {
-  ArrowRight,
-  Diamond,
-  Handshake,
-  Shapes,
-  ShoppingBag,
-  Trophy,
-  Users,
-  X,
-} from "lucide-react";
+import { Diamond, Handshake, Shapes, Trophy, Users, X } from "lucide-react";
 import { useParams, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
@@ -23,33 +14,47 @@ import {
   YoutubeLogo,
 } from "phosphor-react-sc";
 
-export default function Menu(props: {
-  rosters: Awaited<ReturnType<typeof getRosters>>;
-  communities: Awaited<ReturnType<typeof getCommunities>>;
-}) {
+export default function Menu() {
+  const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(false);
 
   const pathname = usePathname();
   const params = useParams();
 
   useEffect(() => {
-    setOpen(false);
-  }, [params]);
+    if (mounted) {
+      toggleMenu(false);
+    }
 
-  useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
+    setMounted(true);
+  }, [params, pathname]);
+
+  function toggleMenu(open: boolean) {
+    if (open) {
+      document.documentElement.classList.add(
+        "overflow-y-hidden",
+        "scrollbar-hidden"
+      );
+    } else {
+      document.documentElement.classList.remove(
+        "overflow-y-hidden",
+        "scrollbar-hidden"
+      );
+    }
+
+    setOpen(open);
+  }
 
   return (
     <>
       {open ? (
         <X
-          onClick={() => setOpen(false)}
+          onClick={() => toggleMenu(false)}
           className="w-6 h-6 text-white relative z-[60]"
         />
       ) : (
         <img
-          onClick={() => setOpen(true)}
+          onClick={() => toggleMenu(true)}
           src="/menu.svg"
           alt=""
           className="w-6 h-6 hidden max-md:flex relative z-[60]"
@@ -57,8 +62,9 @@ export default function Menu(props: {
       )}
       <div
         className={twMerge(
-          "flex flex-col gap-8 pt-24 px-8 text-grey-200 absolute w-full h-screen bg-black top-0 left-0 pointer-events-none opacity-0 transition-opacity",
-          open && "opacity-100 pointer-events-auto"
+          "flex flex-col gap-8 pt-24 px-8 text-grey-200 fixed w-full h-[100dvh] bg-black top-0 left-0 pointer-events-none opacity-0 transition-opacity",
+          open && "opacity-100 pointer-events-auto",
+          pathname === "/" && "pt-32"
         )}
       >
         <ul className="flex flex-col gap-8 text-white">

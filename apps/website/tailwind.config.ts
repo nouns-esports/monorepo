@@ -106,6 +106,25 @@ const config: Config = {
             display: "none",
           },
         },
+        ".prevent-scroll": {
+          /* IE and Edge */
+          "-ms-overflow-style": "none",
+
+          /* Firefox */
+          "scrollbar-width": "none",
+
+          /* Safari and Chrome */
+          "&::-webkit-scrollbar": {
+            display: "none",
+          },
+
+          "touch-action": "none",
+          "-webkit-overflow-scrolling": "none",
+          "overflow-y": "hidden",
+
+          /* Other browsers */
+          "overscroll-behavior": "none",
+        },
       });
     }),
   ],

@@ -19,15 +19,18 @@ export async function refreshNexus() {
   console.log("refreshing nexus");
 
   const users = await db.query.nexus.findMany();
+  const privyUsers = await privyClient.getUsers();
 
   const guild = await discordClient.guilds.fetch(env.DISCORD_GUILD_ID);
 
   await db.transaction(async (tx) => {
     for (const user of users) {
       try {
-        const privyUser = await privyClient.getUser(user.user);
+        const privyUser = privyUsers.find((u) => u.id === user.user);
 
-        if (!privyUser.discord) {
+        // console.log("Checking: ", privyUser?.discord?.username);
+
+        if (!privyUser?.discord) {
           continue;
         }
 
@@ -125,7 +128,6 @@ export async function refreshNexus() {
         await tx.update(nexus).set({ tier }).where(eq(nexus.user, user.user));
 
         console.log("Updated: ", privyUser.discord.username, tier);
-        await new Promise((resolve) => setTimeout(resolve, 250));
       } catch (error) {
         console.error(error);
       }
