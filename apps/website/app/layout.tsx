@@ -5,6 +5,10 @@ import {
   Luckiest_Guy,
   Bebas_Neue,
   Londrina_Solid,
+  Archivo_Black,
+  Koulen,
+  Tilt_Warp,
+  Dela_Gothic_One,
 } from "next/font/google";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";

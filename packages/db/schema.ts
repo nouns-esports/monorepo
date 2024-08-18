@@ -167,11 +167,13 @@ export const proposalsRelations = relations(proposals, ({ one, many }) => ({
 // probably rename this entire table to users later
 export const nexus = pgTable("nexus", {
   id: text("id").primaryKey(),
+  handle: text("handle").notNull().default(""),
   rank: integer("rank").notNull().default(0),
   xpTotal: integer("xp_total").notNull().default(0),
   image: text("image"),
   name: text("name").notNull().default(""),
   bio: text("bio"),
+  interests: text("interests").array().notNull().default([]),
   // everytime profile is updated these refresh also weekly automated refresh - can also extend these types
   wallet: jsonb("wallet").$type<User["wallet"]>(),
   twitter: jsonb("twitter").$type<User["twitter"]>(),
@@ -230,13 +232,15 @@ export const ranksRelations = relations(ranks, ({ one, many }) => ({
   }),
   nexus: many(nexus),
 }));
-
+// wil probably want the ability to pin quests
 export const quests = pgTable("quests", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
   description: text("description").notNull(),
+  image: text("image").notNull(),
   season: integer("season").notNull(),
   community: text("community").notNull(),
+  pinned: boolean("pinned").notNull().default(false),
   hidden: boolean("hidden").notNull().default(false),
   xp: integer("xp").notNull(),
   actions: text("actions").array().notNull(),
@@ -255,11 +259,11 @@ export const questRelations = relations(quests, ({ one, many }) => ({
     fields: [quests.community],
     references: [communities.id],
   }),
-  xp: many(xp),
   minRank: one(ranks, {
     fields: [quests.minRank],
     references: [ranks.id],
   }),
+  completed: many(xp),
 }));
 
 export const xp = pgTable("xp", {
@@ -335,8 +339,13 @@ export const votesRelations = relations(votes, ({ one }) => ({
     fields: [votes.round],
     references: [rounds.id],
   }),
+  nexus: one(nexus, {
+    fields: [votes.user],
+    references: [nexus.id],
+  }),
 }));
 
+// use enum on property directly
 export const creationType = pgEnum("creationType", [
   "art",
   "photograph",

@@ -238,9 +238,18 @@ export default async function Round(props: {
           id={`proposal-${proposal.id}`}
           queryParam="p"
           showOnLoad={selectedProposal?.id === proposal.id}
-          className="flex-col gap-4 w-2/3 rounded-xl h-2/3 p-6 max-sm:p-3 max-h-none max-xl:max-w-none max-w-screen-lg bg-grey-800 max-xl:w-full max-xl:h-[100dvh] max-xl:rounded-none overflow-hidden"
+          className="flex-col gap-4 w-2/3 rounded-xl h-2/3 p-6 max-sm:p-3 max-h-none max-xl:max-w-none max-w-screen-lg bg-black border border-grey-600 max-xl:w-full max-xl:h-[100dvh] max-xl:rounded-none overflow-hidden"
         >
-          <div className="flex justify-end mb-2">
+          <div className="flex justify-between items-center mb-4">
+            <div className="rounded-full flex items-center text-white gap-3 font-semibold text-lg">
+              <img
+                src={
+                  proposal.user.image ?? defaultProfileImage(proposal.user.id)
+                }
+                className="rounded-full h-7 w-7"
+              />
+              {proposal.user.name}
+            </div>
             <ToggleModal
               id={`proposal-${proposal.id}`}
               value={proposal.id.toString()}
@@ -250,59 +259,50 @@ export default async function Round(props: {
               <X className="text-grey-600 w-5 h-5" />
             </ToggleModal>
           </div>
-          <div className="flex flex-col h-full overflow-y-scroll scrollbar-hidden gap-4">
+          <div className="flex flex-col h-full overflow-y-scroll scrollbar-hidden gap-2">
             <h2 className="text-white font-luckiest-guy text-3xl">
               {proposal.title}
             </h2>
-
-            <div className="flex gap-8 items-center">
-              <div className="rounded-full flex items-center text-white gap-3 font-semibold text-lg">
-                <img
-                  src={
-                    proposal.user.image ?? defaultProfileImage(proposal.user.id)
-                  }
-                  className="rounded-full h-7 w-7"
-                />
-                {proposal.user.name}
-              </div>
-              <div className="flex gap-3 items-center">
-                {proposal.user.twitter ? (
-                  <Link
-                    href={`https://twitter.com/${proposal.user.twitter.username}`}
-                    newTab
-                  >
-                    <TwitterLogo
-                      className="w-6 h-6 text-white hover:opacity-80 transition-opacity"
-                      weight="fill"
-                    />
-                  </Link>
-                ) : (
-                  ""
-                )}
-                {proposal.user.farcaster ? (
-                  <Link
-                    href={`https://warpcast.com/${proposal.user.farcaster.username}`}
-                    newTab
-                  >
-                    <img
-                      src="/farcaster.svg"
-                      className="w-5 h-5  hover:opacity-80 transition-opacity"
-                    />
-                  </Link>
-                ) : (
-                  ""
-                )}
-              </div>
+            <div className="flex gap-3 items-center">
+              {proposal.user.twitter ? (
+                <Link
+                  href={`https://twitter.com/${proposal.user.twitter.username}`}
+                  newTab
+                >
+                  <TwitterLogo
+                    className="w-6 h-6 text-white hover:opacity-80 transition-opacity"
+                    weight="fill"
+                  />
+                </Link>
+              ) : (
+                ""
+              )}
+              {proposal.user.farcaster ? (
+                <Link
+                  href={`https://warpcast.com/${proposal.user.farcaster.username}`}
+                  newTab
+                >
+                  <img
+                    src="/farcaster.svg"
+                    className="w-5 h-5  hover:opacity-80 transition-opacity"
+                  />
+                </Link>
+              ) : (
+                ""
+              )}
             </div>
-
-            <Markdown markdown={proposal.content} readOnly />
+            <Markdown
+              markdown={proposal.content}
+              readOnly
+              className="bg-grey-800 rounded-xl p-4 flex flex-col h-fit"
+            />
           </div>
         </Modal>
       ))}
       {priorVotes > 0 ? (
         <Modal
           id="share-votes"
-          className="rounded-xl bg-black overflow-hidden flex-col gap-4 p-4"
+          className="rounded-xl bg-black border border-grey-600 overflow-hidden flex-col gap-4 p-4"
         >
           <div className="relative z-[80] rounded-xl bg-black overflow-hidden flex flex-col gap-4 p-4">
             <img

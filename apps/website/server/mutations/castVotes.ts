@@ -1,7 +1,7 @@
 "use server";
 
 import { db, votes, proposals, rounds } from "~/packages/db/schema";
-import { and, eq } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import checkDiscordAccountAge from "@/utils/checkDiscordAccountAge";
 import { z } from "zod";

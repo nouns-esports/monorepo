@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export default function NotFound() {
   return (
-    <main className="relative h-screen bg-[url(/404/stars.svg)] bg-repeat bg-[length:250px] flex flex-col gap-8 px-8 items-center justify-center">
+    <div className="relative h-screen bg-[url(/404/stars.svg)] bg-repeat bg-[length:250px] flex flex-col gap-8 px-8 items-center justify-center">
       <Image
         src={notFound}
         alt="Page not found image"
@@ -17,6 +17,6 @@ export default function NotFound() {
       </h1>
       <Button href="/">Home</Button>
       <div className="from-transparent to-black bg-gradient-to-b h-64 w-full bottom-0 absolute pointer-events-none" />
-    </main>
+    </div>
   );
 }

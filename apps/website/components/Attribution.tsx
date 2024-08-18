@@ -6,7 +6,7 @@ import { defaultProfileImage } from "@/utils/defaultProfileImage";
 export default function Attribution(props: { id: string; creator?: Nexus }) {
   return (
     <Link
-      href={`/creations/${props.id}`}
+      href={`/creations/${props.id.substring(0, 10)}`}
       className="relative rounded-md w-full h-full flex drop-shadow-lg overflow-hidden bg-gradient-to-br from-[#F3B5FD] to-[#F66FD0] group/tag text-white font-semibold items-center"
     >
       {props.creator ? (

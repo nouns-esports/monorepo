@@ -21,10 +21,10 @@ export default function Button(props: {
     <Component
       disabled={props.disabled}
       onClick={props.onClick}
-      // @ts-ignoredoe
+      // @ts-ignore
       href={props.href}
       type={props.form ? "submit" : undefined}
-      scroll={(!!props.href ?? undefined) && (props.scroll ?? undefined)}
+      scroll={!!props.href && props.scroll ? true : undefined}
       className={twMerge(
         "relative w-min cursor-pointer",
         props.fill && "w-full"

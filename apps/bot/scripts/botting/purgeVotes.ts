@@ -15,7 +15,7 @@ for (let i = 1; i < lines.length; i++) {
     console.log(`User ID: ${id}, Proposal Number: ${proposal}`);
 
     await db.transaction(async (db) => {
-      await db.delete(nexus).where(eq(nexus.user, id));
+      await db.delete(nexus).where(eq(nexus.id, id));
       await db.delete(votes).where(eq(votes.user, id));
     });
   }

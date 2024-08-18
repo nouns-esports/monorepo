@@ -1,5 +1,8 @@
 import Link from "@/components/Link";
-import { getAuthenticatedUser } from "@/server/queries/users";
+import {
+  getAuthenticatedUser,
+  getAuthenticatedPrivyUser,
+} from "@/server/queries/users";
 import SignInButton from "./SignInButton";
 import {
   Shapes,
@@ -9,6 +12,7 @@ import {
   Trophy,
   Diamond,
   Handshake,
+  Gem,
 } from "lucide-react";
 import Banner from "./Banner";
 import { getCommunities } from "@/server/queries/communities";
@@ -16,6 +20,8 @@ import { getRosters } from "@/server/queries/rosters";
 import Menu from "./Menu";
 
 export default async function Header() {
+  const privyUser = await getAuthenticatedPrivyUser();
+
   const user = await getAuthenticatedUser();
 
   const communities = await getCommunities();
@@ -128,6 +134,20 @@ export default async function Header() {
                       </li>
                       <li className="text-nowrap hover:bg-grey-500 transition-colors py-1.5 px-3 rounded-lg">
                         <Link
+                          href="/quests"
+                          className="flex gap-4 items-center"
+                        >
+                          <div className="rounded-md w-10 h-10 flex overflow-hidden bg-blue-500 text-white items-center">
+                            <Gem className="w-full h-full p-2" />
+                          </div>
+                          <div>
+                            <p className="font-bebas-neue text-lg">Quests</p>
+                            <p className="text-grey-200">Level up your nexus</p>
+                          </div>
+                        </Link>
+                      </li>
+                      <li className="text-nowrap hover:bg-grey-500 transition-colors py-1.5 px-3 rounded-lg">
+                        <Link
                           href="/creations"
                           className="flex items-center gap-4"
                         >
@@ -194,7 +214,7 @@ export default async function Header() {
               </nav>
             </div>
             <div className="pointer-events-auto flex items-center relative z-[60]">
-              <SignInButton user={user} />
+              <SignInButton privyUser={privyUser} user={user} />
             </div>
           </div>
         </div>

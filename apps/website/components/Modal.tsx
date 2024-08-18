@@ -31,7 +31,10 @@ export function Modal(props: {
     <dialog
       id={`${props.id}-dialog`}
       data-queryparam={props.queryParam}
-      className={twMerge("outline-none", props.className)}
+      className={twMerge(
+        "outline-none drop-shadow-2xl backdrop:bg-black/50",
+        props.className
+      )}
       onClick={(e) => {
         const rect = e.currentTarget.getBoundingClientRect();
 

@@ -12,6 +12,8 @@ import { ArrowRight, ChevronUp, Timer } from "lucide-react";
 import { getRounds } from "@/server/queries/rounds";
 import { getCreator } from "@/server/queries/creations";
 import RoundCard from "@/components/RoundCard";
+import { getQuests } from "@/server/queries/quests";
+import QuestCard from "@/components/QuestCard";
 
 export default async function Home() {
   const videos = await getVideos();
@@ -19,6 +21,8 @@ export default async function Home() {
   const trendingPosts = await getTrendingPosts();
 
   const rounds = await getRounds({ limit: 4 });
+
+  const quests = await getQuests({ limit: 5 });
 
   return (
     <div className="flex flex-col gap-16 mb-16 max-sm:mb-8 max-lg:gap-12 pt-32 max-xl:pt-28 max-sm:pt-20">
@@ -105,6 +109,36 @@ export default async function Home() {
                 image: round.community.image,
               }}
               className="max-xl:w-80 max-xl:flex-shrink-0"
+            />
+          ))}
+        </div>
+      </div>
+      <div className="flex flex-col gap-4 px-32 max-2xl:px-16 max-xl:px-8 max-lg:px-0">
+        <div className="flex justify-between items-center max-lg:px-8 max-sm:px-4">
+          <h2 className="font-luckiest-guy text-white text-4xl max-sm:text-3xl">
+            Quests
+          </h2>
+          <Link
+            href="/quests"
+            className="text-red flex gap-1 items-center group"
+          >
+            View All
+            <ArrowRight className="w-[1.15rem] h-[1.15rem] group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </div>
+        <div className="flex gap-4 justify-between max-lg:w-full max-lg:overflow-x-scroll max-lg:px-8 max-sm:px-4 max-lg:scrollbar-hidden">
+          {quests.map((quest) => (
+            <QuestCard
+              key={quest.id}
+              id={quest.id}
+              name={quest.name}
+              description={quest.description}
+              image={quest.image}
+              community={{
+                id: quest.community.id,
+                name: quest.community.name,
+                image: quest.community.image,
+              }}
             />
           ))}
         </div>
@@ -219,25 +253,25 @@ export default async function Home() {
               "QmXP7Yq4j4bqiKzgsynfF8AgKZ3vM6Ldq5aCKRGmNh2ScA",
               "QmYeLkcYghV4qkRBeMY12Z352EoLJwzbLWK8JsvbREHfo3",
               "QmdiWQoQpy3D5wpi9pSn6n2uJXyugwcv8rvQoaZnWhotKz",
-            ].map(async (image) => {
-              const creator = await getCreator({ creation: image });
+            ].map(async (id) => {
+              const creator = await getCreator({ creation: id });
 
               return (
-                <Link
-                  key={image}
-                  href={`/creations/${image.substring(0, 10)}`}
-                  className="relative h-full w-auto group"
-                >
+                <div key={id} className="relative h-full w-auto group">
+                  <Link
+                    href={`/creations/${id.substring(0, 10)}`}
+                    className="absolute w-full h-full"
+                  />
                   <img
                     alt="Artwork"
-                    src={`https://ipfs.nouns.gg/ipfs/${image}`}
+                    src={`https://ipfs.nouns.gg/ipfs/${id}`}
                     draggable={false}
                     className="h-full max-w-none object-cover rounded-xl select-none"
                   />
                   <div className="absolute top-3 right-3 h-7 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity">
-                    <Attribution id={image} creator={creator} />
+                    <Attribution id={id} creator={creator} />
                   </div>
-                </Link>
+                </div>
               );
             })
           )}
@@ -257,25 +291,25 @@ export default async function Home() {
               "QmUTghthVwuidV6v7sJnKrbci8Ro2HQRx8huSgpxZz2G3g",
               "QmbKGhDNHSujAJeqJtURW29DuDWtKoFcfx1Eprkjk1movp",
               "QmUE853Ad1yns6UAUCbYjK6iBtxx5e5EihJfCFAAUh5aYb",
-            ].map(async (image) => {
-              const creator = await getCreator({ creation: image });
+            ].map(async (id) => {
+              const creator = await getCreator({ creation: id });
 
               return (
-                <Link
-                  key={image}
-                  href={`/creations/${image.substring(0, 10)}`}
-                  className="relative h-full w-auto group"
-                >
+                <div key={id} className="relative h-full w-auto group">
+                  <Link
+                    href={`/creations/${id.substring(0, 10)}`}
+                    className="absolute w-full h-full"
+                  />
                   <img
                     alt="Artwork"
-                    src={`https://ipfs.nouns.gg/ipfs/${image}`}
+                    src={`https://ipfs.nouns.gg/ipfs/${id}`}
                     draggable={false}
                     className="h-full max-w-none object-cover rounded-xl select-none"
                   />
                   <div className="absolute top-3 right-3 h-7 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity">
-                    <Attribution id={image} creator={creator} />
+                    <Attribution id={id} creator={creator} />
                   </div>
-                </Link>
+                </div>
               );
             })
           )}
@@ -287,7 +321,11 @@ export default async function Home() {
             </h3>
             <Button href="/creations">Explore</Button>
           </div>
-          <Link href="/creations/QmV83sDpdb" className="relative group">
+          <div className="relative group">
+            <Link
+              href="/creations/QmV83sDpdb"
+              className="absolute w-full h-full"
+            />
             <img
               src="https://ipfs.nouns.gg/ipfs/QmV83sDpdbU2E23txL1hY7F6W81SjD4Egz41yCB5YQibQg"
               alt="Pokemon wearing Nouns noggles"
@@ -297,7 +335,7 @@ export default async function Home() {
             <div className="absolute z-10 top-8 right-16 h-8 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity">
               <Attribution id="QmV83sDpdb" />
             </div>
-          </Link>
+          </div>
           <div className="from-transparent to-black bg-gradient-to-b h-2/5 w-full bottom-0 absolute pointer-events-none" />
         </div>
         <div className="from-transparent to-black bg-gradient-to-r w-32 h-full right-0 bottom-0 absolute pointer-events-none max-[1920px]:hidden flex" />
@@ -310,7 +348,8 @@ export default async function Home() {
 function ExploreCard(props: { image: string; title: string; href: string }) {
   return (
     <li className="w-full group relative aspect-[3/4] rounded-xl overflow-hidden max-lg:min-w-[300px]">
-      <Link href={props.href} className="flex h-full items-end flex-col">
+      <div className="relative flex h-full items-end flex-col">
+        <Link href={props.href} className="absolute z-10 w-full h-full" />
         <Image
           src={props.image}
           alt={props.title}
@@ -322,7 +361,7 @@ function ExploreCard(props: { image: string; title: string; href: string }) {
         <div className="absolute bottom-4 left-4 z-10">
           <Button href={props.href}>{props.title}</Button>
         </div>
-      </Link>
+      </div>
     </li>
   );
 }
