@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import TextInput from "../form/TextInput";
 import Button from "../Button";
 import { createProposal } from "@/server/mutations/createProposal";
@@ -12,6 +12,7 @@ import { updateProposal } from "@/server/mutations/updateProposal";
 import { getProposal } from "@/server/queries/proposals";
 import dynamic from "next/dynamic";
 import Shimmer from "../Shimmer";
+import { useAction } from "next-safe-action/hooks";
 
 const Markdown = dynamic(() => import("../lexical/Markdown"), {
   ssr: false,
@@ -20,8 +21,8 @@ const Markdown = dynamic(() => import("../lexical/Markdown"), {
 
 export default function MarkdownEditor(props: {
   round: string;
-  user?: string;
-  proposal?: Awaited<ReturnType<typeof getProposal>>;
+  user: string;
+  proposal: Awaited<ReturnType<typeof getProposal>>;
 }) {
   const [title, setTitle] = useState(props.proposal?.title ?? "");
 
@@ -53,7 +54,8 @@ export default function MarkdownEditor(props: {
 
   const router = useRouter();
 
-  const [loading, setLoading] = useState(false);
+  const createProposalAction = useAction(createProposal);
+  const updateProposalAction = useAction(updateProposal);
 
   return (
     <div className="flex flex-col gap-8">
@@ -111,9 +113,12 @@ export default function MarkdownEditor(props: {
           </p>
         </div>
         <Button
-          loading={loading}
+          loading={
+            createProposalAction.isPending || updateProposalAction.isPending
+          }
           disabled={
-            loading ||
+            createProposalAction.isPending ||
+            updateProposalAction.isPending ||
             title.length < 15 ||
             parsedMarkdown.split(" ").length - 1 < 150
           }
@@ -121,10 +126,8 @@ export default function MarkdownEditor(props: {
             if (!props.user) return;
 
             if (props.proposal) {
-              setLoading(true);
               toast.promise(
-                updateProposal({
-                  user: props.user,
+                updateProposalAction.executeAsync({
                   round: props.round,
                   title,
                   content: editorState,
@@ -135,23 +138,18 @@ export default function MarkdownEditor(props: {
                     router.push(`/rounds/${props.round}`);
                     return "Successfully updated proposal";
                   },
-                  error: () => {
-                    setLoading(false);
-                    return "Failed to update proposal";
-                  },
+                  error: () => "Failed to update proposal",
                 }
               );
 
               return;
             }
 
-            setLoading(true);
             toast.promise(
-              createProposal({
+              createProposalAction.executeAsync({
                 title,
                 content: editorState,
                 round: props.round,
-                user: props.user,
               }),
               {
                 loading: "Creating proposal",
@@ -159,10 +157,7 @@ export default function MarkdownEditor(props: {
                   router.push(`/rounds/${props.round}`);
                   return "Successfully created proposal";
                 },
-                error: () => {
-                  setLoading(false);
-                  return "Failed to create proposal";
-                },
+                error: () => "Failed to create proposal",
               }
             );
           }}

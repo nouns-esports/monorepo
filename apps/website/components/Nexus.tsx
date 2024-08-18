@@ -1,18 +1,12 @@
 "use client";
 
-import {
-  ArrowClockwise,
-  DiscordLogo,
-  Plus,
-  TwitterLogo,
-} from "phosphor-react-sc";
+import { DiscordLogo, Plus, TwitterLogo } from "phosphor-react-sc";
 import Button from "./Button";
 import { useLinkAccount, useLogin, usePrivy } from "@privy-io/react-auth";
 import { useRouter } from "next/navigation";
 import { getNexus } from "@/server/queries/nexus";
 import { twMerge } from "tailwind-merge";
 import type { User, WalletWithMetadata } from "@privy-io/server-auth";
-import { userToProfile } from "@/utils/userToProfile";
 import toast from "react-hot-toast";
 import { shortenAddress } from "@/utils/shortenAddress";
 import { useContext, useTransition } from "react";
@@ -21,10 +15,11 @@ import Link from "./Link";
 import type { getUserAwards } from "@/server/queries/awards";
 import { grantNexus } from "@/server/mutations/grantNexus";
 import { formatUnits } from "viem";
+import { defaultProfileImage } from "@/utils/defaultProfileImage";
+import type { getAuthenticatedUser } from "@/server/queries/users";
 
 export default function Nexus(props: {
-  user?: User;
-  nexus?: Awaited<ReturnType<typeof getNexus>>;
+  user?: Awaited<ReturnType<typeof getAuthenticatedUser>>;
   awards?: Awaited<ReturnType<typeof getUserAwards>>;
 }) {
   const router = useRouter();
@@ -47,7 +42,6 @@ export default function Nexus(props: {
   });
 
   const {
-    unlinkDiscord,
     unlinkTwitter,
     unlinkFarcaster,
     unlinkWallet,
@@ -60,13 +54,11 @@ export default function Nexus(props: {
       account.type === "wallet" && account.walletClientType !== "privy"
   ) ?? []) as WalletWithMetadata[];
 
-  const profile = props.user ? userToProfile(props.user) : undefined;
-
   const { setOnlyCoinbaseWallet } = useContext(LoginMethodContext);
 
   const [loading, startTransition] = useTransition();
 
-  if (!props.nexus) {
+  if (!props.user) {
     return (
       <div className="flex flex-col items-center">
         <div className="w-full flex flex-col gap-8 max-w-2xl">
@@ -185,36 +177,32 @@ export default function Nexus(props: {
   return (
     <div className="flex flex-col items-center">
       <div className="flex flex-col gap-4 justify-center w-full max-w-2xl">
-        {profile ? (
-          <div className="flex items-center justify-between gap-6 p-6 w-full rounded-xl bg-grey-800">
-            <div className="flex gap-4 items-center">
-              <img
-                src={profile.pfp}
-                className="w-12 h-12 rounded-full max-sm:w-12 max-sm:h-12"
-              />
-              <h1 className="text-white text-3xl leading-none font-luckiest-guy">
-                {profile.name}
-              </h1>
-            </div>
-            {props.user?.farcaster ? (
-              <Button
-                href={`https://warpcast.com/${props.user.farcaster?.username}`}
-              >
-                View on Warpcast
-              </Button>
-            ) : (
-              <Button
-                onClick={() => {
-                  linkFarcaster();
-                }}
-              >
-                Customize
-              </Button>
-            )}
+        <div className="flex items-center justify-between gap-6 p-6 w-full rounded-xl bg-grey-800">
+          <div className="flex gap-4 items-center">
+            <img
+              src={props.user.image ?? defaultProfileImage(props.user.id)}
+              className="w-12 h-12 rounded-full max-sm:w-12 max-sm:h-12"
+            />
+            <h1 className="text-white text-3xl leading-none font-luckiest-guy">
+              {profile.name}
+            </h1>
           </div>
-        ) : (
-          ""
-        )}
+          {props.user?.farcaster ? (
+            <Button
+              href={`https://warpcast.com/${props.user.farcaster?.username}`}
+            >
+              View on Warpcast
+            </Button>
+          ) : (
+            <Button
+              onClick={() => {
+                linkFarcaster();
+              }}
+            >
+              Customize
+            </Button>
+          )}
+        </div>
 
         <div className="flex gap-4 w-full items-center h-20 max-sm:flex-col max-sm:h-auto">
           <div className="bg-grey-800 rounded-xl flex flex-col items-center justify-center w-full h-full max-sm:h-20">
@@ -347,24 +335,7 @@ export default function Nexus(props: {
                 )}
               </div>
               <div className="flex gap-4 items-center">
-                <Button
-                  // onClick={() => {
-                  //   if (props.user?.discord)
-                  //     toast.promise(
-                  //       unlinkDiscord(props.user.discord.subject).then(() =>
-                  //         router.refresh()
-                  //       ),
-                  //       {
-                  //         loading: "Unlinking Discord",
-                  //         success: "Successfully unlinked Discord",
-                  //         error: "Failed to unlink Discord",
-                  //       }
-                  //     );
-                  //   else linkDiscord();
-                  // }}
-                  disabled
-                  size="sm"
-                >
+                <Button disabled size="sm">
                   {props.user?.discord ? "Remove" : "Connect"}
                 </Button>
               </div>

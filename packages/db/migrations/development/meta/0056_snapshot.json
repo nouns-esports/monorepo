@@ -1,7 +1,5 @@
 {
-  "id": "9f67451d-c463-4f94-a23a-7fd143baac00",
-  "prevId": "9a6041fb-0b05-4912-9df1-091efe66bec4",
-  "version": "6",
+  "version": "7",
   "dialect": "postgresql",
   "tables": {
     "public.assets": {
@@ -632,8 +630,11 @@
   },
   "schemas": {},
   "_meta": {
-    "columns": {},
     "schemas": {},
-    "tables": {}
-  }
+    "tables": {},
+    "columns": {}
+  },
+  "id": "9f67451d-c463-4f94-a23a-7fd143baac00",
+  "prevId": "9a6041fb-0b05-4912-9df1-091efe66bec4",
+  "sequences": {}
 }

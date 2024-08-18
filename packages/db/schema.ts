@@ -9,11 +9,12 @@ import {
   smallint,
   integer,
   pgEnum,
-  decimal,
+  jsonb,
 } from "drizzle-orm/pg-core";
-import { min, relations } from "drizzle-orm";
+import { relations } from "drizzle-orm";
 import { Pool } from "pg";
 import { env } from "~/env";
+import type { User } from "@privy-io/server-auth";
 
 export const communities = pgTable("communities", {
   id: text("id").primaryKey(),
@@ -78,16 +79,15 @@ export const badges = pgTable("badges", {
 export const rounds = pgTable("rounds", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
-  description: text("description").default("").notNull(), // REMOVE
   image: text("image").notNull(),
   banner: text("banner").notNull(),
   community: text("community").notNull().default(""),
-  content: text("content").notNull(), // RENAME TO DESCRIPTION
+  content: text("content").notNull(),
   start: timestamp("start", { mode: "date" }).notNull(),
   votingStart: timestamp("voting_start", { mode: "date" }).notNull(),
   end: timestamp("end", { mode: "date" }),
-  minProposerRank: integer("min_proposer_rank").notNull().default(0), // REMOVE DEFAULT
-  minVoterRank: integer("min_voter_rank").notNull().default(0), // REMOVE DEFAULT
+  minProposerRank: integer("min_proposer_rank").notNull().default(0),
+  minVoterRank: integer("min_voter_rank").notNull().default(0),
 });
 
 export const roundsRelations = relations(rounds, ({ one, many }) => ({
@@ -107,8 +107,6 @@ export const roundsRelations = relations(rounds, ({ one, many }) => ({
     references: [ranks.id],
   }),
 }));
-
-// If place is 0, it is an infinite round
 
 export const awards = pgTable("awards", {
   id: serial("id").primaryKey(),
@@ -147,7 +145,6 @@ export const proposals = pgTable("proposals", {
   title: text("title").notNull(),
   description: text("description").default("").notNull(),
   content: text("content").notNull(),
-  value: numeric("value", { precision: 78 }).notNull(),
   createdAt: timestamp("created_at", { mode: "date" }).notNull(),
   hidden: boolean("hidden").notNull().default(false),
   published: boolean("published").notNull().default(true),
@@ -161,24 +158,42 @@ export const proposalsRelations = relations(proposals, ({ one, many }) => ({
     references: [rounds.id],
   }),
   votes: many(votes),
+  user: one(nexus, {
+    fields: [proposals.user],
+    references: [nexus.id],
+  }),
 }));
 
+// probably rename this entire table to users later
 export const nexus = pgTable("nexus", {
-  user: text("user").primaryKey(),
-
-  // Remove tier ^
-  xpTotal: integer("xp_total").notNull(),
+  id: text("id").primaryKey(),
+  rank: integer("rank").notNull().default(0),
+  xpTotal: integer("xp_total").notNull().default(0),
   image: text("image"),
-  name: text("name").notNull(),
+  name: text("name").notNull().default(""),
   bio: text("bio"),
-  primaryWallet: text("primary_wallet"),
+  // everytime profile is updated these refresh also weekly automated refresh - can also extend these types
+  wallet: jsonb("wallet").$type<User["wallet"]>(),
+  twitter: jsonb("twitter").$type<User["twitter"]>(),
+  discord: jsonb("discord").$type<User["discord"]>(),
+  farcaster: jsonb("farcaster").$type<User["farcaster"]>(),
+  linkedAccounts: jsonb("linked_accounts")
+    .array()
+    .$type<User["linkedAccounts"]>()
+    .notNull()
+    .default([]),
 });
 
-export const nexusRelations = relations(nexus, ({ many }) => ({
+export const nexusRelations = relations(nexus, ({ one, many }) => ({
   votes: many(votes),
   proposals: many(proposals),
   rankings: many(rankings),
   xp: many(xp),
+  rank: one(ranks, {
+    fields: [nexus.rank],
+    references: [ranks.id],
+  }),
+  creations: many(creations),
 }));
 
 ////////////////////////////////////////////////////
@@ -205,13 +220,15 @@ export const ranks = pgTable("ranks", {
   place: smallint("place").notNull(), // The position of this rank in the list of ranks
   percentile: numeric("percentile", { precision: 3, scale: 2 }).notNull(), // ex: 0.30 === 30%
   season: integer("season").notNull(),
+  votes: smallint("votes").notNull(),
 });
 
-export const ranksRelations = relations(ranks, ({ one }) => ({
+export const ranksRelations = relations(ranks, ({ one, many }) => ({
   season: one(seasons, {
     fields: [ranks.season],
     references: [seasons.id],
   }),
+  nexus: many(nexus),
 }));
 
 export const quests = pgTable("quests", {
@@ -224,8 +241,8 @@ export const quests = pgTable("quests", {
   xp: integer("xp").notNull(),
   actions: text("actions").array().notNull(),
   sequential: boolean("sequential").notNull(), // Should actions be completed in order or not
-  minRank: integer("min_rank").notNull().default(0), // REMOVE DEFAULT
-  maxCompletions: smallint("max_completions").notNull(), // How many times the quest can be completed
+  minRank: integer("min_rank").notNull().default(0),
+  maxCompletions: smallint("max_completions").notNull().default(1), // How many times the quest can be completed
   cooldown: integer("cooldown").notNull(), // How long until the quest can be completed again by the same user
 });
 
@@ -259,7 +276,7 @@ export const xp = pgTable("xp", {
 export const xpRelations = relations(xp, ({ one }) => ({
   user: one(nexus, {
     fields: [xp.user],
-    references: [nexus.user],
+    references: [nexus.id],
   }),
   season: one(seasons, {
     fields: [xp.season],
@@ -271,6 +288,7 @@ export const xpRelations = relations(xp, ({ one }) => ({
   }),
 }));
 
+// Rankings must sync with the Nexus table on refresh
 export const rankings = pgTable("rankings", {
   id: serial("id").primaryKey(),
   user: text("user").notNull(),
@@ -283,7 +301,7 @@ export const rankings = pgTable("rankings", {
 export const rankingsRelations = relations(rankings, ({ one }) => ({
   nexus: one(nexus, {
     fields: [rankings.user],
-    references: [nexus.user],
+    references: [nexus.id],
   }),
   season: one(seasons, {
     fields: [rankings.season],
@@ -358,6 +376,10 @@ export const creationRelations = relations(creations, ({ one }) => ({
     fields: [creations.community],
     references: [communities.id],
   }),
+  creator: one(nexus, {
+    fields: [creations.creator],
+    references: [nexus.id],
+  }),
 }));
 
 const schema = {
@@ -378,8 +400,19 @@ const schema = {
   votesRelations,
   badges,
   nexus,
+  nexusRelations,
   creations,
   creationRelations,
+  seasons,
+  seasonRelations,
+  ranks,
+  ranksRelations,
+  quests,
+  questRelations,
+  xp,
+  xpRelations,
+  rankings,
+  rankingsRelations,
 };
 
 export const db = drizzle(

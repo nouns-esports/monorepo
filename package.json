@@ -48,8 +48,8 @@
     "cross-env": "^7.0.3",
     "discord.js": "^14.15.3",
     "dotenv": "^16.4.1",
-    "drizzle-kit": "^0.21.2",
-    "drizzle-orm": "^0.30.10",
+    "drizzle-kit": "^0.24.0",
+    "drizzle-orm": "^0.33.0",
     "eslint": "^8.56.0",
     "eslint-config-next": "^14.1.0",
     "frog": "^0.15.7",
@@ -58,6 +58,7 @@
     "lexical": "^0.14.5",
     "lucide-react": "^0.407.0",
     "next": "^14.2.1",
+    "next-safe-action": "^7.6.3",
     "pg": "^8.11.3",
     "phosphor-react-sc": "^1.0.0",
     "postcss": "^8.4.35",
@@ -74,6 +75,6 @@
     "typescript": "^5.3.3",
     "viem": "^2.10.1",
     "wagmi": "^2.8.1",
-    "zod": "^3.23.0"
+    "zod": "^3.23.8"
   }
 }

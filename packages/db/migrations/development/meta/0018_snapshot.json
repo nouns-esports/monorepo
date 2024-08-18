@@ -1,5 +1,5 @@
 {
-  "version": "6",
+  "version": "7",
   "dialect": "postgresql",
   "tables": {
     "public.awards": {
@@ -583,5 +583,6 @@
     "columns": {}
   },
   "id": "38f70497-d546-448b-9c8d-97aaecc0ff10",
-  "prevId": "b5065441-5812-4a09-abee-26e4788dc79f"
+  "prevId": "b5065441-5812-4a09-abee-26e4788dc79f",
+  "sequences": {}
 }

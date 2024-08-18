@@ -1,43 +1,37 @@
 "use client";
 
-import Link from "../Link";
-import React, { useCallback, useMemo, useState, useTransition } from "react";
+import React, { useMemo, useState, useTransition } from "react";
 import { CaretUp, CaretDown, ChartBarHorizontal } from "phosphor-react-sc";
 import Button from "../Button";
 import { twMerge } from "tailwind-merge";
 import { castVotes } from "@/server/mutations/castVotes";
 import toast from "react-hot-toast";
-import { getProposals } from "@/server/queries/proposals";
 import { roundState } from "@/utils/roundState";
 import { numberToOrdinal } from "@/utils/numberToOrdinal";
 import { useOptimistic } from "react";
 import { useLogin } from "@privy-io/react-auth";
 import { useRouter } from "next/navigation";
-import type { Nexus } from "~/packages/db/schema";
 import type { getNexus } from "@/server/queries/nexus";
 import { ToggleModal } from "../Modal";
+import type { getRound } from "@/server/queries/rounds";
 
 export default function Proposals(props: {
-  round: {
-    id: string;
-    state: ReturnType<typeof roundState>;
-    awardCount: number;
-    minProposerRank: Nexus["tier"];
-    minVoterRank: Nexus["tier"];
-  };
-  proposals: Array<Awaited<ReturnType<typeof getProposals>>[number]>;
-  user?: {
-    id: string;
-    nexus: NonNullable<Awaited<ReturnType<typeof getNexus>>>;
+  round: NonNullable<
+    Awaited<ReturnType<typeof getRound>> & {
+      state: ReturnType<typeof roundState>;
+      awardCount: number;
+    }
+  >;
+  user?: NonNullable<Awaited<ReturnType<typeof getNexus>>> & {
     priorVotes: number;
   };
 }) {
   const [remainingVotes, setRemainingVotes] = useOptimistic(
-    props.user ? props.user.nexus.votes - props.user.priorVotes : 0
+    props.user ? props.user.rank.votes - props.user.priorVotes : 0
   );
 
   const [votes, setVotes] = useOptimistic<Record<string, number>>(
-    props.proposals.reduce((votes: Record<string, number>, proposal) => {
+    props.round.proposals.reduce((votes: Record<string, number>, proposal) => {
       votes[proposal.id] = votes[proposal.id] ?? 0 + proposal.totalVotes;
       return votes;
     }, {})
@@ -54,7 +48,7 @@ export default function Proposals(props: {
     [userVotes]
   );
 
-  const userProposal = props.proposals.find(
+  const userProposal = props.round.proposals.find(
     (proposal) => proposal.user === props.user?.id
   );
 
@@ -86,7 +80,7 @@ export default function Proposals(props: {
                 );
               }
 
-              if (props.user.nexus.votes < 1) {
+              if (props.user.rank.votes < 1) {
                 return (
                   <>
                     <p className="text-white">Enter the Nexus to propose</p>
@@ -95,26 +89,13 @@ export default function Proposals(props: {
                 );
               }
 
-              if (
-                props.round.minProposerRank === "Challenger" &&
-                props.user.nexus.tier === "Explorer"
-              ) {
+              if (props.user.rank.place < props.round.minProposerRank.place) {
                 return (
                   <>
-                    <p className="text-white">Only Challengers can propose</p>
-                    <Button href="/nexus">View Nexus</Button>
-                  </>
-                );
-              }
-
-              if (
-                props.round.minProposerRank === "Champion" &&
-                (props.user.nexus.tier === "Challenger" ||
-                  props.user.nexus.tier === "Explorer")
-              ) {
-                return (
-                  <>
-                    <p className="text-white">Only Champions can propose</p>
+                    <p className="text-white">
+                      You must be at least {props.round.minProposerRank.name} to
+                      propose
+                    </p>
                     <Button href="/nexus">View Nexus</Button>
                   </>
                 );
@@ -150,7 +131,7 @@ export default function Proposals(props: {
                 );
               }
 
-              if (props.user.nexus.votes < 1) {
+              if (props.user.rank.votes < 1) {
                 return (
                   <>
                     <p className="text-white">Enter the Nexus to vote</p>
@@ -159,32 +140,19 @@ export default function Proposals(props: {
                 );
               }
 
-              if (
-                props.round.minVoterRank === "Challenger" &&
-                props.user.nexus.tier === "Explorer"
-              ) {
+              if (props.user.rank.place < props.round.minVoterRank.place) {
                 return (
                   <>
-                    <p className="text-white">Only Challengers can vote</p>
+                    <p className="text-white">
+                      You must be at least {props.round.minVoterRank.name} to
+                      vote
+                    </p>
                     <Button href="/nexus">View Nexus</Button>
                   </>
                 );
               }
 
-              if (
-                props.round.minVoterRank === "Champion" &&
-                (props.user.nexus.tier === "Challenger" ||
-                  props.user.nexus.tier === "Explorer")
-              ) {
-                return (
-                  <>
-                    <p className="text-white">Only Champions can vote</p>
-                    <Button href="/nexus">View Nexus</Button>
-                  </>
-                );
-              }
-
-              if (props.user.nexus.votes > 0 && remainingVotes < 1) {
+              if (props.user.rank.votes > 0 && remainingVotes < 1) {
                 return (
                   <>
                     <p className="text-white">Your votes have been submitted</p>
@@ -199,7 +167,7 @@ export default function Proposals(props: {
                 <>
                   <p className="text-white">
                     {remainingVotes - (loading ? 0 : votesCast)}/
-                    {props.user.nexus.votes} votes remaining
+                    {props.user.rank.votes} votes remaining
                   </p>
                   <Button
                     disabled={loading || votesCast < 1}
@@ -261,7 +229,7 @@ export default function Proposals(props: {
             if (props.round.state === "Ended") {
               if (props.user) {
                 for (let i = 0; i < props.round.awardCount; i++) {
-                  if (props.proposals[i]?.user === props.user.id) {
+                  if (props.round.proposals[i]?.user === props.user.id) {
                     return (
                       <>
                         <p className="text-white">Your proposal won!</p>
@@ -271,7 +239,7 @@ export default function Proposals(props: {
                   }
                 }
 
-                if (props.user.nexus.votes > 0 && remainingVotes < 1) {
+                if (props.user.rank.votes > 0 && remainingVotes < 1) {
                   return (
                     <>
                       <p className="text-white">
@@ -289,7 +257,7 @@ export default function Proposals(props: {
         </div>
       </div>
       <div className="flex flex-col gap-4">
-        {props.proposals
+        {props.round.proposals
           .toSorted((a, b) => {
             if (props.round.state === "Proposing") {
               if (a.user === props.user?.id && b.user !== props.user?.id) {
@@ -531,7 +499,7 @@ export default function Proposals(props: {
               />
             </ToggleModal>
           ))}
-        {props.proposals.length < 1 ? (
+        {props.round.proposals.length < 1 ? (
           <div className="mt-4 flex gap-4 justify-center items-center">
             <img src="/fire-sticker.png" alt="" className="h-32" />
             <p className="text-grey-200 text-lg max-w-80">

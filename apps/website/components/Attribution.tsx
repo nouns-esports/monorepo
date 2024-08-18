@@ -1,11 +1,9 @@
 import { Diamond } from "lucide-react";
 import Link from "./Link";
-import type { userToProfile } from "@/utils/userToProfile";
+import type { Nexus } from "~/packages/db/schema";
+import { defaultProfileImage } from "@/utils/defaultProfileImage";
 
-export default function Attribution(props: {
-  id: string;
-  creator?: Awaited<ReturnType<typeof userToProfile>>;
-}) {
+export default function Attribution(props: { id: string; creator?: Nexus }) {
   return (
     <Link
       href={`/creations/${props.id}`}
@@ -14,7 +12,7 @@ export default function Attribution(props: {
       {props.creator ? (
         <>
           <img
-            src={props.creator.pfp}
+            src={props.creator.image ?? defaultProfileImage(props.creator.id)}
             draggable={false}
             className="h-full select-none"
           />

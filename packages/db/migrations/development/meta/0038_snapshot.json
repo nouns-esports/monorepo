@@ -1,7 +1,5 @@
 {
-  "id": "0f32dde3-78ea-48db-8f96-2649258a85e9",
-  "prevId": "7aae8c13-923c-4956-8e31-b13021687765",
-  "version": "6",
+  "version": "7",
   "dialect": "postgresql",
   "tables": {
     "public.awards": {
@@ -627,8 +625,11 @@
   "enums": {},
   "schemas": {},
   "_meta": {
-    "columns": {},
     "schemas": {},
-    "tables": {}
-  }
+    "tables": {},
+    "columns": {}
+  },
+  "id": "0f32dde3-78ea-48db-8f96-2649258a85e9",
+  "prevId": "7aae8c13-923c-4956-8e31-b13021687765",
+  "sequences": {}
 }

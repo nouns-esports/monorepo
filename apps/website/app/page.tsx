@@ -220,7 +220,7 @@ export default async function Home() {
               "QmYeLkcYghV4qkRBeMY12Z352EoLJwzbLWK8JsvbREHfo3",
               "QmdiWQoQpy3D5wpi9pSn6n2uJXyugwcv8rvQoaZnWhotKz",
             ].map(async (image) => {
-              const creator = await getCreator({ creationId: image });
+              const creator = await getCreator({ creation: image });
 
               return (
                 <Link
@@ -258,7 +258,7 @@ export default async function Home() {
               "QmbKGhDNHSujAJeqJtURW29DuDWtKoFcfx1Eprkjk1movp",
               "QmUE853Ad1yns6UAUCbYjK6iBtxx5e5EihJfCFAAUh5aYb",
             ].map(async (image) => {
-              const creator = await getCreator({ creationId: image });
+              const creator = await getCreator({ creation: image });
 
               return (
                 <Link

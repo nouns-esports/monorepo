@@ -1,4 +1,4 @@
-import { awards, db, rounds } from "~/packages/db/schema";
+import { awards, db, proposals, rounds } from "~/packages/db/schema";
 import { eq, gt, and, lt, asc, desc, exists, isNotNull } from "drizzle-orm";
 import { unstable_cache as cache } from "next/cache";
 
@@ -13,6 +13,19 @@ export const getRound = cache(
             asset: true,
           },
         },
+        proposals: {
+          where: eq(proposals.hidden, false),
+          orderBy: [desc(proposals.totalVotes), asc(proposals.createdAt)],
+          with: {
+            user: {
+              with: {
+                rank: true,
+              },
+            },
+          },
+        },
+        minProposerRank: true,
+        minVoterRank: true,
       },
     });
   },

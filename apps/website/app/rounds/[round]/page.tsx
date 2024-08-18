@@ -9,20 +9,18 @@ import { formatUnits } from "viem";
 import { getFrameMetadata, isFrameRequest } from "frog/next";
 import type { Metadata } from "next";
 import { getRound } from "@/server/queries/rounds";
-import { getProposals } from "@/server/queries/proposals";
 import { getPriorVotes } from "@/server/queries/votes";
 import { roundState } from "@/utils/roundState";
 import { numberToOrdinal } from "@/utils/numberToOrdinal";
-import { getAuthenticatedUser, getUser } from "@/server/queries/users";
+import { getAuthenticatedUser } from "@/server/queries/users";
 import dynamic from "next/dynamic";
 import Shimmer from "@/components/Shimmer";
 import { getNexus } from "@/server/queries/nexus";
 import { env } from "~/env";
-import { ArrowRight, Lock, X } from "lucide-react";
+import { ArrowRight, X } from "lucide-react";
 import { headers } from "next/headers";
-import { userToProfile } from "@/utils/userToProfile";
-import Dialog from "@/components/Dialog";
 import { Modal, ToggleModal } from "@/components/Modal";
+import { defaultProfileImage } from "@/utils/defaultProfileImage";
 
 const Markdown = dynamic(() => import("@/components/lexical/Markdown"), {
   ssr: false,
@@ -40,7 +38,6 @@ export async function generateMetadata(props: {
 
   return {
     title: round.name,
-    description: round.description,
     metadataBase: new URL(env.PUBLIC_DOMAIN),
     openGraph: {
       type: "website",
@@ -59,14 +56,11 @@ export async function generateMetadata(props: {
 
 export default async function Round(props: {
   params: { round: string };
-  searchParams: { p?: string; votes?: string };
+  searchParams: { p?: string };
 }) {
   if (isFrameRequest(headers())) return null;
 
-  const [round, proposals] = await Promise.all([
-    getRound({ id: props.params.round }),
-    getProposals({ round: props.params.round }),
-  ]);
+  const round = await getRound({ id: props.params.round });
 
   if (!round) {
     return notFound();
@@ -91,7 +85,9 @@ export default async function Round(props: {
     : 0;
 
   const selectedProposal = props.searchParams.p
-    ? proposals.find((proposal) => proposal.id === Number(props.searchParams.p))
+    ? round.proposals.find(
+        (proposal) => proposal.id === Number(props.searchParams.p)
+      )
     : undefined;
 
   return (
@@ -220,19 +216,15 @@ export default async function Round(props: {
             </div>
           </div>
           <Proposals
-            proposals={proposals}
             round={{
-              id: props.params.round,
+              ...round,
               awardCount: round.awards.length,
               state,
-              minProposerRank: round.minProposerRank,
-              minVoterRank: round.minVoterRank,
             }}
             user={
-              user && nexus
+              nexus
                 ? {
-                    id: user.id,
-                    nexus,
+                    ...nexus,
                     priorVotes,
                   }
                 : undefined
@@ -240,79 +232,73 @@ export default async function Round(props: {
           />
         </div>
       </div>
-      {await Promise.all([
-        proposals.map(async (proposal) => {
-          const proposalUser = selectedProposal
-            ? await getUser({ id: selectedProposal.user })
-            : undefined;
-
-          const proposalProfile = proposalUser
-            ? userToProfile(proposalUser)
-            : undefined;
-
-          return (
-            <Modal
-              key={proposal.id}
+      {round.proposals.map((proposal) => (
+        <Modal
+          key={proposal.id}
+          id={`proposal-${proposal.id}`}
+          queryParam="p"
+          showOnLoad={selectedProposal?.id === proposal.id}
+          className="flex-col gap-4 w-2/3 rounded-xl h-2/3 p-6 max-sm:p-3 max-h-none max-xl:max-w-none max-w-screen-lg bg-grey-800 max-xl:w-full max-xl:h-[100dvh] max-xl:rounded-none overflow-hidden"
+        >
+          <div className="flex justify-end mb-2">
+            <ToggleModal
               id={`proposal-${proposal.id}`}
-              queryParam="p"
-              showOnLoad={selectedProposal?.id === proposal.id}
-              className="flex-col gap-4 w-2/3 rounded-xl h-2/3 p-6 max-sm:p-3 max-h-none max-xl:max-w-none max-w-screen-lg bg-grey-800 max-xl:w-full max-xl:h-[100dvh] max-xl:rounded-none overflow-hidden"
+              value={proposal.id.toString()}
+              tabIndex={0}
+              className="bg-grey-200 rounded-md p-1 flex items-center justify-center w-min outline-none"
             >
-              <div className="flex justify-end mb-2">
-                <ToggleModal
-                  id={`proposal-${proposal.id}`}
-                  value={proposal.id.toString()}
-                  tabIndex={0}
-                  className="bg-grey-200 rounded-md p-1 flex items-center justify-center w-min outline-none"
-                >
-                  <X className="text-grey-600 w-5 h-5" />
-                </ToggleModal>
+              <X className="text-grey-600 w-5 h-5" />
+            </ToggleModal>
+          </div>
+          <div className="flex flex-col h-full overflow-y-scroll scrollbar-hidden gap-4">
+            <h2 className="text-white font-luckiest-guy text-3xl">
+              {proposal.title}
+            </h2>
+
+            <div className="flex gap-8 items-center">
+              <div className="rounded-full flex items-center text-white gap-3 font-semibold text-lg">
+                <img
+                  src={
+                    proposal.user.image ?? defaultProfileImage(proposal.user.id)
+                  }
+                  className="rounded-full h-7 w-7"
+                />
+                {proposal.user.name}
               </div>
-              <div className="flex flex-col h-full overflow-y-scroll scrollbar-hidden gap-4">
-                <h2 className="text-white font-luckiest-guy text-3xl">
-                  {proposal.title}
-                </h2>
-                {proposalProfile ? (
-                  <div className="flex gap-8 items-center">
-                    <div className="rounded-full flex items-center text-white gap-3 font-semibold text-lg">
-                      <img
-                        src={proposalProfile.pfp}
-                        className="rounded-full h-7 w-7"
-                      />
-                      {proposalProfile.name}
-                    </div>
-                    <div className="flex gap-3 items-center">
-                      {proposalProfile.socials.twitter ? (
-                        <Link href={proposalProfile.socials.twitter} newTab>
-                          <TwitterLogo
-                            className="w-6 h-6 text-white hover:opacity-80 transition-opacity"
-                            weight="fill"
-                          />
-                        </Link>
-                      ) : (
-                        ""
-                      )}
-                      {proposalProfile.socials.farcaster ? (
-                        <Link href={proposalProfile.socials.farcaster} newTab>
-                          <img
-                            src="/farcaster.svg"
-                            className="w-5 h-5  hover:opacity-80 transition-opacity"
-                          />
-                        </Link>
-                      ) : (
-                        ""
-                      )}
-                    </div>
-                  </div>
+              <div className="flex gap-3 items-center">
+                {proposal.user.twitter ? (
+                  <Link
+                    href={`https://twitter.com/${proposal.user.twitter.username}`}
+                    newTab
+                  >
+                    <TwitterLogo
+                      className="w-6 h-6 text-white hover:opacity-80 transition-opacity"
+                      weight="fill"
+                    />
+                  </Link>
                 ) : (
                   ""
                 )}
-                <Markdown markdown={proposal.content} readOnly />
+                {proposal.user.farcaster ? (
+                  <Link
+                    href={`https://warpcast.com/${proposal.user.farcaster.username}`}
+                    newTab
+                  >
+                    <img
+                      src="/farcaster.svg"
+                      className="w-5 h-5  hover:opacity-80 transition-opacity"
+                    />
+                  </Link>
+                ) : (
+                  ""
+                )}
               </div>
-            </Modal>
-          );
-        }),
-      ])}
+            </div>
+
+            <Markdown markdown={proposal.content} readOnly />
+          </div>
+        </Modal>
+      ))}
       {priorVotes > 0 ? (
         <Modal
           id="share-votes"

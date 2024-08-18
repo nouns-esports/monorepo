@@ -72,38 +72,38 @@ export function ToggleModal(props: {
   return (
     <div
       tabIndex={props.tabIndex}
-      onClick={() => {
-        const dialog = document.getElementById(
-          `${props.id}-dialog`
-        ) as HTMLDialogElement;
-
-        const root = document.documentElement;
-        const url = new URL(window.location.toString());
-
-        if (dialog.open) {
-          document.documentElement.classList.remove("prevent-scroll");
-          root.style.paddingRight = `0px`;
-          dialog.close();
-          if (dialog.dataset.queryparam) {
-            url.searchParams.delete(dialog.dataset.queryparam);
-          }
-        } else {
-          const width = root.clientWidth;
-          document.documentElement.classList.add("prevent-scroll");
-
-          dialog.showModal();
-          root.style.paddingRight = `${root.clientWidth - width}px`;
-
-          if (dialog.dataset.queryparam && props.value) {
-            url.searchParams.set(dialog.dataset.queryparam, props.value);
-          }
-        }
-
-        window.history.pushState({}, "", url);
-      }}
+      onClick={() => toggleModal(props.id, props.value)}
       className={twMerge("cursor-pointer", props.className)}
     >
       {props.children}
     </div>
   );
+}
+
+export function toggleModal(id: string, value?: string) {
+  const dialog = document.getElementById(`${id}-dialog`) as HTMLDialogElement;
+
+  const root = document.documentElement;
+  const url = new URL(window.location.toString());
+
+  if (dialog.open) {
+    document.documentElement.classList.remove("prevent-scroll");
+    root.style.paddingRight = `0px`;
+    dialog.close();
+    if (dialog.dataset.queryparam) {
+      url.searchParams.delete(dialog.dataset.queryparam);
+    }
+  } else {
+    const width = root.clientWidth;
+    document.documentElement.classList.add("prevent-scroll");
+
+    dialog.showModal();
+    root.style.paddingRight = `${root.clientWidth - width}px`;
+
+    if (dialog.dataset.queryparam && value) {
+      url.searchParams.set(dialog.dataset.queryparam, value);
+    }
+  }
+
+  window.history.pushState({}, "", url);
 }
