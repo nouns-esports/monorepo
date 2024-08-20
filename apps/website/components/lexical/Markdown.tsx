@@ -47,6 +47,7 @@ export default function Markdown(props: {
   markdown: string;
   readOnly: boolean;
   onChange?: (state: EditorState, editor: LexicalEditor) => void;
+  className?: string;
 }) {
   return (
     <LexicalComposer
@@ -94,7 +95,8 @@ export default function Markdown(props: {
               "prose-strong:text-white prose-a:text-red prose-p:text-grey-200 marker:text-grey-200 prose-p:leading-snug prose-headings:text-white prose-li:text-grey-200 prose-h1:text-xl prose-h2:text-lg prose-h3:text-base",
               "prose-p:m-0 prose-p:mb-2 prose-h1:mb-4 prose-h2:mb-2 prose-h3:mb-2 prose-headings:mt-4 prose-ul:my-2 prose-ol:my-2 prose-li:m-0",
               "prose-img:rounded-xl prose-img:m-0",
-              !props.readOnly && "ml-1 mt-2"
+              !props.readOnly && "ml-1 mt-2",
+              props.className
             )}
           />
         }
