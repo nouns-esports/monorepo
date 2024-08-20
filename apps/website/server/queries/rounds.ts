@@ -4,7 +4,6 @@ import { unstable_cache as cache } from "next/cache";
 
 export const getRound = cache(
   async (input: { id: string }) => {
-    //
     return db.query.rounds.findFirst({
       where: eq(rounds.id, input.id),
       with: {

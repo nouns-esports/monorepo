@@ -244,6 +244,10 @@ export const quests = pgTable("quests", {
   hidden: boolean("hidden").notNull().default(false),
   xp: integer("xp").notNull(),
   actions: text("actions").array().notNull(),
+  parameters: jsonb("parameters")
+    .array()
+    .$type<Array<{ [key: string]: any }>>()
+    .notNull(),
   sequential: boolean("sequential").notNull(), // Should actions be completed in order or not
   minRank: integer("min_rank").notNull().default(0),
   maxCompletions: smallint("max_completions").notNull().default(1), // How many times the quest can be completed

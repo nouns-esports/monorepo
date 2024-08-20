@@ -1,5 +1,6 @@
 import { twMerge } from "tailwind-merge";
 import Link from "./Link";
+import { Check, Timer } from "lucide-react";
 
 export default function QuestCard(props: {
   id: string;
@@ -11,6 +12,7 @@ export default function QuestCard(props: {
     name: string;
     image: string;
   };
+  completed?: boolean;
   className?: string;
 }) {
   return (
@@ -30,17 +32,32 @@ export default function QuestCard(props: {
           className="w-full h-full object-cover group-hover:scale-105 transition-transform"
         />
       </div>
-      <div className="flex flex-col p-4 h-full">
-        <div className="flex flex-col gap-4 h-full">
-          <p className="text-white text-2xl leading-tight font-bebas-neue line-clamp-2">
+      <div className="flex flex-col p-4 gap-4 h-full">
+        <div className="flex flex-col gap-4">
+          <p className="text-white text-2xl leading-tight font-bebas-neue line-clamp-2 h-[2lh]">
             {props.name}
           </p>
         </div>
-        <div className="flex h-full items-end">
+        <div className="flex flex-col h-full justify-between">
+          {props.completed !== undefined ? (
+            props.completed ? (
+              <div className="text-green flex items-center gap-1 text-sm">
+                <Check className="w-4 h-4" />
+                Completed
+              </div>
+            ) : (
+              <div className="text-yellow flex items-center gap-1 text-sm">
+                <Timer className="w-4 h-4" />
+                Not completed
+              </div>
+            )
+          ) : (
+            ""
+          )}
           <Link
             href={`https://warpcast.com/~/channel/${props.community.id}`}
             newTab
-            className="relative z-20 bg-grey-500 hover:bg-grey-400 transition-colors py-2 pl-2 pr-3 rounded-full flex text-white items-center gap-2 text-sm font-semibold w-fit"
+            className="relative z-20 bg-grey-500 hover:bg-grey-400 transition-colors py-2 pl-2 pr-3 rounded-full flex text-white items-center gap-2 text-sm font-semibold w-fit whitespace-nowrap"
           >
             <img src={props.community.image} className="w-5 h-5 rounded-full" />
             {props.community.name}

@@ -14,6 +14,7 @@ import { getCreator } from "@/server/queries/creations";
 import RoundCard from "@/components/RoundCard";
 import { getQuests } from "@/server/queries/quests";
 import QuestCard from "@/components/QuestCard";
+import { getAuthenticatedUser } from "@/server/queries/users";
 
 export default async function Home() {
   const videos = await getVideos();
@@ -22,7 +23,9 @@ export default async function Home() {
 
   const rounds = await getRounds({ limit: 4 });
 
-  const quests = await getQuests({ limit: 5 });
+  const user = await getAuthenticatedUser();
+
+  const quests = await getQuests({ limit: 5, user: user?.id });
 
   return (
     <div className="flex flex-col gap-16 mb-16 max-sm:mb-8 max-lg:gap-12 pt-32 max-xl:pt-28 max-sm:pt-20">
@@ -139,6 +142,7 @@ export default async function Home() {
                 name: quest.community.name,
                 image: quest.community.image,
               }}
+              completed={!!quest.completed?.[0]?.id}
             />
           ))}
         </div>
