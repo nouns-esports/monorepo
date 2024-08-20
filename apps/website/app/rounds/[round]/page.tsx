@@ -268,7 +268,7 @@ export default async function Round(props: {
                   <X className="text-grey-600 w-5 h-5" />
                 </ToggleModal>
               </div>
-              <div className="flex flex-col h-full overflow-y-scroll scrollbar-hidden gap-4 mb-4">
+              <div className="flex flex-col h-full overflow-y-scroll scrollbar-hidden gap-4">
                 <h2 className="text-white font-luckiest-guy text-3xl">
                   {proposal.title}
                 </h2>
@@ -307,7 +307,11 @@ export default async function Round(props: {
                 ) : (
                   ""
                 )}
-                <Markdown markdown={proposal.content} readOnly />
+                <Markdown
+                  markdown={proposal.content}
+                  readOnly
+                  className="mb-16"
+                />
               </div>
             </Modal>
           );
