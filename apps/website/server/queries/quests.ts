@@ -19,37 +19,31 @@ export const actions: Record<string, ReturnType<typeof createAction>> = {
   followChannel,
 };
 
-export async function checkAction(input: {
+export async function getAction(input: {
   quest: string;
   action: string;
-  user: string;
+  user?: string;
 }) {
   noStore();
 
-  const [user, quest] = await Promise.all([
-    getNexus({ user: input.user }),
-    db.query.quests.findFirst({
-      where: eq(quests.id, input.quest),
-      with: {
-        completed: input.user
-          ? {
-              where: eq(xp.user, input.user),
-              limit: 1,
-              columns: { id: true },
-            }
-          : undefined,
-      },
-    }),
-  ]);
+  const quest = await db.query.quests.findFirst({
+    where: eq(quests.id, input.quest),
+    with: {
+      completed: input.user
+        ? {
+            where: eq(xp.user, input.user),
+            limit: 1,
+            columns: { id: true },
+          }
+        : undefined,
+    },
+  });
 
-  if (!user) return false;
-  if (!quest) return false;
+  if (!quest) return;
 
-  const parameters = quest.parameters[quest.actions.indexOf(input.action)];
+  const actionInputs = quest.actionInputs[quest.actions.indexOf(input.action)];
 
-  // Check if the user has already completed the action within the scopes of the quest
-
-  return actions[input.action].check(user, parameters);
+  return actions[input.action](actionInputs);
 }
 
 export const getQuests = cache(
@@ -83,7 +77,6 @@ export const getQuest = cache(
           ? {
               where: eq(xp.user, input.user),
               limit: 1,
-              columns: { id: true },
             }
           : undefined,
       },

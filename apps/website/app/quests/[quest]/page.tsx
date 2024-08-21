@@ -1,15 +1,41 @@
-import Button from "@/components/Button";
+import CheckQuest from "@/components/CheckQuest";
 import Link from "@/components/Link";
-import { actions, getQuest } from "@/server/queries/quests";
-import { ArrowLeft } from "lucide-react";
+import { getAction, getQuest } from "@/server/queries/quests";
+import { getAuthenticatedUser } from "@/server/queries/users";
+import { ArrowLeft, Check } from "lucide-react";
 import { notFound } from "next/navigation";
 
 export default async function Quest(props: { params: { quest: string } }) {
-  const quest = await getQuest({ id: props.params.quest });
+  const [quest, user] = await Promise.all([
+    getQuest({ id: props.params.quest }),
+    getAuthenticatedUser(),
+  ]);
 
   if (!quest) {
     return notFound();
   }
+
+  const actions = await Promise.all(
+    quest.actions.map((id, index) =>
+      getAction({
+        quest: quest.id,
+        action: quest.actions[index],
+        user: user?.id ?? "",
+      })
+    )
+  );
+
+  const completed = quest.completed?.[0]
+    ? (Array(actions.length).fill(true) as Array<boolean>)
+    : await Promise.all(
+        actions.map(async (action) => {
+          if (!action) throw new Error("Action not found");
+
+          return user ? await action.check(user, quest.actionInputs) : false;
+        })
+      );
+
+  const allCompleted = completed.every((completed) => completed);
 
   return (
     <div className="relative flex justify-center gap-16 w-full pt-32 max-xl:pt-28 max-sm:pt-20 px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
@@ -37,24 +63,34 @@ export default async function Quest(props: { params: { quest: string } }) {
               <div className="flex flex-col gap-4">
                 <div className="flex items-center justify-between">
                   <h2 className="font-bebas-neue text-white text-2xl">
-                    Complete the following
+                    {allCompleted
+                      ? "All actions completed"
+                      : "Complete the following"}
                   </h2>
-                  <Button>Check</Button>
+                  <CheckQuest
+                    completed={allCompleted}
+                    claimed={!!quest.completed?.[0]}
+                  />
                 </div>
                 <ul className="flex flex-col gap-2">
-                  {quest.actions.map((id, index) => {
-                    const action = actions[id];
+                  {actions.map(async (action, index) => {
+                    if (!action) throw new Error("Action not found");
 
                     return (
                       <li
-                        key={id}
-                        className="bg-grey-600 rounded-xl p-3 flex gap-3 items-center"
+                        key={`action-${index}`}
+                        className="bg-grey-600 rounded-xl p-3 flex gap-3 items-center text-white"
                       >
-                        <div className="rounded-full bg-black/60 h-8 w-8 text-white flex items-center justify-center">
-                          {index + 1}
-                        </div>
-
-                        <p className="text-white">{action.name}</p>
+                        {completed[index] ? (
+                          <div className="rounded-full bg-green w-7 h-7 flex items-center justify-center">
+                            <Check className="w-5 h-5 text-white" />
+                          </div>
+                        ) : (
+                          <div className="rounded-full bg-black/60 h-7 w-7 flex items-center justify-center text-sm">
+                            {index + 1}
+                          </div>
+                        )}
+                        {action.description}
                       </li>
                     );
                   })}

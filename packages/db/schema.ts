@@ -82,7 +82,10 @@ export const rounds = pgTable("rounds", {
   image: text("image").notNull(),
   banner: text("banner").notNull(),
   community: text("community").notNull().default(""),
-  content: text("content").notNull(),
+  // type: text("type", { enum: ["markdown", "video", "image"] })
+  //   .notNull()
+  //   .default("markdown"),
+  content: text("content").notNull(), // rename
   start: timestamp("start", { mode: "date" }).notNull(),
   votingStart: timestamp("voting_start", { mode: "date" }).notNull(),
   end: timestamp("end", { mode: "date" }),
@@ -145,11 +148,14 @@ export const proposals = pgTable("proposals", {
   title: text("title").notNull(),
   description: text("description").default("").notNull(),
   content: text("content").notNull(),
+  image: text("image").notNull().default(""),
+  // markdown: jsonb("markdown").$type<{ preview: string; content: string }>(),
+  // image: jsonb("image").$type<{ src: string; caption: string }>(),
+  // video: jsonb("video").$type<{ src: string; caption: string }>(),
   createdAt: timestamp("created_at", { mode: "date" }).notNull(),
   hidden: boolean("hidden").notNull().default(false),
   published: boolean("published").notNull().default(true),
   totalVotes: smallint("total_votes").notNull().default(0),
-  image: text("image").notNull().default(""),
 });
 
 export const proposalsRelations = relations(proposals, ({ one, many }) => ({
@@ -238,27 +244,22 @@ export const quests = pgTable("quests", {
   name: text("name").notNull(),
   description: text("description").notNull(),
   image: text("image").notNull(),
-  season: integer("season").notNull(),
   community: text("community").notNull(),
   pinned: boolean("pinned").notNull().default(false),
-  hidden: boolean("hidden").notNull().default(false),
+  active: boolean("active").notNull().default(false),
   xp: integer("xp").notNull(),
   actions: text("actions").array().notNull(),
-  parameters: jsonb("parameters")
+  actionInputs: jsonb("action_inputs")
     .array()
     .$type<Array<{ [key: string]: any }>>()
-    .notNull(),
-  sequential: boolean("sequential").notNull(), // Should actions be completed in order or not
+    .notNull()
+    .default([]),
   minRank: integer("min_rank").notNull().default(0),
   maxCompletions: smallint("max_completions").notNull().default(1), // How many times the quest can be completed
   cooldown: integer("cooldown").notNull(), // How long until the quest can be completed again by the same user
 });
 
 export const questRelations = relations(quests, ({ one, many }) => ({
-  season: one(seasons, {
-    fields: [quests.season],
-    references: [seasons.id],
-  }),
   community: one(communities, {
     fields: [quests.community],
     references: [communities.id],
@@ -277,8 +278,12 @@ export const xp = pgTable("xp", {
   timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
   season: text("season").notNull(),
   // Only one of the following should be defined at a time
-  quest: text("quest"),
-  // purchase: text("purchase"),
+  from: text("from", {
+    enum: [
+      "quest",
+      //"purchase"
+    ],
+  }),
 });
 
 export const xpRelations = relations(xp, ({ one }) => ({
@@ -291,9 +296,13 @@ export const xpRelations = relations(xp, ({ one }) => ({
     references: [seasons.id],
   }),
   quest: one(quests, {
-    fields: [xp.quest],
+    fields: [xp.from],
     references: [quests.id],
   }),
+  // purchase: one(purchases, {
+  //   fields: [xp.from],
+  //   references: [purchases.id],
+  // }),
 }));
 
 // Rankings must sync with the Nexus table on refresh

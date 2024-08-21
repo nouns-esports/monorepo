@@ -1,0 +1,1 @@
+ALTER TABLE "xp" RENAME COLUMN "quest" TO "from";

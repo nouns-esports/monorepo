@@ -1,15 +1,11 @@
 import type { Nexus } from "~/packages/db/schema";
 
 export default function createAction(
-  create: (
-    user: Nexus,
-    parameters?: { [key: string]: any }
-  ) => {
-    name: string;
-    description: string;
+  create: (actionInputs?: { [key: string]: any }) => {
+    description: React.ReactElement<JSX.IntrinsicElements["p"]>;
     check: (
       user: Nexus,
-      parameters?: { [key: string]: any }
+      actionInputs?: { [key: string]: any }
     ) => Promise<boolean>;
   }
 ) {

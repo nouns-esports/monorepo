@@ -15,6 +15,7 @@ import type { getNexus } from "@/server/queries/nexus";
 import { ToggleModal } from "../Modal";
 import type { getRound } from "@/server/queries/rounds";
 
+// move most of this out to a server component
 export default function Proposals(props: {
   round: NonNullable<
     Awaited<ReturnType<typeof getRound>> & {
