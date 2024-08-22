@@ -106,6 +106,31 @@ const config: Config = {
             display: "none",
           },
         },
+        ".custom-scrollbar": {
+          /* width */
+          "&::-webkit-scrollbar": {
+            width: "8px",
+          },
+
+          /* Track */
+          "&::-webkit-scrollbar-track": {
+            background: "#1A1A1A",
+            borderRadius: "1000px",
+            width: "8px",
+          },
+
+          /* Handle */
+          "&::-webkit-scrollbar-thumb": {
+            background: "#333333",
+            borderRadius: "1000px",
+            width: "8px",
+          },
+
+          /* Handle on hover */
+          "&::-webkit-scrollbar-thumb:hover": {
+            background: "#333333",
+          },
+        },
         ".prevent-scroll": {
           /* IE and Edge */
           "-ms-overflow-style": "none",

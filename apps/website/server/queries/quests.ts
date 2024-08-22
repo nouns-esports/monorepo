@@ -60,6 +60,7 @@ export const getQuests = cache(
               columns: { id: true },
             }
           : undefined,
+        prerequisite: true,
       },
     });
   },
@@ -69,7 +70,6 @@ export const getQuests = cache(
 
 export const getQuest = cache(
   async (input: { id: string; user?: string }) => {
-    //
     return db.query.quests.findFirst({
       where: eq(quests.id, input.id),
       with: {
@@ -79,6 +79,7 @@ export const getQuest = cache(
               limit: 1,
             }
           : undefined,
+        prerequisite: true,
       },
     });
   },

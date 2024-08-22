@@ -91,146 +91,143 @@ export default async function Round(props: {
     : undefined;
 
   return (
-    <div className="relative flex justify-center gap-16 w-full pt-32 max-xl:pt-28 max-sm:pt-20 px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
-      <div className="flex flex-col gap-4 w-full max-w-3xl">
-        <Link href="/rounds" className="text-red flex items-center gap-1 group">
-          <ArrowLeft className="w-5 h-5 text-red group-hover:-translate-x-1 transition-transform" />
-          Back to rounds
-        </Link>
-        <div className="flex flex-col gap-8">
-          <div className="flex flex-col gap-4">
-            <div className="bg-grey-800 rounded-xl overflow-hidden">
-              <img
-                src={round.image}
-                className="w-full h-48 object-cover object-center max-sm:h-32"
+    <div className="relative flex flex-col justify-center gap-4 w-full pt-32 max-xl:pt-28 max-sm:pt-20 px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
+      <Link href="/rounds" className="text-red flex items-center gap-1 group">
+        <ArrowLeft className="w-5 h-5 text-red group-hover:-translate-x-1 transition-transform" />
+        Back to rounds
+      </Link>
+      <div className="flex flex-col gap-8">
+        <div className="flex gap-4">
+          <div className="bg-grey-800 flex flex-col w-full rounded-xl overflow-hidden">
+            <img
+              src={round.image}
+              className="w-full h-48 object-cover object-center max-sm:h-32"
+            />
+            <div className="flex flex-col gap-2 p-4">
+              <h2 className="w-full text-white font-luckiest-guy text-3xl">
+                {round.name}
+              </h2>
+              <Markdown
+                markdown={round.content}
+                readOnly
+                className="max-h-[300px] overflow-y-scroll/ custom-scrollbar"
               />
-              <div className="flex flex-col gap-2 p-4">
-                <h2 className="w-full text-white font-luckiest-guy text-3xl">
-                  {round.name}
-                </h2>
-                <div className="flex flex-col gap-2">
-                  <Markdown markdown={round.content} readOnly />
-                </div>
-              </div>
             </div>
-            <div className="flex gap-4 w-full h-fit max-md:flex-col">
-              <div className="flex gap-4 max-md:w-full">
-                <div className="flex flex-col gap-2 items-center justify-center bg-grey-800 rounded-xl overflow-hidden min-w-36 p-4 flex-shrink-0 max-md:w-full max-md:flex-shrink">
+          </div>
+          <div className="flex gap-4 w-full h-fit max-md:flex-col">
+            <div className="flex gap-4 max-md:w-full">
+              <div className="flex flex-col gap-2 items-center justify-center bg-grey-800 rounded-xl overflow-hidden min-w-36 p-4 flex-shrink-0 max-md:w-full max-md:flex-shrink">
+                <p className="text-sm whitespace-nowrap text-grey-200">
+                  {state === "Upcoming" ? "Round starts" : ""}
+                  {state === "Proposing" ? "Voting starts" : ""}
+                  {state === "Voting" ? "Round ends" : ""}
+                  {state === "Ended" ? "Round ended" : ""}
+                </p>
+                <p className="text-white whitespace-nowrap">
+                  {state !== "Ended" ? (
+                    <Countdown
+                      date={
+                        state === "Upcoming"
+                          ? new Date(round.start)
+                          : state === "Proposing"
+                            ? new Date(round.votingStart)
+                            : new Date(round.end ?? Infinity)
+                      }
+                    />
+                  ) : (
+                    new Intl.DateTimeFormat("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    }).format(new Date(round.end ?? Infinity))
+                  )}
+                </p>
+              </div>
+              {state === "Proposing" || state === "Voting" ? (
+                <div className="flex flex-col gap-2 items-center justify-center h-full bg-grey-800 rounded-xl overflow-hidden w-36 flex-shrink-0 max-md:w-full max-md:flex-shrink">
                   <p className="text-sm whitespace-nowrap text-grey-200">
-                    {state === "Upcoming" ? "Round starts" : ""}
-                    {state === "Proposing" ? "Voting starts" : ""}
-                    {state === "Voting" ? "Round ends" : ""}
-                    {state === "Ended" ? "Round ended" : ""}
+                    Round Status
+                  </p>
+                  <div className="flex items-center justify-center">
+                    <div
+                      className={twMerge(
+                        "flex text-center text-white font-semibold text-xs rounded-full leading-none px-3 py-2",
+                        state === "Proposing" && "bg-blue-700",
+                        state === "Voting" && "bg-purple"
+                      )}
+                    >
+                      {state}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                ""
+              )}
+            </div>
+            <div className="flex gap-6 items-center justify-center h-full bg-grey-800 rounded-xl overflow-hidden w-full p-4 pt-5">
+              <div className="flex flex-col gap-2 items-center pl-4 pr-2">
+                <div className="flex flex-col gap-1 items-center">
+                  <p className="text-sm whitespace-nowrap text-grey-200">
+                    Awards
                   </p>
                   <p className="text-white whitespace-nowrap">
-                    {state !== "Ended" ? (
-                      <Countdown
-                        date={
-                          state === "Upcoming"
-                            ? new Date(round.start)
-                            : state === "Proposing"
-                              ? new Date(round.votingStart)
-                              : new Date(round.end ?? Infinity)
-                        }
-                      />
-                    ) : (
-                      new Intl.DateTimeFormat("en-US", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      }).format(new Date(round.end ?? Infinity))
-                    )}
+                    {round.awards.length} winner
+                    {round.awards.length === 1 ? "" : "s"}
                   </p>
                 </div>
-                {state === "Proposing" || state === "Voting" ? (
-                  <div className="flex flex-col gap-2 items-center justify-center h-full bg-grey-800 rounded-xl overflow-hidden w-36 flex-shrink-0 max-md:w-full max-md:flex-shrink">
-                    <p className="text-sm whitespace-nowrap text-grey-200">
-                      Round Status
-                    </p>
-                    <div className="flex items-center justify-center">
-                      <div
-                        className={twMerge(
-                          "flex text-center text-white font-semibold text-xs rounded-full leading-none px-3 py-2",
-                          state === "Proposing" && "bg-blue-700",
-                          state === "Voting" && "bg-purple"
-                        )}
-                      >
-                        {state}
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  ""
-                )}
+                {round.awards.length > 1 ? <AwardScroller /> : ""}
               </div>
-              <div className="flex gap-6 items-center justify-center h-full bg-grey-800 rounded-xl overflow-hidden w-full p-4 pt-5">
-                <div className="flex flex-col gap-2 items-center pl-4 pr-2">
-                  <div className="flex flex-col gap-1 items-center">
-                    <p className="text-sm whitespace-nowrap text-grey-200">
-                      Awards
+              <div className="bg-grey-600 h-full w-[1px]" />
+              <div
+                id="awards"
+                className="w-full flex gap-4 overflow-x-scroll scrollbar-hidden pt-3 -mt-3 scroll-smooth"
+              >
+                {round.awards.map((award, index) => (
+                  <div
+                    key={index}
+                    className="relative flex flex-col items-center flex-shrink-0 gap-2 border-grey-600 border rounded-xl p-2 px-4"
+                  >
+                    <img
+                      src={award.asset.image}
+                      className="w-7 h-7 rounded-md object-cover object-center"
+                    />
+                    <p className="text-white whitespace-nowrap text-sm">
+                      {award.asset.decimals
+                        ? formatUnits(BigInt(award.value), award.asset.decimals)
+                        : award.value}
                     </p>
-                    <p className="text-white whitespace-nowrap">
-                      {round.awards.length} winner
-                      {round.awards.length === 1 ? "" : "s"}
-                    </p>
-                  </div>
-                  {round.awards.length > 1 ? <AwardScroller /> : ""}
-                </div>
-                <div className="bg-grey-600 h-full w-[1px]" />
-                <div
-                  id="awards"
-                  className="w-full flex gap-4 overflow-x-scroll scrollbar-hidden pt-3 -mt-3 scroll-smooth"
-                >
-                  {round.awards.map((award, index) => (
                     <div
-                      key={index}
-                      className="relative flex flex-col items-center flex-shrink-0 gap-2 border-grey-600 border rounded-xl p-2 px-4"
+                      className={twMerge(
+                        "absolute -top-3 -right-3 rounded-md bg-grey-600 font-bold text-white text-xs flex items-center justify-center w-[30px] py-0.5",
+                        index === 0 && "bg-gold-500 text-gold-900",
+                        index === 1 && "bg-silver-500 text-silver-900",
+                        index === 2 && "bg-bronze-500 text-bronze-900",
+                        index > 2 && "bg-blue-500 text-blue-900"
+                      )}
                     >
-                      <img
-                        src={award.asset.image}
-                        className="w-7 h-7 rounded-md object-cover object-center"
-                      />
-                      <p className="text-white whitespace-nowrap text-sm">
-                        {award.asset.decimals
-                          ? formatUnits(
-                              BigInt(award.value),
-                              award.asset.decimals
-                            )
-                          : award.value}
-                      </p>
-                      <div
-                        className={twMerge(
-                          "absolute -top-3 -right-3 rounded-md bg-grey-600 font-bold text-white text-xs flex items-center justify-center w-[30px] py-0.5",
-                          index === 0 && "bg-gold-500 text-gold-900",
-                          index === 1 && "bg-silver-500 text-silver-900",
-                          index === 2 && "bg-bronze-500 text-bronze-900",
-                          index > 2 && "bg-blue-500 text-blue-900"
-                        )}
-                      >
-                        {numberToOrdinal(award.place)}
-                      </div>
+                      {numberToOrdinal(award.place)}
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
-          <Proposals
-            round={{
-              ...round,
-              awardCount: round.awards.length,
-              state,
-            }}
-            user={
-              nexus
-                ? {
-                    ...nexus,
-                    priorVotes,
-                  }
-                : undefined
-            }
-          />
         </div>
+        <Proposals
+          round={{
+            ...round,
+            awardCount: round.awards.length,
+            state,
+          }}
+          user={
+            nexus
+              ? {
+                  ...nexus,
+                  priorVotes,
+                }
+              : undefined
+          }
+        />
       </div>
       {round.proposals.map((proposal) => (
         <Modal

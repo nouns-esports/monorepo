@@ -149,7 +149,7 @@ export const proposals = pgTable("proposals", {
   description: text("description").default("").notNull(),
   content: text("content").notNull(),
   image: text("image").notNull().default(""),
-  // markdown: jsonb("markdown").$type<{ preview: string; content: string }>(),
+  // markdown: jsonb("markdown").$type<{ preview?: string; content: string, description?: string }>(),
   // image: jsonb("image").$type<{ src: string; caption: string }>(),
   // video: jsonb("video").$type<{ src: string; caption: string }>(),
   createdAt: timestamp("created_at", { mode: "date" }).notNull(),
@@ -254,6 +254,7 @@ export const quests = pgTable("quests", {
     .$type<Array<{ [key: string]: any }>>()
     .notNull()
     .default([]),
+  prerequisite: text("prerequisite"),
   minRank: integer("min_rank").notNull().default(0),
   maxCompletions: smallint("max_completions").notNull().default(1), // How many times the quest can be completed
   cooldown: integer("cooldown").notNull(), // How long until the quest can be completed again by the same user
@@ -269,6 +270,10 @@ export const questRelations = relations(quests, ({ one, many }) => ({
     references: [ranks.id],
   }),
   completed: many(xp),
+  prerequisite: one(quests, {
+    fields: [quests.prerequisite],
+    references: [quests.id],
+  }),
 }));
 
 export const xp = pgTable("xp", {
