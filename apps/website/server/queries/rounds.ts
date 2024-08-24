@@ -13,6 +13,7 @@ export const getRound = cache(
             asset: true,
           },
         },
+        community: true,
         proposals: {
           where: eq(proposals.hidden, false),
           orderBy: [desc(proposals.totalVotes), asc(proposals.createdAt)],

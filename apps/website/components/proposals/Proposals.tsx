@@ -259,7 +259,7 @@ export default function Proposals(props: {
           })()}
         </div>
       </div>
-      <div className="gap-4 grid grid-cols-4">
+      <div className="gap-4 grid grid-cols-4 max-xl:grid-cols-3 max-lg:grid-cols-2 max-sm:grid-cols-1">
         {props.round.proposals
           .toSorted((a, b) => {
             if (props.round.state === "Proposing") {
