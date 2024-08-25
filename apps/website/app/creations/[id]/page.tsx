@@ -1,6 +1,5 @@
 import Link from "@/components/Link";
 import { getCreation } from "@/server/queries/creations";
-import { defaultProfileImage } from "@/utils/defaultProfileImage";
 import { ArrowRight } from "lucide-react";
 import { notFound } from "next/navigation";
 import { TwitterLogo } from "phosphor-react-sc";
@@ -31,10 +30,7 @@ export default async function Creation(props: { params: { id: string } }) {
               <p>by</p>
               <div className="flex items-center gap-2">
                 <img
-                  src={
-                    creation.creator.image ??
-                    defaultProfileImage(creation.creator.id)
-                  }
+                  src={creation.creator.image}
                   className="w-8 h-8 rounded-full"
                 />
                 {creation.creator.name}

@@ -8,7 +8,6 @@ import { roundState } from "@/utils/roundState";
 import { env } from "~/env";
 import { getUserVotesForRound } from "@/server/queries/votes";
 import { getNexus } from "@/server/queries/nexus";
-import { defaultProfileImage } from "@/utils/defaultProfileImage";
 
 const app = new Frog({
   basePath: "/api/frames",
@@ -308,7 +307,7 @@ app.image("/rounds/:round/votes/:user/img", async (c) => {
             }}
           >
             <img
-              src={user.image ?? defaultProfileImage(user.id)}
+              src={user.image}
               style={{ width: 90, height: 90, borderRadius: "100%" }}
             />
             <div

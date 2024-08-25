@@ -40,10 +40,12 @@ await db.insert(nexus).values([
     id: user,
     name: user,
     handle: Math.floor(1000000000 + Math.random() * 9000000000).toString(),
+    image: `https://api.cloudnouns.com/v1/pfp?text=${user}&background=1`,
   })),
   ...Array.from(users).map((user) => ({
     id: user,
     name: user.substring(0, 10),
     handle: Math.floor(1000000000 + Math.random() * 9000000000).toString(),
+    image: `https://api.cloudnouns.com/v1/pfp?text=${user}&background=1`,
   })),
 ]);

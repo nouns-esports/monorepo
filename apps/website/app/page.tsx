@@ -268,7 +268,7 @@ export default async function Home() {
                   />
                   <img
                     alt="Artwork"
-                    src={`https://ipfs.nouns.gg/ipfs/${id}`}
+                    src={`https://ipfs.nouns.gg/ipfs/${id}?img-height=300&img-onerror=redirect`}
                     draggable={false}
                     className="h-full max-w-none object-cover rounded-xl select-none"
                   />
@@ -306,7 +306,7 @@ export default async function Home() {
                   />
                   <img
                     alt="Artwork"
-                    src={`https://ipfs.nouns.gg/ipfs/${id}`}
+                    src={`https://ipfs.nouns.gg/ipfs/${id}?img-height=300&img-onerror=redirect`}
                     draggable={false}
                     className="h-full max-w-none object-cover rounded-xl select-none"
                   />

@@ -5,7 +5,6 @@ import Loading from "@/components/Loading";
 import { usePrivy } from "@privy-io/react-auth";
 import { Modal, toggleModal } from "./Modal";
 import type { getAuthenticatedUser } from "@/server/queries/users";
-import { defaultProfileImage } from "@/utils/defaultProfileImage";
 import Button from "./Button";
 import { useAction } from "next-safe-action/hooks";
 import { createNexus } from "@/server/mutations/createNexus";
@@ -24,7 +23,7 @@ export default function SignInButton(props: {
     <>
       <button
         onClick={() => {
-          if (props.user) router.push("/nexus");
+          if (props.user) router.push(`/users/${props.user.handle}`);
           else toggleModal("sign-in");
         }}
         style={{
@@ -38,7 +37,7 @@ export default function SignInButton(props: {
         {props.user ? (
           <>
             <img
-              src={props.user.image ?? defaultProfileImage(props.user.id)}
+              src={props.user.image}
               alt="User avatar"
               className="rounded-full w-7 h-7 select-none object-center object-cover"
               draggable={false}

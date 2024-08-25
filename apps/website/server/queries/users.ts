@@ -1,5 +1,5 @@
 import { privyClient } from "@/server/clients/privy";
-import { eq } from "drizzle-orm";
+import { eq, or } from "drizzle-orm";
 import { cookies } from "next/headers";
 import { db, nexus as nexusTable } from "~/packages/db/schema";
 import { unstable_cache as cache } from "next/cache";
@@ -44,9 +44,12 @@ export async function getAuthenticatedUser() {
 }
 
 export const getUser = cache(
-  async (input: { id: string }) => {
+  async (input: { user: string }) => {
     return db.query.nexus.findFirst({
-      where: eq(nexusTable.id, input.id),
+      where: or(
+        eq(nexusTable.id, input.user),
+        eq(nexusTable.handle, input.user)
+      ),
     });
   },
   ["getUser"],

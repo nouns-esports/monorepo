@@ -1,7 +1,6 @@
 import { Diamond } from "lucide-react";
 import Link from "./Link";
 import type { Nexus } from "~/packages/db/schema";
-import { defaultProfileImage } from "@/utils/defaultProfileImage";
 
 export default function Attribution(props: { id: string; creator?: Nexus }) {
   return (
@@ -12,7 +11,7 @@ export default function Attribution(props: { id: string; creator?: Nexus }) {
       {props.creator ? (
         <>
           <img
-            src={props.creator.image ?? defaultProfileImage(props.creator.id)}
+            src={props.creator.image}
             draggable={false}
             className="h-full select-none"
           />

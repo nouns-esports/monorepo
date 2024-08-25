@@ -24,6 +24,7 @@ const config: Config = {
       blue: {
         500: "#789AF4",
         700: "#3569EE",
+        800: "#042c91",
         900: "#002688",
       },
       grey: {
@@ -35,14 +36,17 @@ const config: Config = {
       },
       gold: {
         500: "#EEAF36",
+        800: "#704a02",
         900: "#664300",
       },
       silver: {
         500: "#CBD4D7",
+        800: "#706e6e",
         900: "#656565",
       },
       bronze: {
         500: "#D4682B",
+        800: "#632502",
         900: "#5B2100",
       },
     },
@@ -117,6 +121,7 @@ const config: Config = {
             background: "#1A1A1A",
             borderRadius: "1000px",
             width: "8px",
+            marginLeft: "4px", // Add left margin to the track
           },
 
           /* Handle */
@@ -124,12 +129,16 @@ const config: Config = {
             background: "#333333",
             borderRadius: "1000px",
             width: "8px",
+            marginLeft: "4px", // Add left margin to the thumb
           },
 
           /* Handle on hover */
           "&::-webkit-scrollbar-thumb:hover": {
             background: "#333333",
           },
+
+          /* Add padding to the container */
+          paddingRight: "12px", // Increase right padding to accommodate the scrollbar
         },
         ".prevent-scroll": {
           /* IE and Edge */

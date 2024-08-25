@@ -1,14 +1,12 @@
-import Countdown from "@/components/rounds/Countdown";
 import Link from "@/components/Link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, TwitterLogo } from "phosphor-react-sc";
-import AwardScroller from "@/components/rounds/AwardScroller";
 import Proposals from "@/components/proposals/Proposals";
 import { twMerge } from "tailwind-merge";
 import { formatUnits } from "viem";
 import { getFrameMetadata, isFrameRequest } from "frog/next";
 import type { Metadata } from "next";
-import { getRound } from "@/server/queries/rounds";
+import { getRound, getRoundStats } from "@/server/queries/rounds";
 import { getPriorVotes } from "@/server/queries/votes";
 import { roundState } from "@/utils/roundState";
 import { numberToOrdinal } from "@/utils/numberToOrdinal";
@@ -20,12 +18,11 @@ import { env } from "~/env";
 import { ArrowRight, Check, Timer, X } from "lucide-react";
 import { headers } from "next/headers";
 import { Modal, ToggleModal } from "@/components/Modal";
-import { defaultProfileImage } from "@/utils/defaultProfileImage";
 import DateComponent from "@/components/Date";
 
 const Markdown = dynamic(() => import("@/components/lexical/Markdown"), {
   ssr: false,
-  loading: () => <Shimmer className="min-h-96" />,
+  loading: () => <Shimmer className="h-full" />,
 });
 
 export async function generateMetadata(props: {
@@ -61,7 +58,10 @@ export default async function Round(props: {
 }) {
   if (isFrameRequest(headers())) return null;
 
-  const round = await getRound({ id: props.params.round });
+  const [round, stats] = await Promise.all([
+    getRound({ id: props.params.round }),
+    getRoundStats({ id: props.params.round }),
+  ]);
 
   if (!round) {
     return notFound();
@@ -101,7 +101,7 @@ export default async function Round(props: {
         <div className="flex gap-4 h-[500px] max-lg:flex-col max-lg:h-auto">
           <div className="bg-grey-800 flex flex-col w-full h-full rounded-xl overflow-hidden max-lg:max-h-[600px] max-sm:max-h-[500px]">
             <img
-              src={round.image}
+              src={`${round.image}?img-height=500&img-onerror=redirect`}
               className="w-full h-48 object-cover object-center max-sm:h-32"
             />
             <div className="flex flex-col h-full gap-2 max-sm:gap-4 p-4 min-h-0">
@@ -177,25 +177,15 @@ export default async function Round(props: {
                 <div className="flex flex-col gap-2 h-full">
                   <div className="flex w-full justify-between items-center">
                     <p className="">Proposals Created</p>
-                    <p className="text-white">{round.proposals.length}</p>
+                    <p className="text-white">{stats.proposalsCreated}</p>
                   </div>
                   <div className="flex w-full justify-between items-center">
                     <p className="">Votes Cast</p>
-                    <p className="text-white">
-                      {round.proposals.reduce(
-                        (acc, proposal) => acc + proposal.totalVotes,
-                        0
-                      )}
-                    </p>
+                    <p className="text-white">{stats.votesCast}</p>
                   </div>
                   <div className="flex w-full justify-between items-center">
                     <p className="">Total Participants</p>
-                    <p className="text-white">
-                      {round.proposals.reduce(
-                        (acc, proposal) => acc + proposal.totalVotes + 1,
-                        0
-                      )}
-                    </p>
+                    <p className="text-white">{stats.totalParticipants}</p>
                   </div>
                 </div>
                 <div className="flex justify-between items-center">
@@ -265,7 +255,7 @@ export default async function Round(props: {
           round={{
             ...round,
             awardCount: round.awards.length,
-            state,
+            state: "Ended",
           }}
           user={
             nexus
@@ -283,16 +273,11 @@ export default async function Round(props: {
           id={`proposal-${proposal.id}`}
           queryParam="p"
           showOnLoad={selectedProposal?.id === proposal.id}
-          className="flex-col gap-4 w-2/3 rounded-xl h-2/3 p-6 max-sm:p-3 max-h-none max-xl:max-w-none max-w-screen-lg bg-black border border-grey-600 max-xl:w-full max-xl:h-[100dvh] max-xl:rounded-none overflow-hidden"
+          className="flex-col gap-4 w-2/3 h-2/3 p-6 max-sm:p-3 max-xl:max-w-none max-w-screen-lg max-xl:w-full max-xl:h-[100dvh] max-xl:rounded-none overflow-hidden"
         >
           <div className="flex justify-between items-center mb-4">
             <div className="rounded-full flex items-center text-white gap-3 font-semibold text-lg">
-              <img
-                src={
-                  proposal.user.image ?? defaultProfileImage(proposal.user.id)
-                }
-                className="rounded-full h-7 w-7"
-              />
+              <img src={proposal.user.image} className="rounded-full h-7 w-7" />
               {proposal.user.name}
             </div>
             <ToggleModal
@@ -336,19 +321,20 @@ export default async function Round(props: {
                 ""
               )}
             </div>
-            <Markdown
-              markdown={proposal.content}
-              readOnly
-              className="bg-grey-800 rounded-xl p-4 flex flex-col h-fit"
-            />
+            {round.type === "markdown" ? (
+              <Markdown
+                markdown={proposal.content ?? ""}
+                readOnly
+                className="bg-grey-800 rounded-xl p-4 flex flex-col h-fit"
+              />
+            ) : (
+              ""
+            )}
           </div>
         </Modal>
       ))}
       {priorVotes > 0 ? (
-        <Modal
-          id="share-votes"
-          className="rounded-xl bg-black border border-grey-600 overflow-hidden flex-col gap-4 p-4"
-        >
+        <Modal id="share-votes" className="overflow-hidden flex-col gap-4 p-4">
           <div className="relative z-[80] rounded-xl bg-black overflow-hidden flex flex-col gap-4 p-4">
             <img
               src={`/api/frames/rounds/${props.params.round}/votes/${user?.id}/img`}

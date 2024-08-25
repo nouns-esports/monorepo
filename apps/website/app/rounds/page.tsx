@@ -1,5 +1,5 @@
 import Link from "@/components/Link";
-import { getRounds, getStats } from "@/server/queries/rounds";
+import { getRounds, getRoundsStats } from "@/server/queries/rounds";
 import RoundCard from "@/components/RoundCard";
 import { Minus, Plus } from "lucide-react";
 
@@ -13,7 +13,7 @@ export default async function Rounds(props: {
       stage: "ended",
       limit: props.searchParams.showAll ? undefined : 8,
     }),
-    getStats(),
+    getRoundsStats(),
   ]);
 
   return (

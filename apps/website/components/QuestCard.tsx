@@ -28,7 +28,7 @@ export default function QuestCard(props: {
       />
       <div className="flex flex-shrink-0 w-full h-[40%] overflow-hidden">
         <img
-          src={props.image}
+          src={`${props.image}?img-height=200&img-onerror=redirect`}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform"
         />
       </div>

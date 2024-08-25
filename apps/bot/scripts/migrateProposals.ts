@@ -1,3 +1,4 @@
+import { eq } from "drizzle-orm";
 import { db, proposals } from "~/packages/db/schema";
 
 // Steps
@@ -8,14 +9,14 @@ import { db, proposals } from "~/packages/db/schema";
 
 const allProposals = await db.query.proposals.findMany();
 
-for (const proposal of allProposals) {
-  await db.transaction(
-    async (tx) =>
-      await tx.update(proposals).set({
-        markdown: {
-          preview: proposal.image,
-          content: proposal.content,
-        },
+await db.transaction(async (tx) => {
+  for (const proposal of allProposals) {
+    await tx
+      .update(proposals)
+      .set({
+        content: proposal.markdown?.content,
+        image: proposal.markdown?.preview,
       })
-  );
-}
+      .where(eq(proposals.id, proposal.id));
+  }
+});

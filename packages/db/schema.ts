@@ -82,9 +82,9 @@ export const rounds = pgTable("rounds", {
   image: text("image").notNull(),
   banner: text("banner").notNull(),
   community: text("community").notNull().default(""),
-  // type: text("type", { enum: ["markdown", "video", "image"] })
-  //   .notNull()
-  //   .default("markdown"),
+  type: text("type", { enum: ["markdown", "video", "image"] })
+    .notNull()
+    .default("markdown"),
   content: text("content").notNull(), // rename
   start: timestamp("start", { mode: "date" }).notNull(),
   votingStart: timestamp("voting_start", { mode: "date" }).notNull(),
@@ -146,12 +146,9 @@ export const proposals = pgTable("proposals", {
   user: text("user").notNull(),
   round: text("round").notNull(),
   title: text("title").notNull(),
-  description: text("description").default("").notNull(),
-  content: text("content").notNull(),
-  image: text("image").notNull().default(""),
-  // markdown: jsonb("markdown").$type<{ preview?: string; content: string, description?: string }>(),
-  // image: jsonb("image").$type<{ src: string; caption: string }>(),
-  // video: jsonb("video").$type<{ src: string; caption: string }>(),
+  content: text("content"),
+  image: text("image"),
+  video: text("video"),
   createdAt: timestamp("created_at", { mode: "date" }).notNull(),
   hidden: boolean("hidden").notNull().default(false),
   published: boolean("published").notNull().default(true),
@@ -176,7 +173,7 @@ export const nexus = pgTable("nexus", {
   handle: text("handle").notNull().default(""),
   rank: integer("rank").notNull().default(0),
   xpTotal: integer("xp_total").notNull().default(0),
-  image: text("image"),
+  image: text("image").notNull().default(""),
   name: text("name").notNull().default(""),
   bio: text("bio"),
   interests: text("interests").array().notNull().default([]),
@@ -217,7 +214,6 @@ export const seasons = pgTable("seasons", {
 export const seasonRelations = relations(seasons, ({ many }) => ({
   ranks: many(ranks),
   rankings: many(rankings),
-  quests: many(quests),
   xp: many(xp),
 }));
 
@@ -462,3 +458,4 @@ export type Vote = typeof votes.$inferSelect;
 export type Badge = typeof badges.$inferSelect;
 export type Nexus = typeof nexus.$inferSelect;
 export type Creation = typeof creations.$inferSelect;
+export type Rank = typeof ranks.$inferSelect;

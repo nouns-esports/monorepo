@@ -18,6 +18,7 @@ import Banner from "./Banner";
 import { getCommunities } from "@/server/queries/communities";
 import { getRosters } from "@/server/queries/rosters";
 import Menu from "./Menu";
+import { CurrencyEth } from "phosphor-react-sc";
 
 export default async function Header() {
   const privyUser = await getAuthenticatedPrivyUser();
@@ -213,7 +214,13 @@ export default async function Header() {
                 </ul>
               </nav>
             </div>
-            <div className="pointer-events-auto flex items-center relative z-[60]">
+            <div className="pointer-events-auto flex gap-8 items-center relative z-[60]">
+              <Link href="/nexus">
+                <li className="flex gap-2 items-center opacity-100 hover:opacity-80 transition-opacity text-white">
+                  <CurrencyEth className="w-5 h-5" />
+                  Nexus
+                </li>
+              </Link>
               <SignInButton privyUser={privyUser} user={user} />
             </div>
           </div>

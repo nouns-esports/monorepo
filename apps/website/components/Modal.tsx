@@ -32,7 +32,7 @@ export function Modal(props: {
       id={`${props.id}-dialog`}
       data-queryparam={props.queryParam}
       className={twMerge(
-        "outline-none drop-shadow-2xl backdrop:bg-black/50",
+        "outline-none drop-shadow-2xl backdrop:bg-black/50 rounded-xl bg-black border border-grey-600 p-4 max-h-none",
         props.className
       )}
       onClick={(e) => {

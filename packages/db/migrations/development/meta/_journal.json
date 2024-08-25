@@ -470,6 +470,48 @@
       "when": 1724295560810,
       "tag": "0066_unusual_hydra",
       "breakpoints": true
+    },
+    {
+      "idx": 67,
+      "version": "7",
+      "when": 1724535682765,
+      "tag": "0067_gray_blizzard",
+      "breakpoints": true
+    },
+    {
+      "idx": 68,
+      "version": "7",
+      "when": 1724536362562,
+      "tag": "0068_awesome_marvel_boy",
+      "breakpoints": true
+    },
+    {
+      "idx": 69,
+      "version": "7",
+      "when": 1724536393438,
+      "tag": "0069_flaky_zombie",
+      "breakpoints": true
+    },
+    {
+      "idx": 70,
+      "version": "7",
+      "when": 1724541665502,
+      "tag": "0070_careless_matthew_murdock",
+      "breakpoints": true
+    },
+    {
+      "idx": 71,
+      "version": "7",
+      "when": 1724541763359,
+      "tag": "0071_violet_killer_shrike",
+      "breakpoints": true
+    },
+    {
+      "idx": 72,
+      "version": "7",
+      "when": 1724542025464,
+      "tag": "0072_dry_veda",
+      "breakpoints": true
     }
   ]
 }
