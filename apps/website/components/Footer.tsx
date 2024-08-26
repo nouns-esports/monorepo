@@ -43,6 +43,17 @@ export default async function Footer() {
             <Item href="/discord">Discord</Item>
             <Item href="/creations">Creator Spotlight</Item>
           </Group>
+          <Group title="Resources">
+            <Item href="/privacy" newTab>
+              Privacy Policy
+            </Item>
+            <Item href="/terms" newTab>
+              Terms of Service
+            </Item>
+            <Item href="/contact" newTab>
+              Contact
+            </Item>
+          </Group>
         </div>
         <div className="flex max-lg:flex-row max-[300px]:flex-col gap-4 items-center justify-center text-white">
           <div className="flex flex-col gap-4 max-lg:flex-row">
@@ -90,10 +101,15 @@ function Group(props: { title: React.ReactNode; children: React.ReactNode }) {
   );
 }
 
-function Item(props: { href: string; children: React.ReactNode }) {
+function Item(props: {
+  href: string;
+  children: React.ReactNode;
+  newTab?: boolean;
+}) {
   return (
     <Link
       href={props.href}
+      newTab={props.newTab}
       className="hover:text-white select-none transition-colors max-lg:text-center text-nowrap"
     >
       {props.children}

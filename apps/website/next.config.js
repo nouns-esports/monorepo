@@ -101,8 +101,7 @@ const nextConfig = {
       },
       {
         source: "/taki",
-        destination:
-          "https://nouns.gg/rounds/taki",
+        destination: "https://nouns.gg/rounds/taki",
         permanent: true,
       },
       {
@@ -124,6 +123,23 @@ const nextConfig = {
       {
         source: "/about",
         destination: "https://www.youtube.com/watch?v=SAXzMQ8pPvE",
+        permanent: true,
+      },
+      {
+        source: "/privacy",
+        destination:
+          "https://app.termly.io/policy-viewer/policy.html?policyUUID=0d491517-c891-4103-8c31-d6246f954ae6",
+        permanent: true,
+      },
+      {
+        source: "/terms",
+        destination:
+          "https://app.termly.io/policy-viewer/policy.html?policyUUID=d9d85cf5-1c21-4874-901b-e83ad58f7320",
+        permanent: true,
+      },
+      {
+        source: "/contact",
+        destination: "mailto:esports@nouns.gg",
         permanent: true,
       },
     ];
