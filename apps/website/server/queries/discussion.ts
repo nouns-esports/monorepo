@@ -41,7 +41,7 @@ export const getTrendingPosts = cache(
           return false;
         }
 
-        return post.author.power_badge;
+        return true;
       })
       .sort((a, b) => b.reactions.likes_count - a.reactions.likes_count);
 

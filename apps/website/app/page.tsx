@@ -54,7 +54,7 @@ export default async function Home() {
                     <img
                       src={post.author.pfp_url}
                       alt={post.author.display_name}
-                      className="h-full aspect-square rounded-full"
+                      className="h-full aspect-square rounded-full object-cover"
                     />
                     <div className="flex flex-col h-full w-full">
                       <p className="text-white font-semibold text-sm">
