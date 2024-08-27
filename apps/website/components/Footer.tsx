@@ -43,7 +43,7 @@ export default async function Footer() {
             <Item href="/discord">Discord</Item>
             <Item href="/creations">Creator Spotlight</Item>
           </Group>
-          <Group title="Resources">
+          {/* <Group title="Resources">
             <Item href="/privacy" newTab>
               Privacy Policy
             </Item>
@@ -53,7 +53,7 @@ export default async function Footer() {
             <Item href="/contact" newTab>
               Contact
             </Item>
-          </Group>
+          </Group> */}
         </div>
         <div className="flex max-lg:flex-row max-[300px]:flex-col gap-4 items-center justify-center text-white">
           <div className="flex flex-col gap-4 max-lg:flex-row">
