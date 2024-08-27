@@ -5,22 +5,22 @@ export const getTrendingPosts = cache(
   async () => {
     const responses = await Promise.all([
       neynarClient.fetchFeed("filter", {
-        limit: 50,
+        limit: 100,
         filterType: "channel_id",
         channelId: "nouns-esports",
       }),
       neynarClient.fetchFeed("filter", {
-        limit: 50,
+        limit: 100,
         filterType: "channel_id",
         channelId: "cs2",
       }),
       neynarClient.fetchFeed("filter", {
-        limit: 50,
+        limit: 100,
         filterType: "channel_id",
         channelId: "smash",
       }),
       neynarClient.fetchFeed("filter", {
-        limit: 50,
+        limit: 100,
         filterType: "channel_id",
         channelId: "dota2",
       }),
@@ -37,11 +37,11 @@ export const getTrendingPosts = cache(
 
         channelCount[post.channel.id] = ++channelCount[post.channel.id] || 0;
 
-        if (channelCount[post.channel.id] > 6) {
+        if (channelCount[post.channel.id] > 10) {
           return false;
         }
 
-        return post.author.power_badge;
+        return true;
       })
       .sort((a, b) => b.reactions.likes_count - a.reactions.likes_count);
 

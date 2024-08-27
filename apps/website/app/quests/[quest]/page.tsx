@@ -1,9 +1,11 @@
+import Button from "@/components/Button";
 import CheckQuest from "@/components/CheckQuest";
 import Link from "@/components/Link";
 import { getAction, getQuest } from "@/server/queries/quests";
 import { getAuthenticatedUser } from "@/server/queries/users";
-import { ArrowLeft, Check } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, TriangleAlert } from "lucide-react";
 import { notFound } from "next/navigation";
+import { twMerge } from "tailwind-merge";
 
 export default async function Quest(props: { params: { quest: string } }) {
   const [quest, user] = await Promise.all([
@@ -72,25 +74,73 @@ export default async function Quest(props: { params: { quest: string } }) {
                     claimed={!!quest.completed?.[0]}
                   />
                 </div>
-                <ul className="flex flex-col gap-2">
+                {quest.prerequisite ? (
+                  <div className="flex flex-col gap-2">
+                    <div className="relative bg-grey-600 rounded-xl p-3 flex justify-between items-center text-white group hover:bg-grey-500 transition-colors">
+                      <Link
+                        href={`/quests/${quest.prerequisite.id}`}
+                        newTab
+                        className="absolute left-0 top-0 w-full h-full"
+                      />
+                      <div className="flex items-center gap-3">
+                        <div className="rounded-full bg-yellow w-7 h-7 flex items-center justify-center">
+                          <TriangleAlert className="w-4 h-4 text-black/50" />
+                        </div>
+                        <p>
+                          Complete the quest{" "}
+                          <span className="text-yellow">
+                            {quest.prerequisite.name}
+                          </span>
+                        </p>
+                      </div>
+                    </div>
+                    <div className="h-[1px] bg-grey-500 mx-4 mt-2" />
+                  </div>
+                ) : (
+                  ""
+                )}
+                <ul
+                  className={twMerge(
+                    "flex flex-col gap-2",
+                    quest.prerequisite && "opacity-60 pointer-events-none"
+                  )}
+                >
                   {actions.map(async (action, index) => {
                     if (!action) throw new Error("Action not found");
 
                     return (
                       <li
                         key={`action-${index}`}
-                        className="bg-grey-600 rounded-xl p-3 flex gap-3 items-center text-white"
-                      >
-                        {completed[index] ? (
-                          <div className="rounded-full bg-green w-7 h-7 flex items-center justify-center">
-                            <Check className="w-5 h-5 text-white" />
-                          </div>
-                        ) : (
-                          <div className="rounded-full bg-black/60 h-7 w-7 flex items-center justify-center text-sm">
-                            {index + 1}
-                          </div>
+                        className={twMerge(
+                          "relative bg-grey-600 rounded-xl p-3 flex justify-between items-center text-white group hover:bg-grey-500 transition-colors",
+                          completed[index] && "opacity-60 pointer-events-none"
                         )}
-                        {action.description}
+                      >
+                        <Link
+                          href={action.url}
+                          newTab
+                          className="absolute left-0 top-0 w-full h-full"
+                        />
+                        <div className="flex items-center gap-3">
+                          {completed[index] ? (
+                            <div className="rounded-full bg-green w-7 h-7 flex items-center justify-center">
+                              <Check className="w-5 h-5 text-black/50" />
+                            </div>
+                          ) : (
+                            <div className="rounded-full bg-black/60 h-7 w-7 flex items-center justify-center text-sm">
+                              {index + 1}
+                            </div>
+                          )}
+                          {action.description}
+                        </div>
+                        <Link
+                          href={action.help ?? "/discord"}
+                          newTab
+                          className="relative z-10 group-hover:opacity-100 opacity-0 text-red flex items-center mr-1 hover:text-red/70 transition-all"
+                        >
+                          Help?{" "}
+                          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        </Link>
                       </li>
                     );
                   })}

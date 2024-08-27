@@ -5,11 +5,11 @@ import {
   unstable_noStore as noStore,
 } from "next/cache";
 import { linkFarcaster } from "@/server/quests/farcaster/linkFarcaster";
-import { getNexus } from "./nexus";
 import type createAction from "../quests/createAction";
 import { castInChannel } from "../quests/farcaster/castInChannel";
 import { followAccount } from "../quests/farcaster/followAccount";
 import { followChannel } from "../quests/farcaster/followChannel";
+import { visitSite } from "../quests/online/visitSite";
 
 export const actions: Record<string, ReturnType<typeof createAction>> = {
   // Farcaster
@@ -17,6 +17,8 @@ export const actions: Record<string, ReturnType<typeof createAction>> = {
   castInChannel,
   followAccount,
   followChannel,
+  // Online
+  visitSite,
 };
 
 export async function getAction(input: {
@@ -70,6 +72,7 @@ export const getQuests = cache(
 
 export const getQuest = cache(
   async (input: { id: string; user?: string }) => {
+    ////
     return db.query.quests.findFirst({
       where: eq(quests.id, input.id),
       with: {

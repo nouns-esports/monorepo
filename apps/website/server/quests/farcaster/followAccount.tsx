@@ -1,7 +1,7 @@
-import Link from "@/components/Link";
+import { neynarClient } from "@/server/clients/neynar";
 import createAction from "../createAction";
 
-export const followAccount = createAction((actionInputs) => {
+export const followAccount = createAction(async (actionInputs) => {
   if (!actionInputs?.account) {
     throw new Error("Account input missing in action");
   }
@@ -9,19 +9,24 @@ export const followAccount = createAction((actionInputs) => {
   return {
     description: (
       <p>
-        Follow{" "}
-        <Link
-          href={`https://warpcast.com/${actionInputs.account}`}
-          newTab
-          className="text-red hover:text-red/50 transition-colors"
-        >
-          @{actionInputs.account}
-        </Link>
+        Follow <span className="text-red">@{actionInputs.account}</span>
       </p>
     ),
-    name: `Follow @${actionInputs.account}`,
+    url: `https://warpcast.com/${actionInputs.account}`,
     check: async (user) => {
-      return false;
+      if (!user.farcaster) return false;
+
+      const response = await neynarClient.fetchUserFollowers(
+        actionInputs.account,
+        {
+          viewerFid: user.farcaster.fid,
+          limit: 1,
+        }
+      );
+
+      if (!response.result.users?.[0].viewerContext?.following) return false;
+
+      return true;
     },
   };
 });

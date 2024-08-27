@@ -16,6 +16,26 @@ import { Pool } from "pg";
 import { env } from "~/env";
 import type { User } from "@privy-io/server-auth";
 
+export const links = pgTable("links", {
+  id: text("id").primaryKey(),
+  url: text("url").notNull(),
+});
+
+export const snapshots = pgTable("snapshots", {
+  id: serial("id").primaryKey(),
+  timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
+  type: text("type", { enum: ["link-capture", "discord-call"] }).notNull(),
+  tag: text("tag").notNull(),
+  user: text("user").notNull(),
+});
+
+export const snapshotsRelations = relations(snapshots, ({ one }) => ({
+  user: one(nexus, {
+    fields: [snapshots.user],
+    references: [nexus.id],
+  }),
+}));
+
 export const communities = pgTable("communities", {
   id: text("id").primaryKey(),
   image: text("image").notNull(),
@@ -234,7 +254,7 @@ export const ranksRelations = relations(ranks, ({ one, many }) => ({
   }),
   nexus: many(nexus),
 }));
-// wil probably want the ability to pin quests
+
 export const quests = pgTable("quests", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
@@ -244,6 +264,7 @@ export const quests = pgTable("quests", {
   pinned: boolean("pinned").notNull().default(false),
   active: boolean("active").notNull().default(false),
   xp: integer("xp").notNull(),
+  // points: integer("points").notNull(),
   actions: text("actions").array().notNull(),
   actionInputs: jsonb("action_inputs")
     .array()
@@ -252,8 +273,6 @@ export const quests = pgTable("quests", {
     .default([]),
   prerequisite: text("prerequisite"),
   minRank: integer("min_rank").notNull().default(0),
-  maxCompletions: smallint("max_completions").notNull().default(1), // How many times the quest can be completed
-  cooldown: integer("cooldown").notNull(), // How long until the quest can be completed again by the same user
 });
 
 export const questRelations = relations(quests, ({ one, many }) => ({
@@ -272,19 +291,26 @@ export const questRelations = relations(quests, ({ one, many }) => ({
   }),
 }));
 
+// Recuring incentives for actions completed across nouns.gg
+export const incentives = pgTable("incentives", {
+  id: serial("id").primaryKey(),
+  xp: integer("xp").notNull(),
+  // points: integer("points").notNull(),
+  cooldown: integer("cooldown").notNull(),
+});
+
+export const incentivesRelations = relations(incentives, ({ many }) => ({
+  completed: many(xp),
+}));
+
 export const xp = pgTable("xp", {
   id: serial("id").primaryKey(),
   user: text("user").notNull(),
-  xpEarned: integer("xp_earned").notNull(),
+  amount: integer("amount").notNull(),
   timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
   season: text("season").notNull(),
-  // Only one of the following should be defined at a time
-  from: text("from", {
-    enum: [
-      "quest",
-      //"purchase"
-    ],
-  }),
+  quest: text("quest"),
+  incentive: text("incentive"),
 });
 
 export const xpRelations = relations(xp, ({ one }) => ({
@@ -297,11 +323,15 @@ export const xpRelations = relations(xp, ({ one }) => ({
     references: [seasons.id],
   }),
   quest: one(quests, {
-    fields: [xp.from],
+    fields: [xp.quest],
     references: [quests.id],
   }),
+  incentive: one(incentives, {
+    fields: [xp.incentive],
+    references: [incentives.id],
+  }),
   // purchase: one(purchases, {
-  //   fields: [xp.from],
+  //   fields: [xp.purchase],
   //   references: [purchases.id],
   // }),
 }));
@@ -436,6 +466,9 @@ const schema = {
   xpRelations,
   rankings,
   rankingsRelations,
+  links,
+  snapshots,
+  snapshotsRelations,
 };
 
 export const db = drizzle(

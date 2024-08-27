@@ -43,6 +43,23 @@ export default async function Footer() {
             <Item href="/discord">Discord</Item>
             <Item href="/creations">Creator Spotlight</Item>
           </Group>
+          <Group title="Resources">
+            <Item
+              href="https://app.termly.io/policy-viewer/policy.html?policyUUID=0d491517-c891-4103-8c31-d6246f954ae6"
+              newTab
+            >
+              Privacy Policy
+            </Item>
+            <Item
+              href="https://app.termly.io/policy-viewer/policy.html?policyUUID=d9d85cf5-1c21-4874-901b-e83ad58f7320"
+              newTab
+            >
+              Terms of Service
+            </Item>
+            <Item href="mailto:esports@nouns.gg" newTab>
+              Contact
+            </Item>
+          </Group>
         </div>
         <div className="flex max-lg:flex-row max-[300px]:flex-col gap-4 items-center justify-center text-white">
           <div className="flex flex-col gap-4 max-lg:flex-row">
@@ -90,10 +107,15 @@ function Group(props: { title: React.ReactNode; children: React.ReactNode }) {
   );
 }
 
-function Item(props: { href: string; children: React.ReactNode }) {
+function Item(props: {
+  href: string;
+  children: React.ReactNode;
+  newTab?: boolean;
+}) {
   return (
     <Link
       href={props.href}
+      newTab={props.newTab}
       className="hover:text-white select-none transition-colors max-lg:text-center text-nowrap"
     >
       {props.children}
