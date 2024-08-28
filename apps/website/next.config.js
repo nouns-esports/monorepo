@@ -138,8 +138,8 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: "/contact",
-        destination: "mailto:esports@nouns.gg",
+        source: "/github",
+        destination: "https://github.com/nouns-esports/monorepo",
         permanent: true,
       },
     ];
