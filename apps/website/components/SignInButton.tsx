@@ -2,11 +2,15 @@
 
 import { useRouter } from "next/navigation";
 import Loading from "@/components/Loading";
-import { usePrivy } from "@privy-io/react-auth";
+import { useLogin, usePrivy } from "@privy-io/react-auth";
 import { userToProfile } from "@/utils/userToProfile";
 import type { User } from "@privy-io/server-auth";
+import type { getNexus } from "@/server/queries/nexus";
 
-export default function SignInButton(props: { user?: User }) {
+export default function SignInButton(props: {
+  user?: User;
+  nexus?: Awaited<ReturnType<typeof getNexus>>;
+}) {
   const { login, authenticated } = usePrivy();
 
   const router = useRouter();
@@ -28,7 +32,7 @@ export default function SignInButton(props: { user?: User }) {
       className="flex items-center gap-2 select-none text-grey-800 py-1.5 pl-1.5 pr-3.5 text-xl bg-white hover:bg-white/80 transition-colors rounded-full justify-center leading-none font-bebas-neue whitespace-nowrap"
     >
       {props.user ? (
-        props.user.discord && profile ? (
+        props.user.discord && props.nexus && profile ? (
           <>
             <img
               src={profile.pfp}

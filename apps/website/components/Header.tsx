@@ -14,9 +14,12 @@ import Banner from "./Banner";
 import { getCommunities } from "@/server/queries/communities";
 import { getRosters } from "@/server/queries/rosters";
 import Menu from "./Menu";
+import { getNexus } from "@/server/queries/nexus";
 
 export default async function Header() {
   const user = await getAuthenticatedUser();
+
+  const nexus = user ? await getNexus({ user: user.id }) : undefined;
 
   const communities = await getCommunities();
 
@@ -194,7 +197,7 @@ export default async function Header() {
               </nav>
             </div>
             <div className="pointer-events-auto flex items-center relative z-[60]">
-              <SignInButton user={user} />
+              <SignInButton user={user} nexus={nexus} />
             </div>
           </div>
         </div>

@@ -1,19 +1,28 @@
 import { db, proposals, rounds, votes } from "~/packages/db/schema";
-import { privyClient } from "../";
+import { discordClient, privyClient } from "../";
 import { and, desc, eq, gt, inArray, lt, or } from "drizzle-orm";
 import type { WalletWithMetadata } from "@privy-io/server-auth";
 import { writeFileSync } from "fs";
+import { env } from "~/env";
 
 let output = "";
 
 const users = await db.query.nexus.findMany();
 const privyUsers = await privyClient.getUsers();
 
+const guild = await discordClient.guilds.fetch(env.DISCORD_GUILD_ID);
+
 for (const user of users) {
   try {
     const privyUser = privyUsers.find((u) => u.id === user.user);
 
     if (!privyUser?.discord) {
+      continue;
+    }
+
+    try {
+      await guild.members.fetch(privyUser.discord.subject);
+    } catch (error) {
       continue;
     }
 
