@@ -28,12 +28,12 @@ export default function Proposals(props: {
   proposals: Array<Awaited<ReturnType<typeof getProposals>>[number]>;
   user?: {
     id: string;
-    nexus: NonNullable<Awaited<ReturnType<typeof getNexus>>>;
+    nexus?: NonNullable<Awaited<ReturnType<typeof getNexus>>>;
     priorVotes: number;
   };
 }) {
   const [remainingVotes, setRemainingVotes] = useOptimistic(
-    props.user ? props.user.nexus.votes - props.user.priorVotes : 0
+    props.user?.nexus ? props.user.nexus.votes - props.user.priorVotes : 0
   );
 
   const [votes, setVotes] = useOptimistic<Record<string, number>>(
@@ -86,7 +86,7 @@ export default function Proposals(props: {
                 );
               }
 
-              if (props.user.nexus.votes < 1) {
+              if (!props.user.nexus) {
                 return (
                   <>
                     <p className="text-white">Enter the Nexus to propose</p>
@@ -150,7 +150,7 @@ export default function Proposals(props: {
                 );
               }
 
-              if (props.user.nexus.votes < 1) {
+              if (!props.user.nexus) {
                 return (
                   <>
                     <p className="text-white">Enter the Nexus to vote</p>
@@ -271,7 +271,11 @@ export default function Proposals(props: {
                   }
                 }
 
-                if (props.user.nexus.votes > 0 && remainingVotes < 1) {
+                if (
+                  props.user.nexus &&
+                  props.user.nexus.votes > 0 &&
+                  remainingVotes < 1
+                ) {
                   return (
                     <>
                       <p className="text-white">

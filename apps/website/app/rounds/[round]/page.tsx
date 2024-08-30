@@ -229,7 +229,7 @@ export default async function Round(props: {
               minVoterRank: round.minVoterRank,
             }}
             user={
-              user && nexus
+              user
                 ? {
                     id: user.id,
                     nexus,
