@@ -5,6 +5,7 @@ import Modal from "../Modal.new";
 import { ArrowRight, Mail } from "lucide-react";
 import { DiscordLogo, TwitterLogo, Wallet } from "phosphor-react-sc";
 import { create } from "zustand";
+import Link from "../Link";
 
 export const useSignInModal = create<{
   open: boolean;
@@ -17,7 +18,7 @@ export const useSignInModal = create<{
 export default function SignInModal() {
   const { open, setOpen } = useSignInModal();
 
-  const [returningUser, setReturningUser] = useState(true);
+  const [returningUser, setReturningUser] = useState(false);
   const [email, setEmail] = useState("");
 
   return (
@@ -30,6 +31,7 @@ export default function SignInModal() {
         <img
           src="https://ipfs.nouns.gg/ipfs/QmSGYg5t25SQDp1xBw5tqDrfsF62T2HHVZpH4VduaAwJkT"
           className="w-full h-full object-cover brightness-75"
+          draggable={false}
         />
         <div className="absolute bottom-0 left-0 from-black to-transparent bg-gradient-to-t w-full h-16" />
       </div>
@@ -82,6 +84,16 @@ export default function SignInModal() {
             : "Sign into an existing account"}
           <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
         </p>
+        <small className="text-xs">
+          By signing in, you agree to the{" "}
+          <Link href="/terms" className="text-white hover:underline">
+            Terms of Service
+          </Link>{" "}
+          and{" "}
+          <Link href="/privacy" className="text-white hover:underline">
+            Privacy Policy
+          </Link>
+        </small>
       </div>
     </Modal>
   );
