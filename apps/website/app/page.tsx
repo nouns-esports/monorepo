@@ -15,6 +15,7 @@ import RoundCard from "@/components/RoundCard";
 import { getQuests } from "@/server/queries/quests";
 import QuestCard from "@/components/QuestCard";
 import { getAuthenticatedUser } from "@/server/queries/users";
+import Marquee from "@/components/Marquee";
 
 export default async function Home() {
   const videos = await getVideos();
@@ -240,16 +241,9 @@ export default async function Home() {
         </div>
       </div>
       <div className="relative flex flex-col gap-4 w-full overflow-hidden">
-        <div className="flex gap-4 w-full h-60 max-sm:h-40 animate-art-marquee-top">
+        <Marquee className="flex gap-4 w-full h-60 max-sm:h-40">
           {await Promise.all(
             [
-              "QmUMouSSMHhmuPrEs3QUSUjNvfssPoe5k9iXj2dqtXQQ8v",
-              "QmU11vkWikFLWxipJ9Nu1RKnfjzpyPGnjhBhrhn6GJcFz9",
-              "QmVtrefNQxvgDkwZz8yr6L8mqUuWMnCcL6fbVW7GLK345d",
-              "QmYerHVfTANfCmMNvWZdRMJDt5cjotuexaTG5DQgHqFmCn",
-              "QmXP7Yq4j4bqiKzgsynfF8AgKZ3vM6Ldq5aCKRGmNh2ScA",
-              "QmYeLkcYghV4qkRBeMY12Z352EoLJwzbLWK8JsvbREHfo3",
-              "QmdiWQoQpy3D5wpi9pSn6n2uJXyugwcv8rvQoaZnWhotKz",
               "QmUMouSSMHhmuPrEs3QUSUjNvfssPoe5k9iXj2dqtXQQ8v",
               "QmU11vkWikFLWxipJ9Nu1RKnfjzpyPGnjhBhrhn6GJcFz9",
               "QmVtrefNQxvgDkwZz8yr6L8mqUuWMnCcL6fbVW7GLK345d",
@@ -279,21 +273,15 @@ export default async function Home() {
               );
             })
           )}
-        </div>
-        <div className="flex flex-row-reverse gap-4 h-60 max-sm:h-40 animate-art-marquee-bottom">
+        </Marquee>
+        <Marquee className="flex gap-4 w-full h-60 max-sm:h-40" reverse>
           {await Promise.all(
             [
               "QmYfT8Wh7o5YtsfpjYmzWeVpuNVkz2UGYPMti2aEBoMFWs",
               "QmPnd7ayCPYp5VYrmfyYLkjeA9wJtQAXkS46wBiY1VAhta",
               "QmTrfSzw8q5weZRmApCkC2Te3e6Vn87fN2s49G9Kbj9Wkd",
               "QmUTghthVwuidV6v7sJnKrbci8Ro2HQRx8huSgpxZz2G3g",
-              "QmbKGhDNHSujAJeqJtURW29DuDWtKoFcfx1Eprkjk1movp",
-              "QmUE853Ad1yns6UAUCbYjK6iBtxx5e5EihJfCFAAUh5aYb",
-              "QmYfT8Wh7o5YtsfpjYmzWeVpuNVkz2UGYPMti2aEBoMFWs",
-              "QmPnd7ayCPYp5VYrmfyYLkjeA9wJtQAXkS46wBiY1VAhta",
-              "QmTrfSzw8q5weZRmApCkC2Te3e6Vn87fN2s49G9Kbj9Wkd",
-              "QmUTghthVwuidV6v7sJnKrbci8Ro2HQRx8huSgpxZz2G3g",
-              "QmbKGhDNHSujAJeqJtURW29DuDWtKoFcfx1Eprkjk1movp",
+              "QmSGYg5t25SQDp1xBw5tqDrfsF62T2HHVZpH4VduaAwJkT",
               "QmUE853Ad1yns6UAUCbYjK6iBtxx5e5EihJfCFAAUh5aYb",
             ].map(async (id) => {
               const creator = await getCreator({ creation: id });
@@ -317,7 +305,7 @@ export default async function Home() {
               );
             })
           )}
-        </div>
+        </Marquee>
         <div className="relative">
           <div className="flex flex-col items-center pt-32 max-sm:pt-16 gap-8 bg-gradient-to-t from-[#171717] to-black px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
             <h3 className="font-luckiest-guy text-4xl max-sm:text-3xl text-white text-center">

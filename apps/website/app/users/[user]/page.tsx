@@ -1,4 +1,7 @@
 import Button from "@/components/Button";
+import EditProfile from "@/components/EditProfile";
+import TextArea from "@/components/form/TextArea";
+import TextInput from "@/components/form/TextInput";
 import { Modal, ToggleModal } from "@/components/Modal";
 import { getAuthenticatedUser, getUser } from "@/server/queries/users";
 import { notFound } from "next/navigation";
@@ -45,9 +48,7 @@ export default async function User(props: { params: { user: string } }) {
           </div>
         </div>
       </div>
-      <Modal id="edit-profile">
-        <div>dadf</div>
-      </Modal>
+      {authenticatedUser?.id === user.id ? <EditProfile user={user} /> : ""}
     </>
   );
 }

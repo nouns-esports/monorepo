@@ -2,9 +2,13 @@ import { db, links, snapshots } from "~/packages/db/schema";
 import createAction from "../createAction";
 import { and, eq } from "drizzle-orm";
 
-export const visitSite = createAction(async (actionInputs) => {
+export const watchVideo = createAction(async (actionInputs) => {
   if (!actionInputs.link) {
     throw new Error("Link input missing in action");
+  }
+
+  if (!actionInputs.name) {
+    throw new Error("Name input missing in action");
   }
 
   const link = await db.query.links.findFirst({
@@ -18,8 +22,7 @@ export const visitSite = createAction(async (actionInputs) => {
   return {
     description: (
       <p>
-        Visit{" "}
-        <span className="text-red">{link.url.slice(8).split("/")[0]}</span>
+        Watch <span className="text-red">{actionInputs.name}</span>
       </p>
     ),
     url: `/${link.id}?capture=true`,

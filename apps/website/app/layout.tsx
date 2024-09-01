@@ -75,16 +75,16 @@ export const viewport = {
 export default async function RootLayout(props: { children: React.ReactNode }) {
   const user = await getAuthenticatedUser();
   return (
-    <html lang="en" className="scroll-smooth overflow-x-hidden">
+    <html lang="en" className="overflow-hidden">
       <body
-        className={`${cabin.variable} ${luckiestGuy.variable} ${bebasNeue.variable} ${londrinaSolid.variable} bg-black text-grey-200 font-cabin selection:text-white selection:bg-red flex flex-col items-center w-full h-full`}
+        className={`${cabin.variable} ${luckiestGuy.variable} ${bebasNeue.variable} ${londrinaSolid.variable} bg-black text-grey-200 font-cabin selection:text-white selection:bg-red flex flex-col items-center w-full h-[100dvh] scroll-smooth overflow-y-auto scrollbar-main`}
       >
         <Providers user={user?.id}>
           <Header />
-          <main className="flex flex-col w-full min-h-[calc(100vh_-_224px)] h-full max-w-[1920px]">
+          <main className="flex flex-col w-full h-full max-w-[1920px]">
             {props.children}
+            <Footer />
           </main>
-          <Footer />
         </Providers>
       </body>
       {env.NEXT_PUBLIC_ENVIRONMENT === "production" ? (

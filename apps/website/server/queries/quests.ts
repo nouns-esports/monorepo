@@ -10,20 +10,39 @@ import { castInChannel } from "../quests/farcaster/castInChannel";
 import { followAccount } from "../quests/farcaster/followAccount";
 import { followChannel } from "../quests/farcaster/followChannel";
 import { visitSite } from "../quests/online/visitSite";
+import { attendCall } from "../quests/discord/attendCall";
+import { joinServer } from "../quests/discord/joinServer";
+import { linkDiscord } from "../quests/discord/linkDiscord";
+import { watchVideo } from "../quests/online/watchVideo";
+import { linkWallet } from "../quests/onchain/linkWallet";
+import { linkTwitter } from "../quests/twitter/linkTwitter";
 
 export const actions: Record<string, ReturnType<typeof createAction>> = {
+  // Discord
+  attendCall,
+  joinServer,
+  linkDiscord,
+
+  // Twitter
+  linkTwitter,
+
   // Farcaster
   linkFarcaster,
   castInChannel,
   followAccount,
   followChannel,
+
   // Online
   visitSite,
+  watchVideo,
+
+  // Onchain
+  linkWallet,
 };
 
 export async function getAction(input: {
   quest: string;
-  action: string;
+  action: number;
   user?: string;
 }) {
   noStore();
@@ -43,9 +62,10 @@ export async function getAction(input: {
 
   if (!quest) return;
 
-  const actionInputs = quest.actionInputs[quest.actions.indexOf(input.action)];
+  const action = quest.actions[input.action];
+  const actionInputs = quest.actionInputs[input.action] ?? {};
 
-  return actions[input.action](actionInputs);
+  return actions[action](actionInputs);
 }
 
 export const getQuests = cache(

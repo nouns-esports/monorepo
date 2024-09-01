@@ -215,12 +215,16 @@ export default async function Header() {
               </nav>
             </div>
             <div className="pointer-events-auto flex gap-8 items-center relative z-[60]">
-              <Link href="/nexus">
-                <li className="flex gap-2 items-center opacity-100 hover:opacity-80 transition-opacity text-white">
-                  <CurrencyEth className="w-5 h-5" />
-                  Nexus
-                </li>
-              </Link>
+              {privyUser ? (
+                <Link href="/nexus">
+                  <li className="flex gap-2 items-center opacity-100 hover:opacity-80 transition-opacity text-white">
+                    <CurrencyEth className="w-5 h-5" />
+                    Nexus
+                  </li>
+                </Link>
+              ) : (
+                ""
+              )}
               <SignInButton privyUser={privyUser} user={user} />
             </div>
           </div>

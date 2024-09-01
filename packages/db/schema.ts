@@ -131,6 +131,7 @@ export const roundsRelations = relations(rounds, ({ one, many }) => ({
   }),
 }));
 
+// add user column and update it when they claim the award
 export const awards = pgTable("awards", {
   id: serial("id").primaryKey(),
   round: text("round").notNull(),
@@ -166,7 +167,7 @@ export const proposals = pgTable("proposals", {
   user: text("user").notNull(),
   round: text("round").notNull(),
   title: text("title").notNull(),
-  content: text("content"),
+  content: text("content"), // rename to description
   image: text("image"),
   video: text("video"),
   createdAt: timestamp("created_at", { mode: "date" }).notNull(),
@@ -192,7 +193,8 @@ export const nexus = pgTable("nexus", {
   id: text("id").primaryKey(),
   handle: text("handle").notNull().default(""),
   rank: integer("rank").notNull().default(0),
-  xpTotal: integer("xp_total").notNull().default(0),
+  xp: integer("xp").notNull().default(0),
+  // points: integer("points").notNull().default(0),
   image: text("image").notNull().default(""),
   name: text("name").notNull().default(""),
   bio: text("bio"),
@@ -213,17 +215,13 @@ export const nexusRelations = relations(nexus, ({ one, many }) => ({
   votes: many(votes),
   proposals: many(proposals),
   rankings: many(rankings),
-  xp: many(xp),
+  xpRecords: many(xp),
   rank: one(ranks, {
     fields: [nexus.rank],
     references: [ranks.id],
   }),
   creations: many(creations),
 }));
-
-////////////////////////////////////////////////////
-//////////////// v WORKING SCHEMA v ////////////////
-////////////////////////////////////////////////////
 
 export const seasons = pgTable("seasons", {
   id: serial("id").primaryKey(),
@@ -239,9 +237,9 @@ export const seasonRelations = relations(seasons, ({ many }) => ({
 
 export const ranks = pgTable("ranks", {
   id: serial("id").primaryKey(),
-  name: text("name").notNull(), // ex: Explorer III
+  name: text("name").notNull(),
   image: text("image").notNull(),
-  place: smallint("place").notNull(), // The position of this rank in the list of ranks
+  place: smallint("place").notNull(),
   percentile: numeric("percentile", { precision: 3, scale: 2 }).notNull(), // ex: 0.30 === 30%
   season: integer("season").notNull(),
   votes: smallint("votes").notNull(),
@@ -293,7 +291,7 @@ export const questRelations = relations(quests, ({ one, many }) => ({
 
 // Recuring incentives for actions completed across nouns.gg
 export const incentives = pgTable("incentives", {
-  id: serial("id").primaryKey(),
+  id: text("id").primaryKey(),
   xp: integer("xp").notNull(),
   // points: integer("points").notNull(),
   cooldown: integer("cooldown").notNull(),
@@ -330,24 +328,28 @@ export const xpRelations = relations(xp, ({ one }) => ({
     fields: [xp.incentive],
     references: [incentives.id],
   }),
-  // purchase: one(purchases, {
-  //   fields: [xp.purchase],
-  //   references: [purchases.id],
-  // }),
 }));
+
+// export const points = pgTable("points", {
+//   id: serial("id").primaryKey(),
+//   user: text("user").notNull(),
+//   amount: integer("amount").notNull(),
+//   timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
+// });
 
 // Rankings must sync with the Nexus table on refresh
 export const rankings = pgTable("rankings", {
   id: serial("id").primaryKey(),
   user: text("user").notNull(),
   season: integer("season").notNull(),
+  place: integer("place").notNull(),
   rank: integer("rank").notNull(),
-  xpSeasonal: integer("xp_seasonal").notNull().default(0),
+  xp: integer("xp").notNull().default(0),
   timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
 });
 
 export const rankingsRelations = relations(rankings, ({ one }) => ({
-  nexus: one(nexus, {
+  user: one(nexus, {
     fields: [rankings.user],
     references: [nexus.id],
   }),
@@ -355,15 +357,11 @@ export const rankingsRelations = relations(rankings, ({ one }) => ({
     fields: [rankings.season],
     references: [seasons.id],
   }),
-  ranks: one(ranks, {
+  rank: one(ranks, {
     fields: [rankings.rank],
     references: [ranks.id],
   }),
 }));
-
-////////////////////////////////////////////////////
-//////////////// ^ WORKING SCHEMA ^ ////////////////
-////////////////////////////////////////////////////
 
 export const votes = pgTable("votes", {
   id: serial("id").primaryKey(),
@@ -492,3 +490,4 @@ export type Badge = typeof badges.$inferSelect;
 export type Nexus = typeof nexus.$inferSelect;
 export type Creation = typeof creations.$inferSelect;
 export type Rank = typeof ranks.$inferSelect;
+export type Rankings = typeof rankings.$inferSelect;

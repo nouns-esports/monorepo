@@ -1,7 +1,7 @@
 import { privyClient } from "@/server/clients/privy";
-import { eq, or } from "drizzle-orm";
+import { eq, isNotNull, or } from "drizzle-orm";
 import { cookies } from "next/headers";
-import { db, nexus as nexusTable } from "~/packages/db/schema";
+import { db, nexus as nexusTable, xp } from "~/packages/db/schema";
 import { unstable_cache as cache } from "next/cache";
 
 export async function getAuthenticatedPrivyUser() {
@@ -54,4 +54,28 @@ export const getUser = cache(
   },
   ["getUser"],
   { tags: ["getUser"], revalidate: 60 * 10 }
+);
+
+export const getUserStats = cache(
+  async (input: { user: string }) => {
+    const user = await db.query.nexus.findFirst({
+      where: eq(nexusTable.id, input.user),
+      with: {
+        proposals: true,
+        xpRecords: {
+          where: isNotNull(xp.quest),
+        },
+        votes: true,
+      },
+    });
+
+    return {
+      earnedXP: user?.xp ?? 0,
+      proposalsCreated: user?.proposals.length ?? 0,
+      questsCompleted: user?.xpRecords.length ?? 0,
+      votesCast: user?.votes.length ?? 0,
+    };
+  },
+  ["getUserStats"],
+  { tags: ["getUserStats"], revalidate: 60 * 10 }
 );

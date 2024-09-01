@@ -22,6 +22,9 @@ const config: Config = {
       green: "#4CC87D",
       yellow: "#F8C648",
       transparent: "transparent",
+      farcaster: "#855DCD",
+      twitter: "#1DA1F2",
+      discord: "#5865F2",
       blue: {
         500: "#789AF4",
         700: "#3569EE",
@@ -68,14 +71,6 @@ const config: Config = {
         crosshair: "url('/crosshair.svg') 16 16, auto",
       },
       keyframes: {
-        "art-marquee-top": {
-          from: { transform: "translateX(0%)" },
-          to: { transform: "translateX(calc(-2079.5px - 0.5rem))" },
-        },
-        "art-marquee-bottom": {
-          from: { transform: "translateX(0%)" },
-          to: { transform: "translateX(calc(2004.5px + 0.5rem))" },
-        },
         shimmer: {
           "100%": {
             transform: "translateX(100%)",
@@ -84,8 +79,6 @@ const config: Config = {
       },
       animation: {
         shimmer: "shimmer 1s infinite",
-        "art-marquee-top": "art-marquee-top 20s linear infinite",
-        "art-marquee-bottom": "art-marquee-bottom 20s linear infinite",
       },
     },
   },
@@ -100,64 +93,59 @@ const config: Config = {
       });
       addUtilities({
         ".scrollbar-hidden": {
-          /* IE and Edge */
           "-ms-overflow-style": "none",
-
-          /* Firefox */
           "scrollbar-width": "none",
-
-          /* Safari and Chrome */
           "&::-webkit-scrollbar": {
             display: "none",
           },
         },
         ".custom-scrollbar": {
-          /* width */
           "&::-webkit-scrollbar": {
             width: "8px",
           },
-
-          /* Track */
           "&::-webkit-scrollbar-track": {
             background: "#1A1A1A",
             borderRadius: "1000px",
             width: "8px",
             marginLeft: "4px", // Add left margin to the track
           },
-
-          /* Handle */
           "&::-webkit-scrollbar-thumb": {
             background: "#333333",
             borderRadius: "1000px",
             width: "8px",
             marginLeft: "4px", // Add left margin to the thumb
           },
-
-          /* Handle on hover */
           "&::-webkit-scrollbar-thumb:hover": {
-            background: "#333333",
+            background: "#4D4D4D",
           },
-
-          /* Add padding to the container */
           paddingRight: "12px", // Increase right padding to accommodate the scrollbar
         },
+        ".scrollbar-main": {
+          "&::-webkit-scrollbar": {
+            width: "16px",
+          },
+          "&::-webkit-scrollbar-track": {
+            background: "#1A1A1A",
+            width: "16px",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            background: "#333333",
+            cursor: "grab",
+            width: "8px",
+          },
+          "&::-webkit-scrollbar-thumb:hover": {
+            background: "#4D4D4D",
+          },
+        },
         ".prevent-scroll": {
-          /* IE and Edge */
           "-ms-overflow-style": "none",
-
-          /* Firefox */
           "scrollbar-width": "none",
-
-          /* Safari and Chrome */
           "&::-webkit-scrollbar": {
             display: "none",
           },
-
           "touch-action": "none",
           "-webkit-overflow-scrolling": "none",
           "overflow-y": "hidden",
-
-          /* Other browsers */
           "overscroll-behavior": "none",
         },
       });

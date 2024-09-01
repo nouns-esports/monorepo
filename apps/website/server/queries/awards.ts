@@ -18,35 +18,36 @@ export const getAwards = cache(
 
 export const getUserAwards = cache(
   async (input: { user: string }) => {
-    // return [
-    //   {
-    //     id: 1,
-    //     asset: {
-    //       image: "/assets/usdc.svg",
-    //     },
-    //     value: 1000,
-    //     round: {
-    //       id: "riptide-2024",
-    //       name: "Round 1",
-    //       image: "/rounds/riptide-2024/logo.png",
-    //     },
-    //     claimed: false,
-    //   },
-    //   {
-    //     id: 1,
-    //     asset: {
-    //       image: "/assets/usdc.svg",
-    //     },
-    //     value: 250,
-    //     round: {
-    //       id: "genesis-x",
-    //       name: "Round 1",
-    //       image: "/rounds/genesis-x/logo.png",
-    //     },
-    //     claimed: true,
-    //   },
-    // ];
-
+    return [
+      {
+        id: 1,
+        asset: {
+          image: "/assets/usdc.svg",
+          name: "USDC",
+        },
+        value: 1000,
+        round: {
+          id: "riptide-2024",
+          name: "Round 1",
+          image: "/rounds/riptide-2024/logo.png",
+        },
+        claimed: false,
+      },
+      {
+        id: 1,
+        asset: {
+          image: "/assets/usdc.svg",
+          name: "USDC",
+        },
+        value: 250,
+        round: {
+          id: "genesis-x",
+          name: "Round 1",
+          image: "/rounds/genesis-x/logo.png",
+        },
+        claimed: true,
+      },
+    ];
     const applicableRounds = await db.query.proposals.findMany({
       where: and(eq(proposals.user, input.user), gt(proposals.totalVotes, 0)),
       with: {
@@ -58,6 +59,7 @@ export const getUserAwards = cache(
                   columns: {
                     image: true,
                     decimals: true,
+                    name: true,
                   },
                 },
               },
@@ -91,6 +93,7 @@ export const getUserAwards = cache(
         asset: {
           image: string;
           decimals: number | null;
+          name: string;
         };
       }
     > = [];

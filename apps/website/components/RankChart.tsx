@@ -1,9 +1,20 @@
 "use client";
 
-import { LineChart, Line, ResponsiveContainer, ReferenceArea } from "recharts";
-import type { Rank } from "~/packages/db/schema";
+import type { getUserRankings } from "@/server/queries/rankings";
+import {
+  LineChart,
+  Line,
+  ResponsiveContainer,
+  ReferenceArea,
+  YAxis,
+  ReferenceLine,
+} from "recharts";
+import type { Rank, Rankings } from "~/packages/db/schema";
 
-export default function RankChart(props: { rank: Rank; ranks: Rank[] }) {
+export default function RankChart(props: {
+  userRankings: Awaited<ReturnType<typeof getUserRankings>>;
+  ranks: Rank[];
+}) {
   return (
     <ResponsiveContainer
       width="100%"
@@ -11,13 +22,33 @@ export default function RankChart(props: { rank: Rank; ranks: Rank[] }) {
       className="rounded-lg overflow-hidden"
     >
       <LineChart
-        data={[
-          { name: "May", rank: 0 },
-          { name: "June", rank: 1 },
-          { name: "July", rank: 3 },
-          { name: "August", rank: 6 },
-          { name: "September", rank: 7 },
-        ]}
+        data={
+          props.userRankings.length > 0
+            ? [
+                ...(props.userRankings.length === 1
+                  ? [
+                      {
+                        name: new Date().getTime(),
+                        rank: 0,
+                      },
+                    ]
+                  : []),
+                ...props.userRankings.map((ranking) => ({
+                  name: new Date(ranking.timestamp).getTime(),
+                  rank: ranking.rank.place,
+                })),
+              ]
+            : [
+                {
+                  name: new Date().getTime(),
+                  rank: 0,
+                },
+                {
+                  name: new Date().getTime(),
+                  rank: 0,
+                },
+              ]
+        }
         margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
       >
         <Line
@@ -27,6 +58,7 @@ export default function RankChart(props: { rank: Rank; ranks: Rank[] }) {
           dot={false}
           strokeWidth={2}
         />
+        <YAxis domain={[0, 8]} hide={true} />
         {props.ranks.map((rank, index) => {
           const sectionHeight = (props.ranks.length - 1) / 3;
           return (
@@ -41,6 +73,11 @@ export default function RankChart(props: { rank: Rank; ranks: Rank[] }) {
             ></ReferenceArea>
           );
         })}
+        {/* Season lines <ReferenceLine
+          x={new Date("2024-09-01").getTime()}
+          stroke="#FFFFFF"
+          strokeDasharray="3 3"
+        /> */}
       </LineChart>
     </ResponsiveContainer>
   );

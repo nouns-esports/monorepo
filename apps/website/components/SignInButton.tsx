@@ -8,6 +8,10 @@ import type { getAuthenticatedUser } from "@/server/queries/users";
 import Button from "./Button";
 import { useAction } from "next-safe-action/hooks";
 import { createNexus } from "@/server/mutations/createNexus";
+import { ArrowRight, Mail, User } from "lucide-react";
+
+import { DiscordLogo, TwitterLogo, Wallet } from "phosphor-react-sc";
+import SignInModal, { useSignInModal } from "./modals/SignInModal";
 
 export default function SignInButton(props: {
   privyUser?: string;
@@ -19,12 +23,14 @@ export default function SignInButton(props: {
 
   const createNexusAction = useAction(createNexus);
 
+  const { open, setOpen } = useSignInModal();
+
   return (
     <>
       <button
         onClick={() => {
           if (props.user) router.push(`/users/${props.user.handle}`);
-          else toggleModal("sign-in");
+          else setOpen(true);
         }}
         style={{
           paddingTop: props.user?.discord ? "6px" : "10px",
@@ -48,54 +54,74 @@ export default function SignInButton(props: {
           "Sign in"
         )}
       </button>
-      {!props.user ? (
+      <SignInModal />
+      {/* {!props.user ? (
         <Modal
           id="sign-in"
-          className="w-[450px] h-[600px] rounded-2xl bg-black border border-grey-600 max-sm:h-[100dvh] max-sm:w-full text-grey-200"
+          className="gap-4 w-[400px] max-sm:w-full max-sm:border-x-0 max-sm:border-b-0 max-sm:rounded-b-none overflow-hidden"
         >
-          <div className="flex flex-col w-full h-full gap-8">
-            {!props.privyUser ? (
-              <div className="flex flex-col gap-4 h-full">
-                <div className="relative flex items-center justify-center flex-shrink-0 h-48 bg-grey-600 w-full">
-                  Graphic
-                  <div className="absolute bottom-0 left-0 from-black to-transparent bg-gradient-to-t w-full h-16" />
+          <div className="relative flex items-center justify-center flex-shrink-0 h-48 w-full">
+            <img
+              src="https://ipfs.nouns.gg/ipfs/QmSGYg5t25SQDp1xBw5tqDrfsF62T2HHVZpH4VduaAwJkT"
+              className="w-full h-full object-cover brightness-75"
+            />
+            <div className="absolute bottom-0 left-0 from-black to-transparent bg-gradient-to-t w-full h-16" />
+          </div>
+          <div className="flex flex-col justify-between h-full gap-6 pb-6 px-6">
+            <div className="flex flex-col gap-4">
+              <p className="text-3xl font-bebas-neue text-white leading-none">
+                {returningUser ? "Sign in" : "Create account"}
+              </p>
+
+              <div className="flex flex-col gap-3">
+                <div className="flex items-center gap-2 w-full text-white font-semibold border border-white/20 rounded-lg p-2.5">
+                  <Mail className="w-6 h-6" />
+                  <input
+                    type="text"
+                    placeholder="example@email.com"
+                    onChange={(e) => setEmail(e.target.value)}
+                    value={email}
+                    className="bg-transparent outline-none w-full placeholder:text-white/50 text-white"
+                  />
+                  <button className="flex items-center gap-1 text-sm hover:text-white/70 transition-colors">
+                    Submit
+                  </button>
                 </div>
-                <div className="flex flex-col gap-4 px-6">
-                  <div className="text-3xl font-cabin font-semibold text-white">
-                    Help us shape the future of esports
-                  </div>
-                  Get Started / I have an account
-                </div>
+                <button className="flex items-center gap-2 w-full text-white font-semibold bg-discord rounded-lg p-2.5 hover:bg-discord/70 transition-colors">
+                  <DiscordLogo className="w-6 h-6" weight="fill" />
+                  Continue with Discord
+                </button>
+                <button className="flex items-center gap-2 w-full text-white font-semibold bg-farcaster rounded-lg p-2.5 hover:bg-farcaster/70 transition-colors">
+                  <img
+                    src="/farcaster.svg"
+                    className="w-5 h-5 mr-0.5 ml-0.5 object-contain"
+                  />
+                  Continue with Farcaster
+                </button>
+                <button className="flex items-center gap-2 w-full text-white font-semibold bg-twitter rounded-lg p-2.5 hover:bg-twitter/70 transition-colors">
+                  <TwitterLogo className="w-6 h-6" weight="fill" />
+                  Continue with Twitter
+                </button>
+                <button className="flex items-center gap-2 w-full text-black font-semibold bg-white rounded-lg p-2.5 hover:bg-white/70 transition-colors">
+                  <Wallet className="w-6 h-6" weight="fill" />
+                  Continue with Wallet
+                </button>
               </div>
-            ) : (
-              <div className="flex flex-col gap-4 h-full p-6">
-                <div className="text-3xl font-bebas-neue text-white">
-                  Create Profile
-                </div>
-              </div>
-            )}
-            <div className="flex items-center justify-between pl-8 p-4">
-              <div className="flex items-center gap-2">
-                <div className="bg-red rounded-full h-3 w-6"></div>
-                <div className="bg-grey-400 rounded-full h-3 w-3"></div>
-                <div className="bg-grey-400 rounded-full h-3 w-3"></div>
-              </div>
-              <Button
-                loading={createNexusAction.isPending}
-                onClick={() =>
-                  createNexusAction.execute({
-                    name: "Sam",
-                  })
-                }
-              >
-                Next
-              </Button>
             </div>
+            <p
+              onClick={() => setReturningUser(!returningUser)}
+              className="flex items-center gap-1 group text-red cursor-pointer"
+            >
+              {returningUser
+                ? "Create a new account"
+                : "Sign into an existing account"}
+              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+            </p>
           </div>
         </Modal>
       ) : (
         ""
-      )}
+      )} */}
     </>
   );
 }

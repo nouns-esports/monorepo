@@ -21,7 +21,7 @@ export default async function Quest(props: { params: { quest: string } }) {
     quest.actions.map((id, index) =>
       getAction({
         quest: quest.id,
-        action: quest.actions[index],
+        action: index,
         user: user?.id ?? "",
       })
     )

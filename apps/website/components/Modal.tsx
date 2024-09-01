@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 export function Modal(props: {
@@ -10,10 +10,15 @@ export function Modal(props: {
   showOnLoad?: boolean;
   className?: string;
 }) {
+  const [position, setPosition] = useState(0);
+  const [initialTop, setInitialTop] = useState(0);
+
   useEffect(() => {
     const dialog = document.getElementById(
       `${props.id}-dialog`
     ) as HTMLDialogElement;
+
+    setInitialTop(dialog.children[0].children[0].getBoundingClientRect().top);
 
     if (props.showOnLoad && !dialog.open) {
       const root = document.documentElement;
@@ -32,11 +37,12 @@ export function Modal(props: {
       id={`${props.id}-dialog`}
       data-queryparam={props.queryParam}
       className={twMerge(
-        "outline-none drop-shadow-2xl backdrop:bg-black/50 rounded-xl bg-black border border-grey-600 p-4 max-h-none",
-        props.className
+        "outline-none backdrop:bg-black/50 bg-transparent max-h-none backdrop:backdrop-blur-sm max-w-none max-sm:h-[100dvh] max-sm:w-full",
+        "animate-in fade-in backdrop:animate-in backdrop:fade-in slide-in-from-bottom-1/2 ease-in-out"
       )}
       onClick={(e) => {
-        const rect = e.currentTarget.getBoundingClientRect();
+        const rect =
+          e.currentTarget.children[0].children[0].getBoundingClientRect();
 
         if (
           e.clientX < rect.left ||
@@ -60,7 +66,25 @@ export function Modal(props: {
         }
       }}
     >
-      {props.children}
+      <div className="flex flex-col items-center justify-end w-full h-full pointer-events-none overflow-hidden">
+        <div
+          style={{
+            transform: `translate(0px, ${position}px)`,
+          }}
+          onTouchMove={(e) => {
+            setPosition(e.touches[0].clientY - initialTop);
+          }}
+          onTouchEnd={(e) => {
+            setPosition(0);
+          }}
+          className={twMerge(
+            "flex flex-col drop-shadow-2xl rounded-xl bg-black border border-grey-600 text-grey-200 pointer-events-auto",
+            props.className
+          )}
+        >
+          {props.children}
+        </div>
+      </div>
     </dialog>
   );
 }

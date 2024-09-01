@@ -413,7 +413,7 @@ export default function ToolbarPlugin() {
               formData.append("file", file);
 
               try {
-                const hash = await pinImage(formData);
+                const hash = await pinImage({ formData });
 
                 editor.dispatchCommand(INSERT_IMAGE_COMMAND, {
                   altText: "",

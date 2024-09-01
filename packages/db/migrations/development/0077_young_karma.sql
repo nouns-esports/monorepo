@@ -1,0 +1,1 @@
+ALTER TABLE "incentives" ALTER COLUMN "id" SET DATA TYPE text;

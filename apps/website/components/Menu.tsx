@@ -30,17 +30,17 @@ export default function Menu() {
   }, [params, pathname]);
 
   function toggleMenu(open: boolean) {
-    if (open) {
-      document.documentElement.classList.add(
-        "overflow-y-hidden",
-        "scrollbar-hidden"
-      );
-    } else {
-      document.documentElement.classList.remove(
-        "overflow-y-hidden",
-        "scrollbar-hidden"
-      );
-    }
+    // if (open) {
+    //   document.documentElement.classList.add(
+    //     "overflow-y-hidden",
+    //     "scrollbar-hidden"
+    //   );
+    // } else {
+    //   document.documentElement.classList.remove(
+    //     "overflow-y-hidden",
+    //     "scrollbar-hidden"
+    //   );
+    // }
 
     setOpen(open);
   }
