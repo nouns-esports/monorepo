@@ -1,32 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import Modal from "../Modal.new";
+import Modal, { useModal } from "../Modal.new";
 import { ArrowRight, Mail } from "lucide-react";
 import { DiscordLogo, TwitterLogo, Wallet } from "phosphor-react-sc";
 import { create } from "zustand";
 import Link from "../Link";
 
-export const useSignInModal = create<{
-  open: boolean;
-  setOpen: (open: boolean) => void;
-}>((set) => ({
-  open: true,
-  setOpen: (open) => set({ open }),
-}));
-
 export default function SignInModal() {
-  const { open, setOpen } = useSignInModal();
-
-  const [returningUser, setReturningUser] = useState(false);
+  const [returningUser, setReturningUser] = useState(true);
   const [email, setEmail] = useState("");
 
   return (
-    <Modal
-      open={open}
-      setOpen={setOpen}
-      className="gap-4 w-[400px] overflow-hidden"
-    >
+    <Modal id="sign-in" className="gap-4 w-[400px] overflow-hidden">
       <div className="relative flex items-center justify-center flex-shrink-0 h-48 w-full">
         <img
           src="https://ipfs.nouns.gg/ipfs/QmSGYg5t25SQDp1xBw5tqDrfsF62T2HHVZpH4VduaAwJkT"

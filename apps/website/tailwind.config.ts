@@ -122,11 +122,16 @@ const config: Config = {
           "&::-webkit-scrollbar-thumb": {
             background: "#333333",
             borderRadius: "1000px",
+            cursor: "grab",
             width: "8px",
             marginLeft: "4px", // Add left margin to the thumb
           },
           "&::-webkit-scrollbar-thumb:hover": {
             background: "#4D4D4D",
+          },
+          "&::-webkit-scrollbar-thumb:active": {
+            background: "#4D4D4D",
+            cursor: "grabbing",
           },
           paddingRight: "12px", // Increase right padding to accommodate the scrollbar
         },
@@ -145,6 +150,10 @@ const config: Config = {
           },
           "&::-webkit-scrollbar-thumb:hover": {
             background: "#4D4D4D",
+          },
+          "&::-webkit-scrollbar-thumb:active": {
+            background: "#4D4D4D",
+            cursor: "grabbing",
           },
         },
         ".prevent-scroll": {

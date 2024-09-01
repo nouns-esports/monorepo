@@ -12,10 +12,11 @@ import { useOptimistic } from "react";
 import { useLogin } from "@privy-io/react-auth";
 import { useRouter } from "next/navigation";
 import type { getNexus } from "@/server/queries/nexus";
-import { ToggleModal } from "../Modal";
+import { ToggleModal } from "../Modal.new";
 import type { getRound } from "@/server/queries/rounds";
 import { lexicalToDescription } from "@/utils/lexicalToDescription";
 import Link from "../Link";
+import { useModal } from "../Modal.new";
 
 export default function Proposals(props: {
   round: NonNullable<
@@ -158,7 +159,7 @@ export default function Proposals(props: {
                 return (
                   <>
                     <p className="text-white">Your votes have been submitted</p>
-                    <ToggleModal id="share-votes" value="true">
+                    <ToggleModal id="share-votes">
                       <Button>Share</Button>
                     </ToggleModal>
                   </>
@@ -247,7 +248,7 @@ export default function Proposals(props: {
                       <p className="text-white">
                         Your votes have been submitted
                       </p>
-                      <ToggleModal id="share-votes" value="true">
+                      <ToggleModal id="share-votes">
                         <Button>Share</Button>
                       </ToggleModal>
                     </>
@@ -286,8 +287,7 @@ export default function Proposals(props: {
           .map((proposal, index) => (
             <ToggleModal
               key={proposal.id}
-              id={`proposal-${proposal.id}`}
-              value={proposal.id.toString()}
+              id={`view-proposal-${proposal.id}`}
               className={twMerge(
                 "relative flex flex-col gap-4 bg-grey-800 hover:bg-grey-600 transition-colors rounded-xl overflow-hidden aspect-square w-full h-full group p-4",
                 props.round.type === "video" && "aspect-auto",

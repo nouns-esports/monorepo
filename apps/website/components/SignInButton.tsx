@@ -11,7 +11,8 @@ import { createNexus } from "@/server/mutations/createNexus";
 import { ArrowRight, Mail, User } from "lucide-react";
 
 import { DiscordLogo, TwitterLogo, Wallet } from "phosphor-react-sc";
-import SignInModal, { useSignInModal } from "./modals/SignInModal";
+import { useModal } from "./Modal.new";
+import SignInModal from "./modals/SignInModal";
 
 export default function SignInButton(props: {
   privyUser?: string;
@@ -23,7 +24,7 @@ export default function SignInButton(props: {
 
   const createNexusAction = useAction(createNexus);
 
-  const { open, setOpen } = useSignInModal();
+  const { open, setOpen } = useModal("sign-in");
 
   return (
     <>

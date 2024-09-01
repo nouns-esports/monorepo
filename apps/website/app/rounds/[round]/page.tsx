@@ -19,6 +19,7 @@ import { ArrowRight, Check, Timer, X } from "lucide-react";
 import { headers } from "next/headers";
 import { Modal, ToggleModal } from "@/components/Modal";
 import DateComponent from "@/components/Date";
+import ViewProposalModal from "@/components/modals/VewProposalModal";
 
 const Markdown = dynamic(() => import("@/components/lexical/Markdown"), {
   ssr: false,
@@ -268,72 +269,14 @@ export default async function Round(props: {
         />
       </div>
       {round.proposals.map((proposal) => (
-        <Modal
+        <ViewProposalModal
           key={proposal.id}
-          id={`proposal-${proposal.id}`}
-          queryParam="p"
-          showOnLoad={selectedProposal?.id === proposal.id}
-          className="flex-col gap-4 w-2/3 h-2/3 p-6 max-sm:p-3 max-w-screen-lg max-xl:w-full max-xl:h-[100dvh] max-xl:rounded-none overflow-hidden"
-        >
-          <div className="flex justify-between items-center mb-4">
-            <div className="rounded-full flex items-center text-white gap-3 font-semibold text-lg">
-              <img src={proposal.user.image} className="rounded-full h-7 w-7" />
-              {proposal.user.name}
-            </div>
-            <ToggleModal
-              id={`proposal-${proposal.id}`}
-              value={proposal.id.toString()}
-              tabIndex={0}
-              className="bg-grey-200 rounded-md p-1 flex items-center justify-center w-min outline-none"
-            >
-              <X className="text-grey-600 w-5 h-5" />
-            </ToggleModal>
-          </div>
-          <div className="flex flex-col h-full overflow-y-scroll scrollbar-hidden gap-2">
-            <h2 className="text-white font-luckiest-guy text-3xl">
-              {proposal.title}
-            </h2>
-            <div className="flex gap-3 items-center">
-              {proposal.user.twitter ? (
-                <Link
-                  href={`https://twitter.com/${proposal.user.twitter.username}`}
-                  newTab
-                >
-                  <TwitterLogo
-                    className="w-6 h-6 text-white hover:opacity-80 transition-opacity"
-                    weight="fill"
-                  />
-                </Link>
-              ) : (
-                ""
-              )}
-              {proposal.user.farcaster ? (
-                <Link
-                  href={`https://warpcast.com/${proposal.user.farcaster.username}`}
-                  newTab
-                >
-                  <img
-                    src="/farcaster.svg"
-                    className="w-5 h-5  hover:opacity-80 transition-opacity"
-                  />
-                </Link>
-              ) : (
-                ""
-              )}
-            </div>
-            {round.type === "markdown" ? (
-              <Markdown
-                markdown={proposal.content ?? ""}
-                readOnly
-                className="bg-grey-800 rounded-xl p-4 flex flex-col h-fit"
-              />
-            ) : (
-              ""
-            )}
-          </div>
-        </Modal>
+          round={round}
+          proposal={proposal}
+          user={proposal.user}
+        />
       ))}
-      {priorVotes > 0 ? (
+      {/* {priorVotes > 0 ? (
         <Modal id="share-votes" className="overflow-hidden flex-col gap-4 p-4">
           <div className="relative z-[80] rounded-xl bg-black overflow-hidden flex flex-col gap-4 p-4">
             <img
@@ -356,7 +299,7 @@ export default async function Round(props: {
         </Modal>
       ) : (
         ""
-      )}
+      )} */}
     </div>
   );
 }
