@@ -71,6 +71,14 @@ const config: Config = {
         crosshair: "url('/crosshair.svg') 16 16, auto",
       },
       keyframes: {
+        "art-marquee-top": {
+          from: { transform: "translateX(0%)" },
+          to: { transform: "translateX(calc(-2079.5px - 0.5rem))" },
+        },
+        "art-marquee-bottom": {
+          from: { transform: "translateX(0%)" },
+          to: { transform: "translateX(calc(2004.5px + 0.5rem))" },
+        },
         shimmer: {
           "100%": {
             transform: "translateX(100%)",
@@ -79,6 +87,8 @@ const config: Config = {
       },
       animation: {
         shimmer: "shimmer 1s infinite",
+        "art-marquee-top": "art-marquee-top 20s linear infinite",
+        "art-marquee-bottom": "art-marquee-bottom 20s linear infinite",
       },
     },
   },
