@@ -16,7 +16,7 @@ export default function ViewProposalModal(props: {
   return (
     <Modal
       id={`view-proposal-${props.proposal.id}`}
-      className="flex-col gap-4 w-2/3 h-2/3 p-6 max-sm:p-3 max-w-screen-lg max-xl:w-full max-xl:h-[100dvh] max-xl:rounded-none overflow-hidden"
+      className="flex-col gap-4 w-2/3 h-2/3 p-6 max-sm:p-3 max-w-screen-lg max-xl:w-full max-xl:h-[95dvh] max-xl:rounded-none overflow-hidden"
     >
       <div className="flex justify-between items-center mb-4">
         <div className="rounded-full flex items-center text-white gap-3 font-semibold text-lg">

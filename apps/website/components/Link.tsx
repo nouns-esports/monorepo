@@ -11,7 +11,7 @@ export default function Link({
       target={newTab ? "_blank" : undefined}
       rel={newTab ? "noopener noreferrer" : undefined}
       draggable={false}
-      scroll={props.scroll ? true : undefined}
+      scroll={props.scroll}
       className={twMerge("select-none", props.className)}
     >
       {props.children}
