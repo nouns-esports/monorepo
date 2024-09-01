@@ -1,5 +1,5 @@
 import Button from "@/components/Button";
-import EditProfile from "@/components/EditProfile";
+import EditProfileModal from "@/components/modals/EditProfileModal";
 import TextArea from "@/components/form/TextArea";
 import TextInput from "@/components/form/TextInput";
 import { Modal, ToggleModal } from "@/components/Modal";
@@ -48,7 +48,11 @@ export default async function User(props: { params: { user: string } }) {
           </div>
         </div>
       </div>
-      {authenticatedUser?.id === user.id ? <EditProfile user={user} /> : ""}
+      {authenticatedUser?.id === user.id ? (
+        <EditProfileModal user={user} />
+      ) : (
+        ""
+      )}
     </>
   );
 }
