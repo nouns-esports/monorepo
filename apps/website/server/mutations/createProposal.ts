@@ -58,13 +58,12 @@ export const createProposal = onlyUser
       throw new Error("Proposing has closed");
     }
 
-    const { image, description } = parseLexicalState(parsedInput.content);
+    const { image } = parseLexicalState(parsedInput.content);
 
     await db.insert(proposals).values([
       {
         title: parsedInput.title,
         content: parsedInput.content,
-        description,
         image,
         round: parsedInput.round,
         user: ctx.user.id,

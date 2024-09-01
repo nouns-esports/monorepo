@@ -49,7 +49,6 @@ export const updateProposal = onlyUser
       .set({
         title: parsedInput.title,
         content: parsedInput.content,
-        description,
         image,
       })
       .where(eq(proposals.id, proposal.id));
