@@ -310,8 +310,9 @@ export default async function Round(props: {
                 <Markdown
                   markdown={proposal.content}
                   readOnly
-                  className="mb-16"
+                  className="h-[cacl(100%_+_128px)]"
                 />
+                <div className="h-32 w-full" />
               </div>
             </Modal>
           );
