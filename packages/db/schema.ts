@@ -47,7 +47,25 @@ export const communityRelations = relations(communities, ({ many }) => ({
   rosters: many(rosters),
   rounds: many(rounds),
   creations: many(creations),
+  // events: many(events),
 }));
+
+// export const events = pgTable("events", {
+//   id: text("id").primaryKey(),
+//   name: text("name").notNull(),
+//   image: text("image").notNull(),
+//   start: timestamp("start", { mode: "date" }).notNull(),
+//   end: timestamp("end", { mode: "date" }).notNull(),
+//   community: text("community").notNull(),
+// });
+
+// export const eventsRelations = relations(events, ({ one, many }) => ({
+//   community: one(communities, {
+//     fields: [events.community],
+//     references: [communities.id],
+//   }),
+//   quests: many(quests),
+// }));
 
 export const rosters = pgTable("rosters", {
   id: text("id").primaryKey(),
@@ -102,6 +120,7 @@ export const rounds = pgTable("rounds", {
   image: text("image").notNull(),
   banner: text("banner").notNull(),
   community: text("community").notNull().default(""),
+  // event: text("event"),
   type: text("type", { enum: ["markdown", "video", "image"] })
     .notNull()
     .default("markdown"),
@@ -121,6 +140,10 @@ export const roundsRelations = relations(rounds, ({ one, many }) => ({
     fields: [rounds.community],
     references: [communities.id],
   }),
+  // event: one(events, {
+  //   fields: [rounds.event],
+  //   references: [events.id],
+  // }),
   minProposerRank: one(ranks, {
     fields: [rounds.minProposerRank],
     references: [ranks.id],
@@ -259,6 +282,7 @@ export const quests = pgTable("quests", {
   description: text("description").notNull(),
   image: text("image").notNull(),
   community: text("community").notNull(),
+  // event: text("event"),
   pinned: boolean("pinned").notNull().default(false),
   active: boolean("active").notNull().default(false),
   xp: integer("xp").notNull(),
@@ -270,7 +294,7 @@ export const quests = pgTable("quests", {
     .notNull()
     .default([]),
   prerequisite: text("prerequisite"),
-  minRank: integer("min_rank").notNull().default(0),
+  minRank: integer("min_rank").notNull(), // NOTE: Ranks are seasonal, quests are not so this would need to be updated each season
 });
 
 export const questRelations = relations(quests, ({ one, many }) => ({
@@ -287,6 +311,10 @@ export const questRelations = relations(quests, ({ one, many }) => ({
     fields: [quests.prerequisite],
     references: [quests.id],
   }),
+  // event: one(events, {
+  //   fields: [quests.event],
+  //   references: [events.id],
+  // }),
 }));
 
 // Recuring incentives for actions completed across nouns.gg

@@ -18,8 +18,6 @@ import {
   type UseBoundStore,
 } from "zustand";
 
-// maybe Modal.component and Modal.state so we can create state in this file
-
 const useModalState = create<{
   open: Record<string, boolean>;
   setOpen: (id: string, open: boolean) => void;
@@ -33,25 +31,14 @@ const useModalState = create<{
 export function useModal(id: string) {
   const { open, setOpen } = useModalState();
 
-  const [backdrop, setBackdrop] = useState<HTMLElement>();
-  const [modal, setModal] = useState<HTMLElement>();
-
-  useEffect(() => {
-    const backdrop = document.getElementById(`${id}-backdrop`);
-    const modal = document.getElementById(`${id}-modal`);
-
-    if (backdrop) setBackdrop(backdrop);
-    if (modal) setModal(modal);
-  }, [open, id]);
-
   const y = useMotionValue(0);
 
   return {
-    open: open[id],
-    setOpen: (open: boolean) => {
-      if (open) {
-        return setOpen(id, open);
-      }
+    isOpen: open[id],
+    open: () => setOpen(id, true),
+    close: () => {
+      const backdrop = document.getElementById(`${id}-backdrop`);
+      const modal = document.getElementById(`${id}-modal`);
 
       if (!backdrop) {
         console.error("No backdrop found for modal", `${id}-backdrop`);
@@ -79,7 +66,7 @@ export function useModal(id: string) {
           },
           { duration: 0.3, ease: "easeInOut" }
         ),
-      ]).then(() => setOpen(id, open));
+      ]).then(() => setOpen(id, false));
     },
     y,
   };
@@ -91,12 +78,12 @@ export function ToggleModal(props: {
   tabIndex?: number;
   className?: string;
 }) {
-  const { open, setOpen } = useModal(props.id);
+  const { isOpen, open, close } = useModal(props.id);
 
   return (
     <div
       tabIndex={props.tabIndex}
-      onClick={() => setOpen(!open)}
+      onClick={() => (isOpen ? close() : open())}
       className={twMerge("cursor-pointer", props.className)}
     >
       {props.children}
@@ -108,14 +95,14 @@ export default function Modal(props: {
   id: string;
   children: React.ReactNode;
   className?: string;
-  showHandle?: boolean;
+  handle?: boolean;
 }) {
-  const { open, setOpen, y } = useModal(props.id);
+  const { isOpen, close, y } = useModal(props.id);
 
   useEffect(() => {
     const root = document.documentElement;
 
-    if (open) {
+    if (isOpen) {
       const width = root.clientWidth;
 
       document.documentElement.classList.add("prevent-scroll");
@@ -126,17 +113,17 @@ export default function Modal(props: {
 
       root.style.paddingRight = `0px`;
     }
-  }, [open]);
+  }, [isOpen]);
 
   const { width } = useWindowSize();
 
-  // const controls = useDragControls();
+  const controls = useDragControls();
 
-  if (open) {
+  if (isOpen) {
     return (
       <motion.div
         id={`${props.id}-backdrop`}
-        onClick={() => setOpen(false)}
+        onClick={() => close()}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
@@ -152,22 +139,27 @@ export default function Modal(props: {
             top: 0,
             bottom: 0.5,
           }}
+          dragControls={props.handle ? controls : undefined}
+          dragListener={props.handle ? false : undefined}
           style={{ y }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
           onDragEnd={() => {
-            if (y.get() >= 100) {
-              setOpen(false);
-            }
+            if (y.get() >= 100) close();
           }}
           onClick={(e) => e.stopPropagation()}
           className={twMerge(
-            "flex flex-col rounded-xl bg-black border border-grey-600 drop-shadow-2xl max-lg:rounded-b-none max-lg:border-b-0 max-lg:border-x-0 max-lg:w-full",
+            "flex flex-col rounded-xl bg-black border border-grey-600 drop-shadow-2xl max-lg:rounded-b-none max-lg:border-b-0 max-lg:border-x-0 max-lg:w-full ",
             props.className
           )}
         >
-          {props.showHandle && (
-            <div className="mt-3 w-full flex items-center justify-center">
-              <button className="h-1.5 w-12 bg-grey-500 rounded-full cursor-grab active:cursor-grabbing touch-none" />
+          {props.handle && (
+            <div className="w-full items-center justify-center max-lg:flex hidden">
+              <button
+                onPointerDown={
+                  props.handle ? (e) => controls.start(e) : undefined
+                }
+                className="h-1.5 w-12 bg-grey-500 rounded-full cursor-grab active:cursor-grabbing touch-none"
+              />
             </div>
           )}
           {props.children}

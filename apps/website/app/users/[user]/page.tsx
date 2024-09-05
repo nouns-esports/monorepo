@@ -2,7 +2,7 @@ import Button from "@/components/Button";
 import EditProfileModal from "@/components/modals/EditProfileModal";
 import TextArea from "@/components/form/TextArea";
 import TextInput from "@/components/form/TextInput";
-import { Modal, ToggleModal } from "@/components/Modal";
+import { ToggleModal } from "@/components/Modal.new";
 import { getAuthenticatedUser, getUser } from "@/server/queries/users";
 import { notFound } from "next/navigation";
 
@@ -36,11 +36,7 @@ export default async function User(props: { params: { user: string } }) {
             </div>
             {authenticatedUser?.id === user.id ? (
               <ToggleModal id="edit-profile">
-                <Button
-                  href={`https://warpcast.com/${user.farcaster?.username}`}
-                >
-                  Edit Profile
-                </Button>
+                <Button>Manage Account</Button>
               </ToggleModal>
             ) : (
               ""
@@ -48,11 +44,7 @@ export default async function User(props: { params: { user: string } }) {
           </div>
         </div>
       </div>
-      {authenticatedUser?.id === user.id ? (
-        <EditProfileModal user={user} />
-      ) : (
-        ""
-      )}
+      <EditProfileModal user={user} />
     </>
   );
 }

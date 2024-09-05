@@ -17,6 +17,11 @@ import type { getRound } from "@/server/queries/rounds";
 import { lexicalToDescription } from "@/utils/lexicalToDescription";
 import Link from "../Link";
 import { useModal } from "../Modal.new";
+import { useAction, useOptimisticAction } from "next-safe-action/hooks";
+import CastVotesModal from "../modals/CastVotesModal";
+import ViewProposalModal from "../modals/VewProposalModal";
+import type { getAuthenticatedUser } from "@/server/queries/users";
+import VoteSelector from "../VoteSelector";
 
 export default function Proposals(props: {
   round: NonNullable<
@@ -25,221 +30,156 @@ export default function Proposals(props: {
       awardCount: number;
     }
   >;
-  user?: NonNullable<Awaited<ReturnType<typeof getNexus>>> & {
+  user?: NonNullable<Awaited<ReturnType<typeof getAuthenticatedUser>>> & {
     priorVotes: number;
   };
 }) {
-  const [remainingVotes, setRemainingVotes] = useOptimistic(
-    props.user ? props.user.rank.votes - props.user.priorVotes : 0
+  const [selectedVotes, setSelectedVotes] = useState<Record<string, number>>(
+    {}
   );
 
-  const [votes, setVotes] = useOptimistic<Record<string, number>>(
-    props.round.proposals.reduce((votes: Record<string, number>, proposal) => {
-      votes[proposal.id] = votes[proposal.id] ?? 0 + proposal.totalVotes;
-      return votes;
-    }, {})
-  );
+  function addVote(proposal: number, count: number) {
+    // if (remainingVotes < 1) return;
 
-  const [userVotes, setUserVotes] = useState<Record<string, number>>({});
+    setSelectedVotes((prev) => ({
+      ...prev,
+      [proposal]: (prev[proposal] ?? 0) + count,
+    }));
+  }
 
-  const votesCast = useMemo(
-    () =>
-      Object.values(userVotes).reduce(
-        (totalVotes: number, currentVotes: number) => totalVotes + currentVotes,
-        0
-      ),
-    [userVotes]
+  function removeVote(proposal: number, count: number) {
+    if ((selectedVotes[proposal] ?? 0) < 1) return;
+
+    setSelectedVotes((prev) => ({
+      ...prev,
+      [proposal]: (prev[proposal] ?? 0) - count,
+    }));
+  }
+
+  const votesSelected = useMemo(() => {
+    return Object.values(selectedVotes).reduce((acc, curr) => acc + curr, 0);
+  }, [selectedVotes]);
+
+  const remainingVotes = useMemo(() => {
+    return (props.user?.rank.votes ?? 0) - votesSelected;
+  }, [votesSelected]);
+
+  const { isPending, optimisticState: proposals } = useOptimisticAction(
+    castVotes,
+    {
+      currentState: props.round.proposals,
+      updateFn: (proposals, input) =>
+        proposals.map((proposal) => {
+          const vote = input.votes.find(
+            (vote) => vote.proposal === proposal.id
+          );
+
+          return {
+            ...proposal,
+            totalVotes: proposal.totalVotes + (vote ? vote.count : 0),
+          };
+        }),
+    }
   );
 
   const userProposal = props.round.proposals.find(
     (proposal) => proposal.user === props.user?.id
   );
 
-  const [loading, startTransition] = useTransition();
-
-  const router = useRouter();
-
-  const { login } = useLogin({
-    onComplete: () => {
-      router.refresh();
-    },
-  });
+  const { open: openSignInModal } = useModal("sign-in");
+  const { open: openCastVotesModal } = useModal("cast-votes");
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex justify-between items-center w-full gap-4 max-sm:flex-col max-sm:items-start">
-        <h3 className="text-white font-luckiest-guy text-3xl">Proposals</h3>
-        <div className="flex gap-4 items-center max-sm:justify-between max-sm:w-full">
-          {(() => {
-            if (props.round.state === "Proposing") {
-              if (!props.user) {
+    <>
+      <div className="flex flex-col gap-4">
+        <div className="flex justify-between items-center w-full gap-4 max-sm:flex-col max-sm:items-start">
+          <h3 className="text-white font-luckiest-guy text-3xl">Proposals</h3>
+          <div className="flex gap-4 items-center max-sm:justify-between max-sm:w-full">
+            {(() => {
+              if (props.round.state === "Proposing") {
+                if (!props.user) {
+                  return (
+                    <>
+                      <p className="text-white">
+                        You must be signed in to propose
+                      </p>
+                      <Button onClick={() => openSignInModal()}>Sign In</Button>
+                    </>
+                  );
+                }
+
+                if (props.user.rank.votes < 1) {
+                  return (
+                    <>
+                      <p className="text-white">Enter the Nexus to propose</p>
+                      <Button href="/nexus">Get Started</Button>
+                    </>
+                  );
+                }
+
+                if (props.user.rank.place < props.round.minProposerRank.place) {
+                  return (
+                    <>
+                      <p className="text-white">
+                        You must be at least {props.round.minProposerRank.name}{" "}
+                        to propose
+                      </p>
+                      <Button href="/nexus">View Nexus</Button>
+                    </>
+                  );
+                }
+
+                if (userProposal) {
+                  return (
+                    <>
+                      <p className="text-white">
+                        You can edit your proposal until voting starts
+                      </p>
+                      <Button href={`/rounds/${props.round.id}/create`}>
+                        Edit Proposal
+                      </Button>
+                    </>
+                  );
+                }
+
                 return (
-                  <>
-                    <p className="text-white">
-                      You must be signed in to propose
-                    </p>
-                    <Button onClick={() => login()}>Sign In</Button>
-                  </>
-                );
-              }
-
-              if (props.user.rank.votes < 1) {
-                return (
-                  <>
-                    <p className="text-white">Enter the Nexus to propose</p>
-                    <Button href="/nexus">Get Started</Button>
-                  </>
-                );
-              }
-
-              if (props.user.rank.place < props.round.minProposerRank.place) {
-                return (
-                  <>
-                    <p className="text-white">
-                      You must be at least {props.round.minProposerRank.name} to
-                      propose
-                    </p>
-                    <Button href="/nexus">View Nexus</Button>
-                  </>
-                );
-              }
-
-              if (userProposal) {
-                return (
-                  <>
-                    <p className="text-white">
-                      You can edit your proposal until voting starts
-                    </p>
-                    <Button href={`/rounds/${props.round.id}/create`}>
-                      Edit Proposal
-                    </Button>
-                  </>
-                );
-              }
-
-              return (
-                <Button href={`/rounds/${props.round.id}/create`}>
-                  Create Proposal
-                </Button>
-              );
-            }
-
-            if (props.round.state === "Voting") {
-              if (!props.user) {
-                return (
-                  <>
-                    <p className="text-white">You must be signed in to vote</p>
-                    <Button onClick={() => login()}>Sign In</Button>
-                  </>
-                );
-              }
-
-              if (props.user.rank.votes < 1) {
-                return (
-                  <>
-                    <p className="text-white">Enter the Nexus to vote</p>
-                    <Button href="/nexus">Get Started</Button>
-                  </>
-                );
-              }
-
-              if (props.user.rank.place < props.round.minVoterRank.place) {
-                return (
-                  <>
-                    <p className="text-white">
-                      You must be at least {props.round.minVoterRank.name} to
-                      vote
-                    </p>
-                    <Button href="/nexus">View Nexus</Button>
-                  </>
-                );
-              }
-
-              if (props.user.rank.votes > 0 && remainingVotes < 1) {
-                return (
-                  <>
-                    <p className="text-white">Your votes have been submitted</p>
-                    <ToggleModal id="share-votes">
-                      <Button>Share</Button>
-                    </ToggleModal>
-                  </>
-                );
-              }
-
-              return (
-                <>
-                  <p className="text-white">
-                    {remainingVotes - (loading ? 0 : votesCast)}/
-                    {props.user.rank.votes} votes remaining
-                  </p>
-                  <Button
-                    disabled={loading || votesCast < 1}
-                    onClick={() => {
-                      const submit = new Promise((resolve, reject) => {
-                        setRemainingVotes(remainingVotes - votesCast);
-
-                        startTransition(async () => {
-                          setVotes({
-                            ...votes,
-                            ...Object.entries(userVotes).reduce(
-                              (
-                                userVotes: Record<string, number>,
-                                [id, count]
-                              ) => {
-                                userVotes[id] = (votes[id] ?? 0) + count;
-
-                                return userVotes;
-                              },
-                              {}
-                            ),
-                          });
-
-                          await castVotes({
-                            // @ts-ignore
-                            user: props.user.id,
-                            round: props.round.id,
-                            votes: Object.entries(userVotes).map(
-                              ([id, count]) => ({
-                                proposal: Number(id),
-                                count,
-                              })
-                            ),
-                          })
-                            .then(resolve)
-                            .catch(reject);
-                        });
-                      });
-
-                      toast.promise(submit, {
-                        loading: "Casting votes",
-                        success: () => {
-                          setUserVotes({});
-                          return "Successfully cast votes";
-                        },
-                        error: () => {
-                          setUserVotes({});
-                          return "Failed to cast votes";
-                        },
-                      });
-                    }}
-                  >
-                    Submit Votes
+                  <Button href={`/rounds/${props.round.id}/create`}>
+                    Create Proposal
                   </Button>
-                </>
-              );
-            }
+                );
+              }
 
-            if (props.round.state === "Ended") {
-              if (props.user) {
-                for (let i = 0; i < props.round.awardCount; i++) {
-                  if (props.round.proposals[i]?.user === props.user.id) {
-                    return (
-                      <>
-                        <p className="text-white">Your proposal won!</p>
-                        <Button href="/nexus">View Rewards</Button>
-                      </>
-                    );
-                  }
+              if (props.round.state === "Voting") {
+                if (!props.user) {
+                  return (
+                    <>
+                      <p className="text-white">
+                        You must be signed in to vote
+                      </p>
+                      <Button onClick={() => openSignInModal()}>Sign In</Button>
+                    </>
+                  );
+                }
+
+                if (props.user.rank.votes < 1) {
+                  return (
+                    <>
+                      <p className="text-white">Enter the Nexus to vote</p>
+                      <Button href="/nexus">Get Started</Button>
+                    </>
+                  );
+                }
+
+                if (props.user.rank.place < props.round.minVoterRank.place) {
+                  return (
+                    <>
+                      <p className="text-white">
+                        You must be at least {props.round.minVoterRank.name} to
+                        vote
+                      </p>
+                      <Button href="/nexus">View Nexus</Button>
+                    </>
+                  );
                 }
 
                 if (props.user.rank.votes > 0 && remainingVotes < 1) {
@@ -254,269 +194,284 @@ export default function Proposals(props: {
                     </>
                   );
                 }
+
+                return (
+                  <>
+                    <p className="text-white">
+                      {remainingVotes}/{props.user.rank.votes} votes remaining
+                    </p>
+                    <Button
+                      disabled={isPending || votesSelected < 1}
+                      onClick={() => openCastVotesModal()}
+                      // onClick={() => {
+                      //   const submit = new Promise((resolve, reject) => {
+                      //     startTransition(async () => {
+                      //       setVotes({
+                      //         ...votes,
+                      //         ...Object.entries(userVotes).reduce(
+                      //           (
+                      //             userVotes: Record<string, number>,
+                      //             [id, count]
+                      //           ) => {
+                      //             userVotes[id] = (votes[id] ?? 0) + count;
+
+                      //             return userVotes;
+                      //           },
+                      //           {}
+                      //         ),
+                      //       });
+
+                      //       await castVotes({
+                      //         // @ts-ignore
+                      //         user: props.user.id,
+                      //         round: props.round.id,
+                      //         votes: Object.entries(userVotes).map(
+                      //           ([id, count]) => ({
+                      //             proposal: Number(id),
+                      //             count,
+                      //           })
+                      //         ),
+                      //       })
+                      //         .then(resolve)
+                      //         .catch(reject);
+                      //     });
+                      //   });
+
+                      //   toast.promise(submit, {
+                      //     loading: "Casting votes",
+                      //     success: () => {
+                      //       setUserVotes({});
+                      //       return "Successfully cast votes";
+                      //     },
+                      //     error: () => {
+                      //       setUserVotes({});
+                      //       return "Failed to cast votes";
+                      //     },
+                      //   });
+                      // }}
+                    >
+                      Submit Votes
+                    </Button>
+                  </>
+                );
               }
-            }
-          })()}
+
+              if (props.round.state === "Ended") {
+                if (props.user) {
+                  for (let i = 0; i < props.round.awardCount; i++) {
+                    if (props.round.proposals[i]?.user === props.user.id) {
+                      return (
+                        <>
+                          <p className="text-white">Your proposal won!</p>
+                          <Button href="/nexus">View Rewards</Button>
+                        </>
+                      );
+                    }
+                  }
+
+                  if (props.user.rank.votes > 0 && remainingVotes < 1) {
+                    return (
+                      <>
+                        <p className="text-white">
+                          Your votes have been submitted
+                        </p>
+                        <ToggleModal id="share-votes">
+                          <Button>Share</Button>
+                        </ToggleModal>
+                      </>
+                    );
+                  }
+                }
+              }
+            })()}
+          </div>
         </div>
-      </div>
-      <div className="gap-4 grid grid-cols-4 max-xl:grid-cols-3 max-lg:grid-cols-2 max-sm:grid-cols-1">
-        {props.round.proposals
-          .toSorted((a, b) => {
-            if (props.round.state === "Proposing") {
-              if (a.user === props.user?.id && b.user !== props.user?.id) {
-                return -1;
+        <div className="gap-4 grid grid-cols-4 max-xl:grid-cols-3 max-lg:grid-cols-2 max-sm:grid-cols-1">
+          {proposals
+            .toSorted((a, b) => {
+              if (props.round.state === "Proposing") {
+                return b.user.rank.place - a.user.rank.place;
               }
 
-              if (b.user === props.user?.id && a.user !== props.user?.id) {
-                return 1;
-              }
-            }
-
-            if (props.round.state === "Voting") {
-              if (votes[a.id] > votes[b.id]) {
-                return -1;
-              }
-
-              if (votes[b.id] > votes[a.id]) {
-                return 1;
-              }
-            }
-
-            return 0;
-          })
-          .map((proposal, index) => (
-            <ToggleModal
-              key={proposal.id}
-              id={`view-proposal-${proposal.id}`}
-              className={twMerge(
-                "relative flex flex-col gap-4 bg-grey-800 hover:bg-grey-600 transition-colors rounded-xl overflow-hidden aspect-square w-full h-full group p-4",
-                props.round.type === "video" && "aspect-auto",
-                props.round.state === "Ended" &&
-                  index < props.round.awardCount &&
-                  index === 0 &&
-                  "border-[3px] border-gold-500 bg-gold-900 hover:bg-gold-800 text-white",
-                props.round.state === "Ended" &&
-                  index < props.round.awardCount &&
-                  index === 1 &&
-                  "border-[3px] border-silver-500 bg-silver-900 hover:bg-silver-800 text-white",
-                props.round.state === "Ended" &&
-                  index < props.round.awardCount &&
-                  index === 2 &&
-                  "border-[3px] border-bronze-500 bg-bronze-900 hover:bg-bronze-800 text-white",
-                props.round.state === "Ended" &&
-                  index > 2 &&
-                  index < props.round.awardCount &&
-                  "border-[3px] border-blue-500 bg-blue-900 hover:bg-blue-800 text-white"
-              )}
-            >
-              {props.round.type === "markdown" ? (
-                <p className="text-white font-bebas-neue text-2xl line-clamp-2 flex-shrink-0 leading-[1.15] /h-[2lh]">
-                  {proposal.title}
-                </p>
-              ) : (
-                ""
-              )}
-              {props.round.type === "markdown" && !proposal.image ? (
-                <div className="relative w-full h-full overflow-hidden">
-                  <p
-                    className={twMerge(
-                      "text-grey-200 h-full",
-                      props.round.state === "Ended" &&
-                        index < props.round.awardCount &&
-                        "text-white"
-                    )}
-                  >
-                    {lexicalToDescription(proposal.content ?? "")}
+              return b.totalVotes - a.totalVotes;
+            })
+            .map((proposal, index) => (
+              <ToggleModal
+                key={proposal.id}
+                id={`view-proposal-${proposal.id}`}
+                className={twMerge(
+                  "relative flex flex-col gap-4 bg-grey-800 hover:bg-grey-600 transition-colors rounded-xl overflow-hidden aspect-square w-full h-full group p-4",
+                  props.round.type === "video" && "aspect-auto",
+                  props.round.state === "Ended" &&
+                    index < props.round.awardCount &&
+                    index === 0 &&
+                    "border-[3px] border-gold-500 bg-gold-900 hover:bg-gold-800 text-white",
+                  props.round.state === "Ended" &&
+                    index < props.round.awardCount &&
+                    index === 1 &&
+                    "border-[3px] border-silver-500 bg-silver-900 hover:bg-silver-800 text-white",
+                  props.round.state === "Ended" &&
+                    index < props.round.awardCount &&
+                    index === 2 &&
+                    "border-[3px] border-bronze-500 bg-bronze-900 hover:bg-bronze-800 text-white",
+                  props.round.state === "Ended" &&
+                    index > 2 &&
+                    index < props.round.awardCount &&
+                    "border-[3px] border-blue-500 bg-blue-900 hover:bg-blue-800 text-white"
+                )}
+              >
+                {props.round.type === "markdown" ? (
+                  <p className="text-white font-bebas-neue text-2xl line-clamp-2 flex-shrink-0 leading-[1.15] /h-[2lh]">
+                    {proposal.title}
                   </p>
-                  <div
-                    className={twMerge(
-                      "absolute left-0 w-full group-hover:opacity-0 opacity-100 transition-opacity bg-gradient-to-t from-grey-800 to-transparent h-10 bottom-0 z-10",
-                      props.round.state === "Ended" &&
-                        index < props.round.awardCount &&
-                        index === 0 &&
-                        "from-gold-900",
-                      props.round.state === "Ended" &&
-                        index < props.round.awardCount &&
-                        index === 1 &&
-                        "from-silver-900",
-                      props.round.state === "Ended" &&
-                        index < props.round.awardCount &&
-                        index === 2 &&
-                        "from-bronze-900",
-                      props.round.state === "Ended" &&
-                        index > 2 &&
-                        index < props.round.awardCount &&
-                        "from-blue-900"
-                    )}
-                  />
-                  <div
-                    className={twMerge(
-                      "absolute left-0 w-full group-hover:opacity-100 opacity-0 transition-opacity bg-gradient-to-t from-grey-600 to-transparent h-20 bottom-0 z-10",
-                      props.round.state === "Ended" &&
-                        index < props.round.awardCount &&
-                        index === 0 &&
-                        "from-gold-800",
-                      props.round.state === "Ended" &&
-                        index < props.round.awardCount &&
-                        index === 1 &&
-                        "from-silver-800",
-                      props.round.state === "Ended" &&
-                        index < props.round.awardCount &&
-                        index === 2 &&
-                        "from-bronze-800",
-                      props.round.state === "Ended" &&
-                        index > 2 &&
-                        index < props.round.awardCount &&
-                        "from-blue-800"
-                    )}
-                  />
-                </div>
-              ) : (
-                <img
-                  src={`${proposal.image}?img-width=500&img-onerror=redirect`}
-                  className={twMerge(
-                    "flex w-full h-full object-cover overflow-hidden rounded-xl",
-                    props.round.type === "video" && "aspect-video h-auto"
-                  )}
-                />
-              )}
-              <div className="flex justify-between items-center flex-shrink-0">
-                <Link href="" className="flex gap-2 items-center">
-                  <img
-                    src={proposal.user.image}
-                    className="h-6 w-6 rounded-full"
-                  />
-                  {proposal.user.name}
-                </Link>
-                <div className="flex items-center gap-4">
-                  {props.round.state === "Ended" &&
-                  index < props.round.awardCount ? (
-                    <div
+                ) : (
+                  ""
+                )}
+                {props.round.type === "markdown" && !proposal.image ? (
+                  <div className="relative w-full h-full overflow-hidden">
+                    <p
                       className={twMerge(
-                        "rounded-md bg-grey-600 font-bold text-white flex items-center text-sm justify-center px-2 py-0.5",
-                        index === 0 && "bg-gold-500 text-gold-900",
-                        index === 1 && "bg-silver-500 text-silver-900",
-                        index === 2 && "bg-bronze-500 text-bronze-900",
-                        index > 2 && "bg-blue-500 text-blue-900"
+                        "text-grey-200 h-full",
+                        props.round.state === "Ended" &&
+                          index < props.round.awardCount &&
+                          "text-white"
                       )}
                     >
-                      {numberToOrdinal(index + 1)}
-                    </div>
-                  ) : (
-                    ""
-                  )}
-                  {props.round.state === "Voting" ||
-                  props.round.state === "Ended" ? (
+                      {lexicalToDescription(proposal.content ?? "")}
+                    </p>
                     <div
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                      }}
-                      className="h-full items-center flex gap-4 z-20 relative"
-                    >
+                      className={twMerge(
+                        "absolute left-0 w-full group-hover:opacity-0 opacity-100 transition-opacity bg-gradient-to-t from-grey-800 to-transparent h-10 bottom-0 z-10",
+                        props.round.state === "Ended" &&
+                          index < props.round.awardCount &&
+                          index === 0 &&
+                          "from-gold-900",
+                        props.round.state === "Ended" &&
+                          index < props.round.awardCount &&
+                          index === 1 &&
+                          "from-silver-900",
+                        props.round.state === "Ended" &&
+                          index < props.round.awardCount &&
+                          index === 2 &&
+                          "from-bronze-900",
+                        props.round.state === "Ended" &&
+                          index > 2 &&
+                          index < props.round.awardCount &&
+                          "from-blue-900"
+                      )}
+                    />
+                    <div
+                      className={twMerge(
+                        "absolute left-0 w-full group-hover:opacity-100 opacity-0 transition-opacity bg-gradient-to-t from-grey-600 to-transparent h-20 bottom-0 z-10",
+                        props.round.state === "Ended" &&
+                          index < props.round.awardCount &&
+                          index === 0 &&
+                          "from-gold-800",
+                        props.round.state === "Ended" &&
+                          index < props.round.awardCount &&
+                          index === 1 &&
+                          "from-silver-800",
+                        props.round.state === "Ended" &&
+                          index < props.round.awardCount &&
+                          index === 2 &&
+                          "from-bronze-800",
+                        props.round.state === "Ended" &&
+                          index > 2 &&
+                          index < props.round.awardCount &&
+                          "from-blue-800"
+                      )}
+                    />
+                  </div>
+                ) : (
+                  <img
+                    src={`${proposal.image}?img-width=500&img-onerror=redirect`}
+                    className={twMerge(
+                      "flex w-full h-full object-cover overflow-hidden rounded-xl select-none",
+                      props.round.type === "video" && "aspect-video h-auto"
+                    )}
+                  />
+                )}
+                <div className="flex justify-between items-center flex-shrink-0">
+                  <Link
+                    href={`/users/${proposal.user.handle}`}
+                    className="flex gap-2 items-center text-white"
+                  >
+                    <img
+                      src={proposal.user.image}
+                      className="h-6 w-6 rounded-full"
+                    />
+                    {proposal.user.name}
+                  </Link>
+                  <div className="flex items-center gap-4">
+                    {props.round.state === "Ended" &&
+                    index < props.round.awardCount ? (
                       <div
                         className={twMerge(
-                          "flex items-center gap-2 flex-shrink-0"
+                          "rounded-md bg-grey-600 font-bold text-white flex items-center text-sm justify-center px-2 py-0.5",
+                          index === 0 && "bg-gold-500 text-gold-900",
+                          index === 1 && "bg-silver-500 text-silver-900",
+                          index === 2 && "bg-bronze-500 text-bronze-900",
+                          index > 2 && "bg-blue-500 text-blue-900"
                         )}
                       >
-                        {proposal.user !== props.user?.id &&
-                        props.round.state === "Voting" ? (
-                          <CaretUp
-                            onClick={() => {
-                              if (!props.user) return;
-
-                              if (remainingVotes - votesCast < 1) return;
-
-                              setUserVotes({
-                                ...userVotes,
-                                [proposal.id]:
-                                  (userVotes[proposal.id]
-                                    ? userVotes[proposal.id]
-                                    : 0) + 1,
-                              });
-                            }}
-                            className="w-5 h-5 text-grey-200 hover:text-white transition-colors"
-                            weight="fill"
-                          />
-                        ) : (
-                          ""
-                        )}
-                        <p
-                          className={twMerge(
-                            "text-grey-200 text-2xl font-bebas-neue text-center text-nowrap max-sm:mt-1",
-                            props.round.state === "Ended" &&
-                              index < props.round.awardCount &&
-                              "text-white",
-
-                            (props.round.state === "Ended" ||
-                              proposal.user === props.user?.id) &&
-                              "flex items-center gap-2"
-                          )}
-                        >
-                          {votes[proposal.id] ?? 0}
-                          {!loading && userVotes[proposal.id] ? (
-                            <span className="text-white">
-                              {" "}
-                              + {userVotes[proposal.id]}
-                            </span>
-                          ) : (
-                            ""
-                          )}
-                          {props.round.state === "Ended" ||
-                          (proposal.user === props.user?.id &&
-                            props.round.state === "Voting") ? (
-                            <ChartBarHorizontal
-                              className={twMerge(
-                                "w-5 h-5 text-grey-200 -rotate-90",
-                                props.round.state === "Ended" &&
-                                  index < props.round.awardCount &&
-                                  "text-white"
-                              )}
-                              weight="fill"
-                            />
-                          ) : (
-                            ""
-                          )}
-                        </p>
-                        {proposal.user !== props.user?.id &&
-                        props.round.state === "Voting" ? (
-                          <CaretDown
-                            onClick={() => {
-                              if ((userVotes[proposal.id] ?? 0) < 1) return;
-                              setUserVotes({
-                                ...userVotes,
-                                [proposal.id]: userVotes[proposal.id] - 1,
-                              });
-                            }}
-                            className="w-5 h-5 text-grey-200 hover:text-white transition-colors"
-                            weight="fill"
-                          />
-                        ) : (
-                          ""
-                        )}
+                        {numberToOrdinal(index + 1)}
                       </div>
-                    </div>
-                  ) : (
-                    ""
-                  )}
+                    ) : (
+                      ""
+                    )}
+                    {props.round.state === "Voting" ? (
+                      <VoteSelector
+                        proposal={proposal.id}
+                        votes={proposal.totalVotes}
+                        addVote={addVote}
+                        removeVote={removeVote}
+                        selectedVotes={selectedVotes[proposal.id]}
+                      />
+                    ) : (
+                      ""
+                    )}
+                    {props.round.state === "Ended" ? (
+                      <ChartBarHorizontal
+                        className={twMerge(
+                          "w-5 h-5 text-grey-200 -rotate-90",
+                          index < props.round.awardCount && "text-white"
+                        )}
+                        weight="fill"
+                      />
+                    ) : (
+                      ""
+                    )}
+                  </div>
                 </div>
-              </div>
-            </ToggleModal>
-          ))}
-        {props.round.proposals.length < 1 ? (
-          <div className="mt-4 flex gap-4 justify-center items-center">
-            <img src="/fire-sticker.png" alt="" className="h-32" />
-            <p className="text-grey-200 text-lg max-w-80">
-              There are no proposals yet.{" "}
-              {props.round.state === "Proposing"
-                ? "Be the first to propose?"
-                : ""}
-            </p>
-          </div>
-        ) : (
-          ""
-        )}
+              </ToggleModal>
+            ))}
+          {proposals.length < 1 ? (
+            <div className="mt-4 flex gap-4 justify-center items-center">
+              <img src="/fire-sticker.png" alt="" className="h-32" />
+              <p className="text-grey-200 text-lg max-w-80">
+                There are no proposals yet.{" "}
+                {props.round.state === "Proposing"
+                  ? "Be the first to propose?"
+                  : ""}
+              </p>
+            </div>
+          ) : (
+            ""
+          )}
+        </div>
       </div>
-    </div>
+      <CastVotesModal proposals={proposals} selectedVotes={selectedVotes} />
+      {proposals.map((proposal) => (
+        <ViewProposalModal
+          key={proposal.id}
+          round={props.round}
+          proposal={proposal}
+          user={props.user}
+          addVote={addVote}
+          removeVote={removeVote}
+          selectedVotes={selectedVotes}
+        />
+      ))}
+    </>
   );
 }

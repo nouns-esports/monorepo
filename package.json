@@ -42,6 +42,7 @@
     "@privy-io/wagmi": "^0.2.12",
     "@t3-oss/env-nextjs": "^0.10.1",
     "@tailwindcss/typography": "^0.5.12",
+    "@tsparticles/confetti": "^3.5.0",
     "@uidotdev/usehooks": "^2.4.1",
     "arweave": "^1.14.4",
     "autoprefixer": "^10.4.17",

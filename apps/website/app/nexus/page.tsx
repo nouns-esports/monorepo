@@ -45,7 +45,7 @@ export default async function NexusPage(props: {
           <Button href={`/users/${user.handle}`}>View Profile</Button>
         </div>
         <div className="flex flex-col gap-4">
-          <div className="flex h-96 w-full gap-4">
+          <div className="flex max-[1450px]:flex-col max-[1450px]:h-auto h-96 w-full gap-4">
             <div className="h-full bg-grey-800 aspect-video rounded-xl flex flex-col p-4 gap-4">
               <div className="flex justify-between">
                 <div className="flex flex-col">
@@ -128,7 +128,7 @@ export default async function NexusPage(props: {
                 ))}
               </div>
             </div>
-            <div className="h-full bg-grey-800 w-full rounded-xl flex flex-col p-4 justify-between">
+            <div className="h-full bg-grey-800 w-full rounded-xl flex flex-col gap-4 p-4 justify-between">
               <div className="flex flex-col gap-4">
                 <div className="flex items-center justify-between">
                   <h2 className="text-white text-2xl font-bebas-neue">Stats</h2>

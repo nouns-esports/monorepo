@@ -25,6 +25,19 @@ const config: Config = {
       farcaster: "#855DCD",
       twitter: "#1DA1F2",
       discord: "#5865F2",
+      "coinbase-wallet": "#0052FF",
+      "wallet-connect": {
+        light: "#526EFE",
+        dark: "#3455FC",
+      },
+      metamask: {
+        light: "#FA9130",
+        dark: "#6C3D12",
+      },
+      rainbow: {
+        light: "#174299",
+        dark: "#001E59",
+      },
       blue: {
         500: "#789AF4",
         700: "#3569EE",
@@ -63,6 +76,9 @@ const config: Config = {
     extend: {
       transitionDuration: {
         DEFAULT: "300ms",
+      },
+      transitionProperty: {
+        height: "height",
       },
       backgroundSize: {
         grow: "125%",

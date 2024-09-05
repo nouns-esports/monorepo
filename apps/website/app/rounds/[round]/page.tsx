@@ -76,8 +76,6 @@ export default async function Round(props: {
 
   const user = await getAuthenticatedUser();
 
-  const nexus = user ? await getNexus({ user: user.id }) : undefined;
-
   const priorVotes = user
     ? await getPriorVotes({
         user: user.id,
@@ -221,9 +219,9 @@ export default async function Round(props: {
                       : "h-1 bg-green"
                   )}
                 />
-                {state === "Upcoming" ? (
+                {state === "Upcoming" || state === "Proposing" ? (
                   <Upcoming />
-                ) : state === "Proposing" ? (
+                ) : state === "Voting" ? (
                   <Active />
                 ) : (
                   <Completed />
@@ -231,7 +229,7 @@ export default async function Round(props: {
                 <div
                   className={twMerge(
                     "w-full",
-                    state === "Voting" || state === "Ended"
+                    state === "Ended"
                       ? "h-1 bg-green"
                       : "border-2 border-dotted border-grey-500"
                   )}
@@ -256,26 +254,19 @@ export default async function Round(props: {
           round={{
             ...round,
             awardCount: round.awards.length,
-            state: "Ended",
+            state,
           }}
           user={
-            nexus
+            user
               ? {
-                  ...nexus,
+                  ...user,
                   priorVotes,
                 }
               : undefined
           }
         />
       </div>
-      {round.proposals.map((proposal) => (
-        <ViewProposalModal
-          key={proposal.id}
-          round={round}
-          proposal={proposal}
-          user={proposal.user}
-        />
-      ))}
+
       {/* {priorVotes > 0 ? (
         <Modal id="share-votes" className="overflow-hidden flex-col gap-4 p-4">
           <div className="relative z-[80] rounded-xl bg-black overflow-hidden flex flex-col gap-4 p-4">

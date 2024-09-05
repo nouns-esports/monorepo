@@ -24,14 +24,14 @@ export default function SignInButton(props: {
 
   const createNexusAction = useAction(createNexus);
 
-  const { open, setOpen } = useModal("sign-in");
+  const { open } = useModal("sign-in");
 
   return (
     <>
       <button
         onClick={() => {
           if (props.user) router.push(`/users/${props.user.handle}`);
-          else setOpen(true);
+          else open();
         }}
         style={{
           paddingTop: props.user?.discord ? "6px" : "10px",
