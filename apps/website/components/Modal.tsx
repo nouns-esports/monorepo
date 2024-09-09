@@ -1,105 +1,83 @@
 "use client";
 
+import { useWindowSize } from "@uidotdev/usehooks";
+import {
+  animate,
+  motion,
+  useDragControls,
+  useMotionValue,
+} from "framer-motion";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
+import { create } from "zustand";
 
-export function Modal(props: {
-  id: string;
-  children: React.ReactNode;
-  queryParam?: string;
-  showOnLoad?: boolean;
-  className?: string;
-}) {
-  const [position, setPosition] = useState(0);
-  const [initialTop, setInitialTop] = useState(0);
+const useModalState = create<{
+  open: Record<string, boolean>;
+  setOpen: (id: string, open: boolean) => void;
+}>((set) => ({
+  open: {},
+  setOpen: (id, open) => {
+    set((state) => ({ open: { ...state.open, [id]: open } }));
+  },
+}));
 
-  useEffect(() => {
-    const dialog = document.getElementById(
-      `${props.id}-dialog`
-    ) as HTMLDialogElement;
+export function useModal(id: string) {
+  const { open, setOpen } = useModalState();
 
-    setInitialTop(dialog.children[0].children[0].getBoundingClientRect().top);
+  const y = useMotionValue(0);
 
-    if (props.showOnLoad && !dialog.open) {
-      const root = document.documentElement;
-      const width = root.clientWidth;
+  return {
+    isOpen: open[id],
+    open: () => setOpen(id, true),
+    close: () => {
+      const backdrop = document.getElementById(`${id}-backdrop`);
+      const modal = document.getElementById(`${id}-modal`);
 
-      document.documentElement.classList.add("prevent-scroll");
+      if (!backdrop) {
+        console.error("No backdrop found for modal", `${id}-backdrop`);
+        return;
+      }
 
-      dialog.showModal();
+      if (!modal) {
+        console.error("No modal found for modal", `${id}-modal`);
+        return;
+      }
 
-      root.style.paddingRight = `${root.clientWidth - width}px`;
-    }
-  }, []);
-
-  return (
-    <dialog
-      id={`${props.id}-dialog`}
-      data-queryparam={props.queryParam}
-      className={twMerge(
-        "outline-none backdrop:bg-black/50 bg-transparent max-h-none backdrop:backdrop-blur-sm max-w-none max-sm:h-[100dvh] max-sm:w-full",
-        "animate-in fade-in backdrop:animate-in backdrop:fade-in slide-in-from-bottom-1/2 ease-in-out"
-      )}
-      onClick={(e) => {
-        const rect =
-          e.currentTarget.children[0].children[0].getBoundingClientRect();
-
-        if (
-          e.clientX < rect.left ||
-          e.clientX > rect.right ||
-          e.clientY < rect.top ||
-          e.clientY > rect.bottom
-        ) {
-          const root = document.documentElement;
-
-          document.documentElement.classList.remove("prevent-scroll");
-
-          e.currentTarget.close();
-
-          root.style.paddingRight = `0px`;
-
-          if (props.queryParam) {
-            const url = new URL(window.location.toString());
-            url.searchParams.delete(props.queryParam);
-            window.history.pushState({}, "", url);
-          }
-        }
-      }}
-    >
-      <div className="flex flex-col items-center justify-end w-full h-full pointer-events-none overflow-hidden">
-        <div
-          style={{
-            transform: `translate(0px, ${position}px)`,
-          }}
-          onTouchMove={(e) => {
-            setPosition(e.touches[0].clientY - initialTop);
-          }}
-          onTouchEnd={(e) => {
-            setPosition(0);
-          }}
-          className={twMerge(
-            "flex flex-col drop-shadow-2xl rounded-xl bg-black border border-grey-600 text-grey-200 pointer-events-auto",
-            props.className
-          )}
-        >
-          {props.children}
-        </div>
-      </div>
-    </dialog>
-  );
+      Promise.all([
+        animate(
+          backdrop,
+          { opacity: [1, 0] },
+          { duration: 0.3, ease: "easeInOut" }
+        ),
+        animate(
+          modal,
+          {
+            y: [
+              typeof y.get() === "number" ? y.get() : 0,
+              modal.getBoundingClientRect().height,
+            ],
+          },
+          { duration: 0.3, ease: "easeInOut" }
+        ),
+      ]).then(() => setOpen(id, false));
+    },
+    y,
+  };
 }
 
 export function ToggleModal(props: {
   id: string;
-  className?: string;
   children: React.ReactNode;
   tabIndex?: number;
-  value?: string;
+  className?: string;
 }) {
+  const { isOpen, open, close } = useModal(props.id);
+
   return (
     <div
       tabIndex={props.tabIndex}
-      onClick={() => toggleModal(props.id, props.value)}
+      onClick={() => (isOpen ? close() : open())}
       className={twMerge("cursor-pointer", props.className)}
     >
       {props.children}
@@ -107,30 +85,108 @@ export function ToggleModal(props: {
   );
 }
 
-export function toggleModal(id: string, value?: string) {
-  const dialog = document.getElementById(`${id}-dialog`) as HTMLDialogElement;
+export function Modal(props: {
+  id: string;
+  children: React.ReactNode;
+  className?: string;
+  handle?: boolean;
+  queryParam?: [string, string];
+}) {
+  const { open, isOpen, close, y } = useModal(props.id);
 
-  const root = document.documentElement;
-  const url = new URL(window.location.toString());
+  const [mounted, setMounted] = useState(false);
 
-  if (dialog.open) {
-    document.documentElement.classList.remove("prevent-scroll");
-    root.style.paddingRight = `0px`;
-    dialog.close();
-    if (dialog.dataset.queryparam) {
-      url.searchParams.delete(dialog.dataset.queryparam);
+  useEffect(() => {
+    const url = new URL(window.location.toString());
+
+    if (
+      !mounted &&
+      props.queryParam &&
+      url.searchParams.get(props.queryParam[0]) === props.queryParam[1]
+    ) {
+      open();
     }
-  } else {
-    const width = root.clientWidth;
-    document.documentElement.classList.add("prevent-scroll");
 
-    dialog.showModal();
-    root.style.paddingRight = `${root.clientWidth - width}px`;
+    setMounted(true);
+  }, []);
 
-    if (dialog.dataset.queryparam && value) {
-      url.searchParams.set(dialog.dataset.queryparam, value);
+  useEffect(() => {
+    const root = document.documentElement;
+    const url = new URL(window.location.toString());
+
+    if (isOpen) {
+      const width = root.clientWidth;
+
+      document.documentElement.classList.add("prevent-scroll");
+
+      root.style.paddingRight = `${root.clientWidth - width}px`;
+
+      if (props.queryParam) {
+        url.searchParams.set(props.queryParam[0], props.queryParam[1]);
+      }
+    } else {
+      document.documentElement.classList.remove("prevent-scroll");
+
+      root.style.paddingRight = `0px`;
+
+      if (props.queryParam) {
+        url.searchParams.delete(props.queryParam[0]);
+      }
     }
+
+    window.history.pushState({}, "", url);
+  }, [isOpen]);
+
+  const { width } = useWindowSize();
+
+  const controls = useDragControls();
+
+  if (isOpen) {
+    return (
+      <motion.div
+        id={`${props.id}-backdrop`}
+        onClick={() => close()}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+        className="fixed z-[80] inset-0 bg-black/50 flex items-center justify-center max-lg:items-end backdrop-blur-sm"
+      >
+        <motion.div
+          id={`${props.id}-modal`}
+          initial={{ y: "100%" }}
+          animate={{ y: "0%" }}
+          drag={!!((width ?? 0) <= 1024) ? "y" : false}
+          dragConstraints={{ top: 0, bottom: 0 }}
+          dragElastic={{
+            top: 0,
+            bottom: 0.5,
+          }}
+          dragControls={props.handle ? controls : undefined}
+          dragListener={props.handle ? false : undefined}
+          style={{ y }}
+          transition={{ duration: 0.3, ease: "easeInOut" }}
+          onDragEnd={() => {
+            if (y.get() >= 100) close();
+          }}
+          onClick={(e) => e.stopPropagation()}
+          className={twMerge(
+            "flex flex-col rounded-xl bg-black border border-grey-600 drop-shadow-2xl max-lg:rounded-b-none max-lg:border-b-0 max-lg:border-x-0 max-lg:w-full ",
+            props.className
+          )}
+        >
+          {props.handle && (
+            <div className="w-full items-center justify-center max-lg:flex hidden">
+              <button
+                onPointerDown={
+                  props.handle ? (e) => controls.start(e) : undefined
+                }
+                className="h-1.5 w-12 bg-grey-500 rounded-full cursor-grab active:cursor-grabbing touch-none"
+              />
+            </div>
+          )}
+          {props.children}
+        </motion.div>
+      </motion.div>
+    );
   }
-
-  window.history.pushState({}, "", url);
 }

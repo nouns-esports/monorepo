@@ -24,6 +24,7 @@ export const getUserAwards = cache(
         asset: {
           image: "/assets/usdc.svg",
           name: "USDC",
+          decimals: 6,
         },
         value: 1000,
         round: {
@@ -38,6 +39,7 @@ export const getUserAwards = cache(
         asset: {
           image: "/assets/usdc.svg",
           name: "USDC",
+          decimals: 6,
         },
         value: 250,
         round: {

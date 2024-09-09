@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Modal, { ToggleModal, useModal } from "../Modal.new";
+import { Modal, ToggleModal, useModal } from "../Modal";
 import {
   ArrowLeft,
   ArrowRight,
@@ -18,6 +18,7 @@ import {
   useLoginWithOAuth,
   usePrivy,
 } from "@privy-io/react-auth";
+import { usePrivyModalState } from "@/providers/Privy";
 
 export default function SignInModal() {
   const [returningUser, setReturningUser] = useState(true);
@@ -47,6 +48,7 @@ export default function SignInModal() {
   const { loading, initOAuth } = useLoginWithOAuth();
 
   const { login } = usePrivy();
+  const { set } = usePrivyModalState();
 
   useEffect(() => {
     if (isOpen) {
@@ -233,11 +235,21 @@ export default function SignInModal() {
               {returningUser ? "Sign in" : "Create account"}
             </p>
             <div className="flex flex-col gap-3">
-              <div className="flex items-center gap-2 w-full text-white font-semibold border border-white/20 rounded-lg p-2.5">
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (email.length > 0) {
+                    setVerifyCode(true);
+                    // sendCode({ email });
+                  }
+                }}
+                className="flex items-center gap-2 w-full text-white font-semibold border border-white/20 rounded-lg p-2.5"
+              >
                 <Mail className="w-6 h-6" />
                 <input
-                  type="text"
+                  type="email"
                   placeholder="example@email.com"
+                  required
                   onChange={(e) => setEmail(e.target.value)}
                   onKeyDown={(e) => {
                     if (e.key === "Enter" && email.length > 0) {
@@ -249,17 +261,12 @@ export default function SignInModal() {
                   className="bg-transparent outline-none w-full placeholder:text-white/50 text-white"
                 />
                 <button
-                  onClick={() => {
-                    if (email.length > 0) {
-                      setVerifyCode(true);
-                      // sendCode({ email });
-                    }
-                  }}
+                  type="submit"
                   className="flex items-center gap-1 text-sm hover:text-white/70 transition-colors"
                 >
                   Submit
                 </button>
-              </div>
+              </form>
               <button
                 onClick={() => initOAuth({ provider: "discord" })}
                 className="flex items-center gap-2 w-full text-white font-semibold bg-discord rounded-lg p-2.5 hover:bg-discord/70 transition-colors"
@@ -267,7 +274,13 @@ export default function SignInModal() {
                 <DiscordLogo className="w-6 h-6" weight="fill" />
                 Continue with Discord
               </button>
-              <button className="flex items-center gap-2 w-full text-white font-semibold bg-farcaster rounded-lg p-2.5 hover:bg-farcaster/70 transition-colors">
+              <button
+                onClick={() => {
+                  set({ loginMethods: ["farcaster"] });
+                  login();
+                }}
+                className="flex items-center gap-2 w-full text-white font-semibold bg-farcaster rounded-lg p-2.5 hover:bg-farcaster/70 transition-colors"
+              >
                 <img
                   src="/farcaster.svg"
                   className="w-5 h-5 mr-0.5 ml-0.5 object-contain"
@@ -282,7 +295,10 @@ export default function SignInModal() {
                 Continue with Twitter
               </button>
               <button
-                onClick={() => setShowWallets(true)}
+                onClick={() => {
+                  set({ loginMethods: ["wallet"] });
+                  login();
+                }}
                 className="flex items-center justify-between w-full bg-white rounded-lg p-2.5 hover:bg-white/70 transition-colors group"
               >
                 <div className="flex items-center gap-2 text-black font-semibold">

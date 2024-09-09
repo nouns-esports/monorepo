@@ -2,7 +2,7 @@ import Button from "@/components/Button";
 import EditProfileModal from "@/components/modals/EditProfileModal";
 import TextArea from "@/components/form/TextArea";
 import TextInput from "@/components/form/TextInput";
-import { ToggleModal } from "@/components/Modal.new";
+import { ToggleModal } from "@/components/Modal";
 import { getAuthenticatedUser, getUser } from "@/server/queries/users";
 import { notFound } from "next/navigation";
 

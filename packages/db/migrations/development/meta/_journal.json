@@ -554,6 +554,34 @@
       "when": 1724960337478,
       "tag": "0078_motionless_gorgon",
       "breakpoints": true
+    },
+    {
+      "idx": 79,
+      "version": "7",
+      "when": 1725592188553,
+      "tag": "0079_peaceful_blade",
+      "breakpoints": true
+    },
+    {
+      "idx": 80,
+      "version": "7",
+      "when": 1725593132688,
+      "tag": "0080_fair_talon",
+      "breakpoints": true
+    },
+    {
+      "idx": 81,
+      "version": "7",
+      "when": 1725638355303,
+      "tag": "0081_fantastic_blindfold",
+      "breakpoints": true
+    },
+    {
+      "idx": 82,
+      "version": "7",
+      "when": 1725638681727,
+      "tag": "0082_careless_caretaker",
+      "breakpoints": true
     }
   ]
 }

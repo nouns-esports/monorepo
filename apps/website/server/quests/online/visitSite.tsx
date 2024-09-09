@@ -19,7 +19,9 @@ export const visitSite = createAction(async (actionInputs) => {
     description: (
       <p>
         Visit{" "}
-        <span className="text-red">{link.url.slice(8).split("/")[0]}</span>
+        <span className="text-red">
+          {actionInputs.name ?? link.url.slice(8).split("/")[0]}
+        </span>
       </p>
     ),
     url: `/${link.id}?capture=true`,

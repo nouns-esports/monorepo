@@ -47,25 +47,27 @@ export const communityRelations = relations(communities, ({ many }) => ({
   rosters: many(rosters),
   rounds: many(rounds),
   creations: many(creations),
-  // events: many(events),
+  events: many(events),
+  quests: many(quests),
 }));
 
-// export const events = pgTable("events", {
-//   id: text("id").primaryKey(),
-//   name: text("name").notNull(),
-//   image: text("image").notNull(),
-//   start: timestamp("start", { mode: "date" }).notNull(),
-//   end: timestamp("end", { mode: "date" }).notNull(),
-//   community: text("community").notNull(),
-// });
+export const events = pgTable("events", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  image: text("image").notNull(),
+  start: timestamp("start", { mode: "date" }).notNull(),
+  end: timestamp("end", { mode: "date" }).notNull(),
+  community: text("community").notNull(),
+  featured: boolean("featured").notNull().default(false),
+});
 
-// export const eventsRelations = relations(events, ({ one, many }) => ({
-//   community: one(communities, {
-//     fields: [events.community],
-//     references: [communities.id],
-//   }),
-//   quests: many(quests),
-// }));
+export const eventsRelations = relations(events, ({ one, many }) => ({
+  community: one(communities, {
+    fields: [events.community],
+    references: [communities.id],
+  }),
+  quests: many(quests),
+}));
 
 export const rosters = pgTable("rosters", {
   id: text("id").primaryKey(),
@@ -106,13 +108,21 @@ export const talentRelations = relations(talent, ({ one }) => ({
   }),
 }));
 
-export const badges = pgTable("badges", {
-  id: serial("id").primaryKey(),
-  name: text("name").notNull(),
-  description: text("description").notNull(),
-  image: text("image").notNull(),
-  timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
-});
+// export const achievements = pgTable("achievements", {
+//   id: text("id").primaryKey(),
+//   next: text("next"),
+//   name: text("name").notNull(),
+//   description: text("description").notNull(),
+//   image: text("image").notNull(),
+//   xp: integer("xp").notNull(),
+// });
+
+// export const achievementsRelations = relations(achievements, ({ one }) => ({
+//   next: one(achievements, {
+//     fields: [achievements.next],
+//     references: [achievements.id],
+//   }),
+// }));
 
 export const rounds = pgTable("rounds", {
   id: text("id").primaryKey(),
@@ -120,7 +130,7 @@ export const rounds = pgTable("rounds", {
   image: text("image").notNull(),
   banner: text("banner").notNull(),
   community: text("community").notNull().default(""),
-  // event: text("event"),
+  event: text("event"),
   type: text("type", { enum: ["markdown", "video", "image"] })
     .notNull()
     .default("markdown"),
@@ -140,10 +150,10 @@ export const roundsRelations = relations(rounds, ({ one, many }) => ({
     fields: [rounds.community],
     references: [communities.id],
   }),
-  // event: one(events, {
-  //   fields: [rounds.event],
-  //   references: [events.id],
-  // }),
+  event: one(events, {
+    fields: [rounds.event],
+    references: [events.id],
+  }),
   minProposerRank: one(ranks, {
     fields: [rounds.minProposerRank],
     references: [ranks.id],
@@ -217,7 +227,6 @@ export const nexus = pgTable("nexus", {
   handle: text("handle").notNull().default(""),
   rank: integer("rank").notNull().default(0),
   xp: integer("xp").notNull().default(0),
-  // points: integer("points").notNull().default(0),
   image: text("image").notNull().default(""),
   name: text("name").notNull().default(""),
   bio: text("bio"),
@@ -282,19 +291,19 @@ export const quests = pgTable("quests", {
   description: text("description").notNull(),
   image: text("image").notNull(),
   community: text("community").notNull(),
-  // event: text("event"),
-  pinned: boolean("pinned").notNull().default(false),
+  season: text("season").notNull().default(""),
+  event: text("event"),
+  start: timestamp("start", { mode: "date" }),
+  end: timestamp("end", { mode: "date" }),
   active: boolean("active").notNull().default(false),
   xp: integer("xp").notNull(),
-  // points: integer("points").notNull(),
   actions: text("actions").array().notNull(),
   actionInputs: jsonb("action_inputs")
     .array()
     .$type<Array<{ [key: string]: any }>>()
     .notNull()
     .default([]),
-  prerequisite: text("prerequisite"),
-  minRank: integer("min_rank").notNull(), // NOTE: Ranks are seasonal, quests are not so this would need to be updated each season
+  requiredActions: integer("required_actions").notNull().default(-1),
 });
 
 export const questRelations = relations(quests, ({ one, many }) => ({
@@ -302,26 +311,21 @@ export const questRelations = relations(quests, ({ one, many }) => ({
     fields: [quests.community],
     references: [communities.id],
   }),
-  minRank: one(ranks, {
-    fields: [quests.minRank],
-    references: [ranks.id],
-  }),
   completed: many(xp),
-  prerequisite: one(quests, {
-    fields: [quests.prerequisite],
-    references: [quests.id],
+  event: one(events, {
+    fields: [quests.event],
+    references: [events.id],
   }),
-  // event: one(events, {
-  //   fields: [quests.event],
-  //   references: [events.id],
-  // }),
+  season: one(seasons, {
+    fields: [quests.season],
+    references: [seasons.id],
+  }),
 }));
 
 // Recuring incentives for actions completed across nouns.gg
 export const incentives = pgTable("incentives", {
   id: text("id").primaryKey(),
   xp: integer("xp").notNull(),
-  // points: integer("points").notNull(),
   cooldown: integer("cooldown").notNull(),
 });
 
@@ -337,6 +341,7 @@ export const xp = pgTable("xp", {
   season: text("season").notNull(),
   quest: text("quest"),
   incentive: text("incentive"),
+  // achievement: text("achievement"),
 });
 
 export const xpRelations = relations(xp, ({ one }) => ({
@@ -356,14 +361,11 @@ export const xpRelations = relations(xp, ({ one }) => ({
     fields: [xp.incentive],
     references: [incentives.id],
   }),
+  // achievement: one(achievements, {
+  //   fields: [xp.achievement],
+  //   references: [achievements.id],
+  // }),
 }));
-
-// export const points = pgTable("points", {
-//   id: serial("id").primaryKey(),
-//   user: text("user").notNull(),
-//   amount: integer("amount").notNull(),
-//   timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
-// });
 
 // Rankings must sync with the Nexus table on refresh
 export const rankings = pgTable("rankings", {
@@ -426,23 +428,14 @@ export const creationType = pgEnum("creationType", [
 ]);
 
 export const creations = pgTable("creations", {
-  // IPFS hash
   id: text("id").primaryKey(),
-  // Privy id
   creator: text("creator"),
-  // Type of creation
   type: creationType("type").notNull(),
-  // Title of the creation
   title: text("title"),
-  // When it was created
   createdAt: timestamp("created_at", { mode: "date" }),
-  // Links to another creation, useful for creating variants (cropped, modified, etc) while still pointing to the original entry
   original: text("original"),
-  // Search tags, only required for top level creations
   community: text("community").notNull().default(""),
-  // Width
   width: integer("width").notNull(),
-  // Height
   height: integer("height").notNull(),
 });
 
@@ -477,9 +470,12 @@ const schema = {
   proposalsRelations,
   votes,
   votesRelations,
-  badges,
   nexus,
   nexusRelations,
+  // achievements,
+  // achievementsRelations,
+  events,
+  eventsRelations,
   creations,
   creationRelations,
   seasons,
@@ -514,8 +510,9 @@ export type Award = typeof awards.$inferSelect;
 export type Asset = typeof assets.$inferSelect;
 export type Proposal = typeof proposals.$inferSelect;
 export type Vote = typeof votes.$inferSelect;
-export type Badge = typeof badges.$inferSelect;
 export type Nexus = typeof nexus.$inferSelect;
 export type Creation = typeof creations.$inferSelect;
 export type Rank = typeof ranks.$inferSelect;
 export type Rankings = typeof rankings.$inferSelect;
+export type Quest = typeof quests.$inferSelect;
+export type Event = typeof events.$inferSelect;

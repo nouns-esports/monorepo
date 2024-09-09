@@ -67,9 +67,9 @@ export default function RankChart(props: {
               y1={index * sectionHeight}
               y2={(index + 1) * sectionHeight}
               fill={
-                index === 0 ? "#789AF4" : index === 1 ? "#BC30ED" : "#E93737"
+                index === 0 ? "#4990FD" : index === 1 ? "#DA00CB" : "#F00000"
               }
-              fillOpacity={0.3}
+              fillOpacity={0.25}
             ></ReferenceArea>
           );
         })}

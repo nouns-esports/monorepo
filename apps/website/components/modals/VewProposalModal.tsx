@@ -1,6 +1,6 @@
 "use client";
 
-import Modal, { ToggleModal, useModal } from "@/components/Modal.new";
+import { Modal, ToggleModal } from "@/components/Modal";
 import { X } from "lucide-react";
 import Link from "../Link";
 import {
@@ -12,8 +12,6 @@ import {
 import Markdown from "../lexical/Markdown";
 import type { Nexus, Proposal, Round } from "~/packages/db/schema";
 import type { roundState } from "@/utils/roundState";
-import { twMerge } from "tailwind-merge";
-import type { Dispatch, SetStateAction } from "react";
 import type { getAuthenticatedUser } from "@/server/queries/users";
 import VoteSelector from "../VoteSelector";
 
@@ -31,6 +29,7 @@ export default function ViewProposalModal(props: {
     <Modal
       id={`view-proposal-${props.proposal.id}`}
       handle
+      queryParam={[`p`, props.proposal.id.toString()]}
       className="relative flex-col gap-4 w-2/3 h-2/3 p-4 max-w-screen-lg max-xl:w-full max-xl:h-[95dvh] overflow-hidden"
     >
       <div className="flex gap-4 justify-between">
@@ -97,57 +96,6 @@ export default function ViewProposalModal(props: {
           addVote={props.addVote}
           removeVote={props.removeVote}
         />
-        {/* <div className={twMerge("flex items-center gap-2 flex-shrink-0")}>
-          {props.proposal.user.id !== props.user?.id &&
-          props.round.state === "Voting" ? (
-            <CaretUp
-              onClick={() => props.addVote(props.proposal.id, 1)}
-              className="w-5 h-5 text-grey-200 hover:text-white transition-colors"
-              weight="fill"
-            />
-          ) : (
-            ""
-          )}
-          <p
-            className={twMerge(
-              "text-grey-200 text-2xl font-bebas-neue text-center text-nowrap max-sm:mt-1 select-none",
-
-              (props.round.state === "Ended" ||
-                props.proposal.user.id === props.user?.id) &&
-                "flex items-center gap-2"
-            )}
-          >
-            {props.proposal.totalVotes}
-            {props.selectedVotes[props.proposal.id] ? (
-              <span className="text-white select-none">
-                {" "}
-                + {props.selectedVotes[props.proposal.id]}
-              </span>
-            ) : (
-              ""
-            )}
-            {props.round.state === "Ended" ||
-            (props.proposal.user.id === props.user?.id &&
-              props.round.state === "Voting") ? (
-              <ChartBarHorizontal
-                className="w-5 h-5 text-grey-200 -rotate-90"
-                weight="fill"
-              />
-            ) : (
-              ""
-            )}
-          </p>
-          {props.proposal.user.id !== props.user?.id &&
-          props.round.state === "Voting" ? (
-            <CaretDown
-              onClick={() => props.removeVote(props.proposal.id, 1)}
-              className="w-5 h-5 text-grey-200 hover:text-white transition-colors"
-              weight="fill"
-            />
-          ) : (
-            ""
-          )}
-        </div> */}
       </div>
     </Modal>
   );

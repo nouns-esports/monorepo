@@ -1,5 +1,5 @@
-import { db, quests, xp } from "~/packages/db/schema";
-import { desc, eq } from "drizzle-orm";
+import { communities, db, quests, xp } from "~/packages/db/schema";
+import { and, asc, desc, eq, gte, lte } from "drizzle-orm";
 import {
   unstable_cache as cache,
   unstable_noStore as noStore,
@@ -13,7 +13,6 @@ import { visitSite } from "../quests/online/visitSite";
 import { attendCall } from "../quests/discord/attendCall";
 import { joinServer } from "../quests/discord/joinServer";
 import { linkDiscord } from "../quests/discord/linkDiscord";
-import { watchVideo } from "../quests/online/watchVideo";
 import { linkWallet } from "../quests/onchain/linkWallet";
 import { linkTwitter } from "../quests/twitter/linkTwitter";
 
@@ -34,7 +33,6 @@ export const actions: Record<string, ReturnType<typeof createAction>> = {
 
   // Online
   visitSite,
-  watchVideo,
 
   // Onchain
   linkWallet,
@@ -68,11 +66,10 @@ export async function getAction(input: {
   return actions[action](actionInputs);
 }
 
-export const getQuests = cache(
-  async (input?: { limit?: number; user?: string }) => {
+export const getSeasonQuests = cache(
+  async (input: { season: string; user?: string }) => {
     return db.query.quests.findMany({
-      orderBy: desc(quests.name),
-      limit: input?.limit,
+      where: eq(quests.season, input.season),
       with: {
         community: true,
         completed: input?.user
@@ -82,17 +79,38 @@ export const getQuests = cache(
               columns: { id: true },
             }
           : undefined,
-        prerequisite: true,
       },
     });
   },
-  ["getQuests"],
-  { tags: ["getQuests"], revalidate: 60 * 10 }
+  ["getSeasonQuests"],
+  { tags: ["getSeasonQuests"], revalidate: 60 * 10 }
+);
+
+export const getWeeklyQuests = cache(
+  async (input: { user?: string }) => {
+    const now = new Date();
+
+    return db.query.quests.findMany({
+      where: and(gte(quests.start, now), lte(quests.end, now)),
+      with: {
+        community: true,
+        completed: input?.user
+          ? {
+              where: eq(xp.user, input.user),
+              limit: 1,
+              columns: { id: true },
+            }
+          : undefined,
+      },
+    });
+  },
+  ["getWeeklyQuests"],
+  { tags: ["getWeeklyQuests"], revalidate: 60 * 10 }
 );
 
 export const getQuest = cache(
   async (input: { id: string; user?: string }) => {
-    ////
+    //
     return db.query.quests.findFirst({
       where: eq(quests.id, input.id),
       with: {
@@ -102,7 +120,6 @@ export const getQuest = cache(
               limit: 1,
             }
           : undefined,
-        prerequisite: true,
       },
     });
   },

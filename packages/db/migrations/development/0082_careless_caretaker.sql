@@ -1,0 +1,1 @@
+ALTER TABLE "quests" ADD COLUMN "required_actions" integer DEFAULT -1 NOT NULL;

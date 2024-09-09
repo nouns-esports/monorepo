@@ -9,6 +9,7 @@ import { twMerge } from "tailwind-merge";
 import Link from "@/components/Link";
 import { getCurrentRankings, getUserRankings } from "@/server/queries/rankings";
 import DateComponent from "@/components/Date";
+import { formatUnits } from "viem";
 
 export default async function NexusPage(props: {
   searchParams: {
@@ -44,56 +45,55 @@ export default async function NexusPage(props: {
           </div>
           <Button href={`/users/${user.handle}`}>View Profile</Button>
         </div>
-        <div className="flex flex-col gap-4">
-          <div className="flex max-[1450px]:flex-col max-[1450px]:h-auto h-96 w-full gap-4">
-            <div className="h-full bg-grey-800 aspect-video rounded-xl flex flex-col p-4 gap-4">
-              <div className="flex justify-between">
-                <div className="flex flex-col">
-                  <h2 className="text-white">Your Rank</h2>
+        <div className="grid grid-cols-4 gap-4 grid-rows-2">
+          <div className="bg-grey-800 col-span-2 max-lg:col-span-4 rounded-xl flex flex-col p-4 gap-4 h-96">
+            <div className="flex justify-between">
+              <div className="flex flex-col">
+                <h2 className="text-white">Your Rank</h2>
+                <div className="flex items-center gap-2">
+                  <p
+                    className="text-3xl font-bebas-neue"
+                    style={{
+                      color:
+                        user.rank.place < 3
+                          ? "#4990FD"
+                          : user.rank.place < 6
+                            ? "#DA00CB"
+                            : "#F00000",
+                    }}
+                  >
+                    {user.rank.name}
+                  </p>
+                  <img src={user.rank.image} className="h-10 object-contain" />
+                </div>
+              </div>
+              {userRankings.length > 0 ? (
+                <div className="flex items-end flex-col gap-1">
+                  <h2 className="">Updates in</h2>
                   <div className="flex items-center gap-2">
-                    <p
-                      className="text-3xl font-bebas-neue"
-                      style={{
-                        color:
-                          user.rank.place < 3
-                            ? "#3569ee"
-                            : user.rank.place < 6
-                              ? "#BC30ED"
-                              : "#E93737",
-                      }}
-                    >
-                      {user.rank.name}
+                    <p className="text-white">
+                      <Countdown
+                        date={
+                          new Date(
+                            userRankings[userRankings.length - 1].timestamp
+                          )
+                        }
+                      />
                     </p>
-                    <img src={user.rank.image} className="w-8 h-8" />
                   </div>
                 </div>
-                {userRankings.length > 0 ? (
-                  <div className="flex items-end flex-col gap-1">
-                    <h2 className="">Updates in</h2>
-                    <div className="flex items-center gap-2">
-                      <p className="text-white">
-                        <Countdown
-                          date={
-                            new Date(
-                              userRankings[userRankings.length - 1].timestamp
-                            )
-                          }
-                        />
-                      </p>
-                    </div>
-                  </div>
-                ) : (
-                  ""
-                )}
-              </div>
-              <RankChart userRankings={userRankings} ranks={ranks} />
+              ) : (
+                ""
+              )}
             </div>
-            <div className="h-full bg-grey-800 w-full rounded-xl flex flex-col gap-4 p-4 overflow-hidden">
-              <div className="flex items-center justify-between">
-                <h2 className="text-white text-2xl font-bebas-neue">
-                  Leaderboard
-                </h2>
-                {/* <Tabs
+            <RankChart userRankings={userRankings} ranks={ranks} />
+          </div>
+          <div className="bg-grey-800 rounded-xl flex flex-col max-xl:col-span-2 max-md:col-span-4 gap-4 p-4 overflow-hidden h-96">
+            <div className="flex items-center justify-between">
+              <h2 className="text-white text-2xl font-bebas-neue leading-none">
+                Leaderboard
+              </h2>
+              {/* <Tabs
                   id="leaderboard"
                   selected={props.searchParams.leaderboard ?? "global"}
                   options={{
@@ -101,38 +101,40 @@ export default async function NexusPage(props: {
                     friends: "Friends",
                   }}
                 /> */}
-              </div>
-              <div className="relative flex flex-col gap-2 overflow-y-auto custom-scrollbar">
-                {rankings.map((ranking) => (
-                  <Link
-                    href={`/users/${ranking.user.handle}`}
-                    key={ranking.id}
-                    className={twMerge(
-                      "flex justify-between items-center hover:bg-grey-500 transition-colors p-2 rounded-lg",
-                      ranking.user.id === user.id &&
-                        "bg-blue-700 hover:bg-blue-800 sticky top-0 bottom-0"
-                    )}
-                  >
-                    <div className="flex gap-4 items-center">
-                      <p className="text-white w-6">{ranking.place}</p>
-                      <div className="flex gap-2 items-center">
-                        <img
-                          src={ranking.user.image}
-                          className="w-6 h-6 rounded-full"
-                        />
-                        <p className="text-white">{ranking.user.name}</p>
-                      </div>
-                    </div>
-                    <p className="text-white">{ranking.xp} xp</p>
-                  </Link>
-                ))}
-              </div>
             </div>
-            <div className="h-full bg-grey-800 w-full rounded-xl flex flex-col gap-4 p-4 justify-between">
-              <div className="flex flex-col gap-4">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-white text-2xl font-bebas-neue">Stats</h2>
-                  {/* <Tabs
+            <div className="relative flex flex-col gap-2 overflow-y-auto custom-scrollbar">
+              {rankings.map((ranking) => (
+                <Link
+                  href={`/users/${ranking.user.handle}`}
+                  key={ranking.id}
+                  className={twMerge(
+                    "flex justify-between items-center hover:bg-grey-500 transition-colors p-2 rounded-lg",
+                    ranking.user.id === user.id &&
+                      "bg-blue-700 hover:bg-blue-800 sticky top-0 bottom-0"
+                  )}
+                >
+                  <div className="flex gap-4 items-center">
+                    <p className="text-white w-6">{ranking.place}</p>
+                    <div className="flex gap-2 items-center">
+                      <img
+                        src={ranking.user.image}
+                        className="w-6 h-6 rounded-full object-cover"
+                      />
+                      <p className="text-white">{ranking.user.name}</p>
+                    </div>
+                  </div>
+                  <p className="text-white">{ranking.xp} xp</p>
+                </Link>
+              ))}
+            </div>
+          </div>
+          <div className="bg-grey-800 rounded-xl flex flex-col gap-4 p-4 justify-between h-96 max-xl:col-span-2 max-md:col-span-4">
+            <div className="flex flex-col gap-4">
+              <div className="flex items-center justify-between">
+                <h2 className="text-white text-2xl font-bebas-neue leading-none">
+                  Stats
+                </h2>
+                {/* <Tabs
                   id="stats"
                   selected={props.searchParams.stats ?? "all-time"}
                   options={{
@@ -140,49 +142,84 @@ export default async function NexusPage(props: {
                     "this-season": "This Season",
                   }}
                 /> */}
+              </div>
+              <div className="flex flex-col gap-2">
+                <div className="flex justify-between items-center gap-2">
+                  <p className="">Earned XP</p>
+                  <p className="text-white">{userStats.earnedXP}</p>
                 </div>
-                <div className="flex flex-col gap-2">
-                  <div className="flex justify-between items-center gap-2">
-                    <p className="">Earned XP</p>
-                    <p className="text-white">{userStats.earnedXP}</p>
-                  </div>
-                  <div className="flex justify-between items-center gap-2">
-                    <p className="">Votes Cast</p>
-                    <p className="text-white">{userStats.votesCast}</p>
-                  </div>
-                  <div className="flex justify-between items-center gap-2">
-                    <p className="">Proposals Created</p>
-                    <p className="text-white">{userStats.proposalsCreated}</p>
-                  </div>
-                  <div className="flex justify-between items-center gap-2">
-                    <p className="">Quests Completed</p>
-                    <p className="text-white">{userStats.questsCompleted}</p>
-                  </div>
+                <div className="flex justify-between items-center gap-2">
+                  <p className="">Votes Cast</p>
+                  <p className="text-white">{userStats.votesCast}</p>
+                </div>
+                <div className="flex justify-between items-center gap-2">
+                  <p className="">Proposals Created</p>
+                  <p className="text-white">{userStats.proposalsCreated}</p>
+                </div>
+                <div className="flex justify-between items-center gap-2">
+                  <p className="">Quests Completed</p>
+                  <p className="text-white">{userStats.questsCompleted}</p>
                 </div>
               </div>
-              <div className="flex justify-between items-center">
-                <p>Last updated on</p>
-                <p className="text-white whitespace-nowrap">
-                  <DateComponent />
-                </p>
-              </div>
+            </div>
+            <div className="flex justify-between items-center">
+              <p>Last updated on</p>
+              <p className="text-white whitespace-nowrap">
+                <DateComponent />
+              </p>
             </div>
           </div>
-          <div className="w-full h-96 flex gap-4">
-            <div className="h-full bg-grey-800 rounded-xl flex items-center justify-center w-96 flex-shrink-0">
-              <h2 className="text-white text-2xl font-bebas-neue">
-                Leaderboard
-              </h2>
+          <div className="bg-grey-800 rounded-xl flex flex-col p-4 h-96 max-2xl:col-span-2 max-xl:col-span-2 max-md:col-span-4 gap-4">
+            <h2 className="text-white text-2xl font-bebas-neue leading-none">
+              Awards
+            </h2>
+            <ul className="flex flex-col gap-4">
               {awards.map((award) => (
-                <div key={award.id} className="flex flex-col gap-2">
-                  <img src={award.asset.image} className="w-10 h-10" />
-                  <p className="text-white">{award.asset.name}</p>
-                </div>
+                <li
+                  key={award.id}
+                  className="flex items-center justify-between w-ful"
+                >
+                  <Link
+                    href={`/rounds/${award.round.id}`}
+                    className="flex gap-3 items-center text-white font-semibold"
+                  >
+                    <img
+                      src={award.round.image}
+                      className="w-8 h-8 rounded-md"
+                    />
+                    {award.round.id.replaceAll("-", " ")}
+                  </Link>
+                  <div className="flex items-center gap-4">
+                    <div className="text-white gap-2 flex items-center">
+                      <img
+                        src={award.asset.image}
+                        className="w-5 h-5 rounded-md"
+                      />
+                      {formatUnits(
+                        BigInt(award.value),
+                        award.asset.decimals ?? 0
+                      )}
+                    </div>
+                    <div
+                      className={twMerge(
+                        "rounded-full px-2.5 py-0.5 text-sm font-semibold",
+                        award.claimed
+                          ? "text-white bg-green/90"
+                          : "text-white bg-blue-700"
+                      )}
+                    >
+                      {award.claimed ? "Paid" : "Queued"}
+                    </div>
+                  </div>
+                </li>
               ))}
-            </div>
-            <div className="w-full h-full bg-grey-800 rounded-xl flex items-center justify-center">
+            </ul>
+          </div>
+          <div className="bg-grey-800 rounded-xl flex flex-col p-4 gap-4 col-span-3 max-2xl:col-span-2 max-xl:col-span-4 max-lg:col-span-2 max-md:col-span-4 h-96">
+            <h2 className="text-white text-2xl font-bebas-neue leading-none">
               Inventory
-            </div>
+            </h2>
+            <p>You don't have any items yet.</p>
           </div>
         </div>
       </div>

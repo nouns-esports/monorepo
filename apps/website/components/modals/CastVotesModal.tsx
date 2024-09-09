@@ -1,7 +1,7 @@
 "use client";
 
 import type { Nexus, Proposal } from "~/packages/db/schema";
-import Modal, { ToggleModal, useModal } from "../Modal.new";
+import { Modal, ToggleModal, useModal } from "../Modal";
 import TextInput from "../form/TextInput";
 import TextArea from "../form/TextArea";
 import Button from "../Button";
