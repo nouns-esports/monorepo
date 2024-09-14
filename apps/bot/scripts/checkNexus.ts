@@ -111,6 +111,10 @@ for (const user of users) {
 
     if (tier === "Explorer") continue;
 
+    if (user.tier === "Champion" && tier === "Challenger") {
+      continue;
+    }
+
     output += `${privyUser.discord.username},${tier}`;
 
     console.log("Updated: ", privyUser.discord.username, tier);

@@ -255,6 +255,9 @@ app.image("/rounds/:round/votes/:user/img", async (c) => {
   });
 
   return c.res({
+    headers: {
+      "Cache-Control": "max-age=0",
+    },
     image: (
       <div
         style={{

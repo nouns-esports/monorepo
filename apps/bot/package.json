@@ -16,6 +16,7 @@
     "votersForProposal": "cross-env NODE_ENV=production bun ./scripts/analytics/votersForProposal.ts",
     "flagPotentialBots": "cross-env NODE_ENV=production bun ./scripts/botting/flagPotentialBots.ts",
     "flagHardPotentialBots": "cross-env NODE_ENV=production bun ./scripts/botting/flagHardPotentialBots.ts",
-    "explorerRoles": "cross-env NODE_ENV=production bun ./scripts/explorerRoles.ts"
+    "explorerRoles": "cross-env NODE_ENV=production bun ./scripts/explorerRoles.ts",
+    "getWalletAddresses": "cross-env NODE_ENV=production bun ./scripts/getWalletAddresses.ts"
   }
 }
