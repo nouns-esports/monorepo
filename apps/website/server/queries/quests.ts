@@ -66,46 +66,19 @@ export async function getAction(input: {
   return actions[action](actionInputs);
 }
 
-export const getSeasonQuests = cache(
-  async (input: { season: string; user?: string }) => {
+export const getQuests = cache(
+  async (input: { limit?: number; user?: string; season: string }) => {
+    //
     return db.query.quests.findMany({
+      limit: input.limit,
       where: eq(quests.season, input.season),
       with: {
         community: true,
-        completed: input?.user
-          ? {
-              where: eq(xp.user, input.user),
-              limit: 1,
-              columns: { id: true },
-            }
-          : undefined,
       },
     });
   },
-  ["getSeasonQuests"],
-  { tags: ["getSeasonQuests"], revalidate: 60 * 10 }
-);
-
-export const getWeeklyQuests = cache(
-  async (input: { user?: string }) => {
-    const now = new Date();
-
-    return db.query.quests.findMany({
-      where: and(gte(quests.start, now), lte(quests.end, now)),
-      with: {
-        community: true,
-        completed: input?.user
-          ? {
-              where: eq(xp.user, input.user),
-              limit: 1,
-              columns: { id: true },
-            }
-          : undefined,
-      },
-    });
-  },
-  ["getWeeklyQuests"],
-  { tags: ["getWeeklyQuests"], revalidate: 60 * 10 }
+  ["getQuests"],
+  { tags: ["getQuests"], revalidate: 60 * 10 }
 );
 
 export const getQuest = cache(

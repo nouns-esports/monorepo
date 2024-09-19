@@ -21,26 +21,11 @@ export const completeQuest = onlyUser
           where: eq(xp.user, ctx.user.id),
           limit: 1,
         },
-        prerequisite: {
-          with: {
-            completed: {
-              where: eq(xp.user, ctx.user.id),
-              limit: 1,
-            },
-          },
-        },
       },
     });
 
     if (!quest) {
       throw new Error("Quest not found");
-    }
-
-    if (
-      quest.prerequisite?.completed &&
-      quest.prerequisite.completed.length < 1
-    ) {
-      throw new Error("Prerequisite quest not completed");
     }
 
     if (quest.completed.length > 0) {

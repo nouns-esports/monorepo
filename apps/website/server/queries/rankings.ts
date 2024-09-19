@@ -4,7 +4,7 @@ import { db, rankings, seasons } from "~/packages/db/schema";
 
 export const getCurrentRankings = cache(
   async () => {
-    //////
+    ////////
     const season = await db.query.seasons.findFirst({
       orderBy: desc(seasons.start),
       where: lte(seasons.start, new Date()),
@@ -35,6 +35,7 @@ export const getCurrentRankings = cache(
 
 export const getUserRankings = cache(
   async (input: { user: string }) => {
+    //
     return (
       (
         await db.query.seasons.findFirst({

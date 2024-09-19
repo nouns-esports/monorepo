@@ -46,48 +46,66 @@ export default async function NexusPage(props: {
           <Button href={`/users/${user.handle}`}>View Profile</Button>
         </div>
         <div className="grid grid-cols-4 gap-4 grid-rows-2">
-          <div className="bg-grey-800 col-span-2 max-lg:col-span-4 rounded-xl flex flex-col p-4 gap-4 h-96">
-            <div className="flex justify-between">
-              <div className="flex flex-col">
-                <h2 className="text-white">Your Rank</h2>
-                <div className="flex items-center gap-2">
-                  <p
-                    className="text-3xl font-bebas-neue"
-                    style={{
-                      color:
-                        user.rank.place < 3
-                          ? "#4990FD"
-                          : user.rank.place < 6
-                            ? "#DA00CB"
-                            : "#F00000",
-                    }}
-                  >
-                    {user.rank.name}
-                  </p>
-                  <img src={user.rank.image} className="h-10 object-contain" />
-                </div>
-              </div>
-              {userRankings.length > 0 ? (
-                <div className="flex items-end flex-col gap-1">
-                  <h2 className="">Updates in</h2>
+          {user.rank ? (
+            <div className="bg-grey-800 col-span-2 max-lg:col-span-4 rounded-xl flex flex-col p-4 gap-4 h-96">
+              <div className="flex justify-between">
+                <div className="flex flex-col">
+                  <h2 className="text-white">Your Rank</h2>
                   <div className="flex items-center gap-2">
-                    <p className="text-white">
-                      <Countdown
-                        date={
-                          new Date(
-                            userRankings[userRankings.length - 1].timestamp
-                          )
-                        }
-                      />
+                    <p
+                      className="text-3xl font-bebas-neue"
+                      style={{
+                        color:
+                          user.rank.place < 3
+                            ? "#4990FD"
+                            : user.rank.place < 6
+                              ? "#DA00CB"
+                              : "#F00000",
+                      }}
+                    >
+                      {user.rank.name}
                     </p>
+                    <img
+                      src={user.rank.image}
+                      className="h-10 object-contain"
+                    />
                   </div>
                 </div>
-              ) : (
-                ""
-              )}
+                {user.rank ? (
+                  <div className="flex items-end flex-col gap-1">
+                    <h2 className="">Updates in</h2>
+                    <div className="flex items-center gap-2">
+                      <p className="text-white">
+                        <Countdown
+                          date={
+                            new Date(
+                              userRankings[userRankings.length - 1].timestamp
+                            )
+                          }
+                        />
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  ""
+                )}
+              </div>
+              <RankChart userRankings={userRankings} ranks={ranks} />
             </div>
-            <RankChart userRankings={userRankings} ranks={ranks} />
-          </div>
+          ) : (
+            <div className="bg-grey-800 col-span-2 max-lg:col-span-4 rounded-xl flex flex-col items-center justify-center p-4 gap-4 h-96">
+              <img src="/discord.jpg" className="w-12 h-12 rounded-md" />
+              <p className="text-white text-2xl font-bebas-neue leading-none">
+                You are not ranked
+              </p>
+              <p className="text-white text-sm">
+                Join the Discord server to get started
+              </p>
+              <Button href="/discord" size="sm">
+                Check
+              </Button>
+            </div>
+          )}
           <div className="bg-grey-800 rounded-xl flex flex-col max-xl:col-span-2 max-md:col-span-4 gap-4 p-4 overflow-hidden h-96">
             <div className="flex items-center justify-between">
               <h2 className="text-white text-2xl font-bebas-neue leading-none">

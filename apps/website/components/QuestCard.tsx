@@ -52,7 +52,7 @@ export default function QuestCard(props: {
               </div>
             )
           ) : (
-            ""
+            <div />
           )}
           <Link
             href={`https://warpcast.com/~/channel/${props.community.id}`}

@@ -59,6 +59,7 @@ export const events = pgTable("events", {
   end: timestamp("end", { mode: "date" }).notNull(),
   community: text("community").notNull(),
   featured: boolean("featured").notNull().default(false),
+  season: integer("season").notNull(),
 });
 
 export const eventsRelations = relations(events, ({ one, many }) => ({
@@ -67,6 +68,12 @@ export const eventsRelations = relations(events, ({ one, many }) => ({
     references: [communities.id],
   }),
   quests: many(quests),
+  season: one(seasons, {
+    fields: [events.season],
+    references: [seasons.id],
+  }),
+  rounds: many(rounds),
+  creations: many(creations),
 }));
 
 export const rosters = pgTable("rosters", {
@@ -134,6 +141,7 @@ export const rounds = pgTable("rounds", {
   type: text("type", { enum: ["markdown", "video", "image"] })
     .notNull()
     .default("markdown"),
+  featured: boolean("featured").notNull().default(false),
   content: text("content").notNull(), // rename
   start: timestamp("start", { mode: "date" }).notNull(),
   votingStart: timestamp("voting_start", { mode: "date" }).notNull(),
@@ -225,7 +233,7 @@ export const proposalsRelations = relations(proposals, ({ one, many }) => ({
 export const nexus = pgTable("nexus", {
   id: text("id").primaryKey(),
   handle: text("handle").notNull().default(""),
-  rank: integer("rank").notNull().default(0),
+  rank: integer("rank"),
   xp: integer("xp").notNull().default(0),
   image: text("image").notNull().default(""),
   name: text("name").notNull().default(""),
@@ -265,6 +273,7 @@ export const seasonRelations = relations(seasons, ({ many }) => ({
   ranks: many(ranks),
   rankings: many(rankings),
   xp: many(xp),
+  events: many(events),
 }));
 
 export const ranks = pgTable("ranks", {
@@ -293,8 +302,11 @@ export const quests = pgTable("quests", {
   community: text("community").notNull(),
   season: text("season").notNull().default(""),
   event: text("event"),
-  start: timestamp("start", { mode: "date" }),
-  end: timestamp("end", { mode: "date" }),
+  createdAt: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
+  featured: boolean("featured").notNull().default(false),
+  difficulty: text("difficulty", {
+    enum: ["beginner", "intermediate", "advanced"],
+  }).notNull(),
   active: boolean("active").notNull().default(false),
   xp: integer("xp").notNull(),
   actions: text("actions").array().notNull(),
@@ -417,26 +429,19 @@ export const votesRelations = relations(votes, ({ one }) => ({
   }),
 }));
 
-// use enum on property directly
-export const creationType = pgEnum("creationType", [
-  "art",
-  "photograph",
-  // video/clip
-  // emotes
-  // Stickers
-  // GIFs
-]);
-
 export const creations = pgTable("creations", {
   id: text("id").primaryKey(),
   creator: text("creator"),
-  type: creationType("type").notNull(),
+  type: text("type", {
+    enum: ["art", "photograph", "video", "emote", "sticker", "gif"],
+  }).notNull(),
   title: text("title"),
   createdAt: timestamp("created_at", { mode: "date" }),
   original: text("original"),
   community: text("community").notNull().default(""),
   width: integer("width").notNull(),
   height: integer("height").notNull(),
+  event: text("event"),
 });
 
 export const creationRelations = relations(creations, ({ one }) => ({
@@ -451,6 +456,10 @@ export const creationRelations = relations(creations, ({ one }) => ({
   creator: one(nexus, {
     fields: [creations.creator],
     references: [nexus.id],
+  }),
+  event: one(events, {
+    fields: [creations.event],
+    references: [events.id],
   }),
 }));
 

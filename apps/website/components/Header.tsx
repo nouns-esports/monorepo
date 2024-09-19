@@ -13,6 +13,7 @@ import {
   Diamond,
   Handshake,
   Gem,
+  Calendar,
 } from "lucide-react";
 import Banner from "./Banner";
 import { getCommunities } from "@/server/queries/communities";
@@ -67,6 +68,18 @@ export default async function Header() {
                           <p className="text-grey-200">
                             Learn more about our mission
                           </p>
+                        </div>
+                      </Link>
+                      <Link
+                        href="/events"
+                        className="text-nowrap hover:bg-grey-500 transition-colors py-1.5 px-3 rounded-lg flex gap-4 items-center"
+                      >
+                        <div className="rounded-md w-10 h-10 flex overflow-hidden bg-green text-white items-center">
+                          <Calendar className="w-full h-full p-2" />
+                        </div>
+                        <div>
+                          <p className="font-bebas-neue text-lg">Events</p>
+                          <p className="text-grey-200">View upcoming events</p>
                         </div>
                       </Link>
                       <Link

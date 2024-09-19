@@ -582,6 +582,69 @@
       "when": 1725638681727,
       "tag": "0082_careless_caretaker",
       "breakpoints": true
+    },
+    {
+      "idx": 83,
+      "version": "7",
+      "when": 1725973542715,
+      "tag": "0083_premium_secret_warriors",
+      "breakpoints": true
+    },
+    {
+      "idx": 84,
+      "version": "7",
+      "when": 1726042341658,
+      "tag": "0084_talented_peter_parker",
+      "breakpoints": true
+    },
+    {
+      "idx": 85,
+      "version": "7",
+      "when": 1726042547683,
+      "tag": "0085_gifted_triathlon",
+      "breakpoints": true
+    },
+    {
+      "idx": 86,
+      "version": "7",
+      "when": 1726181316130,
+      "tag": "0086_hard_nekra",
+      "breakpoints": true
+    },
+    {
+      "idx": 87,
+      "version": "7",
+      "when": 1726758772011,
+      "tag": "0087_absurd_apocalypse",
+      "breakpoints": true
+    },
+    {
+      "idx": 88,
+      "version": "7",
+      "when": 1726759700447,
+      "tag": "0088_blushing_mystique",
+      "breakpoints": true
+    },
+    {
+      "idx": 89,
+      "version": "7",
+      "when": 1726759724940,
+      "tag": "0089_perfect_dragon_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 90,
+      "version": "7",
+      "when": 1726760980017,
+      "tag": "0090_right_baron_strucker",
+      "breakpoints": true
+    },
+    {
+      "idx": 91,
+      "version": "7",
+      "when": 1726761817825,
+      "tag": "0091_sudden_scrambler",
+      "breakpoints": true
     }
   ]
 }

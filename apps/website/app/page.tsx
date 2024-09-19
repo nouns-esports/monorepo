@@ -13,15 +13,24 @@ import { getRounds } from "@/server/queries/rounds";
 import { getCreator } from "@/server/queries/creations";
 import RoundCard from "@/components/RoundCard";
 import { getAuthenticatedUser } from "@/server/queries/users";
+import { getCurrentSeason } from "@/server/queries/season";
+import { getCurrentEvent } from "@/server/queries/events";
+import { getQuests } from "@/server/queries/quests";
+import QuestCard from "@/components/QuestCard";
 
 export default async function Home() {
-  const videos = await getVideos();
+  const [videos, trendingPosts, rounds, season] = await Promise.all([
+    getVideos(),
+    getTrendingPosts(),
+    getRounds({ limit: 4 }),
+    getCurrentSeason(),
+  ]);
 
-  const trendingPosts = await getTrendingPosts();
+  if (!season) {
+    throw new Error("No season found");
+  }
 
-  const rounds = await getRounds({ limit: 4 });
-
-  const user = await getAuthenticatedUser();
+  const quests = await getQuests({ limit: 5, season: season.id.toString() });
 
   return (
     <div className="flex flex-col gap-16 mb-16 max-sm:mb-8 max-lg:gap-12 pt-32 max-xl:pt-28 max-sm:pt-20">
@@ -108,6 +117,37 @@ export default async function Home() {
                 image: round.community.image,
               }}
               className="max-xl:w-80 max-xl:flex-shrink-0"
+            />
+          ))}
+        </div>
+      </div>
+      <div className="flex flex-col gap-4 px-32 max-2xl:px-16 max-xl:px-8 max-lg:px-0">
+        <div className="flex justify-between items-center max-lg:px-8 max-sm:px-4">
+          <h2 className="font-luckiest-guy text-white text-4xl max-sm:text-3xl">
+            Quests
+          </h2>
+          <Link
+            href="/quests"
+            className="text-red flex gap-1 items-center group"
+          >
+            View All
+            <ArrowRight className="w-[1.15rem] h-[1.15rem] group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </div>
+        <div className="flex gap-4 justify-between max-lg:w-full max-lg:overflow-x-scroll max-lg:px-8 max-sm:px-4 max-lg:scrollbar-hidden">
+          {quests.map((quest) => (
+            <QuestCard
+              key={quest.id}
+              id={quest.id}
+              name={quest.name}
+              description={quest.description}
+              image={quest.image}
+              community={{
+                id: quest.community.id,
+                name: quest.community.name,
+                image: quest.community.image,
+              }}
+              // completed={!!quest.completed?.[0]?.id}
             />
           ))}
         </div>
