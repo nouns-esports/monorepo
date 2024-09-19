@@ -61,7 +61,7 @@ export default function Proposals(props: {
   }, [selectedVotes]);
 
   const remainingVotes = useMemo(() => {
-    return (props.user?.rank.votes ?? 0) - votesSelected;
+    return (props.user?.rank?.votes ?? 0) - votesSelected;
   }, [votesSelected]);
 
   const { isPending, optimisticState: proposals } = useOptimisticAction(
@@ -108,7 +108,7 @@ export default function Proposals(props: {
                   );
                 }
 
-                if (props.user.rank.votes < 1) {
+                if (!props.user.rank) {
                   return (
                     <>
                       <p className="text-white">Enter the Nexus to propose</p>
@@ -161,7 +161,7 @@ export default function Proposals(props: {
                   );
                 }
 
-                if (props.user.rank.votes < 1) {
+                if (!props.user.rank) {
                   return (
                     <>
                       <p className="text-white">Enter the Nexus to vote</p>
@@ -269,7 +269,11 @@ export default function Proposals(props: {
                     }
                   }
 
-                  if (props.user.rank.votes > 0 && remainingVotes < 1) {
+                  if (
+                    props.user.rank &&
+                    props.user.rank.votes > 0 &&
+                    remainingVotes < 1
+                  ) {
                     return (
                       <>
                         <p className="text-white">
@@ -290,7 +294,7 @@ export default function Proposals(props: {
           {proposals
             .toSorted((a, b) => {
               if (props.round.state === "Proposing") {
-                return b.user.rank.place - a.user.rank.place;
+                return (b.user.rank?.place ?? 0) - (a.user.rank?.place ?? 0);
               }
 
               return b.totalVotes - a.totalVotes;
