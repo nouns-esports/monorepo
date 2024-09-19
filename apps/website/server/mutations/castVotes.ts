@@ -36,6 +36,10 @@ export const castVotes = onlyUser
       throw new Error("Round not found");
     }
 
+    if (!ctx.user.nexus.rank) {
+      throw new Error("Enter the Nexus to vote");
+    }
+
     if (ctx.user.nexus.rank.place < round.minVoterRank.place) {
       throw new Error("You are not eligible to vote in this round");
     }
@@ -73,6 +77,10 @@ export const castVotes = onlyUser
         if (proposal.round !== parsedInput.round) {
           tx.rollback();
           throw new Error("You can only vote on proposals in the same round");
+        }
+
+        if (!ctx.user.nexus.rank) {
+          throw new Error("Enter the Nexus to vote");
         }
 
         if (votesUsed + vote.count > ctx.user.nexus.rank.votes) {

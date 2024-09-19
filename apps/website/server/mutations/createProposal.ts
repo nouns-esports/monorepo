@@ -42,6 +42,10 @@ export const createProposal = onlyUser
       throw new Error("You have already proposed for this round");
     }
 
+    if (!ctx.user.nexus.rank) {
+      throw new Error("Enter the Nexus to propose");
+    }
+
     if (ctx.user.nexus.rank.place < round.minProposerRank.place) {
       throw new Error("You are not eligible to vote in this round");
     }
