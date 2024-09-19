@@ -142,6 +142,11 @@ const nextConfig = {
         destination: "https://github.com/nouns-esports/monorepo",
         permanent: true,
       },
+      {
+        source: "/assets",
+        destination: "/brand-assets.zip",
+        permanent: true,
+      },
     ];
   },
 };
