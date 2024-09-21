@@ -115,7 +115,7 @@ for (const user of users) {
       continue;
     }
 
-    output += `${privyUser.discord.username},${tier}`;
+    output += `${privyUser.id},${privyUser.discord.username},${privyUser.discord.subject},${tier}\n`;
 
     console.log("Updated: ", privyUser.discord.username, tier);
   } catch (error) {
