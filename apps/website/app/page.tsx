@@ -14,16 +14,18 @@ import { getCreator } from "@/server/queries/creations";
 import RoundCard from "@/components/RoundCard";
 import { getAuthenticatedUser } from "@/server/queries/users";
 import { getCurrentSeason } from "@/server/queries/season";
-import { getCurrentEvent } from "@/server/queries/events";
+import { getEvents } from "@/server/queries/events";
 import { getQuests } from "@/server/queries/quests";
 import QuestCard from "@/components/QuestCard";
+import EventCard from "@/components/EventCard";
 
 export default async function Home() {
-  const [videos, trendingPosts, rounds, season] = await Promise.all([
+  const [videos, trendingPosts, rounds, season, events] = await Promise.all([
     getVideos(),
     getTrendingPosts(),
     getRounds({ limit: 4 }),
     getCurrentSeason(),
+    getEvents({ limit: 3 }),
   ]);
 
   if (!season) {
@@ -147,7 +149,34 @@ export default async function Home() {
                 name: quest.community.name,
                 image: quest.community.image,
               }}
+              xp={quest.xp}
               // completed={!!quest.completed?.[0]?.id}
+            />
+          ))}
+        </div>
+      </div>
+      <div className="flex flex-col gap-4 px-32 max-2xl:px-16 max-xl:px-8 max-lg:px-0">
+        <div className="flex justify-between items-center max-lg:px-8 max-sm:px-4">
+          <h2 className="font-luckiest-guy text-white text-4xl max-sm:text-3xl">
+            Events
+          </h2>
+          <Link
+            href="/events"
+            className="text-red flex gap-1 items-center group"
+          >
+            View All
+            <ArrowRight className="w-[1.15rem] h-[1.15rem] group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </div>
+        <div className="flex gap-4 justify-between max-lg:w-full max-lg:overflow-x-scroll max-lg:px-8 max-sm:px-4 max-lg:scrollbar-hidden">
+          {events.map((event) => (
+            <EventCard
+              key={event.id}
+              id={event.id}
+              name={event.name}
+              image={event.image}
+              start={event.start}
+              end={event.end}
             />
           ))}
         </div>

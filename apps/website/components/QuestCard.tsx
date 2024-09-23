@@ -1,12 +1,13 @@
 import { twMerge } from "tailwind-merge";
 import Link from "./Link";
-import { Check, Timer } from "lucide-react";
+import { Check, Sparkles, Timer } from "lucide-react";
 
 export default function QuestCard(props: {
   id: string;
   name: string;
   description: string;
   image: string;
+  xp: number;
   community: {
     id: string;
     name: string;
@@ -54,14 +55,23 @@ export default function QuestCard(props: {
           ) : (
             <div />
           )}
-          <Link
-            href={`https://warpcast.com/~/channel/${props.community.id}`}
-            newTab
-            className="relative z-20 bg-grey-500 hover:bg-grey-400 transition-colors py-2 pl-2 pr-3 rounded-full flex text-white items-center gap-2 text-sm font-semibold w-fit whitespace-nowrap"
-          >
-            <img src={props.community.image} className="w-5 h-5 rounded-full" />
-            {props.community.name}
-          </Link>
+          <div className="flex justify-between items-center">
+            <Link
+              href={`https://warpcast.com/~/channel/${props.community.id}`}
+              newTab
+              className="relative z-20 bg-grey-500 hover:bg-grey-400 transition-colors py-2 pl-2 pr-3 rounded-full flex text-white items-center gap-2 text-sm font-semibold w-fit whitespace-nowrap"
+            >
+              <img
+                src={props.community.image}
+                className="w-5 h-5 rounded-full"
+              />
+              {props.community.name}
+            </Link>
+            <div className="text-white font-semibold text-sm flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-green" />
+              {props.xp}00
+            </div>
+          </div>
         </div>
       </div>
     </div>

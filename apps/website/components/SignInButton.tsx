@@ -38,8 +38,8 @@ export default function SignInButton(props: {
       <button
         onClick={() => {
           if (props.user) return router.push(`/users/${props.user.handle}`);
-          if (props.privyUser) return open();
-          else login();
+
+          open();
         }}
         style={{
           paddingTop: props.user?.image ? "6px" : "10px",

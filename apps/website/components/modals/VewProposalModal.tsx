@@ -1,6 +1,6 @@
 "use client";
 
-import { Modal, ToggleModal } from "@/components/Modal";
+import { Modal, ToggleModal, useModal } from "@/components/Modal";
 import { X } from "lucide-react";
 import Link from "../Link";
 import {
@@ -14,9 +14,13 @@ import type { Nexus, Proposal, Round } from "~/packages/db/schema";
 import type { roundState } from "@/utils/roundState";
 import type { getAuthenticatedUser } from "@/server/queries/users";
 import VoteSelector from "../VoteSelector";
+import type { getRound } from "@/server/queries/rounds";
+import Button from "../Button";
 
 export default function ViewProposalModal(props: {
-  round: Round & { state: ReturnType<typeof roundState> };
+  round: NonNullable<Awaited<ReturnType<typeof getRound>>> & {
+    state: ReturnType<typeof roundState>;
+  };
   proposal: Proposal & { user: Nexus };
   user?: NonNullable<Awaited<ReturnType<typeof getAuthenticatedUser>>> & {
     priorVotes: number;
@@ -25,6 +29,7 @@ export default function ViewProposalModal(props: {
   removeVote: (proposal: number, amount: number) => void;
   selectedVotes: Record<string, number>;
 }) {
+  const { open: openCastVotesModal } = useModal("cast-votes");
   return (
     <Modal
       id={`view-proposal-${props.proposal.id}`}
@@ -93,6 +98,9 @@ export default function ViewProposalModal(props: {
           proposal={props.proposal.id}
           votes={props.proposal.totalVotes}
           selectedVotes={props.selectedVotes[props.proposal.id]}
+          userRank={props.user?.rank ?? undefined}
+          minRank={props.round.minVoterRank ?? undefined}
+          roundState={props.round.state}
           addVote={props.addVote}
           removeVote={props.removeVote}
         />

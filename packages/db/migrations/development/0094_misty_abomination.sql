@@ -1,0 +1,1 @@
+ALTER TABLE "ranks" ADD COLUMN "color" text DEFAULT '' NOT NULL;

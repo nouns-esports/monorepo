@@ -40,7 +40,10 @@ export const castVotes = onlyUser
       throw new Error("Enter the Nexus to vote");
     }
 
-    if (ctx.user.nexus.rank.place < round.minVoterRank.place) {
+    if (
+      round.minVoterRank &&
+      ctx.user.nexus.rank.place < round.minVoterRank.place
+    ) {
       throw new Error("You are not eligible to vote in this round");
     }
 

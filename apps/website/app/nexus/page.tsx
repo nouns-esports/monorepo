@@ -10,6 +10,7 @@ import Link from "@/components/Link";
 import { getCurrentRankings, getUserRankings } from "@/server/queries/rankings";
 import DateComponent from "@/components/Date";
 import { formatUnits } from "viem";
+import { Sparkles } from "lucide-react";
 
 export default async function NexusPage(props: {
   searchParams: {
@@ -55,12 +56,7 @@ export default async function NexusPage(props: {
                     <p
                       className="text-3xl font-bebas-neue"
                       style={{
-                        color:
-                          user.rank.place < 3
-                            ? "#4990FD"
-                            : user.rank.place < 6
-                              ? "#DA00CB"
-                              : "#F00000",
+                        color: user.rank.color,
                       }}
                     >
                       {user.rank.name}
@@ -141,7 +137,10 @@ export default async function NexusPage(props: {
                       <p className="text-white">{ranking.user.name}</p>
                     </div>
                   </div>
-                  <p className="text-white">{ranking.xp} xp</p>
+                  <p className="text-white flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-green" />
+                    {ranking.xp}
+                  </p>
                 </Link>
               ))}
             </div>
@@ -163,8 +162,11 @@ export default async function NexusPage(props: {
               </div>
               <div className="flex flex-col gap-2">
                 <div className="flex justify-between items-center gap-2">
-                  <p className="">Earned XP</p>
-                  <p className="text-white">{userStats.earnedXP}</p>
+                  <p className="">All Time XP</p>
+                  <p className="text-white flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-green" />
+                    {userStats.earnedXP}
+                  </p>
                 </div>
                 <div className="flex justify-between items-center gap-2">
                   <p className="">Votes Cast</p>
@@ -186,58 +188,6 @@ export default async function NexusPage(props: {
                 <DateComponent />
               </p>
             </div>
-          </div>
-          <div className="bg-grey-800 rounded-xl flex flex-col p-4 h-96 max-2xl:col-span-2 max-xl:col-span-2 max-md:col-span-4 gap-4">
-            <h2 className="text-white text-2xl font-bebas-neue leading-none">
-              Awards
-            </h2>
-            <ul className="flex flex-col gap-4">
-              {awards.map((award) => (
-                <li
-                  key={award.id}
-                  className="flex items-center justify-between w-ful"
-                >
-                  <Link
-                    href={`/rounds/${award.round.id}`}
-                    className="flex gap-3 items-center text-white font-semibold"
-                  >
-                    <img
-                      src={award.round.image}
-                      className="w-8 h-8 rounded-md"
-                    />
-                    {award.round.id.replaceAll("-", " ")}
-                  </Link>
-                  <div className="flex items-center gap-4">
-                    <div className="text-white gap-2 flex items-center">
-                      <img
-                        src={award.asset.image}
-                        className="w-5 h-5 rounded-md"
-                      />
-                      {formatUnits(
-                        BigInt(award.value),
-                        award.asset.decimals ?? 0
-                      )}
-                    </div>
-                    <div
-                      className={twMerge(
-                        "rounded-full px-2.5 py-0.5 text-sm font-semibold",
-                        award.claimed
-                          ? "text-white bg-green/90"
-                          : "text-white bg-blue-700"
-                      )}
-                    >
-                      {award.claimed ? "Paid" : "Queued"}
-                    </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="bg-grey-800 rounded-xl flex flex-col p-4 gap-4 col-span-3 max-2xl:col-span-2 max-xl:col-span-4 max-lg:col-span-2 max-md:col-span-4 h-96">
-            <h2 className="text-white text-2xl font-bebas-neue leading-none">
-              Inventory
-            </h2>
-            <p>You don't have any items yet.</p>
           </div>
         </div>
       </div>

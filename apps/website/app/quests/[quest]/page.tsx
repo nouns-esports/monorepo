@@ -3,7 +3,13 @@ import CheckQuest from "@/components/CheckQuest";
 import Link from "@/components/Link";
 import { getAction, getQuest } from "@/server/queries/quests";
 import { getAuthenticatedUser } from "@/server/queries/users";
-import { ArrowLeft, ArrowRight, Check, TriangleAlert } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Check,
+  Sparkles,
+  TriangleAlert,
+} from "lucide-react";
 import { notFound } from "next/navigation";
 import { twMerge } from "tailwind-merge";
 
@@ -54,9 +60,16 @@ export default async function Quest(props: { params: { quest: string } }) {
             />
             <div className="flex flex-col gap-8 p-4">
               <div className="flex flex-col gap-2">
-                <h1 className="w-full text-white font-luckiest-guy text-3xl">
-                  {quest.name}
-                </h1>
+                <div className="flex items-center justify-between">
+                  <h1 className="w-full text-white font-luckiest-guy text-3xl">
+                    {quest.name}
+                  </h1>
+                  <div className="flex items-center gap-2 text-white">
+                    Earns <Sparkles className="w-4 h-4 text-green" />
+                    {quest.xp}00
+                  </div>
+                </div>
+
                 <div className="flex flex-col gap-2">
                   {quest.description}
                   {/* <Markdown markdown={round.content} readOnly /> */}

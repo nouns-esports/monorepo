@@ -21,17 +21,20 @@ export const links = pgTable("links", {
   url: text("url").notNull(),
 });
 
-export const snapshots = pgTable("snapshots", {
+export const clicks = pgTable("clicks", {
   id: serial("id").primaryKey(),
+  link: text("link").notNull(),
   timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
-  type: text("type", { enum: ["link-capture", "discord-call"] }).notNull(),
-  tag: text("tag").notNull(),
   user: text("user").notNull(),
 });
 
-export const snapshotsRelations = relations(snapshots, ({ one }) => ({
+export const clicksRelations = relations(clicks, ({ one }) => ({
+  link: one(links, {
+    fields: [clicks.link],
+    references: [links.id],
+  }),
   user: one(nexus, {
-    fields: [snapshots.user],
+    fields: [clicks.user],
     references: [nexus.id],
   }),
 }));
@@ -146,8 +149,8 @@ export const rounds = pgTable("rounds", {
   start: timestamp("start", { mode: "date" }).notNull(),
   votingStart: timestamp("voting_start", { mode: "date" }).notNull(),
   end: timestamp("end", { mode: "date" }),
-  minProposerRank: integer("min_proposer_rank").notNull().default(0),
-  minVoterRank: integer("min_voter_rank").notNull().default(0),
+  minProposerRank: integer("min_proposer_rank"),
+  minVoterRank: integer("min_voter_rank"),
 });
 
 export const roundsRelations = relations(rounds, ({ one, many }) => ({
@@ -280,6 +283,7 @@ export const ranks = pgTable("ranks", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
   image: text("image").notNull(),
+  color: text("color").notNull().default(""),
   place: smallint("place").notNull(),
   percentile: numeric("percentile", { precision: 3, scale: 2 }).notNull(), // ex: 0.30 === 30%
   season: integer("season").notNull(),
@@ -304,9 +308,6 @@ export const quests = pgTable("quests", {
   event: text("event"),
   createdAt: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
   featured: boolean("featured").notNull().default(false),
-  difficulty: text("difficulty", {
-    enum: ["beginner", "intermediate", "advanced"],
-  }).notNull(),
   active: boolean("active").notNull().default(false),
   xp: integer("xp").notNull(),
   actions: text("actions").array().notNull(),
@@ -334,17 +335,6 @@ export const questRelations = relations(quests, ({ one, many }) => ({
   }),
 }));
 
-// Recuring incentives for actions completed across nouns.gg
-export const incentives = pgTable("incentives", {
-  id: text("id").primaryKey(),
-  xp: integer("xp").notNull(),
-  cooldown: integer("cooldown").notNull(),
-});
-
-export const incentivesRelations = relations(incentives, ({ many }) => ({
-  completed: many(xp),
-}));
-
 export const xp = pgTable("xp", {
   id: serial("id").primaryKey(),
   user: text("user").notNull(),
@@ -352,7 +342,7 @@ export const xp = pgTable("xp", {
   timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
   season: text("season").notNull(),
   quest: text("quest"),
-  incentive: text("incentive"),
+  reason: text("reason"),
   // achievement: text("achievement"),
 });
 
@@ -368,10 +358,6 @@ export const xpRelations = relations(xp, ({ one }) => ({
   quest: one(quests, {
     fields: [xp.quest],
     references: [quests.id],
-  }),
-  incentive: one(incentives, {
-    fields: [xp.incentive],
-    references: [incentives.id],
   }),
   // achievement: one(achievements, {
   //   fields: [xp.achievement],
@@ -498,8 +484,8 @@ const schema = {
   rankings,
   rankingsRelations,
   links,
-  snapshots,
-  snapshotsRelations,
+  clicks,
+  clicksRelations,
 };
 
 export const db = drizzle(

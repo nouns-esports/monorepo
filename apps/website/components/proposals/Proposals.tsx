@@ -117,13 +117,26 @@ export default function Proposals(props: {
                   );
                 }
 
-                if (props.user.rank.place < props.round.minProposerRank.place) {
+                if (
+                  props.round.minProposerRank &&
+                  props.user.rank.place < props.round.minProposerRank.place
+                ) {
                   return (
                     <>
-                      <p className="text-white">
-                        You must be at least {props.round.minProposerRank.name}{" "}
-                        to propose
-                      </p>
+                      <div className="flex items-center gap-2">
+                        <p className="text-white">
+                          You must be ranked at least
+                        </p>
+                        <img
+                          src={props.round.minProposerRank.image}
+                          alt={props.round.minProposerRank.name}
+                          className="h-4 w-4 object-contain"
+                        />
+                        <p style={{ color: props.round.minProposerRank.color }}>
+                          {props.round.minProposerRank.name}
+                        </p>
+                        <p className="text-white">to propose</p>
+                      </div>
                       <Button href="/nexus">View Nexus</Button>
                     </>
                   );
@@ -170,13 +183,26 @@ export default function Proposals(props: {
                   );
                 }
 
-                if (props.user.rank.place < props.round.minVoterRank.place) {
+                if (
+                  props.round.minVoterRank &&
+                  props.user.rank.place < props.round.minVoterRank.place
+                ) {
                   return (
                     <>
-                      <p className="text-white">
-                        You must be at least {props.round.minVoterRank.name} to
-                        vote
-                      </p>
+                      <div className="flex items-center gap-2">
+                        <p className="text-white">
+                          You must be ranked at least
+                        </p>
+                        <img
+                          src={props.round.minVoterRank.image}
+                          alt={props.round.minVoterRank.name}
+                          className="h-4 w-4 object-contain"
+                        />
+                        <p style={{ color: props.round.minVoterRank.color }}>
+                          {props.round.minVoterRank.name}
+                        </p>
+                        <p className="text-white">to vote</p>
+                      </div>
                       <Button href="/nexus">View Nexus</Button>
                     </>
                   );
@@ -423,28 +449,19 @@ export default function Proposals(props: {
                     ) : (
                       ""
                     )}
-                    {props.round.state === "Voting" ? (
-                      <VoteSelector
-                        proposal={proposal.id}
-                        votes={proposal.totalVotes}
-                        addVote={addVote}
-                        removeVote={removeVote}
-                        selectedVotes={selectedVotes[proposal.id]}
-                      />
-                    ) : (
-                      ""
-                    )}
-                    {props.round.state === "Ended" ? (
-                      <ChartBarHorizontal
-                        className={twMerge(
-                          "w-5 h-5 text-grey-200 -rotate-90",
-                          index < props.round.awardCount && "text-white"
-                        )}
-                        weight="fill"
-                      />
-                    ) : (
-                      ""
-                    )}
+
+                    <VoteSelector
+                      proposal={proposal.id}
+                      votes={proposal.totalVotes}
+                      addVote={addVote}
+                      removeVote={removeVote}
+                      selectedVotes={selectedVotes[proposal.id]}
+                      userRank={props.user?.rank ?? undefined}
+                      minRank={props.round.minVoterRank ?? undefined}
+                      awardCount={props.round.awardCount}
+                      index={index}
+                      roundState={props.round.state}
+                    />
                   </div>
                 </div>
               </ToggleModal>

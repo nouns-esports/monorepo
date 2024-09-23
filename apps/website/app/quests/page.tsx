@@ -60,7 +60,7 @@ export default async function Quests() {
       )}
       <div className="flex flex-col gap-6">
         <div className="flex items-center justify-between w-full">
-          <h1 className="font-luckiest-guy text-white text-4xl">
+          <h1 className="font-luckiest-guy text-white text-3xl">
             New this week
           </h1>
           <div className="flex items-end flex-col gap-1">
@@ -85,13 +85,14 @@ export default async function Quests() {
                 name: quest.community.name,
                 image: quest.community.image,
               }}
+              xp={quest.xp}
             />
           ))}
         </div>
       </div>
       {thisSeason.length > 0 && (
         <div className="flex flex-col gap-6">
-          <h1 className="font-luckiest-guy text-white text-4xl">This season</h1>
+          <h1 className="font-luckiest-guy text-white text-3xl">This season</h1>
           <div className="grid grid-cols-5 gap-4">
             {thisSeason.map((quest) => (
               <QuestCard
@@ -105,6 +106,7 @@ export default async function Quests() {
                   name: quest.community.name,
                   image: quest.community.image,
                 }}
+                xp={quest.xp}
               />
             ))}
           </div>

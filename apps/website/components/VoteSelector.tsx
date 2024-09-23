@@ -1,15 +1,44 @@
 "use client";
 
+import type { roundState } from "@/utils/roundState";
 import { motion, AnimatePresence } from "framer-motion";
-import { CaretUp, CaretDown } from "phosphor-react-sc";
+import { CaretUp, CaretDown, ChartBarHorizontal } from "phosphor-react-sc";
+import { twMerge } from "tailwind-merge";
+import type { Rank } from "~/packages/db/schema";
 
 export default function VoteSelector(props: {
   proposal: number;
   votes: number;
   selectedVotes?: number;
+  userRank?: Rank;
+  minRank?: Rank;
+  roundState: ReturnType<typeof roundState>;
+  awardCount?: number;
+  index?: number;
   addVote: (proposal: number, votes: number) => void;
   removeVote: (proposal: number, votes: number) => void;
 }) {
+  if (
+    props.roundState === "Ended" ||
+    (props.roundState === "Voting" && !props.userRank)
+  ) {
+    return (
+      <div
+        className={twMerge(
+          "flex items-center gap-2 text-grey-200 text-2xl text-center select-none font-bebas-neue",
+          props.index &&
+            props.awardCount &&
+            props.roundState === "Ended" &&
+            props.index < props.awardCount &&
+            "text-white"
+        )}
+      >
+        {props.votes}
+        <ChartBarHorizontal className="w-5 h-5 -rotate-90" weight="fill" />
+      </div>
+    );
+  }
+
   return (
     <motion.div
       className="flex items-center gap-2 flex-shrink-0 text-grey-200 text-2xl font-bebas-neue text-center text-nowrap select-none"

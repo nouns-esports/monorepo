@@ -46,7 +46,10 @@ export const createProposal = onlyUser
       throw new Error("Enter the Nexus to propose");
     }
 
-    if (ctx.user.nexus.rank.place < round.minProposerRank.place) {
+    if (
+      round.minProposerRank &&
+      ctx.user.nexus.rank.place < round.minProposerRank.place
+    ) {
       throw new Error("You are not eligible to vote in this round");
     }
 

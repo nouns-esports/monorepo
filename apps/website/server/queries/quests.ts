@@ -1,5 +1,5 @@
 import { communities, db, quests, xp } from "~/packages/db/schema";
-import { and, asc, desc, eq, gte, lte } from "drizzle-orm";
+import { and, asc, desc, eq, gte, isNull, lte } from "drizzle-orm";
 import {
   unstable_cache as cache,
   unstable_noStore as noStore,
@@ -67,11 +67,20 @@ export async function getAction(input: {
 }
 
 export const getQuests = cache(
-  async (input: { limit?: number; user?: string; season: string }) => {
+  async (input: {
+    limit?: number;
+    user?: string;
+    season: string;
+    event?: string;
+  }) => {
     //
     return db.query.quests.findMany({
       limit: input.limit,
-      where: eq(quests.season, input.season),
+      where: and(
+        eq(quests.season, input.season),
+        eq(quests.active, true),
+        input.event ? eq(quests.event, input.event) : isNull(quests.event)
+      ),
       with: {
         community: true,
       },

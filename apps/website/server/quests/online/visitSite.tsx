@@ -1,4 +1,4 @@
-import { db, links, snapshots } from "~/packages/db/schema";
+import { db, links, clicks } from "~/packages/db/schema";
 import createAction from "../createAction";
 import { and, eq } from "drizzle-orm";
 
@@ -28,15 +28,11 @@ export const visitSite = createAction(async (actionInputs) => {
     check: async (user) => {
       if (!link) return false;
 
-      const snapshot = await db.query.snapshots.findFirst({
-        where: and(
-          eq(snapshots.user, user.id),
-          eq(snapshots.type, "link-capture"),
-          eq(snapshots.tag, link.id)
-        ),
+      const click = await db.query.clicks.findFirst({
+        where: and(eq(clicks.user, user.id), eq(clicks.link, link.id)),
       });
 
-      if (!snapshot) return false;
+      if (!click) return false;
 
       return true;
     },
