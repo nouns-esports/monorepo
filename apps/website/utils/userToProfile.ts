@@ -23,7 +23,7 @@ export function userToProfile(user: User) {
     return {
       id: user.id,
       name: user.twitter.username,
-      pfp: user.twitter.profilePictureUrl,
+      pfp: `https://api.cloudnouns.com/v1/pfp?text=${user.id}&background=1`,
       socials,
     };
   }
