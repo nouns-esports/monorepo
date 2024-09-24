@@ -233,7 +233,9 @@ app.image("/rounds/:round/votes/:user/img", async (c) => {
   if (!round) {
     return c.res({
       image: (
-        <div style={{ display: "flex", color: "red" }}>No round found</div>
+        <div style={{ display: "flex", color: "red" }}>
+          User did not vote in the round or it doesnt exist
+        </div>
       ),
     });
   }
@@ -253,6 +255,17 @@ app.image("/rounds/:round/votes/:user/img", async (c) => {
     votingStart: round.votingStart,
     end: round.end,
   });
+
+  if (
+    round.id === "take" &&
+    user.id === "did:privy:clx8g9mui0c1k10947grzks2a"
+  ) {
+    console.log("////////// This errors for some reason //////////");
+    console.log(round);
+    console.log(user);
+    console.log(round.votes);
+    console.log("////////// End //////////");
+  }
 
   return c.res({
     headers: {
