@@ -263,6 +263,8 @@ app.image("/rounds/:round/votes/:user/img", async (c) => {
     console.log("////////// This errors for some reason //////////");
     console.log(round);
     console.log(user);
+    console.log(state);
+    console.log(profile);
     console.log(round.votes);
     console.log("////////// End //////////");
   }
