@@ -138,7 +138,7 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: "/nounstown",
+        source: "/nounstownla",
         destination:
           "https://lu.ma/9lb8t14g?tk=qNPPuz",
         permanent: true,
