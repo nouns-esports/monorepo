@@ -138,6 +138,12 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: "/nounstown",
+        destination:
+          "https://lu.ma/9lb8t14g?tk=qNPPuz",
+        permanent: true,
+      },
+      {
         source: "/github",
         destination: "https://github.com/nouns-esports/monorepo",
         permanent: true,
