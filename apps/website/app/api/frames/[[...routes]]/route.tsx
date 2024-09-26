@@ -256,19 +256,6 @@ app.image("/rounds/:round/votes/:user/img", async (c) => {
     end: round.end,
   });
 
-  if (
-    round.id === "take" &&
-    user.id === "did:privy:clx8g9mui0c1k10947grzks2a"
-  ) {
-    console.log("////////// This errors for some reason //////////");
-    console.log(round);
-    console.log(user);
-    console.log(state);
-    console.log(profile);
-    console.log(round.votes);
-    console.log("////////// End //////////");
-  }
-
   return c.res({
     headers: {
       "Cache-Control": "max-age=0",
