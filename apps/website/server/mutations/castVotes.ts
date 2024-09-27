@@ -74,6 +74,8 @@ export async function castVotes(input: {
 
   await db.transaction(async (tx) => {
     for (const vote of input.votes) {
+      if (vote.count === 0) continue;
+
       const proposal = await tx.query.proposals.findFirst({
         where: eq(proposals.id, vote.proposal),
       });
