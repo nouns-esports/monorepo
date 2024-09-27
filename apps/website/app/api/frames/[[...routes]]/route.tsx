@@ -255,6 +255,7 @@ app.image("/rounds/:round/votes/:user/img", async (c) => {
     votingStart: round.votingStart,
     end: round.end,
   });
+  //
 
   return c.res({
     headers: {
