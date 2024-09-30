@@ -38,7 +38,7 @@ export default async function Creation(props: { params: { id: string } }) {
               <div className="flex gap-3 items-center">
                 {creation.creator.twitter ? (
                   <Link
-                    href={`https://twitter.com/${creation.creator.twitter.username}`}
+                    href={`https://twitter.com/${creation.creator.twitter}`}
                     newTab
                   >
                     <TwitterLogo
@@ -51,7 +51,7 @@ export default async function Creation(props: { params: { id: string } }) {
                 )}
                 {creation.creator.farcaster ? (
                   <Link
-                    href={`https://warpcast.com/${creation.creator.farcaster.username}`}
+                    href={`https://warpcast.com/${creation.creator.farcaster}`}
                     newTab
                   >
                     <img

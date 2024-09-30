@@ -300,12 +300,14 @@ export default async function Home() {
                     href={`/creations/${id.substring(0, 10)}`}
                     className="absolute w-full h-full"
                   />
-                  <img
-                    alt="Artwork"
-                    src={`https://ipfs.nouns.gg/ipfs/${id}?img-height=300&img-onerror=redirect`}
-                    draggable={false}
-                    className="h-full max-w-none object-cover rounded-xl select-none"
-                  />
+                  <div className="overflow-hidden h-full rounded-xl pointer-events-none">
+                    <img
+                      alt="Artwork"
+                      src={`https://ipfs.nouns.gg/ipfs/${id}?img-height=300&img-onerror=redirect`}
+                      draggable={false}
+                      className="h-full max-w-none object-cover select-none group-hover:scale-105 transition-transform"
+                    />
+                  </div>
                   <div className="absolute top-3 right-3 h-7 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity">
                     <Attribution id={id} creator={creator} />
                   </div>
@@ -338,12 +340,14 @@ export default async function Home() {
                     href={`/creations/${id.substring(0, 10)}`}
                     className="absolute w-full h-full"
                   />
-                  <img
-                    alt="Artwork"
-                    src={`https://ipfs.nouns.gg/ipfs/${id}?img-height=300&img-onerror=redirect`}
-                    draggable={false}
-                    className="h-full max-w-none object-cover rounded-xl select-none"
-                  />
+                  <div className="overflow-hidden h-full rounded-xl pointer-events-none">
+                    <img
+                      alt="Artwork"
+                      src={`https://ipfs.nouns.gg/ipfs/${id}?img-height=300&img-onerror=redirect`}
+                      draggable={false}
+                      className="h-full max-w-none object-cover select-none group-hover:scale-105 transition-transform"
+                    />
+                  </div>
                   <div className="absolute top-3 right-3 h-7 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity">
                     <Attribution id={id} creator={creator} />
                   </div>

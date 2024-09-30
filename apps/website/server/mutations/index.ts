@@ -1,8 +1,6 @@
 import { createSafeActionClient } from "next-safe-action";
 import { getAuthenticatedUser } from "../queries/users";
 import { env } from "~/env";
-import { db, nexus as nexusTable } from "~/packages/db/schema";
-import { eq } from "drizzle-orm";
 
 export const actionClient = createSafeActionClient();
 
@@ -13,23 +11,9 @@ export const onlyUser = actionClient.use(async ({ next }) => {
     throw new Error("No user session found");
   }
 
-  const nexus = await db.query.nexus.findFirst({
-    where: eq(nexusTable.id, user.id),
-    with: {
-      rank: true,
-    },
-  });
-
-  if (!nexus) {
-    throw new Error("No Nexus profile found");
-  }
-
   return next({
     ctx: {
-      user: {
-        ...user,
-        nexus,
-      },
+      user,
     },
   });
 });

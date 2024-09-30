@@ -21,20 +21,27 @@ export const links = pgTable("links", {
   url: text("url").notNull(),
 });
 
-export const clicks = pgTable("clicks", {
+export const snapshotTypes = {
+  "discord-call": "Attended a community Discord call",
+  "visit-link": "",
+} as const;
+
+export const snapshots = pgTable("snapshots", {
   id: serial("id").primaryKey(),
-  link: text("link").notNull(),
-  timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
   user: text("user").notNull(),
+  type: text("type", {
+    enum: Object.keys(snapshotTypes) as [
+      keyof typeof snapshotTypes,
+      ...Array<keyof typeof snapshotTypes>,
+    ],
+  }),
+  tag: text("tag").notNull(),
+  timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
 });
 
-export const clicksRelations = relations(clicks, ({ one }) => ({
-  link: one(links, {
-    fields: [clicks.link],
-    references: [links.id],
-  }),
+export const snapshotsRelations = relations(snapshots, ({ one }) => ({
   user: one(nexus, {
-    fields: [clicks.user],
+    fields: [snapshots.user],
     references: [nexus.id],
   }),
 }));
@@ -56,6 +63,9 @@ export const communityRelations = relations(communities, ({ many }) => ({
 
 export const events = pgTable("events", {
   id: text("id").primaryKey(),
+  // type: text("type", { enum: ["match", ""] }).notNull(),
+  // url: text("url"),
+  // parent: text("parent"),
   name: text("name").notNull(),
   image: text("image").notNull(),
   start: timestamp("start", { mode: "date" }).notNull(),
@@ -76,7 +86,7 @@ export const eventsRelations = relations(events, ({ one, many }) => ({
     references: [seasons.id],
   }),
   rounds: many(rounds),
-  creations: many(creations),
+  // moments: many(moments),
 }));
 
 export const rosters = pgTable("rosters", {
@@ -242,16 +252,11 @@ export const nexus = pgTable("nexus", {
   name: text("name").notNull().default(""),
   bio: text("bio"),
   interests: text("interests").array().notNull().default([]),
-  // everytime profile is updated these refresh also weekly automated refresh - can also extend these types
-  wallet: jsonb("wallet").$type<User["wallet"]>(),
-  twitter: jsonb("twitter").$type<User["twitter"]>(),
-  discord: jsonb("discord").$type<User["discord"]>(),
-  farcaster: jsonb("farcaster").$type<User["farcaster"]>(),
-  linkedAccounts: jsonb("linked_accounts")
-    .array()
-    .$type<User["linkedAccounts"]>()
-    .notNull()
-    .default([]),
+  wallet: text("wallet"),
+  twitter: text("twitter"),
+  discord: text("discord"),
+  farcaster: text("farcaster"),
+  // use webhooks to update this
 });
 
 export const nexusRelations = relations(nexus, ({ one, many }) => ({
@@ -342,7 +347,7 @@ export const xp = pgTable("xp", {
   timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
   season: text("season").notNull(),
   quest: text("quest"),
-  reason: text("reason"),
+  snapshot: text("snapshot"),
   // achievement: text("achievement"),
 });
 
@@ -358,6 +363,10 @@ export const xpRelations = relations(xp, ({ one }) => ({
   quest: one(quests, {
     fields: [xp.quest],
     references: [quests.id],
+  }),
+  snaphot: one(snapshots, {
+    fields: [xp.snapshot],
+    references: [snapshots.id],
   }),
   // achievement: one(achievements, {
   //   fields: [xp.achievement],
@@ -415,6 +424,7 @@ export const votesRelations = relations(votes, ({ one }) => ({
   }),
 }));
 
+// What if - separate moments table from creations and moments were like events but curated moments (like Cody placed 1st or we won TI). event gets moved to this moments table so it could be like "Cody placed 1st" (moment.name) at "Genesis" (moment.event). A moment has a period of time where our list of curated artists and creators are allowed to post their work for this moment where users can mint and we mint as an incentive. The moments page would be a list of moments and all the creations for each moment (each moment has their own page) and a section for all other creations not tied to a moment
 export const creations = pgTable("creations", {
   id: text("id").primaryKey(),
   creator: text("creator"),
@@ -427,10 +437,11 @@ export const creations = pgTable("creations", {
   community: text("community").notNull().default(""),
   width: integer("width").notNull(),
   height: integer("height").notNull(),
-  event: text("event"),
+  // moment: text("moment")
+  // mint: text("mint") // Zora mint - can be standalone or a part of a moment collection
 });
 
-export const creationRelations = relations(creations, ({ one }) => ({
+export const creationsRelations = relations(creations, ({ one }) => ({
   original: one(creations, {
     fields: [creations.original],
     references: [creations.id],
@@ -443,11 +454,16 @@ export const creationRelations = relations(creations, ({ one }) => ({
     fields: [creations.creator],
     references: [nexus.id],
   }),
-  event: one(events, {
-    fields: [creations.event],
-    references: [events.id],
-  }),
 }));
+
+// export const moments = pgTable("moments", {
+//   id: serial("id").primaryKey(),
+//   name: text("name"),
+//   start: timestamp("start", { mode: "date" }),
+//   end: timestamp("end", { mode: "date" }),
+//   event: text("event"),
+//   collection: text("collection") // Zora collection
+// });
 
 const schema = {
   communities,
@@ -472,7 +488,7 @@ const schema = {
   events,
   eventsRelations,
   creations,
-  creationRelations,
+  creationsRelations,
   seasons,
   seasonRelations,
   ranks,
@@ -484,8 +500,8 @@ const schema = {
   rankings,
   rankingsRelations,
   links,
-  clicks,
-  clicksRelations,
+  snapshots,
+  snapshotsRelations,
 };
 
 export const db = drizzle(
@@ -511,3 +527,4 @@ export type Rank = typeof ranks.$inferSelect;
 export type Rankings = typeof rankings.$inferSelect;
 export type Quest = typeof quests.$inferSelect;
 export type Event = typeof events.$inferSelect;
+export type Snapshot = typeof snapshots.$inferSelect;

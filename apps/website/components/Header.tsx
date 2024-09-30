@@ -1,8 +1,5 @@
 import Link from "@/components/Link";
-import {
-  getAuthenticatedUser,
-  getAuthenticatedPrivyUser,
-} from "@/server/queries/users";
+import { getAuthenticatedUser } from "@/server/queries/users";
 import SignInButton from "./SignInButton";
 import {
   Shapes,
@@ -22,8 +19,6 @@ import Menu from "./Menu";
 import { CurrencyEth } from "phosphor-react-sc";
 
 export default async function Header() {
-  const privyUser = await getAuthenticatedPrivyUser();
-
   const user = await getAuthenticatedUser();
 
   const communities = await getCommunities();
@@ -228,7 +223,7 @@ export default async function Header() {
               </nav>
             </div>
             <div className="pointer-events-auto flex gap-8 items-center relative z-[60]">
-              {privyUser ? (
+              {user?.nexus ? (
                 <Link href="/nexus">
                   <li className="flex gap-2 items-center opacity-100 hover:opacity-80 transition-opacity text-white">
                     <CurrencyEth className="w-5 h-5" />
@@ -238,7 +233,7 @@ export default async function Header() {
               ) : (
                 ""
               )}
-              <SignInButton privyUser={privyUser} user={user} />
+              <SignInButton user={user} />
             </div>
           </div>
         </div>

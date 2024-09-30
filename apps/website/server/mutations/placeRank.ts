@@ -55,9 +55,10 @@ export const placeRank = onlyUser.action(async ({ parsedInput, ctx }) => {
   }
 
   await db.transaction(async (tx) => {
-    await tx.update(nexus).set({
-      rank: lowestRank.id,
-    });
+    await tx
+      .update(nexus)
+      .set({ rank: lowestRank.id })
+      .where(eq(nexus.id, ctx.user.id));
     await tx.insert(rankings).values({
       user: ctx.user.id,
       season: currentSeason.id,

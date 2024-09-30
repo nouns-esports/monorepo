@@ -1,6 +1,6 @@
 import { getAuthenticatedUser, getUserStats } from "@/server/queries/users";
 import { getUserAwards } from "@/server/queries/awards";
-import { notFound } from "next/navigation";
+import { redirect } from "next/navigation";
 import Button from "@/components/Button";
 import RankChart from "@/components/RankChart";
 import { getCurrentRanks } from "@/server/queries/ranks";
@@ -9,7 +9,6 @@ import { twMerge } from "tailwind-merge";
 import Link from "@/components/Link";
 import { getCurrentRankings, getUserRankings } from "@/server/queries/rankings";
 import DateComponent from "@/components/Date";
-import { formatUnits } from "viem";
 import { Sparkles } from "lucide-react";
 
 export default async function NexusPage(props: {
@@ -23,8 +22,8 @@ export default async function NexusPage(props: {
     getCurrentRanks(),
   ]);
 
-  if (!user) {
-    notFound();
+  if (!user || !user.nexus) {
+    return redirect("/");
   }
 
   const [awards, userRankings, rankings, userStats] = await Promise.all([
@@ -39,15 +38,15 @@ export default async function NexusPage(props: {
       <div className="flex flex-col gap-8">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <img src={user.image} className="w-10 h-10 rounded-full" />
+            <img src={user.nexus.image} className="w-10 h-10 rounded-full" />
             <h1 className="text-3xl font-luckiest-guy text-white">
-              {user.name}
+              {user.nexus.name}
             </h1>
           </div>
-          <Button href={`/users/${user.handle}`}>View Profile</Button>
+          <Button href={`/users/${user.nexus.handle}`}>View Profile</Button>
         </div>
         <div className="grid grid-cols-4 gap-4 grid-rows-2">
-          {user.rank ? (
+          {user.nexus.rank ? (
             <div className="bg-grey-800 col-span-2 max-lg:col-span-4 rounded-xl flex flex-col p-4 gap-4 h-96">
               <div className="flex justify-between">
                 <div className="flex flex-col">
@@ -56,18 +55,18 @@ export default async function NexusPage(props: {
                     <p
                       className="text-3xl font-bebas-neue"
                       style={{
-                        color: user.rank.color,
+                        color: user.nexus.rank.color,
                       }}
                     >
-                      {user.rank.name}
+                      {user.nexus.rank.name}
                     </p>
                     <img
-                      src={user.rank.image}
+                      src={user.nexus.rank.image}
                       className="h-10 object-contain"
                     />
                   </div>
                 </div>
-                {user.rank ? (
+                {user.nexus.rank ? (
                   <div className="flex items-end flex-col gap-1">
                     <h2 className="">Updates in</h2>
                     <div className="flex items-center gap-2">
@@ -117,32 +116,36 @@ export default async function NexusPage(props: {
                 /> */}
             </div>
             <div className="relative flex flex-col gap-2 overflow-y-auto custom-scrollbar">
-              {rankings.map((ranking) => (
-                <Link
-                  href={`/users/${ranking.user.handle}`}
-                  key={ranking.id}
-                  className={twMerge(
-                    "flex justify-between items-center hover:bg-grey-500 transition-colors p-2 rounded-lg",
-                    ranking.user.id === user.id &&
-                      "bg-blue-700 hover:bg-blue-800 sticky top-0 bottom-0"
-                  )}
-                >
-                  <div className="flex gap-4 items-center">
-                    <p className="text-white w-6">{ranking.place}</p>
-                    <div className="flex gap-2 items-center">
-                      <img
-                        src={ranking.user.image}
-                        className="w-6 h-6 rounded-full object-cover"
-                      />
-                      <p className="text-white">{ranking.user.name}</p>
+              {rankings.map((ranking) => {
+                if (!ranking.user) return;
+
+                return (
+                  <Link
+                    href={`/users/${ranking.user.handle}`}
+                    key={ranking.id}
+                    className={twMerge(
+                      "flex justify-between items-center hover:bg-grey-500 transition-colors p-2 rounded-lg",
+                      ranking.user.id === user.id &&
+                        "bg-blue-700 hover:bg-blue-800 sticky top-0 bottom-0"
+                    )}
+                  >
+                    <div className="flex gap-4 items-center">
+                      <p className="text-white w-6">{ranking.place}</p>
+                      <div className="flex gap-2 items-center">
+                        <img
+                          src={ranking.user.image}
+                          className="w-6 h-6 rounded-full object-cover"
+                        />
+                        <p className="text-white">{ranking.user.name}</p>
+                      </div>
                     </div>
-                  </div>
-                  <p className="text-white flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-green" />
-                    {ranking.xp}
-                  </p>
-                </Link>
-              ))}
+                    <p className="text-white flex items-center gap-2">
+                      <Sparkles className="w-4 h-4 text-green" />
+                      {ranking.xp}
+                    </p>
+                  </Link>
+                );
+              })}
             </div>
           </div>
           <div className="bg-grey-800 rounded-xl flex flex-col gap-4 p-4 justify-between h-96 max-xl:col-span-2 max-md:col-span-4">

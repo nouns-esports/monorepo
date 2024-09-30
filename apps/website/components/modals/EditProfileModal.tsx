@@ -11,31 +11,23 @@ import { pinImage } from "@/server/mutations/pinImage";
 import { useAction } from "next-safe-action/hooks";
 import { updateProfile } from "@/server/mutations/updateProfile";
 import { useRouter } from "next/navigation";
-import { Plus, RefreshCcw, Save, UserPen } from "lucide-react";
+import { Plus, RefreshCcw, Save, UserPen, X } from "lucide-react";
 import { twMerge } from "tailwind-merge";
+import { usePrivy } from "@privy-io/react-auth";
+import type { AuthenticatedUser } from "@/server/queries/users";
 
-export default function EditProfileModal(props: { user: Nexus }) {
+export default function EditProfileModal(props: { user: AuthenticatedUser }) {
   const [tab, setTab] = useState<"profile" | "connections" | "advanced">(
     "profile"
   );
 
-  const [image, setImage] = useState(props.user.image);
-  const [name, setName] = useState(props.user.name);
-  const [bio, setBio] = useState(props.user.bio);
-  const [handle, setHandle] = useState(props.user.handle);
+  const [image, setImage] = useState(props.user.nexus?.image);
+  const [name, setName] = useState(props.user.nexus?.name);
+  const [bio, setBio] = useState(props.user.nexus?.bio);
 
   const pinImageAction = useAction(pinImage);
 
   const { isOpen, close } = useModal("edit-profile");
-
-  useEffect(() => {
-    if (isOpen) {
-      setImage(props.user.image);
-      setName(props.user.name);
-      setBio(props.user.bio);
-      setHandle(props.user.handle);
-    }
-  }, [isOpen]);
 
   const updateProfileAction = useAction(updateProfile, {
     onSuccess: () => {
@@ -44,11 +36,21 @@ export default function EditProfileModal(props: { user: Nexus }) {
     },
   });
 
+  const { linkDiscord } = usePrivy();
+
   return (
     <Modal id="edit-profile" className="p-4 flex flex-col min-w-80 gap-4">
-      <p className="text-white text-2xl font-bebas-neue leading-none">
-        Your Account
-      </p>
+      <div className="flex justify-between items-center">
+        <p className="text-white text-2xl font-bebas-neue leading-none">
+          Your Account
+        </p>
+        <button
+          onClick={close}
+          className="p-1 rounded-full bg-grey-600 hover:bg-grey-500 transition-colors"
+        >
+          <X className="w-4 h-4 text-grey-200" />
+        </button>
+      </div>
       <div className="flex items-center gap-4">
         <button
           onClick={() => setTab("profile")}
@@ -114,11 +116,6 @@ export default function EditProfileModal(props: { user: Nexus }) {
             <Plus className="w-5 h-5" />
           </div>
         </label>
-        <TextInput
-          value={handle}
-          onChange={(value) => setHandle(value)}
-          placeholder="Handle"
-        />
       </div>
       <div className="flex flex-col gap-4">
         <TextInput
@@ -138,13 +135,7 @@ export default function EditProfileModal(props: { user: Nexus }) {
       </div>
       <div className="flex items-center justify-between gap-4">
         <button
-          onClick={() => {
-            updateProfileAction.execute({
-              name,
-              bio: bio ?? undefined,
-              image,
-            });
-          }}
+          onClick={() => {}}
           className="flex justify-center items-center gap-2 w-full text-black bg-white hover:bg-white/70 font-semibold rounded-lg p-2.5 transition-colors"
         >
           Save

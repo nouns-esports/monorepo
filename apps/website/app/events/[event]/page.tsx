@@ -20,7 +20,6 @@ export default async function EventPage(props: { params: { event: string } }) {
       {event.quests.length > 0 && (
         <h2 className="text-white text-4xl font-luckiest-guy">Quests</h2>
       )}
-      <h2 className="text-white text-4xl font-luckiest-guy">Images</h2>
     </div>
   );
 }

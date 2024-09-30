@@ -14,7 +14,6 @@ export default function EventCard(props: {
       <Link
         href={`/events/${props.id}`}
         className="absolute z-10 top-0 left-0 w-full h-full"
-        newTab
       />
       <img
         src={props.image}

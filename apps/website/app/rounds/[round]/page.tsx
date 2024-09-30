@@ -37,7 +37,7 @@ export async function generateMetadata(props: {
 
   return {
     title: round.name,
-    metadataBase: new URL(env.PUBLIC_DOMAIN),
+    metadataBase: new URL(env.NEXT_PUBLIC_DOMAIN),
     openGraph: {
       type: "website",
       images: [round.banner],
@@ -48,7 +48,7 @@ export async function generateMetadata(props: {
       images: [round.banner],
     },
     other: await getFrameMetadata(
-      `${env.PUBLIC_DOMAIN}/api/frames/rounds/${props.params.round}`
+      `${env.NEXT_PUBLIC_DOMAIN}/api/frames/rounds/${props.params.round}`
     ),
   };
 }
@@ -140,6 +140,7 @@ export default async function Round(props: {
                       <div className="flex gap-2 items-center">
                         <img
                           src={award.asset.image}
+                          title={award.asset.name}
                           className="w-7 h-7 rounded-md object-cover object-center"
                         />
                         <p className="text-white whitespace-nowrap text-sm">
@@ -266,31 +267,6 @@ export default async function Round(props: {
           }
         />
       </div>
-
-      {/* {priorVotes > 0 ? (
-        <Modal id="share-votes" className="overflow-hidden flex-col gap-4 p-4">
-          <div className="relative z-[80] rounded-xl bg-black overflow-hidden flex flex-col gap-4 p-4">
-            <img
-              src={`/api/frames/rounds/${props.params.round}/votes/${user?.id}/img`}
-              className="w-96 rounded-xl"
-            />
-            <div className="flex justify-between text-white">
-              <Link
-                href={`https://warpcast.com/~/compose?embeds[]=${env.PUBLIC_DOMAIN}/api/frames/rounds/${props.params.round}/votes/${user?.id}/`}
-                className="flex gap-1 items-center group hover:opacity-80 transition-opacity"
-              >
-                Share this image on Warpcast{" "}
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </Link>
-              <ToggleModal id="share-votes" className="text-red">
-                Close
-              </ToggleModal>
-            </div>
-          </div>
-        </Modal>
-      ) : (
-        ""
-      )} */}
     </div>
   );
 }

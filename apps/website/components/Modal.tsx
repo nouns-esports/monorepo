@@ -117,16 +117,14 @@ export function Modal(props: {
     if (isOpen) {
       const width = root.clientWidth;
 
-      document.documentElement.classList.add("prevent-scroll");
-
+      root.classList.add("prevent-scroll");
       root.style.paddingRight = `${root.clientWidth - width}px`;
 
       if (props.queryParam) {
         url.searchParams.set(props.queryParam[0], props.queryParam[1]);
       }
     } else {
-      document.documentElement.classList.remove("prevent-scroll");
-
+      root.classList.remove("prevent-scroll");
       root.style.paddingRight = `0px`;
 
       if (props.queryParam) {

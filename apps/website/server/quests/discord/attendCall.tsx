@@ -1,6 +1,6 @@
 import { and, eq } from "drizzle-orm";
 import createAction from "../createAction";
-import { db, snapshots } from "~/packages/db/schema";
+import { db, snapshots, xp } from "~/packages/db/schema";
 
 export const attendCall = createAction<{ tag?: string }>(
   async (actionInputs) => {

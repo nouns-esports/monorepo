@@ -4,23 +4,6 @@
   "type": "module",
   "scripts": {
     "dev": "cross-env NODE_ENV=development bun index.ts",
-    "start": "cross-env NODE_ENV=production bun index.ts",
-    "uniqueVoters": "cross-env NODE_ENV=production bun ./scripts/analytics/uniqueVoters.ts",
-    "proposalCount": "cross-env NODE_ENV=production bun ./scripts/analytics/proposalCount.ts",
-    "totalUniqueInteractions": "cross-env NODE_ENV=production bun ./scripts/analytics/totalUniqueInteractions.ts",
-    "botCheck": "cross-env NODE_ENV=production bun ./scripts/botting/botCheck.ts",
-    "purgeVotes": "cross-env NODE_ENV=production bun ./scripts/botting/purgeVotes.ts",
-    "updateImages": "cross-env NODE_ENV=development bun ./scripts/analytics/updateImages.ts",
-    "checkNexus": "cross-env NODE_ENV=production bun ./scripts/checkNexus.ts",
-    "refreshNexus": "cross-env NODE_ENV=production bun ./scripts/refreshNexus.ts",
-    "votersForProposal": "cross-env NODE_ENV=production bun ./scripts/analytics/votersForProposal.ts",
-    "flagPotentialBots": "cross-env NODE_ENV=production bun ./scripts/botting/flagPotentialBots.ts",
-    "flagHardPotentialBots": "cross-env NODE_ENV=production bun ./scripts/botting/flagHardPotentialBots.ts",
-    "explorerRoles": "cross-env NODE_ENV=production bun ./scripts/explorerRoles.ts",
-    "seedOldUsers": "cross-env NODE_ENV=development bun ./scripts/seedOldUsers.ts",
-    "getFIDs": "cross-env NODE_ENV=production bun ./scripts/getFIDs.ts",
-    "migrateUsers": "cross-env NODE_ENV=development bun ./scripts/migrateUsers.ts",
-    "migrateProposals": "cross-env NODE_ENV=development bun ./scripts/migrateProposals.ts",
-    "fixProposals": "cross-env NODE_ENV=development bun ./scripts/fixProposals.ts"
+    "start": "cross-env NODE_ENV=production bun index.ts"
   }
 }

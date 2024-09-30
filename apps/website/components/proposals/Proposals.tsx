@@ -20,7 +20,7 @@ import { useModal } from "../Modal";
 import { useAction, useOptimisticAction } from "next-safe-action/hooks";
 import CastVotesModal from "../modals/CastVotesModal";
 import ViewProposalModal from "../modals/VewProposalModal";
-import type { getAuthenticatedUser } from "@/server/queries/users";
+import type { AuthenticatedUser } from "@/server/queries/users";
 import VoteSelector from "../VoteSelector";
 
 export default function Proposals(props: {
@@ -30,7 +30,7 @@ export default function Proposals(props: {
       awardCount: number;
     }
   >;
-  user?: NonNullable<Awaited<ReturnType<typeof getAuthenticatedUser>>> & {
+  user?: AuthenticatedUser & {
     priorVotes: number;
   };
 }) {
@@ -39,7 +39,7 @@ export default function Proposals(props: {
   );
 
   function addVote(proposal: number, count: number) {
-    // if (remainingVotes < 1) return;
+    if (remainingVotes < 1) return;
 
     setSelectedVotes((prev) => ({
       ...prev,
@@ -61,26 +61,25 @@ export default function Proposals(props: {
   }, [selectedVotes]);
 
   const remainingVotes = useMemo(() => {
-    return (props.user?.rank?.votes ?? 0) - votesSelected;
+    return (props.user?.nexus?.rank?.votes ?? 0) - votesSelected;
   }, [votesSelected]);
 
-  const { isPending, optimisticState: proposals } = useOptimisticAction(
-    castVotes,
-    {
-      currentState: props.round.proposals,
-      updateFn: (proposals, input) =>
-        proposals.map((proposal) => {
-          const vote = input.votes.find(
-            (vote) => vote.proposal === proposal.id
-          );
+  const {
+    isPending,
+    optimisticState: proposals,
+    hasSucceeded,
+  } = useOptimisticAction(castVotes, {
+    currentState: props.round.proposals,
+    updateFn: (proposals, input) =>
+      proposals.map((proposal) => {
+        const vote = input.votes.find((vote) => vote.proposal === proposal.id);
 
-          return {
-            ...proposal,
-            totalVotes: proposal.totalVotes + (vote ? vote.count : 0),
-          };
-        }),
-    }
-  );
+        return {
+          ...proposal,
+          totalVotes: proposal.totalVotes + (vote ? vote.count : 0),
+        };
+      }),
+  });
 
   const userProposal = props.round.proposals.find(
     (proposal) => proposal.user === props.user?.id
@@ -108,7 +107,7 @@ export default function Proposals(props: {
                   );
                 }
 
-                if (!props.user.rank) {
+                if (!props.user?.nexus?.rank) {
                   return (
                     <>
                       <p className="text-white">Enter the Nexus to propose</p>
@@ -119,7 +118,8 @@ export default function Proposals(props: {
 
                 if (
                   props.round.minProposerRank &&
-                  props.user.rank.place < props.round.minProposerRank.place
+                  props.user?.nexus?.rank.place <
+                    props.round.minProposerRank.place
                 ) {
                   return (
                     <>
@@ -174,7 +174,7 @@ export default function Proposals(props: {
                   );
                 }
 
-                if (!props.user.rank) {
+                if (!props.user?.nexus?.rank) {
                   return (
                     <>
                       <p className="text-white">Enter the Nexus to vote</p>
@@ -185,7 +185,7 @@ export default function Proposals(props: {
 
                 if (
                   props.round.minVoterRank &&
-                  props.user.rank.place < props.round.minVoterRank.place
+                  props.user?.nexus?.rank.place < props.round.minVoterRank.place
                 ) {
                   return (
                     <>
@@ -208,7 +208,7 @@ export default function Proposals(props: {
                   );
                 }
 
-                if (props.user.rank.votes > 0 && remainingVotes < 1) {
+                if (props.user?.nexus?.rank.votes > 0 && remainingVotes < 1) {
                   return (
                     <>
                       <p className="text-white">
@@ -224,57 +224,12 @@ export default function Proposals(props: {
                 return (
                   <>
                     <p className="text-white">
-                      {remainingVotes}/{props.user.rank.votes} votes remaining
+                      {remainingVotes}/{props.user?.nexus?.rank.votes} votes
+                      remaining
                     </p>
                     <Button
                       disabled={isPending || votesSelected < 1}
                       onClick={() => openCastVotesModal()}
-                      // onClick={() => {
-                      //   const submit = new Promise((resolve, reject) => {
-                      //     startTransition(async () => {
-                      //       setVotes({
-                      //         ...votes,
-                      //         ...Object.entries(userVotes).reduce(
-                      //           (
-                      //             userVotes: Record<string, number>,
-                      //             [id, count]
-                      //           ) => {
-                      //             userVotes[id] = (votes[id] ?? 0) + count;
-
-                      //             return userVotes;
-                      //           },
-                      //           {}
-                      //         ),
-                      //       });
-
-                      //       await castVotes({
-                      //         // @ts-ignore
-                      //         user: props.user.id,
-                      //         round: props.round.id,
-                      //         votes: Object.entries(userVotes).map(
-                      //           ([id, count]) => ({
-                      //             proposal: Number(id),
-                      //             count,
-                      //           })
-                      //         ),
-                      //       })
-                      //         .then(resolve)
-                      //         .catch(reject);
-                      //     });
-                      //   });
-
-                      //   toast.promise(submit, {
-                      //     loading: "Casting votes",
-                      //     success: () => {
-                      //       setUserVotes({});
-                      //       return "Successfully cast votes";
-                      //     },
-                      //     error: () => {
-                      //       setUserVotes({});
-                      //       return "Failed to cast votes";
-                      //     },
-                      //   });
-                      // }}
                     >
                       Submit Votes
                     </Button>
@@ -296,8 +251,8 @@ export default function Proposals(props: {
                   }
 
                   if (
-                    props.user.rank &&
-                    props.user.rank.votes > 0 &&
+                    props.user?.nexus?.rank &&
+                    props.user?.nexus?.rank.votes > 0 &&
                     remainingVotes < 1
                   ) {
                     return (
@@ -320,7 +275,7 @@ export default function Proposals(props: {
           {proposals
             .toSorted((a, b) => {
               if (props.round.state === "Proposing") {
-                return (b.user.rank?.place ?? 0) - (a.user.rank?.place ?? 0);
+                return (b.user?.rank?.place ?? 0) - (a.user?.rank?.place ?? 0);
               }
 
               return b.totalVotes - a.totalVotes;
@@ -422,16 +377,20 @@ export default function Proposals(props: {
                   />
                 )}
                 <div className="flex justify-between items-center flex-shrink-0">
-                  <Link
-                    href={`/users/${proposal.user.handle}`}
-                    className="flex gap-2 items-center text-white"
-                  >
-                    <img
-                      src={proposal.user.image}
-                      className="h-6 w-6 rounded-full"
-                    />
-                    {proposal.user.name}
-                  </Link>
+                  {proposal.user ? (
+                    <Link
+                      href={`/users/${proposal.user.handle}`}
+                      className="flex gap-2 items-center text-white"
+                    >
+                      <img
+                        src={proposal.user.image}
+                        className="h-6 w-6 rounded-full"
+                      />
+                      {proposal.user.name}
+                    </Link>
+                  ) : (
+                    <div />
+                  )}
                   <div className="flex items-center gap-4">
                     {props.round.state === "Ended" &&
                     index < props.round.awardCount ? (
@@ -456,7 +415,7 @@ export default function Proposals(props: {
                       addVote={addVote}
                       removeVote={removeVote}
                       selectedVotes={selectedVotes[proposal.id]}
-                      userRank={props.user?.rank ?? undefined}
+                      userRank={props.user?.nexus?.rank ?? undefined}
                       minRank={props.round.minVoterRank ?? undefined}
                       awardCount={props.round.awardCount}
                       index={index}
@@ -481,7 +440,11 @@ export default function Proposals(props: {
           )}
         </div>
       </div>
-      <CastVotesModal proposals={proposals} selectedVotes={selectedVotes} />
+      <CastVotesModal
+        round={props.round.id}
+        proposals={proposals}
+        selectedVotes={selectedVotes}
+      />
       {proposals.map((proposal) => (
         <ViewProposalModal
           key={proposal.id}

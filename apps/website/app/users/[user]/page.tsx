@@ -1,7 +1,5 @@
 import Button from "@/components/Button";
 import EditProfileModal from "@/components/modals/EditProfileModal";
-import TextArea from "@/components/form/TextArea";
-import TextInput from "@/components/form/TextInput";
 import { ToggleModal } from "@/components/Modal";
 import { getAuthenticatedUser, getUser } from "@/server/queries/users";
 import { notFound } from "next/navigation";
@@ -25,11 +23,19 @@ export default async function User(props: { params: { user: string } }) {
                 className="w-12 h-12 rounded-full max-sm:w-12 max-sm:h-12"
               />
               <div className="flex flex-col gap-2">
-                <div className="flex flex-col">
+                <div className="flex items-center gap-2">
                   <h1 className="text-white text-2xl leading-none font-luckiest-guy">
                     {user.name}
                   </h1>
-                  <h2 className="text-lg">@{user.handle}</h2>
+                  {user.rank ? (
+                    <img
+                      src={user.rank.image}
+                      className="h-6 w-6 object-contain"
+                      title={user.rank.name}
+                    />
+                  ) : (
+                    ""
+                  )}
                 </div>
                 <p>{user.bio}</p>
               </div>
@@ -44,7 +50,7 @@ export default async function User(props: { params: { user: string } }) {
           </div>
         </div>
       </div>
-      <EditProfileModal user={user} />
+      {authenticatedUser && <EditProfileModal user={authenticatedUser} />}
     </>
   );
 }
