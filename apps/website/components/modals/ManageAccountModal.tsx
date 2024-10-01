@@ -26,6 +26,8 @@ export default function ManageAccountModal(props: { user: AuthenticatedUser }) {
   const [name, setName] = useState(props.user.nexus?.name);
   const [bio, setBio] = useState(props.user.nexus?.bio);
 
+  const [confirmDeleteAccount, setConfirmDeleteAccount] = useState(false);
+
   const pinImageAction = useAction(pinImage);
 
   const { isOpen, close } = useModal("edit-profile");
@@ -243,11 +245,22 @@ export default function ManageAccountModal(props: { user: AuthenticatedUser }) {
                   <div className="flex flex-col gap-1">
                     <p className="text-white font-semibold">Delete Account</p>
                     <div className="flex gap-2">
-                      <input type="checkbox" className="accent-red w-3" />{" "}
+                      <input
+                        checked={confirmDeleteAccount}
+                        onChange={(e) =>
+                          setConfirmDeleteAccount(!confirmDeleteAccount)
+                        }
+                        type="checkbox"
+                        className="accent-red w-3"
+                      />
                       <label className="text-red text-sm">Are you sure?</label>
                     </div>
                   </div>
-                  <Button onClick={() => {}} size="sm">
+                  <Button
+                    disabled={!confirmDeleteAccount}
+                    onClick={() => {}}
+                    size="sm"
+                  >
                     Delete Account
                   </Button>
                 </div>
