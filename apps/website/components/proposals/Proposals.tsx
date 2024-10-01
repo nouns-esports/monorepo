@@ -62,7 +62,7 @@ export default function Proposals(props: {
 
   const remainingVotes = useMemo(() => {
     return (props.user?.nexus?.rank?.votes ?? 0) - votesSelected;
-  }, [votesSelected]);
+  }, [votesSelected, props.user?.nexus?.rank?.votes]);
 
   const {
     isPending,

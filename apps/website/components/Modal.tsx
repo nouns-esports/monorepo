@@ -8,7 +8,7 @@ import {
   useMotionValue,
 } from "framer-motion";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import { create } from "zustand";
 
@@ -26,6 +26,9 @@ export function useModal(id: string) {
   const { open, setOpen } = useModalState();
 
   const y = useMotionValue(0);
+
+  const { width } = useWindowSize();
+  const mobile = useMemo(() => !!((width ?? 0) <= 1024), [width]);
 
   return {
     isOpen: open[id],
@@ -48,17 +51,17 @@ export function useModal(id: string) {
         animate(
           backdrop,
           { opacity: [1, 0] },
-          { duration: 0.3, ease: "easeInOut" }
+          { duration: mobile ? 0.3 : 0.2, ease: "easeInOut" }
         ),
         animate(
           modal,
           {
             y: [
               typeof y.get() === "number" ? y.get() : 0,
-              modal.getBoundingClientRect().height,
+              modal.getBoundingClientRect().height / (mobile ? 1 : 10),
             ],
           },
-          { duration: 0.3, ease: "easeInOut" }
+          { duration: mobile ? 0.3 : 0.2, ease: "easeInOut" }
         ),
       ]).then(() => setOpen(id, false));
     },
@@ -136,55 +139,62 @@ export function Modal(props: {
   }, [isOpen]);
 
   const { width } = useWindowSize();
+  const mobile = useMemo(() => !!((width ?? 0) <= 1024), [width]);
 
   const controls = useDragControls();
 
-  if (isOpen) {
-    return (
+  return (
+    <motion.div
+      id={`${props.id}-backdrop`}
+      onClick={() => close()}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: isOpen ? 1 : 0 }}
+      transition={{
+        duration: mobile ? 0.3 : 0.2,
+        ease: "easeInOut",
+      }}
+      className={`fixed z-[80] inset-0 bg-black/50 flex items-center justify-center max-lg:items-end backdrop-blur-sm ${
+        isOpen ? "pointer-events-auto" : "pointer-events-none"
+      }`}
+    >
       <motion.div
-        id={`${props.id}-backdrop`}
-        onClick={() => close()}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.3, ease: "easeInOut" }}
-        className="fixed z-[80] inset-0 bg-black/50 flex items-center justify-center max-lg:items-end backdrop-blur-sm"
+        id={`${props.id}-modal`}
+        initial={{ y: mobile ? "100%" : "10%" }}
+        animate={{ y: isOpen ? "0%" : mobile ? "100%" : "10%" }}
+        drag={mobile ? "y" : false}
+        dragConstraints={{ top: 0, bottom: 0 }}
+        dragElastic={{
+          top: 0,
+          bottom: 0.5,
+        }}
+        dragControls={props.handle ? controls : undefined}
+        dragListener={props.handle ? false : undefined}
+        style={{ y }}
+        transition={{
+          duration: mobile ? 0.3 : 0.2,
+          ease: "easeInOut",
+        }}
+        onDragEnd={() => {
+          if (y.get() >= 100) close();
+        }}
+        onClick={(e) => e.stopPropagation()}
+        className={twMerge(
+          "flex flex-col rounded-xl bg-black border border-grey-600 drop-shadow-2xl max-lg:rounded-b-none max-lg:border-b-0 max-lg:border-x-0 max-lg:w-full ",
+          props.className
+        )}
       >
-        <motion.div
-          id={`${props.id}-modal`}
-          initial={{ y: "100%" }}
-          animate={{ y: "0%" }}
-          drag={!!((width ?? 0) <= 1024) ? "y" : false}
-          dragConstraints={{ top: 0, bottom: 0 }}
-          dragElastic={{
-            top: 0,
-            bottom: 0.5,
-          }}
-          dragControls={props.handle ? controls : undefined}
-          dragListener={props.handle ? false : undefined}
-          style={{ y }}
-          transition={{ duration: 0.3, ease: "easeInOut" }}
-          onDragEnd={() => {
-            if (y.get() >= 100) close();
-          }}
-          onClick={(e) => e.stopPropagation()}
-          className={twMerge(
-            "flex flex-col rounded-xl bg-black border border-grey-600 drop-shadow-2xl max-lg:rounded-b-none max-lg:border-b-0 max-lg:border-x-0 max-lg:w-full ",
-            props.className
-          )}
-        >
-          {props.handle && (
-            <div className="w-full items-center justify-center max-lg:flex hidden">
-              <button
-                onPointerDown={
-                  props.handle ? (e) => controls.start(e) : undefined
-                }
-                className="h-1.5 w-12 bg-grey-500 rounded-full cursor-grab active:cursor-grabbing touch-none"
-              />
-            </div>
-          )}
-          {props.children}
-        </motion.div>
+        {props.handle && (
+          <div className="w-full items-center justify-center max-lg:flex hidden">
+            <button
+              onPointerDown={
+                props.handle ? (e) => controls.start(e) : undefined
+              }
+              className="h-1.5 w-12 bg-grey-500 rounded-full cursor-grab active:cursor-grabbing touch-none"
+            />
+          </div>
+        )}
+        {props.children}
       </motion.div>
-    );
-  }
+    </motion.div>
+  );
 }

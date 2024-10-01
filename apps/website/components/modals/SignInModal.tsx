@@ -59,11 +59,10 @@ export default function SignInModal(props: { user?: AuthenticatedUser }) {
 
   const { login } = useLogin({
     onComplete(user, isNewUser) {
-      if (isNewUser) {
-      }
+      if (!isNewUser) close();
     },
   });
-  const { set } = usePrivyModalState();
+  const privyModalState = usePrivyModalState();
 
   const [image, setImage] = useState(
     user?.farcaster?.pfp ??
@@ -163,7 +162,7 @@ export default function SignInModal(props: { user?: AuthenticatedUser }) {
                     </button>
                     <button
                       onClick={() => {
-                        set({ loginMethods: ["farcaster"] });
+                        privyModalState.set({ loginMethods: ["farcaster"] });
                         login();
                       }}
                       className="flex items-center gap-2 w-full text-white font-semibold bg-farcaster rounded-lg p-2.5 hover:bg-farcaster/70 transition-colors"
@@ -183,7 +182,7 @@ export default function SignInModal(props: { user?: AuthenticatedUser }) {
                     </button>
                     <button
                       onClick={() => {
-                        set({ loginMethods: ["wallet"] });
+                        privyModalState.set({ loginMethods: ["wallet"] });
                         login();
                       }}
                       className="flex items-center justify-between w-full bg-white rounded-lg p-2.5 hover:bg-white/70 transition-colors group"

@@ -6,6 +6,7 @@ export default function Image(props: {
   hash: string;
   alt: string;
   className?: string;
+  link?: boolean;
   attribution?: {
     show?: boolean;
     margin?: number;
@@ -30,10 +31,14 @@ export default function Image(props: {
         alt={props.alt}
         className="relative w-full h-full object-cover z-10"
       />
-      <Link
-        href={`/creations/${props.hash}`}
-        className="absolute w-full h-full z-10"
-      />
+      {props.link ? (
+        <Link
+          href={`/creations/${props.hash}`}
+          className="absolute w-full h-full z-10"
+        />
+      ) : (
+        ""
+      )}
       {/* This will have to query the creator on the client inside the attribution component */}
       {props.attribution?.show ? (
         <div className="absolute top-4 right-4 z-20">
