@@ -245,7 +245,6 @@ export const proposalsRelations = relations(proposals, ({ one, many }) => ({
 // probably rename this entire table to users later
 export const nexus = pgTable("nexus", {
   id: text("id").primaryKey(),
-  handle: text("handle").notNull().default(""),
   rank: integer("rank"),
   xp: integer("xp").notNull().default(0),
   image: text("image").notNull().default(""),

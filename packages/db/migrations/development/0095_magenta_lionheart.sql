@@ -1,0 +1,1 @@
+ALTER TABLE "nexus" DROP COLUMN IF EXISTS "handle";

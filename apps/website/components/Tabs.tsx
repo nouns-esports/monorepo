@@ -23,7 +23,7 @@ export default function Tabs(props: {
           key={key}
           href={`/nexus?${props.id}=${key}`}
           className={twMerge(
-            "px-2 py-0.5 rounded-lg hover:bg-grey-500 hover:text-white transition-colors",
+            "px-2 py-0.5 rounded-lg hover:bg-grey-500 hover:text-white transition-colors w-full flex items-center justify-center",
             props.fill && "flex-1",
             props.selected === key && "bg-grey-500 text-white"
           )}

@@ -10,6 +10,7 @@ import Link from "@/components/Link";
 import { getCurrentRankings, getUserRankings } from "@/server/queries/rankings";
 import DateComponent from "@/components/Date";
 import { Sparkles } from "lucide-react";
+import { useLogin, usePrivy } from "@privy-io/react-auth";
 
 export default async function NexusPage(props: {
   searchParams: {
@@ -43,7 +44,9 @@ export default async function NexusPage(props: {
               {user.nexus.name}
             </h1>
           </div>
-          <Button href={`/users/${user.nexus.handle}`}>View Profile</Button>
+          <Button href={`/users/${user.nexus.discord ?? user.id}`}>
+            View Profile
+          </Button>
         </div>
         <div className="grid grid-cols-4 gap-4 grid-rows-2">
           {user.nexus.rank ? (
@@ -121,7 +124,7 @@ export default async function NexusPage(props: {
 
                 return (
                   <Link
-                    href={`/users/${ranking.user.handle}`}
+                    href={`/users/${ranking.user.discord ?? ranking.user.id}`}
                     key={ranking.id}
                     className={twMerge(
                       "flex justify-between items-center hover:bg-grey-500 transition-colors p-2 rounded-lg",

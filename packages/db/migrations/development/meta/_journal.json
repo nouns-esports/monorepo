@@ -666,6 +666,13 @@
       "when": 1727120191463,
       "tag": "0094_misty_abomination",
       "breakpoints": true
+    },
+    {
+      "idx": 95,
+      "version": "7",
+      "when": 1727741531224,
+      "tag": "0095_magenta_lionheart",
+      "breakpoints": true
     }
   ]
 }

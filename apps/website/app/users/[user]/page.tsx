@@ -1,12 +1,12 @@
 import Button from "@/components/Button";
-import EditProfileModal from "@/components/modals/EditProfileModal";
+import ManageAccountModal from "@/components/modals/ManageAccountModal";
 import { ToggleModal } from "@/components/Modal";
 import { getAuthenticatedUser, getUser } from "@/server/queries/users";
 import { notFound } from "next/navigation";
 
 export default async function User(props: { params: { user: string } }) {
   const authenticatedUser = await getAuthenticatedUser();
-  const user = await getUser({ user: props.params.user });
+  const user = await getUser({ user: decodeURIComponent(props.params.user) });
 
   if (!user) {
     return notFound();
@@ -50,7 +50,7 @@ export default async function User(props: { params: { user: string } }) {
           </div>
         </div>
       </div>
-      {authenticatedUser && <EditProfileModal user={authenticatedUser} />}
+      {authenticatedUser && <ManageAccountModal user={authenticatedUser} />}
     </>
   );
 }

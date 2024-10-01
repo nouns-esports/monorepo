@@ -82,8 +82,12 @@ export type AuthenticatedUser = NonNullable<
 
 export const getUser = cache(
   async (input: { user: string }) => {
+    ////
     return db.query.nexus.findFirst({
-      where: or(eq(nexus.id, input.user), eq(nexus.handle, input.user)),
+      where: or(
+        eq(nexus.id, input.user),
+        eq(nexus.discord, input.user.split("#")[0])
+      ),
       with: {
         rank: true,
       },

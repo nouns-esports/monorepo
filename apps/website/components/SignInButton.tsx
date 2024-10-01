@@ -14,7 +14,9 @@ export default function SignInButton(props: { user?: AuthenticatedUser }) {
       <button
         onClick={() => {
           if (props.user?.nexus) {
-            return router.push(`/users/${props.user.nexus.handle}`);
+            return router.push(
+              `/users/${props.user.nexus.discord ?? props.user.id}`
+            );
           }
 
           open();
