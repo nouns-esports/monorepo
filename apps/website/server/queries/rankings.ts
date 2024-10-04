@@ -1,10 +1,9 @@
-import { asc, desc, eq, lte } from "drizzle-orm";
+import { asc, desc, eq, lte, or } from "drizzle-orm";
 import { unstable_cache as cache } from "next/cache";
 import { db, rankings, seasons } from "~/packages/db/schema";
 
 export const getCurrentRankings = cache(
-  async () => {
-    ////////
+  async (input?: { user?: string }) => {
     const season = await db.query.seasons.findFirst({
       orderBy: desc(seasons.start),
       where: lte(seasons.start, new Date()),
@@ -21,8 +20,11 @@ export const getCurrentRankings = cache(
     }
 
     return db.query.rankings.findMany({
-      where: eq(rankings.timestamp, season.rankings[0].timestamp),
-      orderBy: asc(rankings.place),
+      where: or(
+        eq(rankings.timestamp, season.rankings[0].timestamp),
+        input?.user ? eq(rankings.user, input.user) : undefined
+      ),
+      orderBy: desc(rankings.xp),
       with: {
         rank: true,
         user: true,
@@ -35,7 +37,6 @@ export const getCurrentRankings = cache(
 
 export const getUserRankings = cache(
   async (input: { user: string }) => {
-    //
     return (
       (
         await db.query.seasons.findFirst({

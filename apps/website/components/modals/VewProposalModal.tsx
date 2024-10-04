@@ -11,16 +11,14 @@ import {
 } from "phosphor-react-sc";
 import Markdown from "../lexical/Markdown";
 import type { Nexus, Proposal, Round } from "~/packages/db/schema";
-import type { roundState } from "@/utils/roundState";
+import { roundState } from "@/utils/roundState";
 import type { AuthenticatedUser } from "@/server/queries/users";
 import VoteSelector from "../VoteSelector";
 import type { getRound } from "@/server/queries/rounds";
 import Button from "../Button";
 
 export default function ViewProposalModal(props: {
-  round: NonNullable<Awaited<ReturnType<typeof getRound>>> & {
-    state: ReturnType<typeof roundState>;
-  };
+  round: NonNullable<Awaited<ReturnType<typeof getRound>>>;
   proposal: Proposal & { user: Nexus | null };
   user?: AuthenticatedUser & {
     priorVotes: number;
@@ -28,8 +26,17 @@ export default function ViewProposalModal(props: {
   addVote: (proposal: number, amount: number) => void;
   removeVote: (proposal: number, amount: number) => void;
   selectedVotes: Record<string, number>;
+  remainingVotes: number;
 }) {
+  const { close } = useModal(`view-proposal-${props.proposal.id}`);
   const { open: openCastVotesModal } = useModal("cast-votes");
+
+  const state = roundState({
+    start: props.round.start,
+    votingStart: props.round.votingStart,
+    end: props.round.end,
+  });
+
   return (
     <Modal
       id={`view-proposal-${props.proposal.id}`}
@@ -98,16 +105,33 @@ export default function ViewProposalModal(props: {
         ) : (
           <div />
         )}
-        <VoteSelector
-          proposal={props.proposal.id}
-          votes={props.proposal.totalVotes}
-          selectedVotes={props.selectedVotes[props.proposal.id]}
-          userRank={props.user?.nexus?.rank ?? undefined}
-          minRank={props.round.minVoterRank ?? undefined}
-          roundState={props.round.state}
-          addVote={props.addVote}
-          removeVote={props.removeVote}
-        />
+        <div className="flex gap-4">
+          <VoteSelector
+            proposal={props.proposal.id}
+            votes={props.proposal.totalVotes}
+            selectedVotes={props.selectedVotes[props.proposal.id]}
+            remainingVotes={props.remainingVotes}
+            userRank={props.user?.nexus?.rank ?? undefined}
+            minRank={props.round.minVoterRank ?? undefined}
+            roundState={state}
+            addVote={props.addVote}
+            removeVote={props.removeVote}
+          />
+          {state === "Voting" && props.remainingVotes > 0 ? (
+            <Button
+              disabled={!props.selectedVotes[props.proposal.id]}
+              onClick={() => {
+                openCastVotesModal();
+                close();
+              }}
+              size="sm"
+            >
+              Submit
+            </Button>
+          ) : (
+            ""
+          )}
+        </div>
       </div>
     </Modal>
   );

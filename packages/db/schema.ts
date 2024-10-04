@@ -61,11 +61,19 @@ export const communityRelations = relations(communities, ({ many }) => ({
   quests: many(quests),
 }));
 
+// export const articles = pgTable("articles", {
+//   id: text("id").primaryKey(),
+//   title: text("title").notNull(),
+//   // content: jsonb
+//   createdAt: timestamp("createdAt", { mode: "date" }).notNull(),
+// });
+
 export const events = pgTable("events", {
   id: text("id").primaryKey(),
-  // type: text("type", { enum: ["match", ""] }).notNull(),
+  // type: text("type", { enum: ["match", "tournament", "conference"] }).notNull(),
   // url: text("url"),
   // parent: text("parent"),
+  // location: text("location")
   name: text("name").notNull(),
   image: text("image").notNull(),
   start: timestamp("start", { mode: "date" }).notNull(),

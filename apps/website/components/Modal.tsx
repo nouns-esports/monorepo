@@ -7,7 +7,6 @@ import {
   useDragControls,
   useMotionValue,
 } from "framer-motion";
-import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import { create } from "zustand";
@@ -96,6 +95,11 @@ export function Modal(props: {
   queryParam?: [string, string];
 }) {
   const { open, isOpen, close, y } = useModal(props.id);
+  const { open: openModals } = useModalState();
+
+  const anyOpen = useMemo(() => {
+    return Object.values(openModals).some((modal) => modal);
+  }, [openModals]);
 
   const [mounted, setMounted] = useState(false);
 
@@ -118,17 +122,20 @@ export function Modal(props: {
     const url = new URL(window.location.toString());
 
     if (isOpen) {
-      const width = root.clientWidth;
-
-      root.classList.add("prevent-scroll");
-      root.style.paddingRight = `${root.clientWidth - width}px`;
+      if (!anyOpen) {
+        const width = root.clientWidth;
+        root.classList.add("prevent-scroll");
+        root.style.paddingRight = `${root.clientWidth - width}px`;
+      }
 
       if (props.queryParam) {
         url.searchParams.set(props.queryParam[0], props.queryParam[1]);
       }
     } else {
-      root.classList.remove("prevent-scroll");
-      root.style.paddingRight = `0px`;
+      if (!anyOpen) {
+        root.classList.remove("prevent-scroll");
+        root.style.paddingRight = `0px`;
+      }
 
       if (props.queryParam) {
         url.searchParams.delete(props.queryParam[0]);
@@ -143,58 +150,63 @@ export function Modal(props: {
 
   const controls = useDragControls();
 
-  return (
-    <motion.div
-      id={`${props.id}-backdrop`}
-      onClick={() => close()}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: isOpen ? 1 : 0 }}
-      transition={{
-        duration: mobile ? 0.3 : 0.2,
-        ease: "easeInOut",
-      }}
-      className={`fixed z-[80] inset-0 bg-black/50 flex items-center justify-center max-lg:items-end backdrop-blur-sm ${
-        isOpen ? "pointer-events-auto" : "pointer-events-none"
-      }`}
-    >
+  if (isOpen) {
+    return (
       <motion.div
-        id={`${props.id}-modal`}
-        initial={{ y: mobile ? "100%" : "10%" }}
-        animate={{ y: isOpen ? "0%" : mobile ? "100%" : "10%" }}
-        drag={mobile ? "y" : false}
-        dragConstraints={{ top: 0, bottom: 0 }}
-        dragElastic={{
-          top: 0,
-          bottom: 0.5,
-        }}
-        dragControls={props.handle ? controls : undefined}
-        dragListener={props.handle ? false : undefined}
-        style={{ y }}
+        id={`${props.id}-backdrop`}
+        onClick={() => close()}
+        initial={{ opacity: 0 }}
+        // animate={{ opacity: isOpen ? 1 : 0 }}
+        animate={{ opacity: 1 }}
         transition={{
           duration: mobile ? 0.3 : 0.2,
           ease: "easeInOut",
         }}
-        onDragEnd={() => {
-          if (y.get() >= 100) close();
-        }}
-        onClick={(e) => e.stopPropagation()}
         className={twMerge(
-          "flex flex-col rounded-xl bg-black border border-grey-600 drop-shadow-2xl max-lg:rounded-b-none max-lg:border-b-0 max-lg:border-x-0 max-lg:w-full ",
-          props.className
+          `fixed z-[80] inset-0 bg-black/50 flex items-center justify-center max-lg:items-end backdrop-blur-sm`
+          // isOpen ? "pointer-events-auto" : "pointer-events-none",
+          // !mounted && "hidden"
         )}
       >
-        {props.handle && (
-          <div className="w-full items-center justify-center max-lg:flex hidden">
-            <button
-              onPointerDown={
-                props.handle ? (e) => controls.start(e) : undefined
-              }
-              className="h-1.5 w-12 bg-grey-500 rounded-full cursor-grab active:cursor-grabbing touch-none"
-            />
-          </div>
-        )}
-        {props.children}
+        <motion.div
+          id={`${props.id}-modal`}
+          initial={{ y: mobile ? "100%" : "10%" }}
+          animate={{ y: isOpen ? "0%" : mobile ? "100%" : "10%" }}
+          drag={mobile ? "y" : false}
+          dragConstraints={{ top: 0, bottom: 0 }}
+          dragElastic={{
+            top: 0,
+            bottom: 0.5,
+          }}
+          dragControls={props.handle ? controls : undefined}
+          dragListener={props.handle ? false : undefined}
+          style={{ y }}
+          transition={{
+            duration: mobile ? 0.3 : 0.2,
+            ease: "easeInOut",
+          }}
+          onDragEnd={() => {
+            if (y.get() >= 100) close();
+          }}
+          onClick={(e) => e.stopPropagation()}
+          className={twMerge(
+            "flex flex-col rounded-xl bg-black border border-grey-600 drop-shadow-2xl max-lg:rounded-b-none max-lg:border-b-0 max-lg:border-x-0 max-lg:w-full ",
+            props.className
+          )}
+        >
+          {props.handle && (
+            <div className="w-full items-center justify-center max-lg:flex hidden">
+              <button
+                onPointerDown={
+                  props.handle ? (e) => controls.start(e) : undefined
+                }
+                className="h-1.5 w-12 bg-grey-500 rounded-full cursor-grab active:cursor-grabbing touch-none"
+              />
+            </div>
+          )}
+          {props.children}
+        </motion.div>
       </motion.div>
-    </motion.div>
-  );
+    );
+  }
 }

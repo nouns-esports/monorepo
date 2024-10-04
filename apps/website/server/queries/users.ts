@@ -20,6 +20,7 @@ export async function getAuthenticatedUser() {
         audience: env.NEXT_PUBLIC_PRIVY_APP_ID,
       }
     );
+
     if (!payload.sub) return;
 
     let discord:
@@ -51,7 +52,9 @@ export async function getAuthenticatedUser() {
         }
       | undefined;
 
-    for (const { type, ...account } of payload.linked_accounts as any) {
+    for (const { type, ...account } of JSON.parse(
+      payload.linked_accounts as any
+    )) {
       if (type === "discord_oauth") discord = account;
       if (type === "twitter_oauth") twitter = account;
       if (type === "farcaster") farcaster = account;

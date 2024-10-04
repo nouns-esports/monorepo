@@ -10,7 +10,6 @@ import Link from "@/components/Link";
 import { getCurrentRankings, getUserRankings } from "@/server/queries/rankings";
 import DateComponent from "@/components/Date";
 import { Sparkles } from "lucide-react";
-import { useLogin, usePrivy } from "@privy-io/react-auth";
 
 export default async function NexusPage(props: {
   searchParams: {
@@ -27,8 +26,13 @@ export default async function NexusPage(props: {
     return redirect("/");
   }
 
-  const [awards, userRankings, rankings, userStats] = await Promise.all([
-    user ? getUserAwards({ user: user.id }) : [],
+  const [
+    // awards,
+    userRankings,
+    rankings,
+    userStats,
+  ] = await Promise.all([
+    // user ? getUserAwards({ user: user.id }) : [],
     getUserRankings({ user: user.id }),
     getCurrentRankings(),
     getUserStats({ user: user.id }),
@@ -119,7 +123,7 @@ export default async function NexusPage(props: {
                 /> */}
             </div>
             <div className="relative flex flex-col gap-2 overflow-y-auto custom-scrollbar">
-              {rankings.map((ranking) => {
+              {rankings.map((ranking, index) => {
                 if (!ranking.user) return;
 
                 return (
@@ -133,7 +137,7 @@ export default async function NexusPage(props: {
                     )}
                   >
                     <div className="flex gap-4 items-center">
-                      <p className="text-white w-6">{ranking.place}</p>
+                      <p className="text-white w-6">{index + 1}</p>
                       <div className="flex gap-2 items-center">
                         <img
                           src={ranking.user.image}

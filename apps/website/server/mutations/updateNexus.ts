@@ -4,10 +4,9 @@ import { z } from "zod";
 import { onlyUser } from ".";
 import { revalidatePath } from "next/cache";
 import { db, nexus, ranks, seasons } from "~/packages/db/schema";
-import { asc, desc, eq, lte } from "drizzle-orm";
-import { getAuthenticatedPrivyUserWithData } from "../queries/users";
+import { asc, desc, eq, lte, or } from "drizzle-orm";
 
-export const updateProfile = onlyUser
+export const updateNexus = onlyUser
   .schema(
     z.object({
       name: z.string(),
@@ -23,8 +22,15 @@ export const updateProfile = onlyUser
         image: parsedInput.image,
         bio: parsedInput.bio,
       })
-      .where(eq(nexus.id, ctx.user.id));
+      .where(
+        or(
+          ctx.user.nexus?.discord
+            ? eq(nexus.discord, ctx.user.nexus.discord)
+            : undefined,
+          eq(nexus.id, ctx.user.id)
+        )
+      );
 
-    revalidatePath(`/users/${ctx.user.handle}`);
+    revalidatePath(`/users/${ctx.user.nexus?.discord ?? ctx.user.id}`);
     revalidatePath("/nexus");
   });

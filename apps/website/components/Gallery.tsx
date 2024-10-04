@@ -4,59 +4,71 @@ import { useEffect, useRef, useState } from "react";
 import Button from "./Button";
 import { twMerge } from "tailwind-merge";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import type { Round, Event } from "~/packages/db/schema";
+import { roundState } from "@/utils/roundState";
 
-const slides = [
-  {
-    title: "We're redefining esports",
-    sub: "Learn about our mission",
-    href: "/about",
-    button: "Learn more",
-    type: "video",
-    mp4: "/gallery/landing.mp4",
-    webp: "/gallery/landing.webm",
-  },
-  {
-    title: "Win a trip to The International",
-    sub: "An exclusive experience",
-    href: "/rounds/ti",
-    button: "View Round",
-    type: "image",
-    url: "https://ipfs.nouns.gg/ipfs/QmYP15gaVMexJsnnFNRKNudLQZJ2RupDuw83H8oDzKoaqM",
-  },
-  {
-    title: "Nouns Fest Showcase",
-    sub: "Coming in October",
-    href: "https://twitter.com/nounsesports/status/1786230284884881664",
-    button: "View Details",
-    type: "image",
-    url: "/gallery/nouns-fest-showcase.png",
-  },
-  {
-    title: "Matcha",
-    sub: "Where Nouns trades crypto",
-    href: "/matcha",
-    button: "Visit Matcha",
-    type: "image",
-    url: "/gallery/matcha-x-nouns.jpg",
-  },
-  // {
-  //   title: "Get our 2024 jersey",
-  //   sub: "Shop now",
-  //   href: "/shop",
-  //   button: "Shop",
-  //   type: "image",
-  //   url: "/partners.png",
-  // },
-] satisfies Array<
-  { title: string; sub: string; href: string; button: string } & (
-    | { type: "video"; mp4: string; webp: string }
-    | { type: "image"; url: string }
-  )
->;
-
-export default function Gallery() {
+export default function Gallery(props: {
+  highlightedRound?: Round;
+  highlightedEvent?: Event;
+}) {
   const [index, setIndex] = useState(0);
   const [backwards, setBackwards] = useState(false);
+
+  const [slides, setSlides] = useState<
+    Array<
+      { title: string; sub: string; href: string; button: string } & (
+        | { type: "video"; mp4: string; webp: string }
+        | { type: "image"; url: string }
+      )
+    >
+  >([
+    {
+      title: "We're redefining esports",
+      sub: "Learn about our mission",
+      href: "/about",
+      button: "Learn more",
+      type: "video",
+      mp4: "/gallery/landing.mp4",
+      webp: "/gallery/landing.webm",
+    },
+    ...(props.highlightedRound
+      ? ([
+          {
+            title: props.highlightedRound.name,
+            sub: {
+              Voting: "Now voting",
+              Ended: "",
+              Proposing: "Now proposing",
+              Upcoming: "Starting soon",
+            }[roundState(props.highlightedRound)],
+            href: `/rounds/${props.highlightedRound.id}`,
+            button: "View Round",
+            type: "image",
+            url: props.highlightedRound.image,
+          },
+        ] as const)
+      : []),
+    ...(props.highlightedEvent
+      ? ([
+          {
+            title: props.highlightedEvent.name,
+            sub: `Coming in ${new Date(props.highlightedEvent.start).toLocaleString("default", { month: "long" })}`,
+            href: `/events/${props.highlightedEvent.id}`,
+            button: "View Event",
+            type: "image",
+            url: props.highlightedEvent.image,
+          },
+        ] as const)
+      : []),
+    {
+      title: "Matcha",
+      sub: "Where Nouns trades crypto",
+      href: "/matcha",
+      button: "Visit Matcha",
+      type: "image",
+      url: "/gallery/matcha-x-nouns.jpg",
+    },
+  ]);
 
   const backgroundRef = useRef<HTMLDivElement>(null);
 

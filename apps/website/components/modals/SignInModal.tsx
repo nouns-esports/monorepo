@@ -25,7 +25,7 @@ import toast from "react-hot-toast";
 import { pinImage } from "@/server/mutations/pinImage";
 import { useAction } from "next-safe-action/hooks";
 import type { AuthenticatedUser } from "@/server/queries/users";
-import { updateProfile } from "@/server/mutations/updateProfile";
+import { createNexus } from "@/server/mutations/createNexus";
 
 export default function SignInModal(props: { user?: AuthenticatedUser }) {
   const [returningUser, setReturningUser] = useState(true);
@@ -78,7 +78,7 @@ export default function SignInModal(props: { user?: AuthenticatedUser }) {
 
   const pinImageAction = useAction(pinImage);
 
-  const updateProfileAction = useAction(updateProfile, {
+  const createNexusAction = useAction(createNexus, {
     onSuccess: () => {
       console.log("success");
       close();
@@ -427,7 +427,7 @@ export default function SignInModal(props: { user?: AuthenticatedUser }) {
                   <button
                     onClick={async () => {
                       if (!props.user) return;
-                      const result = await updateProfileAction.executeAsync({
+                      const result = await createNexusAction.executeAsync({
                         name,
                         image:
                           image === ""

@@ -9,7 +9,6 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { pinImage } from "@/server/mutations/pinImage";
 import { useAction } from "next-safe-action/hooks";
-import { updateProfile } from "@/server/mutations/updateProfile";
 import { useRouter } from "next/navigation";
 import {
   ArrowRight,
@@ -36,11 +35,14 @@ export default function CastVotesModal(props: {
     }
   >;
   selectedVotes: Record<string, number>;
+  onVotesCast?: () => void;
 }) {
-  const { close } = useModal("cast-votes");
+  const { close, isOpen } = useModal("cast-votes");
   const { user } = usePrivy();
 
-  const { hasSucceeded, isPending, execute } = useAction(castVotes);
+  const { hasSucceeded, isPending, executeAsync, reset } = useAction(castVotes);
+
+  useEffect(() => reset(), [isOpen]);
 
   return (
     <Modal id="cast-votes" className="p-4 flex flex-col min-w-80 gap-6">
@@ -97,23 +99,28 @@ export default function CastVotesModal(props: {
 
                 if (!proposal) return;
                 if (voteCount < 1) return;
-                if (!proposal.user) return;
 
                 return (
                   <div
                     key={proposal.id}
                     className="flex justify-between items-center"
                   >
-                    <div className="flex items-center gap-2">
-                      <img
-                        src={proposal.user.image}
-                        alt=""
-                        className="w-8 h-8 rounded-full"
-                      />
+                    {proposal.user ? (
+                      <div className="flex items-center gap-2">
+                        <img
+                          src={proposal.user.image}
+                          alt=""
+                          className="w-8 h-8 rounded-full"
+                        />
+                        <p className="text-white text-lg font-bebas-neue leading-none">
+                          {proposal.user.name}
+                        </p>
+                      </div>
+                    ) : (
                       <p className="text-white text-lg font-bebas-neue leading-none">
-                        {proposal.user.name}
+                        Proposal {proposal.id}
                       </p>
-                    </div>
+                    )}
                     <p className="text-lg text-white">+ {voteCount}</p>
                   </div>
                 );
@@ -121,48 +128,30 @@ export default function CastVotesModal(props: {
             )}
           </div>
           <button
-            onClick={() => {
-              // const duration = 15 * 1000,
-              //   animationEnd = Date.now() + duration,
-              //   defaults = {
-              //     startVelocity: 30,
-              //     spread: 360,
-              //     ticks: 60,
-              //     zIndex: 0,
-              //   };
-              // function randomInRange(min: number, max: number) {
-              //   return Math.random() * (max - min) + min;
-              // }
-              // const interval = setInterval(function () {
-              //   const timeLeft = animationEnd - Date.now();
-              //   if (timeLeft <= 0) {
-              //     return clearInterval(interval);
-              //   }
-              //   const particleCount = 50 * (timeLeft / duration);
-              //   // since particles fall down, start a bit higher than random
-              //   confetti(
-              //     Object.assign({}, defaults, {
-              //       particleCount,
-              //       origin: {
-              //         x: randomInRange(0.1, 0.3),
-              //         y: Math.random() - 0.2,
-              //       },
-              //     })
-              //   );
-              //   confetti(
-              //     Object.assign({}, defaults, {
-              //       particleCount,
-              //       origin: {
-              //         x: randomInRange(0.7, 0.9),
-              //         y: Math.random() - 0.2,
-              //       },
-              //       zIndex: 100,
-              //     })
-              //   );
-              // }, 250);
+            onClick={async () => {
+              const result = await executeAsync({
+                round: props.round,
+                votes: Object.entries(props.selectedVotes).map(
+                  ([proposal, count]) => ({
+                    proposal: Number(proposal),
+                    count,
+                  })
+                ),
+              });
+
+              if (result?.serverError) {
+                return toast.error(result.serverError);
+              }
+
+              props.onVotesCast?.();
             }}
             className="flex justify-center items-center gap-2 w-full text-black bg-white hover:bg-white/70 font-semibold rounded-lg p-2.5 transition-colors"
           >
+            {isPending ? (
+              <img src="/spinner.svg" className="h-[18px] animate-spin" />
+            ) : (
+              ""
+            )}
             Confirm
           </button>
         </>

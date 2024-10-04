@@ -405,24 +405,22 @@ export default function ToolbarPlugin() {
 
               // 25 MB in bytes
               if (file.size > 25 * 1024 * 1024) {
-                toast.error("Image size should be less than 25 MB");
-                return;
+                return toast.error("Image size should be less than 25 MB");
               }
 
               const formData = new FormData();
               formData.append("file", file);
 
-              try {
-                const hash = await pinImage({ formData });
+              const hash = await pinImage({ formData });
 
-                editor.dispatchCommand(INSERT_IMAGE_COMMAND, {
-                  altText: "",
-                  src: `https://ipfs.nouns.gg/ipfs/${hash}`,
-                });
-              } catch (error) {
-                toast.error("Could not upload image");
-                console.log(error);
+              if (!hash?.data || hash?.serverError) {
+                return toast.error("Could not upload image");
               }
+
+              editor.dispatchCommand(INSERT_IMAGE_COMMAND, {
+                altText: "",
+                src: `https://ipfs.nouns.gg/ipfs/${hash.data}`,
+              });
 
               event.target.value = "";
             }

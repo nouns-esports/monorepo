@@ -20,6 +20,7 @@ import { headers } from "next/headers";
 import { Modal, ToggleModal } from "@/components/Modal";
 import DateComponent from "@/components/Date";
 import ViewProposalModal from "@/components/modals/VewProposalModal";
+import RoundTimeline from "@/components/RoundTimeline";
 
 const Markdown = dynamic(() => import("@/components/lexical/Markdown"), {
   ssr: false,
@@ -67,12 +68,6 @@ export default async function Round(props: {
   if (!round) {
     return notFound();
   }
-
-  const state = roundState({
-    start: round.start,
-    votingStart: round.votingStart,
-    end: round.end,
-  });
 
   const user = await getAuthenticatedUser();
 
@@ -196,66 +191,13 @@ export default async function Round(props: {
                 </div>
               </div>
             </div>
-            <div className="bg-grey-800 w-full gap-2 rounded-xl flex flex-col flex-shrink-0 py-4 px-5 justify-between">
-              <div className="flex items-center w-full">
-                <p className="text-white w-full">
-                  {state === "Upcoming" ? "Round Starts" : "Round Started"}
-                </p>
-                <p className="text-white w-full text-center">
-                  {state === "Upcoming" || state === "Proposing"
-                    ? "Voting Starts"
-                    : "Voting Started"}
-                </p>
-                <p className="text-white w-full text-right">
-                  {state === "Ended" ? "Round Ended" : "Round Ends"}
-                </p>
-              </div>
-              <div className="flex justify-between items-center w-full">
-                {state === "Upcoming" ? <Active /> : <Completed />}
-                <div
-                  className={twMerge(
-                    "w-full",
-                    state === "Upcoming"
-                      ? "border-2 border-dotted border-grey-500"
-                      : "h-1 bg-green"
-                  )}
-                />
-                {state === "Upcoming" || state === "Proposing" ? (
-                  <Upcoming />
-                ) : state === "Voting" ? (
-                  <Active />
-                ) : (
-                  <Completed />
-                )}
-                <div
-                  className={twMerge(
-                    "w-full",
-                    state === "Ended"
-                      ? "h-1 bg-green"
-                      : "border-2 border-dotted border-grey-500"
-                  )}
-                />
-                {state === "Ended" ? <Completed /> : <Upcoming />}
-              </div>
-              <div className="flex items-center w-full">
-                <p className="w-full whitespace-nowrap">
-                  <DateComponent timestamp={round.start} />
-                </p>
-                <p className="w-full text-center whitespace-nowrap">
-                  <DateComponent timestamp={round.votingStart} />
-                </p>
-                <p className="w-full text-right whitespace-nowrap">
-                  <DateComponent timestamp={round.end ?? Infinity} />
-                </p>
-              </div>
-            </div>
+            <RoundTimeline round={round} />
           </div>
         </div>
         <Proposals
           round={{
             ...round,
             awardCount: round.awards.length,
-            state,
           }}
           user={
             user
@@ -268,27 +210,5 @@ export default async function Round(props: {
         />
       </div>
     </div>
-  );
-}
-
-function Completed() {
-  return (
-    <div className="rounded-full flex items-center justify-center h-8 w-8 bg-green flex-shrink-0 ">
-      <Check className="h-4 w-4 text-white" />
-    </div>
-  );
-}
-
-function Active() {
-  return (
-    <div className="rounded-full bg-blue-700 flex items-center justify-center h-8 w-8 flex-shrink-0">
-      <Timer className="h-4 w-4 text-white" />
-    </div>
-  );
-}
-
-function Upcoming() {
-  return (
-    <div className="rounded-full border-2 border-grey-500 border-dotted h-8 w-8 flex-shrink-0" />
   );
 }

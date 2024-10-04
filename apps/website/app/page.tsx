@@ -34,10 +34,21 @@ export default async function Home() {
 
   const quests = await getQuests({ limit: 5, season: season.id.toString() });
 
+  const highlightedRound = rounds.find(
+    (round) => round.featured || new Date(round.end ?? Infinity) > new Date()
+  );
+
+  const highlightedEvent = events.find(
+    (event) => event.featured || new Date(event.end ?? Infinity) > new Date()
+  );
+
   return (
     <div className="flex flex-col gap-16 mb-16 max-sm:mb-8 max-lg:gap-12 pt-32 max-xl:pt-28 max-sm:pt-20">
       <div className="flex gap-4 h-[30vw] max-h-[600px] max-lg:h-auto max-lg:max-h-none w-full px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4 max-lg:flex-col">
-        <Gallery />
+        <Gallery
+          highlightedRound={highlightedRound}
+          highlightedEvent={highlightedEvent}
+        />
         <div className="flex flex-col gap-2 bg-gradient-to-b from-[#8A63D2] to-[#473072] rounded-xl overflow-hidden w-full h-full max-lg:hidden">
           <div className="flex items-center justify-between px-4 pt-3">
             <div className="flex items-center text-2xl font-luckiest-guy gap-3 text-white ">

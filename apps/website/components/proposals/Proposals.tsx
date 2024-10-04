@@ -22,11 +22,11 @@ import CastVotesModal from "../modals/CastVotesModal";
 import ViewProposalModal from "../modals/VewProposalModal";
 import type { AuthenticatedUser } from "@/server/queries/users";
 import VoteSelector from "../VoteSelector";
+import ShareVotesModal from "../modals/ShareVotesModal";
 
 export default function Proposals(props: {
   round: NonNullable<
     Awaited<ReturnType<typeof getRound>> & {
-      state: ReturnType<typeof roundState>;
       awardCount: number;
     }
   >;
@@ -61,25 +61,12 @@ export default function Proposals(props: {
   }, [selectedVotes]);
 
   const remainingVotes = useMemo(() => {
-    return (props.user?.nexus?.rank?.votes ?? 0) - votesSelected;
-  }, [votesSelected, props.user?.nexus?.rank?.votes]);
-
-  const {
-    isPending,
-    optimisticState: proposals,
-    hasSucceeded,
-  } = useOptimisticAction(castVotes, {
-    currentState: props.round.proposals,
-    updateFn: (proposals, input) =>
-      proposals.map((proposal) => {
-        const vote = input.votes.find((vote) => vote.proposal === proposal.id);
-
-        return {
-          ...proposal,
-          totalVotes: proposal.totalVotes + (vote ? vote.count : 0),
-        };
-      }),
-  });
+    return (
+      (props.user?.nexus?.rank?.votes ?? 0) -
+      votesSelected -
+      (props.user?.priorVotes ?? 0)
+    );
+  }, [votesSelected, props.user?.nexus?.rank?.votes, props.user?.priorVotes]);
 
   const userProposal = props.round.proposals.find(
     (proposal) => proposal.user === props.user?.id
@@ -87,6 +74,13 @@ export default function Proposals(props: {
 
   const { open: openSignInModal } = useModal("sign-in");
   const { open: openCastVotesModal } = useModal("cast-votes");
+  const { open: openShareVotesModal } = useModal("share-votes");
+
+  const state = roundState({
+    start: props.round.start,
+    votingStart: props.round.votingStart,
+    end: props.round.end,
+  });
 
   return (
     <>
@@ -95,7 +89,7 @@ export default function Proposals(props: {
           <h3 className="text-white font-luckiest-guy text-3xl">Proposals</h3>
           <div className="flex gap-4 items-center max-sm:justify-between max-sm:w-full">
             {(() => {
-              if (props.round.state === "Proposing") {
+              if (state === "Proposing") {
                 if (!props.user) {
                   return (
                     <>
@@ -162,7 +156,7 @@ export default function Proposals(props: {
                 );
               }
 
-              if (props.round.state === "Voting") {
+              if (state === "Voting") {
                 if (!props.user) {
                   return (
                     <>
@@ -208,14 +202,20 @@ export default function Proposals(props: {
                   );
                 }
 
-                if (props.user?.nexus?.rank.votes > 0 && remainingVotes < 1) {
+                if (
+                  props.user?.nexus?.rank.votes > 0 &&
+                  remainingVotes < 1 &&
+                  votesSelected === 0
+                ) {
                   return (
                     <>
                       <p className="text-white">
                         Your votes have been submitted
                       </p>
                       <ToggleModal id="share-votes">
-                        <Button>Share</Button>
+                        <Button onClick={() => openShareVotesModal()}>
+                          Share
+                        </Button>
                       </ToggleModal>
                     </>
                   );
@@ -228,7 +228,7 @@ export default function Proposals(props: {
                       remaining
                     </p>
                     <Button
-                      disabled={isPending || votesSelected < 1}
+                      disabled={votesSelected < 1}
                       onClick={() => openCastVotesModal()}
                     >
                       Submit Votes
@@ -237,7 +237,7 @@ export default function Proposals(props: {
                 );
               }
 
-              if (props.round.state === "Ended") {
+              if (state === "Ended") {
                 if (props.user) {
                   for (let i = 0; i < props.round.awardCount; i++) {
                     if (props.round.proposals[i]?.user === props.user.id) {
@@ -253,7 +253,8 @@ export default function Proposals(props: {
                   if (
                     props.user?.nexus?.rank &&
                     props.user?.nexus?.rank.votes > 0 &&
-                    remainingVotes < 1
+                    remainingVotes < 1 &&
+                    votesSelected === 0
                   ) {
                     return (
                       <>
@@ -261,7 +262,9 @@ export default function Proposals(props: {
                           Your votes have been submitted
                         </p>
                         <ToggleModal id="share-votes">
-                          <Button>Share</Button>
+                          <Button onClick={() => openShareVotesModal()}>
+                            Share
+                          </Button>
                         </ToggleModal>
                       </>
                     );
@@ -272,9 +275,9 @@ export default function Proposals(props: {
           </div>
         </div>
         <div className="gap-4 grid grid-cols-4 max-xl:grid-cols-3 max-lg:grid-cols-2 max-sm:grid-cols-1">
-          {proposals
+          {props.round.proposals
             .toSorted((a, b) => {
-              if (props.round.state === "Proposing") {
+              if (state === "Proposing") {
                 return (b.user?.rank?.place ?? 0) - (a.user?.rank?.place ?? 0);
               }
 
@@ -287,19 +290,19 @@ export default function Proposals(props: {
                 className={twMerge(
                   "relative flex flex-col gap-4 bg-grey-800 hover:bg-grey-600 transition-colors rounded-xl overflow-hidden aspect-square w-full h-full group p-4",
                   props.round.type === "video" && "aspect-auto",
-                  props.round.state === "Ended" &&
+                  state === "Ended" &&
                     index < props.round.awardCount &&
                     index === 0 &&
                     "border-[3px] border-gold-500 bg-gold-900 hover:bg-gold-800 text-white",
-                  props.round.state === "Ended" &&
+                  state === "Ended" &&
                     index < props.round.awardCount &&
                     index === 1 &&
                     "border-[3px] border-silver-500 bg-silver-900 hover:bg-silver-800 text-white",
-                  props.round.state === "Ended" &&
+                  state === "Ended" &&
                     index < props.round.awardCount &&
                     index === 2 &&
                     "border-[3px] border-bronze-500 bg-bronze-900 hover:bg-bronze-800 text-white",
-                  props.round.state === "Ended" &&
+                  state === "Ended" &&
                     index > 2 &&
                     index < props.round.awardCount &&
                     "border-[3px] border-blue-500 bg-blue-900 hover:bg-blue-800 text-white"
@@ -317,7 +320,7 @@ export default function Proposals(props: {
                     <p
                       className={twMerge(
                         "text-grey-200 h-full",
-                        props.round.state === "Ended" &&
+                        state === "Ended" &&
                           index < props.round.awardCount &&
                           "text-white"
                       )}
@@ -327,19 +330,19 @@ export default function Proposals(props: {
                     <div
                       className={twMerge(
                         "absolute left-0 w-full group-hover:opacity-0 opacity-100 transition-opacity bg-gradient-to-t from-grey-800 to-transparent h-10 bottom-0 z-10",
-                        props.round.state === "Ended" &&
+                        state === "Ended" &&
                           index < props.round.awardCount &&
                           index === 0 &&
                           "from-gold-900",
-                        props.round.state === "Ended" &&
+                        state === "Ended" &&
                           index < props.round.awardCount &&
                           index === 1 &&
                           "from-silver-900",
-                        props.round.state === "Ended" &&
+                        state === "Ended" &&
                           index < props.round.awardCount &&
                           index === 2 &&
                           "from-bronze-900",
-                        props.round.state === "Ended" &&
+                        state === "Ended" &&
                           index > 2 &&
                           index < props.round.awardCount &&
                           "from-blue-900"
@@ -348,19 +351,19 @@ export default function Proposals(props: {
                     <div
                       className={twMerge(
                         "absolute left-0 w-full group-hover:opacity-100 opacity-0 transition-opacity bg-gradient-to-t from-grey-600 to-transparent h-20 bottom-0 z-10",
-                        props.round.state === "Ended" &&
+                        state === "Ended" &&
                           index < props.round.awardCount &&
                           index === 0 &&
                           "from-gold-800",
-                        props.round.state === "Ended" &&
+                        state === "Ended" &&
                           index < props.round.awardCount &&
                           index === 1 &&
                           "from-silver-800",
-                        props.round.state === "Ended" &&
+                        state === "Ended" &&
                           index < props.round.awardCount &&
                           index === 2 &&
                           "from-bronze-800",
-                        props.round.state === "Ended" &&
+                        state === "Ended" &&
                           index > 2 &&
                           index < props.round.awardCount &&
                           "from-blue-800"
@@ -392,8 +395,7 @@ export default function Proposals(props: {
                     <div />
                   )}
                   <div className="flex items-center gap-4">
-                    {props.round.state === "Ended" &&
-                    index < props.round.awardCount ? (
+                    {state === "Ended" && index < props.round.awardCount ? (
                       <div
                         className={twMerge(
                           "rounded-md bg-grey-600 font-bold text-white flex items-center text-sm justify-center px-2 py-0.5",
@@ -419,20 +421,19 @@ export default function Proposals(props: {
                       minRank={props.round.minVoterRank ?? undefined}
                       awardCount={props.round.awardCount}
                       index={index}
-                      roundState={props.round.state}
+                      roundState={state}
+                      remainingVotes={remainingVotes}
                     />
                   </div>
                 </div>
               </ToggleModal>
             ))}
-          {proposals.length < 1 ? (
+          {props.round.proposals.length < 1 ? (
             <div className="mt-4 flex gap-4 justify-center items-center">
               <img src="/fire-sticker.png" alt="" className="h-32" />
               <p className="text-grey-200 text-lg max-w-80">
                 There are no proposals yet.{" "}
-                {props.round.state === "Proposing"
-                  ? "Be the first to propose?"
-                  : ""}
+                {state === "Proposing" ? "Be the first to propose?" : ""}
               </p>
             </div>
           ) : (
@@ -442,10 +443,12 @@ export default function Proposals(props: {
       </div>
       <CastVotesModal
         round={props.round.id}
-        proposals={proposals}
+        proposals={props.round.proposals}
         selectedVotes={selectedVotes}
+        onVotesCast={() => setSelectedVotes({})}
       />
-      {proposals.map((proposal) => (
+      <ShareVotesModal round={props.round.id} />
+      {props.round.proposals.map((proposal) => (
         <ViewProposalModal
           key={proposal.id}
           round={props.round}
@@ -454,6 +457,7 @@ export default function Proposals(props: {
           addVote={addVote}
           removeVote={removeVote}
           selectedVotes={selectedVotes}
+          remainingVotes={remainingVotes}
         />
       ))}
     </>

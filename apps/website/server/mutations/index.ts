@@ -2,7 +2,12 @@ import { createSafeActionClient } from "next-safe-action";
 import { getAuthenticatedUser } from "../queries/users";
 import { env } from "~/env";
 
-export const actionClient = createSafeActionClient();
+export const actionClient = createSafeActionClient({
+  handleServerError: (error) => {
+    console.log("Action error: ", error.message);
+    return error.message;
+  },
+});
 
 export const onlyUser = actionClient.use(async ({ next }) => {
   const user = await getAuthenticatedUser();
@@ -16,6 +21,14 @@ export const onlyUser = actionClient.use(async ({ next }) => {
       user,
     },
   });
+});
+
+export const onlyRanked = onlyUser.use(async ({ next, ctx }) => {
+  if (!ctx.user.nexus?.rank) {
+    throw new Error("User has not entered the Nexus");
+  }
+
+  return next();
 });
 
 export const onlyAdmin = onlyUser.use(async ({ next, ctx }) => {

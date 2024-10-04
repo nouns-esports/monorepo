@@ -3,11 +3,10 @@
 import { db, votes, proposals, rounds } from "~/packages/db/schema";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import checkDiscordAccountAge from "@/utils/checkDiscordAccountAge";
 import { z } from "zod";
-import { onlyUser } from ".";
+import { onlyRanked } from ".";
 
-export const castVotes = onlyUser
+export const castVotes = onlyRanked
   .schema(
     z.object({
       round: z.string(),
@@ -15,13 +14,6 @@ export const castVotes = onlyUser
     })
   )
   .action(async ({ parsedInput, ctx }) => {
-    if (
-      ctx.user.discord?.subject &&
-      !checkDiscordAccountAge(ctx.user.discord.subject)
-    ) {
-      throw new Error(`Error creating proposal`);
-    }
-
     const round = await db.query.rounds.findFirst({
       where: eq(rounds.id, parsedInput.round),
       with: {
@@ -36,13 +28,10 @@ export const castVotes = onlyUser
       throw new Error("Round not found");
     }
 
-    if (!ctx.user.nexus.rank) {
-      throw new Error("Enter the Nexus to vote");
-    }
-
     if (
       round.minVoterRank &&
-      ctx.user.nexus.rank.place < round.minVoterRank.place
+      ctx.user.nexus?.rank?.place &&
+      ctx.user.nexus?.rank?.place < round.minVoterRank.place
     ) {
       throw new Error("You are not eligible to vote in this round");
     }
@@ -82,7 +71,7 @@ export const castVotes = onlyUser
           throw new Error("You can only vote on proposals in the same round");
         }
 
-        if (!ctx.user.nexus.rank) {
+        if (!ctx.user.nexus?.rank) {
           throw new Error("Enter the Nexus to vote");
         }
 

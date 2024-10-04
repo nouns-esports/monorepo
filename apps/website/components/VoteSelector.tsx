@@ -10,6 +10,7 @@ export default function VoteSelector(props: {
   proposal: number;
   votes: number;
   selectedVotes?: number;
+  remainingVotes: number;
   userRank?: Rank;
   minRank?: Rank;
   roundState: ReturnType<typeof roundState>;
@@ -20,17 +21,19 @@ export default function VoteSelector(props: {
 }) {
   if (
     props.roundState === "Ended" ||
-    (props.roundState === "Voting" && !props.userRank)
+    (props.roundState === "Voting" &&
+      (!props.userRank || props.remainingVotes < 1))
   ) {
     return (
       <div
         className={twMerge(
-          "flex items-center gap-2 text-grey-200 text-2xl text-center select-none font-bebas-neue",
-          props.index &&
-            props.awardCount &&
+          "flex items-center gap-2 text-2xl text-center select-none font-bebas-neue",
+          props.index !== undefined &&
+            props.awardCount !== undefined &&
             props.roundState === "Ended" &&
-            props.index < props.awardCount &&
-            "text-white"
+            props.index < props.awardCount
+            ? "text-white"
+            : "text-grey-200"
         )}
       >
         {props.votes}

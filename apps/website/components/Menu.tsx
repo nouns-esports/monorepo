@@ -1,6 +1,14 @@
 "use client";
 
-import { Diamond, Handshake, Shapes, Trophy, Users, X } from "lucide-react";
+import {
+  Diamond,
+  Handshake,
+  Shapes,
+  ShoppingBag,
+  Trophy,
+  Users,
+  X,
+} from "lucide-react";
 import { useParams, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
@@ -147,31 +155,39 @@ export default function Menu() {
             </ul>
           </Group>
         </ul>
-        <div className="flex items-center gap-4 w-full h-full justify-center">
-          <Link href="/discord">
-            <DiscordLogo
-              className="w-7 h-7 text-white hover:text-white/60 cursor-pointer transition-colors"
-              weight="fill"
-            />
+        <div className="flex flex-col items-center gap-8">
+          <Link href="/shop">
+            <li className="gap-2 items-center opacity-100 hover:opacity-80 transition-opacity relative z-[60] text-white hidden max-[400px]:flex">
+              <ShoppingBag className="w-5 h-5" />
+              Shop
+            </li>
           </Link>
-          <Link href="/instagram">
-            <InstagramLogo
-              className="w-7 h-7 text-white hover:text-white/60 cursor-pointer transition-colors"
-              weight="fill"
-            />
-          </Link>
-          <Link href="/twitter">
-            <TwitterLogo
-              className="w-7 h-7 text-white hover:text-white/60 cursor-pointer transition-colors"
-              weight="fill"
-            />
-          </Link>
-          <Link href="/youtube">
-            <YoutubeLogo
-              className="w-7 h-7 text-white hover:text-white/60 cursor-pointer transition-colors"
-              weight="fill"
-            />
-          </Link>
+          <div className="flex items-center gap-4 w-full h-full justify-center">
+            <Link href="/discord">
+              <DiscordLogo
+                className="w-7 h-7 text-white hover:text-white/60 cursor-pointer transition-colors"
+                weight="fill"
+              />
+            </Link>
+            <Link href="/instagram">
+              <InstagramLogo
+                className="w-7 h-7 text-white hover:text-white/60 cursor-pointer transition-colors"
+                weight="fill"
+              />
+            </Link>
+            <Link href="/twitter">
+              <TwitterLogo
+                className="w-7 h-7 text-white hover:text-white/60 cursor-pointer transition-colors"
+                weight="fill"
+              />
+            </Link>
+            <Link href="/youtube">
+              <YoutubeLogo
+                className="w-7 h-7 text-white hover:text-white/60 cursor-pointer transition-colors"
+                weight="fill"
+              />
+            </Link>
+          </div>
         </div>
       </div>
     </>

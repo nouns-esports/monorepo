@@ -2,6 +2,7 @@
 
 export default function DateComponent(props: {
   timestamp?: string | Date | number;
+  short?: boolean;
 }) {
   const now = new Date();
   const date = new Date(props.timestamp ?? now);
@@ -28,11 +29,19 @@ export default function DateComponent(props: {
   }
 
   if (date <= now) {
+    if (props.short) {
+      return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+    }
+
     return date.toLocaleDateString("en-US", {
       month: "long",
       day: "numeric",
       year: "numeric",
     });
+  }
+
+  if (props.short) {
+    return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
   }
 
   return `${date.toLocaleDateString("en-US", {

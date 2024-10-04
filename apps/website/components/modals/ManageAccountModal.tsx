@@ -9,13 +9,14 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { pinImage } from "@/server/mutations/pinImage";
 import { useAction } from "next-safe-action/hooks";
-import { updateProfile } from "@/server/mutations/updateProfile";
+import { updateNexus } from "@/server/mutations/updateNexus";
 import { useRouter } from "next/navigation";
 import { Edit, Plus, RefreshCcw, Save, UserPen, X } from "lucide-react";
 import { twMerge } from "tailwind-merge";
-import { usePrivy } from "@privy-io/react-auth";
+import { useLogin, useLoginWithOAuth, usePrivy } from "@privy-io/react-auth";
 import type { AuthenticatedUser } from "@/server/queries/users";
 import Tabs from "../Tabs";
+import { usePrivyModalState } from "@/providers/Privy";
 
 export default function ManageAccountModal(props: { user: AuthenticatedUser }) {
   const [tab, setTab] = useState<
@@ -30,16 +31,19 @@ export default function ManageAccountModal(props: { user: AuthenticatedUser }) {
 
   const pinImageAction = useAction(pinImage);
 
+  const { linkWallet, linkFarcaster, linkTwitter, linkDiscord, logout } =
+    usePrivy();
+
   const { isOpen, close } = useModal("edit-profile");
 
-  const updateProfileAction = useAction(updateProfile, {
+  const updateNexusAction = useAction(updateNexus, {
     onSuccess: () => {
       console.log("success");
       close();
     },
   });
 
-  const { linkDiscord } = usePrivy();
+  const router = useRouter();
 
   return (
     <Modal id="edit-profile" className="p-4 flex flex-col min-w-80 gap-4">
@@ -161,11 +165,11 @@ export default function ManageAccountModal(props: { user: AuthenticatedUser }) {
                     </div>
                   </div>
                   <Button
-                    onClick={() => {}}
+                    onClick={() => linkDiscord()}
                     size="sm"
                     disabled={!!props.user.discord}
                   >
-                    {props.user.discord ? "Disconnect" : "Connect"}
+                    {props.user.discord ? "Remove" : "Add"}
                   </Button>
                 </div>
                 <div className="flex gap-2 justify-between items-center">
@@ -185,8 +189,8 @@ export default function ManageAccountModal(props: { user: AuthenticatedUser }) {
                       </p>
                     </div>
                   </div>
-                  <Button onClick={() => {}} size="sm">
-                    {props.user.farcaster ? "Disconnect" : "Connect"}
+                  <Button onClick={() => linkFarcaster()} size="sm">
+                    {props.user.farcaster ? "Remove" : "Add"}
                   </Button>
                 </div>
                 <div className="flex gap-2 justify-between items-center">
@@ -206,8 +210,8 @@ export default function ManageAccountModal(props: { user: AuthenticatedUser }) {
                       </p>
                     </div>
                   </div>
-                  <Button onClick={() => {}} size="sm">
-                    {props.user.twitter ? "Disconnect" : "Connect"}
+                  <Button onClick={() => linkTwitter()} size="sm">
+                    {props.user.twitter ? "Remove" : "Add"}
                   </Button>
                 </div>
                 <div className="flex gap-2 justify-between items-center">
@@ -227,8 +231,8 @@ export default function ManageAccountModal(props: { user: AuthenticatedUser }) {
                       </p>
                     </div>
                   </div>
-                  <Button onClick={() => {}} size="sm">
-                    {props.user.wallet ? "Disconnect" : "Connect"}
+                  <Button onClick={() => linkWallet()} size="sm">
+                    {props.user.wallet ? "Remove" : "Add"}
                   </Button>
                 </div>
               </>
@@ -237,7 +241,13 @@ export default function ManageAccountModal(props: { user: AuthenticatedUser }) {
               <>
                 <div className="flex gap-2 justify-between items-center">
                   <p className="text-white font-semibold">Sign Out</p>
-                  <Button onClick={() => {}} size="sm">
+                  <Button
+                    onClick={async () => {
+                      await logout();
+                      router.refresh();
+                    }}
+                    size="sm"
+                  >
                     Sign out
                   </Button>
                 </div>
@@ -258,7 +268,9 @@ export default function ManageAccountModal(props: { user: AuthenticatedUser }) {
                   </div>
                   <Button
                     disabled={!confirmDeleteAccount}
-                    onClick={() => {}}
+                    onClick={() => {
+                      if (!confirmDeleteAccount) return;
+                    }}
                     size="sm"
                   >
                     Delete Account

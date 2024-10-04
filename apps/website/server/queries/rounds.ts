@@ -12,8 +12,36 @@ import {
 } from "drizzle-orm";
 import { unstable_cache as cache } from "next/cache";
 
+export const getRoundWithProposal = cache(
+  async (input: { round: string; user: string }) => {
+    return db.query.rounds.findFirst({
+      where: eq(rounds.id, input.round),
+      with: {
+        proposals: {
+          where: eq(proposals.user, input.user),
+          limit: 1,
+        },
+      },
+    });
+  },
+  ["rounds"],
+  { tags: ["rounds"], revalidate: 60 * 10 }
+);
+
+export const getHighlightedRound = cache(
+  async () => {
+    return db.query.rounds.findFirst({
+      where: gt(rounds.end, new Date()),
+      orderBy: desc(rounds.end),
+    });
+  },
+  ["highlightedRound"],
+  { tags: ["highlightedRound"], revalidate: 60 * 10 }
+);
+
 export const getRound = cache(
   async (input: { id: string }) => {
+    ////////
     return db.query.rounds.findFirst({
       where: eq(rounds.id, input.id),
       with: {

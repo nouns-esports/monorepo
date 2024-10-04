@@ -3,7 +3,6 @@
 import { db, proposals, rounds } from "~/packages/db/schema";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { parseLexicalState } from "@/utils/parseLexicalState";
 import { z } from "zod";
 import { onlyUser } from ".";
 
@@ -11,6 +10,7 @@ export const updateProposal = onlyUser
   .schema(
     z.object({
       title: z.string(),
+      image: z.string().optional(),
       content: z.string(),
       round: z.string(),
     })
@@ -42,14 +42,12 @@ export const updateProposal = onlyUser
       throw new Error("Proposing has closed");
     }
 
-    const { image, description } = parseLexicalState(parsedInput.content);
-
     await db
       .update(proposals)
       .set({
         title: parsedInput.title,
         content: parsedInput.content,
-        image,
+        image: parsedInput.image,
       })
       .where(eq(proposals.id, proposal.id));
 

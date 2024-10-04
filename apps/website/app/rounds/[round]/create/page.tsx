@@ -1,11 +1,12 @@
 import Link from "@/components/Link";
 import { ArrowLeft } from "phosphor-react-sc";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { getProposal } from "@/server/queries/proposals";
 import { getAuthenticatedUser } from "@/server/queries/users";
 import ProposalEditor from "@/components/proposals/ProposalEditor";
 import Shimmer from "@/components/Shimmer";
 import dynamic from "next/dynamic";
+import { getRoundWithProposal } from "@/server/queries/rounds";
 
 const Markdown = dynamic(() => import("@/components/lexical/Markdown"), {
   ssr: false,
@@ -15,12 +16,16 @@ const Markdown = dynamic(() => import("@/components/lexical/Markdown"), {
 export default async function Create(props: { params: { round: string } }) {
   const user = await getAuthenticatedUser();
 
-  const proposal = user
-    ? await getProposal({ user: user.id, round: props.params.round })
+  const round = user
+    ? await getRoundWithProposal({ user: user.id, round: props.params.round })
     : undefined;
 
-  if (!proposal || !user) {
+  if (!round) {
     return notFound();
+  }
+
+  if (!user) {
+    return redirect("/");
   }
 
   return (
@@ -35,23 +40,19 @@ export default async function Create(props: { params: { round: string } }) {
         </Link>
         <div className="bg-grey-800 rounded-xl overflow-hidden">
           <img
-            src={`${proposal.round.image}?img-height=500&img-onerror=redirect`}
+            src={`${round.image}?img-height=500&img-onerror=redirect`}
             className="w-full h-48 object-cover object-center max-sm:h-32"
           />
           <div className="flex flex-col gap-2 p-4">
             <h2 className="w-full text-white font-luckiest-guy text-3xl">
-              {proposal.round.name}
+              {round.name}
             </h2>
             <div className="flex flex-col gap-2">
-              <Markdown markdown={proposal.round.content} readOnly />
+              <Markdown markdown={round.content} readOnly />
             </div>
           </div>
         </div>
-        <ProposalEditor
-          round={props.params.round}
-          proposal={proposal}
-          user={user.id}
-        />
+        <ProposalEditor round={round} user={user.id} />
       </div>
     </div>
   );

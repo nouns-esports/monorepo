@@ -1,19 +1,21 @@
 "use server";
 
 import { z } from "zod";
-import { onlyUser } from ".";
+import { onlyRanked } from ".";
 import { db, nexus, quests, seasons, xp } from "~/packages/db/schema";
 import { desc, eq, gt } from "drizzle-orm";
 import { getAction } from "../queries/quests";
 import { revalidatePath } from "next/cache";
 
-export const completeQuest = onlyUser
+export const completeQuest = onlyRanked
   .schema(
     z.object({
       quest: z.string(),
     })
   )
   .action(async ({ parsedInput, ctx }) => {
+    const now = new Date();
+
     const quest = await db.query.quests.findFirst({
       where: eq(quests.id, parsedInput.quest),
       with: {
@@ -61,7 +63,7 @@ export const completeQuest = onlyUser
     }
 
     const currentSeason = await db.query.seasons.findFirst({
-      where: gt(seasons.start, new Date()),
+      where: gt(seasons.start, now),
       orderBy: desc(seasons.start),
     });
 
@@ -74,11 +76,12 @@ export const completeQuest = onlyUser
         quest: quest.id,
         user: ctx.user.id,
         amount: quest.xp,
-        timestamp: new Date(),
+        timestamp: now,
         season: currentSeason.id.toString(),
       });
+
       await tx.update(nexus).set({
-        xp: ctx.user.xp + quest.xp,
+        xp: (ctx.user.nexus?.xp ?? 0) + quest.xp,
       });
     });
 
