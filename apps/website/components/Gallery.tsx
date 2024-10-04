@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Button from "./Button";
 import { twMerge } from "tailwind-merge";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -14,61 +14,64 @@ export default function Gallery(props: {
   const [index, setIndex] = useState(0);
   const [backwards, setBackwards] = useState(false);
 
-  const [slides, setSlides] = useState<
+  const slides = useMemo<
     Array<
       { title: string; sub: string; href: string; button: string } & (
         | { type: "video"; mp4: string; webp: string }
         | { type: "image"; url: string }
       )
     >
-  >([
-    {
-      title: "We're redefining esports",
-      sub: "Learn about our mission",
-      href: "/about",
-      button: "Learn more",
-      type: "video",
-      mp4: "/gallery/landing.mp4",
-      webp: "/gallery/landing.webm",
-    },
-    ...(props.highlightedRound
-      ? ([
-          {
-            title: props.highlightedRound.name,
-            sub: {
-              Voting: "Now voting",
-              Ended: "",
-              Proposing: "Now proposing",
-              Upcoming: "Starting soon",
-            }[roundState(props.highlightedRound)],
-            href: `/rounds/${props.highlightedRound.id}`,
-            button: "View Round",
-            type: "image",
-            url: props.highlightedRound.image,
-          },
-        ] as const)
-      : []),
-    ...(props.highlightedEvent
-      ? ([
-          {
-            title: props.highlightedEvent.name,
-            sub: `Coming in ${new Date(props.highlightedEvent.start).toLocaleString("default", { month: "long" })}`,
-            href: `/events/${props.highlightedEvent.id}`,
-            button: "View Event",
-            type: "image",
-            url: props.highlightedEvent.image,
-          },
-        ] as const)
-      : []),
-    {
-      title: "Matcha",
-      sub: "Where Nouns trades crypto",
-      href: "/matcha",
-      button: "Visit Matcha",
-      type: "image",
-      url: "/gallery/matcha-x-nouns.jpg",
-    },
-  ]);
+  >(
+    () => [
+      {
+        title: "We're redefining esports",
+        sub: "Learn about our mission",
+        href: "/about",
+        button: "Learn more",
+        type: "video",
+        mp4: "/gallery/landing.mp4",
+        webp: "/gallery/landing.webm",
+      },
+      ...(props.highlightedRound
+        ? ([
+            {
+              title: props.highlightedRound.name,
+              sub: {
+                Voting: "Now voting",
+                Ended: "",
+                Proposing: "Now proposing",
+                Upcoming: "Starting soon",
+              }[roundState(props.highlightedRound)],
+              href: `/rounds/${props.highlightedRound.id}`,
+              button: "View Round",
+              type: "image",
+              url: props.highlightedRound.image,
+            },
+          ] as const)
+        : []),
+      ...(props.highlightedEvent
+        ? ([
+            {
+              title: props.highlightedEvent.name,
+              sub: `Coming in ${new Date(props.highlightedEvent.start).toLocaleString("default", { month: "long" })}`,
+              href: `/events/${props.highlightedEvent.id}`,
+              button: "View Event",
+              type: "image",
+              url: props.highlightedEvent.image,
+            },
+          ] as const)
+        : []),
+      {
+        title: "Matcha",
+        sub: "Where Nouns trades crypto",
+        href: "/matcha",
+        button: "Visit Matcha",
+        type: "image",
+        url: "/gallery/matcha-x-nouns.jpg",
+      },
+    ],
+    [props.highlightedEvent, props.highlightedRound]
+  );
 
   const backgroundRef = useRef<HTMLDivElement>(null);
 
