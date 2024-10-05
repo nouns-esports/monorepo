@@ -14,12 +14,25 @@ export const POST = async (req: NextRequest) => {
       body,
       { id, timestamp, signature },
       env.PRIVY_WEBHOOK_SIGNING_KEY
-    )) as {
-      type: "privy.test";
-      message: string;
-    };
+    )) as
+      | {
+          type: "user.authenticated";
+          account: any;
+        }
+      | {
+          type: "user.updated_account";
+          account: any;
+        }
+      | {
+          type: "user.linked_account";
+          account: any;
+        }
+      | {
+          type: "user.unlinked_account";
+          account: any;
+        };
 
-    console.log(verifiedPayload);
+    console.log(verifiedPayload.account);
 
     return NextResponse.json({ message: "ok" });
   } catch (e) {
