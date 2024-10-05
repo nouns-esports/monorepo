@@ -20,7 +20,7 @@ export default async function LinkRoute(props: {
 
       if (user) {
         await db.insert(snapshots).values({
-          type: "link-capture",
+          type: "visit-link",
           timestamp: new Date(),
           tag: link.id,
           user: user.id,
