@@ -6,6 +6,7 @@ import { twMerge } from "tailwind-merge";
 export default function Button(props: {
   disabled?: boolean;
   href?: string;
+  newTab?: boolean;
   onClick?: () => void;
   backgroundColor?: string;
   scroll?: boolean;
@@ -23,6 +24,7 @@ export default function Button(props: {
       onClick={props.onClick}
       // @ts-ignore
       href={props.href}
+      newTab={props.href ? props.newTab : undefined}
       type={props.form ? "submit" : undefined}
       scroll={!!props.href && props.scroll ? true : undefined}
       className={twMerge(

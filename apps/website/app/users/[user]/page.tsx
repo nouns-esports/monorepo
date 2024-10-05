@@ -3,9 +3,9 @@ import ManageAccountModal from "@/components/modals/ManageAccountModal";
 import { ToggleModal } from "@/components/Modal";
 import { getAuthenticatedUser, getUser } from "@/server/queries/users";
 import { notFound } from "next/navigation";
+import { Level } from "@/components/Level";
 
 export default async function User(props: { params: { user: string } }) {
-  const authenticatedUser = await getAuthenticatedUser();
   const user = await getUser({ user: decodeURIComponent(props.params.user) });
 
   if (!user) {
@@ -38,19 +38,21 @@ export default async function User(props: { params: { user: string } }) {
                   )}
                 </div>
                 <p>{user.bio}</p>
+                <div className="w-64">
+                  <Level xp={user.xp} />
+                </div>
               </div>
             </div>
-            {authenticatedUser?.id === user.id ? (
-              <ToggleModal id="edit-profile">
-                <Button>Manage Account</Button>
-              </ToggleModal>
+            {user.farcaster ? (
+              <Button href={`https://warpcast.com/${user.farcaster}`} newTab>
+                View on Warpcast
+              </Button>
             ) : (
               ""
             )}
           </div>
         </div>
       </div>
-      {authenticatedUser && <ManageAccountModal user={authenticatedUser} />}
     </>
   );
 }

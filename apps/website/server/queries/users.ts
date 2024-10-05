@@ -114,7 +114,6 @@ export const getUserStats = cache(
     });
 
     return {
-      earnedXP: user?.xp ?? 0,
       proposalsCreated: user?.proposals.length ?? 0,
       questsCompleted: user?.xpRecords.length ?? 0,
       votesCast: user?.votes.length ?? 0,

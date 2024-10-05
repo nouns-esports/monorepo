@@ -18,14 +18,17 @@ export default async function Quests() {
 
   const featuredEvent = season.events.find((event) => event.featured);
 
-  const quests = await getQuests({ season: season.id.toString() });
+  const quests = await getQuests({
+    season: season.id.toString(),
+    user: user?.id,
+  });
 
-  const now = new Date();
+  const lastFriday = new Date();
+  lastFriday.setDate(lastFriday.getDate() - ((lastFriday.getDay() + 2) % 7));
+  lastFriday.setHours(0, 0, 0, 0);
 
-  const lastFriday = new Date(now.getDate() - (((now.getDay() + 2) % 7) + 1));
-  const nextFriday = new Date(
-    now.setDate(now.getDate() + ((7 - now.getDay()) % 7))
-  );
+  const nextFriday = new Date(lastFriday);
+  nextFriday.setDate(nextFriday.getDate() + 7);
 
   const newThisWeek = quests.filter(
     (quest) => new Date(quest.createdAt) > lastFriday
@@ -36,7 +39,6 @@ export default async function Quests() {
 
   return (
     <div className="flex flex-col h-full gap-8 pt-32 max-xl:pt-28 max-sm:pt-20 px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
-      {/* Do this inside the gallery section automatically generating for featured quests */}
       {featuredEvent && (
         <div className="relative w-full aspect-[3/1] rounded-xl overflow-hidden">
           <img
@@ -49,13 +51,6 @@ export default async function Quests() {
           <div className="absolute bottom-4 left-4">
             <Button href={`/events/${featuredEvent.id}`}>View Event</Button>
           </div>
-          {/* <div className="absolute z-50 flex flex-col gap-2 top-0 right-0 h-full w-80 p-4">
-            <h2 className="font-bebas-neue text-white text-2xl">Quests</h2>
-            <div className="w-full h-full bg-black/40 backdrop-blur-sm rounded-xl" />
-            <div className="w-full h-full bg-black/40 backdrop-blur-sm  rounded-xl" />
-            <div className="w-full h-full bg-black/40 backdrop-blur-sm rounded-xl" />
-            <div className="w-full h-full bg-black/40 backdrop-blur-sm rounded-xl" />
-          </div> */}
         </div>
       )}
       <div className="flex flex-col gap-6">
@@ -86,6 +81,7 @@ export default async function Quests() {
                 image: quest.community.image,
               }}
               xp={quest.xp}
+              completed={quest.completed?.length > 0 ? true : false}
             />
           ))}
         </div>
@@ -107,6 +103,7 @@ export default async function Quests() {
                   image: quest.community.image,
                 }}
                 xp={quest.xp}
+                completed={quest.completed?.length > 0 ? true : false}
               />
             ))}
           </div>

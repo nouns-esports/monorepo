@@ -328,7 +328,6 @@ export const quests = pgTable("quests", {
     .$type<Array<{ [key: string]: any }>>()
     .notNull()
     .default([]),
-  requiredActions: integer("required_actions").notNull().default(-1),
 });
 
 export const questRelations = relations(quests, ({ one, many }) => ({

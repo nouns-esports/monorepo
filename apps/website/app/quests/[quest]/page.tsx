@@ -1,23 +1,15 @@
-import Button from "@/components/Button";
 import CheckQuest from "@/components/CheckQuest";
 import Link from "@/components/Link";
 import { getAction, getQuest } from "@/server/queries/quests";
 import { getAuthenticatedUser } from "@/server/queries/users";
-import {
-  ArrowLeft,
-  ArrowRight,
-  Check,
-  Sparkles,
-  TriangleAlert,
-} from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Sparkles } from "lucide-react";
 import { notFound } from "next/navigation";
 import { twMerge } from "tailwind-merge";
 
 export default async function Quest(props: { params: { quest: string } }) {
-  const [quest, user] = await Promise.all([
-    getQuest({ id: props.params.quest }),
-    getAuthenticatedUser(),
-  ]);
+  const user = await getAuthenticatedUser();
+
+  const quest = await getQuest({ id: props.params.quest, user: user?.id });
 
   if (!quest) {
     return notFound();
@@ -33,7 +25,7 @@ export default async function Quest(props: { params: { quest: string } }) {
     )
   );
 
-  const completed = quest.completed?.[0]
+  const completedQuests = quest.completed?.[0]
     ? (Array(actions.length).fill(true) as Array<boolean>)
     : await Promise.all(
         actions.map(async (action) => {
@@ -43,7 +35,12 @@ export default async function Quest(props: { params: { quest: string } }) {
         })
       );
 
-  const completedCount = completed.filter((completed) => completed).length;
+  const completedCount = completedQuests.filter(
+    (completed) => completed
+  ).length;
+
+  const claimed = quest.completed?.[0] ? true : false;
+  const completed = completedCount === actions.length;
 
   return (
     <div className="relative flex justify-center gap-16 w-full pt-32 max-xl:pt-28 max-sm:pt-20 px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
@@ -60,16 +57,9 @@ export default async function Quest(props: { params: { quest: string } }) {
             />
             <div className="flex flex-col gap-8 p-4">
               <div className="flex flex-col gap-2">
-                <div className="flex items-center justify-between">
-                  <h1 className="w-full text-white font-luckiest-guy text-3xl">
-                    {quest.name}
-                  </h1>
-                  <div className="flex items-center gap-2 text-white">
-                    Earns <Sparkles className="w-4 h-4 text-green" />
-                    {quest.xp}00
-                  </div>
-                </div>
-
+                <h1 className="w-full text-white font-luckiest-guy text-3xl">
+                  {quest.name}
+                </h1>
                 <div className="flex flex-col gap-2">
                   {quest.description}
                   {/* <Markdown markdown={round.content} readOnly /> */}
@@ -78,20 +68,25 @@ export default async function Quest(props: { params: { quest: string } }) {
               <div className="flex flex-col gap-4">
                 <div className="flex items-center justify-between">
                   <h2 className="font-bebas-neue text-white text-2xl">
-                    {completedCount === actions.length
-                      ? "All actions completed"
-                      : quest.requiredActions === -1
-                        ? "Complete all of the following"
-                        : `Complete at least ${quest.requiredActions} of the following`}
+                    {claimed
+                      ? "Quest completed"
+                      : completed
+                        ? "All actions completed"
+                        : "Complete all of the following"}
                   </h2>
-                  <CheckQuest
-                    completed={
-                      quest.requiredActions === -1
-                        ? completedCount === actions.length
-                        : completedCount >= quest.requiredActions
-                    }
-                    claimed={!!quest.completed?.[0]}
-                  />
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-2 text-white">
+                      Earns <Sparkles className="w-4 h-4 text-green" />
+                      {quest.xp}00
+                    </div>
+                    <CheckQuest
+                      quest={quest.id}
+                      xp={quest.xp}
+                      userXP={user?.nexus?.xp ?? 0}
+                      completed={completed}
+                      claimed={claimed}
+                    />
+                  </div>
                 </div>
                 <ul className={twMerge("flex flex-col gap-2")}>
                   {actions.map(async (action, index) => {
@@ -102,7 +97,8 @@ export default async function Quest(props: { params: { quest: string } }) {
                         key={`action-${index}`}
                         className={twMerge(
                           "relative bg-grey-600 rounded-xl p-3 flex justify-between items-center text-white group hover:bg-grey-500 transition-colors",
-                          completed[index] && "opacity-60 pointer-events-none"
+                          completedQuests[index] &&
+                            "opacity-60 pointer-events-none"
                         )}
                       >
                         <Link
@@ -111,7 +107,7 @@ export default async function Quest(props: { params: { quest: string } }) {
                           className="absolute left-0 top-0 w-full h-full"
                         />
                         <div className="flex items-center gap-3">
-                          {completed[index] ? (
+                          {completedQuests[index] ? (
                             <div className="rounded-full bg-green w-7 h-7 flex items-center justify-center">
                               <Check className="w-5 h-5 text-black/50" />
                             </div>

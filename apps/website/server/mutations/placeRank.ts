@@ -6,8 +6,13 @@ import { z } from "zod";
 import { db, nexus, rankings, ranks, seasons } from "~/packages/db/schema";
 import { and, lte, gte, desc, eq, asc } from "drizzle-orm";
 import checkDiscordAccountAge from "@/utils/checkDiscordAccountAge";
+import { revalidatePath } from "next/cache";
 
-export const placeRank = onlyUser.action(async ({ parsedInput, ctx }) => {
+export const placeRank = onlyUser.action(async ({ ctx }) => {
+  if (ctx.user.nexus?.rank) {
+    throw new Error("You are already ranked");
+  }
+
   if (!ctx.user.discord?.subject) {
     throw new Error("You must connect a Discord account first");
   }
@@ -33,7 +38,7 @@ export const placeRank = onlyUser.action(async ({ parsedInput, ctx }) => {
 
   const [lowestRanking, currentSeason] = await Promise.all([
     db.query.rankings.findFirst({
-      orderBy: and(desc(rankings.timestamp), desc(rankings.place)),
+      orderBy: [desc(rankings.timestamp), desc(rankings.place)],
     }),
     db.query.seasons.findFirst({
       where: and(lte(seasons.start, now), gte(seasons.end, now)),
@@ -70,8 +75,14 @@ export const placeRank = onlyUser.action(async ({ parsedInput, ctx }) => {
       user: ctx.user.id,
       season: currentSeason.id,
       place: lowestRanking.place + 1,
-      timestamp: now,
+      timestamp: lowestRanking.timestamp,
       rank: lowestRank.id,
     });
   });
+
+  revalidatePath(`/users/${ctx.user.id}`);
+  if (ctx.user.nexus?.discord) {
+    revalidatePath(`/users/${ctx.user.nexus.discord}`);
+  }
+  revalidatePath(`/nexus`);
 });

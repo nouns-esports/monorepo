@@ -3,7 +3,7 @@
 import { z } from "zod";
 import { onlyRanked } from ".";
 import { db, nexus, quests, seasons, xp } from "~/packages/db/schema";
-import { desc, eq, gt } from "drizzle-orm";
+import { and, desc, eq, gt, gte, lt, lte } from "drizzle-orm";
 import { getAction } from "../queries/quests";
 import { revalidatePath } from "next/cache";
 
@@ -30,7 +30,7 @@ export const completeQuest = onlyRanked
       throw new Error("Quest not found");
     }
 
-    if (quest.completed.length > 0) {
+    if (quest.completed?.length > 0) {
       throw new Error("Quest already completed");
     }
 
@@ -63,7 +63,7 @@ export const completeQuest = onlyRanked
     }
 
     const currentSeason = await db.query.seasons.findFirst({
-      where: gt(seasons.start, now),
+      where: and(lte(seasons.start, now), gte(seasons.end, now)),
       orderBy: desc(seasons.start),
     });
 
@@ -87,4 +87,5 @@ export const completeQuest = onlyRanked
 
     revalidatePath(`/quests/${quest.id}`);
     revalidatePath("/nexus");
+    revalidatePath("/quests");
   });

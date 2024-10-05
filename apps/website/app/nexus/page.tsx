@@ -9,7 +9,12 @@ import { twMerge } from "tailwind-merge";
 import Link from "@/components/Link";
 import { getCurrentRankings, getUserRankings } from "@/server/queries/rankings";
 import DateComponent from "@/components/Date";
-import { Sparkles } from "lucide-react";
+import { Link2, Settings, Sparkles } from "lucide-react";
+import CheckDiscordServer from "@/components/CheckDiscordServer";
+import { revalidatePath } from "next/cache";
+import { ToggleModal } from "@/components/Modal";
+import ManageAccountModal from "@/components/modals/ManageAccountModal";
+import { Level } from "@/components/Level";
 
 export default async function NexusPage(props: {
   searchParams: {
@@ -47,13 +52,24 @@ export default async function NexusPage(props: {
             <h1 className="text-3xl font-luckiest-guy text-white">
               {user.nexus.name}
             </h1>
+            <div className="ml-4 w-64 bg-grey-800 rounded-xl py-2 px-4">
+              <Level xp={user.nexus.xp} />
+            </div>
           </div>
-          <Button href={`/users/${user.nexus.discord ?? user.id}`}>
-            View Profile
-          </Button>
+          <div className="flex items-center gap-6">
+            <ToggleModal
+              id="manage-account"
+              className="text-red flex items-center gap-1.5 hover:text-red/80 transition-colors"
+            >
+              Manage Account <Settings className="w-4 h-4" />
+            </ToggleModal>
+            <Button href={`/users/${user.nexus.discord ?? user.id}`}>
+              View Profile
+            </Button>
+          </div>
         </div>
         <div className="grid grid-cols-4 gap-4 grid-rows-2">
-          {user.nexus.rank ? (
+          {user.nexus.rank && userRankings.length > 0 ? (
             <div className="bg-grey-800 col-span-2 max-lg:col-span-4 rounded-xl flex flex-col p-4 gap-4 h-96">
               <div className="flex justify-between">
                 <div className="flex flex-col">
@@ -73,11 +89,15 @@ export default async function NexusPage(props: {
                     />
                   </div>
                 </div>
-                {user.nexus.rank ? (
-                  <div className="flex items-end flex-col gap-1">
-                    <h2 className="">Updates in</h2>
-                    <div className="flex items-center gap-2">
-                      <p className="text-white">
+                <div className="flex items-end flex-col gap-1">
+                  <h2 className="">Updates in</h2>
+                  <div className="flex items-center gap-2">
+                    <p className="text-white">
+                      {new Date(
+                        userRankings[userRankings.length - 1].timestamp
+                      ) < new Date() ? (
+                        "Update in progress..."
+                      ) : (
                         <Countdown
                           date={
                             new Date(
@@ -85,27 +105,33 @@ export default async function NexusPage(props: {
                             )
                           }
                         />
-                      </p>
-                    </div>
+                      )}
+                    </p>
                   </div>
-                ) : (
-                  ""
-                )}
+                </div>
               </div>
               <RankChart userRankings={userRankings} ranks={ranks} />
             </div>
           ) : (
             <div className="bg-grey-800 col-span-2 max-lg:col-span-4 rounded-xl flex flex-col items-center justify-center p-4 gap-4 h-96">
-              <img src="/discord.jpg" className="w-12 h-12 rounded-md" />
-              <p className="text-white text-2xl font-bebas-neue leading-none">
-                You are not ranked
+              <div className="flex items-center gap-4">
+                <img src="/discord.jpg" className="w-10 h-10 rounded-md" />
+                <p className="text-white text-2xl font-bebas-neue leading-none">
+                  You are not ranked
+                </p>
+              </div>
+              <p className="text-white text-sm flex items-center gap-2">
+                Join the{" "}
+                <Link
+                  href="/discord"
+                  className="text-red hover:text-red/80 transition-colors flex items-center gap-1"
+                  newTab
+                >
+                  Discord server <Link2 className="w-4 h-4" />
+                </Link>{" "}
+                to get started
               </p>
-              <p className="text-white text-sm">
-                Join the Discord server to get started
-              </p>
-              <Button href="/discord" size="sm">
-                Check
-              </Button>
+              <CheckDiscordServer />
             </div>
           )}
           <div className="bg-grey-800 rounded-xl flex flex-col max-xl:col-span-2 max-md:col-span-4 gap-4 p-4 overflow-hidden h-96">
@@ -161,21 +187,13 @@ export default async function NexusPage(props: {
                 <h2 className="text-white text-2xl font-bebas-neue leading-none">
                   Stats
                 </h2>
-                {/* <Tabs
-                  id="stats"
-                  selected={props.searchParams.stats ?? "all-time"}
-                  options={{
-                    "all-time": "All Time",
-                    "this-season": "This Season",
-                  }}
-                /> */}
               </div>
               <div className="flex flex-col gap-2">
                 <div className="flex justify-between items-center gap-2">
                   <p className="">All Time XP</p>
                   <p className="text-white flex items-center gap-2">
                     <Sparkles className="w-4 h-4 text-green" />
-                    {userStats.earnedXP}
+                    {user.nexus.xp}
                   </p>
                 </div>
                 <div className="flex justify-between items-center gap-2">
@@ -201,6 +219,7 @@ export default async function NexusPage(props: {
           </div>
         </div>
       </div>
+      {user && <ManageAccountModal user={user} />}
     </div>
   );
 }

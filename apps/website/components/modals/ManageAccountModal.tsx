@@ -16,7 +16,6 @@ import { twMerge } from "tailwind-merge";
 import { useLogin, useLoginWithOAuth, usePrivy } from "@privy-io/react-auth";
 import type { AuthenticatedUser } from "@/server/queries/users";
 import Tabs from "../Tabs";
-import { usePrivyModalState } from "@/providers/Privy";
 
 export default function ManageAccountModal(props: { user: AuthenticatedUser }) {
   const [tab, setTab] = useState<
@@ -34,7 +33,7 @@ export default function ManageAccountModal(props: { user: AuthenticatedUser }) {
   const { linkWallet, linkFarcaster, linkTwitter, linkDiscord, logout } =
     usePrivy();
 
-  const { isOpen, close } = useModal("edit-profile");
+  const { isOpen, close } = useModal("manage-account");
 
   const updateNexusAction = useAction(updateNexus, {
     onSuccess: () => {
@@ -46,7 +45,7 @@ export default function ManageAccountModal(props: { user: AuthenticatedUser }) {
   const router = useRouter();
 
   return (
-    <Modal id="edit-profile" className="p-4 flex flex-col min-w-80 gap-4">
+    <Modal id="manage-account" className="p-4 flex flex-col min-w-80 gap-4">
       <div className="flex justify-between items-center">
         <p className="text-white text-2xl font-bebas-neue leading-none">
           Your Account
