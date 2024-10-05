@@ -73,7 +73,7 @@ export const getQuests = cache(
     season: string;
     event?: string;
   }) => {
-    ////////
+    //////////
     return db.query.quests.findMany({
       limit: input.limit,
       where: and(

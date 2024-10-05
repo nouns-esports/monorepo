@@ -8,13 +8,11 @@ import {
   serial,
   smallint,
   integer,
-  pgEnum,
   jsonb,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { Pool } from "pg";
 import { env } from "~/env";
-import type { User } from "@privy-io/server-auth";
 
 export const links = pgTable("links", {
   id: text("id").primaryKey(),
@@ -214,6 +212,7 @@ export const awardsRelations = relations(awards, ({ one }) => ({
   }),
 }));
 
+// Rethink the way we handle awards and assets
 export const assets = pgTable("assets", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
@@ -250,7 +249,6 @@ export const proposalsRelations = relations(proposals, ({ one, many }) => ({
   }),
 }));
 
-// probably rename this entire table to users later
 export const nexus = pgTable("nexus", {
   id: text("id").primaryKey(),
   rank: integer("rank"),

@@ -65,7 +65,7 @@ export default async function Header() {
                           </p>
                         </div>
                       </Link>
-                      <Link
+                      {/* <Link
                         href="/events"
                         className="text-nowrap hover:bg-grey-500 transition-colors py-1.5 px-3 rounded-lg flex gap-4 items-center"
                       >
@@ -76,7 +76,7 @@ export default async function Header() {
                           <p className="font-bebas-neue text-lg">Events</p>
                           <p className="text-grey-200">View upcoming events</p>
                         </div>
-                      </Link>
+                      </Link> */}
                       <Link
                         href="/partners"
                         className="text-nowrap hover:bg-grey-500 transition-colors py-1.5 px-3 rounded-lg flex gap-4 items-center"

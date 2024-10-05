@@ -1,6 +1,6 @@
 {
-  "id": "7d8a7cd1-419d-4373-9397-db87db121753",
-  "prevId": "0fc66b81-0c83-4fd2-b9b3-bf02991eb8fe",
+  "id": "bf910d6b-df63-4b2a-b282-7f1348ae8193",
+  "prevId": "42a03c9a-cdc2-48db-9e5e-4d0bc65158f2",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -138,6 +138,71 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
+    "public.creations": {
+      "name": "creations",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "creator": {
+          "name": "creator",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "original": {
+          "name": "original",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "community": {
+          "name": "community",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        },
+        "width": {
+          "name": "width",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "height": {
+          "name": "height",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "public.events": {
       "name": "events",
       "schema": "",
@@ -219,77 +284,6 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "public.moments": {
-      "name": "moments",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "creator": {
-          "name": "creator",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "type": {
-          "name": "type",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "title": {
-          "name": "title",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "original": {
-          "name": "original",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "community": {
-          "name": "community",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "''"
-        },
-        "width": {
-          "name": "width",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "height": {
-          "name": "height",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "event": {
-          "name": "event",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
     "public.nexus": {
       "name": "nexus",
       "schema": "",
@@ -299,13 +293,6 @@
           "type": "text",
           "primaryKey": true,
           "notNull": true
-        },
-        "handle": {
-          "name": "handle",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "''"
         },
         "rank": {
           "name": "rank",
@@ -346,6 +333,30 @@
           "primaryKey": false,
           "notNull": true,
           "default": "'{}'"
+        },
+        "wallet": {
+          "name": "wallet",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "twitter": {
+          "name": "twitter",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "discord": {
+          "name": "discord",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "farcaster": {
+          "name": "farcaster",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -518,13 +529,6 @@
           "primaryKey": false,
           "notNull": true,
           "default": "'{}'"
-        },
-        "required_actions": {
-          "name": "required_actions",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": -1
         }
       },
       "indexes": {},

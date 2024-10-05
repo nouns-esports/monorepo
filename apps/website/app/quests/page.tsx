@@ -16,7 +16,12 @@ export default async function Quests() {
     throw new Error("No season found");
   }
 
-  const featuredEvent = season.events.find((event) => event.featured);
+  const now = new Date();
+
+  const featuredEvent = season.events.find(
+    (event) =>
+      event.featured && new Date(event.start) < now && new Date(event.end) > now
+  );
 
   const quests = await getQuests({
     season: season.id.toString(),

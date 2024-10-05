@@ -49,12 +49,12 @@ export default function QuestCard(props: {
             {props.community.name}
           </Link>
           {props.completed ? (
-            <div className="font-semibold text-sm flex items-center gap-1 text-green">
+            <div className="font-semibold text-sm flex items-center gap-1 text-green mr-2">
               <Check className="w-4 h-4" />
               Done
             </div>
           ) : (
-            <div className="text-white font-semibold text-sm flex items-center gap-2">
+            <div className="text-white font-semibold text-sm flex items-center gap-2 mr-2">
               <Sparkles className="w-4 h-4 text-green" />
               {props.xp}00
             </div>

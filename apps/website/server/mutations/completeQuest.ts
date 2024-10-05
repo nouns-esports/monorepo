@@ -23,6 +23,7 @@ export const completeQuest = onlyRanked
           where: eq(xp.user, ctx.user.id),
           limit: 1,
         },
+        event: true,
       },
     });
 
@@ -32,6 +33,13 @@ export const completeQuest = onlyRanked
 
     if (quest.completed?.length > 0) {
       throw new Error("Quest already completed");
+    }
+
+    if (
+      quest.event &&
+      (new Date(quest.event.start) > now || new Date(quest.event.end) < now)
+    ) {
+      throw new Error("Quest event is not active");
     }
 
     const actions = await Promise.all(

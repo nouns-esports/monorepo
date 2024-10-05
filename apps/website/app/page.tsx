@@ -20,19 +20,25 @@ import QuestCard from "@/components/QuestCard";
 import EventCard from "@/components/EventCard";
 
 export default async function Home() {
-  const [videos, trendingPosts, rounds, season, events] = await Promise.all([
-    getVideos(),
-    getTrendingPosts(),
-    getRounds({ limit: 4 }),
-    getCurrentSeason(),
-    getEvents({ limit: 3 }),
-  ]);
+  const [user, videos, trendingPosts, rounds, season, events] =
+    await Promise.all([
+      getAuthenticatedUser(),
+      getVideos(),
+      getTrendingPosts(),
+      getRounds({ limit: 4 }),
+      getCurrentSeason(),
+      getEvents({ limit: 3 }),
+    ]);
 
   if (!season) {
     throw new Error("No season found");
   }
 
-  const quests = await getQuests({ limit: 5, season: season.id.toString() });
+  const quests = await getQuests({
+    limit: 5,
+    season: season.id.toString(),
+    user: user?.id,
+  });
 
   const highlightedRound = rounds.find(
     (round) => round.featured || new Date(round.end ?? Infinity) > new Date()
@@ -161,12 +167,12 @@ export default async function Home() {
                 image: quest.community.image,
               }}
               xp={quest.xp}
-              // completed={!!quest.completed?.[0]?.id}
+              completed={quest.completed?.length > 0}
             />
           ))}
         </div>
       </div>
-      <div className="flex flex-col gap-4 px-32 max-2xl:px-16 max-xl:px-8 max-lg:px-0">
+      {/* <div className="flex flex-col gap-4 px-32 max-2xl:px-16 max-xl:px-8 max-lg:px-0">
         <div className="flex justify-between items-center max-lg:px-8 max-sm:px-4">
           <h2 className="font-luckiest-guy text-white text-4xl max-sm:text-3xl">
             Events
@@ -191,7 +197,7 @@ export default async function Home() {
             />
           ))}
         </div>
-      </div>
+      </div> */}
       <div className="flex flex-col gap-4 px-32 max-2xl:px-16 max-xl:px-8 max-lg:px-0">
         <div className="flex justify-between items-center max-lg:px-8 max-sm:px-4">
           <h2 className="font-luckiest-guy text-white text-4xl max-sm:text-3xl">
