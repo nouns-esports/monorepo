@@ -96,7 +96,7 @@ export const createNexus = onlyUser
         interests: parsedInput.interests,
         wallet: ctx.user.wallet?.address,
         twitter: ctx.user.twitter?.username,
-        discord: ctx.user.discord?.username.split("#0")[0],
+        discord: ctx.user.discord?.username.split("#")[0],
         farcaster: ctx.user.farcaster?.username ?? undefined,
       });
     });
