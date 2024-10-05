@@ -185,10 +185,10 @@ app.frame("/rounds/:id", async (c) => {
       </div>
     ),
     intents: [
-      <Button.Link href={`${env.PUBLIC_DOMAIN}/rounds/${round.id}`}>
+      <Button.Link href={`${env.NEXT_PUBLIC_DOMAIN}/rounds/${round.id}`}>
         View
       </Button.Link>,
-      <Button.Link href={`${env.PUBLIC_DOMAIN}/rounds`}>
+      <Button.Link href={`${env.NEXT_PUBLIC_DOMAIN}/rounds`}>
         All Rounds
       </Button.Link>,
     ],
@@ -199,9 +199,11 @@ app.frame("/rounds/:id", async (c) => {
 
 app.frame("/rounds/:round/votes/:user", async (c) => {
   return c.res({
-    image: `${env.PUBLIC_DOMAIN}/api/frames/rounds/${c.req.param("round")}/votes/${c.req.param("user")}/img`,
+    image: `${env.NEXT_PUBLIC_DOMAIN}/api/frames/rounds/${c.req.param("round")}/votes/${c.req.param("user")}/img`,
     intents: [
-      <Button.Link href={`${env.PUBLIC_DOMAIN}/rounds/${c.req.param("round")}`}>
+      <Button.Link
+        href={`${env.NEXT_PUBLIC_DOMAIN}/rounds/${c.req.param("round")}`}
+      >
         View Round
       </Button.Link>,
     ],
@@ -223,7 +225,7 @@ app.image("/rounds/:round/votes/:user/img", async (c) => {
   const round = await getUserVotesForRound({
     round: c.req.param("round"),
     user: c.req.param("user"),
-    wallet: user.wallet?.address,
+    wallet: user.wallet ?? undefined,
   });
 
   if (!round) {
