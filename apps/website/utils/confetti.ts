@@ -1,7 +1,7 @@
 import { confetti as tsParticlesConfetti } from "@tsparticles/confetti";
 
 export function confetti() {
-  const duration = 15 * 500,
+  const duration = 15 * 300,
     animationEnd = Date.now() + duration,
     defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
   function randomInRange(min: number, max: number) {

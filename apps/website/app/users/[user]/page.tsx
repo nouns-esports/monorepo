@@ -44,9 +44,11 @@ export default async function User(props: { params: { user: string } }) {
               </div>
             </div>
             {user.farcaster ? (
-              <Button href={`https://warpcast.com/${user.farcaster}`} newTab>
-                View on Warpcast
-              </Button>
+              <div className="max-sm:hidden">
+                <Button href={`https://warpcast.com/${user.farcaster}`} newTab>
+                  View on Warpcast
+                </Button>
+              </div>
             ) : (
               ""
             )}

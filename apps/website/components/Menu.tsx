@@ -2,6 +2,7 @@
 
 import {
   Diamond,
+  Gem,
   Handshake,
   Shapes,
   ShoppingBag,
@@ -131,6 +132,17 @@ export default function Menu() {
                 </Link>
               </li>
               <li className="text-nowrap">
+                <Link href="/quests" className="flex gap-4 items-center">
+                  <div className="rounded-md w-10 h-10 flex overflow-hidden bg-blue-500 text-white items-center">
+                    <Gem className="w-full h-full p-2" />
+                  </div>
+                  <div>
+                    <p className="font-bebas-neue text-lg">Quests</p>
+                    <p className="text-grey-200">Level up your nexus</p>
+                  </div>
+                </Link>
+              </li>
+              <li className="text-nowrap">
                 <Link href="/creations" className="flex items-center gap-4">
                   <div className="rounded-md w-10 h-10 flex overflow-hidden bg-gradient-to-br from-[#F3B5FD] to-[#F66FD0] text-white items-center">
                     <Diamond className="w-full h-full p-2" />
@@ -155,39 +167,31 @@ export default function Menu() {
             </ul>
           </Group>
         </ul>
-        <div className="flex flex-col items-center gap-8">
-          <Link href="/shop">
-            <li className="gap-2 items-center opacity-100 hover:opacity-80 transition-opacity relative z-[60] text-white hidden max-[400px]:flex">
-              <ShoppingBag className="w-5 h-5" />
-              Shop
-            </li>
+        <div className="flex items-center gap-4 w-full h-full justify-center">
+          <Link href="/discord">
+            <DiscordLogo
+              className="w-7 h-7 text-white hover:text-white/60 cursor-pointer transition-colors"
+              weight="fill"
+            />
           </Link>
-          <div className="flex items-center gap-4 w-full h-full justify-center">
-            <Link href="/discord">
-              <DiscordLogo
-                className="w-7 h-7 text-white hover:text-white/60 cursor-pointer transition-colors"
-                weight="fill"
-              />
-            </Link>
-            <Link href="/instagram">
-              <InstagramLogo
-                className="w-7 h-7 text-white hover:text-white/60 cursor-pointer transition-colors"
-                weight="fill"
-              />
-            </Link>
-            <Link href="/twitter">
-              <TwitterLogo
-                className="w-7 h-7 text-white hover:text-white/60 cursor-pointer transition-colors"
-                weight="fill"
-              />
-            </Link>
-            <Link href="/youtube">
-              <YoutubeLogo
-                className="w-7 h-7 text-white hover:text-white/60 cursor-pointer transition-colors"
-                weight="fill"
-              />
-            </Link>
-          </div>
+          <Link href="/instagram">
+            <InstagramLogo
+              className="w-7 h-7 text-white hover:text-white/60 cursor-pointer transition-colors"
+              weight="fill"
+            />
+          </Link>
+          <Link href="/twitter">
+            <TwitterLogo
+              className="w-7 h-7 text-white hover:text-white/60 cursor-pointer transition-colors"
+              weight="fill"
+            />
+          </Link>
+          <Link href="/youtube">
+            <YoutubeLogo
+              className="w-7 h-7 text-white hover:text-white/60 cursor-pointer transition-colors"
+              weight="fill"
+            />
+          </Link>
         </div>
       </div>
     </>

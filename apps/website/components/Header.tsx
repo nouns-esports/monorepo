@@ -213,7 +213,7 @@ export default async function Header() {
                       ))}
                     </div>
                   </Group>
-                  <Link href="/shop" className="max-[400px]:hidden">
+                  <Link href="/shop">
                     <li className="flex gap-2 items-center opacity-100 hover:opacity-80 transition-opacity relative z-[60]">
                       <ShoppingBag className="w-5 h-5" />
                       Shop
@@ -223,16 +223,6 @@ export default async function Header() {
               </nav>
             </div>
             <div className="pointer-events-auto flex gap-8 items-center relative z-[60]">
-              {user?.nexus ? (
-                <Link href="/nexus">
-                  <li className="flex gap-2 items-center opacity-100 hover:opacity-80 transition-opacity text-white">
-                    <CurrencyEth className="w-5 h-5" />
-                    Nexus
-                  </li>
-                </Link>
-              ) : (
-                ""
-              )}
               <SignInButton user={user} />
             </div>
           </div>
