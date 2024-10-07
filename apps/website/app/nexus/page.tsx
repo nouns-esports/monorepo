@@ -141,7 +141,7 @@ export default async function NexusPage(props: {
                 </Link>{" "}
                 to get started
               </p>
-              <CheckDiscordServer />
+              <CheckDiscordServer user={user} />
             </div>
           )}
           <div className="bg-grey-800 rounded-xl flex flex-col max-xl:col-span-2 max-md:col-span-4 gap-4 p-4 overflow-hidden h-[400px]">
