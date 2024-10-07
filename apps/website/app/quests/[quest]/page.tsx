@@ -82,7 +82,7 @@ export default async function Quest(props: { params: { quest: string } }) {
                 </div>
               </div>
               <div className="flex flex-col gap-4">
-                <div className="flex items-center justify-between">
+                <div className="flex gap-8 items-center justify-between">
                   <h2 className="font-bebas-neue text-white text-2xl">
                     {active
                       ? user

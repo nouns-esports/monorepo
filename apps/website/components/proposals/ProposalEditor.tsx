@@ -195,6 +195,7 @@ export default function ProposalEditor(props: {
               title,
               content: editorState,
               round: props.round.id,
+              image: image ?? undefined,
             });
 
             if (result?.serverError) {

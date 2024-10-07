@@ -41,7 +41,7 @@ export default function SignInButton(props: { user?: AuthenticatedUser }) {
           "Sign in"
         )}
       </button>
-      <SignInModal user={props.user} />
+      {!props.user?.nexus ? <SignInModal user={props.user} /> : null}
     </>
   );
 }

@@ -27,7 +27,7 @@ import { pinImage } from "@/server/mutations/pinImage";
 import { useAction } from "next-safe-action/hooks";
 import type { AuthenticatedUser } from "@/server/queries/users";
 import { createNexus } from "@/server/mutations/createNexus";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function SignInModal(props: { user?: AuthenticatedUser }) {
   const [returningUser, setReturningUser] = useState(true);
@@ -52,7 +52,7 @@ export default function SignInModal(props: { user?: AuthenticatedUser }) {
     "start" | "wallets" | "email" | "profile"
   >(props.user ? "profile" : "start");
 
-  const { isOpen, close } = useModal("sign-in");
+  const { isOpen, close, open } = useModal("sign-in");
 
   const { sendCode, loginWithCode } = useLoginWithEmail();
   const { loading, initOAuth } = useLoginWithOAuth();
@@ -61,8 +61,10 @@ export default function SignInModal(props: { user?: AuthenticatedUser }) {
 
   useEffect(() => {
     if (props.user) {
-      if (!props.user.nexus) setSection("profile");
-      else close();
+      if (!props.user.nexus) {
+        setSection("profile");
+        open();
+      } else close();
     }
   }, [props.user]);
 

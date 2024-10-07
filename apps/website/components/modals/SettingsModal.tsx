@@ -287,8 +287,7 @@ export default function SettingsModal(props: { user: AuthenticatedUser }) {
                     onClick={async () => {
                       await logout();
                       close();
-                      router.refresh();
-                      router.push("/");
+                      window.location.href = "/";
                     }}
                     size="sm"
                   >
