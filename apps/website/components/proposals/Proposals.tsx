@@ -422,7 +422,10 @@ export default function Proposals(props: {
                       awardCount={props.round.awardCount}
                       index={index}
                       roundState={state}
-                      remainingVotes={remainingVotes}
+                      userCanVote={
+                        !!props.user?.nexus?.rank &&
+                        props.user.nexus.rank.votes > props.user.priorVotes
+                      }
                     />
                   </div>
                 </div>
@@ -457,7 +460,10 @@ export default function Proposals(props: {
           addVote={addVote}
           removeVote={removeVote}
           selectedVotes={selectedVotes}
-          remainingVotes={remainingVotes}
+          userCanVote={
+            !!props.user?.nexus?.rank &&
+            props.user.nexus.rank.votes > props.user.priorVotes
+          }
         />
       ))}
     </>

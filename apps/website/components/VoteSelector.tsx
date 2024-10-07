@@ -10,7 +10,7 @@ export default function VoteSelector(props: {
   proposal: number;
   votes: number;
   selectedVotes?: number;
-  remainingVotes: number;
+  userCanVote: boolean;
   userRank?: Rank;
   minRank?: Rank;
   roundState: ReturnType<typeof roundState>;
@@ -21,8 +21,8 @@ export default function VoteSelector(props: {
 }) {
   if (
     props.roundState === "Ended" ||
-    (props.roundState === "Voting" &&
-      (!props.userRank || props.remainingVotes < 1))
+    (props.roundState === "Voting" && !props.userCanVote)
+    // (!props.userRank || props.remainingVotes < 1)
   ) {
     return (
       <div

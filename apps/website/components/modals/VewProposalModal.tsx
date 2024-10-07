@@ -26,7 +26,7 @@ export default function ViewProposalModal(props: {
   addVote: (proposal: number, amount: number) => void;
   removeVote: (proposal: number, amount: number) => void;
   selectedVotes: Record<string, number>;
-  remainingVotes: number;
+  userCanVote: boolean;
 }) {
   const { close } = useModal(`view-proposal-${props.proposal.id}`);
   const { open: openCastVotesModal } = useModal("cast-votes");
@@ -110,14 +110,14 @@ export default function ViewProposalModal(props: {
             proposal={props.proposal.id}
             votes={props.proposal.totalVotes}
             selectedVotes={props.selectedVotes[props.proposal.id]}
-            remainingVotes={props.remainingVotes}
+            userCanVote={props.userCanVote}
             userRank={props.user?.nexus?.rank ?? undefined}
             minRank={props.round.minVoterRank ?? undefined}
             roundState={state}
             addVote={props.addVote}
             removeVote={props.removeVote}
           />
-          {state === "Voting" && props.remainingVotes > 0 ? (
+          {state === "Voting" && props.userCanVote ? (
             <Button
               disabled={!props.selectedVotes[props.proposal.id]}
               onClick={() => {
