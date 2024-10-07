@@ -313,11 +313,14 @@ export default async function Home() {
               "QmXP7Yq4j4bqiKzgsynfF8AgKZ3vM6Ldq5aCKRGmNh2ScA",
               "QmYeLkcYghV4qkRBeMY12Z352EoLJwzbLWK8JsvbREHfo3",
               "QmdiWQoQpy3D5wpi9pSn6n2uJXyugwcv8rvQoaZnWhotKz",
-            ].map(async (id) => {
+            ].map(async (id, index) => {
               const creator = await getCreator({ creation: id });
 
               return (
-                <div key={`${id}-top`} className="relative h-full w-auto group">
+                <div
+                  key={`${index}-top`}
+                  className="relative h-full w-auto group"
+                >
                   <Link
                     href={`/creations/${id.substring(0, 10)}`}
                     className="absolute w-full h-full"
@@ -353,12 +356,12 @@ export default async function Home() {
               "QmUTghthVwuidV6v7sJnKrbci8Ro2HQRx8huSgpxZz2G3g",
               "QmbKGhDNHSujAJeqJtURW29DuDWtKoFcfx1Eprkjk1movp",
               "QmUE853Ad1yns6UAUCbYjK6iBtxx5e5EihJfCFAAUh5aYb",
-            ].map(async (id) => {
+            ].map(async (id, index) => {
               const creator = await getCreator({ creation: id });
 
               return (
                 <div
-                  key={`${id}-bottom`}
+                  key={`${index}-bottom`}
                   className="relative h-full w-auto group"
                 >
                   <Link

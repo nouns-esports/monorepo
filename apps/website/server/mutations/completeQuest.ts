@@ -104,12 +104,17 @@ export const completeQuest = onlyRanked
         season: currentSeason.id.toString(),
       });
 
-      await tx.update(nexus).set({
-        xp: (ctx.user.nexus?.xp ?? 0) + quest.xp,
-      });
+      await tx
+        .update(nexus)
+        .set({
+          xp: (ctx.user.nexus?.xp ?? 0) + quest.xp,
+        })
+        .where(eq(nexus.id, ctx.user.id));
     });
 
     revalidatePath(`/quests/${quest.id}`);
     revalidatePath("/nexus");
     revalidatePath("/quests");
+
+    return quest.xp + (ctx.user.nexus?.xp ?? 0);
   });

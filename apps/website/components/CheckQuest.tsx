@@ -6,7 +6,7 @@ import { useTransition } from "react";
 import { completeQuest } from "@/server/mutations/completeQuest";
 import { useAction } from "next-safe-action/hooks";
 import { toast } from "react-hot-toast";
-import EarnedXPModal from "./modals/EarnedXPModal";
+import EarnedXPModal, { useXPModal } from "./modals/EarnedXPModal";
 import { useModal } from "./Modal";
 import { confetti } from "@/utils/confetti";
 
@@ -26,6 +26,8 @@ export default function CheckQuest(props: {
 
   const xpModal = useModal(`earned-xp-quest-${props.quest}`);
   const signInModal = useModal("sign-in");
+
+  const { setXP } = useXPModal();
 
   return (
     <>
@@ -50,6 +52,7 @@ export default function CheckQuest(props: {
               return toast.error(result.serverError);
             }
 
+            setXP(result?.data ?? 0);
             confetti();
             xpModal.open();
           }
@@ -64,11 +67,7 @@ export default function CheckQuest(props: {
             : "Check"
           : "Sign in"}
       </Button>
-      <EarnedXPModal
-        from={`quest-${props.quest}`}
-        xp={props.xp}
-        userXP={props.userXP}
-      />
+      <EarnedXPModal from={`quest-${props.quest}`} />
     </>
   );
 }

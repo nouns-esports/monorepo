@@ -8,7 +8,7 @@ import {
   xp,
 } from "~/packages/db/schema";
 import { createCommand } from "../createCommand";
-import { discordClient, privyClient } from "..";
+import { discordClient, privyClient, rest } from "..";
 import { env } from "~/env";
 import { Routes } from "discord.js";
 import {
@@ -22,6 +22,7 @@ import {
   isNotNull,
   lte,
 } from "drizzle-orm";
+import { roles } from "../roles";
 
 export const refreshRankings = createCommand({
   description: "Refreshes the rankings",
@@ -34,6 +35,8 @@ export const refreshRankings = createCommand({
       throw new Error("Guild not found");
     }
 
+    const guildMembers = await guild.members.fetch();
+
     const now = new Date();
     const currentSeason = await db.query.seasons.findFirst({
       where: and(lte(seasons.start, now), gte(seasons.end, now)),
@@ -42,8 +45,16 @@ export const refreshRankings = createCommand({
         xp: {
           where: inArray(
             nexus.discord,
-            (await guild.members.fetch()).map((member) => member.user.username)
+            guildMembers.map((member) => member.user.username)
           ),
+          with: {
+            user: {
+              columns: {
+                id: true,
+                discord: true,
+              },
+            },
+          },
         },
       },
     });
@@ -51,6 +62,13 @@ export const refreshRankings = createCommand({
     if (!currentSeason) {
       throw new Error("Season not found");
     }
+
+    const nexusUsers = new Set(currentSeason.xp.map((xp) => xp.user.id));
+
+    const users = Array.from(nexusUsers).map((user) => ({
+      id: user,
+      discord: guildMembers.find,
+    }));
 
     let userXP: Record<string, number | undefined> = {};
 
@@ -90,3 +108,35 @@ export const refreshRankings = createCommand({
     return "Rankings refreshed successfully";
   },
 });
+
+async function toggleRole(user: string, rank: number) {
+  const role = roles(env.NEXT_PUBLIC_ENVIRONMENT).ranks[rank];
+  await addRole({ user, role });
+
+  if (role === "Explorer") {
+    await removeRole({ user, role: "Challenger" });
+    await removeRole({ user, role: "Champion" });
+  }
+
+  if (role === "Challenger") {
+    await removeRole({ user, role: "Explorer" });
+    await removeRole({ user, role: "Champion" });
+  }
+
+  if (role === "Champion") {
+    await removeRole({ user, role: "Explorer" });
+    await removeRole({ user, role: "Challenger" });
+  }
+}
+
+async function addRole(input: { user: string; role: string }) {
+  return rest.put(
+    Routes.guildMemberRole(env.DISCORD_GUILD_ID, input.user, input.role)
+  );
+}
+
+async function removeRole(input: { user: string; role: string }) {
+  return rest.delete(
+    Routes.guildMemberRole(env.DISCORD_GUILD_ID, input.user, input.role)
+  );
+}

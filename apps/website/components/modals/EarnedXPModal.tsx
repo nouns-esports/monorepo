@@ -1,14 +1,25 @@
+"use client";
+
 import { X } from "lucide-react";
 import { Modal, useModal } from "../Modal";
 import Link from "../Link";
 import { Level } from "../Level";
+import { create } from "zustand";
 
-export default function EarnedXPModal(props: {
-  from: string;
+export const useXPModal = create<{
   xp: number;
-  userXP: number;
-}) {
+  setXP: (xp: number) => void;
+}>((set) => ({
+  xp: 0,
+  setXP: (xp) => {
+    set({ xp });
+  },
+}));
+
+export default function EarnedXPModal(props: { from: string }) {
   const { close } = useModal(`earned-xp-${props.from}`);
+
+  const { xp } = useXPModal();
 
   return (
     <Modal
@@ -26,7 +37,7 @@ export default function EarnedXPModal(props: {
           <X className="w-4 h-4 text-grey-200" />
         </button>
       </div>
-      <Level xp={props.xp} gainedXP={props.xp} />
+      <Level xp={xp} />
       <Link
         href="/quests"
         className="flex justify-center items-center gap-2 w-full text-black bg-white hover:bg-white/70 font-semibold rounded-lg p-2.5 transition-colors"

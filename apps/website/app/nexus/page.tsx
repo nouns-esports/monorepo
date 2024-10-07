@@ -161,6 +161,7 @@ export default async function NexusPage(props: {
             <div className="relative flex flex-col gap-2 overflow-y-auto custom-scrollbar">
               {rankings.map((ranking, index) => {
                 if (!ranking.user) return;
+                if (!ranking.rank) return;
 
                 return (
                   <Link
@@ -182,10 +183,11 @@ export default async function NexusPage(props: {
                         <p className="text-white">{ranking.user.name}</p>
                       </div>
                     </div>
-                    <p className="text-white flex items-center gap-2">
-                      <Sparkles className="w-4 h-4 text-green" />
-                      {ranking.xp}
-                    </p>
+                    <img
+                      title={ranking.rank.name}
+                      className="w-6 h-6 object-contain"
+                      src={ranking.rank.image}
+                    />
                   </Link>
                 );
               })}
