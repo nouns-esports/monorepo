@@ -1,1 +1,0 @@
-ALTER TABLE "creations" ALTER COLUMN "type" SET DATA TYPE text;

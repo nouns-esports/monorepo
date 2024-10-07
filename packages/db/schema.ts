@@ -32,7 +32,7 @@ export const snapshots = pgTable("snapshots", {
       keyof typeof snapshotTypes,
       ...Array<keyof typeof snapshotTypes>,
     ],
-  }),
+  }).notNull(),
   tag: text("tag").notNull(),
   timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
 });
@@ -319,6 +319,8 @@ export const quests = pgTable("quests", {
   createdAt: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
   featured: boolean("featured").notNull().default(false),
   active: boolean("active").notNull().default(false),
+  start: timestamp("start", { mode: "date" }),
+  end: timestamp("end", { mode: "date" }),
   xp: integer("xp").notNull(),
   actions: text("actions").array().notNull(),
   actionInputs: jsonb("action_inputs")
@@ -383,7 +385,6 @@ export const rankings = pgTable("rankings", {
   id: serial("id").primaryKey(),
   user: text("user").notNull(),
   season: integer("season").notNull(),
-  place: integer("place").notNull(),
   rank: integer("rank").notNull(),
   xp: integer("xp").notNull().default(0),
   timestamp: timestamp("timestamp", { mode: "date" }).notNull(),

@@ -9,12 +9,13 @@ import type createAction from "../quests/createAction";
 import { castInChannel } from "../quests/farcaster/castInChannel";
 import { followAccount } from "../quests/farcaster/followAccount";
 import { followChannel } from "../quests/farcaster/followChannel";
-import { visitSite } from "../quests/online/visitSite";
 import { attendCall } from "../quests/discord/attendCall";
 import { joinServer } from "../quests/discord/joinServer";
 import { linkDiscord } from "../quests/discord/linkDiscord";
 import { linkWallet } from "../quests/onchain/linkWallet";
 import { linkTwitter } from "../quests/twitter/linkTwitter";
+import { mintERC1155 } from "../quests/zora/mintERC1155";
+import { visitLink } from "../quests/online/visitLink";
 
 export const actions: Record<string, ReturnType<typeof createAction>> = {
   // Discord
@@ -32,10 +33,13 @@ export const actions: Record<string, ReturnType<typeof createAction>> = {
   followChannel,
 
   // Online
-  visitSite,
+  visitLink,
 
   // Onchain
   linkWallet,
+
+  // Zora
+  mintERC1155,
 };
 
 export async function getAction(input: {
@@ -73,7 +77,7 @@ export const getQuests = cache(
     season: string;
     event?: string;
   }) => {
-    //////////
+    ////////////
     return db.query.quests.findMany({
       limit: input.limit,
       where: and(
@@ -98,7 +102,7 @@ export const getQuests = cache(
 
 export const getQuest = cache(
   async (input: { id: string; user?: string }) => {
-    ////////
+    //////////
     return db.query.quests.findFirst({
       where: eq(quests.id, input.id),
       with: {
@@ -108,6 +112,7 @@ export const getQuest = cache(
               limit: 1,
             }
           : undefined,
+        event: true,
       },
     });
   },

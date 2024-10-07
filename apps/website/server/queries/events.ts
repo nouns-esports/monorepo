@@ -1,7 +1,7 @@
 import { env } from "~/env";
 import { unstable_cache as cache } from "next/cache";
 import { db, events, quests, xp } from "~/packages/db/schema";
-import { desc, eq, gt, or } from "drizzle-orm";
+import { asc, desc, eq, gt, or } from "drizzle-orm";
 
 export const getEvents = cache(
   async (input?: { limit?: number }) => {
@@ -27,11 +27,13 @@ export const getHighlightedEvent = cache(
 
 export const getEvent = cache(
   async (input: { id: string }) => {
+    //
     return db.query.events.findFirst({
       where: eq(events.id, input.id),
       with: {
         quests: {
-          with: { community: true },
+          orderBy: [desc(quests.featured), asc(quests.xp)],
+          with: { community: true, completed: true },
         },
         rounds: {
           with: { community: true },

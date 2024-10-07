@@ -1,17 +1,15 @@
 import { env } from "~/env";
-import { Client, REST, Routes, SlashCommandBuilder } from "discord.js";
+import { Client, REST, Role, Routes, SlashCommandBuilder } from "discord.js";
 import { PrivyClient } from "@privy-io/server-auth";
 import { Hono } from "hono";
 import { serve } from "@hono/node-server";
 
 // Commands
-import { backupDatabase } from "./commands/backupDatabase";
 import { createSnapshot } from "./commands/createSnapshot";
 import { refreshRankings } from "./commands/refreshRankings";
 import type { createCommand } from "./createCommand";
 
 const commands: Record<string, ReturnType<typeof createCommand>> = {
-  "backup-database": backupDatabase,
   "create-snapshot": createSnapshot,
   "refresh-rankings": refreshRankings,
 };
@@ -37,11 +35,53 @@ discordClient.once("ready", async () => {
       env.DISCORD_GUILD_ID
     ),
     {
-      body: Object.entries(commands).map(([name, command]) =>
-        new SlashCommandBuilder()
+      body: Object.entries(commands).map(([name, command]) => {
+        let base = new SlashCommandBuilder()
           .setName(name)
-          .setDescription(command.description)
-      ),
+          .setDescription(command.description);
+
+        if (command.params) {
+          for (const param of command.params) {
+            if (param.type === "string") {
+              base.addStringOption((option) => {
+                let parameter = option
+                  .setName(param.name)
+                  .setDescription(param.description)
+                  .setRequired(param.required);
+
+                if (param.choices) {
+                  parameter.addChoices(
+                    ...param.choices.map((choice) => ({
+                      name: choice.name,
+                      value: choice.value,
+                    }))
+                  );
+                }
+
+                return parameter;
+              });
+            }
+            if (param.type === "number") {
+              base.addNumberOption((option) =>
+                option
+                  .setName(param.name)
+                  .setDescription(param.description)
+                  .setRequired(param.required)
+              );
+            }
+            if (param.type === "boolean") {
+              base.addBooleanOption((option) =>
+                option
+                  .setName(param.name)
+                  .setDescription(param.description)
+                  .setRequired(param.required)
+              );
+            }
+          }
+        }
+
+        return base;
+      }),
     }
   );
   console.log("Discord bot is ready! 🤖");
@@ -52,21 +92,30 @@ discordClient.on("interactionCreate", async (interaction) => {
     return;
   }
 
-  if (
-    !Array.isArray(interaction.member?.roles) ||
-    !interaction.member.roles.includes("role id")
-  ) {
-    return interaction.reply("You don't have permissions to run this command");
-  }
+  await interaction.deferReply();
 
-  if (commands[interaction.commandName]) {
-    await interaction.deferReply();
+  try {
+    const isAdmin = !!(interaction.member?.roles as any).cache.get(
+      env.NEXT_PUBLIC_ENVIRONMENT === "development"
+        ? "1253532214784819240" // Tester Role
+        : "1186404392346325173" // Staff Role
+    )?.color;
 
-    const command = commands[interaction.commandName];
+    if (commands[interaction.commandName]) {
+      const command = commands[interaction.commandName];
 
-    const { message, success } = await command.execute(interaction);
+      if (command.onlyAdmin && !isAdmin) {
+        return interaction.editReply(
+          "You are not authorized to use this command"
+        );
+      }
 
-    return interaction.editReply(message);
+      const { message, success } = await command.execute(interaction);
+
+      return interaction.editReply(message);
+    }
+  } catch (e) {
+    return interaction.editReply("Command failed to execute");
   }
 });
 

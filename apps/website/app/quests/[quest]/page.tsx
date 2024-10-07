@@ -25,29 +25,45 @@ export default async function Quest(props: { params: { quest: string } }) {
     )
   );
 
-  const completedQuests = quest.completed?.[0]
-    ? (Array(actions.length).fill(true) as Array<boolean>)
-    : await Promise.all(
-        actions.map(async (action) => {
-          if (!action) throw new Error("Action not found");
+  const now = new Date();
 
-          return user ? await action.check(user, quest.actionInputs) : false;
-        })
-      );
+  const active =
+    quest.active &&
+    (quest.start ? new Date(quest.start) < now : true) &&
+    (quest.end ? new Date(quest.end) > now : true) &&
+    (quest.event
+      ? new Date(quest.event.start) < now && new Date(quest.event.end) > now
+      : true);
+
+  const claimed = quest.completed?.[0] ? true : false;
+
+  const completedQuests = active
+    ? claimed
+      ? (Array(actions.length).fill(true) as Array<boolean>)
+      : await Promise.all(
+          actions.map(async (action) => {
+            if (!action) throw new Error("Action not found");
+
+            return user ? await action.check(user, quest.actionInputs) : false;
+          })
+        )
+    : (Array(actions.length).fill(false) as Array<boolean>);
 
   const completedCount = completedQuests.filter(
     (completed) => completed
   ).length;
 
-  const claimed = quest.completed?.[0] ? true : false;
   const completed = completedCount === actions.length;
 
   return (
     <div className="relative flex justify-center gap-16 w-full pt-32 max-xl:pt-28 max-sm:pt-20 px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
       <div className="flex flex-col gap-4 w-full max-w-3xl">
-        <Link href="/quests" className="text-red flex items-center gap-1 group">
+        <Link
+          href={quest.event ? `/events/${quest.event.id}` : "/quests"}
+          className="text-red flex items-center gap-1 group w-fit"
+        >
           <ArrowLeft className="w-5 h-5 text-red group-hover:-translate-x-1 transition-transform" />
-          Back to quests
+          Back to {quest.event ? quest.event.name : "quests"}
         </Link>
         <div className="flex flex-col gap-4">
           <div className="bg-grey-800 rounded-xl overflow-hidden">
@@ -68,18 +84,24 @@ export default async function Quest(props: { params: { quest: string } }) {
               <div className="flex flex-col gap-4">
                 <div className="flex items-center justify-between">
                   <h2 className="font-bebas-neue text-white text-2xl">
-                    {claimed
-                      ? "Quest completed"
-                      : completed
-                        ? "All actions completed"
-                        : "Complete all of the following"}
+                    {active
+                      ? user
+                        ? claimed
+                          ? "Quest completed"
+                          : completed
+                            ? "All actions completed"
+                            : "Complete all of the following"
+                        : "Enter the Nexus to complete quests"
+                      : "Quest is not active"}
                   </h2>
                   <div className="flex items-center gap-4">
                     <div className="flex items-center gap-2 text-white">
                       Earns <Sparkles className="w-4 h-4 text-green" />
-                      {quest.xp}00
+                      {quest.xp}
                     </div>
                     <CheckQuest
+                      user={!!user?.nexus}
+                      active={active}
                       quest={quest.id}
                       xp={quest.xp}
                       userXP={user?.nexus?.xp ?? 0}
@@ -97,7 +119,7 @@ export default async function Quest(props: { params: { quest: string } }) {
                         key={`action-${index}`}
                         className={twMerge(
                           "relative bg-grey-600 rounded-xl p-3 flex justify-between items-center text-white group hover:bg-grey-500 transition-colors",
-                          completedQuests[index] &&
+                          (completedQuests[index] || !active) &&
                             "opacity-60 pointer-events-none"
                         )}
                       >

@@ -1,7 +1,5 @@
 import Button from "@/components/Button";
-import ManageAccountModal from "@/components/modals/ManageAccountModal";
-import { ToggleModal } from "@/components/Modal";
-import { getAuthenticatedUser, getUser } from "@/server/queries/users";
+import { getUser } from "@/server/queries/users";
 import { notFound } from "next/navigation";
 import { Level } from "@/components/Level";
 
@@ -38,7 +36,7 @@ export default async function User(props: { params: { user: string } }) {
                   )}
                 </div>
                 <p>{user.bio}</p>
-                <div className="w-64">
+                <div className="w-64 max-sm:w-full">
                   <Level xp={user.xp} />
                 </div>
               </div>

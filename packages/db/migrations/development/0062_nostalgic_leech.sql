@@ -1,1 +1,0 @@
-ALTER TABLE "quests" ADD COLUMN "action_inputs" jsonb[] DEFAULT '{}'::jsonb[] NOT NULL;

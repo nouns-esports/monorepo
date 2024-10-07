@@ -1,1 +1,0 @@
-ALTER TABLE "proposals" RENAME COLUMN "image_new" TO "image";

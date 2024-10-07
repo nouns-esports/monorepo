@@ -1,1 +1,0 @@
-ALTER TABLE "proposals" ADD COLUMN "description" text DEFAULT '' NOT NULL;

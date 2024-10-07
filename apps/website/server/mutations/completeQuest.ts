@@ -35,6 +35,18 @@ export const completeQuest = onlyRanked
       throw new Error("Quest already completed");
     }
 
+    if (!quest.active) {
+      throw new Error("Quest is not active");
+    }
+
+    if (quest.start && new Date(quest.start) > now) {
+      throw new Error("Quest hasnt started yet");
+    }
+
+    if (quest.end && new Date(quest.end) < now) {
+      throw new Error("Quest has closed");
+    }
+
     if (
       quest.event &&
       (new Date(quest.event.start) > now || new Date(quest.event.end) < now)
@@ -77,6 +89,10 @@ export const completeQuest = onlyRanked
 
     if (!currentSeason) {
       throw new Error("Season not found");
+    }
+
+    if (quest.season !== currentSeason.id.toString()) {
+      throw new Error("Quest season is not active");
     }
 
     await db.transaction(async (tx) => {

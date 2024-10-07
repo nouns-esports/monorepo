@@ -36,27 +36,27 @@ export const placeRank = onlyUser.action(async ({ ctx }) => {
 
   const now = new Date();
 
-  const [lowestRanking, currentSeason] = await Promise.all([
-    db.query.rankings.findFirst({
-      orderBy: [desc(rankings.timestamp), desc(rankings.place)],
-    }),
-    db.query.seasons.findFirst({
-      where: and(lte(seasons.start, now), gte(seasons.end, now)),
-      orderBy: desc(seasons.start),
-      with: {
-        ranks: {
-          orderBy: asc(ranks.place),
-          limit: 1,
-        },
+  const currentSeason = await db.query.seasons.findFirst({
+    where: and(lte(seasons.start, now), gte(seasons.end, now)),
+    orderBy: desc(seasons.start),
+    with: {
+      ranks: {
+        orderBy: asc(ranks.place),
+        limit: 1,
       },
-    }),
-  ]);
+      rankings: {
+        orderBy: and(desc(rankings.timestamp), asc(rankings.xp)),
+        limit: 1,
+      },
+    },
+  });
 
   if (!currentSeason) {
     throw new Error("No current season");
   }
 
   const lowestRank = currentSeason.ranks[0];
+  const lowestRanking = currentSeason.rankings[0];
 
   if (!lowestRank) {
     throw new Error("No ranks found");
@@ -74,7 +74,6 @@ export const placeRank = onlyUser.action(async ({ ctx }) => {
     await tx.insert(rankings).values({
       user: ctx.user.id,
       season: currentSeason.id,
-      place: lowestRanking.place + 1,
       timestamp: lowestRanking.timestamp,
       rank: lowestRank.id,
     });

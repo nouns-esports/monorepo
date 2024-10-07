@@ -8,6 +8,8 @@ export default function QuestCard(props: {
   description: string;
   image: string;
   xp: number;
+  start?: Date;
+  end?: Date;
   community: {
     id: string;
     name: string;
@@ -16,10 +18,17 @@ export default function QuestCard(props: {
   completed: boolean;
   className?: string;
 }) {
+  const now = new Date();
+
+  const active =
+    props.start && props.end
+      ? new Date(props.start) < now && new Date(props.end) > now
+      : true;
   return (
     <div
       className={twMerge(
         "relative flex flex-col bg-grey-800 hover:bg-grey-600 transition-colors rounded-xl overflow-hidden w-full group aspect-[5/6]",
+        active ? "opacity-100" : "opacity-30 pointer-events-none",
         props.className
       )}
     >
@@ -56,7 +65,7 @@ export default function QuestCard(props: {
           ) : (
             <div className="text-white font-semibold text-sm flex items-center gap-2 mr-2">
               <Sparkles className="w-4 h-4 text-green" />
-              {props.xp}00
+              {props.xp}
             </div>
           )}
         </div>

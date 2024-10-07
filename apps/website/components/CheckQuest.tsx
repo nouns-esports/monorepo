@@ -11,6 +11,8 @@ import { useModal } from "./Modal";
 import { confetti } from "@/utils/confetti";
 
 export default function CheckQuest(props: {
+  user: boolean;
+  active: boolean;
   quest: string;
   xp: number;
   claimed: boolean;
@@ -22,14 +24,19 @@ export default function CheckQuest(props: {
   const [isPending, startTransition] = useTransition();
   const completeQuestAction = useAction(completeQuest);
 
-  const { open } = useModal(`earned-xp-quest-${props.quest}`);
+  const xpModal = useModal(`earned-xp-quest-${props.quest}`);
+  const signInModal = useModal("sign-in");
 
   return (
     <>
       <Button
-        disabled={props.claimed}
+        disabled={props.active ? props.claimed : true}
         loading={isPending || completeQuestAction.isPending}
         onClick={async () => {
+          if (!props.user) {
+            return signInModal.open();
+          }
+
           if (!props.completed) {
             return startTransition(() => router.refresh());
           }
@@ -44,12 +51,18 @@ export default function CheckQuest(props: {
             }
 
             confetti();
-            open();
+            xpModal.open();
           }
         }}
         size="sm"
       >
-        {props.completed ? (props.claimed ? "Claimed" : "Claim") : "Check"}
+        {props.user
+          ? props.completed
+            ? props.claimed
+              ? "Claimed"
+              : "Claim"
+            : "Check"
+          : "Sign in"}
       </Button>
       <EarnedXPModal
         from={`quest-${props.quest}`}

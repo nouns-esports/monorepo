@@ -13,13 +13,13 @@ import { Link2, Settings, Sparkles } from "lucide-react";
 import CheckDiscordServer from "@/components/CheckDiscordServer";
 import { revalidatePath } from "next/cache";
 import { ToggleModal } from "@/components/Modal";
-import ManageAccountModal from "@/components/modals/ManageAccountModal";
+import SettingsModal from "@/components/modals/SettingsModal";
 import { Level } from "@/components/Level";
+import SignInButton from "@/components/SignInButton";
 
 export default async function NexusPage(props: {
   searchParams: {
-    leaderboard?: "friends" | "global";
-    stats?: "all-time" | "this-season";
+    privy_oauth_state?: string;
   };
 }) {
   const [user, ranks] = await Promise.all([
@@ -28,7 +28,14 @@ export default async function NexusPage(props: {
   ]);
 
   if (!user || !user.nexus) {
-    return redirect("/");
+    return (
+      <div className="flex flex-col gap-4 items-center h-screen justify-center">
+        <p className="text-white text-3xl font-luckiest-guy leading-none">
+          You are not signed in
+        </p>
+        <Button href="/">Home</Button>
+      </div>
+    );
   }
 
   const [
@@ -45,32 +52,34 @@ export default async function NexusPage(props: {
 
   return (
     <div className="flex flex-col gap-16 pt-32 max-xl:pt-28 max-sm:pt-20 px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-8 max-sm:gap-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <img src={user.nexus.image} className="w-10 h-10 rounded-full" />
-            <h1 className="text-3xl font-luckiest-guy text-white">
+          <div className="flex items-center gap-4 max-sm:gap-3">
+            <img
+              src={user.nexus.image}
+              className="w-10 h-10 max-sm:w-8 max-sm:h-8 rounded-full"
+            />
+            <h1 className="text-3xl font-luckiest-guy text-white max-sm:text-2xl overflow-hidden max-sm:max-w-60 max-[500px]:max-w-40 max-[425px]:max-w-24">
               {user.nexus.name}
             </h1>
-            <div className="ml-4 w-64 bg-grey-800 rounded-xl py-2 px-4">
-              <Level xp={user.nexus.xp} />
-            </div>
           </div>
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-6 max-sm:gap-4">
             <ToggleModal
-              id="manage-account"
+              id="settings"
               className="text-red flex items-center gap-1.5 hover:text-red/80 transition-colors"
             >
-              Manage Account <Settings className="w-4 h-4" />
+              Settings <Settings className="w-4 h-4" />
             </ToggleModal>
             <Button href={`/users/${user.nexus.discord ?? user.id}`}>
-              View Profile
+              <p>
+                <span className="max-sm:hidden">View </span> Profile
+              </p>
             </Button>
           </div>
         </div>
         <div className="grid grid-cols-4 gap-4 grid-rows-2">
           {user.nexus.rank && userRankings.length > 0 ? (
-            <div className="bg-grey-800 col-span-2 max-lg:col-span-4 rounded-xl flex flex-col p-4 gap-4 h-96">
+            <div className="bg-grey-800 col-span-2 max-lg:col-span-4 rounded-xl flex flex-col p-4 gap-4 h-[400px]">
               <div className="flex justify-between">
                 <div className="flex flex-col">
                   <h2 className="text-white">Your Rank</h2>
@@ -111,9 +120,10 @@ export default async function NexusPage(props: {
                 </div>
               </div>
               <RankChart userRankings={userRankings} ranks={ranks} />
+              <Level xp={user.nexus.xp} />
             </div>
           ) : (
-            <div className="bg-grey-800 col-span-2 max-lg:col-span-4 rounded-xl flex flex-col items-center justify-center p-4 gap-4 h-96">
+            <div className="bg-grey-800 col-span-2 max-lg:col-span-4 rounded-xl flex flex-col items-center justify-center p-4 gap-4 h-[400px]">
               <div className="flex items-center gap-4">
                 <img src="/discord.jpg" className="w-10 h-10 rounded-md" />
                 <p className="text-white text-2xl font-bebas-neue leading-none">
@@ -134,7 +144,7 @@ export default async function NexusPage(props: {
               <CheckDiscordServer />
             </div>
           )}
-          <div className="bg-grey-800 rounded-xl flex flex-col max-xl:col-span-2 max-md:col-span-4 gap-4 p-4 overflow-hidden h-96">
+          <div className="bg-grey-800 rounded-xl flex flex-col max-xl:col-span-2 max-md:col-span-4 gap-4 p-4 overflow-hidden h-[400px]">
             <div className="flex items-center justify-between">
               <h2 className="text-white text-2xl font-bebas-neue leading-none">
                 Leaderboard
@@ -181,7 +191,7 @@ export default async function NexusPage(props: {
               })}
             </div>
           </div>
-          <div className="bg-grey-800 rounded-xl flex flex-col gap-4 p-4 justify-between h-96 max-xl:col-span-2 max-md:col-span-4">
+          <div className="bg-grey-800 rounded-xl flex flex-col gap-4 p-4 justify-between h-[400px] max-xl:col-span-2 max-md:col-span-4">
             <div className="flex flex-col gap-4">
               <div className="flex items-center justify-between">
                 <h2 className="text-white text-2xl font-bebas-neue leading-none">
@@ -219,7 +229,7 @@ export default async function NexusPage(props: {
           </div>
         </div>
       </div>
-      {user && <ManageAccountModal user={user} />}
+      {user && <SettingsModal user={user} />}
     </div>
   );
 }

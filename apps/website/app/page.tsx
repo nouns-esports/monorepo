@@ -40,12 +40,14 @@ export default async function Home() {
     user: user?.id,
   });
 
+  const now = new Date();
+
   const highlightedRound = rounds.find(
-    (round) => round.featured || new Date(round.end ?? Infinity) > new Date()
+    (round) => round.featured || new Date(round.end ?? Infinity) > now
   );
 
   const highlightedEvent = events.find(
-    (event) => event.featured || new Date(event.end ?? Infinity) > new Date()
+    (event) => event.featured || new Date(event.end ?? Infinity) > now
   );
 
   return (
@@ -85,7 +87,7 @@ export default async function Home() {
                     <img
                       src={post.author.pfp_url}
                       alt={post.author.display_name}
-                      className="h-full aspect-square rounded-full"
+                      className="h-full aspect-square object-cover rounded-full"
                     />
                     <div className="flex flex-col h-full w-full">
                       <p className="text-white font-semibold text-sm">
@@ -107,8 +109,8 @@ export default async function Home() {
           </ul>
         </div>
       </div>
-      <div className="flex flex-col gap-4 px-32 max-2xl:px-16 max-xl:px-8 max-lg:px-0">
-        <div className="flex justify-between items-center max-lg:px-8 max-sm:px-4">
+      <div className="flex flex-col gap-4 px-32 max-2xl:px-16 max-xl:px-0">
+        <div className="flex justify-between items-center max-xl:px-8 max-sm:px-4">
           <h2 className="font-luckiest-guy text-white text-4xl max-sm:text-3xl">
             Rounds
           </h2>
@@ -120,7 +122,7 @@ export default async function Home() {
             <ArrowRight className="w-[1.15rem] h-[1.15rem] group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
-        <div className="flex gap-4 justify-between max-lg:w-full max-lg:overflow-x-scroll max-lg:px-8 max-sm:px-4 max-lg:scrollbar-hidden">
+        <div className="flex gap-4 justify-between max-xl:w-full max-xl:overflow-x-scroll max-xl:px-8 max-sm:px-4 max-xl:scrollbar-hidden">
           {rounds.map((round) => (
             <RoundCard
               key={round.id}
@@ -140,8 +142,8 @@ export default async function Home() {
           ))}
         </div>
       </div>
-      <div className="flex flex-col gap-4 px-32 max-2xl:px-16 max-xl:px-8 max-lg:px-0">
-        <div className="flex justify-between items-center max-lg:px-8 max-sm:px-4">
+      <div className="flex flex-col gap-4 px-32 max-2xl:px-16 max-xl:px-0">
+        <div className="flex justify-between items-center max-xl:px-8 max-sm:px-4">
           <h2 className="font-luckiest-guy text-white text-4xl max-sm:text-3xl">
             Quests
           </h2>
@@ -153,7 +155,7 @@ export default async function Home() {
             <ArrowRight className="w-[1.15rem] h-[1.15rem] group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
-        <div className="flex gap-4 justify-between max-lg:w-full max-lg:overflow-x-scroll max-lg:px-8 max-sm:px-4 max-lg:scrollbar-hidden">
+        <div className="flex gap-4 justify-between max-xl:w-full max-xl:overflow-x-scroll max-xl:px-8 max-sm:px-4 max-xl:scrollbar-hidden">
           {quests.map((quest) => (
             <QuestCard
               key={quest.id}
@@ -168,6 +170,9 @@ export default async function Home() {
               }}
               xp={quest.xp}
               completed={quest.completed?.length > 0}
+              start={quest.start ?? undefined}
+              end={quest.end ?? undefined}
+              className="max-xl:w-64 max-xl:flex-shrink-0"
             />
           ))}
         </div>
@@ -312,7 +317,7 @@ export default async function Home() {
               const creator = await getCreator({ creation: id });
 
               return (
-                <div key={id} className="relative h-full w-auto group">
+                <div key={`${id}-top`} className="relative h-full w-auto group">
                   <Link
                     href={`/creations/${id.substring(0, 10)}`}
                     className="absolute w-full h-full"
@@ -352,7 +357,10 @@ export default async function Home() {
               const creator = await getCreator({ creation: id });
 
               return (
-                <div key={id} className="relative h-full w-auto group">
+                <div
+                  key={`${id}-bottom`}
+                  className="relative h-full w-auto group"
+                >
                   <Link
                     href={`/creations/${id.substring(0, 10)}`}
                     className="absolute w-full h-full"

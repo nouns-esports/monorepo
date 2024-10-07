@@ -34,6 +34,10 @@ export const createNexus = onlyUser
               orderBy: asc(ranks.place),
               limit: 1,
             },
+            rankings: {
+              orderBy: and(desc(rankings.timestamp), asc(rankings.xp)),
+              limit: 1,
+            },
           },
         });
 
@@ -42,33 +46,24 @@ export const createNexus = onlyUser
         }
 
         const lowestRank = currentSeason.ranks[0];
+        const lowestRanking = currentSeason.rankings[0];
 
         if (!lowestRank) {
           throw new Error("No ranks found");
         }
 
-        const [lowestRanking, discordResponse] = await Promise.all([
-          db.query.rankings.findFirst({
-            orderBy: and(desc(rankings.timestamp), desc(rankings.place)),
-          }),
-
-          fetch(
-            `https://discord.com/api/guilds/${env.DISCORD_GUILD_ID}/members/${ctx.user.discord.subject}`,
-            {
-              headers: {
-                Authorization: `Bot ${env.DISCORD_TOKEN}`,
-              },
-            }
-          ),
-        ]);
-
-        if (!currentSeason) {
-          throw new Error("No current season");
-        }
-
         if (!lowestRanking) {
           throw new Error("Nobody is ranked");
         }
+
+        const discordResponse = await fetch(
+          `https://discord.com/api/guilds/${env.DISCORD_GUILD_ID}/members/${ctx.user.discord.subject}`,
+          {
+            headers: {
+              Authorization: `Bot ${env.DISCORD_TOKEN}`,
+            },
+          }
+        );
 
         if (
           discordResponse.ok &&
@@ -76,10 +71,9 @@ export const createNexus = onlyUser
         ) {
           rank = lowestRank.id;
           await tx.insert(rankings).values({
-            place: lowestRanking.place + 1,
             season: currentSeason.id,
             user: ctx.user.id,
-            timestamp: new Date(),
+            timestamp: lowestRanking.timestamp,
             rank: lowestRank.id,
           });
         }

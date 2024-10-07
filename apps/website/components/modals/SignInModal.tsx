@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Modal, ToggleModal, useModal } from "../Modal";
 import {
   ArrowLeft,
@@ -10,6 +10,7 @@ import {
   Edit,
   Mail,
   RefreshCcw,
+  Router,
   X,
 } from "lucide-react";
 import { DiscordLogo, TwitterLogo, Wallet } from "phosphor-react-sc";
@@ -26,6 +27,7 @@ import { pinImage } from "@/server/mutations/pinImage";
 import { useAction } from "next-safe-action/hooks";
 import type { AuthenticatedUser } from "@/server/queries/users";
 import { createNexus } from "@/server/mutations/createNexus";
+import { useRouter } from "next/navigation";
 
 export default function SignInModal(props: { user?: AuthenticatedUser }) {
   const [returningUser, setReturningUser] = useState(true);
@@ -57,11 +59,14 @@ export default function SignInModal(props: { user?: AuthenticatedUser }) {
 
   const { user } = usePrivy();
 
-  const { login } = useLogin({
-    onComplete(user, isNewUser) {
-      if (!isNewUser) close();
-    },
-  });
+  useEffect(() => {
+    if (props.user) {
+      if (!props.user.nexus) setSection("profile");
+      else close();
+    }
+  }, [props.user]);
+
+  const { login } = useLogin();
   const privyModalState = usePrivyModalState();
 
   const [image, setImage] = useState(
@@ -80,7 +85,6 @@ export default function SignInModal(props: { user?: AuthenticatedUser }) {
 
   const createNexusAction = useAction(createNexus, {
     onSuccess: () => {
-      console.log("success");
       close();
     },
   });
@@ -443,6 +447,14 @@ export default function SignInModal(props: { user?: AuthenticatedUser }) {
                     }}
                     className="flex justify-center items-center gap-2 w-full text-black bg-white hover:bg-white/70 font-semibold rounded-lg p-2.5 transition-colors"
                   >
+                    {createNexusAction.isPending ? (
+                      <img
+                        src="/spinner.svg"
+                        className="h-[18px] animate-spin"
+                      />
+                    ) : (
+                      ""
+                    )}
                     Create Profile
                   </button>
                 </div>

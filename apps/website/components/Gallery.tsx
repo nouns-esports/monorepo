@@ -98,8 +98,10 @@ export default function Gallery(props: {
     <div className="relative rounded-xl h-full flex-shrink-0 aspect-video max-lg:w-full max-lg:h-auto overflow-hidden select-none">
       <div className="absolute z-10 top-0 left-0 w-full h-full flex flex-col justify-between p-6 max-sm:p-4 pointer-events-none">
         <div>
-          <p className="text-white text-lg">{slides[index].sub}</p>
-          <h1 className="text-white font-luckiest-guy text-4xl max-sm:text-3xl max-sm:leading-none">
+          <p className="text-white text-lg max-[400px]:leading-none">
+            {slides[index].sub}
+          </p>
+          <h1 className="text-white font-luckiest-guy text-4xl max-sm:text-3xl max-sm:leading-none max-[400px]:text-2xl">
             {slides[index].title}
           </h1>
         </div>

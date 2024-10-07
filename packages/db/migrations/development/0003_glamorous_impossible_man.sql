@@ -1,0 +1,1 @@
+ALTER TABLE "snapshots" ALTER COLUMN "type" SET NOT NULL;

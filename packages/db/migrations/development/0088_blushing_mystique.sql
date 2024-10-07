@@ -1,1 +1,0 @@
-ALTER TABLE "quests" ADD COLUMN "difficulty" text DEFAULT 'beginner';

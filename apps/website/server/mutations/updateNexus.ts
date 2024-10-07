@@ -9,28 +9,35 @@ import { asc, desc, eq, lte, or } from "drizzle-orm";
 export const updateNexus = onlyUser
   .schema(
     z.object({
-      name: z.string(),
+      name: z.string().optional(),
       image: z.string().optional(),
       bio: z.string().optional(),
     })
   )
   .action(async ({ parsedInput, ctx }) => {
-    await db
-      .update(nexus)
-      .set({
-        name: parsedInput.name,
-        image: parsedInput.image,
-        bio: parsedInput.bio,
-      })
-      .where(
-        or(
-          ctx.user.nexus?.discord
-            ? eq(nexus.discord, ctx.user.nexus.discord)
-            : undefined,
-          eq(nexus.id, ctx.user.id)
-        )
-      );
+    const updateData: Partial<typeof parsedInput> = {};
 
-    revalidatePath(`/users/${ctx.user.nexus?.discord ?? ctx.user.id}`);
-    revalidatePath("/nexus");
+    if (parsedInput.name !== undefined) updateData.name = parsedInput.name;
+    if (parsedInput.image !== undefined) updateData.image = parsedInput.image;
+    if (parsedInput.bio !== undefined) updateData.bio = parsedInput.bio;
+
+    if (Object.keys(updateData).length > 0) {
+      await db
+        .update(nexus)
+        .set(updateData)
+        .where(
+          or(
+            ctx.user.nexus?.discord
+              ? eq(nexus.discord, ctx.user.nexus.discord)
+              : undefined,
+            eq(nexus.id, ctx.user.id)
+          )
+        );
+
+      revalidatePath(`/users/${ctx.user.id}`);
+      if (ctx.user.nexus?.discord) {
+        revalidatePath(`/users/${ctx.user.nexus.discord}`);
+      }
+      revalidatePath("/nexus");
+    }
   });

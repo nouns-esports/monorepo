@@ -138,8 +138,6 @@ export const POST = async (req: NextRequest) => {
       }
     }
 
-    console.log(verifiedPayload.account);
-
     return NextResponse.json({ message: "ok" });
   } catch (e) {
     console.error(e);

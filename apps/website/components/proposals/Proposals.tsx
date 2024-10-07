@@ -90,7 +90,7 @@ export default function Proposals(props: {
           <div className="flex gap-4 items-center max-sm:justify-between max-sm:w-full">
             {(() => {
               if (state === "Proposing") {
-                if (!props.user) {
+                if (!props.user?.nexus) {
                   return (
                     <>
                       <p className="text-white">
@@ -101,7 +101,7 @@ export default function Proposals(props: {
                   );
                 }
 
-                if (!props.user?.nexus?.rank) {
+                if (!props.user?.nexus.rank) {
                   return (
                     <>
                       <p className="text-white">Enter the Nexus to propose</p>
@@ -112,7 +112,7 @@ export default function Proposals(props: {
 
                 if (
                   props.round.minProposerRank &&
-                  props.user?.nexus?.rank.place <
+                  props.user.nexus.rank.place <
                     props.round.minProposerRank.place
                 ) {
                   return (
@@ -157,7 +157,7 @@ export default function Proposals(props: {
               }
 
               if (state === "Voting") {
-                if (!props.user) {
+                if (!props.user?.nexus) {
                   return (
                     <>
                       <p className="text-white">
@@ -168,7 +168,7 @@ export default function Proposals(props: {
                   );
                 }
 
-                if (!props.user?.nexus?.rank) {
+                if (!props.user.nexus.rank) {
                   return (
                     <>
                       <p className="text-white">Enter the Nexus to vote</p>
@@ -179,7 +179,7 @@ export default function Proposals(props: {
 
                 if (
                   props.round.minVoterRank &&
-                  props.user?.nexus?.rank.place < props.round.minVoterRank.place
+                  props.user.nexus.rank.place < props.round.minVoterRank.place
                 ) {
                   return (
                     <>
@@ -203,7 +203,7 @@ export default function Proposals(props: {
                 }
 
                 if (
-                  props.user?.nexus?.rank.votes > 0 &&
+                  props.user.nexus.rank.votes > 0 &&
                   remainingVotes < 1 &&
                   votesSelected === 0
                 ) {
@@ -224,7 +224,7 @@ export default function Proposals(props: {
                 return (
                   <>
                     <p className="text-white">
-                      {remainingVotes}/{props.user?.nexus?.rank.votes} votes
+                      {remainingVotes}/{props.user.nexus.rank.votes} votes
                       remaining
                     </p>
                     <Button

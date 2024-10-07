@@ -1,1 +1,0 @@
-ALTER TABLE "nexus" ADD COLUMN "handle" text DEFAULT '' NOT NULL;

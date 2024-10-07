@@ -1,14 +1,36 @@
-import type { Interaction } from "discord.js";
+import type {
+  ChatInputCommandInteraction,
+  CommandInteraction,
+  Interaction,
+} from "discord.js";
 
 export function createCommand(command: {
   description: string;
   schedule?: string;
-  execute: (interaction: Interaction) => Promise<string>;
+  params?: Array<
+    | {
+        type: "string";
+        name: string;
+        description: string;
+        choices?: Array<{ name: string; value: string }>;
+        required: boolean;
+      }
+    | {
+        type: "number" | "boolean";
+        name: string;
+        description: string;
+        required: boolean;
+      }
+  >;
+  onlyAdmin?: boolean;
+  execute: (interaction: CommandInteraction) => Promise<string>;
 }) {
   return {
     description: command.description,
     schedule: command.schedule,
-    execute: async (interaction: Interaction) => {
+    params: command.params,
+    onlyAdmin: !!command.onlyAdmin,
+    execute: async (interaction: CommandInteraction) => {
       let message = "";
 
       try {
