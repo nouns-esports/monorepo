@@ -35,7 +35,7 @@ export const createNexus = onlyUser
               limit: 1,
             },
             rankings: {
-              orderBy: and(desc(rankings.timestamp), asc(rankings.xp)),
+              orderBy: [desc(rankings.timestamp), asc(rankings.xp)],
               limit: 1,
             },
           },

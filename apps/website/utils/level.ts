@@ -35,10 +35,5 @@ export function level(xp: number) {
 //   900000, 1000000,
 // ]) {
 //   const { currentLevel, requiredXP, progressXP } = level(xp);
-//   console.log(
-//     `Level ${currentLevel}:`,
-//     `${progressXP}/${requiredXP}`,
-//     xp,
-//     xp / 100
-//   );
+//   console.log(`Level ${currentLevel}:`, `${progressXP}/${requiredXP}`, xp);
 // }
