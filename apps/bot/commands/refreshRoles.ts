@@ -41,7 +41,10 @@ export const refreshRoles = createCommand({
       };
     });
 
+    let i = 0;
+
     for (const user of users) {
+      console.log("Setting Roles", `${i++}/${users.length}`);
       if (!user) continue;
 
       const rankRoles = roles(env.NEXT_PUBLIC_ENVIRONMENT);

@@ -102,9 +102,13 @@ export default async function NexusPage(props: {
                   <h2 className="">Updates in</h2>
                   <div className="flex items-center gap-2">
                     <p className="text-white">
-                      {new Date(
-                        userRankings[userRankings.length - 1].timestamp
-                      ) < new Date() ? (
+                      {new Date() >
+                      new Date(
+                        new Date(
+                          userRankings[userRankings.length - 1].timestamp
+                        ).getTime() +
+                          24 * 60 * 60 * 1000
+                      ) ? (
                         "Update in progress..."
                       ) : (
                         <Countdown
