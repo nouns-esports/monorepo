@@ -231,7 +231,9 @@ app.image("/rounds/:round/votes/:user/img", async (c) => {
   if (!round) {
     return c.res({
       image: (
-        <div style={{ display: "flex", color: "red" }}>No round found</div>
+        <div style={{ display: "flex", color: "red" }}>
+          User did not vote in the round or it doesnt exist
+        </div>
       ),
     });
   }
@@ -249,8 +251,12 @@ app.image("/rounds/:round/votes/:user/img", async (c) => {
     votingStart: round.votingStart,
     end: round.end,
   });
+  //
 
   return c.res({
+    headers: {
+      "Cache-Control": "max-age=0",
+    },
     image: (
       <div
         style={{
@@ -354,7 +360,10 @@ app.image("/rounds/:round/votes/:user/img", async (c) => {
                     fontFamily: "Cabin",
                   }}
                 >
-                  {vote.proposal.title}
+                  {vote.proposal.title.replace(
+                    /[^a-zA-Z0-9 \-_\!\@\#\$\%\^\&\*\(\)\+\=\"\'\?\/\>\<,\.\{\}\[\]\|\\\~\`\;\:\n\r\t]/g,
+                    ""
+                  )}
                 </div>
                 <div
                   style={{

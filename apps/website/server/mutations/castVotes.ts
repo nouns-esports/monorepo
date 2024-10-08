@@ -52,6 +52,8 @@ export const castVotes = onlyRanked
 
     await db.transaction(async (tx) => {
       for (const vote of parsedInput.votes) {
+        if (vote.count === 0) continue;
+
         const proposal = await tx.query.proposals.findFirst({
           where: eq(proposals.id, vote.proposal),
         });

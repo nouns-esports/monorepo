@@ -21,6 +21,8 @@ import { CurrencyEth } from "phosphor-react-sc";
 export default async function Header() {
   const user = await getAuthenticatedUser();
 
+  const nexus = user ? await getNexus({ user: user.id }) : undefined;
+
   const communities = await getCommunities();
 
   const rosters = await getRosters({ limit: 4 });

@@ -44,20 +44,14 @@ export default async function Footer() {
             <Item href="/creations">Creator Spotlight</Item>
           </Group>
           <Group title="Resources">
-            <Item
-              href="https://app.termly.io/policy-viewer/policy.html?policyUUID=0d491517-c891-4103-8c31-d6246f954ae6"
-              newTab
-            >
+            <Item href="/privacy" newTab>
               Privacy Policy
             </Item>
-            <Item
-              href="https://app.termly.io/policy-viewer/policy.html?policyUUID=d9d85cf5-1c21-4874-901b-e83ad58f7320"
-              newTab
-            >
+            <Item href="/terms" newTab>
               Terms of Service
             </Item>
-            <Item href="mailto:esports@nouns.gg" newTab>
-              Contact
+            <Item href="/github" newTab>
+              GitHub
             </Item>
           </Group>
         </div>

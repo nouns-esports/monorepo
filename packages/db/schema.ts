@@ -218,7 +218,7 @@ export const assets = pgTable("assets", {
   name: text("name").notNull(),
   image: text("image").notNull(),
   decimals: smallint("decimals"),
-  chainId: integer("chain_id"), // RENAME TO CHAIN
+  chainId: integer("chain_id"),
   address: text("address"),
   tokenId: text("token_id"),
 });

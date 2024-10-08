@@ -48,6 +48,7 @@ export default function Markdown(props: {
   markdown: string;
   readOnly: boolean;
   onChange?: (state: EditorState, editor: LexicalEditor) => void;
+  className?: string;
 }) {
   return (
     <LexicalComposer
