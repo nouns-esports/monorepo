@@ -193,7 +193,7 @@ app.frame("/rounds/:id", async (c) => {
       </Button.Link>,
     ],
     title: round.name,
-    ogImage: round.banner,
+    ogImage: round.image,
   });
 });
 

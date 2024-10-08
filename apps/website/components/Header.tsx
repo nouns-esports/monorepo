@@ -16,12 +16,9 @@ import Banner from "./Banner";
 import { getCommunities } from "@/server/queries/communities";
 import { getRosters } from "@/server/queries/rosters";
 import Menu from "./Menu";
-import { CurrencyEth } from "phosphor-react-sc";
 
 export default async function Header() {
   const user = await getAuthenticatedUser();
-
-  const nexus = user ? await getNexus({ user: user.id }) : undefined;
 
   const communities = await getCommunities();
 
