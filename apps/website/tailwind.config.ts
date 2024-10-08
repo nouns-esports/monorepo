@@ -7,6 +7,7 @@ const config: Config = {
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./server/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     colors: {
@@ -18,9 +19,26 @@ const config: Config = {
       green: "#4CC87D",
       yellow: "#F8C648",
       transparent: "transparent",
+      farcaster: "#855DCD",
+      twitter: "#1DA1F2",
+      discord: "#5865F2",
+      "coinbase-wallet": "#0052FF",
+      "wallet-connect": {
+        light: "#526EFE",
+        dark: "#3455FC",
+      },
+      metamask: {
+        light: "#FA9130",
+        dark: "#6C3D12",
+      },
+      rainbow: {
+        light: "#174299",
+        dark: "#001E59",
+      },
       blue: {
         500: "#789AF4",
         700: "#3569EE",
+        800: "#042c91",
         900: "#002688",
       },
       grey: {
@@ -32,14 +50,17 @@ const config: Config = {
       },
       gold: {
         500: "#EEAF36",
+        800: "#704a02",
         900: "#664300",
       },
       silver: {
         500: "#CBD4D7",
+        800: "#706e6e",
         900: "#656565",
       },
       bronze: {
         500: "#D4682B",
+        800: "#632502",
         900: "#5B2100",
       },
     },
@@ -52,6 +73,9 @@ const config: Config = {
     extend: {
       transitionDuration: {
         DEFAULT: "300ms",
+      },
+      transitionProperty: {
+        height: "height",
       },
       backgroundSize: {
         grow: "125%",
@@ -92,34 +116,68 @@ const config: Config = {
       });
       addUtilities({
         ".scrollbar-hidden": {
-          /* IE and Edge */
           "-ms-overflow-style": "none",
-
-          /* Firefox */
           "scrollbar-width": "none",
-
-          /* Safari and Chrome */
           "&::-webkit-scrollbar": {
             display: "none",
           },
         },
+        ".custom-scrollbar": {
+          "&::-webkit-scrollbar": {
+            width: "8px",
+          },
+          "&::-webkit-scrollbar-track": {
+            background: "#1A1A1A",
+            borderRadius: "1000px",
+            width: "8px",
+            marginLeft: "4px", // Add left margin to the track
+          },
+          "&::-webkit-scrollbar-thumb": {
+            background: "#333333",
+            borderRadius: "1000px",
+            cursor: "grab",
+            width: "8px",
+            marginLeft: "4px", // Add left margin to the thumb
+          },
+          "&::-webkit-scrollbar-thumb:hover": {
+            background: "#4D4D4D",
+          },
+          "&::-webkit-scrollbar-thumb:active": {
+            background: "#4D4D4D",
+            cursor: "grabbing",
+          },
+          paddingRight: "12px", // Increase right padding to accommodate the scrollbar
+        },
+        ".scrollbar-main": {
+          "&::-webkit-scrollbar": {
+            width: "16px",
+          },
+          "&::-webkit-scrollbar-track": {
+            background: "#1A1A1A",
+            width: "16px",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            background: "#333333",
+            cursor: "grab",
+            width: "8px",
+          },
+          "&::-webkit-scrollbar-thumb:hover": {
+            background: "#4D4D4D",
+          },
+          "&::-webkit-scrollbar-thumb:active": {
+            background: "#4D4D4D",
+            cursor: "grabbing",
+          },
+        },
         ".prevent-scroll": {
-          /* IE and Edge */
           "-ms-overflow-style": "none",
-
-          /* Firefox */
           "scrollbar-width": "none",
-
-          /* Safari and Chrome */
           "&::-webkit-scrollbar": {
             display: "none",
           },
-
           "touch-action": "none",
           "-webkit-overflow-scrolling": "none",
           "overflow-y": "hidden",
-
-          /* Other browsers */
           "overscroll-behavior": "none",
         },
       });

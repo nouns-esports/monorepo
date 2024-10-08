@@ -1,6 +1,12 @@
 "use client";
 
-import { PrivyProvider, getAccessToken, usePrivy } from "@privy-io/react-auth";
+import {
+  PrivyProvider,
+  getAccessToken,
+  usePrivy,
+  type PrivyClientConfig,
+  type WalletListEntry,
+} from "@privy-io/react-auth";
 import { env } from "~/env";
 import { base, baseSepolia } from "viem/chains";
 import { useRouter } from "next/navigation";
@@ -11,16 +17,33 @@ import {
   type Dispatch,
   type SetStateAction,
 } from "react";
+import { create } from "zustand";
 
 export const LoginMethodContext = createContext({
   onlyCoinbaseWallet: false,
   setOnlyCoinbaseWallet: ((value) => {}) as Dispatch<SetStateAction<boolean>>,
 });
 
+export const usePrivyModalState = create<{
+  loginMethods?: PrivyClientConfig["loginMethods"];
+  walletList?: WalletListEntry[];
+  set: (
+    state: Partial<{
+      loginMethods: PrivyClientConfig["loginMethods"];
+      walletList: WalletListEntry[];
+    }>
+  ) => void;
+}>((set) => ({
+  loginMethods: ["discord", "twitter", "wallet", "farcaster", "email"],
+  walletList: undefined,
+  set,
+}));
+
 export default function Privy(props: {
   user?: string;
   children: React.ReactNode;
 }) {
+  const { loginMethods, walletList } = usePrivyModalState();
   const [onlyCoinbaseWallet, setOnlyCoinbaseWallet] = useState(false);
 
   return (
@@ -30,8 +53,8 @@ export default function Privy(props: {
       <PrivyProvider
         appId={env.NEXT_PUBLIC_PRIVY_APP_ID}
         config={{
-          loginMethods: ["discord", "twitter", "wallet", "farcaster", "email"],
-
+          // loginMethods: ["discord", "twitter", "wallet", "farcaster", "email"],
+          loginMethods,
           defaultChain:
             env.NEXT_PUBLIC_ENVIRONMENT === "production" ? base : baseSepolia,
           supportedChains: [
@@ -41,7 +64,8 @@ export default function Privy(props: {
             theme: "#040404",
             accentColor: "#E93737",
             logo: "/logo/logo.svg",
-            walletList: onlyCoinbaseWallet ? ["coinbase_wallet"] : undefined,
+            // walletList: onlyCoinbaseWallet ? ["coinbase_wallet"] : undefined,
+            walletList,
           },
           externalWallets: {
             coinbaseWallet: {

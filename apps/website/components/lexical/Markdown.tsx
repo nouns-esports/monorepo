@@ -44,6 +44,7 @@ const MATCHERS = [
 ];
 
 export default function Markdown(props: {
+  className?: string;
   markdown: string;
   readOnly: boolean;
   onChange?: (state: EditorState, editor: LexicalEditor) => void;

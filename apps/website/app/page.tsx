@@ -8,22 +8,55 @@ import Gallery from "@/components/Gallery";
 import { getVideos } from "@/server/queries/youtube";
 import Attribution from "@/components/Attribution";
 import { getTrendingPosts } from "@/server/queries/discussion";
-import { ArrowRight, ChevronUp, Timer } from "lucide-react";
+import { ArrowRight, ChevronUp } from "lucide-react";
 import { getRounds } from "@/server/queries/rounds";
 import { getCreator } from "@/server/queries/creations";
 import RoundCard from "@/components/RoundCard";
+import { getAuthenticatedUser } from "@/server/queries/users";
+import { getCurrentSeason } from "@/server/queries/season";
+import { getEvents } from "@/server/queries/events";
+import { getQuests } from "@/server/queries/quests";
+import QuestCard from "@/components/QuestCard";
+import EventCard from "@/components/EventCard";
 
 export default async function Home() {
-  const videos = await getVideos();
+  const [user, videos, trendingPosts, rounds, season, events] =
+    await Promise.all([
+      getAuthenticatedUser(),
+      getVideos(),
+      getTrendingPosts(),
+      getRounds({ limit: 4 }),
+      getCurrentSeason(),
+      getEvents({ limit: 3 }),
+    ]);
 
-  const trendingPosts = await getTrendingPosts();
+  if (!season) {
+    throw new Error("No season found");
+  }
 
-  const rounds = await getRounds({ limit: 4 });
+  const quests = await getQuests({
+    limit: 5,
+    season: season.id.toString(),
+    user: user?.id,
+  });
+
+  const now = new Date();
+
+  const highlightedRound = rounds.find(
+    (round) => round.featured || new Date(round.end ?? Infinity) > now
+  );
+
+  const highlightedEvent = events.find(
+    (event) => event.featured || new Date(event.end ?? Infinity) > now
+  );
 
   return (
     <div className="flex flex-col gap-16 mb-16 max-sm:mb-8 max-lg:gap-12 pt-32 max-xl:pt-28 max-sm:pt-20">
       <div className="flex gap-4 h-[30vw] max-h-[600px] max-lg:h-auto max-lg:max-h-none w-full px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4 max-lg:flex-col">
-        <Gallery />
+        <Gallery
+          highlightedRound={highlightedRound}
+          highlightedEvent={highlightedEvent}
+        />
         <div className="flex flex-col gap-2 bg-gradient-to-b from-[#8A63D2] to-[#473072] rounded-xl overflow-hidden w-full h-full max-lg:hidden">
           <div className="flex items-center justify-between px-4 pt-3">
             <div className="flex items-center text-2xl font-luckiest-guy gap-3 text-white ">
@@ -54,7 +87,7 @@ export default async function Home() {
                     <img
                       src={post.author.pfp_url}
                       alt={post.author.display_name}
-                      className="h-full aspect-square rounded-full object-cover"
+                      className="h-full aspect-square object-cover rounded-full"
                     />
                     <div className="flex flex-col h-full w-full">
                       <p className="text-white font-semibold text-sm">
@@ -76,8 +109,8 @@ export default async function Home() {
           </ul>
         </div>
       </div>
-      <div className="flex flex-col gap-4 px-32 max-2xl:px-16 max-xl:px-8 max-lg:px-0">
-        <div className="flex justify-between items-center max-lg:px-8 max-sm:px-4">
+      <div className="flex flex-col gap-4 px-32 max-2xl:px-16 max-xl:px-0">
+        <div className="flex justify-between items-center max-xl:px-8 max-sm:px-4">
           <h2 className="font-luckiest-guy text-white text-4xl max-sm:text-3xl">
             Rounds
           </h2>
@@ -89,7 +122,7 @@ export default async function Home() {
             <ArrowRight className="w-[1.15rem] h-[1.15rem] group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
-        <div className="flex gap-4 justify-between max-lg:w-full max-lg:overflow-x-scroll max-lg:px-8 max-sm:px-4 max-lg:scrollbar-hidden">
+        <div className="flex gap-4 justify-between max-xl:w-full max-xl:overflow-x-scroll max-xl:px-8 max-sm:px-4 max-xl:scrollbar-hidden">
           {rounds.map((round) => (
             <RoundCard
               key={round.id}
@@ -109,6 +142,67 @@ export default async function Home() {
           ))}
         </div>
       </div>
+      <div className="flex flex-col gap-4 px-32 max-2xl:px-16 max-xl:px-0">
+        <div className="flex justify-between items-center max-xl:px-8 max-sm:px-4">
+          <h2 className="font-luckiest-guy text-white text-4xl max-sm:text-3xl">
+            Quests
+          </h2>
+          <Link
+            href="/quests"
+            className="text-red flex gap-1 items-center group"
+          >
+            View All
+            <ArrowRight className="w-[1.15rem] h-[1.15rem] group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </div>
+        <div className="flex gap-4 justify-between max-xl:w-full max-xl:overflow-x-scroll max-xl:px-8 max-sm:px-4 max-xl:scrollbar-hidden">
+          {quests.map((quest) => (
+            <QuestCard
+              key={quest.id}
+              id={quest.id}
+              name={quest.name}
+              description={quest.description}
+              image={quest.image}
+              community={{
+                id: quest.community.id,
+                name: quest.community.name,
+                image: quest.community.image,
+              }}
+              xp={quest.xp}
+              completed={quest.completed?.length > 0}
+              start={quest.start ?? undefined}
+              end={quest.end ?? undefined}
+              className="max-xl:w-64 max-xl:flex-shrink-0"
+            />
+          ))}
+        </div>
+      </div>
+      {/* <div className="flex flex-col gap-4 px-32 max-2xl:px-16 max-xl:px-8 max-lg:px-0">
+        <div className="flex justify-between items-center max-lg:px-8 max-sm:px-4">
+          <h2 className="font-luckiest-guy text-white text-4xl max-sm:text-3xl">
+            Events
+          </h2>
+          <Link
+            href="/events"
+            className="text-red flex gap-1 items-center group"
+          >
+            View All
+            <ArrowRight className="w-[1.15rem] h-[1.15rem] group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </div>
+        <div className="flex gap-4 justify-between max-lg:w-full max-lg:overflow-x-scroll max-lg:px-8 max-sm:px-4 max-lg:scrollbar-hidden">
+          {events.map((event) => (
+            <EventCard
+              key={event.id}
+              id={event.id}
+              name={event.name}
+              image={event.image}
+              start={event.start}
+              end={event.end}
+            />
+          ))}
+        </div>
+      </div> */}
       <div className="flex flex-col gap-4 px-32 max-2xl:px-16 max-xl:px-8 max-lg:px-0">
         <div className="flex justify-between items-center max-lg:px-8 max-sm:px-4">
           <h2 className="font-luckiest-guy text-white text-4xl max-sm:text-3xl">
@@ -219,25 +313,30 @@ export default async function Home() {
               "QmXP7Yq4j4bqiKzgsynfF8AgKZ3vM6Ldq5aCKRGmNh2ScA",
               "QmYeLkcYghV4qkRBeMY12Z352EoLJwzbLWK8JsvbREHfo3",
               "QmdiWQoQpy3D5wpi9pSn6n2uJXyugwcv8rvQoaZnWhotKz",
-            ].map(async (image) => {
-              const creator = await getCreator({ creationId: image });
+            ].map(async (id, index) => {
+              const creator = await getCreator({ creation: id });
 
               return (
-                <Link
-                  key={image}
-                  href={`/creations/${image.substring(0, 10)}`}
+                <div
+                  key={`${index}-top`}
                   className="relative h-full w-auto group"
                 >
-                  <img
-                    alt="Artwork"
-                    src={`https://ipfs.nouns.gg/ipfs/${image}`}
-                    draggable={false}
-                    className="h-full max-w-none object-cover rounded-xl select-none"
+                  <Link
+                    href={`/creations/${id.substring(0, 10)}`}
+                    className="absolute w-full h-full"
                   />
-                  <div className="absolute top-3 right-3 h-7 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity">
-                    <Attribution id={image} creator={creator} />
+                  <div className="overflow-hidden h-full rounded-xl pointer-events-none">
+                    <img
+                      alt="Artwork"
+                      src={`https://ipfs.nouns.gg/ipfs/${id}?img-height=300&img-onerror=redirect`}
+                      draggable={false}
+                      className="h-full max-w-none object-cover select-none group-hover:scale-105 transition-transform"
+                    />
                   </div>
-                </Link>
+                  <div className="absolute top-3 right-3 h-7 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity">
+                    <Attribution id={id} creator={creator} />
+                  </div>
+                </div>
               );
             })
           )}
@@ -257,25 +356,30 @@ export default async function Home() {
               "QmUTghthVwuidV6v7sJnKrbci8Ro2HQRx8huSgpxZz2G3g",
               "QmbKGhDNHSujAJeqJtURW29DuDWtKoFcfx1Eprkjk1movp",
               "QmUE853Ad1yns6UAUCbYjK6iBtxx5e5EihJfCFAAUh5aYb",
-            ].map(async (image) => {
-              const creator = await getCreator({ creationId: image });
+            ].map(async (id, index) => {
+              const creator = await getCreator({ creation: id });
 
               return (
-                <Link
-                  key={image}
-                  href={`/creations/${image.substring(0, 10)}`}
+                <div
+                  key={`${index}-bottom`}
                   className="relative h-full w-auto group"
                 >
-                  <img
-                    alt="Artwork"
-                    src={`https://ipfs.nouns.gg/ipfs/${image}`}
-                    draggable={false}
-                    className="h-full max-w-none object-cover rounded-xl select-none"
+                  <Link
+                    href={`/creations/${id.substring(0, 10)}`}
+                    className="absolute w-full h-full"
                   />
-                  <div className="absolute top-3 right-3 h-7 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity">
-                    <Attribution id={image} creator={creator} />
+                  <div className="overflow-hidden h-full rounded-xl pointer-events-none">
+                    <img
+                      alt="Artwork"
+                      src={`https://ipfs.nouns.gg/ipfs/${id}?img-height=300&img-onerror=redirect`}
+                      draggable={false}
+                      className="h-full max-w-none object-cover select-none group-hover:scale-105 transition-transform"
+                    />
                   </div>
-                </Link>
+                  <div className="absolute top-3 right-3 h-7 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity">
+                    <Attribution id={id} creator={creator} />
+                  </div>
+                </div>
               );
             })
           )}
@@ -287,7 +391,11 @@ export default async function Home() {
             </h3>
             <Button href="/creations">Explore</Button>
           </div>
-          <Link href="/creations/QmV83sDpdb" className="relative group">
+          <div className="relative group">
+            <Link
+              href="/creations/QmV83sDpdb"
+              className="absolute w-full h-full"
+            />
             <img
               src="https://ipfs.nouns.gg/ipfs/QmV83sDpdbU2E23txL1hY7F6W81SjD4Egz41yCB5YQibQg"
               alt="Pokemon wearing Nouns noggles"
@@ -297,7 +405,7 @@ export default async function Home() {
             <div className="absolute z-10 top-8 right-16 h-8 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity">
               <Attribution id="QmV83sDpdb" />
             </div>
-          </Link>
+          </div>
           <div className="from-transparent to-black bg-gradient-to-b h-2/5 w-full bottom-0 absolute pointer-events-none" />
         </div>
         <div className="from-transparent to-black bg-gradient-to-r w-32 h-full right-0 bottom-0 absolute pointer-events-none max-[1920px]:hidden flex" />
@@ -310,7 +418,8 @@ export default async function Home() {
 function ExploreCard(props: { image: string; title: string; href: string }) {
   return (
     <li className="w-full group relative aspect-[3/4] rounded-xl overflow-hidden max-lg:min-w-[300px]">
-      <Link href={props.href} className="flex h-full items-end flex-col">
+      <div className="relative flex h-full items-end flex-col">
+        <Link href={props.href} className="absolute z-10 w-full h-full" />
         <Image
           src={props.image}
           alt={props.title}
@@ -322,7 +431,7 @@ function ExploreCard(props: { image: string; title: string; href: string }) {
         <div className="absolute bottom-4 left-4 z-10">
           <Button href={props.href}>{props.title}</Button>
         </div>
-      </Link>
+      </div>
     </li>
   );
 }

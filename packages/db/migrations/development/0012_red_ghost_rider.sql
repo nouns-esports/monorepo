@@ -1,1 +1,0 @@
-ALTER TABLE "awards" ADD COLUMN "id" serial NOT NULL;

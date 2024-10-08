@@ -1,9 +1,47 @@
-import { awards, db, rounds } from "~/packages/db/schema";
-import { eq, gt, and, lt, asc, desc, exists, isNotNull } from "drizzle-orm";
+import { awards, db, proposals, rounds, votes } from "~/packages/db/schema";
+import {
+  eq,
+  gt,
+  and,
+  lt,
+  asc,
+  desc,
+  exists,
+  isNotNull,
+  sql,
+} from "drizzle-orm";
 import { unstable_cache as cache } from "next/cache";
+
+export const getRoundWithProposal = cache(
+  async (input: { round: string; user: string }) => {
+    return db.query.rounds.findFirst({
+      where: eq(rounds.id, input.round),
+      with: {
+        proposals: {
+          where: eq(proposals.user, input.user),
+          limit: 1,
+        },
+      },
+    });
+  },
+  ["rounds"],
+  { tags: ["rounds"], revalidate: 60 * 10 }
+);
+
+export const getHighlightedRound = cache(
+  async () => {
+    return db.query.rounds.findFirst({
+      where: gt(rounds.end, new Date()),
+      orderBy: desc(rounds.end),
+    });
+  },
+  ["highlightedRound"],
+  { tags: ["highlightedRound"], revalidate: 60 * 10 }
+);
 
 export const getRound = cache(
   async (input: { id: string }) => {
+    ////////
     return db.query.rounds.findFirst({
       where: eq(rounds.id, input.id),
       with: {
@@ -13,6 +51,21 @@ export const getRound = cache(
             asset: true,
           },
         },
+        community: true,
+        proposals: {
+          where: eq(proposals.hidden, false),
+          orderBy: [desc(proposals.totalVotes), asc(proposals.createdAt)],
+          with: {
+            user: {
+              with: {
+                rank: true,
+              },
+            },
+          },
+        },
+        votes: true,
+        minProposerRank: true,
+        minVoterRank: true,
       },
     });
   },
@@ -25,6 +78,7 @@ export const getRounds = cache(
     stage?: "active" | "upcoming" | "ended";
     limit?: number;
   }) => {
+    //
     if (input?.stage) {
       switch (input.stage) {
         case "active":
@@ -93,7 +147,31 @@ export const getRounds = cache(
   { tags: ["rounds"], revalidate: 60 * 10 }
 );
 
-export const getStats = cache(
+export const getRoundStats = cache(
+  async (input: { id: string }) => {
+    const round = await getRound({ id: input.id });
+
+    if (!round) {
+      return {
+        proposalsCreated: 0,
+        votesCast: 0,
+        totalParticipants: 0,
+      };
+    }
+
+    return {
+      proposalsCreated: round.proposals.length,
+      votesCast: round.votes.length,
+      totalParticipants: new Set(
+        [...round.proposals, ...round.votes].map((item) => item.user)
+      ).size,
+    };
+  },
+  ["roundStats"],
+  { tags: ["roundStats"], revalidate: 60 * 10 }
+);
+
+export const getRoundsStats = cache(
   async () => {
     const allRounds = await db.query.rounds.findMany({
       where: isNotNull(rounds.end),
@@ -120,30 +198,25 @@ export const getStats = cache(
       },
     });
 
-    let fundsDeployed = 0;
-
-    const uniqueParticipants: Record<string, boolean> = {};
-
-    for (const round of allRounds) {
-      for (const award of round.awards) {
-        if (award.asset === "usdc") {
-          fundsDeployed += Number(award.value) / 1000000;
-        }
-      }
-
-      for (const proposal of round.proposals) {
-        uniqueParticipants[proposal.user] = true;
-      }
-
-      for (const vote of round.votes) {
-        uniqueParticipants[vote.user] = true;
-      }
-    }
-
     return {
       roundsCreated: allRounds.length,
-      fundsDeployed,
-      totalParticipants: Object.keys(uniqueParticipants).length,
+      fundsDeployed: allRounds.reduce(
+        (total, round) =>
+          total +
+          round.awards.reduce(
+            (roundTotal, award) =>
+              award.asset === "usdc"
+                ? roundTotal + Number(award.value) / 1000000
+                : roundTotal,
+            0
+          ),
+        0
+      ),
+      totalParticipants: new Set(
+        allRounds
+          .flatMap((round) => [...round.proposals, ...round.votes])
+          .map((item) => item.user)
+      ).size,
     };
   },
   ["getStats"],

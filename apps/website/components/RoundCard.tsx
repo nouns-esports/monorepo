@@ -1,9 +1,10 @@
 import Link from "./Link";
 import { Timer } from "lucide-react";
 import { roundState } from "@/utils/roundState";
-import Countdown from "@/components/rounds/Countdown";
+import Countdown from "@/components/Countdown";
 import type { Community, Round } from "~/packages/db/schema";
 import { twMerge } from "tailwind-merge";
+import Image from "./Image";
 
 export default function RoundCard(props: {
   id: Round["id"];
@@ -37,9 +38,14 @@ export default function RoundCard(props: {
         className="absolute z-10 top-0 left-0 w-full h-full"
       />
       <div className="flex flex-shrink-0 w-full h-36/ h-[40%] overflow-hidden">
-        <img
-          src={props.image}
+        {/* <img
+          src={`${props.image}?img-height=200&img-onerror=redirect`}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+        /> */}
+        <Image
+          hash={props.image.split("/ipfs/")[1]}
+          alt={props.name}
+          className="group-hover:scale-105 transition-transform"
         />
       </div>
       <div className="flex flex-col p-4 h-full">

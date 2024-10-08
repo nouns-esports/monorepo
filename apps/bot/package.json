@@ -5,20 +5,8 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development bun index.ts",
     "start": "cross-env NODE_ENV=production bun index.ts",
-    "uniqueVoters": "cross-env NODE_ENV=production bun ./scripts/analytics/uniqueVoters.ts",
-    "proposalCount": "cross-env NODE_ENV=production bun ./scripts/analytics/proposalCount.ts",
-    "totalUniqueInteractions": "cross-env NODE_ENV=production bun ./scripts/analytics/totalUniqueInteractions.ts",
-    "botCheck": "cross-env NODE_ENV=production bun ./scripts/botting/botCheck.ts",
-    "purgeVotes": "cross-env NODE_ENV=production bun ./scripts/botting/purgeVotes.ts",
-    "updateImages": "cross-env NODE_ENV=development bun ./scripts/analytics/updateImages.ts",
-    "checkNexus": "cross-env NODE_ENV=production bun ./scripts/checkNexus.ts",
-    "refreshNexus": "cross-env NODE_ENV=production bun ./scripts/refreshNexus.ts",
-    "votersForProposal": "cross-env NODE_ENV=production bun ./scripts/analytics/votersForProposal.ts",
-    "flagPotentialBots": "cross-env NODE_ENV=production bun ./scripts/botting/flagPotentialBots.ts",
-    "flagHardPotentialBots": "cross-env NODE_ENV=production bun ./scripts/botting/flagHardPotentialBots.ts",
-    "explorerRoles": "cross-env NODE_ENV=production bun ./scripts/explorerRoles.ts",
-    "getWalletAddresses": "cross-env NODE_ENV=production bun ./scripts/getWalletAddresses.ts",
-    "updateNexus": "cross-env NODE_ENV=production bun ./scripts/updateNexus.ts",
-    "getGenesis": "cross-env NODE_ENV=production bun ./scripts/getGenesis.ts"
+    "migration:data": "cross-env NODE_ENV=development bun migration/data.ts",
+    "migration:genesis": "cross-env NODE_ENV=development bun migration/genesis.ts",
+    "migration:users": "cross-env NODE_ENV=development bun migration/users.ts"
   }
 }

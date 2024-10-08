@@ -1,127 +1,107 @@
 "use server";
 
 import { db, votes, proposals, rounds } from "~/packages/db/schema";
-import { getAuthenticatedUser } from "@/server/queries/users";
-import { and, eq } from "drizzle-orm";
-import { revalidatePath, revalidateTag } from "next/cache";
-import { getNexus } from "../queries/nexus";
-import checkDiscordAccountAge from "@/utils/checkDiscordAccountAge";
+import { eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
+import { z } from "zod";
+import { onlyRanked } from ".";
 
-export async function castVotes(input: {
-  user: string;
-  round: string;
-  votes: { proposal: number; count: number }[];
-}) {
-  const user = await getAuthenticatedUser();
-
-  if (!user) {
-    throw new Error("No user session found");
-  }
-
-  if (user.id !== input.user) {
-    throw new Error("You can only cast votes for yourself");
-  }
-
-  const nexus = await getNexus({ user: user.id });
-
-  if (!nexus) {
-    throw new Error("A Nexus membership is required to vote");
-  }
-
-  if (user.discord?.subject && !checkDiscordAccountAge(user.discord.subject)) {
-    throw new Error(
-      `Privy user ${user.id} and discord account ${user.discord.subject} is less than 30 days old`
-    );
-  }
-
-  const [round, previousVotes] = await Promise.all([
-    db.query.rounds.findFirst({
-      where: eq(rounds.id, input.round),
-    }),
-    db.query.votes.findMany({
-      where: and(eq(votes.user, user.id), eq(votes.round, input.round)),
-    }),
-  ]);
-
-  if (!round) {
-    throw new Error("Round not found");
-  }
-
-  if (round.minVoterRank === "Challenger" && nexus.tier === "Explorer") {
-    throw new Error("You are not eligible to vote in this round");
-  }
-
-  if (
-    round.minVoterRank === "Champion" &&
-    (nexus.tier === "Challenger" || nexus.tier === "Explorer")
-  ) {
-    throw new Error("You are not eligible to vote in this round");
-  }
-
-  const now = new Date();
-  const votingStart = new Date(round.votingStart);
-  const roundEnd = new Date(round.end ?? Infinity);
-
-  if (now < votingStart) {
-    throw new Error("Voting has not started yet");
-  }
-
-  if (now > roundEnd) {
-    throw new Error("Round has ended");
-  }
-
-  let votesUsed = previousVotes.reduce((votes, vote) => votes + vote.count, 0);
-
-  await db.transaction(async (tx) => {
-    for (const vote of input.votes) {
-      if (vote.count === 0) continue;
-
-      const proposal = await tx.query.proposals.findFirst({
-        where: eq(proposals.id, vote.proposal),
-      });
-
-      if (!proposal) {
-        tx.rollback();
-        throw new Error("Proposal not found");
-      }
-
-      if (proposal.user === user.id) {
-        tx.rollback();
-        throw new Error("You cannot vote on your own proposal");
-      }
-
-      if (proposal.round !== input.round) {
-        tx.rollback();
-        throw new Error("You can only vote on proposals in the same round");
-      }
-
-      if (votesUsed + vote.count > nexus.votes) {
-        tx.rollback();
-        throw new Error("You have used all your votes");
-      }
-
-      votesUsed += vote.count;
-
-      await tx.insert(votes).values([
-        {
-          user: user.id,
-          proposal: vote.proposal,
-          round: round.id,
-          count: vote.count,
-          timestamp: now,
+export const castVotes = onlyRanked
+  .schema(
+    z.object({
+      round: z.string(),
+      votes: z.array(z.object({ proposal: z.number(), count: z.number() })),
+    })
+  )
+  .action(async ({ parsedInput, ctx }) => {
+    const round = await db.query.rounds.findFirst({
+      where: eq(rounds.id, parsedInput.round),
+      with: {
+        votes: {
+          where: eq(votes.user, ctx.user.id),
         },
-      ]);
+        minVoterRank: true,
+      },
+    });
 
-      await tx
-        .update(proposals)
-        .set({
-          totalVotes: proposal.totalVotes + vote.count,
-        })
-        .where(eq(proposals.id, vote.proposal));
+    if (!round) {
+      throw new Error("Round not found");
     }
-  });
 
-  revalidatePath(`/rounds/${input.round}`);
-  revalidateTag("votes");
-  revalidateTag("proposals");
-}
+    if (
+      round.minVoterRank &&
+      ctx.user.nexus?.rank?.place &&
+      ctx.user.nexus?.rank?.place < round.minVoterRank.place
+    ) {
+      throw new Error("You are not eligible to vote in this round");
+    }
+
+    const now = new Date();
+    const votingStart = new Date(round.votingStart);
+    const roundEnd = new Date(round.end ?? Infinity);
+
+    if (now < votingStart) {
+      throw new Error("Voting has not started yet");
+    }
+
+    if (now > roundEnd) {
+      throw new Error("Round has ended");
+    }
+
+    let votesUsed = round.votes.reduce((votes, vote) => votes + vote.count, 0);
+
+    await db.transaction(async (tx) => {
+      for (const vote of parsedInput.votes) {
+        if (vote.count === 0) continue;
+
+        const proposal = await tx.query.proposals.findFirst({
+          where: eq(proposals.id, vote.proposal),
+        });
+
+        if (!proposal) {
+          tx.rollback();
+          throw new Error("Proposal not found");
+        }
+
+        if (proposal.user === ctx.user.id) {
+          tx.rollback();
+          throw new Error("You cannot vote on your own proposal");
+        }
+
+        if (proposal.round !== parsedInput.round) {
+          tx.rollback();
+          throw new Error("You can only vote on proposals in the same round");
+        }
+
+        if (!ctx.user.nexus?.rank) {
+          throw new Error("Enter the Nexus to vote");
+        }
+
+        if (votesUsed + vote.count > ctx.user.nexus.rank.votes) {
+          tx.rollback();
+          throw new Error("You have used all your votes");
+        }
+
+        votesUsed += vote.count;
+
+        await tx.insert(votes).values([
+          {
+            user: ctx.user.id,
+            proposal: vote.proposal,
+            round: round.id,
+            count: vote.count,
+            timestamp: now,
+          },
+        ]);
+
+        await tx
+          .update(proposals)
+          .set({
+            totalVotes: proposal.totalVotes + vote.count,
+          })
+          .where(eq(proposals.id, vote.proposal));
+      }
+    });
+
+    revalidatePath(`/rounds/${parsedInput.round}`);
+  });

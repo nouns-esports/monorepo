@@ -1,1 +1,0 @@
-ALTER TABLE "rounds" ADD COLUMN "votingStart" timestamp NOT NULL;

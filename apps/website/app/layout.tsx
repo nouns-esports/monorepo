@@ -5,6 +5,10 @@ import {
   Luckiest_Guy,
   Bebas_Neue,
   Londrina_Solid,
+  Archivo_Black,
+  Koulen,
+  Tilt_Warp,
+  Dela_Gothic_One,
 } from "next/font/google";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -52,7 +56,7 @@ export const metadata = {
     "dao",
     "governance",
   ],
-  metadataBase: new URL(env.PUBLIC_DOMAIN),
+  metadataBase: new URL(env.NEXT_PUBLIC_DOMAIN),
   openGraph: {
     type: "website",
     images: ["/og-banner.webp"],
@@ -71,7 +75,7 @@ export const viewport = {
 export default async function RootLayout(props: { children: React.ReactNode }) {
   const user = await getAuthenticatedUser();
   return (
-    <html lang="en" className="scroll-smooth overflow-x-hidden">
+    <html lang="en" className="scroll-smooth overflow-x-hidden scrollbar-main">
       <body
         className={`${cabin.variable} ${luckiestGuy.variable} ${bebasNeue.variable} ${londrinaSolid.variable} bg-black text-grey-200 font-cabin selection:text-white selection:bg-red flex flex-col items-center w-full h-full`}
       >

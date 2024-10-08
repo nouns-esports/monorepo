@@ -34,6 +34,7 @@ export const getTrendingPosts = cache(
       .filter((post) => {
         if (post.text.length < 1) return false;
         if (!post.channel) return false;
+        if (post.author.username === "esports") return false;
 
         channelCount[post.channel.id] = ++channelCount[post.channel.id] || 0;
 

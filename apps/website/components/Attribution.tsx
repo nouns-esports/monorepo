@@ -1,20 +1,17 @@
 import { Diamond } from "lucide-react";
 import Link from "./Link";
-import type { userToProfile } from "@/utils/userToProfile";
+import type { Nexus } from "~/packages/db/schema";
 
-export default function Attribution(props: {
-  id: string;
-  creator?: Awaited<ReturnType<typeof userToProfile>>;
-}) {
+export default function Attribution(props: { id: string; creator?: Nexus }) {
   return (
     <Link
-      href={`/creations/${props.id}`}
+      href={`/creations/${props.id.substring(0, 10)}`}
       className="relative rounded-md w-full h-full flex drop-shadow-lg overflow-hidden bg-gradient-to-br from-[#F3B5FD] to-[#F66FD0] group/tag text-white font-semibold items-center"
     >
       {props.creator ? (
         <>
           <img
-            src={props.creator.pfp}
+            src={props.creator.image}
             draggable={false}
             className="h-full select-none"
           />

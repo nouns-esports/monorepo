@@ -12,7 +12,7 @@ export default function TextArea(props: {
         placeholder={props.placeholder}
         value={props.value}
         onChange={(e) => props.onChange?.(e.target.value)}
-        className="bg-grey-800 rounded-xl text-white placeholder-grey-400 py-2 px-3"
+        className="bg-grey-800 rounded-xl text-white placeholder-grey-400 py-2 px-3 outline-none custom-scrollbar"
         rows={props.lines ?? 4}
       />
     </div>

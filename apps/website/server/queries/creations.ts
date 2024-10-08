@@ -1,13 +1,14 @@
 import { unstable_cache as cache } from "next/cache";
 import { desc, eq, like, or } from "drizzle-orm";
 import { db, creations } from "~/packages/db/schema";
-import { getUser } from "./users";
-import { userToProfile } from "@/utils/userToProfile";
 
 export const getCreation = cache(
   async (input: { id: string }) => {
     return db.query.creations.findFirst({
       where: or(eq(creations.id, input.id), like(creations.id, `${input.id}%`)),
+      with: {
+        creator: true,
+      },
     });
   },
   ["getCreation"],
@@ -23,21 +24,25 @@ export const getCreations = cache(
 );
 
 export const getCreator = cache(
-  async (input: { creationId: string }) => {
+  async (input: { creation: string }) => {
     const creation = await db.query.creations.findFirst({
       where: or(
-        eq(creations.id, input.creationId),
-        like(creations.id, `${input.creationId}%`)
+        eq(creations.id, input.creation),
+        like(creations.id, `${input.creation}%`)
       ),
+      with: {
+        creator: true,
+      },
+      columns: {
+        creator: true,
+      },
     });
 
-    if (!creation?.creator) return;
+    if (!creation?.creator) {
+      return;
+    }
 
-    const user = await getUser({ id: creation.creator });
-
-    if (!user) return;
-
-    return userToProfile(user);
+    return creation.creator;
   },
   ["getCreator"],
   { tags: ["getCreator"], revalidate: 60 * 10 }

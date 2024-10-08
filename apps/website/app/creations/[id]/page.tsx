@@ -1,8 +1,5 @@
-import Button from "@/components/Button";
 import Link from "@/components/Link";
 import { getCreation } from "@/server/queries/creations";
-import { getUser } from "@/server/queries/users";
-import { userToProfile } from "@/utils/userToProfile";
 import { ArrowRight } from "lucide-react";
 import { notFound } from "next/navigation";
 import { TwitterLogo } from "phosphor-react-sc";
@@ -15,12 +12,6 @@ export default async function Creation(props: { params: { id: string } }) {
     notFound();
   }
 
-  const creator = creation.creator
-    ? await getUser({ id: creation.creator })
-    : undefined;
-
-  const creatorProfile = creator ? userToProfile(creator) : undefined;
-
   return (
     <div className="flex items-center justify-center relative h-screen w-full mb-8 max-sm:mb-0 overflow-hidden">
       <div className="absolute z-10 -bottom-72 left-0 h-72 w-[calc(100vw_+_8rem)] bg-gradient-to-b from-transparent to-black -mx-32 max-2xl:-mx-16 max-xl:-mx-8 max-sm:-mx-4" />
@@ -30,7 +21,7 @@ export default async function Creation(props: { params: { id: string } }) {
         className="w-full fixed top-0 left-0 blur-2xl h-full brightness-75 select-none object-cover bg-black"
       />
       <div className="flex flex-col justify-center items-center gap-12 max-sm:gap-8 relative z-10 h-[60%] px-32 max-xl:px-16 max-sm:px-8">
-        {creatorProfile ? (
+        {creation.creator ? (
           <div className="flex flex-col gap-4">
             <h1 className="font-luckiest-guy text-white text-5xl text-center max-sm:text-4xl">
               {creation.title ?? "Untitled"}
@@ -39,14 +30,17 @@ export default async function Creation(props: { params: { id: string } }) {
               <p>by</p>
               <div className="flex items-center gap-2">
                 <img
-                  src={creatorProfile.pfp}
+                  src={creation.creator.image}
                   className="w-8 h-8 rounded-full"
                 />
-                {creatorProfile.name}
+                {creation.creator.name}
               </div>
               <div className="flex gap-3 items-center">
-                {creatorProfile.socials.twitter ? (
-                  <Link href={creatorProfile.socials.twitter} newTab>
+                {creation.creator.twitter ? (
+                  <Link
+                    href={`https://twitter.com/${creation.creator.twitter}`}
+                    newTab
+                  >
                     <TwitterLogo
                       className="w-6 h-6 text-white hover:opacity-80 transition-opacity"
                       weight="fill"
@@ -55,8 +49,11 @@ export default async function Creation(props: { params: { id: string } }) {
                 ) : (
                   ""
                 )}
-                {creatorProfile.socials.farcaster ? (
-                  <Link href={creatorProfile.socials.farcaster} newTab>
+                {creation.creator.farcaster ? (
+                  <Link
+                    href={`https://warpcast.com/${creation.creator.farcaster}`}
+                    newTab
+                  >
                     <img
                       src="/farcaster.svg"
                       className="w-5 h-5  hover:opacity-80 transition-opacity"
@@ -79,7 +76,7 @@ export default async function Creation(props: { params: { id: string } }) {
             creation.width / creation.height > 1.3 ? "w-full" : "h-full"
           )}
         />
-        {!creator ? (
+        {!creation.creator ? (
           <div className="flex w-full justify-center">
             <Link
               newTab

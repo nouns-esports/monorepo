@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import TextInput from "../form/TextInput";
 import Button from "../Button";
 import { createProposal } from "@/server/mutations/createProposal";
@@ -9,24 +9,31 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import LimitMeter from "../LimitMeter";
 import { updateProposal } from "@/server/mutations/updateProposal";
-import { getProposal } from "@/server/queries/proposals";
 import dynamic from "next/dynamic";
 import Shimmer from "../Shimmer";
+import { useAction } from "next-safe-action/hooks";
+import type { getRoundWithProposal } from "@/server/queries/rounds";
+import { pinImage } from "@/server/mutations/pinImage";
+import { Edit2, Plus } from "lucide-react";
 
 const Markdown = dynamic(() => import("../lexical/Markdown"), {
   ssr: false,
   loading: () => <Shimmer />,
 });
 
-export default function MarkdownEditor(props: {
-  round: string;
-  user?: string;
-  proposal?: Awaited<ReturnType<typeof getProposal>>;
+export default function ProposalEditor(props: {
+  round: NonNullable<Awaited<ReturnType<typeof getRoundWithProposal>>>;
+  user: string;
 }) {
-  const [title, setTitle] = useState(props.proposal?.title ?? "");
+  const proposal =
+    props.round.proposals.length > 0 ? props.round.proposals[0] : undefined;
+
+  const [title, setTitle] = useState(proposal?.title ?? "");
+
+  const [image, setImage] = useState(proposal?.image);
 
   const [editorState, setEditorState] = useState(
-    props.proposal?.content ??
+    proposal?.content ??
       JSON.stringify({
         children: [
           {
@@ -47,13 +54,12 @@ export default function MarkdownEditor(props: {
       })
   );
 
-  const [parsedMarkdown, setParsedMarkdown] = useState(
-    props.proposal?.content ?? ""
-  );
+  const [parsedMarkdown, setParsedMarkdown] = useState(proposal?.content ?? "");
 
   const router = useRouter();
 
-  const [loading, setLoading] = useState(false);
+  const createProposalAction = useAction(createProposal);
+  const updateProposalAction = useAction(updateProposal);
 
   return (
     <div className="flex flex-col gap-8">
@@ -74,6 +80,53 @@ export default function MarkdownEditor(props: {
           }}
           value={title}
         />
+      </div>
+      <div className="flex flex-col gap-3">
+        <div className="flex items-center justify-between mt-4">
+          <h2 className="font-luckiest-guy text-white text-2xl">Cover Image</h2>
+        </div>
+        {image ? (
+          <img
+            src={image}
+            className="h-32 w-fit aspect-video object-cover rounded-xl"
+          />
+        ) : (
+          ""
+        )}
+        <label className="text-red flex items-center gap-1 hover:opacity-80 cursor-pointer transition-opacity">
+          {image ? "Change" : "Upload"} image
+          {image ? <Edit2 className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+          <input
+            type="file"
+            accept="image/*"
+            onChange={async (event) => {
+              const files = event.target.files;
+
+              if (files && files.length > 0) {
+                const file = files[0];
+
+                // 25 MB in bytes
+                if (file.size > 25 * 1024 * 1024) {
+                  return toast.error("Image size should be less than 25 MB");
+                }
+
+                const formData = new FormData();
+                formData.append("file", file);
+
+                const hash = await pinImage({ formData });
+
+                if (!hash?.data || hash?.serverError) {
+                  return toast.error("Could not upload image");
+                }
+
+                setImage(`https://ipfs.nouns.gg/ipfs/${hash.data}`);
+
+                event.target.value = "";
+              }
+            }}
+            style={{ display: "none" }}
+          />
+        </label>
       </div>
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
@@ -111,63 +164,49 @@ export default function MarkdownEditor(props: {
           </p>
         </div>
         <Button
-          loading={loading}
+          loading={
+            createProposalAction.isPending || updateProposalAction.isPending
+          }
           disabled={
-            loading ||
+            createProposalAction.isPending ||
+            updateProposalAction.isPending ||
             title.length < 15 ||
             parsedMarkdown.split(" ").length - 1 < 150
           }
           onClick={async () => {
             if (!props.user) return;
 
-            if (props.proposal) {
-              setLoading(true);
-              toast.promise(
-                updateProposal({
-                  user: props.user,
-                  round: props.round,
-                  title,
-                  content: editorState,
-                }),
-                {
-                  loading: "Updating proposal",
-                  success: () => {
-                    router.push(`/rounds/${props.round}`);
-                    return "Successfully updated proposal";
-                  },
-                  error: () => {
-                    setLoading(false);
-                    return "Failed to update proposal";
-                  },
-                }
-              );
-
-              return;
-            }
-
-            setLoading(true);
-            toast.promise(
-              createProposal({
+            if (proposal) {
+              const result = await updateProposalAction.executeAsync({
+                round: props.round.id,
                 title,
                 content: editorState,
-                round: props.round,
-                user: props.user,
-              }),
-              {
-                loading: "Creating proposal",
-                success: () => {
-                  router.push(`/rounds/${props.round}`);
-                  return "Successfully created proposal";
-                },
-                error: () => {
-                  setLoading(false);
-                  return "Failed to create proposal";
-                },
+              });
+
+              if (result?.serverError) {
+                return toast.error(result.serverError);
               }
-            );
+
+              toast.success("Successfully updated proposal");
+              return router.push(`/rounds/${props.round.id}`);
+            }
+
+            const result = await createProposalAction.executeAsync({
+              title,
+              content: editorState,
+              round: props.round.id,
+              image: image ?? undefined,
+            });
+
+            if (result?.serverError) {
+              return toast.error(result.serverError);
+            }
+
+            toast.success("Successfully created proposal");
+            return router.push(`/rounds/${props.round.id}`);
           }}
         >
-          {props.proposal ? "Update Proposal" : "Create Proposal"}
+          {proposal ? "Update Proposal" : "Create Proposal"}
         </Button>
       </div>
     </div>

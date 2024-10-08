@@ -9,12 +9,14 @@ import {
   Trophy,
   Diamond,
   Handshake,
+  Gem,
+  Calendar,
 } from "lucide-react";
 import Banner from "./Banner";
 import { getCommunities } from "@/server/queries/communities";
 import { getRosters } from "@/server/queries/rosters";
 import Menu from "./Menu";
-import { getNexus } from "@/server/queries/nexus";
+import { CurrencyEth } from "phosphor-react-sc";
 
 export default async function Header() {
   const user = await getAuthenticatedUser();
@@ -65,6 +67,18 @@ export default async function Header() {
                           </p>
                         </div>
                       </Link>
+                      {/* <Link
+                        href="/events"
+                        className="text-nowrap hover:bg-grey-500 transition-colors py-1.5 px-3 rounded-lg flex gap-4 items-center"
+                      >
+                        <div className="rounded-md w-10 h-10 flex overflow-hidden bg-green text-white items-center">
+                          <Calendar className="w-full h-full p-2" />
+                        </div>
+                        <div>
+                          <p className="font-bebas-neue text-lg">Events</p>
+                          <p className="text-grey-200">View upcoming events</p>
+                        </div>
+                      </Link> */}
                       <Link
                         href="/partners"
                         className="text-nowrap hover:bg-grey-500 transition-colors py-1.5 px-3 rounded-lg flex gap-4 items-center"
@@ -126,6 +140,20 @@ export default async function Header() {
                             <p className="text-grey-200">
                               Govern who and what we fund
                             </p>
+                          </div>
+                        </Link>
+                      </li>
+                      <li className="text-nowrap hover:bg-grey-500 transition-colors py-1.5 px-3 rounded-lg">
+                        <Link
+                          href="/quests"
+                          className="flex gap-4 items-center"
+                        >
+                          <div className="rounded-md w-10 h-10 flex overflow-hidden bg-blue-500 text-white items-center">
+                            <Gem className="w-full h-full p-2" />
+                          </div>
+                          <div>
+                            <p className="font-bebas-neue text-lg">Quests</p>
+                            <p className="text-grey-200">Level up your nexus</p>
                           </div>
                         </Link>
                       </li>
@@ -196,8 +224,8 @@ export default async function Header() {
                 </ul>
               </nav>
             </div>
-            <div className="pointer-events-auto flex items-center relative z-[60]">
-              <SignInButton user={user} nexus={nexus} />
+            <div className="pointer-events-auto flex gap-8 items-center relative z-[60]">
+              <SignInButton user={user} />
             </div>
           </div>
         </div>

@@ -1,1 +1,0 @@
-ALTER TABLE "proposals" ADD COLUMN "hidden" boolean DEFAULT false NOT NULL;

@@ -1,123 +1,124 @@
-import { unstable_cache as cache } from "next/cache";
-import { privyClient } from "@/server/clients/privy";
-import type { User as PrivyUser } from "@privy-io/server-auth";
-import { cookies } from "next/headers";
 import * as jose from "jose";
 import { env } from "~/env";
-
-export const getUser = cache(
-  async (input: { id: string }) => {
-    try {
-      let privyUser: PrivyUser | null;
-
-      if (input.id.startsWith("0x")) {
-        privyUser = await privyClient.getUserByWalletAddress(input.id);
-      } else {
-        privyUser = await privyClient.getUser(input.id);
-      }
-
-      if (!privyUser) return;
-
-      return privyUser;
-    } catch (e) {}
-  },
-  ["users"],
-  { tags: ["users"], revalidate: 60 * 15 }
-);
+import { createPublicKey } from "crypto";
+import { eq, isNotNull, or } from "drizzle-orm";
+import { db, nexus, xp } from "~/packages/db/schema";
+import { unstable_cache as cache } from "next/cache";
+import { cookies } from "next/headers";
 
 export async function getAuthenticatedUser() {
-  const session = cookies().get("privy-token")?.value;
+  const token = cookies().get("privy-id-token");
+
+  if (!token) return;
 
   try {
-    if (!session) return;
-
-    const user = await privyClient.verifyAuthToken(session);
-
-    return privyClient.getUser(user.userId);
-  } catch (error) {}
-}
-
-async function getNewAuthenticaedUser() {
-  const identityToken = cookies().get("privy-id-token")?.value;
-
-  if (!identityToken) return;
-
-  try {
-    const verificationKey = await jose.importSPKI(
-      env.PRIVY_VERIFICATION_KEY,
-      "ES256"
-    );
-
     const { payload, protectedHeader } = await jose.jwtVerify(
-      identityToken,
-      verificationKey,
+      token.value,
+      createPublicKey(env.PRIVY_VERIFICATION_KEY),
       {
         issuer: "privy.io",
         audience: env.NEXT_PUBLIC_PRIVY_APP_ID,
       }
     );
 
-    if (payload) {
-      let discord:
-        | {
-            type: "discord_oauth";
-            subject: string;
-            username: string;
-          }
-        | undefined;
+    if (!payload.sub) return;
 
-      let twitter:
-        | {
-            type: "twitter_oauth";
-            subject: string;
-            username: string;
-          }
-        | undefined;
-
-      let farcaster:
-        | {
-            type: "farcaster";
-            fid: number;
-            username: string;
-          }
-        | undefined;
-
-      let wallet:
-        | {
-            type: "wallet";
-            address: string;
-            chain_type: string;
-            wallet_client_type: string;
-          }
-        | undefined;
-
-      for (const account of payload.linked_accounts as any) {
-        if (account.type === "discord_oauth") {
-          discord = account;
+    let discord:
+      | {
+          subject: string;
+          username: string;
         }
+      | undefined;
 
-        if (account.type === "twitter_oauth") {
-          twitter = account;
+    let twitter:
+      | {
+          subject: string;
+          username: string;
         }
+      | undefined;
 
-        if (account.type === "farcaster") {
-          farcaster = account;
+    let farcaster:
+      | {
+          fid: number;
+          username: string;
         }
+      | undefined;
 
-        if (account.type === "wallet") {
-          wallet = account;
+    let wallet:
+      | {
+          address: string;
+          chain_type: string;
+          wallet_client_type: string;
         }
-      }
+      | undefined;
 
-      return {
-        id: payload.sub,
-        discord,
-        twitter,
-        farcaster,
-        wallet,
-      };
+    for (const { type, ...account } of JSON.parse(
+      payload.linked_accounts as any
+    )) {
+      if (type === "discord_oauth") discord = account;
+      if (type === "twitter_oauth") twitter = account;
+      if (type === "farcaster") farcaster = account;
+      if (type === "wallet") wallet = account;
     }
-  } catch (error) {
-    console.error(error);
+
+    return {
+      id: payload.sub,
+      discord,
+      twitter,
+      farcaster,
+      wallet,
+      nexus: await db.query.nexus.findFirst({
+        where: eq(nexus.id, payload.sub),
+        with: {
+          rank: true,
+        },
+      }),
+    };
+  } catch (e) {
+    console.error(e);
   }
 }
+
+export type AuthenticatedUser = NonNullable<
+  Awaited<ReturnType<typeof getAuthenticatedUser>>
+>;
+
+export const getUser = cache(
+  async (input: { user: string }) => {
+    //////
+    return db.query.nexus.findFirst({
+      where: or(
+        eq(nexus.id, input.user),
+        eq(nexus.discord, input.user.split("#")[0])
+      ),
+      with: {
+        rank: true,
+      },
+    });
+  },
+  ["getUser"],
+  { tags: ["getUser"], revalidate: 60 * 10 }
+);
+
+export const getUserStats = cache(
+  async (input: { user: string }) => {
+    const user = await db.query.nexus.findFirst({
+      where: eq(nexus.id, input.user),
+      with: {
+        proposals: true,
+        xpRecords: {
+          where: isNotNull(xp.quest),
+        },
+        votes: true,
+      },
+    });
+
+    return {
+      proposalsCreated: user?.proposals.length ?? 0,
+      questsCompleted: user?.xpRecords.length ?? 0,
+      votesCast: user?.votes.length ?? 0,
+    };
+  },
+  ["getUserStats"],
+  { tags: ["getUserStats"], revalidate: 60 * 10 }
+);

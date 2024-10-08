@@ -1,1 +1,0 @@
-ALTER TABLE "rounds" RENAME COLUMN "description" TO "content";
