@@ -18,6 +18,7 @@
     "flagHardPotentialBots": "cross-env NODE_ENV=production bun ./scripts/botting/flagHardPotentialBots.ts",
     "explorerRoles": "cross-env NODE_ENV=production bun ./scripts/explorerRoles.ts",
     "getWalletAddresses": "cross-env NODE_ENV=production bun ./scripts/getWalletAddresses.ts",
-    "updateNexus": "cross-env NODE_ENV=production bun ./scripts/updateNexus.ts"
+    "updateNexus": "cross-env NODE_ENV=production bun ./scripts/updateNexus.ts",
+    "getGenesis": "cross-env NODE_ENV=production bun ./scripts/getGenesis.ts"
   }
 }
