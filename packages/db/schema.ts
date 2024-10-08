@@ -22,6 +22,7 @@ export const links = pgTable("links", {
 export const snapshotTypes = {
   "discord-call": "Attended a community Discord call",
   "visit-link": "",
+  genesis: "Were included in the Genesis snapshot",
 } as const;
 
 export const snapshots = pgTable("snapshots", {
@@ -33,7 +34,7 @@ export const snapshots = pgTable("snapshots", {
       ...Array<keyof typeof snapshotTypes>,
     ],
   }).notNull(),
-  tag: text("tag").notNull(),
+  tag: text("tag"),
   timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
 });
 
@@ -154,8 +155,7 @@ export const rounds = pgTable("rounds", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
   image: text("image").notNull(),
-  banner: text("banner").notNull(),
-  community: text("community").notNull().default(""),
+  community: text("community").notNull(),
   event: text("event"),
   type: text("type", { enum: ["markdown", "video", "image"] })
     .notNull()
@@ -261,7 +261,6 @@ export const nexus = pgTable("nexus", {
   twitter: text("twitter"),
   discord: text("discord"),
   farcaster: text("farcaster"),
-  // use webhooks to update this
 });
 
 export const nexusRelations = relations(nexus, ({ one, many }) => ({
@@ -295,7 +294,7 @@ export const ranks = pgTable("ranks", {
   image: text("image").notNull(),
   color: text("color").notNull().default(""),
   place: smallint("place").notNull(),
-  percentile: numeric("percentile", { precision: 3, scale: 2 }).notNull(), // ex: 0.30 === 30%
+  percentile: numeric("percentile", { precision: 4, scale: 3 }).notNull(), // ex: 0.01 === 1%, 0.001 === 0.1%, 0.0001 === 0.01%
   season: integer("season").notNull(),
   votes: smallint("votes").notNull(),
 });
@@ -435,11 +434,13 @@ export const creations = pgTable("creations", {
   creator: text("creator"),
   type: text("type", {
     enum: ["art", "photograph", "video", "emote", "sticker", "gif"],
-  }).notNull(),
+  })
+    .notNull()
+    .default("art"),
   title: text("title"),
   createdAt: timestamp("created_at", { mode: "date" }),
   original: text("original"),
-  community: text("community").notNull().default(""),
+  community: text("community").notNull(),
   width: integer("width").notNull(),
   height: integer("height").notNull(),
   // moment: text("moment")
