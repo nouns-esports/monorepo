@@ -63,12 +63,21 @@ export const refreshRankings = createCommand({
       throw new Error("Season not found");
     }
 
-    const nexusUsers = new Set(currentSeason.xp.map((xp) => xp.user.id));
+    const nexusUsers = new Set(
+      currentSeason.xp.map((xp) => ({
+        id: xp.user.id,
+        discord: xp.user.discord,
+      }))
+    );
 
-    const users = Array.from(nexusUsers).map((user) => ({
-      id: user,
-      discord: guildMembers.find,
-    }));
+    const users = Array.from(nexusUsers)
+      .map((user) => ({
+        id: user.id,
+        discord: guildMembers.find(
+          (member) => member.user.username === user.discord
+        ),
+      }))
+      .filter((user) => user.discord);
 
     let userXP: Record<string, number | undefined> = {};
 
