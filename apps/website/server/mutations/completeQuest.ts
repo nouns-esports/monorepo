@@ -101,7 +101,7 @@ export const completeQuest = onlyRanked
         user: ctx.user.id,
         amount: quest.xp,
         timestamp: now,
-        season: currentSeason.id.toString(),
+        season: currentSeason.id,
       });
 
       await tx
