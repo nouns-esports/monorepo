@@ -31,8 +31,14 @@ export const visitLink = createAction(async (actionInputs) => {
       ),
       video: (
         <p>
-          Watch {!actionInputs?.name ? "this " : ""}
-          <span className="text-red">{actionInputs?.name ?? "video"}</span>
+          Watch {!actionInputs.name ? "this " : ""}
+          <span className="text-red">{actionInputs.name ?? "video"}</span>
+        </p>
+      ),
+      article: (
+        <p>
+          Read {!actionInputs.name ? "this " : ""}
+          <span className="text-red">{actionInputs.name ?? "article"}</span>
         </p>
       ),
       stream: (

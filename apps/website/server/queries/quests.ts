@@ -102,7 +102,7 @@ export const getQuests = cache(
 
 export const getQuest = cache(
   async (input: { id: string; user?: string }) => {
-    ////////////
+    ////////////////
     return db.query.quests.findFirst({
       where: eq(quests.id, input.id),
       with: {
