@@ -1,3 +1,4 @@
+import { eq } from "drizzle-orm";
 import { db, nexus, snapshots, xp } from "~/packages/db/schema";
 
 const users = [
@@ -30176,6 +30177,13 @@ await db.transaction(async (tx) => {
       season: 1,
       snapshot: snapshot[0].id,
     } as any);
+
+    await tx
+      .update(nexus)
+      .set({
+        xp: earnedXP,
+      })
+      .where(eq(nexus.id, scoredUser.id));
   }
 
   for (let i = 0; i < challengers.length; i++) {
@@ -30200,6 +30208,13 @@ await db.transaction(async (tx) => {
       season: 1,
       snapshot: snapshot[0].id,
     } as any);
+
+    await tx
+      .update(nexus)
+      .set({
+        xp: earnedXP,
+      })
+      .where(eq(nexus.id, scoredUser.id));
   }
 
   for (let i = 0; i < champions.length; i++) {
@@ -30224,5 +30239,12 @@ await db.transaction(async (tx) => {
       season: 1,
       snapshot: snapshot[0].id,
     } as any);
+
+    await tx
+      .update(nexus)
+      .set({
+        xp: earnedXP,
+      })
+      .where(eq(nexus.id, scoredUser.id));
   }
 });

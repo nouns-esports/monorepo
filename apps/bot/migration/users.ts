@@ -7,6 +7,7 @@ const nexusUsers = await db.query.nexus.findMany();
 
 await db.transaction(async (tx) => {
   for (const nexusUser of nexusUsers) {
+    console.log("Migrating user", nexusUser.id);
     const user = users.find((user) => user.id === nexusUser.id);
 
     if (!user) continue;
