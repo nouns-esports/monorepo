@@ -28,6 +28,7 @@ import { useAction } from "next-safe-action/hooks";
 import type { AuthenticatedUser } from "@/server/queries/users";
 import { createNexus } from "@/server/mutations/createNexus";
 import { useRouter, useSearchParams } from "next/navigation";
+import Countdown from "../Countdown";
 
 export default function SignInModal(props: { user?: AuthenticatedUser }) {
   const [returningUser, setReturningUser] = useState(true);
@@ -54,7 +55,8 @@ export default function SignInModal(props: { user?: AuthenticatedUser }) {
 
   const { isOpen, close, open } = useModal("sign-in");
 
-  const { sendCode, loginWithCode } = useLoginWithEmail();
+  const { sendCode, loginWithCode, state } = useLoginWithEmail();
+  const [emailCooldown, setEmailCooldown] = useState(new Date());
   const { loading, initOAuth } = useLoginWithOAuth();
 
   const { user } = usePrivy();
@@ -132,7 +134,8 @@ export default function SignInModal(props: { user?: AuthenticatedUser }) {
                         e.preventDefault();
                         if (email.length > 0) {
                           setSection("email");
-                          // sendCode({ email });
+                          sendCode({ email });
+                          setEmailCooldown(new Date(Date.now() + 1000 * 30));
                         }
                       }}
                       className="flex items-center gap-2 w-full text-white font-semibold border border-white/20 rounded-lg p-2.5"
@@ -146,7 +149,8 @@ export default function SignInModal(props: { user?: AuthenticatedUser }) {
                         onKeyDown={(e) => {
                           if (e.key === "Enter" && email.length > 0) {
                             setSection("email");
-                            // sendCode({ email });
+                            sendCode({ email });
+                            setEmailCooldown(new Date(Date.now() + 1000 * 30));
                           }
                         }}
                         value={email}
@@ -343,11 +347,36 @@ export default function SignInModal(props: { user?: AuthenticatedUser }) {
                     />
                   </div>
                   <button
+                    disabled={
+                      Object.values(emailCode).every((code) => !code) &&
+                      emailCooldown > new Date()
+                    }
                     onClick={() => {
-                      // loginWithCode({ code: Object.values(emailCode).join("") });
+                      const confirm = Object.values(emailCode).every(
+                        (code) => !!code
+                      );
+
+                      if (confirm) {
+                        return loginWithCode({
+                          code: Object.values(emailCode).join(""),
+                        });
+                      }
+
+                      if (emailCooldown < new Date()) {
+                        sendCode({ email });
+                        setEmailCooldown(new Date(Date.now() + 1000 * 30));
+                      }
                     }}
-                    className="flex justify-center items-center gap-2 w-full text-black bg-white hover:bg-white/70 font-semibold rounded-lg p-2.5 transition-colors"
+                    className="flex disabled:opacity-70 disabled:pointer-events-none justify-center items-center gap-2 w-full text-black bg-white hover:bg-white/70 font-semibold rounded-lg p-2.5 transition-colors"
                   >
+                    {state.status === "submitting-code" ? (
+                      <img
+                        src="/spinner.svg"
+                        className="h-[18px] animate-spin"
+                      />
+                    ) : (
+                      ""
+                    )}
                     {Object.values(emailCode).every((code) => !!code)
                       ? "Confirm"
                       : "Resend"}
@@ -357,6 +386,13 @@ export default function SignInModal(props: { user?: AuthenticatedUser }) {
                       <RefreshCcw className="w-4 h-4" />
                     )}
                   </button>
+                  {emailCooldown > new Date() && (
+                    <p className="w-full items-center justify-center gap-1 flex text-white text-sm">
+                      <span>Resend in</span>
+
+                      <Countdown date={emailCooldown} onlySeconds />
+                    </p>
+                  )}
                 </div>
               ),
               profile: props.user && (
