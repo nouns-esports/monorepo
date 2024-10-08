@@ -113,6 +113,27 @@
       "when": 1728364191029,
       "tag": "0015_silky_radioactive_man",
       "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1728374317337,
+      "tag": "0016_sloppy_champions",
+      "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1728374335618,
+      "tag": "0017_careless_odin",
+      "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1728374345399,
+      "tag": "0018_wet_mysterio",
+      "breakpoints": true
     }
   ]
 }

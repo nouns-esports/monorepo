@@ -26,6 +26,7 @@ export const getCurrentRankings = cache(
         input?.user ? eq(rankings.user, input.user) : undefined
       ),
       orderBy: desc(rankings.xp),
+      limit: 100,
       with: {
         rank: true,
         user: true,

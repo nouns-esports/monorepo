@@ -8,14 +8,16 @@ import { serve } from "@hono/node-server";
 import { createSnapshot } from "./commands/createSnapshot";
 import { refreshRankings } from "./commands/refreshRankings";
 import type { createCommand } from "./createCommand";
+import { refreshRoles } from "./commands/refreshRoles";
 
 const commands: Record<string, ReturnType<typeof createCommand>> = {
   "create-snapshot": createSnapshot,
   "refresh-rankings": refreshRankings,
+  "refresh-roles": refreshRoles,
 };
 
-const app = new Hono();
-serve({ fetch: app.fetch, port: 8787 });
+// const app = new Hono();
+// serve({ fetch: app.fetch, port: 8787 });
 
 export const discordClient = new Client({
   intents: ["Guilds", "GuildMessages", "MessageContent", "GuildMembers"],
@@ -99,7 +101,7 @@ discordClient.on("interactionCreate", async (interaction) => {
       env.NEXT_PUBLIC_ENVIRONMENT === "development"
         ? "1253532214784819240" // Tester Role
         : "1186404392346325173" // Staff Role
-    )?.color;
+    );
 
     if (commands[interaction.commandName]) {
       const command = commands[interaction.commandName];

@@ -350,7 +350,7 @@ export const xp = pgTable("xp", {
   user: text("user").notNull(),
   amount: integer("amount").notNull(),
   timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
-  season: text("season").notNull(),
+  season: integer("season").notNull(),
   quest: text("quest"),
   snapshot: text("snapshot"),
   // achievement: text("achievement"),

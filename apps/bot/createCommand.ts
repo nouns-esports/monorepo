@@ -36,6 +36,7 @@ export function createCommand(command: {
       try {
         message = await command.execute(interaction);
       } catch (e) {
+        console.log(e);
         if (e instanceof Error) {
           return {
             message: e.message,
