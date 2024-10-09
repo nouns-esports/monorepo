@@ -1,9 +1,12 @@
 import QuestCard from "@/components/QuestCard";
 import { getEvent } from "@/server/queries/events";
+import { getAuthenticatedUser } from "@/server/queries/users";
 import { notFound } from "next/navigation";
 
 export default async function EventPage(props: { params: { event: string } }) {
-  const event = await getEvent({ id: props.params.event });
+  const user = await getAuthenticatedUser();
+
+  const event = await getEvent({ id: props.params.event, user: user?.id });
 
   if (!event) {
     return notFound();
