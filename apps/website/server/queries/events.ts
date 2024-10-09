@@ -26,14 +26,22 @@ export const getHighlightedEvent = cache(
 );
 
 export const getEvent = cache(
-  async (input: { id: string }) => {
+  async (input: { id: string; user?: string }) => {
     ////
     return db.query.events.findFirst({
       where: eq(events.id, input.id),
       with: {
         quests: {
           orderBy: [desc(quests.featured), asc(quests.xp)],
-          with: { community: true, completed: true },
+          with: {
+            community: true,
+            completed: input.user
+              ? {
+                  limit: 1,
+                  where: eq(xp.user, input.user),
+                }
+              : undefined,
+          },
         },
         rounds: {
           with: { community: true },
