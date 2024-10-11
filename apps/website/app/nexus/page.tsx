@@ -50,6 +50,13 @@ export default async function NexusPage(props: {
     getUserStats({ user: user.id }),
   ]);
 
+  const now = new Date();
+  const nextUpdate = new Date(now);
+  nextUpdate.setUTCHours(20, 0, 0, 0); // 3pm CST is 8pm UTC
+  if (nextUpdate <= now) {
+    nextUpdate.setDate(nextUpdate.getDate() + 1);
+  }
+
   return (
     <div className="flex flex-col gap-16 pt-32 max-xl:pt-28 max-sm:pt-20 px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
       <div className="flex flex-col gap-8 max-sm:gap-4">
@@ -102,23 +109,7 @@ export default async function NexusPage(props: {
                   <h2 className="">Updates in</h2>
                   <div className="flex items-center gap-2">
                     <p className="text-white">
-                      {new Date() >
-                      new Date(
-                        new Date(
-                          userRankings[userRankings.length - 1].timestamp
-                        ).getTime() +
-                          24 * 60 * 60 * 1000
-                      ) ? (
-                        "Update in progress..."
-                      ) : (
-                        <Countdown
-                          date={
-                            new Date(
-                              userRankings[userRankings.length - 1].timestamp
-                            )
-                          }
-                        />
-                      )}
+                      <Countdown date={nextUpdate} />
                     </p>
                   </div>
                 </div>

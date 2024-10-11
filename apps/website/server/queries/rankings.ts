@@ -1,4 +1,4 @@
-import { asc, desc, eq, lte, or } from "drizzle-orm";
+import { and, asc, desc, eq, lte, or } from "drizzle-orm";
 import { unstable_cache as cache } from "next/cache";
 import { db, rankings, seasons } from "~/packages/db/schema";
 
@@ -19,6 +19,17 @@ export const getCurrentRankings = cache(
     if (!season || season.rankings.length < 1) {
       return [];
     }
+
+    const latestTimestamp = season.rankings[0].timestamp;
+
+    const userRanking = input?.user
+      ? db.query.rankings.findFirst({
+          where: and(
+            eq(rankings.user, input.user),
+            eq(rankings.timestamp, latestTimestamp)
+          ),
+        })
+      : undefined;
 
     return db.query.rankings.findMany({
       where: or(
