@@ -24,12 +24,26 @@ export const refreshRankings = createCommand({
           orderBy: desc(ranks.place),
         },
         xp: true,
+        rankings: {
+          orderBy: desc(rankings.timestamp),
+          limit: 1,
+        },
       },
     });
 
     if (!currentSeason) {
       throw new Error("Season not found");
     }
+
+    const previousLeaderboard = currentSeason.rankings[0]
+      ? await db.query.rankings.findMany({
+          where: eq(
+            rankings.timestamp,
+            new Date(currentSeason.rankings[0].timestamp)
+          ),
+          orderBy: desc(rankings.xp),
+        })
+      : [];
 
     const records: Record<string, number | undefined> = {};
 
@@ -51,6 +65,16 @@ export const refreshRankings = createCommand({
           currentSeason.ranks.find((r) => percentile <= Number(r.percentile)) ??
           currentSeason.ranks[currentSeason.ranks.length - 1];
 
+        let diff = 0;
+
+        const previousRankingIndex = previousLeaderboard.findIndex(
+          (previousRanking) => previousRanking.user === leaderboard[i].user
+        );
+
+        if (previousRankingIndex > -1) {
+          diff = (i - previousRankingIndex) * -1;
+        }
+
         console.log(
           "Refreshing",
           `${i + 1}/${leaderboard.length}`,
@@ -68,6 +92,7 @@ export const refreshRankings = createCommand({
         await tx.insert(rankings).values({
           rank: rank.id,
           timestamp: now,
+          diff,
           season: currentSeason.id,
           user: leaderboard[i].user,
           xp: leaderboard[i].xp,
