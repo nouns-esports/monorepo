@@ -41,5 +41,5 @@ export const getTrendingPosts = cache(
     return filtered;
   },
   ["discussion"],
-  { tags: ["discussion"], revalidate: 60 * 10 }
+  { tags: ["discussion"], revalidate: 60 * 60 * 24 }
 );
