@@ -7,7 +7,7 @@ import { getRound } from "@/server/queries/rounds";
 import { roundState } from "@/utils/roundState";
 import { env } from "~/env";
 import { getUserVotesForRound } from "@/server/queries/votes";
-import { getNexus } from "@/server/queries/nexus";
+import { getUser } from "@/server/queries/users";
 
 const app = new Frog({
   basePath: "/api/frames",
@@ -214,7 +214,7 @@ app.frame("/rounds/:round/votes/:user", async (c) => {
 
 // Add full width banner image to top TODO
 app.image("/rounds/:round/votes/:user/img", async (c) => {
-  const user = await getNexus({ user: c.req.param("user") });
+  const user = await getUser({ user: c.req.param("user") });
 
   if (!user) {
     return c.res({
@@ -251,7 +251,6 @@ app.image("/rounds/:round/votes/:user/img", async (c) => {
     votingStart: round.votingStart,
     end: round.end,
   });
-  //
 
   return c.res({
     headers: {
