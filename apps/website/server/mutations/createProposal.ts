@@ -67,4 +67,5 @@ export const createProposal = onlyUser
     ]);
 
     revalidatePath(`/rounds/${parsedInput.round}`);
+    revalidatePath(`/rounds/${parsedInput.round}/create`);
   });

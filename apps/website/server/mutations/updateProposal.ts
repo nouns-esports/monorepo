@@ -52,4 +52,5 @@ export const updateProposal = onlyUser
       .where(eq(proposals.id, proposal.id));
 
     revalidatePath(`/rounds/${parsedInput.round}`);
+    revalidatePath(`/rounds/${parsedInput.round}/create`);
   });

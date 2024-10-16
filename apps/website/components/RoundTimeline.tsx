@@ -70,7 +70,11 @@ export default function RoundTimeline(props: { round: Round }) {
                 "h-1 absolute",
                 state === "Proposing" ? "bg-blue-700" : "bg-green"
               )}
-            />
+            >
+              {state === "Proposing" ? (
+                <div className="h-3 w-3 rounded-full right-0 absolute -top-1 bg-blue-700" />
+              ) : null}
+            </div>
           ) : (
             ""
           )}
@@ -96,7 +100,11 @@ export default function RoundTimeline(props: { round: Round }) {
                 "absolute h-1",
                 state === "Voting" ? "bg-blue-700" : "bg-green"
               )}
-            />
+            >
+              {state === "Voting" ? (
+                <div className="h-3 w-3 rounded-full right-0 absolute -top-1 bg-blue-700" />
+              ) : null}
+            </div>
           ) : (
             ""
           )}
