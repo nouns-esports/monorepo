@@ -385,7 +385,9 @@ export const rankings = pgTable("rankings", {
   user: text("user").notNull(),
   season: integer("season").notNull(),
   rank: integer("rank").notNull(),
-  xp: integer("xp").notNull().default(0),
+  xp: integer("xp").notNull(),
+  diff: integer("diff").notNull(),
+  position: integer("position").notNull(),
   timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
 });
 

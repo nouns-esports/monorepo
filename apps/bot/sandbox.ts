@@ -9,6 +9,7 @@ const timestamps = await Promise.all(
     "2024-10-11T15:25:57.027Z",
     "2024-10-12T14:38:17.660Z",
     "2024-10-13T14:40:40.478Z",
+    "2024-10-14T21:06:28.374Z",
   ].map(async (timestamp) => {
     return db.query.rankings.findMany({
       where: eq(rankings.timestamp, new Date(timestamp)),
@@ -23,17 +24,6 @@ await db.transaction(async (tx) => {
 
     for (let j = 0; j < rankingsAtTimestamp.length; j++) {
       const ranking = rankingsAtTimestamp[j];
-      let diff = 0;
-
-      if (i > 0) {
-        const previousRankingIndex = timestamps[i - 1].findIndex(
-          (previousRanking) => previousRanking.user === ranking.user
-        );
-
-        if (previousRankingIndex > -1) {
-          diff = (j - previousRankingIndex) * -1;
-        }
-      }
 
       console.log(
         "Leaderboard",
@@ -45,7 +35,7 @@ await db.transaction(async (tx) => {
       await tx
         .update(rankings)
         .set({
-          diff,
+          position: j + 1,
         })
         .where(eq(rankings.id, ranking.id));
     }

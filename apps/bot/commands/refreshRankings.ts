@@ -93,6 +93,7 @@ export const refreshRankings = createCommand({
           rank: rank.id,
           timestamp: now,
           diff,
+          position: i + 1,
           season: currentSeason.id,
           user: leaderboard[i].user,
           xp: leaderboard[i].xp,

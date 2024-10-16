@@ -4,7 +4,7 @@ import { db, rankings, seasons } from "~/packages/db/schema";
 
 export const getCurrentRankings = cache(
   async (input?: { user?: string }) => {
-    //
+    ////
     const season = await db.query.seasons.findFirst({
       orderBy: desc(seasons.start),
       where: lte(seasons.start, new Date()),
@@ -22,27 +22,35 @@ export const getCurrentRankings = cache(
 
     const latestTimestamp = season.rankings[0].timestamp;
 
-    const userRanking = input?.user
-      ? db.query.rankings.findFirst({
-          where: and(
-            eq(rankings.user, input.user),
-            eq(rankings.timestamp, latestTimestamp)
-          ),
-        })
-      : undefined;
+    const [currentRankings, userRanking] = await Promise.all([
+      db.query.rankings.findMany({
+        where: eq(rankings.timestamp, latestTimestamp),
+        orderBy: desc(rankings.xp),
+        limit: 100,
+        with: {
+          rank: true,
+          user: true,
+        },
+      }),
+      input?.user
+        ? db.query.rankings.findFirst({
+            where: and(
+              eq(rankings.user, input.user),
+              eq(rankings.timestamp, latestTimestamp)
+            ),
+            with: {
+              rank: true,
+              user: true,
+            },
+          })
+        : undefined,
+    ]);
 
-    return db.query.rankings.findMany({
-      where: or(
-        eq(rankings.timestamp, season.rankings[0].timestamp),
-        input?.user ? eq(rankings.user, input.user) : undefined
-      ),
-      orderBy: desc(rankings.xp),
-      limit: 100,
-      with: {
-        rank: true,
-        user: true,
-      },
-    });
+    if (!userRanking) {
+      return currentRankings;
+    }
+
+    return [...currentRankings, userRanking].toSorted((a, b) => b.xp - a.xp);
   },
   ["getCurrentRanks"],
   { tags: ["getCurrentRanks"], revalidate: 60 * 10 }

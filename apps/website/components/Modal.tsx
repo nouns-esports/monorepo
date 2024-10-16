@@ -97,8 +97,8 @@ export function Modal(props: {
   const { open, isOpen, close, y } = useModal(props.id);
   const { open: openModals } = useModalState();
 
-  const anyOpen = useMemo(() => {
-    return Object.values(openModals).some((modal) => modal);
+  const openCount = useMemo(() => {
+    return Object.values(openModals).filter((modal) => modal).length;
   }, [openModals]);
 
   const [mounted, setMounted] = useState(false);
@@ -122,7 +122,7 @@ export function Modal(props: {
     const url = new URL(window.location.toString());
 
     if (isOpen) {
-      if (!anyOpen) {
+      if (openCount === 1) {
         const width = root.clientWidth;
         root.classList.add("prevent-scroll");
         root.style.paddingRight = `${root.clientWidth - width}px`;
@@ -132,7 +132,7 @@ export function Modal(props: {
         url.searchParams.set(props.queryParam[0], props.queryParam[1]);
       }
     } else {
-      if (!anyOpen) {
+      if (openCount === 0) {
         root.classList.remove("prevent-scroll");
         root.style.paddingRight = `0px`;
       }

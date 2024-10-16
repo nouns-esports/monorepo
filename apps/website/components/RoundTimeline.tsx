@@ -9,6 +9,11 @@ import { useWindowSize } from "@uidotdev/usehooks";
 import { useMemo } from "react";
 
 export default function RoundTimeline(props: { round: Round }) {
+  const now = new Date();
+  const start = new Date(props.round.start);
+  const votingStart = new Date(props.round.votingStart);
+  const end = new Date(props.round.end ?? Infinity);
+
   const state = roundState({
     start: props.round.start,
     votingStart: props.round.votingStart,
@@ -17,6 +22,16 @@ export default function RoundTimeline(props: { round: Round }) {
 
   const { width } = useWindowSize();
   const short = useMemo(() => !!((width ?? 0) <= 600), [width]);
+
+  const votingProgress =
+    ((now.getTime() - start.getTime()) /
+      (votingStart.getTime() - start.getTime())) *
+    100;
+
+  const endProgress =
+    ((now.getTime() - votingStart.getTime()) /
+      (end.getTime() - votingStart.getTime())) *
+    100;
 
   return (
     <div className="bg-grey-800 w-full gap-2 rounded-xl flex flex-col flex-shrink-0 py-4 px-5 justify-between">
@@ -34,31 +49,66 @@ export default function RoundTimeline(props: { round: Round }) {
         </p>
       </div>
       <div className="flex justify-between items-center w-full">
-        {state === "Upcoming" ? <Active /> : <Completed />}
-        <div
-          className={twMerge(
-            "w-full",
-            state === "Upcoming"
-              ? "border-2 border-dotted border-grey-500"
-              : "h-1 bg-green"
+        {
+          {
+            Upcoming: <Upcoming />,
+            Proposing: <Active />,
+            Voting: <Completed />,
+            Ended: <Completed />,
+          }[state]
+        }
+        <div className="h-1 w-full relative bg-[repeating-linear-gradient(to_right,transparent,transparent_2px,#333333_2px,#333333_4px)]">
+          {state !== "Upcoming" ? (
+            <div
+              style={{
+                width:
+                  state === "Proposing"
+                    ? `${votingProgress > 100 ? 100 : votingProgress}%`
+                    : "100%",
+              }}
+              className={twMerge(
+                "h-1 absolute",
+                state === "Proposing" ? "bg-blue-700" : "bg-green"
+              )}
+            />
+          ) : (
+            ""
           )}
-        />
-        {state === "Upcoming" || state === "Proposing" ? (
-          <Upcoming />
-        ) : state === "Voting" ? (
-          <Active />
-        ) : (
-          <Completed />
-        )}
-        <div
-          className={twMerge(
-            "w-full",
-            state === "Ended"
-              ? "h-1 bg-green"
-              : "border-2 border-dotted border-grey-500"
+        </div>
+        {
+          {
+            Upcoming: <Upcoming />,
+            Proposing: <Upcoming />,
+            Voting: <Active />,
+            Ended: <Completed />,
+          }[state]
+        }
+        <div className="h-1 w-full relative bg-[repeating-linear-gradient(to_right,transparent,transparent_2px,#333333_2px,#333333_4px)]">
+          {state === "Voting" || state === "Ended" ? (
+            <div
+              style={{
+                width:
+                  state === "Voting"
+                    ? `${endProgress > 100 ? 100 : endProgress}%`
+                    : "100%",
+              }}
+              className={twMerge(
+                "absolute h-1",
+                state === "Voting" ? "bg-blue-700" : "bg-green"
+              )}
+            />
+          ) : (
+            ""
           )}
-        />
-        {state === "Ended" ? <Completed /> : <Upcoming />}
+        </div>
+        {
+          {
+            Upcoming: <Upcoming />,
+            Proposing: <Upcoming />,
+            Voting: <Upcoming />,
+            Ended: <Completed />,
+          }[state]
+        }
       </div>
       <div className="flex items-center w-full">
         <p className="w-full whitespace-nowrap">

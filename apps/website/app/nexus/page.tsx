@@ -16,6 +16,7 @@ import { ToggleModal } from "@/components/Modal";
 import SettingsModal from "@/components/modals/SettingsModal";
 import { Level } from "@/components/Level";
 import SignInButton from "@/components/SignInButton";
+import { CaretDown, CaretUp } from "phosphor-react-sc";
 
 export default async function NexusPage(props: {
   searchParams: {
@@ -154,7 +155,7 @@ export default async function NexusPage(props: {
                 /> */}
             </div>
             <div className="relative flex flex-col gap-2 overflow-y-auto custom-scrollbar">
-              {rankings.map((ranking, index) => {
+              {rankings.map((ranking) => {
                 if (!ranking.user) return;
                 if (!ranking.rank) return;
 
@@ -169,7 +170,7 @@ export default async function NexusPage(props: {
                     )}
                   >
                     <div className="flex gap-4 items-center">
-                      <p className="text-white w-6">{index + 1}</p>
+                      <p className="text-white w-6">{ranking.position}</p>
                       <div className="flex gap-2 items-center">
                         <img
                           src={ranking.user.image}
@@ -178,11 +179,32 @@ export default async function NexusPage(props: {
                         <p className="text-white">{ranking.user.name}</p>
                       </div>
                     </div>
-                    <img
-                      title={ranking.rank.name}
-                      className="w-6 h-6 object-contain"
-                      src={ranking.rank.image}
-                    />
+                    <div className="flex gap-3 items-center">
+                      {ranking.diff !== 0 ? (
+                        <div
+                          className={twMerge(
+                            "flex items-center gap-1",
+                            ranking.user.id === user.id
+                              ? "text-white"
+                              : ranking.diff > 0
+                                ? "text-green"
+                                : "text-red"
+                          )}
+                        >
+                          {ranking.diff > 0 ? (
+                            <CaretUp className="w-4 h-4" weight="fill" />
+                          ) : (
+                            <CaretDown className="w-4 h-4" weight="fill" />
+                          )}
+                          {Math.abs(ranking.diff)}
+                        </div>
+                      ) : null}
+                      <img
+                        title={ranking.rank.name}
+                        className="w-6 h-6 object-contain"
+                        src={ranking.rank.image}
+                      />
+                    </div>
                   </Link>
                 );
               })}

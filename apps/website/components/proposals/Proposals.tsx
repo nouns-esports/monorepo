@@ -1,23 +1,15 @@
 "use client";
 
-import React, { useMemo, useState, useTransition } from "react";
-import { CaretUp, CaretDown, ChartBarHorizontal } from "phosphor-react-sc";
+import React, { useMemo, useState } from "react";
 import Button from "../Button";
 import { twMerge } from "tailwind-merge";
-import { castVotes } from "@/server/mutations/castVotes";
-import toast from "react-hot-toast";
 import { roundState } from "@/utils/roundState";
 import { numberToOrdinal } from "@/utils/numberToOrdinal";
-import { useOptimistic } from "react";
-import { useLogin } from "@privy-io/react-auth";
-import { useRouter } from "next/navigation";
-import type { getNexus } from "@/server/queries/nexus";
 import { ToggleModal } from "../Modal";
 import type { getRound } from "@/server/queries/rounds";
 import { lexicalToDescription } from "@/utils/lexicalToDescription";
 import Link from "../Link";
 import { useModal } from "../Modal";
-import { useAction, useOptimisticAction } from "next-safe-action/hooks";
 import CastVotesModal from "../modals/CastVotesModal";
 import ViewProposalModal from "../modals/VewProposalModal";
 import type { AuthenticatedUser } from "@/server/queries/users";

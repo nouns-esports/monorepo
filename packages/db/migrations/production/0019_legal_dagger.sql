@@ -1,0 +1,1 @@
+ALTER TABLE "rankings" ADD COLUMN "diff" integer DEFAULT 0 NOT NULL;

@@ -1,0 +1,1 @@
+ALTER TABLE "rankings" ADD COLUMN "position" integer DEFAULT 0 NOT NULL;

@@ -1,6 +1,6 @@
 import Link from "@/components/Link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, TwitterLogo } from "phosphor-react-sc";
+import { ArrowLeft } from "phosphor-react-sc";
 import Proposals from "@/components/proposals/Proposals";
 import { twMerge } from "tailwind-merge";
 import { formatUnits } from "viem";
@@ -8,18 +8,13 @@ import { getFrameMetadata, isFrameRequest } from "frog/next";
 import type { Metadata } from "next";
 import { getRound, getRoundStats } from "@/server/queries/rounds";
 import { getPriorVotes } from "@/server/queries/votes";
-import { roundState } from "@/utils/roundState";
 import { numberToOrdinal } from "@/utils/numberToOrdinal";
 import { getAuthenticatedUser } from "@/server/queries/users";
 import dynamic from "next/dynamic";
 import Shimmer from "@/components/Shimmer";
-import { getNexus } from "@/server/queries/nexus";
 import { env } from "~/env";
-import { ArrowRight, Check, Timer, X } from "lucide-react";
 import { headers } from "next/headers";
-import { Modal, ToggleModal } from "@/components/Modal";
 import DateComponent from "@/components/Date";
-import ViewProposalModal from "@/components/modals/VewProposalModal";
 import RoundTimeline from "@/components/RoundTimeline";
 
 const Markdown = dynamic(() => import("@/components/lexical/Markdown"), {

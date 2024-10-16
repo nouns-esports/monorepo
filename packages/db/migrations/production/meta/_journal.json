@@ -134,6 +134,20 @@
       "when": 1728374345399,
       "tag": "0018_wet_mysterio",
       "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1728845673774,
+      "tag": "0019_legal_dagger",
+      "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1729107375373,
+      "tag": "0020_remarkable_terrax",
+      "breakpoints": true
     }
   ]
 }

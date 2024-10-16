@@ -49,152 +49,292 @@ app.frame("/rounds/:id", async (c) => {
     end: round.end,
   });
 
-  const start = new Date(round.start);
+  const now = new Date();
+  const targetDate =
+    state === "Upcoming"
+      ? new Date(round.start)
+      : state === "Proposing"
+        ? new Date(round.votingStart)
+        : new Date(round.end ?? Infinity);
+
+  const timeDiff = targetDate.getTime() - now.getTime();
+  const days = Math.max(0, Math.floor(timeDiff / (1000 * 60 * 60 * 24)));
+  const hours = Math.max(
+    0,
+    Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+  );
+  const minutes = Math.max(
+    0,
+    Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60))
+  );
+  const seconds = Math.max(0, Math.floor((timeDiff % (1000 * 60)) / 1000));
+
+  const time =
+    days >= 1
+      ? `${days}d ${hours}h ${minutes}m`
+      : `${hours}h ${minutes}m ${seconds}s`;
 
   return c.res({
     image: (
       <div
         style={{
-          color: "white",
-          backgroundColor: "#121213",
           display: "flex",
           flexDirection: "column",
-          justifyContent: "space-between",
-          height: "100%",
-          width: "100%",
-          padding: 48,
+          backgroundColor: "#121213",
+          flex: 1,
         }}
       >
-        <div
+        <img
+          src={round.image}
           style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
+            width: "100%",
+            height: "40%",
+            objectFit: "cover",
+            flexShrink: 0,
           }}
-        >
-          <img
-            src={round.image}
-            style={{
-              width: 150,
-              height: 150,
-              borderRadius: 12,
-              objectFit: "cover",
-            }}
-          />
-          {state === "Upcoming" ? (
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "flex-end",
-              }}
-            >
-              <p
-                style={{
-                  fontFamily: "Cabin",
-                  weight: 500,
-                  fontSize: 36,
-                  lineHeight: 0.6,
-                  color: "#909497",
-                }}
-              >
-                Starts
-              </p>
-              <p
-                style={{
-                  fontFamily: "Cabin",
-                  weight: 500,
-                  fontSize: 40,
-                  lineHeight: 0.6,
-                  color: "white",
-                }}
-              >
-                {start.toLocaleString("default", { month: "long" })}{" "}
-                {start.getDate()}
-              </p>
-            </div>
-          ) : (
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                fontFamily: "Cabin",
-                backgroundColor:
-                  state === "Proposing"
-                    ? "#3569ee"
-                    : state === "Voting"
-                      ? "#bc30ed"
-                      : "#E93737",
-                borderRadius: "10000",
-                paddingLeft: 32,
-                paddingRight: 32,
-                paddingTop: 16,
-                paddingBottom: 16,
-                fontSize: 32,
-                fontWeight: 600,
-              }}
-            >
-              {state === "Proposing" ? "Proposing" : ""}
-              {state === "Voting" ? "Voting" : ""}
-              {state === "Ended" ? "Ended" : ""}
-            </div>
-          )}
-        </div>
+        />
         <div
           style={{
             display: "flex",
             flexDirection: "column",
-            gap: 16,
+            flex: 1,
+            padding: 36,
           }}
         >
-          <h1
+          <div
             style={{
-              fontSize: 64,
-              fontWeight: 600,
-              margin: 0,
-              fontFamily: "Bebas Neue",
+              display: "flex",
+              flexDirection: "column",
+              gap: 64,
+              flex: 1,
             }}
           >
-            {round.name}
-          </h1>
-          <p
+            <h1
+              style={{
+                fontSize: 72,
+                fontWeight: 600,
+                margin: 0,
+                fontFamily: "Bebas Neue",
+                color: "white",
+              }}
+            >
+              {round.name}
+            </h1>
+            <div style={{ display: "flex", flexDirection: "row", gap: 24 }}>
+              <p
+                style={{
+                  fontSize: 36,
+                  margin: 0,
+                  color: "#909497",
+                  weight: 500,
+                  fontFamily: "Cabin",
+                }}
+              >
+                {state === "Upcoming" ? "Round starts" : ""}
+                {state === "Proposing" ? "Voting starts" : ""}
+                {state === "Voting" ? "Round ends" : ""}
+                {state === "Ended" ? "Round ended" : ""}
+              </p>
+              <p
+                style={{
+                  fontSize: 36,
+                  margin: 0,
+                  color: "white",
+                  weight: 500,
+                  fontFamily: "Cabin",
+                }}
+              >
+                {state === "Ended"
+                  ? new Intl.DateTimeFormat("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    }).format(new Date(round.end ?? Infinity))
+                  : time}
+              </p>
+            </div>
+          </div>
+          <div
             style={{
-              fontSize: 36,
-              margin: 0,
-              color: "#909497",
-              weight: 500,
-              fontFamily: "Cabin",
+              backgroundColor: "#333333",
+              padding: 16,
+              paddingRight: 32,
+              borderRadius: 9999,
+              display: "flex",
+              color: "white",
+              alignItems: "center",
+              alignSelf: "flex-start",
+              gap: 24,
             }}
           >
-            {/* {round.description} */}
-            Error
-            {/* fix this later TODO - probably full image background with less brightness */}
-          </p>
+            <img
+              src={round.community.image}
+              style={{ width: 64, height: 64, borderRadius: "100%" }}
+            />
+            <p
+              style={{
+                margin: 0,
+                fontFamily: "Cabin",
+                fontSize: 36,
+                fontWeight: 500,
+                whiteSpace: "nowrap",
+              }}
+            >
+              {round.community.name}
+            </p>
+          </div>
         </div>
-        <p
-          style={{
-            fontSize: 36,
-            margin: 0,
-            color: "#909497",
-            weight: 500,
-            fontFamily: "Cabin",
-          }}
-        >
-          nouns.gg/rounds/{round.id}
-        </p>
       </div>
     ),
-    intents: [
-      <Button.Link href={`${env.NEXT_PUBLIC_DOMAIN}/rounds/${round.id}`}>
-        View
-      </Button.Link>,
-      <Button.Link href={`${env.NEXT_PUBLIC_DOMAIN}/rounds`}>
-        All Rounds
-      </Button.Link>,
-    ],
-    title: round.name,
-    ogImage: round.image,
+    imageAspectRatio: "1:1",
+    imageOptions: {
+      width: 1200,
+      height: 1200,
+    },
   });
+  //   image: (
+  //     <div
+  //       style={{
+  //         color: "white",
+  //         backgroundColor: "#121213",
+  //         display: "flex",
+  //         flexDirection: "column",
+  //         justifyContent: "space-between",
+  //         height: "100%",
+  //         width: "100%",
+  //         padding: 48,
+  //       }}
+  //     >
+  //       <div
+  //         style={{
+  //           display: "flex",
+  //           alignItems: "center",
+  //           justifyContent: "space-between",
+  //         }}
+  //       >
+  //         <img
+  //           src={round.image}
+  //           style={{
+  //             width: 150,
+  //             height: 150,
+  //             borderRadius: 12,
+  //             objectFit: "cover",
+  //           }}
+  //         />
+  //         {state === "Upcoming" ? (
+  //           <div
+  //             style={{
+  //               display: "flex",
+  //               flexDirection: "column",
+  //               alignItems: "flex-end",
+  //             }}
+  //           >
+  //             <p
+  //               style={{
+  //                 fontFamily: "Cabin",
+  //                 weight: 500,
+  //                 fontSize: 36,
+  //                 lineHeight: 0.6,
+  //                 color: "#909497",
+  //               }}
+  //             >
+  //               Starts
+  //             </p>
+  //             <p
+  //               style={{
+  //                 fontFamily: "Cabin",
+  //                 weight: 500,
+  //                 fontSize: 40,
+  //                 lineHeight: 0.6,
+  //                 color: "white",
+  //               }}
+  //             >
+  //               {start.toLocaleString("default", { month: "long" })}{" "}
+  //               {start.getDate()}
+  //             </p>
+  //           </div>
+  //         ) : (
+  //           <div
+  //             style={{
+  //               display: "flex",
+  //               flexDirection: "column",
+  //               fontFamily: "Cabin",
+  //               backgroundColor:
+  //                 state === "Proposing"
+  //                   ? "#3569ee"
+  //                   : state === "Voting"
+  //                     ? "#bc30ed"
+  //                     : "#E93737",
+  //               borderRadius: "10000",
+  //               paddingLeft: 32,
+  //               paddingRight: 32,
+  //               paddingTop: 16,
+  //               paddingBottom: 16,
+  //               fontSize: 32,
+  //               fontWeight: 600,
+  //             }}
+  //           >
+  //             {state === "Proposing" ? "Proposing" : ""}
+  //             {state === "Voting" ? "Voting" : ""}
+  //             {state === "Ended" ? "Ended" : ""}
+  //           </div>
+  //         )}
+  //       </div>
+  //       <div
+  //         style={{
+  //           display: "flex",
+  //           flexDirection: "column",
+  //           gap: 16,
+  //         }}
+  //       >
+  //         <h1
+  //           style={{
+  //             fontSize: 64,
+  //             fontWeight: 600,
+  //             margin: 0,
+  //             fontFamily: "Bebas Neue",
+  //           }}
+  //         >
+  //           {round.name}
+  //         </h1>
+  //         <p
+  //           style={{
+  //             fontSize: 36,
+  //             margin: 0,
+  //             color: "#909497",
+  //             weight: 500,
+  //             fontFamily: "Cabin",
+  //           }}
+  //         >
+  //           {/* {round.description} */}
+  //           Error
+  //           {/* fix this later TODO - probably full image background with less brightness */}
+  //         </p>
+  //       </div>
+  //       <p
+  //         style={{
+  //           fontSize: 36,
+  //           margin: 0,
+  //           color: "#909497",
+  //           weight: 500,
+  //           fontFamily: "Cabin",
+  //         }}
+  //       >
+  //         nouns.gg/rounds/{round.id}
+  //       </p>
+  //     </div>
+  //   ),
+  //   intents: [
+  //     <Button.Link href={`${env.NEXT_PUBLIC_DOMAIN}/rounds/${round.id}`}>
+  //       View
+  //     </Button.Link>,
+  //     <Button.Link href={`${env.NEXT_PUBLIC_DOMAIN}/rounds`}>
+  //       All Rounds
+  //     </Button.Link>,
+  //   ],
+  //   title: round.name,
+  //   ogImage: round.image,
+  // });
 });
 
 app.frame("/rounds/:round/votes/:user", async (c) => {
@@ -266,158 +406,129 @@ app.image("/rounds/:round/votes/:user/img", async (c) => {
           justifyContent: "space-between",
           height: "100%",
           width: "100%",
-          padding: 48,
         }}
       >
+        <img
+          src={round.image}
+          style={{
+            width: "100%",
+            height: "40%",
+            objectFit: "cover",
+            flexShrink: 0,
+          }}
+        />
         <div
           style={{
             display: "flex",
-            alignItems: "center",
+            flexDirection: "column",
             justifyContent: "space-between",
+            padding: 48,
+            flex: 1,
           }}
         >
-          <img
-            src={round.image}
-            style={{
-              width: 150,
-              height: 150,
-              borderRadius: 12,
-              objectFit: "cover",
-            }}
-          />
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              fontFamily: "Cabin",
-              backgroundColor: state === "Voting" ? "#bc30ed" : "#E93737",
-              borderRadius: "10000",
-              paddingLeft: 32,
-              paddingRight: 32,
-              paddingTop: 16,
-              paddingBottom: 16,
-              fontSize: 32,
-              fontWeight: 600,
-            }}
-          >
-            {state === "Voting" ? "Voting" : ""}
-            {state === "Ended" ? "Ended" : ""}
-          </div>
-        </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 48 }}>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              gap: 32,
-              alignItems: "center",
-            }}
-          >
-            <img
-              src={user.image}
-              style={{ width: 90, height: 90, borderRadius: "100%" }}
-            />
+          <div style={{ display: "flex", flexDirection: "column", gap: 48 }}>
             <div
               style={{
                 display: "flex",
-                fontSize: 64,
-                fontWeight: 600,
-                fontFamily: "Bebas Neue",
+                flexDirection: "row",
+                gap: 32,
+                alignItems: "center",
               }}
             >
-              {user.name}'s Votes
-            </div>
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: 32,
-            }}
-          >
-            {round.votes.slice(0, 5).map((vote) => (
+              <img
+                src={user.image}
+                style={{ width: 90, height: 90, borderRadius: "100%" }}
+              />
               <div
                 style={{
                   display: "flex",
-                  justifyContent: "space-between",
-                  gap: 64,
-                  width: "100%",
-                  backgroundColor: "#1A1A1A",
-                  paddingLeft: 32,
-                  paddingRight: 32,
-                  paddingTop: 20,
-                  paddingBottom: 20,
-                  borderRadius: 16,
+                  fontSize: 64,
+                  fontWeight: 600,
+                  fontFamily: "Bebas Neue",
                 }}
               >
-                <div
-                  style={{
-                    display: "block",
-                    lineClamp: 1,
-                    fontSize: 36,
-                    fontFamily: "Cabin",
-                  }}
-                >
-                  {vote.proposal.title.replace(
-                    /[^a-zA-Z0-9 \-_\!\@\#\$\%\^\&\*\(\)\+\=\"\'\?\/\>\<,\.\{\}\[\]\|\\\~\`\;\:\n\r\t]/g,
-                    ""
-                  )}
-                </div>
+                {user.name}'s Votes
+              </div>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 32,
+              }}
+            >
+              {round.votes.slice(0, 5).map((vote) => (
                 <div
                   style={{
                     display: "flex",
-                    gap: 16,
-                    alignItems: "center",
+                    justifyContent: "space-between",
+                    gap: 64,
+                    width: "100%",
+                    backgroundColor: "#1A1A1A",
+                    paddingLeft: 32,
+                    paddingRight: 32,
+                    paddingTop: 20,
+                    paddingBottom: 20,
+                    borderRadius: 16,
                   }}
                 >
-                  <svg
-                    width="16"
-                    viewBox="0 0 10 7"
-                    fill="none"
-                    preserveAspectRatio="xMidYMid meet"
-                  >
-                    <path
-                      d="M4.35124 0.280489L0.215046 4.78915C-0.273086 5.32138 0.123629 6.15385 0.864453 6.15385H9.13683C9.30263 6.15398 9.46495 6.10853 9.60437 6.02294C9.74378 5.93734 9.85437 5.81523 9.92289 5.67123C9.99142 5.52723 10.015 5.36744 9.99074 5.211C9.9665 5.05456 9.8955 4.9081 9.78624 4.78915L5.65005 0.281312C5.5691 0.192957 5.46927 0.122143 5.35726 0.0736226C5.24526 0.0251026 5.12366 0 5.00064 0C4.87763 0 4.75603 0.0251026 4.64402 0.0736226C4.53202 0.122143 4.43219 0.192135 4.35124 0.280489Z"
-                      fill="white"
-                    />
-                  </svg>
                   <div
                     style={{
-                      display: "flex",
+                      display: "block",
+                      lineClamp: 1,
                       fontSize: 36,
                       fontFamily: "Cabin",
                     }}
                   >
-                    {vote.count.toString()}
+                    {vote.proposal.title.replace(
+                      /[^a-zA-Z0-9 \-_\!\@\#\$\%\^\&\*\(\)\+\=\"\'\?\/\>\<,\.\{\}\[\]\|\\\~\`\;\:\n\r\t]/g,
+                      ""
+                    )}
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: 16,
+                      alignItems: "center",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        fontSize: 36,
+                        fontFamily: "Cabin",
+                      }}
+                    >
+                      {vote.count.toString()}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-            {round.votes.length > 5 ? (
-              <div
-                style={{
-                  display: "flex",
-                  fontSize: 36,
-                  fontFamily: "Cabin",
-                }}
-              >
-                +{(round.votes.length - 5).toString()} more
-              </div>
-            ) : (
-              ""
-            )}
+              ))}
+              {round.votes.length > 5 ? (
+                <div
+                  style={{
+                    display: "flex",
+                    fontSize: 36,
+                    fontFamily: "Cabin",
+                  }}
+                >
+                  +{(round.votes.length - 5).toString()} more
+                </div>
+              ) : (
+                ""
+              )}
+            </div>
           </div>
-        </div>
-        <div
-          style={{
-            fontSize: 36,
-            display: "flex",
-            color: "#909497",
-            fontFamily: "Cabin",
-          }}
-        >
-          nouns.gg/rounds/{round.id}
+          <div
+            style={{
+              fontSize: 36,
+              display: "flex",
+              color: "#909497",
+              fontFamily: "Cabin",
+            }}
+          >
+            nouns.gg/rounds/{round.id}
+          </div>
         </div>
       </div>
     ),

@@ -15,6 +15,7 @@ import { useAction } from "next-safe-action/hooks";
 import type { getRoundWithProposal } from "@/server/queries/rounds";
 import { pinImage } from "@/server/mutations/pinImage";
 import { Edit2, Plus } from "lucide-react";
+import FileUpload from "../FileUpload";
 
 const Markdown = dynamic(() => import("../lexical/Markdown"), {
   ssr: false,
@@ -29,8 +30,8 @@ export default function ProposalEditor(props: {
     props.round.proposals.length > 0 ? props.round.proposals[0] : undefined;
 
   const [title, setTitle] = useState(proposal?.title ?? "");
-
-  const [image, setImage] = useState(proposal?.image);
+  const [image, setImage] = useState(proposal?.image ?? undefined);
+  const [video, setVideo] = useState(proposal?.video);
 
   const [editorState, setEditorState] = useState(
     proposal?.content ??
@@ -62,9 +63,9 @@ export default function ProposalEditor(props: {
   const updateProposalAction = useAction(updateProposal);
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-8 w-full">
       <div className="flex flex-col gap-2">
-        <div className="flex items-center justify-between mt-4">
+        <div className="flex items-center justify-between">
           <h2 className="font-luckiest-guy text-white text-2xl">Title</h2>
           <LimitMeter
             type="character"
@@ -81,80 +82,76 @@ export default function ProposalEditor(props: {
           value={title}
         />
       </div>
-      <div className="flex flex-col gap-3">
-        <div className="flex items-center justify-between mt-4">
-          <h2 className="font-luckiest-guy text-white text-2xl">Cover Image</h2>
-        </div>
-        {image ? (
-          <img
-            src={image}
-            className="h-32 w-fit aspect-video object-cover rounded-xl"
-          />
-        ) : (
-          ""
-        )}
-        <label className="text-red flex items-center gap-1 hover:opacity-80 cursor-pointer transition-opacity">
-          {image ? "Change" : "Upload"} image
-          {image ? <Edit2 className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
-          <input
-            type="file"
-            accept="image/*"
-            onChange={async (event) => {
-              const files = event.target.files;
+      {
+        {
+          image: (
+            <>
+              <div className="flex flex-col gap-3">
+                <div className="flex items-center justify-between mt-4">
+                  <h2 className="font-luckiest-guy text-white text-2xl">
+                    Image
+                  </h2>
+                </div>
+                {image ? (
+                  <img
+                    src={image}
+                    className="h-32 w-fit aspect-video object-cover rounded-xl"
+                  />
+                ) : (
+                  ""
+                )}
+                <FileUpload type="image" asset={image} setAsset={setImage} />
+              </div>
+            </>
+          ),
+          markdown: (
+            <>
+              <div className="flex flex-col gap-3">
+                <div className="flex items-center justify-between mt-4">
+                  <h2 className="font-luckiest-guy text-white text-2xl">
+                    Cover Image
+                  </h2>
+                </div>
+                <FileUpload type="image" asset={image} setAsset={setImage} />
+              </div>
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center justify-between">
+                  <h2 className="font-luckiest-guy text-white text-2xl">
+                    Proposal
+                  </h2>
+                  <LimitMeter
+                    type="word"
+                    value={parsedMarkdown.split(" ").length - 1}
+                    min={150}
+                    max={Infinity}
+                  />
+                </div>
+                <div className="relative bg-grey-800 border border-grey-600 rounded-xl overflow-hidden p-2 min-h-60">
+                  <Markdown
+                    markdown={editorState}
+                    readOnly={false}
+                    onChange={(state, editor) => {
+                      state.read(() => {
+                        setEditorState(
+                          JSON.stringify(editor.toJSON().editorState.root)
+                        );
+                        setParsedMarkdown(
+                          $generateHtmlFromNodes(editor).replaceAll(
+                            /<[^>]*>/g,
+                            ""
+                          )
+                        );
+                      });
+                    }}
+                  />
+                </div>
+              </div>
+            </>
+          ),
+          video: <></>,
+        }[props.round.type]
+      }
 
-              if (files && files.length > 0) {
-                const file = files[0];
-
-                // 25 MB in bytes
-                if (file.size > 25 * 1024 * 1024) {
-                  return toast.error("Image size should be less than 25 MB");
-                }
-
-                const formData = new FormData();
-                formData.append("file", file);
-
-                const hash = await pinImage({ formData });
-
-                if (!hash?.data || hash?.serverError) {
-                  return toast.error("Could not upload image");
-                }
-
-                setImage(`https://ipfs.nouns.gg/ipfs/${hash.data}`);
-
-                event.target.value = "";
-              }
-            }}
-            style={{ display: "none" }}
-          />
-        </label>
-      </div>
-      <div className="flex flex-col gap-2">
-        <div className="flex items-center justify-between">
-          <h2 className="font-luckiest-guy text-white text-2xl">Proposal</h2>
-          <LimitMeter
-            type="word"
-            value={parsedMarkdown.split(" ").length - 1}
-            min={150}
-            max={Infinity}
-          />
-        </div>
-        <div className="relative bg-grey-800 border border-grey-600 rounded-xl overflow-hidden p-2 min-h-60">
-          <Markdown
-            markdown={editorState}
-            readOnly={false}
-            onChange={(state, editor) => {
-              state.read(() => {
-                setEditorState(
-                  JSON.stringify(editor.toJSON().editorState.root)
-                );
-                setParsedMarkdown(
-                  $generateHtmlFromNodes(editor).replaceAll(/<[^>]*>/g, "")
-                );
-              });
-            }}
-          />
-        </div>
-      </div>
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
           <h2 className="font-luckiest-guy text-white text-2xl">Submit</h2>
