@@ -75,6 +75,9 @@ export const placeRank = onlyUser.action(async ({ ctx }) => {
       user: ctx.user.id,
       season: currentSeason.id,
       timestamp: lowestRanking.timestamp,
+      position: lowestRanking.position + 1,
+      diff: 0,
+      xp: 0,
       rank: lowestRank.id,
     });
   });

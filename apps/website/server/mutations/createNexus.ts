@@ -73,6 +73,9 @@ export const createNexus = onlyUser
           await tx.insert(rankings).values({
             season: currentSeason.id,
             user: ctx.user.id,
+            position: lowestRanking.position + 1,
+            diff: 0,
+            xp: 0,
             timestamp: lowestRanking.timestamp,
             rank: lowestRank.id,
           });
