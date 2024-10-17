@@ -1,0 +1,1 @@
+ALTER TABLE "xp" DROP COLUMN IF EXISTS "snapshot";

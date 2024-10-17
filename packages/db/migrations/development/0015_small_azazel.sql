@@ -1,0 +1,1 @@
+ALTER TABLE "xp" RENAME COLUMN "snapshot_temp" TO "snapshot";

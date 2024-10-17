@@ -352,7 +352,7 @@ export const xp = pgTable("xp", {
   timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
   season: integer("season").notNull(),
   quest: text("quest"),
-  snapshot: text("snapshot"),
+  snapshot: integer("snapshot"),
   // achievement: text("achievement"),
 });
 
