@@ -386,12 +386,6 @@ app.image("/rounds/:round/votes/:user/img", async (c) => {
     });
   }
 
-  const state = roundState({
-    start: round.start,
-    votingStart: round.votingStart,
-    end: round.end,
-  });
-
   return c.res({
     headers: {
       "Cache-Control": "max-age=0",
@@ -457,7 +451,7 @@ app.image("/rounds/:round/votes/:user/img", async (c) => {
                 gap: 32,
               }}
             >
-              {round.votes.slice(0, 5).map((vote) => (
+              {round.votes.slice(0, 4).map((vote) => (
                 <div
                   style={{
                     display: "flex",
@@ -504,7 +498,7 @@ app.image("/rounds/:round/votes/:user/img", async (c) => {
                   </div>
                 </div>
               ))}
-              {round.votes.length > 5 ? (
+              {round.votes.length > 4 ? (
                 <div
                   style={{
                     display: "flex",
@@ -512,7 +506,7 @@ app.image("/rounds/:round/votes/:user/img", async (c) => {
                     fontFamily: "Cabin",
                   }}
                 >
-                  +{(round.votes.length - 5).toString()} more
+                  +{(round.votes.length - 4).toString()} more
                 </div>
               ) : (
                 ""
