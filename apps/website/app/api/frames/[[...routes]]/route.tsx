@@ -513,16 +513,20 @@ app.image("/rounds/:round/votes/:user/img", async (c) => {
               )}
             </div>
           </div>
-          <div
-            style={{
-              fontSize: 36,
-              display: "flex",
-              color: "#909497",
-              fontFamily: "Cabin",
-            }}
-          >
-            nouns.gg/rounds/{round.id}
-          </div>
+          {round.votes.length < 4 ? (
+            <div
+              style={{
+                fontSize: 36,
+                display: "flex",
+                color: "#909497",
+                fontFamily: "Cabin",
+              }}
+            >
+              nouns.gg/rounds/{round.id}
+            </div>
+          ) : (
+            ""
+          )}
         </div>
       </div>
     ),
