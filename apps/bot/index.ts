@@ -5,13 +5,13 @@ import { Hono } from "hono";
 import { serve } from "@hono/node-server";
 
 // Commands
-import { createSnapshot } from "./commands/createSnapshot";
-import { refreshRankings } from "./commands/refreshRankings";
 import type { createCommand } from "./createCommand";
+import { refreshRankings } from "./commands/refreshRankings";
 import { refreshRoles } from "./commands/refreshRoles";
+import { discordSnapshot } from "./commands/discordSnapshot";
 
 const commands: Record<string, ReturnType<typeof createCommand>> = {
-  "create-snapshot": createSnapshot,
+  "discord-snapshot": discordSnapshot,
   "refresh-rankings": refreshRankings,
   "refresh-roles": refreshRoles,
 };

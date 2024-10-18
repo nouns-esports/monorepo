@@ -29,6 +29,12 @@ export const visitLink = createAction(async (actionInputs) => {
           </span>
         </p>
       ),
+      post: (
+        <p>
+          View {!actionInputs.name ? "this " : ""}
+          <span className="text-red">{actionInputs.name ?? "post"}</span>
+        </p>
+      ),
       video: (
         <p>
           Watch {!actionInputs.name ? "this " : ""}

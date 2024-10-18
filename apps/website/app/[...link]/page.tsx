@@ -15,6 +15,8 @@ export default async function LinkRoute(props: {
   });
 
   if (link) {
+    const url = new URL(link.url);
+
     if (props.searchParams.capture) {
       const user = await getAuthenticatedUser();
 
@@ -29,7 +31,7 @@ export default async function LinkRoute(props: {
     }
 
     redirect(
-      `${link.url}/${props.params.link.slice(1).join("/")}`,
+      `${url.origin}${url.pathname}${props.params.link.slice(1).join("/")}?${url.searchParams.toString()}`,
       RedirectType.replace
     );
   }
