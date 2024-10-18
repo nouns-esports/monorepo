@@ -54,7 +54,7 @@ export const placeTrade = createAction<{
             query MyQuery {
               tradesMatcha(
                 limit: 1
-                where: {_and: {takerToken: {_eq: "${actionInputs.token.toLowerCase()}"}, taker: {_eq: "${user.wallet.address.toLowerCase()}"}}}
+                where: {_and: [{_or: [{taker: {_eq: "${user.wallet.address.toLowerCase()}"}}, {maker: {_eq: "${user.wallet.address.toLowerCase()}"}}]}, {_or: [{takerToken: {_eq: "${actionInputs.token.toLowerCase()}"}}, {makerToken: {_eq: "${actionInputs.token.toLowerCase()}"}}]}]}
               ) {
                 transactionHash
               }

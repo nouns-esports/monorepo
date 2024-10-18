@@ -48,14 +48,18 @@ export const refreshRoles = createCommand({
 
       if (!user) continue;
 
-      const rankRoles = roles(env.NEXT_PUBLIC_ENVIRONMENT);
-      const role = rankRoles.ranks[user.rank];
+      const allRoles = roles(env.NEXT_PUBLIC_ENVIRONMENT);
+      const role = allRoles.ranks[user.rank];
 
       if (!user.discord.roles.includes(role)) {
         await addRole({ user: user.discord.id, role });
       }
 
-      for (const [rank, role] of Object.entries(rankRoles.ranks)) {
+      if (!user.discord.roles.includes(allRoles.nexus)) {
+        await addRole({ user: user.discord.id, role: allRoles.nexus });
+      }
+
+      for (const [rank, role] of Object.entries(allRoles.ranks)) {
         if (user.rank === Number(rank)) continue;
 
         if (user.discord.roles.includes(role)) {
@@ -73,6 +77,7 @@ function roles(environment: "development" | "production"): {
     [key: number]: string;
   };
   staff: string;
+  nexus: string;
 } {
   if (environment === "development") {
     return {
@@ -88,6 +93,7 @@ function roles(environment: "development" | "production"): {
         9: "1292849990086955058", // Champion III
       },
       staff: "1292850310515003493",
+      nexus: "",
     };
   }
 
@@ -104,6 +110,7 @@ function roles(environment: "development" | "production"): {
       9: "1292850537292759051", // Champion III
     },
     staff: "1186404392346325173",
+    nexus: "1296891293385101343",
   };
 }
 
