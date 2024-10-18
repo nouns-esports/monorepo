@@ -1,6 +1,6 @@
 import { db, nexus, seasons, snapshots, xp } from "~/packages/db/schema";
 import { createCommand } from "../createCommand";
-import { and, gte, lte, desc, inArray } from "drizzle-orm";
+import { and, gte, lte, desc, inArray, eq } from "drizzle-orm";
 
 export const discordSnapshot = createCommand({
   description: "Creates a snapshot of Discord users in a voice channel",
@@ -51,13 +51,22 @@ export const discordSnapshot = createCommand({
           })
           .returning({ id: snapshots.id });
 
+        const amount = 300;
+
         await tx.insert(xp).values({
           user: user.id,
-          amount: 300,
+          amount,
           timestamp: now,
           snapshot: snapshot.id,
           season: currentSeason.id,
         });
+
+        await tx
+          .update(nexus)
+          .set({
+            xp: user.xp + amount,
+          })
+          .where(eq(nexus.id, user.id));
       }
     });
 
