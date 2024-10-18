@@ -16,6 +16,7 @@ import { linkWallet } from "../quests/onchain/linkWallet";
 import { linkTwitter } from "../quests/twitter/linkTwitter";
 import { mintERC1155 } from "../quests/zora/mintERC1155";
 import { visitLink } from "../quests/online/visitLink";
+import { placeTrade } from "../quests/matcha/placeTrade";
 
 export const actions: Record<string, ReturnType<typeof createAction>> = {
   // Discord
@@ -40,6 +41,9 @@ export const actions: Record<string, ReturnType<typeof createAction>> = {
 
   // Zora
   mintERC1155,
+
+  // Matcha
+  placeTrade,
 };
 
 export async function getAction(input: {
