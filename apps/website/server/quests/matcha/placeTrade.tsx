@@ -40,6 +40,43 @@ export const placeTrade = createAction<{
     check: async (user) => {
       if (!user.wallet) return false;
 
+      if (actionInputs.token) {
+        const response = await fetch(
+          "https://trade-history.spaceship.0x.org/v1/graphql",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "0x-api-key": env.MATCHA_API_KEY,
+            },
+            body: JSON.stringify({
+              query: `
+            query MyQuery {
+              tradesMatcha(
+                limit: 1
+                where: {_and: {takerToken: {_eq: "${actionInputs.token.toLowerCase()}"}, taker: {_eq: "${user.wallet.address.toLowerCase()}"}}}
+              ) {
+                transactionHash
+              }
+            }
+          `,
+            }),
+          }
+        );
+
+        if (!response.ok) return false;
+
+        const trades = (
+          (await response.json()) as {
+            data: { tradesMatcha: Array<{ transactionHash: string }> };
+          }
+        ).data.tradesMatcha;
+
+        if (trades.length < 1) return false;
+
+        return true;
+      }
+
       const response = await fetch(
         "https://trade-history.spaceship.0x.org/v1/graphql",
         {
@@ -62,6 +99,8 @@ export const placeTrade = createAction<{
           }),
         }
       );
+
+      if (!response.ok) return false;
 
       const trades = (
         (await response.json()) as {
