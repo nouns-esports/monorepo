@@ -26,7 +26,7 @@ export const placeTrade = createAction<{
         Place a trade{" "}
         {actionInputs.token ? (
           <>
-            for <span className="text-red">{actionInputs.symbol}</span>{" "}
+            for <span className="text-red">${actionInputs.symbol}</span>{" "}
           </>
         ) : (
           <></>
@@ -46,7 +46,7 @@ export const placeTrade = createAction<{
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "0x-api-key": env["0X_API_KEY"],
+            "0x-api-key": env.MATCHA_API_KEY,
           },
           body: JSON.stringify({
             query: `
