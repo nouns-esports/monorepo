@@ -33,6 +33,7 @@ export async function generateMetadata(props: {
 
   return {
     title: round.name,
+    description: null,
     metadataBase: new URL(env.NEXT_PUBLIC_DOMAIN),
     openGraph: {
       type: "website",
