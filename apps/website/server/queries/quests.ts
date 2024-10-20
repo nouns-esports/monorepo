@@ -89,6 +89,7 @@ export const getQuests = cache(
         eq(quests.active, true),
         input.event ? eq(quests.event, input.event) : isNull(quests.event)
       ),
+      orderBy: desc(quests.createdAt),
       with: {
         community: true,
         completed: input.user
