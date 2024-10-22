@@ -113,6 +113,34 @@
       "when": 1729180380863,
       "tag": "0015_small_azazel",
       "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1729453473772,
+      "tag": "0016_tricky_dexter_bennett",
+      "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1729530302309,
+      "tag": "0017_chief_starjammers",
+      "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1729530431700,
+      "tag": "0018_striped_natasha_romanoff",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1729541860306,
+      "tag": "0019_organic_hex",
+      "breakpoints": true
     }
   ]
 }

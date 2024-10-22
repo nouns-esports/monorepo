@@ -135,22 +135,6 @@ export const talentRelations = relations(talent, ({ one }) => ({
   }),
 }));
 
-// export const achievements = pgTable("achievements", {
-//   id: text("id").primaryKey(),
-//   next: text("next"),
-//   name: text("name").notNull(),
-//   description: text("description").notNull(),
-//   image: text("image").notNull(),
-//   xp: integer("xp").notNull(),
-// });
-
-// export const achievementsRelations = relations(achievements, ({ one }) => ({
-//   next: one(achievements, {
-//     fields: [achievements.next],
-//     references: [achievements.id],
-//   }),
-// }));
-
 export const rounds = pgTable("rounds", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
@@ -353,7 +337,7 @@ export const xp = pgTable("xp", {
   season: integer("season").notNull(),
   quest: text("quest"),
   snapshot: integer("snapshot"),
-  // achievement: text("achievement"),
+  achievement: text("achievement"),
 });
 
 export const xpRelations = relations(xp, ({ one }) => ({
@@ -373,13 +357,8 @@ export const xpRelations = relations(xp, ({ one }) => ({
     fields: [xp.snapshot],
     references: [snapshots.id],
   }),
-  // achievement: one(achievements, {
-  //   fields: [xp.achievement],
-  //   references: [achievements.id],
-  // }),
 }));
 
-// Rankings must sync with the Nexus table on refresh
 export const rankings = pgTable("rankings", {
   id: serial("id").primaryKey(),
   user: text("user").notNull(),
@@ -491,8 +470,6 @@ const schema = {
   votesRelations,
   nexus,
   nexusRelations,
-  // achievements,
-  // achievementsRelations,
   events,
   eventsRelations,
   creations,

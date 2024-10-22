@@ -17,6 +17,7 @@ import SettingsModal from "@/components/modals/SettingsModal";
 import { Level } from "@/components/Level";
 import SignInButton from "@/components/SignInButton";
 import { CaretDown, CaretUp } from "phosphor-react-sc";
+import Achievements from "@/components/Achievements";
 
 export default async function NexusPage(props: {
   searchParams: {
@@ -245,6 +246,12 @@ export default async function NexusPage(props: {
                 <DateComponent />
               </p>
             </div>
+          </div>
+          <div className="bg-grey-800 relative rounded-xl flex h-[400px] col-span-4 overflow-hidden">
+            <h2 className="text-white text-2xl font-bebas-neue leading-none absolute top-4 left-4 z-10">
+              Achievements
+            </h2>
+            <Achievements user={user} />
           </div>
         </div>
       </div>
