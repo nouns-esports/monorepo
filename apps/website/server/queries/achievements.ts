@@ -1,17 +1,7 @@
-import { reachExplorer } from "../achievements/nexus/reachExplorer";
-import { reachChallenger } from "../achievements/nexus/reachChallenger";
-import { reachChampion } from "../achievements/nexus/reachChampion";
-import { joinServer } from "../achievements/nexus/joinServer";
-import { connectWallet } from "../achievements/nexus/connectWallet";
-import { attendCall } from "../achievements/nexus/attendCall";
-import { connectFarcaster } from "../achievements/nexus/connectFarcaster";
-import { connectX } from "../achievements/nexus/connectX";
-import { connectDiscord } from "../achievements/nexus/connectDiscord";
 import type { AuthenticatedUser } from "./users";
 import { unstable_cache as cache } from "next/cache";
 import { db, xp } from "~/packages/db/schema";
 import { and, eq, inArray } from "drizzle-orm";
-import type createAchievement from "../achievements/createAchievement";
 
 // export const achievements = {
 //   connectDiscord,

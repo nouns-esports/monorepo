@@ -255,12 +255,9 @@ export default async function NexusPage(props: {
             </div>
           </div>
           <div className="bg-grey-800 relative rounded-xl flex flex-col gap-4 p-4 h-[400px] col-span-2">
-            <div className="flex justify-between items-center w-full">
-              <h2 className="text-white text-2xl font-bebas-neue leading-none">
-                Achievements
-              </h2>
-              <Maximize2 className="w-5 h-5 text-white" />
-            </div>
+            <h2 className="text-white text-2xl font-bebas-neue leading-none">
+              Achievements
+            </h2>
             <div className="bg-grey-600 rounded-xl relative w-full h-full overflow-hidden">
               <Achievements user={user} />
             </div>
