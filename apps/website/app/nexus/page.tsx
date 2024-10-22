@@ -9,7 +9,14 @@ import { twMerge } from "tailwind-merge";
 import Link from "@/components/Link";
 import { getCurrentRankings, getUserRankings } from "@/server/queries/rankings";
 import DateComponent from "@/components/Date";
-import { Link2, Settings, Sparkles } from "lucide-react";
+import {
+  Fullscreen,
+  Link2,
+  Maximize,
+  Maximize2,
+  Settings,
+  Sparkles,
+} from "lucide-react";
 import CheckDiscordServer from "@/components/CheckDiscordServer";
 import { revalidatePath } from "next/cache";
 import { ToggleModal } from "@/components/Modal";
@@ -247,11 +254,16 @@ export default async function NexusPage(props: {
               </p>
             </div>
           </div>
-          <div className="bg-grey-800 relative rounded-xl flex h-[400px] col-span-4 overflow-hidden">
-            <h2 className="text-white text-2xl font-bebas-neue leading-none absolute top-4 left-4 z-10">
-              Achievements
-            </h2>
-            <Achievements user={user} />
+          <div className="bg-grey-800 relative rounded-xl flex flex-col gap-4 p-4 h-[400px] col-span-2">
+            <div className="flex justify-between items-center w-full">
+              <h2 className="text-white text-2xl font-bebas-neue leading-none">
+                Achievements
+              </h2>
+              <Maximize2 className="w-5 h-5 text-white" />
+            </div>
+            <div className="bg-grey-600 rounded-xl relative w-full h-full overflow-hidden">
+              <Achievements user={user} />
+            </div>
           </div>
         </div>
       </div>

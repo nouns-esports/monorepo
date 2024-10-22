@@ -21,11 +21,11 @@ export default function Achievements(props: { user?: AuthenticatedUser }) {
         return (
           <>
             <Node achievement={achievement} user={props.user} />
-            <Column>
+            <Row>
               {achievement.next.map((a) => (
-                <Row key={a.id}>{render(a)}</Row>
+                <Column key={a.id}>{render(a)}</Column>
               ))}
-            </Column>
+            </Row>
           </>
         );
       }
@@ -47,10 +47,12 @@ export default function Achievements(props: { user?: AuthenticatedUser }) {
         drag
         dragMomentum={false}
         dragControls={controls}
-        className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center cursor-move"
+        className="absolute top-0 left-0 w-full h-full flex items-center justify-center cursor-move"
         style={{ scale }}
       >
-        <div className="flex items-center">{render(achievements)}</div>
+        <div className="flex flex-col items-center flex-shrink-0">
+          {render(achievements)}
+        </div>
       </motion.div>
       <motion.div
         className="absolute z-10 top-0 left-0 w-full h-full cursor-move"
@@ -77,7 +79,7 @@ function Node(props: { achievement: Achievement; user?: AuthenticatedUser }) {
   return (
     <>
       {props.achievement.id !== "enter-nexus" ? (
-        <div className="w-8 h-2 bg-white" />
+        <div className="h-8 w-2 bg-white" />
       ) : null}
       <img
         src={props.achievement.image}
@@ -92,16 +94,16 @@ function Node(props: { achievement: Achievement; user?: AuthenticatedUser }) {
   );
 }
 
-function Column(props: { children: React.ReactNode | React.ReactNode[] }) {
+function Row(props: { children: React.ReactNode | React.ReactNode[] }) {
   return (
     <>
-      <div className="w-8 h-2 bg-white" />
-      <div className="bg-white w-2 h-[calc(100%-120px)]" />
-      <div className="flex flex-col gap-8 h-full">{props.children}</div>
+      <div className="h-8 w-2 bg-white" />
+      <div className="bg-white h-2 w-[calc(100%-120px)]" />
+      <div className="flex gap-8 w-full">{props.children}</div>
     </>
   );
 }
 
-function Row(props: { children: React.ReactNode }) {
-  return <div className="flex items-center">{props.children}</div>;
+function Column(props: { children: React.ReactNode }) {
+  return <div className="flex flex-col items-center">{props.children}</div>;
 }
