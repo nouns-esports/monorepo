@@ -1,19 +1,27 @@
 import Button from "@/components/Button";
 import { getUser } from "@/server/queries/users";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { Level } from "@/components/Level";
+import { getFeed } from "@/server/queries/farcaster";
+import CastCard from "@/components/CastCard";
 
 export default async function User(props: { params: { user: string } }) {
   const user = await getUser({ user: decodeURIComponent(props.params.user) });
 
   if (!user) {
+    if (!props.params.user.startsWith("did:privy:")) {
+      redirect(`https://warpcast.com/${props.params.user}`);
+    }
+
     return notFound();
   }
+
+  const feed = await getFeed({ fid: 11500 });
 
   return (
     <>
       <div className="flex flex-col items-center gap-16 pt-32 max-xl:pt-28 max-sm:pt-20 px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
-        <div className="max-w-2xl w-full">
+        <div className="max-w-2xl w-full flex flex-col gap-4">
           <div className="flex justify-between gap-6 p-6 w-full rounded-xl bg-grey-800">
             <div className="flex gap-4">
               <img
@@ -50,6 +58,11 @@ export default async function User(props: { params: { user: string } }) {
             ) : (
               ""
             )}
+          </div>
+          <div className="flex flex-col gap-4 w-full">
+            {await Promise.all([
+              feed.map(async (cast) => <CastCard cast={cast} />),
+            ])}
           </div>
         </div>
       </div>
