@@ -3,10 +3,11 @@
 import { env } from "~/env";
 import { onlyRanked, onlyUser } from ".";
 import { z } from "zod";
-import { db, nexus, xp } from "~/packages/db/schema";
-import { and, eq, or } from "drizzle-orm";
+import { db, events, nexus, seasons, xp } from "~/packages/db/schema";
+import { and, desc, eq, gte, lte, or } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { checkAchievements } from "../queries/achievements";
+import { achievements } from "../achievements";
 
 export const claimAchievement = onlyRanked
   .schema(
@@ -15,13 +16,27 @@ export const claimAchievement = onlyRanked
     })
   )
   .action(async ({ parsedInput, ctx }) => {
-    if (!checkAchievements[parsedInput.id]) {
+    if (!checkAchievements[parsedInput.id] || !achievements[parsedInput.id]) {
       throw new Error("Achievement not found");
     }
 
-    const alreadyClaimed = await db.query.xp.findFirst({
-      where: and(eq(xp.user, ctx.user.id), eq(xp.achievement, parsedInput.id)),
-    });
+    const now = new Date();
+
+    const [alreadyClaimed, currentSeason] = await Promise.all([
+      db.query.xp.findFirst({
+        where: and(
+          eq(xp.user, ctx.user.id),
+          eq(xp.achievement, parsedInput.id)
+        ),
+      }),
+      db.query.seasons.findFirst({
+        where: and(lte(seasons.start, now), gte(seasons.end, now)),
+      }),
+    ]);
+
+    if (!currentSeason) {
+      throw new Error("No active season");
+    }
 
     if (alreadyClaimed) {
       throw new Error("Achievement already claimed");
@@ -35,14 +50,14 @@ export const claimAchievement = onlyRanked
       await tx.insert(xp).values({
         user: ctx.user.id,
         achievement: parsedInput.id,
-        amount: 0,
-        season: 1,
-        timestamp: new Date(),
+        amount: achievements[parsedInput.id].xp,
+        season: currentSeason.id,
+        timestamp: now,
       });
       await tx
         .update(nexus)
         .set({
-          xp: (ctx.user.nexus?.xp ?? 0) + 0,
+          xp: (ctx.user.nexus?.xp ?? 0) + achievements[parsedInput.id].xp,
         })
         .where(eq(nexus.id, ctx.user.id));
     });
