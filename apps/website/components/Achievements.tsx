@@ -154,7 +154,7 @@ function Node(props: {
               "grayscale-0 border-gold-500"
           )}
         />
-        <div className="absolute z-10 top-4 -left-4 rounded-xl drop-shadow-2xl h-[calc(100%_+_64px)] flex flex-col bg-grey-800 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">
+        <div className="absolute z-10 top-4 -left-4 rounded-xl drop-shadow-2xl h-[calc(100%_+_64px)] flex flex-col bg-grey-800 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto transform-gpu">
           <img
             src={`${props.achievement.image}?img-height=100&img-onerror=redirect`}
             draggable={false}
