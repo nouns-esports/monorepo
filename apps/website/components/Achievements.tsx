@@ -142,7 +142,7 @@ function Node(props: {
       ) : null}
       <div className="relative group cursor-pointer">
         <img
-          src={props.achievement.image}
+          src={`${props.achievement.image}?img-height=100&img-onerror=redirect`}
           draggable={false}
           className={twMerge(
             "w-32 h-32 rounded-md border-8 border-grey-200 grayscale select-none",
@@ -156,7 +156,7 @@ function Node(props: {
         />
         <div className="absolute z-10 top-4 -left-4 rounded-xl drop-shadow-2xl h-[calc(100%_+_64px)] flex flex-col bg-grey-800 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">
           <img
-            src={props.achievement.image}
+            src={`${props.achievement.image}?img-height=100&img-onerror=redirect`}
             draggable={false}
             className={twMerge(
               "absolute -top-4 left-4 w-32 h-32 rounded-md border-8 border-grey-200 grayscale select-none",
