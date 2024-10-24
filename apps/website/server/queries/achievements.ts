@@ -60,10 +60,6 @@ export const getAchievementsProgress = cache(
 
     await Promise.all(
       Object.entries(checkAchievements).map(async ([achievement, check]) => {
-        if (!input.user.nexus) {
-          return "incomplete";
-        }
-
         if (claimRecords.find((record) => record.achievement === achievement)) {
           return (progress[achievement] = "claimed");
         }
