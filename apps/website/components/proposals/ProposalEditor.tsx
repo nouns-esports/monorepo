@@ -92,14 +92,14 @@ export default function ProposalEditor(props: {
                     Image
                   </h2>
                 </div>
-                {image ? (
+                {/* {image ? (
                   <img
                     src={image}
                     className="h-32 w-fit aspect-video object-cover rounded-xl"
                   />
                 ) : (
                   ""
-                )}
+                )} */}
                 <FileUpload type="image" asset={image} setAsset={setImage} />
               </div>
             </>
