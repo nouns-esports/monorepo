@@ -91,10 +91,6 @@ export const completeQuest = onlyRanked
       throw new Error("Season not found");
     }
 
-    if (quest.season !== currentSeason.id.toString()) {
-      throw new Error("Quest season is not active");
-    }
-
     await db.transaction(async (tx) => {
       await tx.insert(xp).values({
         quest: quest.id,

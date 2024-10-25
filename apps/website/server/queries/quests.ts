@@ -75,17 +75,10 @@ export async function getAction(input: {
 }
 
 export const getQuests = cache(
-  async (input: {
-    limit?: number;
-    user?: string;
-    season: string;
-    event?: string;
-  }) => {
-    //////////////
+  async (input: { limit?: number; user?: string; event?: string }) => {
     return db.query.quests.findMany({
       limit: input.limit,
       where: and(
-        eq(quests.season, input.season),
         eq(quests.active, true),
         input.event ? eq(quests.event, input.event) : isNull(quests.event)
       ),
@@ -107,7 +100,6 @@ export const getQuests = cache(
 
 export const getQuest = cache(
   async (input: { id: string; user?: string }) => {
-    ////////////////
     return db.query.quests.findFirst({
       where: eq(quests.id, input.id),
       with: {

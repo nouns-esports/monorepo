@@ -169,6 +169,13 @@
       "when": 1729180391113,
       "tag": "0023_jittery_forge",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1729869345898,
+      "tag": "0024_public_post",
+      "breakpoints": true
     }
   ]
 }

@@ -313,7 +313,6 @@ export const quests = pgTable("quests", {
   description: text("description").notNull(),
   image: text("image").notNull(),
   community: text("community").notNull(),
-  season: text("season").notNull().default(""),
   event: text("event"),
   createdAt: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
   featured: boolean("featured").notNull().default(false),
@@ -338,10 +337,6 @@ export const questRelations = relations(quests, ({ one, many }) => ({
   event: one(events, {
     fields: [quests.event],
     references: [events.id],
-  }),
-  season: one(seasons, {
-    fields: [quests.season],
-    references: [seasons.id],
   }),
 }));
 
