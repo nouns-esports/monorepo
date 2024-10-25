@@ -91,7 +91,7 @@ export default function Achievements(props: {
           backgroundPositionX,
           backgroundPositionY,
         }}
-        className="absolute top-0 left-0 w-full h-full flex items-center justify-center cursor-move bg-[url(/dots.svg)] bg-repeat /touch-none"
+        className="absolute top-0 left-0 w-full h-full flex items-center justify-center cursor-move bg-[url(/dots.svg)] bg-repeat touch-none"
         onPointerDown={(e) => {
           controls.start(e);
         }}
@@ -99,35 +99,39 @@ export default function Achievements(props: {
         onMouseEnter={() =>
           window.addEventListener("wheel", preventScroll, { passive: false })
         }
+        onWheel={(e) => {
+          const newScale = scale.get() + (e.deltaY > 0 ? -0.05 : 0.05);
+          scale.set(Math.max(0.25, Math.min(newScale, 1)));
+        }}
         onMouseLeave={() => window.removeEventListener("wheel", preventScroll)}
-        // onTouchStart={(e) => {
-        //   if (e.touches.length === 2) {
-        //     const initialDistance = Math.hypot(
-        //       e.touches[0].clientX - e.touches[1].clientX,
-        //       e.touches[0].clientY - e.touches[1].clientY
-        //     );
-        //     const initialScale = scale.get();
+        onTouchStart={(e) => {
+          if (e.touches.length === 2) {
+            const initialDistance = Math.hypot(
+              e.touches[0].clientX - e.touches[1].clientX,
+              e.touches[0].clientY - e.touches[1].clientY
+            );
+            const initialScale = scale.get();
 
-        //     const onTouchMove = (e: TouchEvent) => {
-        //       if (e.touches.length === 2) {
-        //         const distance = Math.hypot(
-        //           e.touches[0].clientX - e.touches[1].clientX,
-        //           e.touches[0].clientY - e.touches[1].clientY
-        //         );
-        //         const newScale = (distance / initialDistance) * initialScale;
-        //         scale.set(Math.max(0.25, Math.min(newScale, 1)));
-        //       }
-        //     };
+            const onTouchMove = (e: TouchEvent) => {
+              if (e.touches.length === 2) {
+                const distance = Math.hypot(
+                  e.touches[0].clientX - e.touches[1].clientX,
+                  e.touches[0].clientY - e.touches[1].clientY
+                );
+                const newScale = (distance / initialDistance) * initialScale;
+                scale.set(Math.max(0.25, Math.min(newScale, 1)));
+              }
+            };
 
-        //     const onTouchEnd = () => {
-        //       document.removeEventListener("touchmove", onTouchMove);
-        //       document.removeEventListener("touchend", onTouchEnd);
-        //     };
+            const onTouchEnd = () => {
+              document.removeEventListener("touchmove", onTouchMove);
+              document.removeEventListener("touchend", onTouchEnd);
+            };
 
-        //     document.addEventListener("touchmove", onTouchMove);
-        //     document.addEventListener("touchend", onTouchEnd);
-        //   }
-        // }}
+            document.addEventListener("touchmove", onTouchMove);
+            document.addEventListener("touchend", onTouchEnd);
+          }
+        }}
       >
         <motion.div
           drag
