@@ -36,7 +36,6 @@ export default async function Home() {
 
   const quests = await getQuests({
     limit: 5,
-    season: season.id.toString(),
     user: user?.id,
   });
 
