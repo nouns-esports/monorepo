@@ -16,8 +16,6 @@ export default async function User(props: { params: { user: string } }) {
     return notFound();
   }
 
-  const feed = await getFeed({ fid: 11500 });
-
   return (
     <>
       <div className="flex flex-col items-center gap-16 pt-32 max-xl:pt-28 max-sm:pt-20 px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
@@ -58,11 +56,6 @@ export default async function User(props: { params: { user: string } }) {
             ) : (
               ""
             )}
-          </div>
-          <div className="flex flex-col gap-4 w-full">
-            {await Promise.all([
-              feed.map(async (cast) => <CastCard cast={cast} />),
-            ])}
           </div>
         </div>
       </div>
