@@ -2,7 +2,6 @@ import { env } from "~/env";
 import type { AuthenticatedUser } from "../queries/users";
 
 export default async function joinServer(user: AuthenticatedUser) {
-  console.log("checking joinServer", user.discord);
   if (!user.discord) return false;
 
   const discordResponse = await fetch(
@@ -12,12 +11,6 @@ export default async function joinServer(user: AuthenticatedUser) {
         Authorization: `Bot ${env.DISCORD_TOKEN}`,
       },
     }
-  );
-
-  console.log(
-    "discordResponse",
-    discordResponse.ok,
-    await discordResponse.json()
   );
 
   if (discordResponse.ok) return true;

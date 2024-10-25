@@ -20,12 +20,14 @@ import reachChampion from "../achievements/reachChampion";
 import reachExplorer from "../achievements/reachExplorer";
 import tenVoters from "../achievements/tenVoters";
 import winARound from "../achievements/winARound";
+import joinServer from "../achievements/joinServer";
 
 export const checkAchievements: Record<
   string,
   (user: AuthenticatedUser) => Promise<boolean>
 > = {
   attendCall,
+  joinServer,
   castVote,
   castVoteWinningProposal,
   completeQuest,
