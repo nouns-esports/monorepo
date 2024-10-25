@@ -1,7 +1,7 @@
 import type { AuthenticatedUser } from "../queries/users";
 
 export default async function reachExplorer(user: AuthenticatedUser) {
-  if (user.nexus?.rank && [1, 2, 3].includes(user.nexus.rank.id)) {
+  if (user.nexus?.rank) {
     return true;
   }
 
