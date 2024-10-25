@@ -9,7 +9,14 @@ import { twMerge } from "tailwind-merge";
 import Link from "@/components/Link";
 import { getCurrentRankings, getUserRankings } from "@/server/queries/rankings";
 import DateComponent from "@/components/Date";
-import { Link2, Settings, Sparkles } from "lucide-react";
+import {
+  Fullscreen,
+  Link2,
+  Maximize,
+  Maximize2,
+  Settings,
+  Sparkles,
+} from "lucide-react";
 import CheckDiscordServer from "@/components/CheckDiscordServer";
 import { revalidatePath } from "next/cache";
 import { ToggleModal } from "@/components/Modal";
@@ -17,6 +24,10 @@ import SettingsModal from "@/components/modals/SettingsModal";
 import { Level } from "@/components/Level";
 import SignInButton from "@/components/SignInButton";
 import { CaretDown, CaretUp } from "phosphor-react-sc";
+import Achievements from "@/components/Achievements";
+import { getAchievementsProgress } from "@/server/queries/achievements";
+import ProgressCircle from "@/components/ProgressCircle";
+import EarnedXPModal from "@/components/modals/EarnedXPModal";
 
 export default async function NexusPage(props: {
   searchParams: {
@@ -44,11 +55,13 @@ export default async function NexusPage(props: {
     userRankings,
     rankings,
     userStats,
+    achievementProgress,
   ] = await Promise.all([
     // user ? getUserAwards({ user: user.id }) : [],
     getUserRankings({ user: user.id }),
     getCurrentRankings(),
     getUserStats({ user: user.id }),
+    getAchievementsProgress({ user: user }),
   ]);
 
   const now = new Date();
@@ -57,6 +70,10 @@ export default async function NexusPage(props: {
   if (nextUpdate <= now) {
     nextUpdate.setDate(nextUpdate.getDate() + 1);
   }
+
+  const completed = Object.values(achievementProgress).filter(
+    (value) => value === "claimed"
+  ).length;
 
   return (
     <div className="flex flex-col gap-16 pt-32 max-xl:pt-28 max-sm:pt-20 px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
@@ -244,6 +261,31 @@ export default async function NexusPage(props: {
               <p className="text-white whitespace-nowrap">
                 <DateComponent />
               </p>
+            </div>
+          </div>
+          <div className="bg-grey-800 relative rounded-xl flex flex-col gap-4 p-4 h-[400px] col-span-2 max-lg:col-span-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-white text-2xl font-bebas-neue leading-none">
+                Achievements
+              </h2>
+              <div className="flex items-center gap-3">
+                <p className="text-white">
+                  {completed}/{Object.keys(achievementProgress).length}{" "}
+                  Completed
+                </p>
+                <ProgressCircle
+                  value={completed}
+                  min={0}
+                  size={24}
+                  max={Object.keys(achievementProgress).length}
+                />
+              </div>
+            </div>
+            <div className="bg-grey-600 rounded-xl relative w-full h-full overflow-hidden">
+              <Achievements
+                user={user}
+                achievementProgress={achievementProgress}
+              />
             </div>
           </div>
         </div>

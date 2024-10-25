@@ -16,7 +16,13 @@ export const useXPModal = create<{
   },
 }));
 
-export default function EarnedXPModal(props: { from: string }) {
+export default function EarnedXPModal(props: {
+  from: string;
+  redirect?: {
+    link: string;
+    text: string;
+  };
+}) {
   const { close } = useModal(`earned-xp-${props.from}`);
 
   const { xp } = useXPModal();
@@ -38,12 +44,21 @@ export default function EarnedXPModal(props: { from: string }) {
         </button>
       </div>
       <Level xp={xp} />
-      <Link
-        href="/quests"
-        className="flex justify-center items-center gap-2 w-full text-black bg-white hover:bg-white/70 font-semibold rounded-lg p-2.5 transition-colors"
-      >
-        View Quests
-      </Link>
+      {props.redirect ? (
+        <Link
+          href={props.redirect.link}
+          className="flex justify-center items-center gap-2 w-full text-black bg-white hover:bg-white/70 font-semibold rounded-lg p-2.5 transition-colors"
+        >
+          {props.redirect.text}
+        </Link>
+      ) : (
+        <button
+          onClick={() => close()}
+          className="flex justify-center items-center gap-2 w-full text-black bg-white hover:bg-white/70 font-semibold rounded-lg p-2.5 transition-colors"
+        >
+          Close
+        </button>
+      )}
     </Modal>
   );
 }

@@ -11,6 +11,7 @@ import {
   Handshake,
   Gem,
   Calendar,
+  MessageCircle,
 } from "lucide-react";
 import Banner from "./Banner";
 import { getCommunities } from "@/server/queries/communities";
@@ -195,21 +196,55 @@ export default async function Header() {
                     title="Communities"
                     icon={<Users className="w-5 h-5" />}
                   >
-                    <div className="grid grid-cols-2 w-[22rem]">
-                      {communities.map((community) => (
-                        <Link
-                          key={community.name}
-                          href={`https://warpcast.com/~/channel/${community.channels[0]}`}
-                          className="flex items-center gap-2 rounded-lg px-2 py-2 hover:bg-grey-500 transition-colors w-full"
-                        >
-                          <img
-                            src={community.image}
-                            alt={community.name}
-                            className="w-6 h-6 rounded-md object-cover"
-                          />
-                          <p className="text-nowrap">{community.name}</p>
+                    <div className="flex flex-col gap-2 ">
+                      <div className="text-nowrap hover:bg-grey-500 transition-colors py-1.5 px-3 rounded-lg">
+                        <Link href="/chat" className="flex gap-4 items-center">
+                          <div className="rounded-md w-10 h-10 flex overflow-hidden bg-red text-white items-center">
+                            <MessageCircle className="w-full h-full p-2" />
+                          </div>
+                          <div>
+                            <p className="font-bebas-neue text-lg">Chat</p>
+                            <p className="text-grey-200">Join the discussion</p>
+                          </div>
                         </Link>
-                      ))}
+                      </div>
+                      <div className="flex justify-between items-center px-3">
+                        <p className="font-bebas-neue text-lg">Communities</p>
+                        <Link
+                          href="/chat"
+                          className="text-red text-sm flex gap-1 items-center group/rosters"
+                        >
+                          View All
+                          <ArrowRight className="w-4 h-4 group-hover/rosters:translate-x-0.5 transition-transform" />
+                        </Link>
+                      </div>
+                      <div className="grid grid-cols-2 w-[22rem] px-1.5">
+                        {communities
+                          .filter((community) =>
+                            [
+                              "nouns",
+                              "matcha",
+                              "smash",
+                              "dota",
+                              "cs",
+                              "rocket-league",
+                            ].includes(community.id)
+                          )
+                          .map((community) => (
+                            <Link
+                              key={community.name}
+                              href={`/chat/${community.id}`}
+                              className="flex items-center gap-2 rounded-lg px-2 py-2 hover:bg-grey-500 transition-colors w-full"
+                            >
+                              <img
+                                src={community.image}
+                                alt={community.name}
+                                className="w-6 h-6 rounded-md object-cover"
+                              />
+                              <p className="text-nowrap">{community.name}</p>
+                            </Link>
+                          ))}
+                      </div>
                     </div>
                   </Group>
                   <Link href="/shop">

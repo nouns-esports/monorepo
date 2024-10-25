@@ -89,7 +89,8 @@ export const getUser = cache(
     return db.query.nexus.findFirst({
       where: or(
         eq(nexus.id, input.user),
-        eq(nexus.discord, input.user.split("#")[0])
+        eq(nexus.discord, input.user.split("#")[0]),
+        eq(nexus.farcaster, input.user)
       ),
       with: {
         rank: true,

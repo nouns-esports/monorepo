@@ -35,7 +35,7 @@ export default function Button(props: {
       <div
         className={twMerge(
           "relative select-none text-grey-800 bg-white rounded-full flex items-center justify-center leading-none font-bebas-neue whitespace-nowrap",
-          props.size === "lg" && "py-3 px-[22px] text-xl",
+          props.size === "lg" && "py-3 px-[22px] text-2xl",
           (props.size === "md" || !props.size) && "py-1.5 px-4 text-xl",
           props.size === "sm" && "py-1 px-3 text-lg",
           props.disabled

@@ -29,17 +29,6 @@ export const getRoundWithProposal = cache(
   { tags: ["rounds"], revalidate: 60 * 10 }
 );
 
-export const getHighlightedRound = cache(
-  async () => {
-    return db.query.rounds.findFirst({
-      where: gt(rounds.end, new Date()),
-      orderBy: desc(rounds.end),
-    });
-  },
-  ["highlightedRound"],
-  { tags: ["highlightedRound"], revalidate: 60 * 10 }
-);
-
 export const getRound = cache(
   async (input: { id: string }) => {
     /////////
@@ -132,7 +121,7 @@ export const getRounds = cache(
 
     return db.query.rounds.findMany({
       limit: input?.limit,
-      orderBy: desc(rounds.end),
+      orderBy: [desc(rounds.featured), desc(rounds.end)],
       where: and(lt(rounds.start, new Date()), isNotNull(rounds.end)),
       with: {
         awards: {

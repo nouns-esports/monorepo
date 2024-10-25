@@ -1,6 +1,7 @@
 import { db, communities, rosters, talent } from "~/packages/db/schema";
 import { and, asc, eq } from "drizzle-orm";
 import { unstable_cache as cache } from "next/cache";
+import { neynarClient } from "../clients/neynar";
 
 export const getCommunities = cache(
   async () => {

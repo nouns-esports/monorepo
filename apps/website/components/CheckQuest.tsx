@@ -67,7 +67,10 @@ export default function CheckQuest(props: {
             : "Check"
           : "Sign in"}
       </Button>
-      <EarnedXPModal from={`quest-${props.quest}`} />
+      <EarnedXPModal
+        from={`quest-${props.quest}`}
+        redirect={{ link: "/quests", text: "View Quests" }}
+      />
     </>
   );
 }
