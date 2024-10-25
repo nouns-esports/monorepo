@@ -91,7 +91,7 @@ export default function Achievements(props: {
           backgroundPositionX,
           backgroundPositionY,
         }}
-        className="absolute top-0 left-0 w-full h-full flex items-center justify-center cursor-move bg-[url(/dots.svg)] bg-repeat touch-none"
+        className="absolute top-0 left-0 w-full h-full flex items-center justify-center cursor-move bg-[url(/dots.svg)] bg-repeat /touch-none"
         onPointerDown={(e) => {
           controls.start(e);
         }}
