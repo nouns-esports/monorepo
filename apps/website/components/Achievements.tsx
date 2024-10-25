@@ -100,34 +100,34 @@ export default function Achievements(props: {
           window.addEventListener("wheel", preventScroll, { passive: false })
         }
         onMouseLeave={() => window.removeEventListener("wheel", preventScroll)}
-        onTouchStart={(e) => {
-          if (e.touches.length === 2) {
-            const initialDistance = Math.hypot(
-              e.touches[0].clientX - e.touches[1].clientX,
-              e.touches[0].clientY - e.touches[1].clientY
-            );
-            const initialScale = scale.get();
+        // onTouchStart={(e) => {
+        //   if (e.touches.length === 2) {
+        //     const initialDistance = Math.hypot(
+        //       e.touches[0].clientX - e.touches[1].clientX,
+        //       e.touches[0].clientY - e.touches[1].clientY
+        //     );
+        //     const initialScale = scale.get();
 
-            const onTouchMove = (e: TouchEvent) => {
-              if (e.touches.length === 2) {
-                const distance = Math.hypot(
-                  e.touches[0].clientX - e.touches[1].clientX,
-                  e.touches[0].clientY - e.touches[1].clientY
-                );
-                const newScale = (distance / initialDistance) * initialScale;
-                scale.set(Math.max(0.25, Math.min(newScale, 1)));
-              }
-            };
+        //     const onTouchMove = (e: TouchEvent) => {
+        //       if (e.touches.length === 2) {
+        //         const distance = Math.hypot(
+        //           e.touches[0].clientX - e.touches[1].clientX,
+        //           e.touches[0].clientY - e.touches[1].clientY
+        //         );
+        //         const newScale = (distance / initialDistance) * initialScale;
+        //         scale.set(Math.max(0.25, Math.min(newScale, 1)));
+        //       }
+        //     };
 
-            const onTouchEnd = () => {
-              document.removeEventListener("touchmove", onTouchMove);
-              document.removeEventListener("touchend", onTouchEnd);
-            };
+        //     const onTouchEnd = () => {
+        //       document.removeEventListener("touchmove", onTouchMove);
+        //       document.removeEventListener("touchend", onTouchEnd);
+        //     };
 
-            document.addEventListener("touchmove", onTouchMove);
-            document.addEventListener("touchend", onTouchEnd);
-          }
-        }}
+        //     document.addEventListener("touchmove", onTouchMove);
+        //     document.addEventListener("touchend", onTouchEnd);
+        //   }
+        // }}
       >
         <motion.div
           drag
