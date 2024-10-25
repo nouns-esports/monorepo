@@ -49,9 +49,7 @@ export default async function Quests() {
       {featuredQuests.length > 0 && (
         <div className="flex flex-col gap-6">
           <div className="flex items-center justify-between w-full">
-            <h1 className="font-luckiest-guy text-white text-3xl">
-              Highlighted
-            </h1>
+            <h1 className="font-luckiest-guy text-white text-3xl">Featured</h1>
           </div>
           <div className="grid grid-cols-5 max-2xl:grid-cols-4 max-lg:grid-cols-3 max-md:grid-cols-2 max-[550px]:flex max-[550px]:overflow-x-scroll max-[550px]:scrollbar-hidden gap-4">
             {featuredQuests.map((quest) => (
