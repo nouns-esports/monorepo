@@ -17,6 +17,7 @@ import { linkTwitter } from "../quests/twitter/linkTwitter";
 import { mintERC1155 } from "../quests/zora/mintERC1155";
 import { visitLink } from "../quests/online/visitLink";
 import { placeTrade } from "../quests/matcha/placeTrade";
+import { claimAchievement } from "../quests/achievements/claimAchievement";
 
 export const actions: Record<string, ReturnType<typeof createAction>> = {
   // Discord
@@ -44,6 +45,9 @@ export const actions: Record<string, ReturnType<typeof createAction>> = {
 
   // Matcha
   placeTrade,
+
+  // Achievements
+  claimAchievement,
 };
 
 export async function getAction(input: {
