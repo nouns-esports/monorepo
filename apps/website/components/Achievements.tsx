@@ -13,6 +13,8 @@ import toast from "react-hot-toast";
 import { useModal } from "./Modal";
 import EarnedXPModal, { useXPModal } from "./modals/EarnedXPModal";
 import { confetti } from "@/utils/confetti";
+import { useWindowSize } from "@uidotdev/usehooks";
+import { useMemo } from "react";
 
 export default function Achievements(props: {
   user?: AuthenticatedUser;
@@ -83,6 +85,9 @@ export default function Achievements(props: {
     );
   }
 
+  const { width } = useWindowSize();
+  const mobile = useMemo(() => !!((width ?? 0) <= 600), [width]);
+
   return (
     <>
       <motion.div
@@ -146,6 +151,11 @@ export default function Achievements(props: {
         >
           {render(achievementTree)}
         </motion.div>
+        {width ? (
+          <div className="absolute bottom-2 left-3 flex items-center gap-2 text-sm text-white select-none">
+            {mobile ? "Touch to move" : "Use mouse to move"}
+          </div>
+        ) : null}
       </motion.div>
       <EarnedXPModal from="achievement" />
     </>
