@@ -15,6 +15,7 @@ import ViewProposalModal from "../modals/VewProposalModal";
 import type { AuthenticatedUser } from "@/server/queries/users";
 import VoteSelector from "../VoteSelector";
 import ShareVotesModal from "../modals/ShareVotesModal";
+import type { Round } from "~/packages/db/schema";
 
 export default function Proposals(props: {
   round: NonNullable<
@@ -300,77 +301,93 @@ export default function Proposals(props: {
                     "border-[3px] border-blue-500 bg-blue-900 hover:bg-blue-800 text-white"
                 )}
               >
-                {props.round.type === "markdown" ? (
-                  <p className="text-white font-bebas-neue text-2xl line-clamp-2 flex-shrink-0 leading-[1.15] /h-[2lh]">
-                    {proposal.title}
-                  </p>
-                ) : (
-                  ""
-                )}
-                {props.round.type === "markdown" && !proposal.image ? (
-                  <div className="relative w-full h-full overflow-hidden">
-                    <p
-                      className={twMerge(
-                        "text-grey-200 h-full",
-                        state === "Ended" &&
-                          index < props.round.awardCount &&
-                          "text-white"
-                      )}
-                    >
-                      {lexicalToDescription(proposal.content ?? "")}
-                    </p>
-                    <div
-                      className={twMerge(
-                        "absolute left-0 w-full group-hover:opacity-0 opacity-100 transition-opacity bg-gradient-to-t from-grey-800 to-transparent h-10 bottom-0 z-10",
-                        state === "Ended" &&
-                          index < props.round.awardCount &&
-                          index === 0 &&
-                          "from-gold-900",
-                        state === "Ended" &&
-                          index < props.round.awardCount &&
-                          index === 1 &&
-                          "from-silver-900",
-                        state === "Ended" &&
-                          index < props.round.awardCount &&
-                          index === 2 &&
-                          "from-bronze-900",
-                        state === "Ended" &&
-                          index > 2 &&
-                          index < props.round.awardCount &&
-                          "from-blue-900"
-                      )}
-                    />
-                    <div
-                      className={twMerge(
-                        "absolute left-0 w-full group-hover:opacity-100 opacity-0 transition-opacity bg-gradient-to-t from-grey-600 to-transparent h-20 bottom-0 z-10",
-                        state === "Ended" &&
-                          index < props.round.awardCount &&
-                          index === 0 &&
-                          "from-gold-800",
-                        state === "Ended" &&
-                          index < props.round.awardCount &&
-                          index === 1 &&
-                          "from-silver-800",
-                        state === "Ended" &&
-                          index < props.round.awardCount &&
-                          index === 2 &&
-                          "from-bronze-800",
-                        state === "Ended" &&
-                          index > 2 &&
-                          index < props.round.awardCount &&
-                          "from-blue-800"
-                      )}
-                    />
-                  </div>
-                ) : (
-                  <img
-                    src={`${proposal.image}?img-width=500&img-onerror=redirect`}
-                    className={twMerge(
-                      "flex w-full h-full object-cover overflow-hidden rounded-xl select-none",
-                      props.round.type === "video" && "aspect-video h-auto"
-                    )}
-                  />
-                )}
+                <p className="text-white font-bebas-neue text-2xl line-clamp-2 flex-shrink-0 leading-[1.15] /h-[2lh]">
+                  {proposal.title}
+                </p>
+                {
+                  {
+                    markdown: proposal.image ? (
+                      <img
+                        src={`${proposal.image}?img-width=500&img-onerror=redirect`}
+                        className={twMerge(
+                          "flex w-full h-full object-cover overflow-hidden rounded-xl select-none",
+                          props.round.type === "video" && "aspect-video h-auto"
+                        )}
+                      />
+                    ) : (
+                      <div className="relative w-full h-full overflow-hidden">
+                        <p
+                          className={twMerge(
+                            "text-grey-200 h-full",
+                            state === "Ended" &&
+                              index < props.round.awardCount &&
+                              "text-white"
+                          )}
+                        >
+                          {lexicalToDescription(proposal.content ?? "")}
+                        </p>
+                        <div
+                          className={twMerge(
+                            "absolute left-0 w-full group-hover:opacity-0 opacity-100 transition-opacity bg-gradient-to-t from-grey-800 to-transparent h-10 bottom-0 z-10",
+                            state === "Ended" &&
+                              index < props.round.awardCount &&
+                              index === 0 &&
+                              "from-gold-900",
+                            state === "Ended" &&
+                              index < props.round.awardCount &&
+                              index === 1 &&
+                              "from-silver-900",
+                            state === "Ended" &&
+                              index < props.round.awardCount &&
+                              index === 2 &&
+                              "from-bronze-900",
+                            state === "Ended" &&
+                              index > 2 &&
+                              index < props.round.awardCount &&
+                              "from-blue-900"
+                          )}
+                        />
+                        <div
+                          className={twMerge(
+                            "absolute left-0 w-full group-hover:opacity-100 opacity-0 transition-opacity bg-gradient-to-t from-grey-600 to-transparent h-20 bottom-0 z-10",
+                            state === "Ended" &&
+                              index < props.round.awardCount &&
+                              index === 0 &&
+                              "from-gold-800",
+                            state === "Ended" &&
+                              index < props.round.awardCount &&
+                              index === 1 &&
+                              "from-silver-800",
+                            state === "Ended" &&
+                              index < props.round.awardCount &&
+                              index === 2 &&
+                              "from-bronze-800",
+                            state === "Ended" &&
+                              index > 2 &&
+                              index < props.round.awardCount &&
+                              "from-blue-800"
+                          )}
+                        />
+                      </div>
+                    ),
+                    image: (
+                      <img
+                        src={`${proposal.image}?img-width=500&img-onerror=redirect`}
+                        className={twMerge(
+                          "flex w-full h-full object-cover overflow-hidden rounded-xl select-none",
+                          props.round.type === "video" && "aspect-video h-auto"
+                        )}
+                      />
+                    ),
+                    video: (
+                      <iframe
+                        src="https://clips.twitch.tv/embed?clip=BlueExquisiteBaconHeyGuys-vynEsLJMItjIbj9m&parent=beta.nouns.gg"
+                        className="w-full aspect-video rounded-xl select-none overflow-hidden"
+                        allowfullscreen
+                      ></iframe>
+                    ),
+                  }[props.round.type as Round["type"]]
+                }
                 <div className="flex justify-between items-center flex-shrink-0">
                   {proposal.user ? (
                     <Link
