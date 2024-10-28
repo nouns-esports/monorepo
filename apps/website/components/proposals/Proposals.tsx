@@ -384,7 +384,7 @@ export default function Proposals(props: {
                         src="https://clips.twitch.tv/embed?clip=BlueExquisiteBaconHeyGuys-vynEsLJMItjIbj9m&parent=beta.nouns.gg"
                         className="w-full aspect-video rounded-xl select-none overflow-hidden"
                         // @ts-ignore
-                        allowfullscreen
+                        allowfullscreen={true}
                       ></iframe>
                     ),
                   }[props.round.type as Round["type"]]
