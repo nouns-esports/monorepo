@@ -191,6 +191,16 @@ app.frame("/rounds/:id", async (c) => {
       width: 1200,
       height: 1200,
     },
+    intents: [
+      <Button.Link href={`${env.NEXT_PUBLIC_DOMAIN}/rounds/${round.id}`}>
+        View
+      </Button.Link>,
+      <Button.Link href={`${env.NEXT_PUBLIC_DOMAIN}/rounds`}>
+        All Rounds
+      </Button.Link>,
+    ],
+    title: round.name,
+    ogImage: round.image,
   });
   //   image: (
   //     <div
