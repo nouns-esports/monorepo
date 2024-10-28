@@ -65,7 +65,7 @@ export default function ViewProposalModal(props: {
             image: (
               <img
                 src={props.proposal.image ?? ""}
-                className="w-full h-full object-contain"
+                className="w-full h-full object-contain rounded-xl"
               />
             ),
           }[props.round.type as string]
