@@ -2,8 +2,7 @@ export default function Test() {
   return (
     <iframe
       src="https://clips.twitch.tv/embed?clip=BlueExquisiteBaconHeyGuys-vynEsLJMItjIbj9m&parent=nouns.gg"
-      height="300"
-      width="100%"
+      className="aspect-video h-64 mt-64"
       //   allowfullscreen
     ></iframe>
   );
