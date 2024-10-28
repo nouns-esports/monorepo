@@ -202,7 +202,6 @@ app.frame("/rounds/:id", async (c) => {
     title: round.name,
     ogImage: round.image,
   });
-  //   image: (
   //     <div
   //       style={{
   //         color: "white",
@@ -362,7 +361,6 @@ app.frame("/rounds/:round/votes/:user", async (c) => {
   });
 });
 
-// Add full width banner image to top TODO
 app.image("/rounds/:round/votes/:user/img", async (c) => {
   const user = await getUser({ user: c.req.param("user") });
 
