@@ -14,7 +14,6 @@ import { unstable_cache as cache } from "next/cache";
 
 export const getRoundWithProposal = cache(
   async (input: { round: string; user: string }) => {
-    console.log(input.user);
     return db.query.rounds.findFirst({
       where: eq(rounds.id, input.round),
       with: {

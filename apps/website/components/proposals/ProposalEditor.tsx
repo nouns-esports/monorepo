@@ -168,7 +168,8 @@ export default function ProposalEditor(props: {
             createProposalAction.isPending ||
             updateProposalAction.isPending ||
             title.length < 15 ||
-            parsedMarkdown.split(" ").length - 1 < 150
+            (props.round.type === "markdown" &&
+              parsedMarkdown.split(" ").length - 1 < 150)
           }
           onClick={async () => {
             if (!props.user) return;
@@ -192,7 +193,7 @@ export default function ProposalEditor(props: {
               title,
               content: editorState,
               round: props.round.id,
-              image: image ?? undefined,
+              image: image,
             });
 
             if (result?.serverError) {

@@ -2,9 +2,7 @@ import { ArrowSquareOut } from "phosphor-react-sc";
 import { metadata } from "@/app/layout";
 import type { Metadata } from "next";
 import Link from "@/components/Link";
-import Image from "next/image";
 import { notFound } from "next/navigation";
-import { getTalent } from "@/server/queries/talent";
 import { getCommunityRosters } from "@/server/queries/communities";
 
 export async function generateMetadata(props: { params: { id: string } }) {
@@ -77,13 +75,12 @@ export default async function RosterPage(props: { params: { id: string } }) {
                       maxWidth: roster.talent.length < 5 ? "18rem" : "100%",
                     }}
                   >
-                    <Image
+                    <img
                       src={person.image ?? "/talent/silhouette.webp"}
                       style={{
                         filter: person.image ? "none" : "brightness(20%)",
                       }}
                       alt={person.name}
-                      fill
                       className="w-full pt-8 z-10 group-hover:translate-y-[4.5rem] max-lg:translate-y-[4.5rem] transition-transform object-contain"
                     />
                     <div className="absolute top-6 w-full text-center">

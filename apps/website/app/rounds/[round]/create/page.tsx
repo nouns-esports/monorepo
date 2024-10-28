@@ -28,8 +28,6 @@ export default async function Create(props: { params: { round: string } }) {
     return redirect(`/rounds/${props.params.round}`);
   }
 
-  console.log(round.proposals);
-
   return (
     <div className="flex flex-col gap-4 justify-center pt-32 max-xl:pt-28 max-sm:pt-20 px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
       <Link

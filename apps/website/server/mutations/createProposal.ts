@@ -16,7 +16,6 @@ export const createProposal = onlyUser
     })
   )
   .action(async ({ parsedInput, ctx }) => {
-    console.log(ctx.user);
     const round = await db.query.rounds.findFirst({
       where: eq(rounds.id, parsedInput.round),
       with: {
@@ -62,7 +61,7 @@ export const createProposal = onlyUser
         image: parsedInput.image,
         round: parsedInput.round,
         user: ctx.user.id,
-        createdAt: new Date(),
+        createdAt: now,
       },
     ]);
 

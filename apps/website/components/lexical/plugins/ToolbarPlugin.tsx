@@ -245,7 +245,7 @@ export default function ToolbarPlugin() {
         value={blockType}
         onChange={(e) => {
           setBlockType(e.target.value as keyof typeof blockTypeToBlockName);
-          console.log(e.target.value);
+
           if (["h1", "h2", "h3"].includes(e.target.value)) {
             return formatHeading(e.target.value as "h1" | "h2" | "h3");
           }
