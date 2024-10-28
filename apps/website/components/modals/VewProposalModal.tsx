@@ -57,11 +57,19 @@ export default function ViewProposalModal(props: {
         </ToggleModal>
       </div>
       <div className="flex flex-col h-full overflow-y-scroll custom-scrollbar gap-2">
-        {props.round.type === "markdown" ? (
-          <Markdown markdown={props.proposal.content ?? ""} readOnly />
-        ) : (
-          ""
-        )}
+        {
+          {
+            markdown: (
+              <Markdown markdown={props.proposal.content ?? ""} readOnly />
+            ),
+            image: (
+              <img
+                src={props.proposal.image ?? ""}
+                className="w-full h-full object-contain"
+              />
+            ),
+          }[props.round.type as string]
+        }
       </div>
       <div className="flex justify-between items-center">
         {props.proposal.user ? (

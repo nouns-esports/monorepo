@@ -233,7 +233,7 @@ function Node(props: {
                   return toast.error(result.serverError);
                 }
 
-                setXP(props.achievement.xp);
+                setXP(result?.data ?? 0);
                 confetti();
                 open();
               }}

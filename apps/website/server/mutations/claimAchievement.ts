@@ -67,4 +67,6 @@ export const claimAchievement = onlyRanked
       revalidatePath(`/users/${ctx.user.nexus.discord}`);
     }
     revalidatePath("/nexus");
+
+    return achievements[parsedInput.id].xp + (ctx.user.nexus?.xp ?? 0);
   });
