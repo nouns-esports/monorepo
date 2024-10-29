@@ -16,7 +16,6 @@ import type { AuthenticatedUser } from "@/server/queries/users";
 import VoteSelector from "../VoteSelector";
 import ShareVotesModal from "../modals/ShareVotesModal";
 import type { Round } from "~/packages/db/schema";
-import VideoPlayer from "../VideoPlayer";
 
 export default function Proposals(props: {
   round: NonNullable<
@@ -377,7 +376,12 @@ export default function Proposals(props: {
                         className="flex w-full h-full object-cover overflow-hidden rounded-xl select-none"
                       />
                     ),
-                    video: <VideoPlayer url={proposal.video ?? ""} />,
+                    video: (
+                      <img
+                        src={`${proposal.image}?img-width=500&img-onerror=redirect`}
+                        className="flex w-full h-full object-cover overflow-hidden rounded-xl select-none"
+                      />
+                    ),
                   }[props.round.type as Round["type"]]
                 }
                 <div className="flex justify-between items-center flex-shrink-0">
