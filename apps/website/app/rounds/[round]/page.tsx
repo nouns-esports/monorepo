@@ -194,7 +194,6 @@ export default async function Round(props: {
           round={{
             ...round,
             awardCount: round.awards.length,
-            type: "video",
           }}
           user={
             user

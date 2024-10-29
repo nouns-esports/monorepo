@@ -16,6 +16,8 @@ import type { AuthenticatedUser } from "@/server/queries/users";
 import VoteSelector from "../VoteSelector";
 import type { getRound } from "@/server/queries/rounds";
 import Button from "../Button";
+import VideoPlayer from "../VideoPlayer";
+import { twMerge } from "tailwind-merge";
 
 export default function ViewProposalModal(props: {
   round: NonNullable<Awaited<ReturnType<typeof getRound>>>;
@@ -42,7 +44,10 @@ export default function ViewProposalModal(props: {
       id={`view-proposal-${props.proposal.id}`}
       handle
       queryParam={[`p`, props.proposal.id.toString()]}
-      className="relative flex-col gap-4 w-2/3 h-2/3 p-4 max-w-screen-lg max-xl:w-full max-xl:h-[95dvh] overflow-hidden"
+      className={twMerge(
+        "relative flex flex-col gap-4 w-2/3 max-h-[66.66%] p-4 max-w-screen-lg max-xl:w-full max-xl:h-[95dvh] overflow-hidden",
+        props.round.type === "markdown" && ""
+      )}
     >
       <div className="flex gap-4 justify-between">
         <h2 className="text-white font-luckiest-guy text-3xl">
@@ -65,10 +70,11 @@ export default function ViewProposalModal(props: {
             image: (
               <img
                 src={props.proposal.image ?? ""}
-                className="w-full h-full object-contain rounded-xl"
+                className="flex h-full object-contain rounded-xl"
               />
             ),
-          }[props.round.type as string]
+            video: <VideoPlayer url={props.proposal.video ?? ""} />,
+          }[props.round.type as Round["type"]]
         }
       </div>
       <div className="flex justify-between items-center">

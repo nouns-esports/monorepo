@@ -16,6 +16,7 @@ import type { AuthenticatedUser } from "@/server/queries/users";
 import VoteSelector from "../VoteSelector";
 import ShareVotesModal from "../modals/ShareVotesModal";
 import type { Round } from "~/packages/db/schema";
+import VideoPlayer from "../VideoPlayer";
 
 export default function Proposals(props: {
   round: NonNullable<
@@ -373,19 +374,10 @@ export default function Proposals(props: {
                     image: (
                       <img
                         src={`${proposal.image}?img-width=500&img-onerror=redirect`}
-                        className={twMerge(
-                          "flex w-full h-full object-cover overflow-hidden rounded-xl select-none",
-                          props.round.type === "video" && "aspect-video h-auto"
-                        )}
+                        className="flex w-full h-full object-cover overflow-hidden rounded-xl select-none"
                       />
                     ),
-                    video: (
-                      <iframe
-                        src="https://clips.twitch.tv/embed?clip=BlueExquisiteBaconHeyGuys-vynEsLJMItjIbj9m&parent=beta.nouns.gg"
-                        className="w-full aspect-video rounded-xl select-none overflow-hidden"
-                        allowFullScreen
-                      ></iframe>
-                    ),
+                    video: <VideoPlayer url={proposal.video ?? ""} />,
                   }[props.round.type as Round["type"]]
                 }
                 <div className="flex justify-between items-center flex-shrink-0">
