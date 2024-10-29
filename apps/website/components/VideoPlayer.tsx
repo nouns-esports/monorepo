@@ -1,8 +1,10 @@
+import { env } from "~/env";
+
 export default function VideoPlayer(props: { url: string }) {
   if (props.url.includes("twitch.tv")) {
     return (
       <iframe
-        src={props.url}
+        src={`${props.url}&parent=${env.NEXT_PUBLIC_DOMAIN.split("://")[1]}`}
         className="w-full aspect-video rounded-xl select-none overflow-hidden"
         allowFullScreen
       />
@@ -37,6 +39,6 @@ export default function VideoPlayer(props: { url: string }) {
   );
 }
 
-// Twitch: https://clips.twitch.tv/embed?clip=BlueExquisiteBaconHeyGuys-vynEsLJMItjIbj9m&parent=beta.nouns.gg
+// Twitch: https://clips.twitch.tv/embed?clip=BlueExquisiteBaconHeyGuys-vynEsLJMItjIbj9m
 // Youtube: https://www.youtube.com/embed/sqRntu1k6AE
 // Google Drive: https://drive.google.com/file/d/1obXK4mr1yTVS7ruAWba__6k6D5b_ORgs/preview
