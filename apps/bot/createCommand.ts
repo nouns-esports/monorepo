@@ -24,7 +24,7 @@ export function createCommand(command: {
       }
   >;
   onlyAdmin?: boolean;
-  execute: (interaction: CommandInteraction) => Promise<string>;
+  execute: (interaction?: CommandInteraction) => Promise<string>;
 }) {
   if (command.schedule && !validate(command.schedule)) {
     throw new Error("Invalid cron expression");
@@ -39,10 +39,6 @@ export function createCommand(command: {
       let message = "";
 
       try {
-        if (!interaction) {
-          throw new Error("Can only be run from a Discord command");
-        }
-
         message = await command.execute(interaction);
       } catch (e) {
         console.log(e);
