@@ -3,7 +3,7 @@ import { Client, REST, Role, Routes, SlashCommandBuilder } from "discord.js";
 import { PrivyClient } from "@privy-io/server-auth";
 import { Hono } from "hono";
 import { serve } from "@hono/node-server";
-
+import { schedule } from "node-cron";
 // Commands
 import type { createCommand } from "./createCommand";
 import { refreshRankings } from "./commands/refreshRankings";
@@ -123,7 +123,15 @@ discordClient.on("interactionCreate", async (interaction) => {
 
 for (const [name, command] of Object.entries(commands)) {
   if (command.schedule) {
-    // Schedule and run command
+    schedule(
+      command.schedule,
+      async () => {
+        await command.execute();
+      },
+      {
+        timezone: "America/Chicago",
+      }
+    );
   }
 
   // app.post(`/${name}`, async (c) => {

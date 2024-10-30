@@ -7,7 +7,7 @@ import { isNotNull } from "drizzle-orm";
 
 export const refreshRoles = createCommand({
   description: "Refreshes the ranked roles",
-  schedule: "30 3 * * *",
+  schedule: "30 15 * * *",
   onlyAdmin: true,
   execute: async () => {
     const guild = discordClient.guilds.cache.get(env.DISCORD_GUILD_ID);
