@@ -62,7 +62,7 @@ export default function Proposals(props: {
   }, [votesSelected, props.user?.nexus?.rank?.votes, props.user?.priorVotes]);
 
   const userProposal = props.round.proposals.find(
-    (proposal) => proposal.user === props.user?.id
+    (proposal) => proposal.user?.id === props.user?.id
   );
 
   const { open: openSignInModal } = useModal("sign-in");
@@ -379,7 +379,7 @@ export default function Proposals(props: {
                     video: (
                       <img
                         src={`${proposal.image}?img-width=500&img-onerror=redirect`}
-                        className="flex w-full h-full object-cover overflow-hidden rounded-xl select-none"
+                        className="flex w-full h-full object-cover overflow-hidden rounded-xl select-none aspect-video"
                       />
                     ),
                   }[props.round.type as Round["type"]]

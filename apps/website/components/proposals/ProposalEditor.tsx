@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import TextInput from "../form/TextInput";
 import Button from "../Button";
 import { createProposal } from "@/server/mutations/createProposal";
@@ -13,9 +13,10 @@ import dynamic from "next/dynamic";
 import Shimmer from "../Shimmer";
 import { useAction } from "next-safe-action/hooks";
 import type { getRoundWithProposal } from "@/server/queries/rounds";
-import { pinImage } from "@/server/mutations/pinImage";
-import { Edit2, Plus } from "lucide-react";
-import FileUpload from "../FileUpload";
+import { Trash2 } from "lucide-react";
+import PinImage from "../PinImage";
+import VideoPlayer from "../VideoPlayer";
+import { env } from "~/env";
 
 const Markdown = dynamic(() => import("../lexical/Markdown"), {
   ssr: false,
@@ -31,7 +32,41 @@ export default function ProposalEditor(props: {
 
   const [title, setTitle] = useState(proposal?.title ?? "");
   const [image, setImage] = useState(proposal?.image ?? undefined);
-  const [video, setVideo] = useState(proposal?.video);
+  const [video, setVideo] = useState(proposal?.video ?? undefined);
+
+  const validVideo = useMemo(() => {
+    if (!video) return;
+
+    // Youtube: https://www.youtube.com/embed/sqRntu1k6AE
+    // Google Drive: https://drive.google.com/file/d/1obXK4mr1yTVS7ruAWba__6k6D5b_ORgs/preview
+
+    try {
+      const url = new URL(video);
+
+      // User Input: https://clips.twitch.tv/BlueExquisiteBaconHeyGuys-vynEsLJMItjIbj9m
+      // Output: https://clips.twitch.tv/embed?clip=BlueExquisiteBaconHeyGuys-vynEsLJMItjIbj9m&parent=nouns.gg
+      if (url.hostname.includes("clips.twitch.tv")) {
+        if (url.pathname.length > 1)
+          return `https://clips.twitch.tv/embed?clip=${url.pathname.replace("/", "")}`;
+      }
+
+      // User Input: https://www.youtube.com/watch?v=sqRntu1k6AE
+      // Output: https://www.youtube.com/embed/sqRntu1k6AE
+      if (url.hostname.includes("youtube.com")) {
+        if (url.searchParams.get("v") !== null) {
+          return `https://www.youtube.com/embed/${url.searchParams.get("v")}`;
+        }
+      }
+
+      // User Input: https://drive.google.com/file/d/1obXK4mr1yTVS7ruAWba__6k6D5b_ORgs/view
+      // Output: https://drive.google.com/file/d/1obXK4mr1yTVS7ruAWba__6k6D5b_ORgs/preview
+      if (url.hostname.includes("drive.google.com")) {
+        return video.replace("/view", "/preview").split("?")[0];
+      }
+    } catch {}
+
+    return;
+  }, [video]);
 
   const [editorState, setEditorState] = useState(
     proposal?.content ??
@@ -86,33 +121,43 @@ export default function ProposalEditor(props: {
         {
           image: (
             <>
-              <div className="flex flex-col gap-3">
+              <div className="flex flex-col gap-3 max-w-[400px]">
                 <div className="flex items-center justify-between mt-4">
                   <h2 className="font-luckiest-guy text-white text-2xl">
                     Image
                   </h2>
+                  {image ? (
+                    <button
+                      onClick={() => setImage(undefined)}
+                      className="text-red flex items-center gap-1 hover:opacity-70 transition-opacity"
+                    >
+                      Remove
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  ) : null}
                 </div>
-                {/* {image ? (
-                  <img
-                    src={image}
-                    className="h-32 w-fit aspect-video object-cover rounded-xl"
-                  />
-                ) : (
-                  ""
-                )} */}
-                <FileUpload type="image" asset={image} setAsset={setImage} />
+                <PinImage image={image} setImage={setImage} />
               </div>
             </>
           ),
           markdown: (
             <>
-              <div className="flex flex-col gap-3">
+              <div className="flex flex-col gap-3 max-w-[400px]">
                 <div className="flex items-center justify-between mt-4">
                   <h2 className="font-luckiest-guy text-white text-2xl">
                     Cover Image
                   </h2>
+                  {image ? (
+                    <button
+                      onClick={() => setImage(undefined)}
+                      className="text-red flex items-center gap-1 hover:opacity-70 transition-opacity"
+                    >
+                      Remove
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  ) : null}
                 </div>
-                <FileUpload type="image" asset={image} setAsset={setImage} />
+                <PinImage image={image} setImage={setImage} />
               </div>
               <div className="flex flex-col gap-2">
                 <div className="flex items-center justify-between">
@@ -148,7 +193,57 @@ export default function ProposalEditor(props: {
               </div>
             </>
           ),
-          video: <></>,
+          video: (
+            <>
+              <div className="flex flex-col gap-3 max-w-[400px]">
+                <div className="flex items-center justify-between mt-4">
+                  <h2 className="font-luckiest-guy text-white text-2xl">
+                    Cover Image
+                  </h2>
+                  {image ? (
+                    <button
+                      onClick={() => setImage(undefined)}
+                      className="text-red flex items-center gap-1 hover:opacity-70 transition-opacity"
+                    >
+                      Remove
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  ) : null}
+                </div>
+                <PinImage image={image} setImage={setImage} />
+              </div>
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center justify-between max-w-[400px]">
+                  <h2 className="font-luckiest-guy text-white text-2xl">
+                    Video
+                  </h2>
+                  {video && validVideo ? (
+                    <button
+                      onClick={() => setVideo(undefined)}
+                      className="text-red flex items-center gap-1 hover:opacity-70 transition-opacity"
+                    >
+                      Remove
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  ) : null}
+                </div>
+                {video && validVideo ? (
+                  <div className="max-w-[400px]">
+                    <VideoPlayer url={validVideo} />
+                  </div>
+                ) : (
+                  <TextInput
+                    placeholder="Link to Twitch Clip, YouTube Video, or Google Drive File"
+                    onChange={(value) => setVideo(value)}
+                    value={video}
+                  />
+                )}
+                {video && !validVideo ? (
+                  <small className="text-red">Not a valid video url</small>
+                ) : null}
+              </div>
+            </>
+          ),
         }[props.round.type]
       }
 
@@ -168,8 +263,11 @@ export default function ProposalEditor(props: {
             createProposalAction.isPending ||
             updateProposalAction.isPending ||
             title.length < 15 ||
-            (props.round.type === "markdown" &&
-              parsedMarkdown.split(" ").length - 1 < 150)
+            {
+              markdown: parsedMarkdown.split(" ").length - 1 < 150,
+              image: !image,
+              video: !video && !validVideo && !image,
+            }[props.round.type]
           }
           onClick={async () => {
             if (!props.user) return;
@@ -179,6 +277,8 @@ export default function ProposalEditor(props: {
                 round: props.round.id,
                 title,
                 content: editorState,
+                image: image,
+                video: validVideo,
               });
 
               if (result?.serverError) {
@@ -194,6 +294,7 @@ export default function ProposalEditor(props: {
               content: editorState,
               round: props.round.id,
               image: image,
+              video: validVideo,
             });
 
             if (result?.serverError) {

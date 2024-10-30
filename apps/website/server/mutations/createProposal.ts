@@ -13,6 +13,7 @@ export const createProposal = onlyUser
       image: z.string().optional(),
       content: z.string(),
       round: z.string(),
+      video: z.string().optional(),
     })
   )
   .action(async ({ parsedInput, ctx }) => {
@@ -54,6 +55,14 @@ export const createProposal = onlyUser
       throw new Error("Proposing has closed");
     }
 
+    if (round.type === "image" && !parsedInput.image) {
+      throw new Error("Image is required");
+    }
+
+    if (round.type === "video" && (!parsedInput.video || !parsedInput.image)) {
+      throw new Error("Video and cover image is required");
+    }
+
     await db.insert(proposals).values([
       {
         title: parsedInput.title,
@@ -61,6 +70,7 @@ export const createProposal = onlyUser
         image: parsedInput.image,
         round: parsedInput.round,
         user: ctx.user.id,
+        video: parsedInput.video,
         createdAt: now,
       },
     ]);

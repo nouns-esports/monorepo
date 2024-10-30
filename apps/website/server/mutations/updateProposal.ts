@@ -13,6 +13,7 @@ export const updateProposal = onlyUser
       image: z.string().optional(),
       content: z.string(),
       round: z.string(),
+      video: z.string().optional(),
     })
   )
   .action(async ({ parsedInput, ctx }) => {
@@ -42,12 +43,21 @@ export const updateProposal = onlyUser
       throw new Error("Proposing has closed");
     }
 
+    if (round.type === "image" && !parsedInput.image) {
+      throw new Error("Image is required");
+    }
+
+    if (round.type === "video" && (!parsedInput.video || !parsedInput.image)) {
+      throw new Error("Video and cover image is required");
+    }
+
     await db
       .update(proposals)
       .set({
         title: parsedInput.title,
         content: parsedInput.content,
         image: parsedInput.image,
+        video: parsedInput.video,
       })
       .where(eq(proposals.id, proposal.id));
 
