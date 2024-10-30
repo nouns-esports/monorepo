@@ -7,6 +7,7 @@ import { and, desc, eq, gte, lte } from "drizzle-orm";
 export const refreshRankings = createCommand({
   description: "Refreshes the rankings",
   schedule: "0 15 * * *",
+  then: "refresh-roles",
   onlyAdmin: true,
   execute: async () => {
     const guild = discordClient.guilds.cache.get(env.DISCORD_GUILD_ID);

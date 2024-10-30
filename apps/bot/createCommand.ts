@@ -8,6 +8,7 @@ import { validate } from "node-cron";
 export function createCommand(command: {
   description: string;
   schedule?: string;
+  then?: string;
   params?: Array<
     | {
         type: "string";
@@ -33,6 +34,7 @@ export function createCommand(command: {
   return {
     description: command.description,
     schedule: command.schedule,
+    then: command.then,
     params: command.params,
     onlyAdmin: !!command.onlyAdmin,
     execute: async (interaction?: CommandInteraction) => {

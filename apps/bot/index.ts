@@ -127,6 +127,10 @@ for (const [name, command] of Object.entries(commands)) {
       command.schedule,
       async () => {
         await command.execute();
+
+        if (command.then) {
+          await commands[command.then].execute();
+        }
       },
       {
         timezone: "America/Chicago",
