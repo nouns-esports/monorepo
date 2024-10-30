@@ -1,11 +1,12 @@
 import { db, communities, rosters, talent } from "~/packages/db/schema";
-import { and, asc, eq } from "drizzle-orm";
+import { and, asc, eq, inArray } from "drizzle-orm";
 import { unstable_cache as cache } from "next/cache";
 import { neynarClient } from "../clients/neynar";
 
 export const getCommunities = cache(
-  async () => {
+  async (input?: { ids?: string[] }) => {
     return db.query.communities.findMany({
+      where: input?.ids ? inArray(communities.id, input.ids) : undefined,
       orderBy: asc(communities.name),
     });
   },

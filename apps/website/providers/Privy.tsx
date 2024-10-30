@@ -18,6 +18,7 @@ import {
   type SetStateAction,
 } from "react";
 import { create } from "zustand";
+import { SmartWalletsProvider } from "@privy-io/react-auth/smart-wallets";
 
 export const LoginMethodContext = createContext({
   onlyCoinbaseWallet: false,
@@ -53,7 +54,6 @@ export default function Privy(props: {
       <PrivyProvider
         appId={env.NEXT_PUBLIC_PRIVY_APP_ID}
         config={{
-          // loginMethods: ["discord", "twitter", "wallet", "farcaster", "email"],
           loginMethods,
           defaultChain:
             env.NEXT_PUBLIC_ENVIRONMENT === "production" ? base : baseSepolia,
@@ -64,7 +64,6 @@ export default function Privy(props: {
             theme: "#040404",
             accentColor: "#E93737",
             logo: "/logo/logo.svg",
-            // walletList: onlyCoinbaseWallet ? ["coinbase_wallet"] : undefined,
             walletList,
           },
           externalWallets: {
@@ -74,7 +73,9 @@ export default function Privy(props: {
           },
         }}
       >
-        <PrivySync>{props.children}</PrivySync>
+        <PrivySync>
+          <SmartWalletsProvider>{props.children}</SmartWalletsProvider>
+        </PrivySync>
       </PrivyProvider>
     </LoginMethodContext.Provider>
   );
