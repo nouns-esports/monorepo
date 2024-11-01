@@ -84,10 +84,7 @@ export default async function CastCard(props: {
             </RichText>
           </p>
           {embeds.image ? (
-            <Link
-              href={`https://warpcast.com/${props.cast.author.username}/${props.cast.hash.substring(0, 10)}`}
-              className="relative flex items-center justify-center mb-1 w-full max-h-[400px] overflow-hidden rounded-xl"
-            >
+            <div className="relative flex items-center justify-center mb-1 w-full max-h-[400px] overflow-hidden rounded-xl">
               <img
                 src={embeds.image.url}
                 className="blur-2xl brightness-[25%] absolute top-0 left-0 w-full object-cover h-full"
@@ -96,7 +93,7 @@ export default async function CastCard(props: {
                 src={embeds.image.url}
                 className="relative z-10 object-contain h-full"
               />
-            </Link>
+            </div>
           ) : (
             ""
           )}
@@ -135,10 +132,10 @@ export default async function CastCard(props: {
                   <Spinner className="text-white" />
                 </Player.LoadingIndicator>
                 <Player.Controls
-                  className="p-4 pointer-events-none opacity-0 group-hover:pointer-events-auto group-hover:opacity-100 transition-opacity duration-150"
+                  className="pointer-events-none opacity-0 group-hover:pointer-events-auto group-hover:opacity-100 transition-opacity duration-150"
                   autoHide={0}
                 >
-                  <div className="absolute left-6 bottom-6 flex flex-col gap-2 w-[calc(100%_-_48px)]">
+                  <div className="absolute left-4 bottom-4 flex flex-col gap-2 w-[calc(100%_-_32px)]">
                     <Player.Seek className="h-5 flex items-center gap-2.5 select-none touch-none">
                       <Player.Track className="bg-white/70 relative flex-grow rounded-full h-1">
                         <Player.SeekBuffer className="absolute bg-black/50 rounded-full h-full" />
