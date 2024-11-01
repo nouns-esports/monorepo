@@ -57,7 +57,7 @@ export default async function CastCard(props: {
             </Link>
             {props.topic ? (
               <>
-                <span className="text-grey-400 font-semibold text-sm">in</span>
+                <span className="text-grey-200 font-semibold text-sm">in</span>
                 <Link
                   href={`/chat?topic=${props.topic.id.substring(0, 10)}`}
                   className="flex items-center gap-1 bg-grey-600 hover:bg-grey-500 transition-colors rounded-full px-2 py-1"
@@ -73,10 +73,10 @@ export default async function CastCard(props: {
               </>
             ) : null}
           </div>
-          <MoreHorizontal className="w-5 h-5 text-grey-400 hover:text-white transition-colors mr-2" />
+          <MoreHorizontal className="w-5 h-5 text-grey-200 hover:text-white transition-colors mr-2" />
         </div>
         <div className="flex flex-col gap-3">
-          <p className="text-white/85 w-fit">
+          <p className="text-white w-fit">
             <RichText>
               {embeds.website
                 ? props.cast.text.replace(embeds.website.url, "")
