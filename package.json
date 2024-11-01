@@ -35,6 +35,7 @@
     "@lexical/list": "^0.14.5",
     "@lexical/react": "^0.14.5",
     "@lexical/rich-text": "^0.14.5",
+    "@livepeer/react": "^4.2.7",
     "@neynar/nodejs-sdk": "^1.65.0",
     "@pinata/sdk": "^2.1.0",
     "@privy-io/react-auth": "^1.92.5",

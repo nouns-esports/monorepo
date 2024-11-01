@@ -34,3 +34,10 @@ export const getFeed = cache(
   ["getFeed"],
   { revalidate: 60 * 10 }
 );
+
+export const getCast = cache(
+  async (input: { hash: string }) => {
+    return (await neynarClient.fetchBulkCasts([input.hash])).result.casts[0];
+  },
+  ["getCast"]
+);
