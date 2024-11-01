@@ -23,7 +23,9 @@ export default function RichText(props: { children: string }) {
   return (
     <MatchTicker>
       <MatchLink>
-        <MatchHandle>{props.children}</MatchHandle>
+        <MatchHandle>
+          <MatchChannel>{props.children}</MatchChannel>
+        </MatchHandle>
       </MatchLink>
     </MatchTicker>
   );
@@ -35,14 +37,18 @@ function MatchTicker(props: { children: React.ReactNode }) {
       component={(match, key) => {
         const token = tokens[match.replace("$", "").toLowerCase()];
         return (
-          <Link
-            href={token ? `/matcha/tokens/base/${token}` : "/matcha"}
+          <span
             key={key}
-            newTab
-            className="text-red hover:opacity-70 transition-opacity"
+            className="relative text-red hover:opacity-70 transition-opacity w-min text-nowrap"
           >
-            {match}
-          </Link>
+            <Link
+              href={token ? `/matcha/tokens/base/${token}` : "/matcha"}
+              newTab
+              className="absolute top-0 left-0 w-full h-full"
+            >
+              {match}
+            </Link>
+          </span>
         );
       }}
       regex={/\$[A-Za-z]+/}
@@ -61,14 +67,15 @@ function MatchLink(props: { children: React.ReactNode }) {
         );
 
         return (
-          <Link
-            href={url.hostname === "nouns.gg" ? url.pathname : url.href}
-            key={key}
-            newTab={url.hostname !== "nouns.gg"}
-            className="text-red hover:opacity-70 transition-opacity"
-          >
+          <span className="relative text-red hover:opacity-70 transition-opacity w-min text-nowrap">
+            <Link
+              href={url.hostname === "nouns.gg" ? url.pathname : url.href}
+              key={key}
+              newTab={url.hostname !== "nouns.gg"}
+              className="absolute top-0 left-0 w-full h-full"
+            />
             {url.pathname in vanityUrls ? vanityUrls[url.pathname] : match}
-          </Link>
+          </span>
         );
       }}
       regex={
@@ -85,16 +92,39 @@ function MatchHandle(props: { children: React.ReactNode }) {
     <LinkIt
       component={(match, key) => {
         return (
-          <Link
-            href={`/users/${match.replace("@", "")}`}
-            key={key}
-            className="text-red hover:opacity-70 transition-opacity"
-          >
+          <span className="relative text-red hover:opacity-70 transition-opacity w-min text-nowrap">
+            <Link
+              href={`/users/${match.replace("@", "")}`}
+              key={key}
+              className="absolute top-0 left-0 w-full h-full"
+            />
             {match in vanityHandles ? vanityHandles[match] : match}
-          </Link>
+          </span>
         );
       }}
       regex={/@[\w-]+/g}
+    >
+      {props.children}
+    </LinkIt>
+  );
+}
+
+function MatchChannel(props: { children: React.ReactNode }) {
+  return (
+    <LinkIt
+      component={(match, key) => {
+        return (
+          <span className="relative text-red hover:opacity-70 transition-opacity w-min text-nowrap">
+            <Link
+              href={`/users/${match.replace("/", "")}`}
+              key={key}
+              className="absolute top-0 left-0 w-full h-full"
+            />
+            {match}
+          </span>
+        );
+      }}
+      regex={/\/[\w-]+/g}
     >
       {props.children}
     </LinkIt>

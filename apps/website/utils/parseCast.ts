@@ -1,4 +1,7 @@
-import type { CastWithInteractions } from "@neynar/nodejs-sdk/build/neynar-api/v2";
+import type {
+  CastEmbedded,
+  CastWithInteractions,
+} from "@neynar/nodejs-sdk/build/neynar-api/v2";
 
 type ImageEmbed = { url: string; width: number; height: number };
 type VideoEmbed = {
@@ -13,12 +16,12 @@ type WebsiteEmbed = {
 type FrameEmbed = { url: string; image: string };
 
 type CastEmbed = {
-  cast: CastWithInteractions;
+  cast: CastEmbedded;
   embeds: {
-    image: ImageEmbed;
-    video: VideoEmbed;
-    website: WebsiteEmbed;
-    frame: FrameEmbed;
+    image?: ImageEmbed;
+    video?: VideoEmbed;
+    website?: WebsiteEmbed;
+    frame?: FrameEmbed;
   };
 };
 
@@ -27,7 +30,7 @@ export default function parseCastEmbed(embeds: CastWithInteractions["embeds"]) {
   let video: VideoEmbed | undefined;
   let website: WebsiteEmbed | undefined;
   let frame: FrameEmbed | undefined;
-  let cast: CastEmbed | undefined;
+  let quoteCast: CastEmbed | undefined;
 
   for (const embed of embeds) {
     if ("url" in embed) {
@@ -60,7 +63,57 @@ export default function parseCastEmbed(embeds: CastWithInteractions["embeds"]) {
         }
       }
     }
+
+    if ("cast" in embed) {
+      let quoteImage: ImageEmbed | undefined;
+      let quoteVideo: VideoEmbed | undefined;
+      let quoteWebsite: WebsiteEmbed | undefined;
+      let quoteFrame: FrameEmbed | undefined;
+
+      for (const quoteEmbed of embed.cast.embeds) {
+        if ("url" in quoteEmbed) {
+          if (quoteEmbed.metadata) {
+            if (quoteEmbed.metadata.image) {
+              quoteImage = {
+                url: quoteEmbed.url,
+                width: quoteEmbed.metadata.image.width_px ?? 0,
+                height: quoteEmbed.metadata.image.height_px ?? 0,
+              };
+            }
+
+            if (quoteEmbed.metadata.video) {
+              quoteVideo = {
+                url: quoteEmbed.url,
+                duration: quoteEmbed.metadata.video.duration_s ?? 0,
+              };
+            }
+
+            if (
+              quoteEmbed.metadata.html &&
+              quoteEmbed.metadata.html.ogTitle &&
+              quoteEmbed.metadata.html.ogImage
+            ) {
+              quoteWebsite = {
+                url: quoteEmbed.url,
+                image: quoteEmbed.metadata.html.ogImage[0].url,
+                title: quoteEmbed.metadata.html.ogTitle,
+              };
+            }
+          }
+        }
+      }
+
+      quoteCast = {
+        cast: embed.cast,
+        embeds: {
+          image: quoteImage,
+          video: quoteVideo,
+          website: quoteWebsite,
+          frame: quoteFrame,
+        },
+      };
+    }
   }
 
-  return { image, video, website, frame };
+  return { image, video, website, frame, quoteCast };
 }
