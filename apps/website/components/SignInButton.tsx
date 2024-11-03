@@ -4,20 +4,10 @@ import { useRouter } from "next/navigation";
 import type { AuthenticatedUser } from "@/server/queries/users";
 import { useModal } from "./Modal";
 import SignInModal from "./modals/SignInModal";
-import { usePrivy } from "@privy-io/react-auth";
-import { useEffect } from "react";
 
 export default function SignInButton(props: { user?: AuthenticatedUser }) {
   const router = useRouter();
   const { open } = useModal("sign-in");
-
-  const { user } = usePrivy();
-
-  useEffect(() => {
-    console.log(
-      user?.linkedAccounts.find((account) => account.type === "smart_wallet")
-    );
-  }, [user]);
 
   return (
     <>

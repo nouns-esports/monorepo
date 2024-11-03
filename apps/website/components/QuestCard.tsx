@@ -10,7 +10,7 @@ export default function QuestCard(props: {
   xp: number;
   start?: Date;
   end?: Date;
-  community: {
+  community?: {
     id: string;
     name: string;
     image: string;
@@ -50,12 +50,15 @@ export default function QuestCard(props: {
         </div>
         <div className="flex justify-between items-center">
           <Link
-            href={`https://warpcast.com/~/channel/${props.community.id}`}
+            href={`https://warpcast.com/~/channel/${props.community?.id ?? "nouns-esports"}`}
             newTab
             className="relative z-20 bg-grey-500 hover:bg-grey-400 transition-colors py-2 pl-2 pr-3 rounded-full flex text-white items-center gap-2 text-sm font-semibold w-fit whitespace-nowrap"
           >
-            <img src={props.community.image} className="w-5 h-5 rounded-full" />
-            {props.community.name}
+            <img
+              src={props.community?.image ?? "/logo/logo-square.png"}
+              className="w-5 h-5 rounded-full"
+            />
+            {props.community?.name ?? "Nouns Esports"}
           </Link>
           {props.completed ? (
             <div className="font-semibold text-sm flex items-center gap-1 text-green mr-2">

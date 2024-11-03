@@ -13,7 +13,7 @@ export default function RoundCard(props: {
   start: Round["start"];
   votingStart: Round["votingStart"];
   end: Round["end"];
-  community: {
+  community?: {
     id: Community["id"];
     name: Community["name"];
     image: Community["image"];
@@ -84,12 +84,15 @@ export default function RoundCard(props: {
         </div>
         <div className="flex h-full items-end">
           <Link
-            href={`https://warpcast.com/~/channel/${props.community.id}`}
+            href={`https://warpcast.com/~/channel/${props.community?.id ?? "nouns-esports"}`}
             newTab
             className="relative z-20 bg-grey-500 hover:bg-grey-400 transition-colors py-2 pl-2 pr-3 rounded-full flex text-white items-center gap-2 text-sm font-semibold w-fit"
           >
-            <img src={props.community.image} className="w-5 h-5 rounded-full" />
-            {props.community.name}
+            <img
+              src={props.community?.image ?? "/logo/logo-square.png"}
+              className="w-5 h-5 rounded-full"
+            />
+            {props.community?.name ?? "Nouns Esports"}
           </Link>
         </div>
       </div>

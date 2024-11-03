@@ -67,10 +67,12 @@ function MatchLink(props: { children: React.ReactNode }) {
         );
 
         return (
-          <span className="relative text-red hover:opacity-70 transition-opacity w-min text-nowrap ">
+          <span
+            key={key}
+            className="relative text-red hover:opacity-70 transition-opacity w-min text-nowrap "
+          >
             <Link
               href={url.hostname === "nouns.gg" ? url.pathname : url.href}
-              key={key}
               newTab={url.hostname !== "nouns.gg"}
               className="absolute top-0 left-0 w-full h-full"
             />
@@ -92,10 +94,12 @@ function MatchHandle(props: { children: React.ReactNode }) {
     <LinkIt
       component={(match, key) => {
         return (
-          <span className="relative text-red hover:opacity-70 transition-opacity w-min text-nowrap">
+          <span
+            key={key}
+            className="relative text-red hover:opacity-70 transition-opacity w-min text-nowrap"
+          >
             <Link
               href={`/users/${match.replace(" @", "")}`}
-              key={key}
               className="absolute top-0 left-0 w-full h-full"
             />
             {match in vanityHandles ? vanityHandles[match] : match}
@@ -114,10 +118,12 @@ function MatchChannel(props: { children: React.ReactNode }) {
     <LinkIt
       component={(match, key) => {
         return (
-          <span className="relative text-red hover:opacity-70 transition-opacity w-min text-nowrap">
+          <span
+            key={key}
+            className="relative text-red hover:opacity-70 transition-opacity w-min text-nowrap"
+          >
             <Link
               href={`/users/${match.replace(" /", "")}`}
-              key={key}
               className="absolute top-0 left-0 w-full h-full"
             />
             {match}

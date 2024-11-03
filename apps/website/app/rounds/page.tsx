@@ -62,11 +62,15 @@ export default async function Rounds() {
                 start={round.start}
                 votingStart={round.votingStart}
                 end={round.end}
-                community={{
-                  id: round.community.id,
-                  name: round.community.name,
-                  image: round.community.image,
-                }}
+                community={
+                  round.community
+                    ? {
+                        id: round.community.id,
+                        name: round.community.name,
+                        image: round.community.image,
+                      }
+                    : undefined
+                }
                 className="max-lg:w-80 max-lg:flex-shrink-0"
               />
             ))}
@@ -90,11 +94,15 @@ export default async function Rounds() {
                 start={round.start}
                 votingStart={round.votingStart}
                 end={round.end}
-                community={{
-                  id: round.community.id,
-                  name: round.community.name,
-                  image: round.community.image,
-                }}
+                community={
+                  round.community
+                    ? {
+                        id: round.community.id,
+                        name: round.community.name,
+                        image: round.community.image,
+                      }
+                    : undefined
+                }
                 className="max-lg:w-80 max-lg:flex-shrink-0"
               />
             ))}
@@ -117,11 +125,15 @@ export default async function Rounds() {
               start={round.start}
               votingStart={round.votingStart}
               end={round.end}
-              community={{
-                id: round.community.id,
-                name: round.community.name,
-                image: round.community.image,
-              }}
+              community={
+                round.community
+                  ? {
+                      id: round.community.id,
+                      name: round.community.name,
+                      image: round.community.image,
+                    }
+                  : undefined
+              }
               className="max-lg:w-80 max-lg:flex-shrink-0"
             />
           ))}

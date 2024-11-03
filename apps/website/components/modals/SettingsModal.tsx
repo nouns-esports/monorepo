@@ -13,6 +13,7 @@ import { twMerge } from "tailwind-merge";
 import { usePrivy } from "@privy-io/react-auth";
 import type { AuthenticatedUser } from "@/server/queries/users";
 import Tabs from "../Tabs";
+import { deleteUser } from "@/server/mutations/deleteUser";
 
 export default function SettingsModal(props: { user: AuthenticatedUser }) {
   const [tab, setTab] = useState<
@@ -50,7 +51,19 @@ export default function SettingsModal(props: { user: AuthenticatedUser }) {
     },
   });
 
-  const router = useRouter();
+  const deleteUserAction = useAction(deleteUser, {
+    onSuccess: () => {
+      toast.success("Account deleted");
+      close();
+      window.location.href = "/";
+    },
+    onError: ({ error }) => {
+      toast.error(
+        error.serverError ??
+          "Could not delete account, reach out in the Discord server for help."
+      );
+    },
+  });
 
   return (
     <Modal id="settings" className="p-4 flex flex-col min-w-80 gap-4">
@@ -313,6 +326,7 @@ export default function SettingsModal(props: { user: AuthenticatedUser }) {
                     disabled={!confirmDeleteAccount}
                     onClick={() => {
                       if (!confirmDeleteAccount) return;
+                      deleteUserAction.execute();
                     }}
                     size="sm"
                   >

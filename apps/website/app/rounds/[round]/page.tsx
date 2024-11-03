@@ -100,15 +100,15 @@ export default async function Round(props: {
                   {round.name}
                 </h1>
                 <Link
-                  href={`https://warpcast.com/~/channel/${round.community.id}`}
+                  href={`https://warpcast.com/~/channel/${round.community?.id ?? "nouns-esports"}`}
                   newTab
                   className="bg-grey-500 hover:bg-grey-400 transition-colors py-2 pl-2 pr-3 flex-shrink-0 rounded-full flex text-white items-center gap-2 text-sm font-semibold w-fit whitespace-nowrap"
                 >
                   <img
-                    src={round.community.image}
+                    src={round.community?.image ?? "/logo/logo-square.png"}
                     className="w-5 h-5 rounded-full"
                   />
-                  {round.community.name}
+                  {round.community?.name ?? "Nouns Esports"}
                 </Link>
               </div>
               <Markdown

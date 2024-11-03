@@ -18,7 +18,6 @@ import {
   type SetStateAction,
 } from "react";
 import { create } from "zustand";
-import { SmartWalletsProvider } from "@privy-io/react-auth/smart-wallets";
 
 export const LoginMethodContext = createContext({
   onlyCoinbaseWallet: false,
@@ -73,9 +72,7 @@ export default function Privy(props: {
           },
         }}
       >
-        <PrivySync>
-          <SmartWalletsProvider>{props.children}</SmartWalletsProvider>
-        </PrivySync>
+        <PrivySync>{props.children}</PrivySync>
       </PrivyProvider>
     </LoginMethodContext.Provider>
   );

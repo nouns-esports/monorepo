@@ -131,11 +131,15 @@ export default async function Home() {
               start={round.start}
               votingStart={round.votingStart}
               end={round.end}
-              community={{
-                id: round.community.id,
-                name: round.community.name,
-                image: round.community.image,
-              }}
+              community={
+                round.community
+                  ? {
+                      id: round.community.id,
+                      name: round.community.name,
+                      image: round.community.image,
+                    }
+                  : undefined
+              }
               className="max-xl:w-80 max-xl:flex-shrink-0"
             />
           ))}
@@ -162,11 +166,15 @@ export default async function Home() {
               name={quest.name}
               description={quest.description}
               image={quest.image}
-              community={{
-                id: quest.community.id,
-                name: quest.community.name,
-                image: quest.community.image,
-              }}
+              community={
+                quest.community
+                  ? {
+                      id: quest.community.id,
+                      name: quest.community.name,
+                      image: quest.community.image,
+                    }
+                  : undefined
+              }
               xp={quest.xp}
               completed={quest.completed?.length > 0}
               start={quest.start ?? undefined}

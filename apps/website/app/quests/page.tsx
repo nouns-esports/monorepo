@@ -59,11 +59,15 @@ export default async function Quests() {
                 name={quest.name}
                 description={quest.description}
                 image={quest.image}
-                community={{
-                  id: quest.community.id,
-                  name: quest.community.name,
-                  image: quest.community.image,
-                }}
+                community={
+                  quest.community
+                    ? {
+                        id: quest.community.id,
+                        name: quest.community.name,
+                        image: quest.community.image,
+                      }
+                    : undefined
+                }
                 xp={quest.xp}
                 completed={quest.completed?.length > 0 ? true : false}
                 start={quest.start ?? undefined}
@@ -84,11 +88,15 @@ export default async function Quests() {
               name={quest.name}
               description={quest.description}
               image={quest.image}
-              community={{
-                id: quest.community.id,
-                name: quest.community.name,
-                image: quest.community.image,
-              }}
+              community={
+                quest.community
+                  ? {
+                      id: quest.community.id,
+                      name: quest.community.name,
+                      image: quest.community.image,
+                    }
+                  : undefined
+              }
               xp={quest.xp}
               completed={quest.completed?.length > 0 ? true : false}
               start={quest.start ?? undefined}
