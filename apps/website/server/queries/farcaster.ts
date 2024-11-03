@@ -20,7 +20,7 @@ export const getFeed = cache(
               await neynarClient.fetchFeed("filter", {
                 filterType: "channel_id",
                 channelId: channel,
-                limit: 25,
+                limit: 10,
               })
             ).casts
         )

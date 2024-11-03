@@ -30,13 +30,6 @@ export default function VideoPlayer(props: { url: string }) {
       />
     );
   }
-
-  return (
-    <video
-      src={props.url}
-      className="w-full aspect-video rounded-xl select-none overflow-hidden"
-    />
-  );
 }
 
 // Twitch: https://clips.twitch.tv/embed?clip=BlueExquisiteBaconHeyGuys-vynEsLJMItjIbj9m

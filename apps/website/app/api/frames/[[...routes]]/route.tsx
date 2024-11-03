@@ -36,6 +36,21 @@ const app = new Frog({
   },
 });
 
+app.frame("/join/:channel", async (c) => {
+  return c.res({
+    headers: {
+      "Cache-Control": "max-age=0",
+    },
+    image: <div>Join</div>,
+    intents: [
+      <Button.Link href={`${env.NEXT_PUBLIC_DOMAIN}/api/`}>
+        Get Started
+      </Button.Link>,
+    ],
+    title: "Join",
+  });
+});
+
 app.frame("/rounds/:id", async (c) => {
   const round = await getRound({ id: c.req.param("id") });
 

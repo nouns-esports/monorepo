@@ -4,25 +4,22 @@ import { getFeed } from "@/server/queries/farcaster";
 import Button from "@/components/Button";
 import { ChevronDown } from "lucide-react";
 
-export default async function Chat(props: {
-  searchParams: { topic?: string };
-}) {
-  const communities = await getCommunities({
-    ids: [
-      "dota",
-      "cs",
-      "smash",
-      "nouns-esports",
-      "nounsfe",
-      "pokemon",
-      "rocketleague",
-    ],
-  });
+export default async function Chat(props: { searchParams: { c?: string } }) {
+  const communities = await getCommunities();
+  const allChannels = [
+    ...communities.map((c) => c.channel),
+    ...communities
+      .map((c) => c.subcommunities.map((sub) => sub.channel))
+      .flat(),
+  ];
 
-  const topic = communities.find((c) => c.id === props.searchParams?.topic);
+  const community = communities.find((c) => c.id === props.searchParams?.c);
+  const subChannels = community?.subcommunities.map((sub) => sub.channel);
 
   const feed = await getFeed({
-    channels: topic?.channels ?? communities.map((c) => c.channels).flat(),
+    channels: community
+      ? [community.channel, ...(subChannels ?? [])]
+      : ["nouns-esports", ...allChannels],
   });
 
   return (
@@ -32,14 +29,14 @@ export default async function Chat(props: {
           <div className="flex items-center gap-4">
             <img
               src={
-                topic?.image ??
+                community?.image ??
                 "https://ipfs.nouns.gg/ipfs/QmbzPe6hFtEwudcqBPfp1eTCGq5zSgR4Ch7KoEgCJHXudM"
               }
               className="w-12 h-12 rounded-lg"
             />
             <div className="flex items-center gap-0">
               <h1 className="text-4xl text-white font-semibold">
-                {topic?.name ?? "Trending"}
+                {community?.name ?? "Trending"}
               </h1>
               <ChevronDown className="w-12 h-12 text-white" />
             </div>
@@ -52,8 +49,8 @@ export default async function Chat(props: {
               <CastCard
                 key={cast.hash}
                 cast={cast}
-                topic={communities.find((c) =>
-                  c.channels.includes(cast.channel?.id ?? "")
+                community={communities.find(
+                  (c) => c.channel === cast.channel?.id
                 )}
               />
             )),

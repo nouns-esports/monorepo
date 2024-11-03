@@ -20,16 +20,18 @@ import {
   MoreHorizontal,
   RefreshCcw,
 } from "lucide-react";
-import parseCastEmbed from "@/utils/parseCast";
+import parseCastEmbeds from "@/utils/parseCastEmbeds";
 import * as Player from "@livepeer/react/player";
 import Spinner from "./Spinner";
 import { twMerge } from "tailwind-merge";
+import Countup from "./Countup";
+import { videoEmbedFromLink } from "@/utils/videoEmbedFromLink";
 
 export default async function CastCard(props: {
   cast: CastWithInteractions;
-  topic?: Community;
+  community?: Community;
 }) {
-  const embeds = parseCastEmbed(props.cast.embeds);
+  const embeds = parseCastEmbeds(props.cast.embeds);
 
   return (
     <div className="relative flex gap-3 bg-grey-800 rounded-xl pl-2 pr-4 py-4">
@@ -57,29 +59,31 @@ export default async function CastCard(props: {
                 {props.cast.author.display_name}
               </h2>
             </Link>
-            {props.topic ? (
+            {props.community ? (
               <>
                 <p className="text-grey-200 font-semibold text-sm">in</p>
                 <Link
-                  href={`/chat?topic=${props.topic.id.substring(0, 10)}`}
+                  href={`/chat?c=${props.community.id.substring(0, 10)}`}
                   className="flex items-center gap-1 bg-grey-600 hover:bg-grey-500 transition-colors rounded-full px-2 py-1"
                 >
                   <img
-                    src={props.topic.image}
+                    src={props.community.image}
                     className="w-4 h-4 rounded-full object-cover object-center"
                   />
                   <h2 className="text-white text-nowrap text-sm">
-                    {props.topic.name}
+                    {props.community.name}
                   </h2>
                 </Link>
               </>
             ) : null}
-            <p className="text-grey-200 font-semibold text-sm">25m</p>
+            <p className="text-grey-200 font-semibold text-sm">
+              <Countup date={props.cast.timestamp} />
+            </p>
           </div>
           <MoreHorizontal className="w-5 h-5 text-grey-200 hover:text-white transition-colors mr-2" />
         </div>
         <div className="flex flex-col gap-3">
-          <p className="text-white w-fit">
+          <p className="text-white">
             <RichText>
               {embeds.website
                 ? props.cast.text.replace(embeds.website.url, "")
@@ -89,7 +93,10 @@ export default async function CastCard(props: {
           <div className="flex flex-col gap-1">
             {embeds.image ? <CastImage image={embeds.image} /> : ""}
             {embeds.website ? (
-              <WebsitePreview website={embeds.website} />
+              <WebsitePreview
+                website={embeds.website}
+                small={props.cast.embeds.length > 0}
+              />
             ) : null}
             {embeds.video ? <VideoPlayer video={embeds.video} /> : null}
             {embeds.quoteCast ? (
@@ -117,7 +124,7 @@ export default async function CastCard(props: {
 }
 
 function VideoPlayer(props: {
-  video: NonNullable<ReturnType<typeof parseCastEmbed>["video"]>;
+  video: NonNullable<ReturnType<typeof parseCastEmbeds>["video"]>;
 }) {
   return (
     <Player.Root
@@ -197,8 +204,34 @@ function VideoPlayer(props: {
 }
 
 function WebsitePreview(props: {
-  website: NonNullable<ReturnType<typeof parseCastEmbed>["website"]>;
+  website: NonNullable<ReturnType<typeof parseCastEmbeds>["website"]>;
+  small?: boolean;
 }) {
+  if (props.small) {
+    return (
+      <Link
+        href={props.website.url}
+        newTab
+        className="h-24 border bg-black/20 hover:bg-grey-800 transition-colors border-grey-600 flex gap-3 rounded-xl p-2 group"
+      >
+        <img
+          src={props.website.image}
+          className="h-full aspect-[4/3] rounded-xl group-hover:brightness-75 object-cover object-center transition-all"
+        />
+        <div className="w-full flex flex-col gap-1 pointer-events-none">
+          <p className="flex items-center w-full text-white">
+            {props.website.title}
+          </p>
+          <p className="flex items-center w-full text-sm text-grey-200">
+            {props.website.url}
+          </p>
+        </div>
+
+        <ExternalLink className="w-4 h-4 text-white flex-shrink-0 mt-1 mr-1" />
+      </Link>
+    );
+  }
+
   return (
     <Link
       href={props.website.url}
@@ -218,10 +251,10 @@ function WebsitePreview(props: {
 }
 
 function CastImage(props: {
-  image: NonNullable<ReturnType<typeof parseCastEmbed>["image"]>;
+  image: NonNullable<ReturnType<typeof parseCastEmbeds>["image"]>;
 }) {
   return (
-    <div className="relative flex items-center justify-center mb-1 w-full max-h-[400px] overflow-hidden rounded-xl">
+    <div className="relative flex items-center justify-center mb-1 border border-grey-600 w-full max-h-[400px] overflow-hidden rounded-xl">
       <img
         src={props.image.url}
         className="blur-2xl brightness-[25%] absolute top-0 left-0 w-full object-cover h-full"
@@ -235,7 +268,7 @@ function CastImage(props: {
 }
 
 function QuoteCast(props: {
-  quoteCast: NonNullable<ReturnType<typeof parseCastEmbed>["quoteCast"]>;
+  quoteCast: NonNullable<ReturnType<typeof parseCastEmbeds>["quoteCast"]>;
   small?: boolean;
 }) {
   return (
@@ -252,7 +285,7 @@ function QuoteCast(props: {
           {props.quoteCast.cast.author.display_name}
         </p>
       </Link>
-      <div className="flex gap-1">
+      <div className="flex justify-between gap-1">
         {props.quoteCast.cast.text ? (
           <p className="text-white text-sm">
             <RichText>{props.quoteCast.cast.text}</RichText>

@@ -143,19 +143,6 @@ export default function Menu() {
                 </Link>
               </li>
               <li className="text-nowrap">
-                <Link href="/creations" className="flex items-center gap-4">
-                  <div className="rounded-md w-10 h-10 flex overflow-hidden bg-gradient-to-br from-[#F3B5FD] to-[#F66FD0] text-white items-center">
-                    <Diamond className="w-full h-full p-2" />
-                  </div>
-                  <div>
-                    <p className="font-bebas-neue text-lg">Creator Spotlight</p>
-                    <p className="text-grey-200">
-                      Explore our community of creators
-                    </p>
-                  </div>
-                </Link>
-              </li>
-              <li className="text-nowrap">
                 <Link href="/discord" className="flex items-center gap-4">
                   <img src="/discord.jpg" className="h-10 w-10 rounded-md" />
                   <div>

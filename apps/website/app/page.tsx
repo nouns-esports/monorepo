@@ -320,10 +320,12 @@ export default async function Home() {
                   key={`${index}-top`}
                   className="relative h-full w-auto group"
                 >
-                  <Link
-                    href={`/creations/${id.substring(0, 10)}`}
-                    className="absolute w-full h-full"
-                  />
+                  {creator ? (
+                    <Link
+                      href={`/users/${creator.farcaster ?? creator.discord ?? creator.id}`}
+                      className="absolute w-full h-full"
+                    />
+                  ) : null}
                   <div className="overflow-hidden h-full rounded-xl pointer-events-none">
                     <img
                       alt="Artwork"
@@ -332,9 +334,11 @@ export default async function Home() {
                       className="h-full max-w-none object-cover select-none group-hover:scale-105 transition-transform"
                     />
                   </div>
-                  <div className="absolute top-3 right-3 h-7 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity">
-                    <Attribution id={id} creator={creator} />
-                  </div>
+                  {creator ? (
+                    <div className="absolute top-3 right-3 h-7 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity">
+                      <Attribution id={id} creator={creator} />
+                    </div>
+                  ) : null}
                 </div>
               );
             })
@@ -363,10 +367,12 @@ export default async function Home() {
                   key={`${index}-bottom`}
                   className="relative h-full w-auto group"
                 >
-                  <Link
-                    href={`/creations/${id.substring(0, 10)}`}
-                    className="absolute w-full h-full"
-                  />
+                  {creator ? (
+                    <Link
+                      href={`/users/${creator.farcaster ?? creator.discord ?? creator.id}`}
+                      className="absolute w-full h-full"
+                    />
+                  ) : null}
                   <div className="overflow-hidden h-full rounded-xl pointer-events-none">
                     <img
                       alt="Artwork"
@@ -375,9 +381,11 @@ export default async function Home() {
                       className="h-full max-w-none object-cover select-none group-hover:scale-105 transition-transform"
                     />
                   </div>
-                  <div className="absolute top-3 right-3 h-7 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity">
-                    <Attribution id={id} creator={creator} />
-                  </div>
+                  {creator ? (
+                    <div className="absolute top-3 right-3 h-7 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity">
+                      <Attribution id={id} creator={creator} />
+                    </div>
+                  ) : null}
                 </div>
               );
             })
@@ -401,9 +409,6 @@ export default async function Home() {
               draggable={false}
               className="w-full select-none max-md:w-auto max-md:h-80 max-md:object-cover"
             />
-            <div className="absolute z-10 top-8 right-16 h-8 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity">
-              <Attribution id="QmV83sDpdb" />
-            </div>
           </div>
           <div className="from-transparent to-black bg-gradient-to-b h-2/5 w-full bottom-0 absolute pointer-events-none" />
         </div>

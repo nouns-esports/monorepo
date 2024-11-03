@@ -17,6 +17,7 @@ import { Trash2 } from "lucide-react";
 import PinImage from "../PinImage";
 import VideoPlayer from "../VideoPlayer";
 import { env } from "~/env";
+import { videoEmbedFromLink } from "@/utils/videoEmbedFromLink";
 
 const Markdown = dynamic(() => import("../lexical/Markdown"), {
   ssr: false,
@@ -37,35 +38,7 @@ export default function ProposalEditor(props: {
   const validVideo = useMemo(() => {
     if (!video) return;
 
-    // Youtube: https://www.youtube.com/embed/sqRntu1k6AE
-    // Google Drive: https://drive.google.com/file/d/1obXK4mr1yTVS7ruAWba__6k6D5b_ORgs/preview
-
-    try {
-      const url = new URL(video);
-
-      // User Input: https://clips.twitch.tv/BlueExquisiteBaconHeyGuys-vynEsLJMItjIbj9m
-      // Output: https://clips.twitch.tv/embed?clip=BlueExquisiteBaconHeyGuys-vynEsLJMItjIbj9m&parent=nouns.gg
-      if (url.hostname.includes("clips.twitch.tv")) {
-        if (url.pathname.length > 1)
-          return `https://clips.twitch.tv/embed?clip=${url.pathname.replace("/", "")}`;
-      }
-
-      // User Input: https://www.youtube.com/watch?v=sqRntu1k6AE
-      // Output: https://www.youtube.com/embed/sqRntu1k6AE
-      if (url.hostname.includes("youtube.com")) {
-        if (url.searchParams.get("v") !== null) {
-          return `https://www.youtube.com/embed/${url.searchParams.get("v")}`;
-        }
-      }
-
-      // User Input: https://drive.google.com/file/d/1obXK4mr1yTVS7ruAWba__6k6D5b_ORgs/view
-      // Output: https://drive.google.com/file/d/1obXK4mr1yTVS7ruAWba__6k6D5b_ORgs/preview
-      if (url.hostname.includes("drive.google.com")) {
-        return video.replace("/view", "/preview").split("?")[0];
-      }
-    } catch {}
-
-    return;
+    return videoEmbedFromLink(video);
   }, [video]);
 
   const [editorState, setEditorState] = useState(

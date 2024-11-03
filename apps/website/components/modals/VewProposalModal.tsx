@@ -16,8 +16,8 @@ import type { AuthenticatedUser } from "@/server/queries/users";
 import VoteSelector from "../VoteSelector";
 import type { getRound } from "@/server/queries/rounds";
 import Button from "../Button";
-import VideoPlayer from "../VideoPlayer";
 import { twMerge } from "tailwind-merge";
+import VideoEmbedPlayer from "../VideoEmbedPlayer";
 
 export default function ViewProposalModal(props: {
   round: NonNullable<Awaited<ReturnType<typeof getRound>>>;
@@ -73,7 +73,7 @@ export default function ViewProposalModal(props: {
                 className="flex h-full object-contain rounded-xl"
               />
             ),
-            video: <VideoPlayer url={props.proposal.video ?? ""} />,
+            video: <VideoEmbedPlayer url={props.proposal.video ?? ""} />,
           }[props.round.type as Round["type"]]
         }
       </div>

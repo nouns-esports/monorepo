@@ -25,7 +25,9 @@ type CastEmbed = {
   };
 };
 
-export default function parseCastEmbed(embeds: CastWithInteractions["embeds"]) {
+export default function parseCastEmbeds(
+  embeds: CastWithInteractions["embeds"]
+) {
   let image: ImageEmbed | undefined;
   let video: VideoEmbed | undefined;
   let website: WebsiteEmbed | undefined;
@@ -70,48 +72,50 @@ export default function parseCastEmbed(embeds: CastWithInteractions["embeds"]) {
       let quoteWebsite: WebsiteEmbed | undefined;
       let quoteFrame: FrameEmbed | undefined;
 
-      for (const quoteEmbed of embed.cast.embeds) {
-        if ("url" in quoteEmbed) {
-          if (quoteEmbed.metadata) {
-            if (quoteEmbed.metadata.image) {
-              quoteImage = {
-                url: quoteEmbed.url,
-                width: quoteEmbed.metadata.image.width_px ?? 0,
-                height: quoteEmbed.metadata.image.height_px ?? 0,
-              };
-            }
+      if (embed.cast.embeds) {
+        for (const quoteEmbed of embed.cast.embeds) {
+          if ("url" in quoteEmbed) {
+            if (quoteEmbed.metadata) {
+              if (quoteEmbed.metadata.image) {
+                quoteImage = {
+                  url: quoteEmbed.url,
+                  width: quoteEmbed.metadata.image.width_px ?? 0,
+                  height: quoteEmbed.metadata.image.height_px ?? 0,
+                };
+              }
 
-            if (quoteEmbed.metadata.video) {
-              quoteVideo = {
-                url: quoteEmbed.url,
-                duration: quoteEmbed.metadata.video.duration_s ?? 0,
-              };
-            }
+              if (quoteEmbed.metadata.video) {
+                quoteVideo = {
+                  url: quoteEmbed.url,
+                  duration: quoteEmbed.metadata.video.duration_s ?? 0,
+                };
+              }
 
-            if (
-              quoteEmbed.metadata.html &&
-              quoteEmbed.metadata.html.ogTitle &&
-              quoteEmbed.metadata.html.ogImage
-            ) {
-              quoteWebsite = {
-                url: quoteEmbed.url,
-                image: quoteEmbed.metadata.html.ogImage[0].url,
-                title: quoteEmbed.metadata.html.ogTitle,
-              };
+              if (
+                quoteEmbed.metadata.html &&
+                quoteEmbed.metadata.html.ogTitle &&
+                quoteEmbed.metadata.html.ogImage
+              ) {
+                quoteWebsite = {
+                  url: quoteEmbed.url,
+                  image: quoteEmbed.metadata.html.ogImage[0].url,
+                  title: quoteEmbed.metadata.html.ogTitle,
+                };
+              }
             }
           }
         }
-      }
 
-      quoteCast = {
-        cast: embed.cast,
-        embeds: {
-          image: quoteImage,
-          video: quoteVideo,
-          website: quoteWebsite,
-          frame: quoteFrame,
-        },
-      };
+        quoteCast = {
+          cast: embed.cast,
+          embeds: {
+            image: quoteImage,
+            video: quoteVideo,
+            website: quoteWebsite,
+            frame: quoteFrame,
+          },
+        };
+      }
     }
   }
 

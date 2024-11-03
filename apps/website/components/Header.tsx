@@ -157,24 +157,6 @@ export default async function Header() {
                       </li>
                       <li className="text-nowrap hover:bg-grey-500 transition-colors py-1.5 px-3 rounded-lg">
                         <Link
-                          href="/creations"
-                          className="flex items-center gap-4"
-                        >
-                          <div className="rounded-md w-10 h-10 flex overflow-hidden bg-gradient-to-br from-[#F3B5FD] to-[#F66FD0] text-white items-center">
-                            <Diamond className="w-full h-full p-2" />
-                          </div>
-                          <div>
-                            <p className="font-bebas-neue text-lg">
-                              Creator Spotlight
-                            </p>
-                            <p className="text-grey-200">
-                              Explore our community of creators
-                            </p>
-                          </div>
-                        </Link>
-                      </li>
-                      <li className="text-nowrap hover:bg-grey-500 transition-colors py-1.5 px-3 rounded-lg">
-                        <Link
                           href="/discord"
                           className="flex items-center gap-4"
                         >
@@ -233,7 +215,7 @@ export default async function Header() {
                           .map((community) => (
                             <Link
                               key={community.name}
-                              href={`/chat?topic=${community.id}`}
+                              href={`/chat?c=${community.id}`}
                               className="flex items-center gap-2 rounded-lg px-2 py-2 hover:bg-grey-500 transition-colors w-full"
                             >
                               <img

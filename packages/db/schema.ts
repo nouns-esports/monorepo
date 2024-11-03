@@ -49,15 +49,22 @@ export const communities = pgTable("communities", {
   id: text("id").primaryKey(),
   image: text("image").notNull(),
   name: text("name").notNull(),
-  channels: text("channels").array().notNull(),
+  channel: text("channel").notNull(),
+  parent: text("parent"),
 });
 
-export const communityRelations = relations(communities, ({ many }) => ({
+export const communityRelations = relations(communities, ({ one, many }) => ({
   rosters: many(rosters),
   rounds: many(rounds),
   creations: many(creations),
   events: many(events),
   quests: many(quests),
+  subcommunities: many(communities, { relationName: "parentToChild" }),
+  parent: one(communities, {
+    fields: [communities.parent],
+    references: [communities.id],
+    relationName: "parentToChild",
+  }),
 }));
 
 // export const articles = pgTable("articles", {

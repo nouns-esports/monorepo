@@ -9,6 +9,7 @@ import type { createCommand } from "./createCommand";
 import { refreshRankings } from "./commands/refreshRankings";
 import { refreshRoles } from "./commands/refreshRoles";
 import { discordSnapshot } from "./commands/discordSnapshot";
+import { NeynarAPIClient } from "@neynar/nodejs-sdk";
 
 const commands: Record<string, ReturnType<typeof createCommand>> = {
   "discord-snapshot": discordSnapshot,
@@ -29,6 +30,8 @@ export const privyClient = new PrivyClient(
   env.NEXT_PUBLIC_PRIVY_APP_ID,
   env.PRIVY_APP_SECRET
 );
+
+export const neynarClient = new NeynarAPIClient(env.NEYNAR_API_KEY);
 
 discordClient.once("ready", async () => {
   await rest.put(
