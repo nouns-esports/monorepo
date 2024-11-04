@@ -3,6 +3,14 @@
     "rules": {
       "suspicious": {
         "noExplicitAny": "off"
+      },
+      "a11y": {
+        "useIframeTitle": "off",
+        "useButtonType": "off",
+        "useAltText": "off"
+      },
+      "style": {
+        "useNumberNamespace": "off"
       }
     }
   }

@@ -45,6 +45,12 @@ export const snapshotsRelations = relations(snapshots, ({ one }) => ({
 	}),
 }));
 
+// export const notifications = pgTable("notifications", {
+// 	id: serial("id").primaryKey(),
+// 	user: text("user").notNull(),
+// 	timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
+// });
+
 export const communities = pgTable("communities", {
 	id: text("id").primaryKey(),
 	image: text("image").notNull(),
