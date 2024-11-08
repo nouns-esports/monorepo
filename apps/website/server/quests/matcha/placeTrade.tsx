@@ -38,14 +38,7 @@ export const placeTrade = createAction<{
 			? `/matcha/tokens/${actionInputs.chain}/${actionInputs.token}`
 			: "/matcha",
 		check: async (user) => {
-			console.log("CHECKING");
-			console.log(user);
-			console.log(user.nexus);
-
-			if (!user.wallet) {
-				console.log("NO WALLET");
-				return false;
-			}
+			if (!user.wallet) return false;
 
 			if (actionInputs.token) {
 				const response = await fetch(
@@ -71,10 +64,7 @@ export const placeTrade = createAction<{
 					},
 				);
 
-				if (!response.ok) {
-					console.log("BAD RESPONSE");
-					return false;
-				}
+				if (!response.ok) return false;
 
 				const trades = (
 					(await response.json()) as {
@@ -82,10 +72,7 @@ export const placeTrade = createAction<{
 					}
 				).data.tradesMatcha;
 
-				if (trades.length < 1) {
-					console.log("NO TRADES");
-					return false;
-				}
+				if (trades.length < 1) return false;
 
 				return true;
 			}
@@ -113,10 +100,7 @@ export const placeTrade = createAction<{
 				},
 			);
 
-			if (!response.ok) {
-				console.log("BAD RESPONSE");
-				return false;
-			}
+			if (!response.ok) return false;
 
 			const trades = (
 				(await response.json()) as {
@@ -124,12 +108,7 @@ export const placeTrade = createAction<{
 				}
 			).data.tradesMatcha;
 
-			if (trades.length < 1) {
-				console.log("NO TRADES");
-				return false;
-			}
-
-			console.log("EVERYTHINGS FINE");
+			if (trades.length < 1) return false;
 
 			return true;
 		},
