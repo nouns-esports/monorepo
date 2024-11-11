@@ -19,13 +19,16 @@ const vanityHandles: Record<string, string> = {
 	"@esports": "Nouns Esports",
 };
 
-export default function RichText(props: { children: string }) {
+export default function RichText(props: {
+	children: string;
+	readOnly?: boolean;
+}) {
 	return (
 		<MatchTicker>
 			<MatchHandle>
 				<MatchChannel>
 					<MatchLink>
-						<MatchEmote>{props.children} </MatchEmote>
+						<MatchEmote>{props.children}</MatchEmote>
 					</MatchLink>
 				</MatchChannel>
 			</MatchHandle>
@@ -33,24 +36,20 @@ export default function RichText(props: { children: string }) {
 	);
 }
 
-function MatchTicker(props: { children: React.ReactNode }) {
+function MatchTicker(props: { children: React.ReactNode; readonly?: boolean }) {
 	return (
 		<LinkIt
 			component={(match, key) => {
 				const token = tokens[match.replace("$", "").toLowerCase()];
+
 				return (
-					<span
+					<Link
+						href={token ? `/matcha/tokens/base/${token}` : "/matcha"}
 						key={key}
-						className="relative text-red hover:opacity-70 transition-opacity w-min text-nowrap"
+						className="relative z-10 text-red hover:opacity-70 transition-opacity"
 					>
-						<Link
-							href={token ? `/matcha/tokens/base/${token}` : "/matcha"}
-							newTab
-							className="absolute top-0 left-0 w-full h-full"
-						>
-							{match}
-						</Link>
-					</span>
+						{match}
+					</Link>
 				);
 			}}
 			regex={/\$[A-Za-z]+/}
@@ -60,7 +59,7 @@ function MatchTicker(props: { children: React.ReactNode }) {
 	);
 }
 
-function MatchLink(props: { children: React.ReactNode }) {
+function MatchLink(props: { children: React.ReactNode; readonly?: boolean }) {
 	return (
 		<LinkIt
 			component={(match, key) => {
@@ -69,17 +68,14 @@ function MatchLink(props: { children: React.ReactNode }) {
 				);
 
 				return (
-					<span
+					<Link
 						key={key}
-						className="relative text-red hover:opacity-70 transition-opacity w-min text-nowrap "
+						href={url.hostname === "nouns.gg" ? url.pathname : url.href}
+						newTab={url.hostname !== "nouns.gg"}
+						className="relative z-10 text-red hover:opacity-70 transition-opacity"
 					>
-						<Link
-							href={url.hostname === "nouns.gg" ? url.pathname : url.href}
-							newTab={url.hostname !== "nouns.gg"}
-							className="absolute top-0 left-0 w-full h-full"
-						/>
 						{url.pathname in vanityUrls ? vanityUrls[url.pathname] : match}
-					</span>
+					</Link>
 				);
 			}}
 			regex={
@@ -91,45 +87,42 @@ function MatchLink(props: { children: React.ReactNode }) {
 	);
 }
 
-function MatchHandle(props: { children: React.ReactNode }) {
+function MatchHandle(props: { children: React.ReactNode; readonly?: boolean }) {
 	return (
 		<LinkIt
 			component={(match, key) => {
 				return (
-					<span
+					<Link
 						key={key}
-						className="relative text-red hover:opacity-70 transition-opacity w-min text-nowrap"
+						href={`/users/${match.replace(" @", "")}`}
+						className="relative z-10 text-red hover:opacity-70 transition-opacity"
 					>
-						<Link
-							href={`/users/${match.replace(" @", "")}`}
-							className="absolute top-0 left-0 w-full h-full"
-						/>
 						{match in vanityHandles ? vanityHandles[match] : match}
-					</span>
+					</Link>
 				);
 			}}
-			regex={/\s@[\w\.-]+/g}
+			regex={/(?:^@|[\s]@)[\w\.-]+/g}
 		>
 			{props.children}
 		</LinkIt>
 	);
 }
 
-function MatchChannel(props: { children: React.ReactNode }) {
+function MatchChannel(props: {
+	children: React.ReactNode;
+	readonly?: boolean;
+}) {
 	return (
 		<LinkIt
 			component={(match, key) => {
 				return (
-					<span
+					<Link
 						key={key}
-						className="relative text-red hover:opacity-70 transition-opacity w-min text-nowrap"
+						href={`/users/${match.replace(" /", "")}`}
+						className="relative z-10 text-red hover:opacity-70 transition-opacity"
 					>
-						<Link
-							href={`/users/${match.replace(" /", "")}`}
-							className="absolute top-0 left-0 w-full h-full"
-						/>
 						{match}
-					</span>
+					</Link>
 				);
 			}}
 			regex={/\s\/[\w-]+/g}
@@ -139,15 +132,15 @@ function MatchChannel(props: { children: React.ReactNode }) {
 	);
 }
 
-function MatchEmote(props: { children: React.ReactNode }) {
+function MatchEmote(props: { children: React.ReactNode; readonly?: boolean }) {
 	return (
 		<LinkIt
 			component={(match, key) => {
 				return (
 					<img
 						key={key}
-						src="https://pbs.twimg.com/media/Fw7OFjeXoAEoXzE.png"
-						className="inline-flex mx-1 h-[1em]"
+						src="https://ipfs.nouns.gg/ipfs/QmQQGnQEarwqHc2VQeQhEtKwnyjXSBqpAyZKhjhhSusY4i"
+						className="relative z-10 inline-flex mx-1 h-[1em]"
 						title=":noggles:"
 					/>
 				);

@@ -183,6 +183,27 @@
       "when": 1730653238666,
       "tag": "0025_tricky_wolverine",
       "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1731179995591,
+      "tag": "0026_spooky_naoko",
+      "breakpoints": true
+    },
+    {
+      "idx": 27,
+      "version": "7",
+      "when": 1731180103286,
+      "tag": "0027_large_bastion",
+      "breakpoints": true
+    },
+    {
+      "idx": 28,
+      "version": "7",
+      "when": 1731180117303,
+      "tag": "0028_naive_stature",
+      "breakpoints": true
     }
   ]
 }

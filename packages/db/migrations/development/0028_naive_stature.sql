@@ -1,0 +1,1 @@
+ALTER TABLE "nexus" RENAME COLUMN "farcaster" TO "username";

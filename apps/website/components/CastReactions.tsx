@@ -14,14 +14,17 @@ export default function CastReactions(props: {
 }) {
 	return (
 		<div className="flex items-center gap-3">
-			<Link href={`/chat/${props.hash.substring(0, 10)}`}>
+			<Link
+				href={`/chat/${props.hash.substring(0, 10)}`}
+				className="relative z-10"
+			>
 				<MessageSquare
 					className={twMerge(
 						"w-5 h-5 text-grey-200 hover:text-white transition-colors  ",
 					)}
 				/>
 			</Link>
-			<button>
+			<button className="relative z-10">
 				<RefreshCcw
 					className={twMerge(
 						"w-5 h-5  transition-colors",
@@ -29,7 +32,7 @@ export default function CastReactions(props: {
 					)}
 				/>
 			</button>
-			<button>
+			<button className="relative z-10">
 				<ArrowFatUp
 					className={twMerge(
 						"w-5 h-5  transition-colors",

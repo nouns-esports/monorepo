@@ -2,12 +2,13 @@ import { unstable_cache as cache } from "next/cache";
 import { neynarClient } from "../clients/neynar";
 
 export const getFeed = cache(
-	async (input: { fid?: number; channels?: string[] }) => {
+	async (input: { fid?: number; channels?: string[]; viewerFid?: number }) => {
 		if (input.fid) {
 			return (
 				await neynarClient.fetchCastsForUser(input.fid, {
 					limit: 25,
 					includeReplies: false,
+					viewerFid: input.viewerFid,
 				})
 			).casts;
 		}
@@ -21,7 +22,7 @@ export const getFeed = cache(
 								filterType: "channel_id",
 								channelId: channel,
 								limit: 10,
-								viewerFid: 11500,
+								viewerFid: input.viewerFid,
 							})
 						).casts,
 				),
@@ -37,12 +38,12 @@ export const getFeed = cache(
 );
 
 export const getCast = cache(
-	async (input: { hash: string }) => {
+	async (input: { hash: string; viewerFid?: number }) => {
 		return (
-			await neynarClient.fetchBulkCasts([input.hash], {
-				viewerFid: 11500,
+			await neynarClient.lookupCastConversation(input.hash, "hash", {
+				viewerFid: input.viewerFid,
 			})
-		).result.casts[0];
+		).conversation.cast;
 	},
 	["getCast"],
 );

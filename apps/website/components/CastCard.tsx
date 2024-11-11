@@ -28,33 +28,33 @@ import Countup from "./Countup";
 import { videoEmbedFromLink } from "@/utils/videoEmbedFromLink";
 import CastReactions from "./CastReactions";
 
-export default async function CastCard(props: {
+export default function CastCard(props: {
 	cast: CastWithInteractions;
 	community?: Community;
 }) {
 	const embeds = parseCastEmbeds(props.cast.embeds);
 
 	return (
-		<div className="relative flex gap-3 bg-grey-800 rounded-xl pl-2 pr-4 py-4">
-			{/* <Link
-        href={`/chat/${props.cast.hash.substring(0, 10)}`}
-        className="w-full h-full absolute top-0 left-0 z-10"
-      /> */}
+		<div className="relative flex gap-3 bg-grey-800 rounded-xl pl-2 pr-4 py-4 w-full">
+			<Link
+				href={`/chat/${props.cast.hash.substring(0, 10)}`}
+				className="w-full h-full absolute top-0 left-0"
+			/>
 			<Link
 				href={`/users/${props.cast.author.username}`}
-				className="ml-2 w-12 h-12 flex-shrink-0"
+				className="relative z-10 ml-2 w-12 h-12 flex-shrink-0 flex"
 			>
 				<img
 					src={props.cast.author.pfp_url}
-					className="w-full h-full rounded-full object-cover object-center"
+					className="w-full h-full rounded-full object-cover object-center hover:brightness-75 transition-all"
 				/>
 			</Link>
-			<div className="flex flex-col gap-1 w-full">
+			<div className="flex flex-col gap-1 flex-1 min-w-0">
 				<div className="flex justify-between">
 					<div className="flex items-center gap-2">
 						<Link
 							href={`/users/${props.cast.author.username}`}
-							className="flex gap-2 items-center w-min hover:opacity-70 transition-opacity"
+							className="flex relative z-10 gap-2 items-center w-min hover:opacity-70 transition-opacity"
 						>
 							<h2 className="text-white text-nowrap">
 								{props.cast.author.display_name}
@@ -64,8 +64,8 @@ export default async function CastCard(props: {
 							<>
 								<p className="text-grey-200 font-semibold text-sm">in</p>
 								<Link
-									href={`/chat?c=${props.community.id.substring(0, 10)}`}
-									className="flex items-center gap-1 bg-grey-600 hover:bg-grey-500 transition-colors rounded-full px-2 py-1"
+									href={`/chat?c=${props.community.id}`}
+									className="flex relative z-10  items-center gap-1 bg-grey-600 hover:bg-grey-500 transition-colors rounded-full px-2 py-1"
 								>
 									<img
 										src={props.community.image}
@@ -83,8 +83,8 @@ export default async function CastCard(props: {
 					</div>
 					<MoreHorizontal className="w-5 h-5 text-grey-200 hover:text-white transition-colors mr-2" />
 				</div>
-				<div className="flex flex-col gap-3">
-					<p className="text-white">
+				<div className="flex flex-col gap-3 w-full">
+					<p className="text-white w-full">
 						<RichText>
 							{embeds.website
 								? props.cast.text.replace(embeds.website.url, "")
@@ -122,11 +122,13 @@ export default async function CastCard(props: {
 						<div className="flex items-center gap-2 text-sm text-grey-200">
 							<Link
 								href={`/chat/${props.cast.hash.substring(0, 10)}`}
-								className="hover:text-grey-200/70 transition-colors"
+								className="relative z-10 hover:text-grey-200/70 transition-colors"
 							>
 								{props.cast.replies.count} comments
 							</Link>
-							<p>{props.cast.reactions.likes_count} upvotes</p>
+							<p className="cursor-default">
+								{props.cast.reactions.likes_count} upvotes
+							</p>
 						</div>
 					</div>
 				</div>
@@ -166,7 +168,7 @@ function VideoPlayer(props: {
 								<Player.SeekBuffer className="absolute bg-black/50 rounded-full h-full" />
 								<Player.Range className="absolute bg-white rounded-full h-full" />
 							</Player.Track>
-							<Player.Thumb className="block w-3 h-3 bg-white rounded-full" />
+							<Player.Thumb className="block w-3 h-3 cursor-pointer bg-white rounded-full" />
 						</Player.Seek>
 						<div className="flex items-center justify-between">
 							<div className="flex items-center gap-4">
@@ -196,7 +198,7 @@ function VideoPlayer(props: {
 									<Player.Track className="bg-white/70 relative flex-grow rounded-full h-1">
 										<Player.Range className="absolute bg-white rounded-full h-full" />
 									</Player.Track>
-									<Player.Thumb className="block w-3 h-3 bg-white rounded-full" />
+									<Player.Thumb className="block w-3 h-3 cursor-pointer bg-white rounded-full" />
 								</Player.Volume>
 							</div>
 							<Player.FullscreenTrigger>
@@ -224,7 +226,7 @@ function WebsitePreview(props: {
 			<Link
 				href={props.website.url}
 				newTab
-				className="h-24 border bg-black/20 hover:bg-grey-800 transition-colors border-grey-600 flex gap-3 rounded-xl p-2 group"
+				className="relative z-10 h-24 border bg-black/20 hover:bg-grey-800 transition-colors border-grey-600 flex gap-3 rounded-xl p-2 group"
 			>
 				<img
 					src={props.website.image}
@@ -247,7 +249,7 @@ function WebsitePreview(props: {
 		<Link
 			href={props.website.url}
 			newTab
-			className="relative aspect-video bg-black flex flex-col rounded-xl overflow-hidden group"
+			className="relative z-10 aspect-video bg-black flex flex-col rounded-xl overflow-hidden group"
 		>
 			<img
 				src={props.website.image}
@@ -265,14 +267,17 @@ function CastImage(props: {
 	image: NonNullable<ReturnType<typeof parseCastEmbeds>["image"]>;
 }) {
 	return (
-		<div className="relative flex items-center justify-center mb-1 border border-grey-600 w-full max-h-[400px] overflow-hidden rounded-xl">
+		<div className="relative z-10 flex items-center justify-center mb-1 border border-grey-600 w-full overflow-hidden rounded-xl">
 			<img
 				src={props.image.url}
 				className="blur-2xl brightness-[25%] absolute top-0 left-0 w-full object-cover h-full"
 			/>
 			<img
 				src={props.image.url}
-				className="relative z-10 object-contain h-full"
+				style={{
+					height: props.image.height,
+				}}
+				className="relative z-10 object-contain h-full max-h-[400px]"
 			/>
 		</div>
 	);
@@ -283,16 +288,20 @@ function QuoteCast(props: {
 	small?: boolean;
 }) {
 	return (
-		<div className="rounded-xl flex flex-col gap-1 border bg-black/20 hover:bg-grey-800 transition-colors border-grey-600 p-2 mb-1">
+		<div className="relative z-10 rounded-xl flex flex-col gap-1 border bg-black/20 hover:bg-grey-800 transition-colors border-grey-600 p-2 mb-1">
+			<Link
+				href={`/chat/${props.quoteCast.cast.hash.substring(0, 10)}`}
+				className="w-full h-full absolute top-0 left-0"
+			/>
 			<Link
 				href={`/users/${props.quoteCast.cast.author.username}`}
-				className="flex items-center gap-2 group"
+				className="relative z-10 flex items-center gap-2 group w-fit"
 			>
 				<img
 					src={props.quoteCast.cast.author.pfp_url}
-					className="w-4 h-4 rounded-full object-cover object-center"
+					className="w-4 h-4 rounded-full object-cover object-center group-hover:brightness-75 transition-all"
 				/>
-				<p className="text-white group-hover:opacity-70 transition-opacity">
+				<p className="text-white group-hover:opacity-70 transition-opacity text-nowrap">
 					{props.quoteCast.cast.author.display_name}
 				</p>
 			</Link>

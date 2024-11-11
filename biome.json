@@ -2,15 +2,22 @@
   "linter": {
     "rules": {
       "suspicious": {
-        "noExplicitAny": "off"
+        "noExplicitAny": "off",
+        "noArrayIndexKey": "off"
       },
       "a11y": {
         "useIframeTitle": "off",
         "useButtonType": "off",
-        "useAltText": "off"
+        "useAltText": "off",
+        "noSvgWithoutTitle": "off",
+        "useKeyWithClickEvents": "off"
       },
       "style": {
-        "useNumberNamespace": "off"
+        "useNumberNamespace": "off",
+        "useNodejsImportProtocol": "off"
+      },
+      "correctness": {
+        "useExhaustiveDependencies": "off"
       }
     }
   }
