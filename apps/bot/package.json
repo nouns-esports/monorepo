@@ -3,7 +3,7 @@
   "module": "index.ts",
   "type": "module",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development bun index.ts",
+    "test": "cross-env NODE_ENV=development bun index.ts",
     "start": "cross-env NODE_ENV=production bun index.ts",
     "sandbox:production": "cross-env NODE_ENV=production bun sandbox.ts",
     "sandbox:development": "cross-env NODE_ENV=development bun sandbox.ts"

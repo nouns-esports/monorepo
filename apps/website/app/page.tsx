@@ -413,18 +413,14 @@ export default async function Home() {
 							</ToggleModal>
 						)}
 					</div>
-					<div className="relative group">
-						<Link
-							href="/creations/QmV83sDpdb"
-							className="absolute w-full h-full"
-						/>
-						<img
-							src="https://ipfs.nouns.gg/ipfs/QmV83sDpdbU2E23txL1hY7F6W81SjD4Egz41yCB5YQibQg"
-							alt="Pokemon wearing Nouns noggles"
-							draggable={false}
-							className="w-full select-none max-md:w-auto max-md:h-80 max-md:object-cover"
-						/>
-					</div>
+
+					<img
+						src="https://ipfs.nouns.gg/ipfs/QmV83sDpdbU2E23txL1hY7F6W81SjD4Egz41yCB5YQibQg"
+						alt="Pokemon wearing Nouns noggles"
+						draggable={false}
+						className="w-full select-none max-md:w-auto max-md:h-80 max-md:object-cover"
+					/>
+
 					<div className="from-transparent to-black bg-gradient-to-b h-2/5 w-full bottom-0 absolute pointer-events-none" />
 				</div>
 				<div className="from-transparent to-black bg-gradient-to-r w-32 h-full right-0 bottom-0 absolute pointer-events-none max-[1920px]:hidden flex" />

@@ -276,6 +276,7 @@ export const proposalsRelations = relations(proposals, ({ one, many }) => ({
 
 export const nexus = pgTable("nexus", {
 	id: text("id").primaryKey(),
+	admin: boolean("admin").notNull().default(false),
 	rank: integer("rank"),
 	xp: integer("xp").notNull().default(0),
 	image: text("image").notNull().default(""),
