@@ -52,6 +52,7 @@
     "@tiptap/react": "^2.9.1",
     "@tiptap/starter-kit": "^2.9.1",
     "@tsparticles/confetti": "^3.5.0",
+    "@turbo/codemod": "^2.2.3",
     "@types/node-cron": "^3.0.11",
     "@uidotdev/usehooks": "^2.4.1",
     "arweave": "^1.14.4",
