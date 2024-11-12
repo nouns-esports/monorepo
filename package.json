@@ -16,7 +16,8 @@
     "@types/pg": "^8.11.5",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
-    "prettier": "^3.1.0"
+    "prettier": "^3.1.0",
+    "turbo": "^1.12.3"
   },
   "engines": {
     "node": ">=18"
@@ -28,7 +29,6 @@
     "packages/*"
   ],
   "dependencies": {
-    "turbo": "^1.12.3",
     "@apollo/client": "^3.9.4",
     "@lexical/headless": "^0.14.5",
     "@lexical/html": "^0.14.5",
