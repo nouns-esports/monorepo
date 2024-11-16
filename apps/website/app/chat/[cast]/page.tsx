@@ -1,10 +1,23 @@
 import CastCard from "@/components/CastCard";
+import Link from "@/components/Link";
+import NavigateBack from "@/components/NavigateBack";
+import Upvote from "@/components/Upvote";
 import { getCast } from "@/server/queries/farcaster";
+import {
+	getAuthenticatedUser,
+	type AuthenticatedUser,
+} from "@/server/queries/users";
 import type { CastWithInteractionsAndConversationsRef } from "@neynar/nodejs-sdk/build/neynar-api/v2";
+import { ArrowLeft, MoreHorizontal } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 
 export default async function Cast(props: { params: { cast: string } }) {
-	const cast = await getCast({ hash: props.params.cast });
+	const user = await getAuthenticatedUser();
+
+	const cast = await getCast({
+		hash: props.params.cast,
+		viewerFid: user?.farcaster?.fid,
+	});
 
 	function renderComments(
 		comment: CastWithInteractionsAndConversationsRef,
@@ -20,20 +33,30 @@ export default async function Cast(props: { params: { cast: string } }) {
 							pfp_url: comment.author.pfp_url,
 							username: comment.author.username,
 						}}
+						upvoted={!!comment.viewer_context?.liked}
 						text={comment.text}
 						level={level}
+						upvotes={comment.reactions.likes_count}
 					/>
 					<div className=" flex w-full gap-4 relative">
 						<div className="absolute left-0 -top-4 w-12 h-[calc(100%_-_50px)] flex flex-col items-center">
 							<div className="h-full bg-grey-200 w-0.5 hover:bg-white" />
 						</div>
 						<div className="ml-12 flex flex-col gap-4 w-full">
-							{comment.direct_replies.map((c) =>
-								renderComments(
-									c as CastWithInteractionsAndConversationsRef,
-									level + 1,
-								),
-							)}
+							{comment.direct_replies
+								.toSorted(
+									(a, b) =>
+										(b as CastWithInteractionsAndConversationsRef).reactions
+											.likes_count -
+										(a as CastWithInteractionsAndConversationsRef).reactions
+											.likes_count,
+								)
+								.map((c) =>
+									renderComments(
+										c as CastWithInteractionsAndConversationsRef,
+										level + 1,
+									),
+								)}
 						</div>
 					</div>
 				</div>
@@ -48,6 +71,8 @@ export default async function Cast(props: { params: { cast: string } }) {
 					pfp_url: comment.author.pfp_url,
 					username: comment.author.username,
 				}}
+				upvoted={!!comment.viewer_context?.liked}
+				upvotes={comment.reactions.likes_count}
 				text={comment.text}
 				level={level}
 			/>
@@ -57,9 +82,21 @@ export default async function Cast(props: { params: { cast: string } }) {
 	return (
 		<div className="flex flex-col items-center w-full pt-32 max-xl:pt-28 max-sm:pt-20 px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
 			<div className="flex flex-col gap-4 max-w-3xl w-full">
-				<CastCard cast={cast} />
+				<Link href="/chat" className="text-red flex items-center gap-1 group">
+					<ArrowLeft className="w-5 h-5 text-red group-hover:-translate-x-1 transition-transform" />
+					Back to feed
+				</Link>
+				<CastCard cast={cast} expanded />
 				<h2 className="text-white text-2xl font-bebas-neue">Comments</h2>
-				{cast.direct_replies.map((comment) => renderComments(comment, 0))}
+				{cast.direct_replies
+					.toSorted(
+						(a, b) =>
+							(b as CastWithInteractionsAndConversationsRef).reactions
+								.likes_count -
+							(a as CastWithInteractionsAndConversationsRef).reactions
+								.likes_count,
+					)
+					.map((comment) => renderComments(comment, 0))}
 			</div>
 		</div>
 	);
@@ -70,6 +107,8 @@ function Comment(props: {
 	author: { pfp_url?: string; username: string };
 	text: string;
 	level: number;
+	upvoted: boolean;
+	upvotes: number;
 }) {
 	return (
 		<div className="flex gap-2 bg-grey-800 rounded-xl p-2">
@@ -97,10 +136,20 @@ function Comment(props: {
 					</div>
 				) : null}
 			</div>
-			<div className="flex flex-col gap-1">
-				<p className="text-white"> {props.author.username}</p>
-				<p className="text-white">{props.text}</p>
+			<div className="flex flex-col gap-2 w-full">
+				<div className="flex flex-col gap-1">
+					<p className="text-white"> {props.author.username}</p>
+					<p className="text-white">{props.text}</p>
+				</div>
+				<div className="flex items-center gap-2">
+					<Upvote hash={props.hash} upvoted={props.upvoted} />
+					<p className="cursor-default text-sm">
+						{props.upvotes} upvote
+						{props.upvotes === 1 ? "" : "s"}
+					</p>
+				</div>
 			</div>
+			<MoreHorizontal className="w-5 h-5 text-grey-200 hover:text-white transition-colors mr-2" />
 		</div>
 	);
 }

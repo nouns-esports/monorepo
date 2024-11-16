@@ -11,6 +11,8 @@ import {
 	sql,
 } from "drizzle-orm";
 import { unstable_cache as cache } from "next/cache";
+import { neynarClient } from "../clients/neynar";
+import { env } from "~/env";
 
 export const getRoundWithProposal = cache(
 	async (input: { round: string; user: string }) => {
@@ -59,6 +61,11 @@ export const getRound = cache(
 								rank: true,
 							},
 						},
+						proposal: {
+							with: {
+								user: true,
+							},
+						},
 					},
 				},
 				minProposerRank: true,
@@ -72,107 +79,13 @@ export const getRound = cache(
 
 export const getRounds = cache(
 	async (input?: {
-		stage?: "active" | "upcoming" | "ended";
 		limit?: number;
 	}) => {
-		//
-		if (input?.stage) {
-			switch (input.stage) {
-				case "active":
-					return db.query.rounds.findMany({
-						where: and(
-							lt(rounds.start, new Date()),
-							gt(rounds.end, new Date()),
-						),
-						limit: input.limit,
-						orderBy: asc(rounds.end),
-						with: {
-							awards: {
-								with: {
-									asset: true,
-								},
-							},
-							community: true,
-						},
-					});
-				case "upcoming":
-					return db.query.rounds.findMany({
-						where: gt(rounds.start, new Date()),
-						limit: input.limit,
-						orderBy: asc(rounds.start),
-						with: {
-							awards: {
-								with: {
-									asset: true,
-								},
-							},
-							community: true,
-						},
-					});
-				case "ended":
-					return db.query.rounds.findMany({
-						where: lt(rounds.end, new Date()),
-						limit: input.limit,
-						orderBy: desc(rounds.end),
-						with: {
-							awards: {
-								with: {
-									asset: true,
-								},
-							},
-							community: true,
-						},
-					});
-			}
-		}
-
 		return db.query.rounds.findMany({
 			limit: input?.limit,
 			orderBy: [desc(rounds.featured), desc(rounds.end)],
-			where: and(lt(rounds.start, new Date()), isNotNull(rounds.end)),
 			with: {
-				awards: {
-					with: {
-						asset: true,
-					},
-				},
 				community: true,
-			},
-		});
-	},
-	["rounds"],
-	{ tags: ["rounds"], revalidate: 60 * 10 },
-);
-
-export const getRoundStats = cache(
-	async (input: { id: string }) => {
-		const round = await getRound({ id: input.id });
-
-		if (!round) {
-			return {
-				proposalsCreated: 0,
-				votesCast: 0,
-				totalParticipants: 0,
-			};
-		}
-
-		return {
-			proposalsCreated: round.proposals.length,
-			votesCast: round.votes.length,
-			totalParticipants: new Set(
-				[...round.proposals, ...round.votes].map((item) => item.user),
-			).size,
-		};
-	},
-	["roundStats"],
-	{ tags: ["roundStats"], revalidate: 60 * 10 },
-);
-
-export const getRoundsStats = cache(
-	async () => {
-		const allRounds = await db.query.rounds.findMany({
-			where: isNotNull(rounds.end),
-			with: {
 				awards: {
 					columns: {
 						asset: true,
@@ -190,35 +103,29 @@ export const getRoundsStats = cache(
 					},
 				},
 			},
-			columns: {
-				id: true,
-			},
 		});
+	},
+	["rounds"],
+	{ tags: ["rounds"], revalidate: 60 * 10 },
+);
 
-		return {
-			roundsCreated: allRounds.length,
-			fundsDeployed: allRounds.reduce(
-				(total, round) =>
-					total +
-					round.awards.reduce(
-						(roundTotal, award) =>
-							award.asset === "usdc"
-								? roundTotal + Number(award.value) / 1000000
-								: roundTotal,
-						0,
-					),
-				0,
-			),
-			totalParticipants: new Set(
-				allRounds
-					.flatMap((round) => [...round.proposals, ...round.votes])
-					.map((item) => item.user),
-			).size,
-		};
+export const getComments = cache(
+	async (input: { round: string }) => {
+		const [roundCasts, voteCasts] = await Promise.all([
+			neynarClient.fetchFeed("filter", {
+				filterType: "embed_url",
+				embedUrl: `${env.NEXT_PUBLIC_DOMAIN}/rounds/${input.round}`,
+			}),
+			neynarClient.fetchFeed("filter", {
+				filterType: "embed_url",
+				embedUrl: `${env.NEXT_PUBLIC_DOMAIN}/api/frames/rounds/${input.round}`,
+			}),
+		]);
+
+		return [...roundCasts.casts, ...voteCasts.casts].filter(
+			(cast) => cast.text.length > 0,
+		);
 	},
-	["getStats"],
-	{
-		tags: ["getStats"],
-		revalidate: 60 * 10,
-	},
+	["comments"],
+	{ tags: ["comments"], revalidate: 60 * 10 },
 );

@@ -189,7 +189,7 @@ export const rounds = pgTable("rounds", {
 	content: text("content").notNull(), // rename
 	start: timestamp("start", { mode: "date" }).notNull(),
 	votingStart: timestamp("voting_start", { mode: "date" }).notNull(),
-	end: timestamp("end", { mode: "date" }),
+	end: timestamp("end", { mode: "date" }).notNull(),
 	minProposerRank: integer("min_proposer_rank"),
 	minVoterRank: integer("min_voter_rank"),
 });

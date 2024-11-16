@@ -8,7 +8,7 @@ import { pinImage } from "@/server/mutations/pinImage";
 import { useAction } from "next-safe-action/hooks";
 import { updateNexus } from "@/server/mutations/updateNexus";
 import { useRouter } from "next/navigation";
-import { Edit, UserPen, X } from "lucide-react";
+import { Edit, Link, UserPen, X, XIcon } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 import { usePrivy } from "@privy-io/react-auth";
 import type { AuthenticatedUser } from "@/server/queries/users";
@@ -180,7 +180,7 @@ export default function SettingsModal(props: { user: AuthenticatedUser }) {
 							</>
 						),
 						connections: (
-							<>
+							<div className="flex flex-col gap-3">
 								<div className="flex gap-2 justify-between items-center">
 									<div className="flex items-center gap-3">
 										<img
@@ -262,35 +262,85 @@ export default function SettingsModal(props: { user: AuthenticatedUser }) {
 										{props.user.twitter ? "Remove" : "Add"}
 									</Button>
 								</div>
-								<div className="flex gap-2 justify-between items-center">
-									<div className="flex items-center gap-3">
-										<img
-											src="https://ipfs.nouns.gg/ipfs/QmTHUctNLWFbYwWU7DhUBtXfXL31T2qnZNRnZPg4TDLJyS"
-											className="h-10 w-10 rounded-md"
-										/>
-										<div className="flex flex-col">
-											<p className="text-white font-semibold">Wallet</p>
-											<p
-												className={twMerge(
-													props.user.wallet ? "text-green" : "text-red",
-												)}
-											>
-												{props.user.wallet ? "Connected" : "Not Connected"}
-											</p>
+								{props.user.smartWallet ? (
+									<div className="flex gap-2 justify-between items-center">
+										<div className="flex items-center gap-3">
+											<img
+												src="/logo/logo-square.svg"
+												className="h-10 w-10 rounded-md"
+											/>
+											<div className="flex flex-col">
+												<p className="text-white font-semibold">Wallet</p>
+												<p>
+													{props.user.smartWallet.substring(0, 6)}...
+													{props.user.smartWallet.substring(
+														props.user.smartWallet.length - 4,
+													)}
+												</p>
+											</div>
 										</div>
+										<Button
+											href={`https://thesuperscan.io/address/${props.user.smartWallet}`}
+											size="sm"
+											newTab
+										>
+											View
+										</Button>
 									</div>
-									<Button
-										onClick={() =>
-											props.user.wallet
-												? unlinkWallet(props.user.wallet.address)
-												: linkWallet()
-										}
-										size="sm"
-									>
-										{props.user.wallet ? "Remove" : "Add"}
-									</Button>
+								) : null}
+								<div className="flex flex-col gap-3">
+									<div className="flex items-center justify-between">
+										<p className="text-white font-semibold">External Wallets</p>
+										<button
+											onClick={() => linkWallet()}
+											className="flex items-center gap-1 text-red hover:text-red/70 transition-colors"
+										>
+											<Link className="w-4 h-4" />
+											Verify
+										</button>
+									</div>
+									<div className="flex flex-col gap-2">
+										{props.user.wallets.map((wallet) => (
+											<div
+												key={wallet.address}
+												className="flex items-center gap-2 justify-between"
+											>
+												<div className="flex items-center gap-2">
+													<img
+														src={
+															{
+																rainbow:
+																	"https://ipfs.nouns.gg/ipfs/QmbsJ82EZw2oJtdPbiNdfQ8LPW2P8JxMHbWvqrj9ZWwNF9",
+																coinbase:
+																	"https://ipfs.nouns.gg/ipfs/QmdSdo9pCPr3MpBRKAySnjwRfEH4tCm9aHggzqVgsPY2fx",
+																metamask:
+																	"https://ipfs.nouns.gg/ipfs/QmdF9f6t9EFHAXF35wmmEN2LPCdtojZKqJteKYmnHsa14G",
+															}[wallet.wallet_client_type] ??
+															"https://ipfs.nouns.gg/ipfs/QmXiGnEvjtEHTsYxGEiQo8pENMZJHWxywDkEvrQ1xMJpf8"
+														}
+														className="h-6 w-6 rounded-md"
+													/>
+													<p className="text-white">
+														{wallet.address.substring(0, 6)}...
+														{wallet.address.substring(
+															wallet.address.length - 4,
+														)}
+													</p>
+												</div>
+												<button
+													onClick={() => unlinkWallet(wallet.address)}
+													className="hover:text-white/70 text-white transition-colors"
+												>
+													<XIcon className="w-5 h-5 " />
+												</button>
+											</div>
+										))}
+										{props.user.wallets.length === 0
+											? "No external wallets verified"
+											: null}
+									</div>
 								</div>
-							</>
+							</div>
 						),
 						advanced: (
 							<>

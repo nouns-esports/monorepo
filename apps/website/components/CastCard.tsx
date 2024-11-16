@@ -26,22 +26,27 @@ import Spinner from "./Spinner";
 import { twMerge } from "tailwind-merge";
 import Countup from "./Countup";
 import { videoEmbedFromLink } from "@/utils/videoEmbedFromLink";
-import CastReactions from "./CastReactions";
+import Recast from "./Recast";
+import Upvote from "./Upvote";
 
 export default function CastCard(props: {
 	cast: CastWithInteractions;
 	community?: Community;
+	expanded?: boolean;
 }) {
 	const embeds = parseCastEmbeds(props.cast.embeds);
 
 	return (
 		<div className="relative flex gap-3 bg-grey-800 rounded-xl pl-2 pr-4 py-4 w-full">
-			<Link
-				href={`/chat/${props.cast.hash.substring(0, 10)}`}
-				className="w-full h-full absolute top-0 left-0"
-			/>
+			{!props.expanded ? (
+				<Link
+					href={`/chat/${props.cast.hash}`}
+					className="w-full h-full absolute top-0 left-0"
+				/>
+			) : null}
 			<Link
 				href={`/users/${props.cast.author.username}`}
+				newTab
 				className="relative z-10 ml-2 w-12 h-12 flex-shrink-0 flex"
 			>
 				<img
@@ -53,6 +58,7 @@ export default function CastCard(props: {
 				<div className="flex justify-between">
 					<div className="flex items-center gap-2">
 						<Link
+							newTab
 							href={`/users/${props.cast.author.username}`}
 							className="flex relative z-10 gap-2 items-center w-min hover:opacity-70 transition-opacity"
 						>
@@ -77,7 +83,7 @@ export default function CastCard(props: {
 								</Link>
 							</>
 						) : null}
-						<p className="text-grey-200 font-semibold text-sm">
+						<p className="text-grey-200 font-semibold text-sm pointer-events-none">
 							<Countup date={props.cast.timestamp} />
 						</p>
 					</div>
@@ -107,27 +113,59 @@ export default function CastCard(props: {
 							/>
 						) : null}
 					</div>
-					<div className="flex flex-col gap-3">
-						<CastReactions
-							hash={props.cast.hash}
-							user={
-								props.cast.viewer_context
-									? {
-											liked: props.cast.viewer_context.liked,
-											recast: props.cast.viewer_context.recasted,
-										}
-									: undefined
-							}
-						/>
+					<div
+						className={twMerge(
+							"flex",
+							props.expanded ? "gap-2" : "flex-col gap-3",
+						)}
+					>
+						<div
+							className={twMerge(
+								"flex items-center gap-3",
+								props.expanded && "gap-2",
+							)}
+						>
+							{!props.expanded ? (
+								<Link
+									href={`/chat/${props.cast.hash}`}
+									className="relative z-10"
+								>
+									<MessageSquare
+										className={twMerge(
+											"w-5 h-5 text-grey-200 hover:text-white transition-colors  ",
+										)}
+									/>
+								</Link>
+							) : null}
+							<Recast
+								hash={props.cast.hash}
+								recast={!!props.cast.viewer_context?.recasted}
+							/>
+							{props.expanded ? (
+								<p className="cursor-default mr-2">
+									{props.cast.reactions.recasts_count} repost
+									{props.cast.reactions.recasts_count === 1 ? "" : "s"}
+								</p>
+							) : null}
+							<Upvote
+								hash={props.cast.hash}
+								upvoted={!!props.cast.viewer_context?.liked}
+							/>
+						</div>
+
 						<div className="flex items-center gap-2 text-sm text-grey-200">
-							<Link
-								href={`/chat/${props.cast.hash.substring(0, 10)}`}
-								className="relative z-10 hover:text-grey-200/70 transition-colors"
-							>
-								{props.cast.replies.count} comments
-							</Link>
+							{!props.expanded ? (
+								<Link
+									href={`/chat/${props.cast.hash.substring(0, 10)}`}
+									className="relative z-10 hover:text-grey-200/70 transition-colors"
+								>
+									{props.cast.replies.count} comment
+									{props.cast.replies.count === 1 ? "" : "s"}
+								</Link>
+							) : null}
 							<p className="cursor-default">
-								{props.cast.reactions.likes_count} upvotes
+								{props.cast.reactions.likes_count} upvote
+								{props.cast.reactions.likes_count === 1 ? "" : "s"}
 							</p>
 						</div>
 					</div>

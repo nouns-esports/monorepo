@@ -6,7 +6,7 @@ import { twMerge } from "tailwind-merge";
 import { formatUnits } from "viem";
 import { getFrameMetadata, isFrameRequest } from "frog/next";
 import type { Metadata } from "next";
-import { getRound, getRoundStats } from "@/server/queries/rounds";
+import { getRound, getComments } from "@/server/queries/rounds";
 import { getPriorVotes } from "@/server/queries/votes";
 import { numberToOrdinal } from "@/utils/numberToOrdinal";
 import { getAuthenticatedUser } from "@/server/queries/users";
@@ -53,15 +53,62 @@ export async function generateMetadata(props: {
 	};
 }
 
+type Activity = {
+	timestamp: Date;
+} & (
+	| {
+			type: "state";
+			name: string;
+			icon: ReactNode;
+			color: string;
+	  }
+	| {
+			type: "comment";
+			url: string;
+			user: {
+				id: string;
+				name: string;
+				image: string;
+			};
+			text: string;
+	  }
+	| {
+			type: "proposal";
+			user: {
+				id: string;
+				name: string;
+				image: string;
+			};
+	  }
+	| {
+			type: "vote";
+			count: number;
+			user: {
+				id: string;
+				name: string;
+				image: string;
+			};
+			for: {
+				user: {
+					id: string;
+					name: string;
+					image: string;
+				};
+				title: string;
+			};
+	  }
+);
+
 export default async function Round(props: {
 	params: { round: string };
 	searchParams: { p?: string };
 }) {
 	if (isFrameRequest(headers())) return null;
 
-	const [user, round] = await Promise.all([
+	const [user, round, comments] = await Promise.all([
 		getAuthenticatedUser(),
 		getRound({ id: props.params.round }),
+		getComments({ round: props.params.round }),
 	]);
 
 	if (!round) {
@@ -71,10 +118,57 @@ export default async function Round(props: {
 	const priorVotes = user
 		? await getPriorVotes({
 				user: user.id,
-				wallet: user.wallet?.address,
 				round: props.params.round,
 			})
 		: 0;
+
+	const commentActivity = comments.map((comment) => ({
+		type: "comment",
+		timestamp: new Date(comment.timestamp),
+		user: {
+			id: comment.author.username,
+			name: comment.author.display_name ?? "",
+			image: comment.author.pfp_url ?? "",
+		},
+		text: comment.text,
+		url: `/chat/${comment.hash}`,
+	})) satisfies Activity[];
+
+	const proposalActivity = round.proposals
+		.filter((proposal) => proposal.user)
+		.map((proposal) => ({
+			type: "proposal",
+			timestamp: new Date(proposal.createdAt),
+			user: {
+				id: proposal.user.username ?? proposal.user.discord ?? proposal.user.id,
+				name: proposal.user.name,
+				image: proposal.user.image,
+			},
+		})) satisfies Activity[];
+
+	const voteActivity = round.votes
+		.filter((vote) => vote.user && vote.proposal.user)
+		.map((vote) => ({
+			type: "vote",
+			count: vote.count,
+			timestamp: new Date(vote.timestamp),
+			user: {
+				id: vote.user.username ?? vote.user.id,
+				name: vote.user.name,
+				image: vote.user.image,
+			},
+			for: {
+				title: vote.proposal.title,
+				user: {
+					id:
+						vote.proposal.user.username ??
+						vote.proposal.user.discord ??
+						vote.proposal.user.id,
+					name: vote.proposal.user.name,
+					image: vote.proposal.user.image,
+				},
+			},
+		})) satisfies Activity[];
 
 	return (
 		<div className="relative flex flex-col justify-center gap-4 w-full pt-32 max-xl:pt-28 max-sm:pt-20 px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
@@ -83,7 +177,7 @@ export default async function Round(props: {
 				Back to rounds
 			</Link>
 			<div className="flex flex-col gap-8">
-				<div className="flex gap-4 h-[500px] max-lg:flex-col max-lg:h-auto">
+				<div className="flex gap-4 h-[500px] max-xl:flex-col max-xl:h-auto">
 					<div className="bg-grey-800 flex flex-col w-full h-full rounded-xl overflow-hidden max-lg:max-h-[600px] max-sm:max-h-[500px]">
 						<img
 							src={`${round.image}?img-height=500&img-onerror=redirect`}
@@ -114,8 +208,8 @@ export default async function Round(props: {
 						</div>
 					</div>
 					<div className="flex flex-col gap-4 w-full h-full">
-						<div className="flex gap-4 h-full min-h-0 w-full">
-							<div className="bg-grey-800 w-full h-full max-lg:max-h-80 rounded-xl flex flex-col gap-4 p-4">
+						<div className="flex max-md:flex-col gap-4 h-full min-h-0 w-full">
+							<div className="bg-grey-800 min-w-52 w-full h-full max-xl:max-h-80 rounded-xl flex flex-col gap-4 p-4">
 								<h2 className="font-bebas-neue text-2xl text-white">Awards</h2>
 								<div className="flex flex-col gap-4 h-full overflow-y-auto custom-scrollbar">
 									{round.awards.map((award, index) => (
@@ -158,112 +252,108 @@ export default async function Round(props: {
 									{round.awards.length > 1 ? "winners" : "winner"}
 								</p>
 							</div>
-							<div className="bg-grey-800 w-full h-full rounded-xl flex flex-col p-4 gap-4 max-xl:hidden">
+							<div className="bg-grey-800 w-full min-w-96 max-xl:max-h-80 h-full rounded-xl flex flex-col p-4 gap-4">
 								<div className="flex items-center justify-between">
 									<h2 className="font-bebas-neue text-2xl text-white">
 										Activity
 									</h2>
-									<select className="bg-grey-500 text-white rounded-full px-2 py-1 outline-none cursor-pointer">
-										<option>All</option>
-										<option>Proposals</option>
-										<option>Votes</option>
-										<option>Comments</option>
-									</select>
 								</div>
-								<div className="flex flex-col gap-2 h-full overflow-y-auto custom-scrollbar">
+								<div className="flex flex-col gap-3 h-full overflow-y-auto custom-scrollbar">
 									{(
 										[
 											{
-												type: "round-start",
+												type: "state",
+												name: "Round started",
 												timestamp: new Date(round.start),
 												icon: (
 													<div className="bg-green p-1 w-5 h-5 text-white rounded-md">
 														<Megaphone className="w-full h-full" />
 													</div>
 												),
-												user: undefined,
-												caption: undefined,
+												color: "text-green",
 											},
 											{
-												type: "voting-start",
+												type: "state",
+												name: "Voting started",
 												timestamp: new Date(round.votingStart),
 												icon: (
 													<div className="bg-purple p-1 w-5 h-5 text-white rounded-md">
 														<TicketCheck className="w-full h-full" />
 													</div>
 												),
-												user: undefined,
-												caption: undefined,
+												color: "text-purple",
 											},
 											{
-												type: "round-end",
-												timestamp: new Date(round.end ?? Infinity),
+												type: "state",
+												name: "Round ended",
+												timestamp: new Date(round.end),
 												icon: (
 													<div className="bg-red p-1 w-5 h-5 text-white rounded-md">
 														<Gavel className="w-full h-full" />
 													</div>
 												),
-												user: undefined,
-												caption: undefined,
+												color: "text-red",
 											},
-											// {
-											// 	type: "comment",
-											// 	timestamp: new Date("2024-10-07T05:00:00"),
-											// 	icon: "https://ipfs.nouns.gg/ipfs/Qmd66SPyEt4uZko5uezgajmoS1K575RJS2bQxh4KehzmcD",
-											// 	user: "Sam",
-											// 	caption:
-											// 		"This round is pretty cool, you guys should go check it out and also vote.",
-											// },
-											...round.proposals
-												.filter((proposal) => proposal.user)
-												.map((proposal) => ({
-													type: "proposal",
-													timestamp: new Date(proposal.createdAt),
-													icon: undefined,
-													user: {
-														id: proposal.user.username ?? proposal.user.id,
-														name: proposal.user.name,
-														image: proposal.user.image,
-													},
-													caption: undefined,
-												})),
-											...round.votes
-												.filter((vote) => vote.user)
-												.map((vote) => ({
-													type: "vote",
-													timestamp: new Date(vote.timestamp),
-													icon: undefined,
-													user: {
-														id: vote.user.username ?? vote.user.id,
-														name: vote.user.name,
-														image: vote.user.image,
-													},
-													caption: undefined,
-												})),
-										] satisfies Array<{
-											type: string;
-											timestamp: Date;
-											icon?: ReactNode;
-											user?: {
-												id: string;
-												name: string;
-												image: string;
-											};
-											caption?: string;
-										}>
+											...commentActivity,
+											...proposalActivity,
+											...voteActivity,
+										] satisfies Activity[]
 									)
 										.filter((event) => event.timestamp < new Date())
 										.sort(
-											(a, b) => a.timestamp.getTime() - b.timestamp.getTime(),
+											(a, b) => b.timestamp.getTime() - a.timestamp.getTime(),
 										)
 										.map((event, index) => (
-											<div
-												key={`activity-${index}`}
-												className="flex flex-col gap-0.5"
-											>
-												<div className="flex items-center justify-between">
-													<div className="flex items-center gap-2">
-														{event.user ? (
+											<div key={`activity-${index}`}>
+												{event.type === "state" ? (
+													<div className="flex items-center justify-between">
+														<div className="flex items-center gap-2">
+															{event.icon}
+															<p className={event.color}>{event.name}</p>
+														</div>
+														<p className="text-grey-200 text-sm">
+															<Countup date={event.timestamp} />
+														</p>
+													</div>
+												) : null}
+												{event.type === "comment" ? (
+													<div className="flex flex-col gap-0.5">
+														<div className="flex items-center justify-between">
+															<div className="flex items-center gap-2">
+																<Link
+																	href={`/users/${event.user.id}`}
+																	className="text-white flex items-center gap-2 group hover:text-white/70 transition-all"
+																>
+																	<img
+																		src={event.user.image}
+																		className={twMerge(
+																			"w-5 h-5 rounded-full object-cover group-hover:brightness-75 transition-all",
+																		)}
+																	/>
+																	{event.user.name}
+																</Link>
+																<Link
+																	href={event.url}
+																	className="text-grey-200"
+																>
+																	commented
+																</Link>
+															</div>
+															<p className="text-grey-200 text-sm">
+																<Countup date={event.timestamp} />
+															</p>
+														</div>
+														<Link
+															href={event.url}
+															className="text-sm line-clamp-2 ml-7 hover:text-grey-200/70 transition-colors"
+														>
+															"{event.text}"
+														</Link>
+													</div>
+												) : null}
+												{event.type === "proposal" ? (
+													<div className="flex items-center justify-between">
+														<div className="flex items-center gap-2">
 															<Link
 																href={`/users/${event.user.id}`}
 																className="text-white flex items-center gap-2 group hover:text-white/70 transition-all"
@@ -276,39 +366,50 @@ export default async function Round(props: {
 																/>
 																{event.user.name}
 															</Link>
-														) : (
-															event.icon
-														)}
-														<p
-															className={twMerge(
-																event.type === "proposal" && "text-yellow",
-																event.type === "vote" && "text-blue-500",
-																event.type === "round-start" && "text-green",
-																event.type === "voting-start" && "text-purple",
-																event.type === "round-end" && "text-red",
-																event.type === "comment" && "text-grey-200",
-															)}
-														>
-															{
-																{
-																	proposal: "created a proposal",
-																	vote: "voted",
-																	"round-start": "Round started",
-																	"voting-start": "Voting started",
-																	"round-end": "Round ended",
-																	comment: "commented",
-																}[event.type]
-															}
+															<p className="text-yellow">created a proposal</p>
+														</div>
+														<p className="text-grey-200 text-sm">
+															<Countup date={event.timestamp} />
 														</p>
 													</div>
-													<p className="text-grey-200 text-sm">
-														<Countup date={event.timestamp} />
-													</p>
-												</div>
-												{event.caption ? (
-													<p className="text-sm line-clamp-2 ml-7">
-														"{event.caption}"
-													</p>
+												) : null}
+												{event.type === "vote" ? (
+													<div className="flex items-center justify-between">
+														<div className="flex items-center gap-2">
+															<Link
+																href={`/users/${event.user.id}`}
+																className="text-white flex items-center gap-2 group hover:text-white/70 transition-all"
+															>
+																<img
+																	src={event.user.image}
+																	className={twMerge(
+																		"w-5 h-5 rounded-full object-cover group-hover:brightness-75 transition-all",
+																	)}
+																/>
+																{event.user.name}
+															</Link>
+															<p className="text-blue-500">voted for</p>
+															<Link
+																href={`/users/${event.for.user.id}`}
+																className="text-white flex items-center gap-2 group hover:text-white/70 transition-all"
+															>
+																<img
+																	src={event.for.user.image}
+																	className={twMerge(
+																		"w-5 h-5 rounded-full object-cover group-hover:brightness-75 transition-all",
+																	)}
+																/>
+																{event.for.user.name}
+															</Link>
+															<p className="text-blue-500">
+																with {event.count} vote
+																{event.count === 1 ? "" : "s"}
+															</p>
+														</div>
+														<p className="text-grey-200 text-sm">
+															<Countup date={event.timestamp} />
+														</p>
+													</div>
 												) : null}
 											</div>
 										))}
@@ -319,10 +420,7 @@ export default async function Round(props: {
 					</div>
 				</div>
 				<Proposals
-					round={{
-						...round,
-						awardCount: round.awards.length,
-					}}
+					round={round}
 					user={
 						user
 							? {

@@ -24,9 +24,13 @@ import {
 	TwitterLogo,
 	YoutubeLogo,
 } from "phosphor-react-sc";
+import { getRosters } from "@/server/queries/rosters";
 
 export default async function Header() {
-	const user = await getAuthenticatedUser();
+	const [user, rosters] = await Promise.all([
+		getAuthenticatedUser(),
+		getRosters({ limit: 4 }),
+	]);
 
 	return (
 		<>
@@ -82,32 +86,31 @@ export default async function Header() {
 												</div>
 											</Link>
 											<div className="text-nowrap gap-2 flex flex-col py-3">
-												<p className="font-bebas-neue text-lg px-3">Socials</p>
-												<div className="px-3 flex gap-4">
-													<Link href="/discord">
-														<DiscordLogo
-															className="w-7 h-7 text-white hover:text-white/60 cursor-pointer transition-colors"
-															weight="fill"
-														/>
+												<div className="flex justify-between items-center px-3">
+													<p className="font-bebas-neue text-lg">Rosters</p>
+													<Link
+														href="/rosters"
+														className="text-red text-sm flex gap-1 items-center group/rosters"
+													>
+														View All
+														<ArrowRight className="w-4 h-4 group-hover/rosters:translate-x-0.5 transition-transform" />
 													</Link>
-													<Link href="/instagram">
-														<InstagramLogo
-															className="w-7 h-7 text-white hover:text-white/60 cursor-pointer transition-colors"
-															weight="fill"
-														/>
-													</Link>
-													<Link href="/twitter">
-														<TwitterLogo
-															className="w-7 h-7 text-white hover:text-white/60 cursor-pointer transition-colors"
-															weight="fill"
-														/>
-													</Link>
-													<Link href="/youtube">
-														<YoutubeLogo
-															className="w-7 h-7 text-white hover:text-white/60 cursor-pointer transition-colors"
-															weight="fill"
-														/>
-													</Link>
+												</div>
+												<div className="px-1.5 grid grid-cols-2 w-80">
+													{rosters.map((roster) => (
+														<Link
+															key={roster.id}
+															href={`/rosters/${roster.community.id}`}
+															className="flex items-center gap-2 rounded-lg px-2 py-2 hover:bg-grey-500 transition-colors w-full"
+														>
+															<img
+																src={roster.community.image}
+																alt={`Our ${roster.name} roster`}
+																className="w-6 h-6 rounded-md object-cover"
+															/>
+															<p className="text-nowrap">{roster.name}</p>
+														</Link>
+													))}
 												</div>
 											</div>
 										</div>

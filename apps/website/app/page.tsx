@@ -43,11 +43,11 @@ export default async function Home() {
 	const now = new Date();
 
 	const highlightedRound = rounds.find(
-		(round) => round.featured || new Date(round.end ?? Infinity) > now,
+		(round) => round.featured || new Date(round.end) > now,
 	);
 
 	const highlightedEvent = events.find(
-		(event) => event.featured || new Date(event.end ?? Infinity) > now,
+		(event) => event.featured || new Date(event.end) > now,
 	);
 
 	return (
