@@ -218,6 +218,13 @@
       "when": 1731716822225,
       "tag": "0030_sad_johnny_blaze",
       "breakpoints": true
+    },
+    {
+      "idx": 31,
+      "version": "7",
+      "when": 1731898897985,
+      "tag": "0031_worthless_stranger",
+      "breakpoints": true
     }
   ]
 }

@@ -28,7 +28,7 @@ export const getHighlightedEvent = cache(
 
 export const getEvent = cache(
 	async (input: { id: string; user?: string }) => {
-		////
+		//////////
 		return db.query.events.findFirst({
 			where: eq(events.id, input.id),
 			with: {
@@ -47,6 +47,7 @@ export const getEvent = cache(
 				rounds: {
 					with: { community: true },
 				},
+				community: true,
 			},
 		});
 	},

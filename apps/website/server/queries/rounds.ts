@@ -68,6 +68,7 @@ export const getRound = cache(
 						},
 					},
 				},
+				event: true,
 				minProposerRank: true,
 				minVoterRank: true,
 			},

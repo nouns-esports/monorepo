@@ -23,6 +23,7 @@ export const snapshotTypes = {
 	"discord-call": "Attended a community Discord call",
 	"visit-link": "",
 	genesis: "Were included in the Genesis snapshot",
+	"check-in": "Checked in to an event",
 } as const;
 
 export const snapshots = pgTable("snapshots", {
@@ -45,11 +46,49 @@ export const snapshotsRelations = relations(snapshots, ({ one }) => ({
 	}),
 }));
 
-// export const notifications = pgTable("notifications", {
-// 	id: serial("id").primaryKey(),
-// 	user: text("user").notNull(),
-// 	timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
-// });
+export const notifications = pgTable("notifications", {
+	id: serial("id").primaryKey(),
+	user: text("user").notNull(),
+	timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
+	type: text("type", {
+		enum: [
+			"round-started",
+			"round-voting-started",
+			"round-won",
+			"quest-created",
+			"event-started",
+			"nexus-rankup",
+		],
+	}).notNull(),
+	round: text("round"),
+	quest: text("quest"),
+	event: text("event"),
+	ranking: integer("ranking"),
+	read: boolean("read").notNull().default(false),
+});
+
+export const notificationsRelations = relations(notifications, ({ one }) => ({
+	user: one(nexus, {
+		fields: [notifications.user],
+		references: [nexus.id],
+	}),
+	round: one(rounds, {
+		fields: [notifications.round],
+		references: [rounds.id],
+	}),
+	quest: one(quests, {
+		fields: [notifications.quest],
+		references: [quests.id],
+	}),
+	event: one(events, {
+		fields: [notifications.event],
+		references: [events.id],
+	}),
+	ranking: one(rankings, {
+		fields: [notifications.ranking],
+		references: [rankings.id],
+	}),
+}));
 
 export const communities = pgTable("communities", {
 	id: text("id").primaryKey(),
@@ -106,6 +145,7 @@ export const eventsRelations = relations(events, ({ one, many }) => ({
 		references: [seasons.id],
 	}),
 	rounds: many(rounds),
+	notifications: many(notifications),
 }));
 
 // export const attendees = pgTable("attendees", {
@@ -214,6 +254,7 @@ export const roundsRelations = relations(rounds, ({ one, many }) => ({
 		fields: [rounds.minVoterRank],
 		references: [ranks.id],
 	}),
+	notifications: many(notifications),
 }));
 
 // add user column and update it when they claim the award
@@ -369,6 +410,7 @@ export const questRelations = relations(quests, ({ one, many }) => ({
 		fields: [quests.event],
 		references: [events.id],
 	}),
+	notifications: many(notifications),
 }));
 
 export const xp = pgTable("xp", {
@@ -412,7 +454,7 @@ export const rankings = pgTable("rankings", {
 	timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
 });
 
-export const rankingsRelations = relations(rankings, ({ one }) => ({
+export const rankingsRelations = relations(rankings, ({ one, many }) => ({
 	user: one(nexus, {
 		fields: [rankings.user],
 		references: [nexus.id],
@@ -425,6 +467,7 @@ export const rankingsRelations = relations(rankings, ({ one }) => ({
 		fields: [rankings.rank],
 		references: [ranks.id],
 	}),
+	notifications: many(notifications),
 }));
 
 export const votes = pgTable("votes", {
@@ -586,6 +629,8 @@ const schema = {
 	links,
 	snapshots,
 	snapshotsRelations,
+	notifications,
+	notificationsRelations,
 };
 
 export const db = drizzle(
@@ -612,3 +657,4 @@ export type Rankings = typeof rankings.$inferSelect;
 export type Quest = typeof quests.$inferSelect;
 export type Event = typeof events.$inferSelect;
 export type Snapshot = typeof snapshots.$inferSelect;
+export type Notification = typeof notifications.$inferSelect;
