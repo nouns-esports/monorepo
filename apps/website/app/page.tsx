@@ -13,7 +13,6 @@ import { getRounds } from "@/server/queries/rounds";
 import { getCreator } from "@/server/queries/creations";
 import RoundCard from "@/components/RoundCard";
 import { getAuthenticatedUser } from "@/server/queries/users";
-import { getCurrentSeason } from "@/server/queries/season";
 import { getEvents } from "@/server/queries/events";
 import { getQuests } from "@/server/queries/quests";
 import QuestCard from "@/components/QuestCard";
@@ -21,19 +20,13 @@ import EventCard from "@/components/EventCard";
 import { ToggleModal } from "@/components/Modal";
 
 export default async function Home() {
-	const [user, videos, trendingPosts, rounds, season, events] =
-		await Promise.all([
-			getAuthenticatedUser(),
-			getVideos(),
-			getTrendingPosts(),
-			getRounds({ limit: 4 }),
-			getCurrentSeason(),
-			getEvents({ limit: 3 }),
-		]);
-
-	if (!season) {
-		throw new Error("No season found");
-	}
+	const [user, videos, trendingPosts, rounds, events] = await Promise.all([
+		getAuthenticatedUser(),
+		getVideos(),
+		getTrendingPosts(),
+		getRounds({ limit: 4 }),
+		getEvents({ limit: 3 }),
+	]);
 
 	const quests = await getQuests({
 		limit: 5,

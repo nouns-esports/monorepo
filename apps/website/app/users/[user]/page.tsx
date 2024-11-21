@@ -6,15 +6,18 @@ import { getFeed } from "@/server/queries/farcaster";
 import CastCard from "@/components/CastCard";
 import CreatePost from "@/components/CreatePost";
 
-export default async function User(props: { params: { user: string } }) {
+export default async function User(props: {
+	params: Promise<{ user: string }>;
+}) {
+	const params = await props.params;
 	const [authenticatedUser, user] = await Promise.all([
 		getAuthenticatedUser(),
-		getUser({ user: decodeURIComponent(props.params.user) }),
+		getUser({ user: decodeURIComponent(params.user) }),
 	]);
 
 	if (!user) {
-		if (!props.params.user.startsWith("did:privy:")) {
-			redirect(`https://warpcast.com/${props.params.user}`);
+		if (!params.user.startsWith("did:privy:")) {
+			redirect(`https://warpcast.com/${params.user}`);
 		}
 
 		return notFound();

@@ -3,18 +3,19 @@ import { getAuthenticatedUser } from "@/server/queries/users";
 import { redirect } from "next/navigation";
 
 export default async function CheckinCode(props: {
-	params: { event: string; code: string };
+	params: Promise<{ event: string; code: string }>;
 }) {
+	const params = await props.params;
 	const user = await getAuthenticatedUser();
 
-	if (!user) redirect(`/events/${props.params.event}/checkin`);
+	if (!user) redirect(`/events/${params.event}/checkin`);
 
 	await db.insert(snapshots).values({
 		type: "check-in",
-		tag: `${props.params.event}:${props.params.code}`,
+		tag: `${params.event}:${params.code}`,
 		user: user.id,
 		timestamp: new Date(),
 	});
 
-	return redirect(`/events/${props.params.event}/checkin`);
+	return redirect(`/events/${params.event}/checkin`);
 }

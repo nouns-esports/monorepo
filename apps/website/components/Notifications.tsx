@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { twMerge } from "tailwind-merge";
 import Link from "./Link";
+import { readNotifications } from "@/server/mutations/readNotifications";
 
 export default function Notifications(props: {
 	notifications: Awaited<ReturnType<typeof getNotifications>>;
@@ -18,7 +19,18 @@ export default function Notifications(props: {
 
 	return (
 		<div className="relative">
-			<div onClick={() => setShow(true)} className="group cursor-pointer">
+			<div
+				onClick={async () => {
+					setShow(true);
+
+					if (hasNotifications) {
+						await readNotifications();
+						router.refresh();
+						console.log("refreshing");
+					}
+				}}
+				className="group cursor-pointer"
+			>
 				{hasNotifications ? (
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -75,18 +87,18 @@ export default function Notifications(props: {
 						onClick={() => setShow(false)}
 						className="fixed w-screen h-screen top-0 left-0"
 					/>
-					<div className="relative z-10 bg-grey-800 w-[400px] rounded-xl drop-shadow-2xl p-2 flex flex-col gap-1">
-						<p className="font-bebas-neue text-white text-xl pl-2 pt-1.5">
+					<div className="relative z-10 bg-grey-800 w-[400px] rounded-xl drop-shadow-2xl p-2 flex flex-col">
+						<p className="font-bebas-neue text-white text-xl pl-2 pt-1">
 							Notifications
 						</p>
-						<div className="flex flex-col">
+						<div className="flex flex-col max-h-[400px] overflow-y-auto custom-scrollbar">
 							{props.notifications.map((notification) => (
 								<Link
 									href={
 										{
 											"round-started": `/rounds/${notification.round?.id}`,
 											"event-started": `/events/${notification.event?.id}`,
-											"nexus-rankup": `/nexus/${notification.ranking?.id}`,
+											"nexus-rankup": "/nexus",
 											"quest-created": `/quests/${notification.quest?.id}`,
 											"round-voting-started": `/rounds/${notification.round?.id}`,
 											"round-won": `/rounds/${notification.round?.id}`,
@@ -101,13 +113,20 @@ export default function Notifications(props: {
 												<div className="flex gap-2 ">
 													<img
 														src={notification.round.image}
-														className="rounded-xl w-24 flex-shrink-0"
+														className="rounded-xl w-24 flex-shrink-0 object-cover object-center"
 													/>
 													<div className="flex flex-col gap-2">
-														<p className="font-bebas-neue text-white line-clamp-2">
-															{notification.round.name}
+														<div className="flex gap-2">
+															<p className="font-bebas-neue text-white line-clamp-2 h-[2lh]">
+																{notification.round.name}
+															</p>
+															{!notification.read ? (
+																<div className="w-2 h-2 bg-red flex-shrink-0 rounded-full" />
+															) : null}
+														</div>
+														<p className="text-blue-500 text-sm">
+															Round started
 														</p>
-														<p className="text-green text-sm">Round started</p>
 													</div>
 												</div>
 											) : null,
@@ -115,12 +134,17 @@ export default function Notifications(props: {
 												<div className="flex gap-2 ">
 													<img
 														src={notification.round.image}
-														className="rounded-xl w-24 flex-shrink-0"
+														className="rounded-xl w-24 flex-shrink-0 object-cover object-center"
 													/>
 													<div className="flex flex-col gap-2">
-														<p className="font-bebas-neue text-white line-clamp-2">
-															{notification.round.name}
-														</p>
+														<div className="flex gap-2">
+															<p className="font-bebas-neue text-white line-clamp-2 h-[2lh]">
+																{notification.round.name}
+															</p>
+															{!notification.read ? (
+																<div className="w-2 h-2 bg-red flex-shrink-0 rounded-full" />
+															) : null}
+														</div>
 														<p className="text-purple text-sm">
 															Voting started
 														</p>
@@ -131,21 +155,86 @@ export default function Notifications(props: {
 												<div className="flex gap-2 ">
 													<img
 														src={notification.round.image}
-														className="rounded-xl w-24 flex-shrink-0"
+														className="rounded-xl w-24 flex-shrink-0 object-cover object-center"
 													/>
 													<div className="flex flex-col gap-2">
-														<p className="font-bebas-neue text-white line-clamp-2">
-															{notification.round.name}
-														</p>
+														<div className="flex gap-2">
+															<p className="font-bebas-neue text-white line-clamp-2 h-[2lh]">
+																{notification.round.name}
+															</p>
+															{!notification.read ? (
+																<div className="w-2 h-2 bg-red flex-shrink-0 rounded-full" />
+															) : null}
+														</div>
 														<p className="text-yellow text-sm">
 															You won the round!
 														</p>
 													</div>
 												</div>
 											) : null,
-											"quest-created": <div></div>,
-											"nexus-rankup": <div></div>,
-											"event-started": <div></div>,
+											"quest-created": notification.quest ? (
+												<div className="flex gap-2 ">
+													<img
+														src={notification.quest.image}
+														className="rounded-xl w-24 flex-shrink-0 object-cover object-center"
+													/>
+													<div className="flex flex-col gap-2">
+														<div className="flex gap-2">
+															<p className="font-bebas-neue text-white line-clamp-2 h-[2lh]">
+																{notification.quest.name}
+															</p>
+															{!notification.read ? (
+																<div className="w-2 h-2 bg-red flex-shrink-0 rounded-full" />
+															) : null}
+														</div>
+														<p className="text-blue-500 text-sm">
+															New quest was created
+														</p>
+													</div>
+												</div>
+											) : null,
+											"nexus-rankup": notification.ranking ? (
+												<div className="flex gap-2">
+													<img
+														src={notification.ranking.rank.image}
+														className="rounded-xl w-24 flex-shrink-0 object-contain"
+													/>
+													<div className="flex flex-col gap-2">
+														<div className="flex gap-2">
+															<p className="font-bebas-neue text-white line-clamp-2 h-[2lh]">
+																{notification.ranking.rank.name}
+															</p>
+															{!notification.read ? (
+																<div className="w-2 h-2 bg-red flex-shrink-0 rounded-full" />
+															) : null}
+														</div>
+														<p className="text-blue-500 text-sm">
+															You placed in a rank
+														</p>
+													</div>
+												</div>
+											) : null,
+											"event-started": notification.event ? (
+												<div className="flex gap-2 ">
+													<img
+														src={notification.event.image}
+														className="rounded-xl w-24 flex-shrink-0 object-cover object-center"
+													/>
+													<div className="flex flex-col gap-2">
+														<div className="flex gap-2">
+															<p className="font-bebas-neue text-white line-clamp-2 h-[2lh]">
+																{notification.event.name}
+															</p>
+															{!notification.read ? (
+																<div className="w-2 h-2 bg-red flex-shrink-0 rounded-full" />
+															) : null}
+														</div>
+														<p className="text-blue-500 text-sm">
+															Event has started
+														</p>
+													</div>
+												</div>
+											) : null,
 										}[notification.type]
 									}
 								</Link>

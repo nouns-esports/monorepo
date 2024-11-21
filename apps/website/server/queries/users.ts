@@ -7,7 +7,7 @@ import { unstable_cache as cache } from "next/cache";
 import { cookies } from "next/headers";
 
 export async function getAuthenticatedUser() {
-	const token = cookies().get("privy-id-token");
+	const token = (await cookies()).get("privy-id-token");
 
 	if (!token) return;
 

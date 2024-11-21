@@ -28,6 +28,7 @@ import Countup from "./Countup";
 import { videoEmbedFromLink } from "@/utils/videoEmbedFromLink";
 import Recast from "./Recast";
 import Upvote from "./Upvote";
+import CastText from "./CastText";
 
 export default function CastCard(props: {
 	cast: CastWithInteractions;
@@ -50,6 +51,7 @@ export default function CastCard(props: {
 				className="relative z-10 ml-2 w-12 h-12 flex-shrink-0 flex"
 			>
 				<img
+					key={props.cast.author.pfp_url}
 					src={props.cast.author.pfp_url}
 					className="w-full h-full rounded-full object-cover object-center hover:brightness-75 transition-all"
 				/>
@@ -74,6 +76,7 @@ export default function CastCard(props: {
 									className="flex relative z-10  items-center gap-1 bg-grey-600 hover:bg-grey-500 transition-colors rounded-full px-2 py-1"
 								>
 									<img
+										key={props.community.image}
 										src={props.community.image}
 										className="w-4 h-4 rounded-full object-cover object-center"
 									/>
@@ -90,13 +93,11 @@ export default function CastCard(props: {
 					<MoreHorizontal className="w-5 h-5 text-grey-200 hover:text-white transition-colors mr-2" />
 				</div>
 				<div className="flex flex-col gap-3 w-full">
-					<p className="text-white w-full">
-						<RichText>
-							{embeds.website
-								? props.cast.text.replace(embeds.website.url, "")
-								: props.cast.text}
-						</RichText>
-					</p>
+					<CastText className="text-white w-full pointer-events-none">
+						{embeds.website
+							? props.cast.text.replace(embeds.website.url, "")
+							: props.cast.text}
+					</CastText>
 					<div className="flex flex-col gap-1">
 						{embeds.image ? <CastImage image={embeds.image} /> : ""}
 						{embeds.website ? (
@@ -211,21 +212,21 @@ function VideoPlayer(props: {
 						<div className="flex items-center justify-between">
 							<div className="flex items-center gap-4">
 								<Player.PlayPauseTrigger>
-									<Player.PlayingIndicator asChild matcher={false}>
+									<Player.PlayingIndicator matcher={false}>
 										<Play className="text-white h-6 w-6" weight="fill" />
 									</Player.PlayingIndicator>
-									<Player.PlayingIndicator asChild>
+									<Player.PlayingIndicator>
 										<Pause className="text-white h-6 w-6" weight="fill" />
 									</Player.PlayingIndicator>
 								</Player.PlayPauseTrigger>
 								<Player.MuteTrigger className="w-6 h-6">
-									<Player.VolumeIndicator asChild matcher={false}>
+									<Player.VolumeIndicator matcher={false}>
 										<SpeakerSimpleX
 											className="text-white h-6 w-6"
 											weight="fill"
 										/>
 									</Player.VolumeIndicator>
-									<Player.VolumeIndicator asChild matcher={true}>
+									<Player.VolumeIndicator matcher={true}>
 										<SpeakerSimpleHigh
 											className="text-white h-6 w-6"
 											weight="fill"
@@ -240,10 +241,10 @@ function VideoPlayer(props: {
 								</Player.Volume>
 							</div>
 							<Player.FullscreenTrigger>
-								<Player.FullscreenIndicator asChild matcher={false}>
+								<Player.FullscreenIndicator matcher={false}>
 									<CornersOut className="text-white h-7 w-7" weight="bold" />
 								</Player.FullscreenIndicator>
-								<Player.FullscreenIndicator asChild>
+								<Player.FullscreenIndicator matcher={true}>
 									<CornersIn className="text-white h-7 w-7" weight="bold" />
 								</Player.FullscreenIndicator>
 							</Player.FullscreenTrigger>
@@ -267,6 +268,7 @@ function WebsitePreview(props: {
 				className="relative z-10 h-24 border bg-black/20 hover:bg-grey-800 transition-colors border-grey-600 flex gap-3 rounded-xl p-2 group"
 			>
 				<img
+					key={props.website.image}
 					src={props.website.image}
 					className="h-full aspect-[4/3] rounded-xl group-hover:brightness-75 object-cover object-center transition-all"
 				/>
@@ -290,6 +292,7 @@ function WebsitePreview(props: {
 			className="relative z-10 aspect-video bg-black flex flex-col rounded-xl overflow-hidden group"
 		>
 			<img
+				key={props.website.image}
 				src={props.website.image}
 				className="w-full h-full group-hover:brightness-75 object-cover object-center transition-all"
 			/>
@@ -345,9 +348,9 @@ function QuoteCast(props: {
 			</Link>
 			<div className="flex justify-between gap-1">
 				{props.quoteCast.cast.text ? (
-					<p className="text-white text-sm">
-						<RichText>{props.quoteCast.cast.text}</RichText>
-					</p>
+					<CastText className="text-white text-sm">
+						{props.quoteCast.cast.text}
+					</CastText>
 				) : null}
 				{props.quoteCast.embeds.image ? (
 					<div

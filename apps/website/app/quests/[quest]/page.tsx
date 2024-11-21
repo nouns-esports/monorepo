@@ -6,10 +6,13 @@ import { ArrowLeft, ArrowRight, Check, Sparkles } from "lucide-react";
 import { notFound } from "next/navigation";
 import { twMerge } from "tailwind-merge";
 
-export default async function Quest(props: { params: { quest: string } }) {
+export default async function Quest(props: {
+	params: Promise<{ quest: string }>;
+}) {
+	const params = await props.params;
 	const user = await getAuthenticatedUser();
 
-	const quest = await getQuest({ id: props.params.quest, user: user?.id });
+	const quest = await getQuest({ id: params.quest, user: user?.id });
 
 	if (!quest) {
 		return notFound();

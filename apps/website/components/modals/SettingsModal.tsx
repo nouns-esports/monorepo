@@ -8,7 +8,7 @@ import { pinImage } from "@/server/mutations/pinImage";
 import { useAction } from "next-safe-action/hooks";
 import { updateNexus } from "@/server/mutations/updateNexus";
 import { useRouter } from "next/navigation";
-import { Edit, Link, UserPen, X, XIcon } from "lucide-react";
+import { ArrowRight, Edit, Link, UserPen, X, XIcon } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 import { usePrivy } from "@privy-io/react-auth";
 import type { AuthenticatedUser } from "@/server/queries/users";
@@ -66,7 +66,10 @@ export default function SettingsModal(props: { user: AuthenticatedUser }) {
 	});
 
 	return (
-		<Modal id="settings" className="p-4 flex flex-col min-w-80 gap-4">
+		<Modal
+			id="settings"
+			className="p-4 flex flex-col min-w-80 min-h-[400px] gap-4"
+		>
 			<div className="flex justify-between items-center">
 				<p className="text-white text-2xl font-bebas-neue leading-none">
 					Settings
@@ -87,7 +90,7 @@ export default function SettingsModal(props: { user: AuthenticatedUser }) {
 					advanced: "Advanced",
 				}}
 			/>
-			<div className="flex flex-col gap-4">
+			<div className="flex flex-col gap-4 overflow-y-auto custom-scrollbar">
 				{
 					{
 						profile: (
@@ -175,6 +178,19 @@ export default function SettingsModal(props: { user: AuthenticatedUser }) {
 										)}
 										Update
 										<UserPen className="w-4 h-4" />
+									</button>
+								</div>
+								<div className="flex gap-2 items-center">
+									<button
+										onClick={async () => {
+											await logout();
+											close();
+											window.location.href = "/";
+										}}
+										className="flex items-center gap-1 text-red group hover:text-red/70 transition-colors"
+									>
+										Sign out
+										<ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
 									</button>
 								</div>
 							</>
@@ -344,19 +360,6 @@ export default function SettingsModal(props: { user: AuthenticatedUser }) {
 						),
 						advanced: (
 							<>
-								<div className="flex gap-2 justify-between items-center">
-									<p className="text-white font-semibold">Sign Out</p>
-									<Button
-										onClick={async () => {
-											await logout();
-											close();
-											window.location.href = "/";
-										}}
-										size="sm"
-									>
-										Sign out
-									</Button>
-								</div>
 								<div className="flex gap-2 justify-between items-center">
 									<div className="flex flex-col gap-1">
 										<p className="text-white font-semibold">Delete Account</p>

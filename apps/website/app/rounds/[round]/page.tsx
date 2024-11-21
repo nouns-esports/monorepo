@@ -10,25 +10,18 @@ import { getRound, getComments } from "@/server/queries/rounds";
 import { getPriorVotes } from "@/server/queries/votes";
 import { numberToOrdinal } from "@/utils/numberToOrdinal";
 import { getAuthenticatedUser } from "@/server/queries/users";
-import dynamic from "next/dynamic";
-import Shimmer from "@/components/Shimmer";
 import { env } from "~/env";
 import { headers } from "next/headers";
-import DateComponent from "@/components/Date";
 import RoundTimeline from "@/components/RoundTimeline";
 import Countup from "@/components/Countup";
-import type { ReactNode } from "react";
 import { Gavel, Megaphone, TicketCheck } from "lucide-react";
-
-const Markdown = dynamic(() => import("@/components/lexical/Markdown"), {
-	ssr: false,
-	loading: () => <Shimmer className="h-full" />,
-});
+import Markdown from "@/components/lexical/Markdown";
 
 export async function generateMetadata(props: {
-	params: { round: string };
+	params: Promise<{ round: string }>;
 }): Promise<Metadata> {
-	const round = await getRound({ id: props.params.round });
+	const params = await props.params;
+	const round = await getRound({ id: params.round });
 
 	if (!round) {
 		return notFound();
@@ -48,7 +41,7 @@ export async function generateMetadata(props: {
 			images: [round.image],
 		},
 		other: await getFrameMetadata(
-			`${env.NEXT_PUBLIC_DOMAIN}/api/frames/rounds/${props.params.round}`,
+			`${env.NEXT_PUBLIC_DOMAIN}/api/frames/rounds/${params.round}`,
 		),
 	};
 }
@@ -59,7 +52,7 @@ type Activity = {
 	| {
 			type: "state";
 			name: string;
-			icon: ReactNode;
+			icon: React.ReactNode;
 			color: string;
 	  }
 	| {
@@ -100,15 +93,16 @@ type Activity = {
 );
 
 export default async function Round(props: {
-	params: { round: string };
-	searchParams: { p?: string };
+	params: Promise<{ round: string }>;
+	searchParams: Promise<{ p?: string }>;
 }) {
-	if (isFrameRequest(headers())) return null;
+	if (isFrameRequest(await headers())) return null;
 
+	const params = await props.params;
 	const [user, round, comments] = await Promise.all([
 		getAuthenticatedUser(),
-		getRound({ id: props.params.round }),
-		getComments({ round: props.params.round }),
+		getRound({ id: params.round }),
+		getComments({ round: params.round }),
 	]);
 
 	if (!round) {
@@ -118,7 +112,7 @@ export default async function Round(props: {
 	const priorVotes = user
 		? await getPriorVotes({
 				user: user.id,
-				round: props.params.round,
+				round: params.round,
 			})
 		: 0;
 

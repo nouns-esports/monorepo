@@ -104,7 +104,7 @@ export const communityRelations = relations(communities, ({ one, many }) => ({
 	creations: many(creations),
 	events: many(events),
 	quests: many(quests),
-	subcommunities: many(communities, { relationName: "parentToChild" }),
+	children: many(communities, { relationName: "parentToChild" }),
 	parent: one(communities, {
 		fields: [communities.parent],
 		references: [communities.id],
@@ -131,7 +131,6 @@ export const events = pgTable("events", {
 	end: timestamp("end", { mode: "date" }).notNull(),
 	community: text("community"),
 	featured: boolean("featured").notNull().default(false),
-	season: integer("season").notNull(),
 });
 
 export const eventsRelations = relations(events, ({ one, many }) => ({
@@ -140,10 +139,6 @@ export const eventsRelations = relations(events, ({ one, many }) => ({
 		references: [communities.id],
 	}),
 	quests: many(quests),
-	season: one(seasons, {
-		fields: [events.season],
-		references: [seasons.id],
-	}),
 	rounds: many(rounds),
 	notifications: many(notifications),
 }));
@@ -226,7 +221,8 @@ export const rounds = pgTable("rounds", {
 		.notNull()
 		.default("markdown"),
 	featured: boolean("featured").notNull().default(false),
-	content: text("content").notNull(), // rename
+	content: text("content").notNull(),
+	// add description - tiptap for migration
 	start: timestamp("start", { mode: "date" }).notNull(),
 	votingStart: timestamp("voting_start", { mode: "date" }).notNull(),
 	end: timestamp("end", { mode: "date" }).notNull(),
@@ -357,7 +353,6 @@ export const seasonRelations = relations(seasons, ({ many }) => ({
 	ranks: many(ranks),
 	rankings: many(rankings),
 	xp: many(xp),
-	events: many(events),
 }));
 
 export const ranks = pgTable("ranks", {

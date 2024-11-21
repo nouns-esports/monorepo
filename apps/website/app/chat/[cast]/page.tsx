@@ -1,4 +1,5 @@
 import CastCard from "@/components/CastCard";
+import GoBack from "@/components/GoBack";
 import Link from "@/components/Link";
 import NavigateBack from "@/components/NavigateBack";
 import Upvote from "@/components/Upvote";
@@ -11,11 +12,14 @@ import type { CastWithInteractionsAndConversationsRef } from "@neynar/nodejs-sdk
 import { ArrowLeft, MoreHorizontal } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 
-export default async function Cast(props: { params: { cast: string } }) {
+export default async function Cast(props: {
+	params: Promise<{ cast: string }>;
+}) {
+	const params = await props.params;
 	const user = await getAuthenticatedUser();
 
 	const cast = await getCast({
-		hash: props.params.cast,
+		hash: params.cast,
 		viewerFid: user?.farcaster?.fid,
 	});
 
@@ -82,10 +86,13 @@ export default async function Cast(props: { params: { cast: string } }) {
 	return (
 		<div className="flex flex-col items-center w-full pt-32 max-xl:pt-28 max-sm:pt-20 px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
 			<div className="flex flex-col gap-4 max-w-3xl w-full">
-				<Link href="/chat" className="text-red flex items-center gap-1 group">
+				<GoBack
+					fallback="/chat"
+					className="text-red flex items-center gap-1 group"
+				>
 					<ArrowLeft className="w-5 h-5 text-red group-hover:-translate-x-1 transition-transform" />
 					Back to feed
-				</Link>
+				</GoBack>
 				<CastCard cast={cast} expanded />
 				<h2 className="text-white text-2xl font-bebas-neue">Comments</h2>
 				{cast.direct_replies
@@ -111,9 +118,10 @@ function Comment(props: {
 	upvotes: number;
 }) {
 	return (
-		<div className="flex gap-2 bg-grey-800 rounded-xl p-2">
-			<div className="relative w-8 h-8">
+		<div className="flex gap-2 bg-grey-800 rounded-xl p-4">
+			<div className="relative flex-shrink-0 w-8 h-8">
 				<img
+					key={props.author.pfp_url}
 					src={props.author.pfp_url}
 					className="w-full h-full rounded-full object-cover object-center"
 				/>

@@ -7,7 +7,7 @@ export const getEvents = cache(
 	async (input?: { limit?: number }) => {
 		//
 		return db.query.events.findMany({
-			orderBy: desc(events.start),
+			orderBy: [desc(events.featured), desc(events.start)],
 			limit: input?.limit,
 		});
 	},
@@ -15,14 +15,14 @@ export const getEvents = cache(
 	{ revalidate: 60 * 10 },
 );
 
-export const getHighlightedEvent = cache(
+export const getFeaturedEvent = cache(
 	async () => {
 		return db.query.events.findFirst({
 			where: or(eq(events.featured, true), gt(events.end, new Date())),
 			orderBy: desc(events.end),
 		});
 	},
-	["highlightedEvent"],
+	["getFeaturedEvent"],
 	{ revalidate: 60 * 10 },
 );
 

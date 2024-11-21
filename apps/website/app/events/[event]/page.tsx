@@ -4,19 +4,23 @@ import QuestCard from "@/components/QuestCard";
 import RoundCard from "@/components/RoundCard";
 import { getEvent } from "@/server/queries/events";
 import { getAuthenticatedUser } from "@/server/queries/users";
-import { CalendarDays, MapPin, MapPinned } from "lucide-react";
+import { CalendarDays, MapPinned } from "lucide-react";
 import { notFound } from "next/navigation";
 
-export default async function EventPage(props: { params: { event: string } }) {
+export default async function EventPage(props: {
+	params: Promise<{ event: string }>;
+}) {
+	const params = await props.params;
 	const user = await getAuthenticatedUser();
 
-	const event = await getEvent({ id: props.params.event, user: user?.id });
+	const event = await getEvent({
+		id: params.event,
+		user: user?.id,
+	});
 
 	if (!event) {
 		return notFound();
 	}
-
-	const now = new Date();
 
 	return (
 		<div className="flex flex-col gap-16 pt-32 max-xl:pt-28 max-sm:pt-20">

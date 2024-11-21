@@ -1,70 +1,33 @@
 "use client";
 
-import { X } from "lucide-react";
+import { ChevronDown, ImageIcon, X } from "lucide-react";
 import { Modal, useModal } from "../Modal";
 import type { AuthenticatedUser } from "@/server/queries/users";
 import Button from "../Button";
 import LimitMeter from "../LimitMeter";
-import { useEditor, EditorContent, mergeAttributes } from "@tiptap/react";
-import Document from "@tiptap/extension-document";
-import Text from "@tiptap/extension-text";
-import Paragraph from "@tiptap/extension-paragraph";
-// import Mention from "@tiptap/extension-mention";
-import Mention from "../MentionExtension";
-import Image from "@tiptap/extension-image";
-import Link from "@tiptap/extension-link";
-import { useMemo } from "react";
+import { useState } from "react";
+import type { Community } from "~/packages/db/schema";
+import { twMerge } from "tailwind-merge";
+import CastText, { useCastTextEditor } from "../CastText";
 
 export default function CreatePostModal(props: {
 	user?: AuthenticatedUser;
+	communities: Community[];
 }) {
 	if (!props.user?.nexus) return;
 
 	const { close } = useModal("create-post");
 
-	const editor = useEditor({
-		extensions: [
-			Document,
-			Text,
-			Paragraph,
-			Link.configure({
-				protocols: ["http", "https"],
-				HTMLAttributes: {
-					class: "text-red cursor-pointer hover:opacity-80 transition-opacity",
-					rel: "noopener noreferrer",
-				},
-			}),
-			Mention,
-			// Mention.configure({
-			// 	HTMLAttributes: {
-			// 		class: "text-red cursor-pointer hover:opacity-80 transition-opacity",
-			// 	},
-			// 	renderHTML({ options, node }) {
-			// 		return [
-			// 			"a",
-			// 			mergeAttributes({ href: "/profile/1" }, options.HTMLAttributes),
-			// 			"Test",
-			// 		];
-			// 	},
-			// }),
-			Image.configure({
-				HTMLAttributes: {
-					class: "rounded-md",
-				},
-			}),
-		],
-		immediatelyRender: false,
-		editorProps: {
-			attributes: {
-				class: "outline-none text-white",
-			},
-		},
+	const [text, setText] = useState("");
+
+	const editor = useCastTextEditor({
+		onUpdate: ({ editor }) => setText(editor.getText()),
 	});
 
-	const text = useMemo(
-		() => (editor ? editor.getText() : ""),
-		[editor?.getText()],
-	);
+	const [community, setCommunity] = useState<Community>();
+
+	const [image, setImage] = useState<File>();
+	const [showCommunityDropdown, setShowCommunityDropdown] = useState(false);
 
 	return (
 		<Modal
@@ -90,24 +53,23 @@ export default function CreatePostModal(props: {
 				/>
 				<div className="flex flex-col gap-1 flex-1 min-w-0 w-full">
 					<div className="flex items-center gap-2">
-						<h2 className="text-white text-nowrap">{props.user.nexus.name}</h2>
-						{/* {props.community ? (
+						<h2 className="text-white text-nowrap py-0.5">
+							{props.user.nexus.name}
+						</h2>
+						{community ? (
 							<>
 								<p className="text-grey-200 font-semibold text-sm">in</p>
-								<Link
-									href={`/chat?c=${props.community.id}`}
-									className="flex relative z-10  items-center gap-1 bg-grey-600 hover:bg-grey-500 transition-colors rounded-full px-2 py-1"
-								>
+								<div className="flex relative z-10 items-center gap-1 bg-grey-600 rounded-full px-2 py-1">
 									<img
-										src={props.community.image}
+										src={community.image}
 										className="w-4 h-4 rounded-full object-cover object-center"
 									/>
 									<h2 className="text-white text-nowrap text-sm">
-										{props.community.name}
+										{community.name}
 									</h2>
-								</Link>
+								</div>
 							</>
-						) : null} */}
+						) : null}
 					</div>
 					<div className="relative">
 						{text.length < 1 ? (
@@ -115,12 +77,70 @@ export default function CreatePostModal(props: {
 								Start typing a new post here...
 							</p>
 						) : null}
-						<EditorContent editor={editor} />
+						<CastText editor={editor} />
 					</div>
 				</div>
 			</div>
 			<div className="flex items-center justify-between">
-				<div />
+				<div className="flex items-center gap-2">
+					<div
+						onClick={() => setShowCommunityDropdown(!showCommunityDropdown)}
+						className="relative flex items-center gap-2 bg-grey-800 hover:bg-grey-600 cursor-pointer transition-colors p-2 pr-3 text-white rounded-full"
+					>
+						<img
+							src={community?.image ?? "/logo/logo-square.svg"}
+							className="rounded-full w-6 h-6"
+						/>
+						{community?.name ?? "Nouns Esports"}
+						<ChevronDown
+							className={twMerge(
+								"w-4 h-4 text-white",
+								showCommunityDropdown && "rotate-180",
+							)}
+						/>
+						{showCommunityDropdown ? (
+							<div className="absolute top-12 left-0 bg-grey-600 w-40 flex flex-col rounded-xl overflow-hidden">
+								<div
+									onClick={() => setShowCommunityDropdown(false)}
+									className="fixed top-0 left-0 w-full h-full"
+								/>
+								{[
+									{
+										name: "Nouns Esports",
+										id: "nouns-esports",
+										channel: "nouns-esports",
+										parent: null,
+										image: "/logo/logo-square.svg",
+									},
+									...props.communities,
+								].map((c) =>
+									c.id !== community?.id ? (
+										<div
+											onClick={() => {
+												if (c.id === "nouns-esports") {
+													setCommunity(undefined);
+													setShowCommunityDropdown(false);
+													return;
+												}
+
+												setCommunity(c);
+												setShowCommunityDropdown(false);
+											}}
+											key={c.id}
+											className="flex items-center gap-2 text-nowrap w-full cursor-pointer hover:bg-grey-500 transition-colors p-2"
+										>
+											<img src={c.image} className="w-6 h-6 rounded-full" />
+											{c.name}
+										</div>
+									) : null,
+								)}
+							</div>
+						) : null}
+					</div>
+					<button className="p-2.5 rounded-full bg-grey-800 hover:bg-grey-600 transition-colors">
+						<ImageIcon className="w-5 h-5 text-grey-200" />
+					</button>
+				</div>
 				<div className="flex items-center gap-4">
 					<LimitMeter
 						type="character"
