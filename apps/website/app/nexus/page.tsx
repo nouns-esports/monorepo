@@ -66,7 +66,7 @@ export default async function NexusPage(props: {
 
   const now = new Date();
   const nextUpdate = new Date(now);
-  nextUpdate.setUTCHours(20, 0, 0, 0); // 3pm CST is 8pm UTC
+  nextUpdate.setUTCHours(21, 0, 0, 0); // 3pm CST is 9pm UTC
   if (nextUpdate <= now) {
     nextUpdate.setDate(nextUpdate.getDate() + 1);
   }
