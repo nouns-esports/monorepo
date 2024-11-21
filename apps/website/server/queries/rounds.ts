@@ -150,7 +150,7 @@ export const getRoundStats = cache(
 
     return {
       proposalsCreated: round.proposals.length,
-      votesCast: round.votes.length,
+      votesCast: round.votes.reduce((sum, vote) => sum + vote.count, 0),
       totalParticipants: new Set(
         [...round.proposals, ...round.votes].map((item) => item.user)
       ).size,
