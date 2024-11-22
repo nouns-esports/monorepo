@@ -15,8 +15,10 @@ import { Pool } from "pg";
 import { env } from "~/env";
 
 export const links = pgTable("links", {
-	id: text("id").primaryKey(),
-	url: text("url").notNull(),
+	id: serial("id").primaryKey(),
+	path: text("path").unique(),
+	url: text("url").notNull().unique(),
+	// frame: text("frame"),
 });
 
 export const snapshotTypes = {
@@ -313,6 +315,7 @@ export const proposalsRelations = relations(proposals, ({ one, many }) => ({
 
 export const nexus = pgTable("nexus", {
 	id: text("id").primaryKey(),
+	username: text("username"),
 	admin: boolean("admin").notNull().default(false),
 	rank: integer("rank"),
 	xp: integer("xp").notNull().default(0),
@@ -323,7 +326,6 @@ export const nexus = pgTable("nexus", {
 	wallet: text("wallet"),
 	twitter: text("twitter"),
 	discord: text("discord"),
-	username: text("username"),
 	fid: integer("fid"),
 });
 
@@ -337,11 +339,20 @@ export const nexusRelations = relations(nexus, ({ one, many }) => ({
 		references: [ranks.id],
 	}),
 	creations: many(creations),
-	// profiles: one(profiles, {
-	// 	fields: [nexus.fid],
-	// 	references: [profiles.fid],
-	// }),
+	posts: many(posts),
+	reactions: many(reactions),
 }));
+
+export const profiles = pgTable("profiles", {
+	user: text("user").primaryKey(),
+	image: text("image"),
+	name: text("name").notNull().default(""),
+	bio: text("bio"),
+
+	twitter: text("twitter"),
+	discord: text("discord"),
+	farcaster: integer("farcaster"),
+});
 
 export const seasons = pgTable("seasons", {
 	id: serial("id").primaryKey(),
@@ -520,74 +531,73 @@ export const creationsRelations = relations(creations, ({ one }) => ({
 	}),
 }));
 
-// export const casts = pgTable("casts", {
-// 	hash: text("hash").primaryKey(),
-// 	author: integer("author"),
-// 	createdAt: timestamp("created_at", { mode: "date" }),
-// 	channel: text("channel"),
-// 	parent: text("parent"),
-// 	thread: text("thread"),
-// });
+export const posts = pgTable("posts", {
+	id: serial("id").primaryKey(),
+	author: integer("author").notNull(),
+	createdAt: timestamp("created_at", { mode: "date" }).notNull(),
+	hash: text("hash"),
+	channel: text("channel"),
+	parent: text("parent"),
+	thread: text("thread"),
+});
 
-// export const castsRelations = relations(casts, ({ one, many }) => ({
-// 	author: one(profiles, {
-// 		fields: [casts.author],
-// 		references: [profiles.fid],
-// 	}),
-// 	reactions: many(reactions),
-// 	parent: one(casts, {
-// 		fields: [casts.parent],
-// 		references: [casts.hash],
-// 	}),
-// 	community: one(communities, {
-// 		fields: [casts.channel],
-// 		references: [communities.channel],
-// 	}),
-// 	thread: one(casts, {
-// 		fields: [casts.thread],
-// 		references: [casts.hash],
-// 	}),
-// }));
+// need profiles for non nouns.gg accounts
 
-// export const reactions = pgTable("reactions", {
-// 	id: serial("id").primaryKey(),
-// 	cast: text("cast"),
-// 	user: integer("user"),
-// 	type: text("type", { enum: ["like", "recast"] }),
-// 	timestamp: timestamp("timestamp", { mode: "date" }),
-// });
+export const postsRelations = relations(posts, ({ one, many }) => ({
+	author: one(nexus, {
+		fields: [posts.author],
+		references: [nexus.id],
+	}),
+	reactions: many(reactions),
+	parent: one(posts, {
+		fields: [posts.parent],
+		references: [posts.hash],
+	}),
+	community: one(communities, {
+		fields: [posts.channel],
+		references: [communities.channel],
+	}),
+	thread: one(posts, {
+		fields: [posts.thread],
+		references: [posts.hash],
+	}),
+}));
 
-// export const reactionsRelations = relations(reactions, ({ one }) => ({
-// 	cast: one(casts, {
-// 		fields: [reactions.cast],
-// 		references: [casts.hash],
-// 	}),
-// 	user: one(profiles, {
-// 		fields: [reactions.user],
-// 		references: [profiles.fid],
-// 	}),
-// }));
+export const reactions = pgTable("reactions", {
+	id: serial("id").primaryKey(),
+	post: integer("post").notNull(),
+	user: integer("user").notNull(),
+	type: text("type", { enum: ["like", "recast"] }).notNull(),
+	timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
+});
 
-// export const profiles = pgTable("profiles", {
-// 	fid: integer("fid").primaryKey(),
-// 	user: text("user"), // Can be undefined if Farcaster user has not created an account
-// 	username: text("username").notNull(),
-// 	name: text("name").notNull(),
-// 	image: text("image").notNull(),
-// 	bio: text("bio"),
-// 	wallet: text("wallet"),
-// 	twitter: text("twitter"),
-// 	discord: text("discord"),
-// });
+export const reactionsRelations = relations(reactions, ({ one }) => ({
+	post: one(posts, {
+		fields: [reactions.post],
+		references: [posts.id],
+	}),
+	user: one(nexus, {
+		fields: [reactions.user],
+		references: [nexus.id],
+	}),
+}));
 
-// export const profilesRelations = relations(profiles, ({ one, many }) => ({
-// 	user: one(nexus, {
-// 		fields: [profiles.user],
-// 		references: [nexus.id],
-// 	}),
-// 	casts: many(casts),
-// 	reactions: many(reactions),
-// }));
+export const embeds = pgTable("embeds", {
+	id: text("id").primaryKey(),
+	post: integer("post"),
+	url: text("url"),
+});
+
+export const embedsRelations = relations(embeds, ({ one }) => ({
+	post: one(posts, {
+		fields: [embeds.post],
+		references: [posts.id],
+	}),
+	metadata: one(links, {
+		fields: [embeds.url],
+		references: [links.url],
+	}),
+}));
 
 const schema = {
 	communities,

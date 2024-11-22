@@ -63,7 +63,11 @@ export const getRound = cache(
 						},
 						proposal: {
 							with: {
-								user: true,
+								user: {
+									with: {
+										rank: true,
+									},
+								},
 							},
 						},
 					},

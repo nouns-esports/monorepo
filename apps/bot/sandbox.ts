@@ -3,7 +3,7 @@ import { privyClient } from ".";
 const users = await privyClient.getUsers();
 
 for (let i = 0; i < users.length; i++) {
-	console.log(`Embedding ${i + 1}/${users.length}`);
+	console.log(`Generating wallets ${i + 1}/${users.length}`);
 	const user = users[i];
 
 	try {

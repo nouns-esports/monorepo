@@ -14,7 +14,7 @@ import { env } from "~/env";
 import { headers } from "next/headers";
 import RoundTimeline from "@/components/RoundTimeline";
 import Countup from "@/components/Countup";
-import { Gavel, Megaphone, TicketCheck } from "lucide-react";
+import { Gavel, Megaphone, TicketCheck, Users } from "lucide-react";
 import Markdown from "@/components/lexical/Markdown";
 
 export async function generateMetadata(props: {
@@ -164,6 +164,12 @@ export default async function Round(props: {
 			},
 		})) satisfies Activity[];
 
+	const participants = new Set();
+
+	for (const votesAndProposals of [...round.proposals, ...round.votes]) {
+		participants.add(votesAndProposals.user?.id);
+	}
+
 	return (
 		<div className="relative flex flex-col justify-center gap-4 w-full pt-32 max-xl:pt-28 max-sm:pt-20 px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
 			<Link
@@ -254,6 +260,13 @@ export default async function Round(props: {
 									<h2 className="font-bebas-neue text-2xl text-white">
 										Activity
 									</h2>
+									<div
+										title="Participants"
+										className="flex items-center gap-2 text-white pr-2"
+									>
+										<Users className="w-4 h-4" />
+										{participants.size}
+									</div>
 								</div>
 								<div className="flex flex-col gap-3 h-full overflow-y-auto custom-scrollbar">
 									{(

@@ -16,6 +16,7 @@ import type { AuthenticatedUser } from "@/server/queries/users";
 import VoteSelector from "../VoteSelector";
 import ShareVotesModal from "../modals/ShareVotesModal";
 import type { Round } from "~/packages/db/schema";
+import Countdown from "../Countdown";
 
 export default function Proposals(props: {
 	round: NonNullable<Awaited<ReturnType<typeof getRound>>>;
@@ -74,9 +75,32 @@ export default function Proposals(props: {
 	return (
 		<>
 			<div className="flex flex-col gap-4">
-				<div className="flex justify-between items-center w-full gap-4 max-sm:flex-col max-sm:items-start">
-					<h3 className="text-white font-luckiest-guy text-3xl">Proposals</h3>
-					<div className="flex gap-4 items-center max-sm:justify-between max-sm:w-full">
+				<div className="flex justify-between items-center w-full gap-4 max-md:flex-col max-md:items-start">
+					<div className="flex items-center gap-4 max-lg:flex-col max-lg:items-start max-md:flex-row max-md:items-center max-md:justify-between max-md:w-full">
+						<h3 className="text-white font-luckiest-guy text-3xl">Proposals</h3>
+						{state !== "Ended" && state !== "Upcoming" ? (
+							<div className="flex items-center px-3 py-2 gap-2 bg-grey-800  font-semibold rounded-xl">
+								<div className="flex items-center gap-1.5">
+									<div className="w-2 h-2 rounded-full bg-red animate-pulse" />
+									<p className="text-red">
+										{
+											{
+												Upcoming: "",
+												Proposing: "Proposing",
+												Voting: "Voting",
+												Ended: "",
+											}[state]
+										}
+									</p>
+								</div>
+								<p className="text-white">
+									<Countdown date={props.round.end} />
+								</p>
+							</div>
+						) : null}
+					</div>
+
+					<div className="flex gap-4 items-center max-md:justify-between max-md:w-full">
 						{(() => {
 							if (state === "Proposing") {
 								if (!props.user?.nexus) {
@@ -391,6 +415,11 @@ export default function Proposals(props: {
 												className="h-6 w-6 rounded-full"
 											/>
 											{proposal.user.name}
+											<img
+												title={proposal.user.rank?.name}
+												src={proposal.user.rank?.image}
+												className="h-5 w-5 rounded-full object-contain"
+											/>
 										</Link>
 									) : (
 										<div />

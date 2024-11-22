@@ -10,74 +10,60 @@ import {
 import { env } from "~/env";
 import { base, baseSepolia } from "viem/chains";
 import { useRouter } from "next/navigation";
-import {
-	createContext,
-	useEffect,
-	useState,
-	type Dispatch,
-	type SetStateAction,
-} from "react";
+import { useEffect } from "react";
 import { create } from "zustand";
 import { SmartWalletsProvider } from "@privy-io/react-auth/smart-wallets";
-
-export const LoginMethodContext = createContext({
-	onlyCoinbaseWallet: false,
-	setOnlyCoinbaseWallet: ((value) => {}) as Dispatch<SetStateAction<boolean>>,
-});
-
 export const usePrivyModalState = create<{
 	loginMethods?: PrivyClientConfig["loginMethods"];
+	externalWallets?: PrivyClientConfig["externalWallets"];
 	walletList?: WalletListEntry[];
-	set: (
+	setPrivyModalState: (
 		state: Partial<{
 			loginMethods: PrivyClientConfig["loginMethods"];
+			externalWallets: PrivyClientConfig["externalWallets"];
 			walletList: WalletListEntry[];
 		}>,
 	) => void;
 }>((set) => ({
 	loginMethods: ["discord", "twitter", "wallet", "farcaster", "email"],
+	externalWallets: {
+		coinbaseWallet: {
+			connectionOptions: "all",
+		},
+	},
 	walletList: undefined,
-	set,
+	setPrivyModalState: (state) => set(state),
 }));
 
 export default function Privy(props: {
 	user?: string;
 	children: React.ReactNode;
 }) {
-	const { loginMethods, walletList } = usePrivyModalState();
-	const [onlyCoinbaseWallet, setOnlyCoinbaseWallet] = useState(false);
+	const { loginMethods, walletList, externalWallets } = usePrivyModalState();
 
 	return (
-		<LoginMethodContext.Provider
-			value={{ onlyCoinbaseWallet, setOnlyCoinbaseWallet }}
+		<PrivyProvider
+			appId={env.NEXT_PUBLIC_PRIVY_APP_ID}
+			config={{
+				loginMethods,
+				defaultChain:
+					env.NEXT_PUBLIC_ENVIRONMENT === "production" ? base : baseSepolia,
+				supportedChains: [
+					env.NEXT_PUBLIC_ENVIRONMENT === "production" ? base : baseSepolia,
+				],
+				appearance: {
+					theme: "#040404",
+					accentColor: "#E93737",
+					logo: "/logo/logo.svg",
+					walletList,
+				},
+				externalWallets,
+			}}
 		>
-			<PrivyProvider
-				appId={env.NEXT_PUBLIC_PRIVY_APP_ID}
-				config={{
-					loginMethods,
-					defaultChain:
-						env.NEXT_PUBLIC_ENVIRONMENT === "production" ? base : baseSepolia,
-					supportedChains: [
-						env.NEXT_PUBLIC_ENVIRONMENT === "production" ? base : baseSepolia,
-					],
-					appearance: {
-						theme: "#040404",
-						accentColor: "#E93737",
-						logo: "/logo/logo.svg",
-						walletList,
-					},
-					externalWallets: {
-						coinbaseWallet: {
-							connectionOptions: "all",
-						},
-					},
-				}}
-			>
-				<PrivySync>
-					<SmartWalletsProvider>{props.children}</SmartWalletsProvider>
-				</PrivySync>
-			</PrivyProvider>
-		</LoginMethodContext.Provider>
+			<PrivySync>
+				<SmartWalletsProvider>{props.children}</SmartWalletsProvider>
+			</PrivySync>
+		</PrivyProvider>
 	);
 }
 

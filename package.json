@@ -40,7 +40,7 @@
     "@neynar/nodejs-sdk": "^1.68.0",
     "@pinata/sdk": "^2.1.0",
     "@privy-io/react-auth": "^1.94.2",
-    "@privy-io/server-auth": "^1.16.3",
+    "@privy-io/server-auth": "^1.16.4",
     "@privy-io/wagmi": "^0.2.12",
     "@t3-oss/env-nextjs": "^0.10.1",
     "@tailwindcss/typography": "^0.5.12",

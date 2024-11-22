@@ -91,7 +91,7 @@ export const createNexus = onlyUser
 					`https://api.cloudnouns.com/v1/pfp?text=${ctx.user.id}&background=1`,
 				bio: parsedInput.bio,
 				interests: parsedInput.interests,
-				wallet: ctx.user.wallet?.address,
+				wallet: ctx.user.smartWallet,
 				twitter: ctx.user.twitter?.username,
 				discord: ctx.user.discord?.username.split("#")[0],
 				username: ctx.user.farcaster?.username ?? undefined,

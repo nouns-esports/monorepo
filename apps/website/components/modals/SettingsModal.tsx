@@ -7,13 +7,15 @@ import toast from "react-hot-toast";
 import { pinImage } from "@/server/mutations/pinImage";
 import { useAction } from "next-safe-action/hooks";
 import { updateNexus } from "@/server/mutations/updateNexus";
-import { useRouter } from "next/navigation";
-import { ArrowRight, Edit, Link, UserPen, X, XIcon } from "lucide-react";
+import { ArrowRight, Edit, LinkIcon, UserPen, X, XIcon } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 import { usePrivy } from "@privy-io/react-auth";
 import type { AuthenticatedUser } from "@/server/queries/users";
 import Tabs from "../Tabs";
 import { deleteUser } from "@/server/mutations/deleteUser";
+import { usePrivyModalState } from "@/providers/Privy";
+import { env } from "~/env";
+import Link from "@/components/Link";
 
 export default function SettingsModal(props: { user: AuthenticatedUser }) {
 	const [tab, setTab] = useState<
@@ -38,6 +40,8 @@ export default function SettingsModal(props: { user: AuthenticatedUser }) {
 		unlinkTwitter,
 		logout,
 	} = usePrivy();
+
+	const { setPrivyModalState } = usePrivyModalState();
 
 	const { isOpen, close } = useModal("settings");
 
@@ -68,7 +72,7 @@ export default function SettingsModal(props: { user: AuthenticatedUser }) {
 	return (
 		<Modal
 			id="settings"
-			className="p-4 flex flex-col min-w-80 min-h-[400px] gap-4"
+			className="p-4 flex flex-col min-w-96 min-h-[500px] gap-4"
 		>
 			<div className="flex justify-between items-center">
 				<p className="text-white text-2xl font-bebas-neue leading-none">
@@ -90,110 +94,115 @@ export default function SettingsModal(props: { user: AuthenticatedUser }) {
 					advanced: "Advanced",
 				}}
 			/>
-			<div className="flex flex-col gap-4 overflow-y-auto custom-scrollbar">
+			<div className="flex flex-col flex-1 gap-4">
 				{
 					{
 						profile: (
-							<>
-								<div className="flex items-center gap-4 h-12">
-									<label className="cursor-pointer aspect-square h-full relative group">
-										<input
-											type="file"
-											accept="image/*"
-											onChange={async (event) => {
-												const files = event.target.files;
-
-												if (files && files.length > 0) {
-													const file = files[0];
-
-													// 25 MB in bytes
-													if (file.size > 25 * 1024 * 1024) {
-														toast.error("Image size should be less than 25 MB");
-														return;
-													}
-
-													const formData = new FormData();
-													formData.append("file", file);
-
-													const hash = await pinImageAction.executeAsync({
-														formData,
-													});
-
-													if (hash?.data) {
-														setImage(`https://ipfs.nouns.gg/ipfs/${hash.data}`);
-													} else toast.error("Could not upload image");
-
-													event.target.value = "";
-												}
-											}}
-											style={{ display: "none" }}
-										/>
-										<img
-											src={
-												image === ""
-													? `https://api.cloudnouns.com/v1/pfp?text=${props.user.id}&background=1`
-													: image
-											}
-											className="rounded-full group-hover:opacity-50 transition-opacity"
-										/>
-										<div className="absolute -bottom-1 -right-1 flex items-center p-1 rounded-full justify-center bg-white text-black">
-											<Edit className="w-3 h-3" />
-										</div>
-									</label>
-									<input
-										type="text"
-										value={name}
-										onChange={(e) => setName(e.target.value)}
-										placeholder="Enter a display name"
-										className="bg-grey-800 rounded-xl text-white placeholder-grey-400 py-2 px-3 outline-none border-grey-600 border-[1px] w-full"
-									/>
-								</div>
+							<div className="flex flex-col justify-between flex-1 gap-4">
 								<div className="flex flex-col gap-4">
-									<textarea
-										placeholder="Enter a bio"
-										value={bio ?? ""}
-										onChange={(e) => setBio(e.target.value)}
-										className="bg-grey-800 rounded-xl text-white placeholder-grey-400 py-2 px-3 outline-none custom-scrollbar"
-										rows={4}
-									/>
-								</div>
-								<div className="flex items-center justify-between gap-4">
-									<button
-										onClick={() =>
-											updateNexusAction.execute({
-												name: name ?? undefined,
-												bio: bio ?? undefined,
-												image,
-											})
-										}
-										className="flex justify-center items-center gap-2 w-full text-black bg-white hover:bg-white/70 font-semibold rounded-lg p-2.5 transition-colors"
-									>
-										{updateNexusAction.isPending ? (
-											<img
-												src="/spinner.svg"
-												className="h-[18px] animate-spin"
+									<div className="flex items-center gap-4 h-12">
+										<label className="cursor-pointer aspect-square h-full relative group">
+											<input
+												type="file"
+												accept="image/*"
+												onChange={async (event) => {
+													const files = event.target.files;
+
+													if (files && files.length > 0) {
+														const file = files[0];
+
+														// 25 MB in bytes
+														if (file.size > 25 * 1024 * 1024) {
+															toast.error(
+																"Image size should be less than 25 MB",
+															);
+															return;
+														}
+
+														const formData = new FormData();
+														formData.append("file", file);
+
+														const hash = await pinImageAction.executeAsync({
+															formData,
+														});
+
+														if (hash?.data) {
+															setImage(
+																`https://ipfs.nouns.gg/ipfs/${hash.data}`,
+															);
+														} else toast.error("Could not upload image");
+
+														event.target.value = "";
+													}
+												}}
+												style={{ display: "none" }}
 											/>
-										) : (
-											""
-										)}
-										Update
-										<UserPen className="w-4 h-4" />
-									</button>
+											<img
+												src={
+													image === ""
+														? `https://api.cloudnouns.com/v1/pfp?text=${props.user.id}&background=1`
+														: image
+												}
+												className="rounded-full group-hover:opacity-50 transition-opacity"
+											/>
+											<div className="absolute -bottom-1 -right-1 flex items-center p-1 rounded-full justify-center bg-white text-black">
+												<Edit className="w-3 h-3" />
+											</div>
+										</label>
+										<input
+											type="text"
+											value={name}
+											onChange={(e) => setName(e.target.value)}
+											placeholder="Enter a display name"
+											className="bg-grey-800 rounded-xl text-white placeholder-grey-400 py-2 px-3 outline-none border-grey-600 border-[1px] w-full"
+										/>
+									</div>
+									<div className="flex flex-col gap-4">
+										<textarea
+											placeholder="Enter a bio"
+											value={bio ?? ""}
+											onChange={(e) => setBio(e.target.value)}
+											className="bg-grey-800 rounded-xl text-white placeholder-grey-400 py-2 px-3 outline-none custom-scrollbar"
+											rows={4}
+										/>
+									</div>
+									<div className="flex items-center justify-between gap-4">
+										<button
+											onClick={() =>
+												updateNexusAction.execute({
+													name: name ?? undefined,
+													bio: bio ?? undefined,
+													image,
+												})
+											}
+											className="flex justify-center items-center gap-2 w-full text-black bg-white hover:bg-white/70 font-semibold rounded-lg p-2.5 transition-colors"
+										>
+											{updateNexusAction.isPending ? (
+												<img
+													src="/spinner.svg"
+													className="h-[18px] animate-spin"
+												/>
+											) : (
+												""
+											)}
+											Update
+											<UserPen className="w-4 h-4" />
+										</button>
+									</div>
 								</div>
-								<div className="flex gap-2 items-center">
-									<button
-										onClick={async () => {
-											await logout();
-											close();
-											window.location.href = "/";
-										}}
-										className="flex items-center gap-1 text-red group hover:text-red/70 transition-colors"
-									>
-										Sign out
-										<ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-									</button>
-								</div>
-							</>
+
+								<button
+									onClick={async () => {
+										await logout();
+										close();
+										window.location.href = "/";
+									}}
+									className="flex items-center gap-1 text-red group hover:text-red/70 transition-colors"
+								>
+									Sign out
+									<ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+								</button>
+							</div>
 						),
 						connections: (
 							<div className="flex flex-col gap-3">
@@ -287,7 +296,7 @@ export default function SettingsModal(props: { user: AuthenticatedUser }) {
 											/>
 											<div className="flex flex-col">
 												<p className="text-white font-semibold">Wallet</p>
-												<p>
+												<p className="text-blue-500">
 													{props.user.smartWallet.substring(0, 6)}...
 													{props.user.smartWallet.substring(
 														props.user.smartWallet.length - 4,
@@ -296,7 +305,7 @@ export default function SettingsModal(props: { user: AuthenticatedUser }) {
 											</div>
 										</div>
 										<Button
-											href={`https://thesuperscan.io/address/${props.user.smartWallet}`}
+											href={`https://${env.NEXT_PUBLIC_ENVIRONMENT === "development" ? "sepolia." : ""}basescan.org/address/${props.user.smartWallet}`}
 											size="sm"
 											newTab
 										>
@@ -311,7 +320,7 @@ export default function SettingsModal(props: { user: AuthenticatedUser }) {
 											onClick={() => linkWallet()}
 											className="flex items-center gap-1 text-red hover:text-red/70 transition-colors"
 										>
-											<Link className="w-4 h-4" />
+											<LinkIcon className="w-4 h-4" />
 											Verify
 										</button>
 									</div>
@@ -321,13 +330,17 @@ export default function SettingsModal(props: { user: AuthenticatedUser }) {
 												key={wallet.address}
 												className="flex items-center gap-2 justify-between"
 											>
-												<div className="flex items-center gap-2">
+												<Link
+													href={`https://${env.NEXT_PUBLIC_ENVIRONMENT === "development" ? "sepolia." : ""}basescan.org/address/${wallet.address}`}
+													newTab
+													className="flex items-center gap-2 group"
+												>
 													<img
 														src={
 															{
 																rainbow:
 																	"https://ipfs.nouns.gg/ipfs/QmbsJ82EZw2oJtdPbiNdfQ8LPW2P8JxMHbWvqrj9ZWwNF9",
-																coinbase:
+																coinbase_wallet:
 																	"https://ipfs.nouns.gg/ipfs/QmdSdo9pCPr3MpBRKAySnjwRfEH4tCm9aHggzqVgsPY2fx",
 																metamask:
 																	"https://ipfs.nouns.gg/ipfs/QmdF9f6t9EFHAXF35wmmEN2LPCdtojZKqJteKYmnHsa14G",
@@ -336,13 +349,13 @@ export default function SettingsModal(props: { user: AuthenticatedUser }) {
 														}
 														className="h-6 w-6 rounded-md"
 													/>
-													<p className="text-white">
+													<p className="text-white group-hover:text-white/70 transition-colors">
 														{wallet.address.substring(0, 6)}...
 														{wallet.address.substring(
 															wallet.address.length - 4,
 														)}
 													</p>
-												</div>
+												</Link>
 												<button
 													onClick={() => unlinkWallet(wallet.address)}
 													className="hover:text-white/70 text-white transition-colors"
