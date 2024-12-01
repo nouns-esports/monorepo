@@ -1,5 +1,6 @@
 "use client";
 
+import { confetti } from "@/utils/confetti";
 import { useWindowSize } from "@uidotdev/usehooks";
 import {
 	animate,
@@ -93,6 +94,7 @@ export function Modal(props: {
 	className?: string;
 	handle?: boolean;
 	queryParam?: [string, string];
+	confetti?: boolean;
 }) {
 	const { open, isOpen, close, y } = useModal(props.id);
 	const { open: openModals } = useModalState();
@@ -126,6 +128,7 @@ export function Modal(props: {
 				const width = root.clientWidth;
 				root.classList.add("prevent-scroll");
 				root.style.paddingRight = `${root.clientWidth - width}px`;
+				if (props.confetti) confetti();
 			}
 
 			if (props.queryParam) {

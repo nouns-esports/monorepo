@@ -144,7 +144,7 @@ export default async function Header() {
 													</div>
 												</Link>
 											</li>
-											<li className="text-nowrap hover:bg-grey-500 transition-colors py-1.5 px-3 rounded-lg">
+											{/* <li className="text-nowrap hover:bg-grey-500 transition-colors py-1.5 px-3 rounded-lg">
 												<Link href="/chat" className="flex items-center gap-4">
 													<div className="rounded-md w-10 h-10 flex overflow-hidden bg-green text-white items-center">
 														<MessageCircle className="w-full h-full p-2" />
@@ -152,6 +152,23 @@ export default async function Header() {
 													<div>
 														<p className="font-bebas-neue text-lg">Chat</p>
 														<p className="text-grey-200">Join the discussion</p>
+													</div>
+												</Link>
+											</li> */}
+											<li className="text-nowrap hover:bg-grey-500 transition-colors py-1.5 px-3 rounded-lg">
+												<Link
+													href="/discord"
+													className="flex items-center gap-4"
+												>
+													<img
+														src="/discord.jpg"
+														className="h-10 w-10 rounded-md"
+													/>
+													<div>
+														<p className="font-bebas-neue text-lg">Discord</p>
+														<p className="text-grey-200">
+															Join the Discord server
+														</p>
 													</div>
 												</Link>
 											</li>

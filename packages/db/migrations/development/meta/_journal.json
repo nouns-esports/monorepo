@@ -225,6 +225,41 @@
       "when": 1731898897985,
       "tag": "0031_worthless_stranger",
       "breakpoints": true
+    },
+    {
+      "idx": 32,
+      "version": "7",
+      "when": 1733014758302,
+      "tag": "0032_hesitant_ultron",
+      "breakpoints": true
+    },
+    {
+      "idx": 33,
+      "version": "7",
+      "when": 1733070844408,
+      "tag": "0033_violet_starfox",
+      "breakpoints": true
+    },
+    {
+      "idx": 34,
+      "version": "7",
+      "when": 1733073614882,
+      "tag": "0034_fat_dreadnoughts",
+      "breakpoints": true
+    },
+    {
+      "idx": 35,
+      "version": "7",
+      "when": 1733073648128,
+      "tag": "0035_whole_mandrill",
+      "breakpoints": true
+    },
+    {
+      "idx": 36,
+      "version": "7",
+      "when": 1733089633449,
+      "tag": "0036_sharp_johnny_storm",
+      "breakpoints": true
     }
   ]
 }

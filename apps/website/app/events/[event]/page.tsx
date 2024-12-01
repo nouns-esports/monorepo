@@ -1,5 +1,6 @@
 import DateComponent from "@/components/Date";
 import Link from "@/components/Link";
+import PredictionCard from "@/components/PredictionCard";
 import QuestCard from "@/components/QuestCard";
 import RoundCard from "@/components/RoundCard";
 import { getEvent } from "@/server/queries/events";
@@ -131,6 +132,25 @@ export default async function EventPage(props: {
 								xp={quest.xp}
 								completed={quest.completed?.length > 0}
 								className="max-lg:w-64 max-lg:flex-shrink-0"
+							/>
+						))}
+					</div>
+				</div>
+			)}
+			{event.predictions.length > 0 && (
+				<div className="flex flex-col gap-6">
+					<h2 className="text-white font-luckiest-guy text-3xl pl-32 max-2xl:pl-16 max-xl:pl-8 max-sm:pl-4">
+						Predictions
+					</h2>
+					<div className="grid grid-cols-4 max-2xl:grid-cols-3 max-lg:flex max-lg:overflow-x-scroll max-lg:scrollbar-hidden gap-4 px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
+						{event.predictions.map((prediction) => (
+							<PredictionCard
+								key={prediction.id}
+								id={prediction.id}
+								name={prediction.name}
+								image={prediction.image}
+								xp={prediction.xp}
+								outcomes={prediction.outcomes}
 							/>
 						))}
 					</div>
