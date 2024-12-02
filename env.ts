@@ -2,7 +2,7 @@ import { createEnv } from "@t3-oss/env-nextjs";
 import { z } from "zod";
 import path from "path";
 
-console.log("T3 PINATA_JWT", process.env.PINATA_JWT);
+console.log("T3 PINATA_JWT", process.env);
 console.log("PATH", process.cwd(), __dirname);
 
 import dotenv from "dotenv";
@@ -12,7 +12,7 @@ dotenv.config({
 	}`,
 });
 
-console.log("T3 PINATA_JWT", process.env.PINATA_JWT);
+console.log("T3 PINATA_JWT", process.env);
 
 export const env = createEnv({
 	server: {
