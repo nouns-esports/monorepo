@@ -5,11 +5,12 @@ import path from "path";
 console.log("T3 PINATA_JWT", process.env.PINATA_JWT);
 
 import dotenv from "dotenv";
-dotenv.config({
-	path: `${path.relative(process.cwd(), __dirname)}/.env.${
-		process.env.NODE_ENV
-	}`,
-});
+// dotenv.config({
+// 	path: `${path.relative(process.cwd(), __dirname)}/.env.${
+// 		process.env.NODE_ENV
+// 	}`,
+// });
+dotenv.config();
 
 console.log("T3 PINATA_JWT", process.env.PINATA_JWT);
 
