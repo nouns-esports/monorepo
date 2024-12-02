@@ -108,17 +108,14 @@ export default function CastText({
 	className?: string;
 	children?: string;
 }) {
+	const editor = useCastTextEditor({ content: children, editable: false });
+
 	if (typeof window === "undefined") {
 		return null;
 	}
 
 	if (!props.editor) {
-		return (
-			<EditorContent
-				{...props}
-				editor={useCastTextEditor({ content: children, editable: false })}
-			/>
-		);
+		return <EditorContent {...props} editor={editor} />;
 	}
 
 	return <EditorContent {...props} editor={props.editor} />;

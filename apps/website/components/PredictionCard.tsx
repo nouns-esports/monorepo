@@ -80,7 +80,7 @@ export default function PredictionCard(props: {
 			{props.outcomes.map((outcome) => (
 				<PlaceBetModal
 					key={`modal-${props.id}-${outcome.id}`}
-					prediction={props.id}
+					prediction={{ id: props.id, image: props.image, name: props.name }}
 					outcome={outcome}
 				/>
 			))}

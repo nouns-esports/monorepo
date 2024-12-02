@@ -413,7 +413,7 @@ export const nexus = pgTable("nexus", {
 	wallet: text("wallet"),
 	twitter: text("twitter"),
 	discord: text("discord"),
-	fid: text("fid"),
+	fid: integer("fid"),
 });
 
 export const nexusRelations = relations(nexus, ({ one, many }) => ({

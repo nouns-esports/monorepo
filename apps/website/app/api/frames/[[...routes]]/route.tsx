@@ -1,6 +1,7 @@
 /** @jsxImportSource frog/jsx */
 import { Button, Frog } from "frog";
 import { handle } from "frog/next";
+import { handle as handle_hono } from "hono/vercel";
 import { devtools } from "frog/dev";
 import { serveStatic } from "frog/serve-static";
 import { getRound } from "@/server/queries/rounds";
@@ -423,5 +424,7 @@ app.image("/rounds/:round/votes/:user/img", async (c) => {
 
 devtools(app, { serveStatic });
 
-export const GET = handle(app);
-export const POST = handle(app);
+// export const GET = handle(app);
+// export const POST = handle(app);
+export const GET = handle_hono(app.hono).bind(app.hono);
+export const POST = handle_hono(app.hono).bind(app.hono);

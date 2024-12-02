@@ -8,7 +8,11 @@ import { env } from "~/env";
 import Shimmer from "../Shimmer";
 
 export default function PlaceBetModal(props: {
-	prediction: string;
+	prediction: {
+		id: string;
+		image: string;
+		name: string;
+	};
 	outcome: {
 		id: number;
 		name: string;
@@ -22,7 +26,7 @@ export default function PlaceBetModal(props: {
 	return (
 		<Modal
 			id={`prediction-${props.prediction}-${props.outcome.id}`}
-			className="p-4 flex flex-col min-w-80 gap-4"
+			className="p-4 flex flex-col min-w-80 gap-6"
 		>
 			<div className="flex justify-between items-center">
 				<p className="text-white text-2xl font-bebas-neue leading-none">
@@ -35,11 +39,15 @@ export default function PlaceBetModal(props: {
 					<X className="w-4 h-4 text-grey-200" />
 				</button>
 			</div>
+			<p className="text-white leading-none">
+				You are betting for{" "}
+				<span className="font-semibold text-green">{props.outcome.name}</span>
+			</p>
 			<button
 				onClick={() => close()}
 				className="flex justify-center items-center gap-2 w-full text-black bg-white hover:bg-white/70 font-semibold rounded-lg p-2.5 transition-colors"
 			>
-				Close
+				Confirm
 			</button>
 		</Modal>
 	);

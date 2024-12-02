@@ -13,7 +13,7 @@ import { db, xp } from "~/packages/db/schema";
 
 export default async function Stations(props: {
 	params: Promise<{ event: string }>;
-	searchParams: { claimed?: string };
+	searchParams: Promise<{ claimed?: string }>;
 }) {
 	const params = await props.params;
 	const searchParams = await props.searchParams;

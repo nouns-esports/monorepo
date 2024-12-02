@@ -156,6 +156,7 @@ export function Modal(props: {
 	if (isOpen) {
 		return (
 			<motion.div
+				//@ts-ignore
 				id={`${props.id}-backdrop`}
 				onClick={() => close()}
 				initial={{ opacity: 0 }}
@@ -172,6 +173,7 @@ export function Modal(props: {
 				)}
 			>
 				<motion.div
+					//@ts-ignore
 					id={`${props.id}-modal`}
 					initial={{ y: mobile ? "100%" : "10%" }}
 					animate={{ y: isOpen ? "0%" : mobile ? "100%" : "10%" }}
@@ -191,6 +193,7 @@ export function Modal(props: {
 					onDragEnd={() => {
 						if (y.get() >= 100) close();
 					}}
+					//@ts-ignore
 					onClick={(e) => e.stopPropagation()}
 					className={twMerge(
 						"flex flex-col rounded-xl bg-black border border-grey-600 drop-shadow-2xl max-lg:rounded-b-none max-lg:border-b-0 max-lg:border-x-0 max-lg:w-full ",

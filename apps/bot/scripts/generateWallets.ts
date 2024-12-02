@@ -13,7 +13,7 @@ for (let i = 0; i < users.length; i++) {
 			createEthereumSmartWallet: true,
 		});
 	} catch (e) {
-		console.error(user.id, e);
+		console.error(`Iteration ${i + 1}/${users.length}`, e);
 	}
 }
 

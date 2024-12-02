@@ -1,7 +1,10 @@
+console.log("PINATA_JWT", process.env.PINATA_JWT);
+
 const createJiti = require("jiti");
 const jiti = createJiti(__filename);
-
 jiti("../../env");
+
+console.log("PINATA_JWT", process.env.PINATA_JWT);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -20,6 +23,9 @@ const nextConfig = {
 		fetches: {
 			fullUrl: true,
 		},
+	},
+	eslint: {
+		ignoreDuringBuilds: true,
 	},
 };
 

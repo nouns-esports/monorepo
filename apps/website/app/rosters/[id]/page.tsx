@@ -61,7 +61,7 @@ export default async function RosterPage(props: {
 			</div>
 			<div className="flex flex-col gap-16">
 				{rosters.map((roster) => (
-					<div className="flex flex-col gap-4">
+					<div key={roster.id} className="flex flex-col gap-4">
 						{rosters.length > 1 ? (
 							<h2 className="font-bebas-neue text-4xl text-white">
 								{roster.name}

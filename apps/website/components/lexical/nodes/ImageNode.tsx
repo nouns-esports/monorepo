@@ -1,132 +1,132 @@
 import type {
-  DOMConversionMap,
-  DOMConversionOutput,
-  DOMExportOutput,
-  EditorConfig,
-  LexicalNode,
-  NodeKey,
-  SerializedLexicalNode,
-  Spread,
+	DOMConversionMap,
+	DOMConversionOutput,
+	DOMExportOutput,
+	EditorConfig,
+	LexicalNode,
+	NodeKey,
+	SerializedLexicalNode,
+	Spread,
 } from "lexical";
 import { DecoratorNode } from "lexical";
-import * as React from "react";
+import type * as React from "react";
 
 export interface ImagePayload {
-  altText: string;
-  key?: NodeKey;
-  src: string;
+	altText: string;
+	key?: NodeKey;
+	src: string;
 }
 
 function convertImageElement(domNode: Node): null | DOMConversionOutput {
-  if (domNode instanceof HTMLImageElement) {
-    const { alt: altText, src } = domNode;
-    const node = $createImageNode({ altText, src });
-    return { node };
-  }
-  return null;
+	if (domNode instanceof HTMLImageElement) {
+		const { alt: altText, src } = domNode;
+		const node = $createImageNode({ altText, src });
+		return { node };
+	}
+	return null;
 }
 
 export type SerializedImageNode = Spread<
-  {
-    altText: string;
-    src: string;
-    type: "image";
-    version: 1;
-  },
-  SerializedLexicalNode
+	{
+		altText: string;
+		src: string;
+		type: "image";
+		version: 1;
+	},
+	SerializedLexicalNode
 >;
 
-export class ImageNode extends DecoratorNode<JSX.Element> {
-  __src: string;
-  __altText: string;
+export class ImageNode extends DecoratorNode<React.JSX.Element> {
+	__src: string;
+	__altText: string;
 
-  static getType(): string {
-    return "image";
-  }
+	static getType(): string {
+		return "image";
+	}
 
-  static clone(node: ImageNode): ImageNode {
-    return new ImageNode(node.__src, node.__altText, node.__key);
-  }
+	static clone(node: ImageNode): ImageNode {
+		return new ImageNode(node.__src, node.__altText, node.__key);
+	}
 
-  static importJSON(serializedNode: SerializedImageNode): ImageNode {
-    const { altText, src } = serializedNode;
-    const node = $createImageNode({
-      altText,
-      src,
-    });
-    return node;
-  }
+	static importJSON(serializedNode: SerializedImageNode): ImageNode {
+		const { altText, src } = serializedNode;
+		const node = $createImageNode({
+			altText,
+			src,
+		});
+		return node;
+	}
 
-  exportDOM(): DOMExportOutput {
-    const element = document.createElement("img");
-    element.setAttribute("src", this.__src);
-    element.setAttribute("alt", this.__altText);
-    return { element };
-  }
+	exportDOM(): DOMExportOutput {
+		const element = document.createElement("img");
+		element.setAttribute("src", this.__src);
+		element.setAttribute("alt", this.__altText);
+		return { element };
+	}
 
-  static importDOM(): DOMConversionMap | null {
-    return {
-      img: (node: Node) => ({
-        conversion: convertImageElement,
-        priority: 0,
-      }),
-    };
-  }
+	static importDOM(): DOMConversionMap | null {
+		return {
+			img: (node: Node) => ({
+				conversion: convertImageElement,
+				priority: 0,
+			}),
+		};
+	}
 
-  constructor(src: string, altText: string, key?: NodeKey) {
-    super(key);
-    this.__src = src;
-    this.__altText = altText;
-  }
+	constructor(src: string, altText: string, key?: NodeKey) {
+		super(key);
+		this.__src = src;
+		this.__altText = altText;
+	}
 
-  exportJSON(): SerializedImageNode {
-    return {
-      altText: this.getAltText(),
-      src: this.getSrc(),
-      type: "image",
-      version: 1,
-    };
-  }
+	exportJSON(): SerializedImageNode {
+		return {
+			altText: this.getAltText(),
+			src: this.getSrc(),
+			type: "image",
+			version: 1,
+		};
+	}
 
-  createDOM(config: EditorConfig): HTMLElement {
-    const span = document.createElement("span");
-    const theme = config.theme;
-    const className = theme.image;
-    if (className !== undefined) {
-      span.className = className;
-    }
-    return span;
-  }
+	createDOM(config: EditorConfig): HTMLElement {
+		const span = document.createElement("span");
+		const theme = config.theme;
+		const className = theme.image;
+		if (className !== undefined) {
+			span.className = className;
+		}
+		return span;
+	}
 
-  updateDOM(): false {
-    return false;
-  }
+	updateDOM(): false {
+		return false;
+	}
 
-  getSrc(): string {
-    return this.__src;
-  }
+	getSrc(): string {
+		return this.__src;
+	}
 
-  getAltText(): string {
-    return this.__altText;
-  }
+	getAltText(): string {
+		return this.__altText;
+	}
 
-  decorate(): JSX.Element {
-    return (
-      <img src={this.__src} alt={this.__altText} className="max-w-lg w-full" />
-    );
-  }
+	decorate(): React.JSX.Element {
+		return (
+			<img src={this.__src} alt={this.__altText} className="max-w-lg w-full" />
+		);
+	}
 }
 
 export function $createImageNode({
-  altText,
-  src,
-  key,
+	altText,
+	src,
+	key,
 }: ImagePayload): ImageNode {
-  return new ImageNode(src, altText, key);
+	return new ImageNode(src, altText, key);
 }
 
 export function $isImageNode(
-  node: LexicalNode | null | undefined
+	node: LexicalNode | null | undefined,
 ): node is ImageNode {
-  return node instanceof ImageNode;
+	return node instanceof ImageNode;
 }

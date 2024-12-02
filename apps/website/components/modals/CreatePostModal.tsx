@@ -14,8 +14,6 @@ export default function CreatePostModal(props: {
 	user?: AuthenticatedUser;
 	communities: Community[];
 }) {
-	if (!props.user?.nexus) return;
-
 	const { close } = useModal("create-post");
 
 	const [text, setText] = useState("");
@@ -28,6 +26,8 @@ export default function CreatePostModal(props: {
 
 	const [image, setImage] = useState<File>();
 	const [showCommunityDropdown, setShowCommunityDropdown] = useState(false);
+
+	if (!props.user?.nexus) return;
 
 	return (
 		<Modal

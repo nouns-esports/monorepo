@@ -260,6 +260,20 @@
       "when": 1733089633449,
       "tag": "0036_sharp_johnny_storm",
       "breakpoints": true
+    },
+    {
+      "idx": 37,
+      "version": "7",
+      "when": 1733177911566,
+      "tag": "0037_jazzy_black_cat",
+      "breakpoints": true
+    },
+    {
+      "idx": 38,
+      "version": "7",
+      "when": 1733177920012,
+      "tag": "0038_nice_goliath",
+      "breakpoints": true
     }
   ]
 }
