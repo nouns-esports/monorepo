@@ -11,8 +11,6 @@ import {
 } from "phosphor-react-sc";
 import Link from "./Link";
 import type { CastWithInteractions } from "@neynar/nodejs-sdk/build/neynar-api/v2";
-import { LinkIt } from "react-linkify-it";
-import RichText from "./RichText";
 import type { Community } from "~/packages/db/schema";
 import {
 	ExternalLink,

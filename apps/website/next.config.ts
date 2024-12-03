@@ -1,13 +1,6 @@
-console.log("PINATA_JWT", process.env.PINATA_JWT);
+import type { NextConfig } from "next";
 
-const createJiti = require("jiti");
-const jiti = createJiti(__filename);
-jiti("../../env");
-
-console.log("PINATA_JWT", process.env.PINATA_JWT);
-
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+export default {
 	images: {
 		remotePatterns: [
 			{
@@ -27,6 +20,4 @@ const nextConfig = {
 	eslint: {
 		ignoreDuringBuilds: true,
 	},
-};
-
-module.exports = nextConfig;
+} satisfies NextConfig;

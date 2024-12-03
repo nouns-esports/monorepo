@@ -2,17 +2,12 @@ import { createEnv } from "@t3-oss/env-nextjs";
 import { z } from "zod";
 import path from "path";
 
-console.log("T3 PINATA_JWT", process.env);
-console.log("PATH", process.cwd(), __dirname);
-
 import dotenv from "dotenv";
 dotenv.config({
 	path: `${path.relative(process.cwd(), __dirname)}/.env.${
 		process.env.NODE_ENV
 	}`,
 });
-
-console.log("T3 PINATA_JWT", process.env);
 
 export const env = createEnv({
 	server: {

@@ -16,7 +16,6 @@
     "@types/pg": "^8.11.5",
     "@types/react": "npm:types-react@19.0.0-rc.1",
     "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1",
-    "prettier": "^3.1.0",
     "turbo": "^2.3.3"
   },
   "engines": {
@@ -29,7 +28,6 @@
     "packages/*"
   ],
   "dependencies": {
-    "@apollo/client": "^3.9.4",
     "@farcaster/hub-nodejs": "^0.12.7",
     "@lexical/headless": "^0.14.5",
     "@lexical/html": "^0.14.5",
@@ -55,7 +53,6 @@
     "@tsparticles/confetti": "^3.5.0",
     "@types/node-cron": "^3.0.11",
     "@uidotdev/usehooks": "^2.4.1",
-    "arweave": "^1.14.4",
     "autoprefixer": "^10.4.17",
     "cross-env": "^7.0.3",
     "discord.js": "^14.15.3",
@@ -67,7 +64,6 @@
     "framer-motion": "^11.3.31",
     "frog": "0.17.4",
     "hono": "^4.6.12",
-    "jiti": "^1.21.0",
     "jose": "^5.6.3",
     "lexical": "^0.14.5",
     "lucide-react": "^0.407.0",
@@ -82,10 +78,7 @@
     "react-countdown": "^2.3.5",
     "react-dom": "19.0.0-rc-66855b96-20241106",
     "react-hot-toast": "^2.4.1",
-    "react-linkify-it": "^1.0.8",
-    "react-tweet": "^3.2.0",
     "recharts": "^2.12.7",
-    "sharp": "^0.33.3",
     "tailwind-merge": "^2.4.0",
     "tailwindcss": "^3.4.3",
     "tailwindcss-animate": "^1.0.7",
