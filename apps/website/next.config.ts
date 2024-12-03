@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+// Checks env during build
 import { env } from "~/env";
 
 export default {
