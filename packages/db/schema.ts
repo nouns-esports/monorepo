@@ -192,6 +192,7 @@ export const outcomes = pgTable("outcomes", {
 	name: text("name").notNull(),
 	image: text("image"),
 	outcome: boolean("outcome"),
+	totalBets: integer("total_bets").notNull().default(0),
 });
 
 export const outcomesRelations = relations(outcomes, ({ one }) => ({

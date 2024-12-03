@@ -153,6 +153,10 @@ export default async function EventPage(props: {
 									image={prediction.image}
 									xp={prediction.xp}
 									outcomes={prediction.outcomes}
+									totalBets={prediction.outcomes.reduce(
+										(acc, outcome) => acc + outcome.totalBets,
+										0,
+									)}
 								/>
 							))}
 						</div>

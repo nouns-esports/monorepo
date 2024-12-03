@@ -6,7 +6,7 @@ import { getStations } from "@/server/queries/stations";
 import { getAuthenticatedUser } from "@/server/queries/users";
 import { and, inArray } from "drizzle-orm";
 import { eq } from "drizzle-orm";
-import { Check } from "lucide-react";
+import { Check, Sparkles } from "lucide-react";
 import { redirect } from "next/navigation";
 import { twMerge } from "tailwind-merge";
 import { db, xp } from "~/packages/db/schema";
@@ -85,7 +85,10 @@ export default async function Stations(props: {
 										{station.name}
 									</h2>
 								</div>
-								<p className="text-green font-semibold">{station.xp} XP</p>
+								<p className="text-white flex items-center gap-2 mr-1 pointer-events-none">
+									<Sparkles className="w-4 h-4 text-green" />
+									{station.xp}
+								</p>
 							</div>
 						);
 					})}

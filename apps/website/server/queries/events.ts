@@ -28,7 +28,7 @@ export const getFeaturedEvent = cache(
 
 export const getEvent = cache(
 	async (input: { id: string; user?: string }) => {
-		////////////////
+		//////////////////////////
 		return db.query.events.findFirst({
 			where: eq(events.id, input.id),
 			with: {

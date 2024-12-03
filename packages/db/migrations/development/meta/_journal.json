@@ -274,6 +274,13 @@
       "when": 1733177920012,
       "tag": "0038_nice_goliath",
       "breakpoints": true
+    },
+    {
+      "idx": 39,
+      "version": "7",
+      "when": 1733259157222,
+      "tag": "0039_foamy_crusher_hogan",
+      "breakpoints": true
     }
   ]
 }

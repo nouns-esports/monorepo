@@ -6,24 +6,27 @@ import Link from "../Link";
 import { usePrivy } from "@privy-io/react-auth";
 import { env } from "~/env";
 import { create } from "zustand";
-import type { Outcome, Prediction } from "~/packages/db/schema";
 
 export const usePlaceBetModal = create<{
-	prediction?: Prediction;
-	outcome?: Outcome;
+	outcome?: {
+		id: number;
+		name: string;
+	};
+	setState: (state: {
+		outcome: {
+			id: number;
+			name: string;
+		};
+	}) => void;
 }>((set) => ({
-	prediction: undefined,
 	outcome: undefined,
-	setPrediction: (prediction: Prediction) => {
-		set({ prediction });
-	},
-	setOutcome: (outcome: Outcome) => {
-		set({ outcome });
+	setState: (state) => {
+		set({ ...state });
 	},
 }));
 
 export default function PlaceBetModal() {
-	const { prediction, outcome } = usePlaceBetModal();
+	const { outcome } = usePlaceBetModal();
 
 	const { close } = useModal("place-bet");
 	const { user } = usePrivy();
