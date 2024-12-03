@@ -1,13 +1,5 @@
 import { createEnv } from "@t3-oss/env-nextjs";
-import { fileURLToPath } from "url";
 import { z } from "zod";
-import path from "path";
-import dotenv from "dotenv";
-dotenv.config({
-	path: `${path.relative(process.cwd(), path.dirname(fileURLToPath(import.meta.url)))}/.env.${
-		process.env.NODE_ENV
-	}`,
-});
 
 export const env = createEnv({
 	server: {
