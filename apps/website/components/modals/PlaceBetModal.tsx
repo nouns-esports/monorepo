@@ -5,29 +5,31 @@ import { ArrowRight, X } from "lucide-react";
 import Link from "../Link";
 import { usePrivy } from "@privy-io/react-auth";
 import { env } from "~/env";
-import Shimmer from "../Shimmer";
+import { create } from "zustand";
+import type { Outcome, Prediction } from "~/packages/db/schema";
 
-export default function PlaceBetModal(props: {
-	prediction: {
-		id: string;
-		image: string;
-		name: string;
-	};
-	outcome: {
-		id: number;
-		name: string;
-	};
-}) {
-	const { close } = useModal(
-		`prediction-${props.prediction}-${props.outcome.id}`,
-	);
+export const usePlaceBetModal = create<{
+	prediction?: Prediction;
+	outcome?: Outcome;
+}>((set) => ({
+	prediction: undefined,
+	outcome: undefined,
+	setPrediction: (prediction: Prediction) => {
+		set({ prediction });
+	},
+	setOutcome: (outcome: Outcome) => {
+		set({ outcome });
+	},
+}));
+
+export default function PlaceBetModal() {
+	const { prediction, outcome } = usePlaceBetModal();
+
+	const { close } = useModal("place-bet");
 	const { user } = usePrivy();
 
 	return (
-		<Modal
-			id={`prediction-${props.prediction}-${props.outcome.id}`}
-			className="p-4 flex flex-col min-w-80 gap-6"
-		>
+		<Modal id="place-bet" className="p-4 flex flex-col min-w-80 gap-6">
 			<div className="flex justify-between items-center">
 				<p className="text-white text-2xl font-bebas-neue leading-none">
 					Place Bet
@@ -41,7 +43,7 @@ export default function PlaceBetModal(props: {
 			</div>
 			<p className="text-white leading-none">
 				You are betting for{" "}
-				<span className="font-semibold text-green">{props.outcome.name}</span>
+				<span className="font-semibold text-green">{outcome?.name}</span>
 			</p>
 			<button
 				onClick={() => close()}

@@ -3,9 +3,9 @@
   "module": "index.ts",
   "type": "module",
   "scripts": {
-    "test": "cross-env NODE_ENV=development bun index.ts",
-    "start": "cross-env NODE_ENV=production bun index.ts",
-    "sandbox:production": "cross-env NODE_ENV=production bun sandbox.ts",
-    "sandbox:development": "cross-env NODE_ENV=development bun sandbox.ts"
+    "test": "bun --env-file=../../.env.development index.ts",
+    "start": "bun --env-file=../../.env.production index.ts",
+    "sandbox:production": "bun --env-file=../../.env.production sandbox.ts",
+    "sandbox:development": "bun --env-file=../../.env.development sandbox.ts"
   }
 }
