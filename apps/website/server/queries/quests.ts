@@ -1,8 +1,8 @@
 import { communities, db, quests, xp } from "~/packages/db/schema";
 import { and, asc, desc, eq, gte, isNull, lte } from "drizzle-orm";
 import {
-  unstable_cache as cache,
-  unstable_noStore as noStore,
+	unstable_cache as cache,
+	unstable_noStore as noStore,
 } from "next/cache";
 import { linkFarcaster } from "@/server/quests/farcaster/linkFarcaster";
 import type createAction from "../quests/createAction";
@@ -18,105 +18,108 @@ import { mintERC1155 } from "../quests/zora/mintERC1155";
 import { visitLink } from "../quests/online/visitLink";
 import { placeTrade } from "../quests/matcha/placeTrade";
 import { claimAchievement } from "../quests/achievements/claimAchievement";
-
+import { castVote } from "../quests/rounds/castVote";
 export const actions: Record<string, ReturnType<typeof createAction>> = {
-  // Discord
-  attendCall,
-  joinServer,
-  linkDiscord,
+	// Discord
+	attendCall,
+	joinServer,
+	linkDiscord,
 
-  // Twitter
-  linkTwitter,
+	// Twitter
+	linkTwitter,
 
-  // Farcaster
-  linkFarcaster,
-  castInChannel,
-  followAccount,
-  followChannel,
+	// Farcaster
+	linkFarcaster,
+	castInChannel,
+	followAccount,
+	followChannel,
 
-  // Online
-  visitLink,
+	// Online
+	visitLink,
 
-  // Onchain
-  linkWallet,
+	// Onchain
+	linkWallet,
 
-  // Zora
-  mintERC1155,
+	// Zora
+	mintERC1155,
 
-  // Matcha
-  placeTrade,
+	// Matcha
+	placeTrade,
 
-  // Achievements
-  claimAchievement,
+	// Achievements
+	claimAchievement,
+
+	// Rounds
+	castVote,
 };
 
 export async function getAction(input: {
-  quest: string;
-  action: number;
-  user?: string;
+	quest: string;
+	action: number;
+	user?: string;
 }) {
-  noStore();
+	noStore();
 
-  const quest = await db.query.quests.findFirst({
-    where: eq(quests.id, input.quest),
-    with: {
-      completed: input.user
-        ? {
-            where: eq(xp.user, input.user),
-            limit: 1,
-            columns: { id: true },
-          }
-        : undefined,
-    },
-  });
+	const quest = await db.query.quests.findFirst({
+		where: eq(quests.id, input.quest),
+		with: {
+			completed: input.user
+				? {
+						where: eq(xp.user, input.user),
+						limit: 1,
+						columns: { id: true },
+					}
+				: undefined,
+		},
+	});
 
-  if (!quest) return;
+	if (!quest) return;
 
-  const action = quest.actions[input.action];
-  const actionInputs = quest.actionInputs[input.action] ?? {};
+	const action = quest.actions[input.action];
+	const actionInputs = quest.actionInputs[input.action] ?? {};
 
-  return actions[action](actionInputs);
+	return actions[action](actionInputs);
 }
 
 export const getQuests = cache(
-  async (input: { limit?: number; user?: string; event?: string }) => {
-    return db.query.quests.findMany({
-      limit: input.limit,
-      where: and(
-        eq(quests.active, true),
-        input.event ? eq(quests.event, input.event) : isNull(quests.event)
-      ),
-      orderBy: [desc(quests.featured), desc(quests.createdAt)],
-      with: {
-        community: true,
-        completed: input.user
-          ? {
-              where: eq(xp.user, input.user),
-              limit: 1,
-            }
-          : undefined,
-      },
-    });
-  },
-  ["getQuests"],
-  { tags: ["getQuests"], revalidate: 60 * 10 }
+	async (input: { limit?: number; user?: string; event?: string }) => {
+		return db.query.quests.findMany({
+			limit: input.limit,
+			where: and(
+				eq(quests.active, true),
+				input.event ? eq(quests.event, input.event) : isNull(quests.event),
+			),
+			orderBy: [desc(quests.featured), desc(quests.createdAt)],
+			with: {
+				community: true,
+				completed: input.user
+					? {
+							where: eq(xp.user, input.user),
+							limit: 1,
+						}
+					: undefined,
+			},
+		});
+	},
+	["getQuests"],
+	{ tags: ["getQuests"], revalidate: 60 * 10 },
 );
 
 export const getQuest = cache(
-  async (input: { id: string; user?: string }) => {
-    return db.query.quests.findFirst({
-      where: eq(quests.id, input.id),
-      with: {
-        completed: input.user
-          ? {
-              where: eq(xp.user, input.user),
-              limit: 1,
-            }
-          : undefined,
-        event: true,
-      },
-    });
-  },
-  ["getQuest"],
-  { tags: ["getQuest"], revalidate: 60 * 10 }
+	async (input: { id: string; user?: string }) => {
+		return db.query.quests.findFirst({
+			where: eq(quests.id, input.id),
+			with: {
+				completed: input.user
+					? {
+							where: eq(xp.user, input.user),
+							limit: 1,
+						}
+					: undefined,
+				event: true,
+			},
+		});
+	},
+	["getQuest"],
+	{ tags: ["getQuest"], revalidate: 60 * 10 },
 );
