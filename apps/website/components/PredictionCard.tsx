@@ -51,7 +51,13 @@ export default function PredictionCard(props: {
 					<div className="rounded-lg flex flex-col items-center">
 						<p className="text-white leading-none">
 							{Math.round(
-								(props.outcomes[0].totalBets / props.totalBets || 0) * 100,
+								(props.outcomes.toSorted((a, b) =>
+									a.name === "Yes"
+										? -1
+										: b.name === "Yes"
+											? 1
+											: a.name.localeCompare(b.name),
+								)[0].totalBets / props.totalBets || 0) * 100,
 							)}
 							%
 						</p>

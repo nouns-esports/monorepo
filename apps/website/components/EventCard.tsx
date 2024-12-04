@@ -2,6 +2,7 @@ import type { Event } from "~/packages/db/schema";
 import Link from "@/components/Link";
 import Button from "./Button";
 import { CalendarDays } from "lucide-react";
+import { twMerge } from "tailwind-merge";
 
 export default function EventCard(props: {
 	id: Event["id"];
@@ -9,9 +10,15 @@ export default function EventCard(props: {
 	image: Event["image"];
 	start: Event["start"];
 	end: Event["end"];
+	className?: string;
 }) {
 	return (
-		<div className="w-full h-min group relative flex flex-col gap-2 aspect-video rounded-xl overflow-hidden">
+		<div
+			className={twMerge(
+				"w-full h-min group relative flex flex-col gap-2 aspect-video rounded-xl overflow-hidden",
+				props.className,
+			)}
+		>
 			<Link
 				href={`/events/${props.id}`}
 				className="absolute z-10 top-0 left-0 w-full h-full"
