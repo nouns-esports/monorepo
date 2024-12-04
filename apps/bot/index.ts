@@ -125,21 +125,25 @@ discordClient.on("interactionCreate", async (interaction) => {
 });
 
 for (const [name, command] of Object.entries(commands)) {
-	if (command.schedule) {
-		schedule(
-			command.schedule,
-			async () => {
-				await command.execute();
-			},
-			{
-				timezone: "America/Chicago",
-			},
-		);
-	}
+  if (command.schedule) {
+    schedule(
+      command.schedule,
+      async () => {
+        await command.execute();
 
-	// app.post(`/${name}`, async (c) => {
-	//   const {message, success} = command.execute({
-	//     sender: c.query("sender"),
-	//   })
-	// })
+        if (command.then) {
+          await commands[command.then].execute();
+        }
+      },
+      {
+        timezone: "America/Chicago",
+      }
+    );
+  }
+
+  // app.post(`/${name}`, async (c) => {
+  //   const {message, success} = command.execute({
+  //     sender: c.query("sender"),
+  //   })
+  // })
 }

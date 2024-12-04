@@ -8,6 +8,7 @@ import { validate } from "node-cron";
 export function createCommand(command: {
   description: string;
   schedule?: string;
+  then?: string;
   params?: Array<
     | {
         type: "string";
@@ -24,7 +25,7 @@ export function createCommand(command: {
       }
   >;
   onlyAdmin?: boolean;
-  execute: (interaction: CommandInteraction) => Promise<string>;
+  execute: (interaction?: CommandInteraction) => Promise<string>;
 }) {
   if (command.schedule && !validate(command.schedule)) {
     throw new Error("Invalid cron expression");
@@ -33,16 +34,13 @@ export function createCommand(command: {
   return {
     description: command.description,
     schedule: command.schedule,
+    then: command.then,
     params: command.params,
     onlyAdmin: !!command.onlyAdmin,
     execute: async (interaction?: CommandInteraction) => {
       let message = "";
 
       try {
-        if (!interaction) {
-          throw new Error("Can only be run from a Discord command");
-        }
-
         message = await command.execute(interaction);
       } catch (e) {
         console.log(e);

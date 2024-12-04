@@ -3,8 +3,38 @@ import Link from "@/components/Link";
 import { getAction, getQuest } from "@/server/queries/quests";
 import { getAuthenticatedUser } from "@/server/queries/users";
 import { ArrowLeft, ArrowRight, Check, Sparkles } from "lucide-react";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { twMerge } from "tailwind-merge";
+import { env } from "~/env";
+
+export async function generateMetadata(props: {
+  params: { quest: string };
+}): Promise<Metadata> {
+  const quest = await getQuest({ id: props.params.quest });
+
+  if (!quest) {
+    return notFound();
+  }
+
+  return {
+    title: quest.name,
+    description: null,
+    metadataBase: new URL(env.NEXT_PUBLIC_DOMAIN),
+    openGraph: {
+      type: "website",
+      images: [quest.image],
+    },
+    twitter: {
+      site: "@NounsEsports",
+      card: "summary_large_image",
+      images: [quest.image],
+    },
+    // other: await getFrameMetadata(
+    //   `${env.NEXT_PUBLIC_DOMAIN}/api/frames/rounds/${props.params.quest}`
+    // ),
+  };
+}
 
 export default async function Quest(props: {
 	params: Promise<{ quest: string }>;

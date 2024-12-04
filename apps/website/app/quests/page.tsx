@@ -33,7 +33,7 @@ export default async function Quests() {
 					</div>
 				</div>
 			)}
-			{featuredQuests.length > 0 && (
+			{!featuredEvent && featuredQuests.length > 0 && (
 				<div className="flex flex-col gap-6">
 					<div className="flex items-center justify-between w-full">
 						<h1 className="font-luckiest-guy text-white text-3xl">Featured</h1>

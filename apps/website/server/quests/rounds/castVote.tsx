@@ -15,8 +15,7 @@ export const castVote = createAction<{ round?: string }>(
 		return {
 			description: round ? (
 				<p>
-					Vote on a proposal in
-					<span className="text-red">{round.name}</span>
+					Vote on a proposal in <span className="text-red">{round.name}</span>
 				</p>
 			) : (
 				<p>Vote on any proposal</p>

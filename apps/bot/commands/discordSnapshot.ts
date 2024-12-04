@@ -14,6 +14,10 @@ export const discordSnapshot = createCommand({
   ],
   onlyAdmin: true,
   execute: async (interaction) => {
+    if (!interaction) {
+      throw new Error("Can only be run from a Discord command");
+    }
+
     const tag = interaction.options.get("tag")?.value?.toString();
 
     if (!interaction.channel?.isVoiceBased()) {
