@@ -37,7 +37,7 @@ export default function RoundCard(props: {
 				href={`/rounds/${props.id}`}
 				className="absolute z-10 top-0 left-0 w-full h-full"
 			/>
-			<div className="flex flex-shrink-0 w-full h-36/ h-[40%] overflow-hidden">
+			<div className="flex flex-shrink-0 w-full h-[40%] overflow-hidden">
 				{/* <img
           src={`${props.image}?img-height=200&img-onerror=redirect`}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform"

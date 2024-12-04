@@ -2,9 +2,10 @@
 
 import { twMerge } from "tailwind-merge";
 import Link from "./Link";
-import { Sparkles, Vote } from "lucide-react";
+import { Check, Sparkles, Vote, X } from "lucide-react";
 import { useModal } from "./Modal";
 import { usePlaceBetModal } from "./modals/PlaceBetModal";
+import type { AuthenticatedUser } from "@/server/queries/users";
 
 export default function PredictionCard(props: {
 	id: string;
@@ -18,14 +19,23 @@ export default function PredictionCard(props: {
 		totalBets: number;
 	}>;
 	totalBets: number;
+	userBet?: {
+		outcome: number;
+	};
+	user?: AuthenticatedUser;
+	className?: string;
 }) {
 	const { open } = useModal("place-bet");
+	const { open: openSignIn } = useModal("sign-in");
 	const { setState } = usePlaceBetModal();
 
 	return (
-		<Link
-			href={`/predictions/${props.id}`}
-			className="flex flex-col gap-3 bg-grey-800 rounded-xl px-2 pb-3 pt-4 hover:bg-grey-600 transition-colors aspect-video h-full justify-between"
+		<div
+			// href={`/predictions/${props.id}`}
+			className={twMerge(
+				"flex flex-col gap-3 bg-grey-800 rounded-xl px-2 pb-3 pt-4 hover:bg-grey-600 transition-colors aspect-video h-full justify-between",
+				props.className,
+			)}
 		>
 			<div className="flex justify-between gap-8 px-2 items-center">
 				<div className="flex items-center gap-4">
@@ -40,7 +50,10 @@ export default function PredictionCard(props: {
 				{props.outcomes.length === 2 ? (
 					<div className="rounded-lg flex flex-col items-center">
 						<p className="text-white leading-none">
-							{(props.outcomes[0].totalBets / props.totalBets || 0) * 100}%
+							{Math.round(
+								(props.outcomes[0].totalBets / props.totalBets || 0) * 100,
+							)}
+							%
 						</p>
 						<p className="text-white/50 text-sm">chance</p>
 					</div>
@@ -59,19 +72,44 @@ export default function PredictionCard(props: {
 							)
 							.map((outcome, index) => (
 								<button
+									disabled={!!props.userBet}
 									onClick={() => {
-										setState({ outcome });
+										if (props.userBet) return;
+
+										if (!props.user) {
+											openSignIn();
+											return;
+										}
+
+										setState({ outcome, prediction: { id: props.id } });
 										open();
 									}}
 									key={outcome.id}
 									className={twMerge(
 										"w-full flex items-center justify-center py-2 rounded-lg text-white transition-colors",
-										index === 0
-											? "bg-green/30 hover:bg-green/50 text-green"
-											: "bg-red/30 hover:bg-red/50 text-red",
+										index === 0 && "bg-green/30  text-green",
+										index === 0 && !props.userBet && "hover:bg-green/50",
+										index === 1 && "bg-red/30  text-red",
+										index === 1 && !props.userBet && "hover:bg-red/50",
 									)}
 								>
-									{outcome.name}
+									{props.userBet?.outcome === outcome.id ? (
+										<div
+											className={twMerge(
+												"text-sm  flex items-center gap-1",
+												index === 0 ? "text-green" : " text-red",
+											)}
+										>
+											{index === 0 ? (
+												<Check className="w-4 h-4" />
+											) : (
+												<X className="w-4 h-4" />
+											)}
+											You bet: {outcome.name}
+										</div>
+									) : (
+										outcome.name
+									)}
 								</button>
 							))}
 					</div>
@@ -86,18 +124,36 @@ export default function PredictionCard(props: {
 								>
 									{outcome.name}
 									<div className="flex items-center gap-3">
+										{props.userBet?.outcome === outcome.id ? (
+											<div className="text-sm text-green flex items-center gap-1">
+												<Check className="w-4 h-4" />
+												Your bet
+											</div>
+										) : null}
 										<p className="text-sm">
-											{(outcome.totalBets / props.totalBets || 0) * 100}%
+											{Math.round(
+												(outcome.totalBets / props.totalBets || 0) * 100,
+											)}
+											%
 										</p>
-										<button
-											onClick={() => {
-												setState({ outcome });
-												open();
-											}}
-											className="text-sm text-green bg-green/30 hover:bg-green/50 px-2 py-0.5 rounded-md"
-										>
-											Bet
-										</button>
+										{!props.userBet ? (
+											<button
+												onClick={() => {
+													if (props.userBet) return;
+
+													if (!props.user) {
+														openSignIn();
+														return;
+													}
+
+													setState({ outcome, prediction: { id: props.id } });
+													open();
+												}}
+												className="text-sm text-green bg-green/30 hover:bg-green/50 transition-colors px-2 py-0.5 rounded-md"
+											>
+												Bet
+											</button>
+										) : null}
 									</div>
 								</div>
 							))}
@@ -107,7 +163,7 @@ export default function PredictionCard(props: {
 			<div className="flex justify-between items-center px-2">
 				<p className="text-sm flex items-center gap-1.5 cursor-default">
 					<Vote className="w-4 h-4" />
-					{props.totalBets} bets placed
+					{props.totalBets} bet{props.totalBets === 1 ? "" : "s"} placed
 				</p>
 				<p
 					title={`${props.xp} xp`}
@@ -117,6 +173,6 @@ export default function PredictionCard(props: {
 					{props.xp}
 				</p>
 			</div>
-		</Link>
+		</div>
 	);
 }

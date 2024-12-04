@@ -137,6 +137,7 @@ export const events = pgTable("events", {
 	location: text("location"),
 	name: text("name").notNull(),
 	image: text("image").notNull(),
+	description: text("description").notNull().default(""),
 	start: timestamp("start", { mode: "date" }).notNull(),
 	end: timestamp("end", { mode: "date" }).notNull(),
 	community: text("community"),
@@ -184,6 +185,7 @@ export const predictionsRelations = relations(predictions, ({ one, many }) => ({
 		references: [events.id],
 	}),
 	outcomes: many(outcomes),
+	bets: many(bets),
 }));
 
 export const outcomes = pgTable("outcomes", {
@@ -195,17 +197,20 @@ export const outcomes = pgTable("outcomes", {
 	totalBets: integer("total_bets").notNull().default(0),
 });
 
-export const outcomesRelations = relations(outcomes, ({ one }) => ({
+export const outcomesRelations = relations(outcomes, ({ one, many }) => ({
 	prediction: one(predictions, {
 		fields: [outcomes.prediction],
 		references: [predictions.id],
 	}),
+	bets: many(bets),
 }));
 
 export const bets = pgTable("bets", {
-	id: text("id").primaryKey(),
+	id: serial("id").primaryKey(),
 	user: text("user").notNull(),
-	outcome: text("outcome").notNull(),
+	outcome: integer("outcome").notNull(),
+	prediction: text("prediction").notNull(),
+	timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
 });
 
 export const betsRelations = relations(bets, ({ one }) => ({
@@ -216,6 +221,10 @@ export const betsRelations = relations(bets, ({ one }) => ({
 	outcome: one(outcomes, {
 		fields: [bets.outcome],
 		references: [outcomes.id],
+	}),
+	prediction: one(predictions, {
+		fields: [bets.prediction],
+		references: [predictions.id],
 	}),
 }));
 

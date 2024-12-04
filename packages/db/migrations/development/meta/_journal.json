@@ -281,6 +281,55 @@
       "when": 1733259157222,
       "tag": "0039_foamy_crusher_hogan",
       "breakpoints": true
+    },
+    {
+      "idx": 40,
+      "version": "7",
+      "when": 1733272057660,
+      "tag": "0040_little_snowbird",
+      "breakpoints": true
+    },
+    {
+      "idx": 41,
+      "version": "7",
+      "when": 1733272574148,
+      "tag": "0041_special_dragon_lord",
+      "breakpoints": true
+    },
+    {
+      "idx": 42,
+      "version": "7",
+      "when": 1733272581997,
+      "tag": "0042_green_crystal",
+      "breakpoints": true
+    },
+    {
+      "idx": 43,
+      "version": "7",
+      "when": 1733273027253,
+      "tag": "0043_plain_wong",
+      "breakpoints": true
+    },
+    {
+      "idx": 44,
+      "version": "7",
+      "when": 1733273033092,
+      "tag": "0044_jazzy_magus",
+      "breakpoints": true
+    },
+    {
+      "idx": 45,
+      "version": "7",
+      "when": 1733273057673,
+      "tag": "0045_colorful_agent_brand",
+      "breakpoints": true
+    },
+    {
+      "idx": 46,
+      "version": "7",
+      "when": 1733284576750,
+      "tag": "0046_little_iron_fist",
+      "breakpoints": true
     }
   ]
 }

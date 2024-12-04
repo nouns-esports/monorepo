@@ -1,7 +1,7 @@
 "use server";
 
 import { db, votes, proposals, rounds } from "~/packages/db/schema";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { onlyRanked } from ".";
@@ -97,7 +97,7 @@ export const castVotes = onlyRanked
 				await tx
 					.update(proposals)
 					.set({
-						totalVotes: proposal.totalVotes + vote.count,
+						totalVotes: sql`${proposals.totalVotes} + ${vote.count}`,
 					})
 					.where(eq(proposals.id, vote.proposal));
 			}

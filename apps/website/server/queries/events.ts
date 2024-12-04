@@ -1,6 +1,6 @@
 import { env } from "~/env";
 import { unstable_cache as cache } from "next/cache";
-import { db, events, quests, xp } from "~/packages/db/schema";
+import { bets, db, events, quests, xp } from "~/packages/db/schema";
 import { asc, desc, eq, gt, or } from "drizzle-orm";
 
 export const getEvents = cache(
@@ -28,7 +28,7 @@ export const getFeaturedEvent = cache(
 
 export const getEvent = cache(
 	async (input: { id: string; user?: string }) => {
-		//////////////////////////
+		////////////////////////////
 		return db.query.events.findFirst({
 			where: eq(events.id, input.id),
 			with: {
@@ -51,6 +51,7 @@ export const getEvent = cache(
 				predictions: {
 					with: {
 						outcomes: true,
+						bets: input.user ? { where: eq(bets.user, input.user) } : undefined,
 					},
 				},
 				community: true,

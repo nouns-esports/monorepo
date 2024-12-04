@@ -53,25 +53,19 @@ export default async function EventPage(props: {
 								) : null}
 							</div>
 							<p className="text-grey-200 max-sm:max-h-32 h-full overflow-y-auto custom-scrollbar">
-								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-								eiusmod tempor incididunt ut labore et dolore magna aliqua.
-								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-								eiusmod tempor incididunt ut labore et dolore magna aliqua.
-								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-								eiusmod tempor incididunt ut labore et dolore magna aliqua.
-								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-								eiusmod tempor incididunt ut labore et dolore magna aliqua.
+								{event.description}
 							</p>
 							<div className="flex items-center gap-6">
 								<div className="flex items-center gap-2 text-white font-bebas-neue text-xl">
 									<CalendarDays className="w-6 h-6 text-white" />
 									<p className="mt-0.5">
-										<DateComponent timestamp={event.start} />
+										<DateComponent timestamp={event.start} short /> -{" "}
+										<DateComponent timestamp={event.end} short />
 									</p>
 								</div>
 								<div className="flex items-center gap-2 text-white font-bebas-neue text-xl">
 									<MapPinned className="w-6 h-6 text-white" />
-									<p className="mt-0.5">Atlanta, Georgia</p>
+									<p className="mt-0.5">{event.location}</p>
 								</div>
 							</div>
 						</div>
@@ -157,6 +151,9 @@ export default async function EventPage(props: {
 										(acc, outcome) => acc + outcome.totalBets,
 										0,
 									)}
+									userBet={prediction.bets?.[0]}
+									user={user}
+									className="max-lg:h-52 max-lg:flex-shrink-0"
 								/>
 							))}
 						</div>

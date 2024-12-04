@@ -212,7 +212,7 @@ export default async function Round(props: {
 					</div>
 					<div className="flex flex-col gap-4 w-full h-full">
 						<div className="flex max-md:flex-col gap-4 h-full min-h-0 w-full">
-							<div className="bg-grey-800 min-w-52 w-full h-full max-xl:max-h-80 rounded-xl flex flex-col gap-4 p-4">
+							<div className="bg-grey-800 min-w-52 max-sm:min-w-full flex-1 max-xl:max-h-80 rounded-xl flex flex-col gap-4 p-4">
 								<h2 className="font-bebas-neue text-2xl text-white">Awards</h2>
 								<div className="flex flex-col gap-4 h-full overflow-y-auto custom-scrollbar">
 									{round.awards.map((award, index) => (
@@ -255,7 +255,7 @@ export default async function Round(props: {
 									{round.awards.length > 1 ? "winners" : "winner"}
 								</p>
 							</div>
-							<div className="bg-grey-800 w-full min-w-96 max-xl:max-h-80 h-full rounded-xl flex flex-col p-4 gap-4">
+							<div className="bg-grey-800 min-w-96 max-sm:min-w-full max-xl:max-h-80 flex-1 rounded-xl flex flex-col p-4 gap-4">
 								<div className="flex items-center justify-between">
 									<h2 className="font-bebas-neue text-2xl text-white">
 										Activity
