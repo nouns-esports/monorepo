@@ -36,7 +36,15 @@ export const castInChannel = createAction<{
 
 			if (response.casts.length === 0) return false;
 
-			if (regex && !response.casts.some((cast) => regex.test(cast.text))) {
+			if (regex) {
+				for (const cast of response.casts) {
+					for (const embed of cast.embeds) {
+						if ("url" in embed && regex.test(embed.url)) {
+							return true;
+						}
+					}
+				}
+
 				return false;
 			}
 
