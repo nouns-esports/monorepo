@@ -107,7 +107,7 @@ export const communities = pgTable("communities", {
 	id: text("id").primaryKey(),
 	image: text("image").notNull(),
 	name: text("name").notNull(),
-	channel: text("channel").notNull(),
+	channel: text("channel"),
 	parent: text("parent"),
 });
 
