@@ -13,7 +13,7 @@ export const castInChannel = createAction<{
 	return {
 		description: (
 			<p>
-				Cast {actionInputs.what ?? ""} in the{" "}
+				{actionInputs.what ?? "Cast"} in the{" "}
 				<span className="text-red">/{actionInputs.channel}</span> channel
 			</p>
 		),
