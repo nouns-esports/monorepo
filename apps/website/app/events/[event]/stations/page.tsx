@@ -1,5 +1,5 @@
 import Button from "@/components/Button";
-import { useModal } from "@/components/Modal";
+import { ToggleModal } from "@/components/Modal";
 import EarnedXPModal from "@/components/modals/EarnedXPModal";
 import { getEvent } from "@/server/queries/events";
 import { getStations } from "@/server/queries/stations";
@@ -28,23 +28,32 @@ export default async function Stations(props: {
 		redirect("/events");
 	}
 
-	const claimedStations = user
-		? await db.query.xp.findMany({
-				where: and(
-					eq(xp.user, user.id),
-					inArray(
-						xp.station,
-						stations.map((station) => station.id),
-					),
-				),
-			})
-		: [];
+	if (!user) {
+		return (
+			<div className="flex flex-col gap-4 pt-32 max-xl:pt-28 max-sm:pt-20 px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
+				<h1 className="text-white text-2xl font-luckiest-guy">
+					You must sign in to continue
+				</h1>
+				<ToggleModal id="sign-in">
+					<Button>Sign in</Button>
+				</ToggleModal>
+			</div>
+		);
+	}
+
+	const claimedStations = await db.query.xp.findMany({
+		where: and(
+			eq(xp.user, user.id),
+			inArray(
+				xp.station,
+				stations.map((station) => station.id),
+			),
+		),
+	});
 
 	const justClaimed = claimedStations.find(
 		(claimed) => claimed.id === Number(searchParams.claimed),
 	);
-
-	// const { open: openSignInModal } = useModal("sign-in");
 
 	return (
 		<>
@@ -53,9 +62,6 @@ export default async function Stations(props: {
 					<h1 className="text-3xl text-white font-luckiest-guy">
 						{event.name}
 					</h1>
-					{/* {!user ? (
-						<Button onClick={() => openSignInModal()}>Sign in</Button>
-					) : null} */}
 				</div>
 				<div className="flex flex-col gap-4">
 					{stations.map((station, index) => {
