@@ -27,6 +27,7 @@ export default async function Chat(props: {
 	const subChannels = community?.children.map((child) => child.channel);
 
 	const feed = await getFeed({
+		//@ts-ignore FIX ISSUE LATER
 		channels: community
 			? [community.channel, ...(subChannels ?? [])]
 			: ["nouns-esports", ...allChannels],
