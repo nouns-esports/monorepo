@@ -6,205 +6,441 @@ import { twMerge } from "tailwind-merge";
 import { formatUnits } from "viem";
 import { getFrameMetadata, isFrameRequest } from "frog/next";
 import type { Metadata } from "next";
-import { getRound, getRoundStats } from "@/server/queries/rounds";
+import { getRound, getComments } from "@/server/queries/rounds";
 import { getPriorVotes } from "@/server/queries/votes";
 import { numberToOrdinal } from "@/utils/numberToOrdinal";
 import { getAuthenticatedUser } from "@/server/queries/users";
-import dynamic from "next/dynamic";
-import Shimmer from "@/components/Shimmer";
 import { env } from "~/env";
 import { headers } from "next/headers";
-import DateComponent from "@/components/Date";
 import RoundTimeline from "@/components/RoundTimeline";
-
-const Markdown = dynamic(() => import("@/components/lexical/Markdown"), {
-  ssr: false,
-  loading: () => <Shimmer className="h-full" />,
-});
+import Countup from "@/components/Countup";
+import { Gavel, Megaphone, TicketCheck, Users } from "lucide-react";
+import Markdown from "@/components/lexical/Markdown";
 
 export async function generateMetadata(props: {
-  params: { round: string };
+	params: Promise<{ round: string }>;
 }): Promise<Metadata> {
-  const round = await getRound({ id: props.params.round });
+	const params = await props.params;
+	const round = await getRound({ id: params.round });
 
-  if (!round) {
-    return notFound();
-  }
+	if (!round) {
+		return notFound();
+	}
 
-  return {
-    title: round.name,
-    description: null,
-    metadataBase: new URL(env.NEXT_PUBLIC_DOMAIN),
-    openGraph: {
-      type: "website",
-      images: [round.image],
-    },
-    twitter: {
-      site: "@NounsEsports",
-      card: "summary_large_image",
-      images: [round.image],
-    },
-    other: await getFrameMetadata(
-      `${env.NEXT_PUBLIC_DOMAIN}/api/frames/rounds/${props.params.round}`
-    ),
-  };
+	return {
+		title: round.name,
+		description: null,
+		metadataBase: new URL(env.NEXT_PUBLIC_DOMAIN),
+		openGraph: {
+			type: "website",
+			images: [round.image],
+		},
+		twitter: {
+			site: "@NounsEsports",
+			card: "summary_large_image",
+			images: [round.image],
+		},
+		other: await getFrameMetadata(
+			`${env.NEXT_PUBLIC_DOMAIN}/api/frames/rounds/${params.round}`,
+		),
+	};
 }
 
+type Activity = {
+	timestamp: Date;
+} & (
+	| {
+			type: "state";
+			name: string;
+			icon: React.ReactNode;
+			color: string;
+	  }
+	| {
+			type: "comment";
+			url: string;
+			user: {
+				id: string;
+				name: string;
+				image: string;
+			};
+			text: string;
+	  }
+	| {
+			type: "proposal";
+			user: {
+				id: string;
+				name: string;
+				image: string;
+			};
+	  }
+	| {
+			type: "vote";
+			count: number;
+			user: {
+				id: string;
+				name: string;
+				image: string;
+			};
+			for: {
+				user: {
+					id: string;
+					name: string;
+					image: string;
+				};
+				title: string;
+			};
+	  }
+);
+
 export default async function Round(props: {
-  params: { round: string };
-  searchParams: { p?: string };
+	params: Promise<{ round: string }>;
+	searchParams: Promise<{ p?: string }>;
 }) {
-  if (isFrameRequest(headers())) return null;
+	if (isFrameRequest(await headers())) return null;
 
-  const [round, stats] = await Promise.all([
-    getRound({ id: props.params.round }),
-    getRoundStats({ id: props.params.round }),
-  ]);
+	const params = await props.params;
+	const [user, round, comments] = await Promise.all([
+		getAuthenticatedUser(),
+		getRound({ id: params.round }),
+		getComments({ round: params.round }),
+	]);
 
-  if (!round) {
-    return notFound();
-  }
+	if (!round) {
+		return notFound();
+	}
 
-  const user = await getAuthenticatedUser();
+	const priorVotes = user
+		? await getPriorVotes({
+				user: user.id,
+				round: params.round,
+			})
+		: 0;
 
-  const priorVotes = user
-    ? await getPriorVotes({
-        user: user.id,
-        wallet: user.wallet?.address,
-        round: props.params.round,
-      })
-    : 0;
+	const commentActivity = comments.map((comment) => ({
+		type: "comment",
+		timestamp: new Date(comment.timestamp),
+		user: {
+			id: comment.author.username,
+			name: comment.author.display_name ?? "",
+			image: comment.author.pfp_url ?? "",
+		},
+		text: comment.text,
+		url: `/chat/${comment.hash}`,
+	})) satisfies Activity[];
 
-  const selectedProposal = props.searchParams.p
-    ? round.proposals.find(
-        (proposal) => proposal.id === Number(props.searchParams.p)
-      )
-    : undefined;
+	const proposalActivity = round.proposals
+		.filter((proposal) => proposal.user)
+		.map((proposal) => ({
+			type: "proposal",
+			timestamp: new Date(proposal.createdAt),
+			user: {
+				id: proposal.user.username ?? proposal.user.discord ?? proposal.user.id,
+				name: proposal.user.name,
+				image: proposal.user.image,
+			},
+		})) satisfies Activity[];
 
-  return (
-    <div className="relative flex flex-col justify-center gap-4 w-full pt-32 max-xl:pt-28 max-sm:pt-20 px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
-      <Link href="/rounds" className="text-red flex items-center gap-1 group">
-        <ArrowLeft className="w-5 h-5 text-red group-hover:-translate-x-1 transition-transform" />
-        Back to rounds
-      </Link>
-      <div className="flex flex-col gap-8">
-        <div className="flex gap-4 h-[500px] max-lg:flex-col max-lg:h-auto">
-          <div className="bg-grey-800 flex flex-col w-full h-full rounded-xl overflow-hidden max-lg:max-h-[600px] max-sm:max-h-[500px]">
-            <img
-              src={`${round.image}?img-height=500&img-onerror=redirect`}
-              className="w-full h-48 object-cover object-center max-sm:h-32"
-            />
-            <div className="flex flex-col h-full gap-2 max-sm:gap-4 p-4 min-h-0">
-              <div className="flex gap-4 items-start justify-between max-sm:flex-col">
-                <h1 className="w-full text-white font-luckiest-guy text-3xl max-xl:text-2xl">
-                  {round.name}
-                </h1>
-                <Link
-                  href={`https://warpcast.com/~/channel/${round.community.id}`}
-                  newTab
-                  className="bg-grey-500 hover:bg-grey-400 transition-colors py-2 pl-2 pr-3 flex-shrink-0 rounded-full flex text-white items-center gap-2 text-sm font-semibold w-fit whitespace-nowrap"
-                >
-                  <img
-                    src={round.community.image}
-                    className="w-5 h-5 rounded-full"
-                  />
-                  {round.community.name}
-                </Link>
-              </div>
-              <Markdown
-                markdown={round.content}
-                readOnly
-                className="overflow-y-auto h-full custom-scrollbar"
-              />
-            </div>
-          </div>
-          <div className="flex flex-col gap-4 w-full h-full">
-            <div className="flex gap-4 h-full min-h-0 w-full">
-              <div className="bg-grey-800 w-full h-full max-lg:max-h-80 rounded-xl flex flex-col gap-4 p-4">
-                <h2 className="font-bebas-neue text-2xl text-white">Awards</h2>
-                <div className="flex flex-col gap-4 h-full overflow-y-auto custom-scrollbar">
-                  {round.awards.map((award, index) => (
-                    <div
-                      key={award.id}
-                      className="flex items-center justify-between"
-                    >
-                      <div className="flex gap-2 items-center">
-                        <img
-                          src={award.asset.image}
-                          title={award.asset.name}
-                          className="w-7 h-7 rounded-md object-cover object-center"
-                        />
-                        <p className="text-white whitespace-nowrap text-sm">
-                          {award.asset.decimals
-                            ? formatUnits(
-                                BigInt(award.value),
-                                award.asset.decimals
-                              )
-                            : award.value}{" "}
-                          {award.asset.name}
-                        </p>
-                      </div>
-                      <div
-                        className={twMerge(
-                          "rounded-md bg-grey-600 font-bold text-white text-xs flex items-center justify-center w-[30px] py-0.5",
-                          index === 0 && "bg-gold-500 text-gold-900",
-                          index === 1 && "bg-silver-500 text-silver-900",
-                          index === 2 && "bg-bronze-500 text-bronze-900",
-                          index > 2 && "bg-blue-500 text-blue-900"
-                        )}
-                      >
-                        {numberToOrdinal(award.place)}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <p>
-                  {round.awards.length}{" "}
-                  {round.awards.length > 1 ? "winners" : "winner"}
-                </p>
-              </div>
-              <div className="bg-grey-800 w-full h-full rounded-xl flex flex-col p-4 gap-4 max-xl:hidden">
-                <h2 className="font-bebas-neue text-2xl text-white">Stats</h2>
-                <div className="flex flex-col gap-2 h-full">
-                  <div className="flex w-full justify-between items-center">
-                    <p className="">Proposals Created</p>
-                    <p className="text-white">{stats.proposalsCreated}</p>
-                  </div>
-                  <div className="flex w-full justify-between items-center">
-                    <p className="">Votes Cast</p>
-                    <p className="text-white">{stats.votesCast}</p>
-                  </div>
-                  <div className="flex w-full justify-between items-center">
-                    <p className="">Total Participants</p>
-                    <p className="text-white">{stats.totalParticipants}</p>
-                  </div>
-                </div>
-                <div className="flex justify-between items-center">
-                  <p>Last updated on</p>
-                  <p className="text-white whitespace-nowrap">
-                    <DateComponent />
-                  </p>
-                </div>
-              </div>
-            </div>
-            <RoundTimeline round={round} />
-          </div>
-        </div>
-        <Proposals
-          round={{
-            ...round,
-            awardCount: round.awards.length,
-          }}
-          user={
-            user
-              ? {
-                  ...user,
-                  priorVotes,
-                }
-              : undefined
-          }
-        />
-      </div>
-    </div>
-  );
+	const voteActivity = round.votes
+		.filter((vote) => vote.user && vote.proposal.user)
+		.map((vote) => ({
+			type: "vote",
+			count: vote.count,
+			timestamp: new Date(vote.timestamp),
+			user: {
+				id: vote.user.username ?? vote.user.id,
+				name: vote.user.name,
+				image: vote.user.image,
+			},
+			for: {
+				title: vote.proposal.title,
+				user: {
+					id:
+						vote.proposal.user.username ??
+						vote.proposal.user.discord ??
+						vote.proposal.user.id,
+					name: vote.proposal.user.name,
+					image: vote.proposal.user.image,
+				},
+			},
+		})) satisfies Activity[];
+
+	const participants = new Set();
+
+	for (const votesAndProposals of [...round.proposals, ...round.votes]) {
+		participants.add(votesAndProposals.user?.id);
+	}
+
+	return (
+		<div className="relative flex flex-col justify-center gap-4 w-full pt-32 max-xl:pt-28 max-sm:pt-20 px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
+			<Link
+				href={round.event ? `/events/${round.event.id}` : "/rounds"}
+				className="text-red flex items-center gap-1 group"
+			>
+				<ArrowLeft className="w-5 h-5 text-red group-hover:-translate-x-1 transition-transform" />
+				Back to {round.event ? round.event.name : "rounds"}
+			</Link>
+			<div className="flex flex-col gap-8">
+				<div className="flex gap-4 h-[500px] max-xl:flex-col max-xl:h-auto">
+					<div className="bg-grey-800 flex flex-col w-full h-full rounded-xl overflow-hidden max-lg:max-h-[600px] max-sm:max-h-[500px]">
+						<img
+							src={`${round.image}?img-height=500&img-onerror=redirect`}
+							className="w-full h-48 object-cover object-center max-sm:h-32"
+						/>
+						<div className="flex flex-col h-full gap-2 max-sm:gap-4 p-4 min-h-0">
+							<div className="flex gap-4 items-start justify-between max-sm:flex-col">
+								<h1 className="w-full text-white font-luckiest-guy text-3xl max-xl:text-2xl">
+									{round.name}
+								</h1>
+								<Link
+									href={`https://warpcast.com/~/channel/${round.community?.id ?? "nouns-esports"}`}
+									newTab
+									className="bg-grey-500 hover:bg-grey-400 transition-colors py-2 pl-2 pr-3 flex-shrink-0 rounded-full flex text-white items-center gap-2 text-sm font-semibold w-fit whitespace-nowrap"
+								>
+									<img
+										src={round.community?.image ?? "/logo/logo-square.png"}
+										className="w-5 h-5 rounded-full"
+									/>
+									{round.community?.name ?? "Nouns Esports"}
+								</Link>
+							</div>
+							<Markdown
+								markdown={round.content}
+								readOnly
+								className="overflow-y-auto h-full custom-scrollbar"
+							/>
+						</div>
+					</div>
+					<div className="flex flex-col gap-4 w-full h-full">
+						<div className="flex max-md:flex-col gap-4 h-full min-h-0 w-full">
+							<div className="bg-grey-800 min-w-52 max-sm:min-w-full flex-1 max-xl:max-h-80 rounded-xl flex flex-col gap-4 p-4">
+								<h2 className="font-bebas-neue text-2xl text-white">Awards</h2>
+								<div className="flex flex-col gap-4 h-full overflow-y-auto custom-scrollbar">
+									{round.awards.map((award, index) => (
+										<div
+											key={award.id}
+											className="flex items-center justify-between"
+										>
+											<div className="flex gap-2 items-center">
+												<img
+													src={award.asset.image}
+													title={award.asset.name}
+													className="w-7 h-7 rounded-md object-cover object-center"
+												/>
+												<p className="text-white whitespace-nowrap text-sm">
+													{award.asset.decimals
+														? formatUnits(
+																BigInt(award.value),
+																award.asset.decimals,
+															)
+														: award.value}{" "}
+													{award.asset.name}
+												</p>
+											</div>
+											<div
+												className={twMerge(
+													"rounded-md bg-grey-600 font-bold text-white text-xs flex items-center justify-center w-[30px] py-0.5",
+													index === 0 && "bg-gold-500 text-gold-900",
+													index === 1 && "bg-silver-500 text-silver-900",
+													index === 2 && "bg-bronze-500 text-bronze-900",
+													index > 2 && "bg-blue-500 text-blue-900",
+												)}
+											>
+												{numberToOrdinal(award.place)}
+											</div>
+										</div>
+									))}
+								</div>
+								<p>
+									{round.awards.length}{" "}
+									{round.awards.length > 1 ? "winners" : "winner"}
+								</p>
+							</div>
+							<div className="bg-grey-800 min-w-96 max-sm:min-w-full max-xl:max-h-80 flex-1 rounded-xl flex flex-col p-4 gap-4">
+								<div className="flex items-center justify-between">
+									<h2 className="font-bebas-neue text-2xl text-white">
+										Activity
+									</h2>
+									<div
+										title="Participants"
+										className="flex items-center gap-2 text-white pr-2"
+									>
+										<Users className="w-4 h-4" />
+										{participants.size}
+									</div>
+								</div>
+								<div className="flex flex-col gap-3 h-full overflow-y-auto custom-scrollbar">
+									{(
+										[
+											{
+												type: "state",
+												name: "Round started",
+												timestamp: new Date(round.start),
+												icon: (
+													<div className="bg-green p-1 w-5 h-5 text-white rounded-md">
+														<Megaphone className="w-full h-full" />
+													</div>
+												),
+												color: "text-green",
+											},
+											{
+												type: "state",
+												name: "Voting started",
+												timestamp: new Date(round.votingStart),
+												icon: (
+													<div className="bg-purple p-1 w-5 h-5 text-white rounded-md">
+														<TicketCheck className="w-full h-full" />
+													</div>
+												),
+												color: "text-purple",
+											},
+											{
+												type: "state",
+												name: "Round ended",
+												timestamp: new Date(round.end),
+												icon: (
+													<div className="bg-red p-1 w-5 h-5 text-white rounded-md">
+														<Gavel className="w-full h-full" />
+													</div>
+												),
+												color: "text-red",
+											},
+											...commentActivity,
+											...proposalActivity,
+											...voteActivity,
+										] satisfies Activity[]
+									)
+										.filter((event) => event.timestamp < new Date())
+										.sort(
+											(a, b) => b.timestamp.getTime() - a.timestamp.getTime(),
+										)
+										.map((event, index) => (
+											<div key={`activity-${index}`}>
+												{event.type === "state" ? (
+													<div className="flex items-center justify-between">
+														<div className="flex items-center gap-2">
+															{event.icon}
+															<p className={event.color}>{event.name}</p>
+														</div>
+														<p className="text-grey-200 text-sm">
+															<Countup date={event.timestamp} />
+														</p>
+													</div>
+												) : null}
+												{event.type === "comment" ? (
+													<div className="flex flex-col gap-0.5">
+														<div className="flex items-center justify-between">
+															<div className="flex items-center gap-2">
+																<Link
+																	href={`/users/${event.user.id}`}
+																	className="text-white flex items-center gap-2 group hover:text-white/70 transition-all"
+																>
+																	<img
+																		src={event.user.image}
+																		className={twMerge(
+																			"w-5 h-5 rounded-full object-cover group-hover:brightness-75 transition-all",
+																		)}
+																	/>
+																	{event.user.name}
+																</Link>
+																<Link
+																	href={event.url}
+																	className="text-grey-200"
+																>
+																	commented
+																</Link>
+															</div>
+															<p className="text-grey-200 text-sm">
+																<Countup date={event.timestamp} />
+															</p>
+														</div>
+														<Link
+															href={event.url}
+															className="text-sm line-clamp-2 ml-7 hover:text-grey-200/70 transition-colors"
+														>
+															"{event.text}"
+														</Link>
+													</div>
+												) : null}
+												{event.type === "proposal" ? (
+													<div className="flex items-center justify-between">
+														<div className="flex items-center gap-2">
+															<Link
+																href={`/users/${event.user.id}`}
+																className="text-white flex items-center gap-2 group hover:text-white/70 transition-all"
+															>
+																<img
+																	src={event.user.image}
+																	className={twMerge(
+																		"w-5 h-5 rounded-full object-cover group-hover:brightness-75 transition-all",
+																	)}
+																/>
+																{event.user.name}
+															</Link>
+															<p className="text-yellow">created a proposal</p>
+														</div>
+														<p className="text-grey-200 text-sm">
+															<Countup date={event.timestamp} />
+														</p>
+													</div>
+												) : null}
+												{event.type === "vote" ? (
+													<div className="flex items-center justify-between">
+														<div className="flex items-center gap-2">
+															<Link
+																href={`/users/${event.user.id}`}
+																className="text-white flex items-center gap-2 group hover:text-white/70 transition-all"
+															>
+																<img
+																	src={event.user.image}
+																	className={twMerge(
+																		"w-5 h-5 rounded-full object-cover group-hover:brightness-75 transition-all",
+																	)}
+																/>
+																{event.user.name}
+															</Link>
+															<p className="text-blue-500">voted for</p>
+															<Link
+																href={`/users/${event.for.user.id}`}
+																className="text-white flex items-center gap-2 group hover:text-white/70 transition-all"
+															>
+																<img
+																	src={event.for.user.image}
+																	className={twMerge(
+																		"w-5 h-5 rounded-full object-cover group-hover:brightness-75 transition-all",
+																	)}
+																/>
+																{event.for.user.name}
+															</Link>
+															<p className="text-blue-500">
+																with {event.count} vote
+																{event.count === 1 ? "" : "s"}
+															</p>
+														</div>
+														<p className="text-grey-200 text-sm">
+															<Countup date={event.timestamp} />
+														</p>
+													</div>
+												) : null}
+											</div>
+										))}
+								</div>
+							</div>
+						</div>
+						<RoundTimeline round={round} />
+					</div>
+				</div>
+				<Proposals
+					round={round}
+					user={
+						user
+							? {
+									...user,
+									priorVotes,
+								}
+							: undefined
+					}
+				/>
+			</div>
+		</div>
+	);
 }

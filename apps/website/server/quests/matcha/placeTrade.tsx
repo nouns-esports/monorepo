@@ -38,7 +38,7 @@ export const placeTrade = createAction<{
 			? `/matcha/tokens/${actionInputs.chain}/${actionInputs.token}`
 			: "/matcha",
 		check: async (user) => {
-			if (!user.wallet) return false;
+			if (!user.wallets[0]) return false;
 
 			if (actionInputs.token) {
 				const response = await fetch(
@@ -54,7 +54,7 @@ export const placeTrade = createAction<{
             query MyQuery {
               tradesMatcha(
                 limit: 1
-                where: {_and: [{_or: [{taker: {_eq: "${user.wallet.address.toLowerCase()}"}}, {maker: {_eq: "${user.wallet.address.toLowerCase()}"}}]}, {_or: [{takerToken: {_eq: "${actionInputs.token.toLowerCase()}"}}, {makerToken: {_eq: "${actionInputs.token.toLowerCase()}"}}]}]}
+                where: {_and: [{_or: [{taker: {_eq: "${user.wallets[0].address.toLowerCase()}"}}, {maker: {_eq: "${user.wallets[0].address.toLowerCase()}"}}]}, {_or: [{takerToken: {_eq: "${actionInputs.token.toLowerCase()}"}}, {makerToken: {_eq: "${actionInputs.token.toLowerCase()}"}}]}]}
               ) {
                 transactionHash
               }
@@ -90,7 +90,7 @@ export const placeTrade = createAction<{
             query MyQuery {
               tradesMatcha(
                 limit: 1
-                where: {taker: {_eq: "${user.wallet.address.toLowerCase()}"}}
+                where: {taker: {_eq: "${user.wallets[0].address.toLowerCase()}"}}
               ) {
                 transactionHash
               }

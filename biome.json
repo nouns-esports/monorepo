@@ -1,0 +1,25 @@
+{
+  "linter": {
+    "rules": {
+      "suspicious": {
+        "noExplicitAny": "off",
+        "noArrayIndexKey": "off"
+      },
+      "a11y": {
+        "useIframeTitle": "off",
+        "useButtonType": "off",
+        "useAltText": "off",
+        "noSvgWithoutTitle": "off",
+        "useKeyWithClickEvents": "off"
+      },
+      "style": {
+        "useNumberNamespace": "off",
+        "useNodejsImportProtocol": "off"
+      },
+      "correctness": {
+        "useExhaustiveDependencies": "off",
+        "useJsxKeyInIterable": "off"
+      }
+    }
+  }
+}

@@ -1,29 +1,14 @@
 import Button from "@/components/Button";
-import Countdown from "@/components/Countdown";
 import QuestCard from "@/components/QuestCard";
-import { getCurrentEvent } from "@/server/queries/events";
-import { getCurrentSeason } from "@/server/queries/season";
+import { getFeaturedEvent } from "@/server/queries/events";
 import { getAuthenticatedUser } from "@/server/queries/users";
 import { getQuests } from "@/server/queries/quests";
 
 export default async function Quests() {
-	const [user, season] = await Promise.all([
+	const [user, featuredEvent] = await Promise.all([
 		getAuthenticatedUser(),
-		getCurrentSeason(),
+		getFeaturedEvent(),
 	]);
-
-	if (!season) {
-		throw new Error("No season found");
-	}
-
-	const now = new Date();
-
-	const featuredEvent = season.events.find(
-		(event) =>
-			event.featured &&
-			new Date(event.start) < now &&
-			new Date(event.end) > now,
-	);
 
 	const quests = await getQuests({
 		user: user?.id,
@@ -61,13 +46,17 @@ export default async function Quests() {
 								name={quest.name}
 								description={quest.description}
 								image={quest.image}
-								community={{
-									id: quest.community.id,
-									name: quest.community.name,
-									image: quest.community.image,
-								}}
+								community={
+									quest.community
+										? {
+												id: quest.community.id,
+												name: quest.community.name,
+												image: quest.community.image,
+											}
+										: undefined
+								}
 								xp={quest.xp}
-								completed={quest.completed?.length > 0 ? true : false}
+								completed={!!(quest.completed?.length > 0)}
 								start={quest.start ?? undefined}
 								end={quest.end ?? undefined}
 								className="max-[550px]:w-64 max-[550px]:flex-shrink-0"
@@ -86,13 +75,17 @@ export default async function Quests() {
 							name={quest.name}
 							description={quest.description}
 							image={quest.image}
-							community={{
-								id: quest.community.id,
-								name: quest.community.name,
-								image: quest.community.image,
-							}}
+							community={
+								quest.community
+									? {
+											id: quest.community.id,
+											name: quest.community.name,
+											image: quest.community.image,
+										}
+									: undefined
+							}
 							xp={quest.xp}
-							completed={quest.completed?.length > 0 ? true : false}
+							completed={!!(quest.completed?.length > 0)}
 							start={quest.start ?? undefined}
 							end={quest.end ?? undefined}
 							className="max-[550px]:w-64 max-[550px]:flex-shrink-0"

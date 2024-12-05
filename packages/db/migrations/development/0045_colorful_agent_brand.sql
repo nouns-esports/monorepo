@@ -1,0 +1,1 @@
+ALTER TABLE "bets" ADD COLUMN "timestamp" timestamp NOT NULL;

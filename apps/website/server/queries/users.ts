@@ -7,7 +7,7 @@ import { unstable_cache as cache } from "next/cache";
 import { cookies } from "next/headers";
 
 export async function getAuthenticatedUser() {
-	const token = cookies().get("privy-id-token");
+	const token = (await cookies()).get("privy-id-token");
 
 	if (!token) return;
 
@@ -44,13 +44,13 @@ export async function getAuthenticatedUser() {
 			  }
 			| undefined;
 
-		let wallet:
-			| {
-					address: string;
-					chain_type: string;
-					wallet_client_type: string;
-			  }
-			| undefined;
+		const wallets: Array<{
+			address: string;
+			chain_type: string;
+			wallet_client_type: string;
+		}> = [];
+
+		let smartWallet: string | undefined;
 
 		for (const { type, ...account } of JSON.parse(
 			payload.linked_accounts as any,
@@ -58,8 +58,11 @@ export async function getAuthenticatedUser() {
 			if (type === "discord_oauth") discord = account;
 			if (type === "twitter_oauth") twitter = account;
 			if (type === "farcaster") farcaster = account;
+			if (type === "smart_wallet") {
+				smartWallet = account.address;
+			}
 			if (type === "wallet" && account.wallet_client_type !== "privy") {
-				wallet = account;
+				wallets.push(account);
 			}
 		}
 
@@ -68,7 +71,8 @@ export async function getAuthenticatedUser() {
 			discord,
 			twitter,
 			farcaster,
-			wallet,
+			wallets,
+			smartWallet,
 			nexus: await db.query.nexus.findFirst({
 				where: eq(nexus.id, payload.sub),
 				with: {
@@ -92,7 +96,7 @@ export const getUser = cache(
 			where: or(
 				eq(nexus.id, input.user),
 				eq(nexus.discord, input.user.split("#")[0]),
-				eq(nexus.farcaster, input.user),
+				eq(nexus.username, input.user),
 			),
 			with: {
 				rank: true,

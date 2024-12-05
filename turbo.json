@@ -1,7 +1,23 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": ["**/.env.*local"],
-  "pipeline": {
+  "globalEnv": [
+    "NODE_ENV",
+    "GOOGLE_API_KEY",
+    "NEYNAR_API_KEY",
+    "DATABASE_URL",
+    "PRIVY_APP_SECRET",
+    "PRIVY_VERIFICATION_KEY",
+    "PRIVY_WEBHOOK_SIGNING_KEY",
+    "DISCORD_TOKEN",
+    "DISCORD_GUILD_ID",
+    "DISCORD_CLIENT_ID",
+    "PINATA_JWT",
+    "MATCHA_API_KEY",
+    "NEXT_PUBLIC_ENVIRONMENT",
+    "NEXT_PUBLIC_PRIVY_APP_ID",
+    "NEXT_PUBLIC_DOMAIN"
+  ],
+  "tasks": {
     "build": {
       "dependsOn": ["^build"],
       "outputs": [".next/**", "!.next/cache/**"],
@@ -14,6 +30,9 @@
       "cache": false,
       "persistent": true
     },
-    "start": { "cache": false, "persistent": true }
+    "start": {
+      "cache": false,
+      "persistent": true
+    }
   }
 }

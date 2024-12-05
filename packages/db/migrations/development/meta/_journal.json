@@ -148,6 +148,195 @@
       "when": 1729875445722,
       "tag": "0020_flaky_changeling",
       "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1730587481349,
+      "tag": "0021_keen_captain_universe",
+      "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1730587979577,
+      "tag": "0022_wakeful_hellion",
+      "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1730588714527,
+      "tag": "0023_fuzzy_the_professor",
+      "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1730591401555,
+      "tag": "0024_wise_virginia_dare",
+      "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1730653238666,
+      "tag": "0025_tricky_wolverine",
+      "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1731179995591,
+      "tag": "0026_spooky_naoko",
+      "breakpoints": true
+    },
+    {
+      "idx": 27,
+      "version": "7",
+      "when": 1731180103286,
+      "tag": "0027_large_bastion",
+      "breakpoints": true
+    },
+    {
+      "idx": 28,
+      "version": "7",
+      "when": 1731180117303,
+      "tag": "0028_naive_stature",
+      "breakpoints": true
+    },
+    {
+      "idx": 29,
+      "version": "7",
+      "when": 1731435502380,
+      "tag": "0029_steady_photon",
+      "breakpoints": true
+    },
+    {
+      "idx": 30,
+      "version": "7",
+      "when": 1731716822225,
+      "tag": "0030_sad_johnny_blaze",
+      "breakpoints": true
+    },
+    {
+      "idx": 31,
+      "version": "7",
+      "when": 1731898897985,
+      "tag": "0031_worthless_stranger",
+      "breakpoints": true
+    },
+    {
+      "idx": 32,
+      "version": "7",
+      "when": 1733014758302,
+      "tag": "0032_hesitant_ultron",
+      "breakpoints": true
+    },
+    {
+      "idx": 33,
+      "version": "7",
+      "when": 1733070844408,
+      "tag": "0033_violet_starfox",
+      "breakpoints": true
+    },
+    {
+      "idx": 34,
+      "version": "7",
+      "when": 1733073614882,
+      "tag": "0034_fat_dreadnoughts",
+      "breakpoints": true
+    },
+    {
+      "idx": 35,
+      "version": "7",
+      "when": 1733073648128,
+      "tag": "0035_whole_mandrill",
+      "breakpoints": true
+    },
+    {
+      "idx": 36,
+      "version": "7",
+      "when": 1733089633449,
+      "tag": "0036_sharp_johnny_storm",
+      "breakpoints": true
+    },
+    {
+      "idx": 37,
+      "version": "7",
+      "when": 1733177911566,
+      "tag": "0037_jazzy_black_cat",
+      "breakpoints": true
+    },
+    {
+      "idx": 38,
+      "version": "7",
+      "when": 1733177920012,
+      "tag": "0038_nice_goliath",
+      "breakpoints": true
+    },
+    {
+      "idx": 39,
+      "version": "7",
+      "when": 1733259157222,
+      "tag": "0039_foamy_crusher_hogan",
+      "breakpoints": true
+    },
+    {
+      "idx": 40,
+      "version": "7",
+      "when": 1733272057660,
+      "tag": "0040_little_snowbird",
+      "breakpoints": true
+    },
+    {
+      "idx": 41,
+      "version": "7",
+      "when": 1733272574148,
+      "tag": "0041_special_dragon_lord",
+      "breakpoints": true
+    },
+    {
+      "idx": 42,
+      "version": "7",
+      "when": 1733272581997,
+      "tag": "0042_green_crystal",
+      "breakpoints": true
+    },
+    {
+      "idx": 43,
+      "version": "7",
+      "when": 1733273027253,
+      "tag": "0043_plain_wong",
+      "breakpoints": true
+    },
+    {
+      "idx": 44,
+      "version": "7",
+      "when": 1733273033092,
+      "tag": "0044_jazzy_magus",
+      "breakpoints": true
+    },
+    {
+      "idx": 45,
+      "version": "7",
+      "when": 1733273057673,
+      "tag": "0045_colorful_agent_brand",
+      "breakpoints": true
+    },
+    {
+      "idx": 46,
+      "version": "7",
+      "when": 1733284576750,
+      "tag": "0046_little_iron_fist",
+      "breakpoints": true
+    },
+    {
+      "idx": 47,
+      "version": "7",
+      "when": 1733354185790,
+      "tag": "0047_brave_yellowjacket",
+      "breakpoints": true
     }
   ]
 }

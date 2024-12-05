@@ -23,61 +23,63 @@ import winARound from "../achievements/winARound";
 import joinServer from "../achievements/joinServer";
 
 export const checkAchievements: Record<
-  string,
-  (user: AuthenticatedUser) => Promise<boolean>
+	string,
+	(user: AuthenticatedUser) => Promise<boolean>
 > = {
-  attendCall,
-  joinServer,
-  castVote,
-  castVoteWinningProposal,
-  completeQuest,
-  connectDiscord,
-  connectFarcaster,
-  connectWallet,
-  connectX,
-  createProposal,
-  enterNexus,
-  getAVote,
-  placeFirst,
-  reachChallenger,
-  reachChampion,
-  reachExplorer,
-  tenVoters,
-  winARound,
+	attendCall,
+	joinServer,
+	castVote,
+	castVoteWinningProposal,
+	completeQuest,
+	connectDiscord,
+	connectFarcaster,
+	connectWallet,
+	connectX,
+	createProposal,
+	enterNexus,
+	getAVote,
+	placeFirst,
+	reachChallenger,
+	reachChampion,
+	reachExplorer,
+	tenVoters,
+	winARound,
 };
 
 export const getAchievementsProgress = cache(
-  async (input: { user: AuthenticatedUser }) => {
-    let progress: Record<string, "claimed" | "completed" | "incomplete"> = {};
+	async (input: { user: AuthenticatedUser }) => {
+		const progress: Record<string, "claimed" | "completed" | "incomplete"> = {};
 
-    const claimRecords = await db.query.xp.findMany({
-      where: and(
-        eq(xp.user, input.user.id),
-        inArray(xp.achievement, Object.keys(checkAchievements))
-      ),
-      columns: {
-        achievement: true,
-      },
-    });
+		const claimRecords = await db.query.xp.findMany({
+			where: and(
+				eq(xp.user, input.user.id),
+				inArray(xp.achievement, Object.keys(checkAchievements)),
+			),
+			columns: {
+				achievement: true,
+			},
+		});
 
-    await Promise.all(
-      Object.entries(checkAchievements).map(async ([achievement, check]) => {
-        if (claimRecords.find((record) => record.achievement === achievement)) {
-          return (progress[achievement] = "claimed");
-        }
+		await Promise.all(
+			Object.entries(checkAchievements).map(async ([achievement, check]) => {
+				if (claimRecords.find((record) => record.achievement === achievement)) {
+					progress[achievement] = "claimed";
+					return;
+				}
 
-        const completed = await check(input.user);
+				const completed = await check(input.user);
 
-        if (completed) {
-          return (progress[achievement] = "completed");
-        }
+				if (completed) {
+					progress[achievement] = "completed";
+					return;
+				}
 
-        return (progress[achievement] = "incomplete");
-      })
-    );
+				progress[achievement] = "incomplete";
+			}),
+		);
 
-    return progress;
-  },
-  ["getAchievementsProgress"],
-  { tags: ["getAchievementsProgress"], revalidate: 60 * 10 }
+		return progress;
+	},
+	["getAchievementsProgress"],
+	{ tags: ["getAchievementsProgress"], revalidate: 60 * 10 },
 );

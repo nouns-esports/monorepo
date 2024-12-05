@@ -30,9 +30,9 @@ import ProgressCircle from "@/components/ProgressCircle";
 import EarnedXPModal from "@/components/modals/EarnedXPModal";
 
 export default async function NexusPage(props: {
-	searchParams: {
-		privy_oauth_state?: string;
-	};
+  searchParams: Promise<{
+    privy_oauth_state?: string;
+  }>;
 }) {
 	const [user, ranks] = await Promise.all([
 		getAuthenticatedUser(),

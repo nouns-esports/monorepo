@@ -1,0 +1,1 @@
+ALTER TABLE "rounds" ALTER COLUMN "end" SET NOT NULL;
