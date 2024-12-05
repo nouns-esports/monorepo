@@ -14,7 +14,7 @@ import { env } from "~/env";
 import { headers } from "next/headers";
 import RoundTimeline from "@/components/RoundTimeline";
 import Countup from "@/components/Countup";
-import { Gavel, Megaphone, TicketCheck, Users } from "lucide-react";
+import { ArrowRight, Gavel, Megaphone, TicketCheck, Users } from "lucide-react";
 import Markdown from "@/components/lexical/Markdown";
 
 export async function generateMetadata(props: {
@@ -99,10 +99,10 @@ export default async function Round(props: {
 	if (isFrameRequest(await headers())) return null;
 
 	const params = await props.params;
-	const [user, round, comments] = await Promise.all([
+	const [user, round] = await Promise.all([
 		getAuthenticatedUser(),
 		getRound({ id: params.round }),
-		getComments({ round: params.round }),
+		// getComments({ round: params.round }),
 	]);
 
 	if (!round) {
@@ -116,17 +116,17 @@ export default async function Round(props: {
 			})
 		: 0;
 
-	const commentActivity = comments.map((comment) => ({
-		type: "comment",
-		timestamp: new Date(comment.timestamp),
-		user: {
-			id: comment.author.username,
-			name: comment.author.display_name ?? "",
-			image: comment.author.pfp_url ?? "",
-		},
-		text: comment.text,
-		url: `/chat/${comment.hash}`,
-	})) satisfies Activity[];
+	// const commentActivity = comments.map((comment) => ({
+	// 	type: "comment",
+	// 	timestamp: new Date(comment.timestamp),
+	// 	user: {
+	// 		id: comment.author.username,
+	// 		name: comment.author.display_name ?? "",
+	// 		image: comment.author.pfp_url ?? "",
+	// 	},
+	// 	text: comment.text,
+	// 	url: `/chat/${comment.hash}`,
+	// })) satisfies Activity[];
 
 	const proposalActivity = round.proposals
 		.filter((proposal) => proposal.user)
@@ -268,7 +268,7 @@ export default async function Round(props: {
 										{participants.size}
 									</div>
 								</div>
-								<div className="flex flex-col gap-3 h-full overflow-y-auto custom-scrollbar">
+								<div className="flex flex-col gap-3 h-full overflow-y-auto overflow-x-hidden custom-scrollbar">
 									{(
 										[
 											{
@@ -304,7 +304,7 @@ export default async function Round(props: {
 												),
 												color: "text-red",
 											},
-											...commentActivity,
+											// ...commentActivity,
 											...proposalActivity,
 											...voteActivity,
 										] satisfies Activity[]
@@ -326,7 +326,7 @@ export default async function Round(props: {
 														</p>
 													</div>
 												) : null}
-												{event.type === "comment" ? (
+												{/* {event.type === "comment" ? (
 													<div className="flex flex-col gap-0.5">
 														<div className="flex items-center justify-between">
 															<div className="flex items-center gap-2">
@@ -360,7 +360,7 @@ export default async function Round(props: {
 															"{event.text}"
 														</Link>
 													</div>
-												) : null}
+												) : null} */}
 												{event.type === "proposal" ? (
 													<div className="flex items-center justify-between">
 														<div className="flex items-center gap-2">
@@ -388,7 +388,7 @@ export default async function Round(props: {
 														<div className="flex items-center gap-2">
 															<Link
 																href={`/users/${event.user.id}`}
-																className="text-white flex items-center gap-2 group hover:text-white/70 transition-all"
+																className="text-white flex items-center gap-1.5 group hover:text-white/70 transition-all"
 															>
 																<img
 																	src={event.user.image}
@@ -398,10 +398,12 @@ export default async function Round(props: {
 																/>
 																{event.user.name}
 															</Link>
-															<p className="text-blue-500">voted for</p>
+															<p className="flex text-blue-500 text-nowrap">
+																+{event.count}
+															</p>
 															<Link
 																href={`/users/${event.for.user.id}`}
-																className="text-white flex items-center gap-2 group hover:text-white/70 transition-all"
+																className="text-white flex items-center gap-1.5 group hover:text-white/70 transition-all"
 															>
 																<img
 																	src={event.for.user.image}
@@ -411,10 +413,6 @@ export default async function Round(props: {
 																/>
 																{event.for.user.name}
 															</Link>
-															<p className="text-blue-500">
-																with {event.count} vote
-																{event.count === 1 ? "" : "s"}
-															</p>
 														</div>
 														<p className="text-grey-200 text-sm">
 															<Countup date={event.timestamp} />

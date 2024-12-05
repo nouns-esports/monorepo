@@ -71,6 +71,8 @@ export const getRound = cache(
 							},
 						},
 					},
+					limit: 100,
+					orderBy: desc(votes.timestamp),
 				},
 				event: true,
 				minProposerRank: true,
