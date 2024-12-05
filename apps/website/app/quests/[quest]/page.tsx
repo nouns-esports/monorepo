@@ -9,9 +9,11 @@ import { twMerge } from "tailwind-merge";
 import { env } from "~/env";
 
 export async function generateMetadata(props: {
-	params: { quest: string };
+	params: Promise<{ quest: string }>;
 }): Promise<Metadata> {
-	const quest = await getQuest({ id: props.params.quest });
+	const params = await props.params;
+
+	const quest = await getQuest({ id: params.quest });
 
 	if (!quest) {
 		return notFound();
