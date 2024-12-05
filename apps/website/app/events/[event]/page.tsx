@@ -134,7 +134,7 @@ export default async function EventPage(props: {
 					</div>
 				)}
 				{event.predictions.length > 0 && (
-					<div className="flex flex-col gap-6">
+					<div id="predictions" className="flex flex-col gap-6">
 						<h2 className="text-white font-luckiest-guy text-3xl pl-32 max-2xl:pl-16 max-xl:pl-8 max-sm:pl-4">
 							Predictions
 						</h2>

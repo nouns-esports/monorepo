@@ -21,7 +21,7 @@ export const makePrediction = createAction<{ prediction?: string }>(
 			) : (
 				<p>Make a prediction</p>
 			),
-			url: "/events/nounsvitational",
+			url: "/events/nounsvitational#predictions",
 			check: async (user) => {
 				const bet = await db.query.bets.findFirst({
 					where: and(
