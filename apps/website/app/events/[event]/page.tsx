@@ -71,7 +71,7 @@ export default async function EventPage(props: {
 						</div>
 					</div>
 				</div>
-				{event.rounds.length > 0 && (
+				{/* {event.rounds.length > 0 && (
 					<div className="flex flex-col gap-6">
 						<h2 className="text-white font-luckiest-guy text-3xl pl-32 max-2xl:pl-16 max-xl:pl-8 max-sm:pl-4">
 							Rounds
@@ -100,7 +100,7 @@ export default async function EventPage(props: {
 							))}
 						</div>
 					</div>
-				)}
+				)} */}
 				{event.quests.length > 0 && (
 					<div className="flex flex-col gap-6">
 						<h2 className="text-white font-luckiest-guy text-3xl pl-32 max-2xl:pl-16 max-xl:pl-8 max-sm:pl-4">
