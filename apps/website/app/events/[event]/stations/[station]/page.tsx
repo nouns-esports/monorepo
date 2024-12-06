@@ -41,5 +41,11 @@ export default async function Station(props: {
 		})
 		.returning({ id: xp.id });
 
+	console.log(
+		params.event,
+		record.id,
+		`/events/${params.event}/stations?claimed=${record.id}`,
+	);
+
 	return redirect(`/events/${params.event}/stations?claimed=${record.id}`);
 }

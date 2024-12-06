@@ -24,6 +24,8 @@ export default async function Stations(props: {
 		getEvent({ id: params.event }),
 	]);
 
+	console.log(params.event, event);
+
 	if (!event) {
 		redirect("/events");
 	}
