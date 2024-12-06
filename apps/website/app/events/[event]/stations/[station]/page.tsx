@@ -20,7 +20,11 @@ export default async function Station(props: {
 		}),
 	]);
 
-	if (!user || !station || !currentSeason) {
+	if (!station?.event) {
+		redirect("/events");
+	}
+
+	if (!user || !currentSeason) {
 		redirect(`/events/${params.event}/stations`);
 	}
 
@@ -40,12 +44,6 @@ export default async function Station(props: {
 			amount: station.xp,
 		})
 		.returning({ id: xp.id });
-
-	console.log(
-		params.event,
-		record.id,
-		`/events/${params.event}/stations?claimed=${record.id}`,
-	);
 
 	return redirect(`/events/${params.event}/stations?claimed=${record.id}`);
 }
