@@ -177,6 +177,7 @@ export const predictions = pgTable("predictions", {
 	image: text("image").notNull(),
 	rules: jsonb("rules").notNull(),
 	xp: integer("xp").notNull().default(0),
+	closed: boolean("closed").notNull().default(false),
 });
 
 export const predictionsRelations = relations(predictions, ({ one, many }) => ({
