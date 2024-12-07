@@ -138,7 +138,7 @@ export default async function EventPage(props: {
 						<h2 className="text-white font-luckiest-guy text-3xl pl-32 max-2xl:pl-16 max-xl:pl-8 max-sm:pl-4">
 							Predictions
 						</h2>
-						<div className="grid grid-cols-4 max-2xl:grid-cols-3 max-lg:grid-cols-2 max-md:flex max-md:overflow-x-scroll max-md:scrollbar-hidden gap-4 px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
+						<div className="grid grid-cols-4 max-2xl:grid-cols-3 max-lg:grid-cols-2 max-md:flex max-md:flex-col gap-4 px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
 							{event.predictions.map((prediction) => (
 								<PredictionCard
 									key={prediction.id}
@@ -151,9 +151,10 @@ export default async function EventPage(props: {
 										(acc, outcome) => acc + outcome.totalBets,
 										0,
 									)}
+									closed={prediction.closed}
 									userBet={prediction.bets?.[0]}
 									user={user}
-									className="max-md:h-52 max-md:flex-shrink-0"
+									className="max-md:w-full max-md:flex-shrink-0"
 								/>
 							))}
 						</div>

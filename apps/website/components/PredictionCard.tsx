@@ -24,6 +24,7 @@ export default function PredictionCard(props: {
 	};
 	user?: AuthenticatedUser;
 	className?: string;
+	closed: boolean;
 }) {
 	const { open } = useModal("place-bet");
 	const { open: openSignIn } = useModal("sign-in");
@@ -34,6 +35,7 @@ export default function PredictionCard(props: {
 			// href={`/predictions/${props.id}`}
 			className={twMerge(
 				"flex flex-col gap-3 bg-grey-800 rounded-xl px-2 pb-3 pt-4 hover:bg-grey-600 transition-colors aspect-video h-full justify-between",
+				props.closed && "opacity-50 pointer-events-none",
 				props.className,
 			)}
 		>
