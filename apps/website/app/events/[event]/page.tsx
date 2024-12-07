@@ -7,7 +7,35 @@ import RoundCard from "@/components/RoundCard";
 import { getEvent } from "@/server/queries/events";
 import { getAuthenticatedUser } from "@/server/queries/users";
 import { CalendarDays, MapPinned } from "lucide-react";
+import type { Metadata } from "next";
+import { env } from "~/env";
 import { notFound } from "next/navigation";
+
+export async function generateMetadata(props: {
+	params: Promise<{ event: string }>;
+}): Promise<Metadata> {
+	const params = await props.params;
+	const event = await getEvent({ id: params.event });
+
+	if (!event) {
+		return notFound();
+	}
+
+	return {
+		title: event.name,
+		description: null,
+		metadataBase: new URL(env.NEXT_PUBLIC_DOMAIN),
+		openGraph: {
+			type: "website",
+			images: [event.image],
+		},
+		twitter: {
+			site: "@NounsEsports",
+			card: "summary_large_image",
+			images: [event.image],
+		},
+	};
+}
 
 export default async function EventPage(props: {
 	params: Promise<{ event: string }>;
