@@ -6,8 +6,8 @@ import { and, desc, eq, gte, lte } from "drizzle-orm";
 
 export const refreshRankings = createCommand({
 	description: "Refreshes the rankings",
-	// schedule: "0 15 * * *",
-	schedule: "0 * * * *",
+	schedule: "0 15 * * *",
+	// schedule: "0 * * * *",
 	then: "refresh-roles",
 	onlyAdmin: true,
 	execute: async () => {

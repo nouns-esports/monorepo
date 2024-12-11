@@ -30,9 +30,9 @@ import ProgressCircle from "@/components/ProgressCircle";
 import EarnedXPModal from "@/components/modals/EarnedXPModal";
 
 export default async function NexusPage(props: {
-  searchParams: Promise<{
-    privy_oauth_state?: string;
-  }>;
+	searchParams: Promise<{
+		privy_oauth_state?: string;
+	}>;
 }) {
 	const [user, ranks] = await Promise.all([
 		getAuthenticatedUser(),
@@ -66,12 +66,13 @@ export default async function NexusPage(props: {
 
 	const now = new Date();
 	const nextUpdate = new Date(now);
-	// nextUpdate.setUTCHours(21, 0, 0, 0); // 3pm CST is 9pm UTC
-	// if (nextUpdate <= now) {
-	//   nextUpdate.setDate(nextUpdate.getDate() + 1);
-	// }
-	nextUpdate.setMinutes(0, 0, 0);
-	nextUpdate.setHours(nextUpdate.getHours() + 1);
+	nextUpdate.setUTCHours(21, 0, 0, 0); // 3pm CST is 9pm UTC
+	if (nextUpdate <= now) {
+		nextUpdate.setDate(nextUpdate.getDate() + 1);
+	}
+	// Every hour
+	// nextUpdate.setMinutes(0, 0, 0);
+	// nextUpdate.setHours(nextUpdate.getHours() + 1);
 
 	const completed = Object.values(achievementProgress).filter(
 		(value) => value === "claimed",
