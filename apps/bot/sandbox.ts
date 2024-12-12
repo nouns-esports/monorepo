@@ -1,24 +1,30 @@
-import { privyClient } from ".";
+import { eq } from "drizzle-orm";
+import { db, rounds } from "~/packages/db/schema";
 
-const users = await privyClient.getUsers();
+const allRounds = await db.query.rounds.findMany({
+	with: {
+		votes: true,
+		proposals: true,
+	},
+});
 
-for (let i = 0; i < users.length; i++) {
-	console.log(`Generating wallets ${i + 1}/${users.length}`);
-	const user = users[i];
+await db.transaction(async (tx) => {
+	for (const round of allRounds) {
+		const participants = new Set<string>();
 
-	try {
-		await privyClient.importUser({
-			linkedAccounts: user.linkedAccounts,
-			createEthereumWallet: true,
-			createEthereumSmartWallet: true,
-		});
-	} catch (e) {
-		console.error(
-			user.id,
-			user.linkedAccounts.map((a) => a.type),
-			e,
-		);
+		for (const vote of round.votes) {
+			participants.add(vote.user);
+		}
+
+		for (const proposal of round.proposals) {
+			participants.add(proposal.user);
+		}
+
+		await tx
+			.update(rounds)
+			.set({
+				totalParticipants: participants.size,
+			})
+			.where(eq(rounds.id, round.id));
 	}
-}
-
-console.log("done");
+});

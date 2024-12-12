@@ -327,6 +327,7 @@ export const rounds = pgTable("rounds", {
 	end: timestamp("end", { mode: "date" }).notNull(),
 	minProposerRank: integer("min_proposer_rank"),
 	minVoterRank: integer("min_voter_rank"),
+	totalParticipants: integer("total_participants").notNull().default(0),
 });
 
 export const roundsRelations = relations(rounds, ({ one, many }) => ({
@@ -626,6 +627,39 @@ export const creationsRelations = relations(creations, ({ one }) => ({
 		references: [nexus.id],
 	}),
 }));
+
+// export const shops = pgTable("shops", {
+// 	id: text("id").primaryKey(),
+// 	name: text("name").notNull(),
+// });
+
+// export const shopsRelations = relations(shops, ({ many }) => ({
+// 	products: many(products),
+// }));
+
+// // These can be different than the actual product in the store
+// export const products = pgTable("products", {
+// 	id: text("id").primaryKey(),
+// 	shop: text("shop").notNull(),
+// 	title: text("title").notNull(),
+// 	description: text("description").notNull(),
+// 	sizes: text("sizes", { enum: ["XS", "S", "M", "L", "XL", "2XL"] })
+// 		.array()
+// 		.notNull()
+// 		.default([]),
+// 	variants: jsonb("variants")
+// 		.array()
+// 		.$type<Array<{ id: string; name: string; image: string; price: number }>>()
+// 		.notNull()
+// 		.default([]),
+// });
+
+// export const productsRelations = relations(products, ({ one }) => ({
+// 	shop: one(shops, {
+// 		fields: [products.shop],
+// 		references: [shops.id],
+// 	}),
+// }));
 
 // export const posts = pgTable("posts", {
 // 	id: serial("id").primaryKey(),

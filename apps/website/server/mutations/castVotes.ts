@@ -20,6 +20,9 @@ export const castVotes = onlyRanked
 				votes: {
 					where: eq(votes.user, ctx.user.id),
 				},
+				proposals: {
+					where: eq(proposals.user, ctx.user.id),
+				},
 				minVoterRank: true,
 			},
 		});
@@ -51,6 +54,15 @@ export const castVotes = onlyRanked
 		let votesUsed = round.votes.reduce((votes, vote) => votes + vote.count, 0);
 
 		await db.transaction(async (tx) => {
+			if (round.proposals.length === 0) {
+				await tx
+					.update(rounds)
+					.set({
+						totalParticipants: sql`${rounds.totalParticipants} + 1`,
+					})
+					.where(eq(rounds.id, round.id));
+			}
+
 			for (const vote of parsedInput.votes) {
 				if (vote.count === 0) continue;
 
