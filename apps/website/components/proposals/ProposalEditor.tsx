@@ -13,7 +13,7 @@ import dynamic from "next/dynamic";
 import Shimmer from "../Shimmer";
 import { useAction } from "next-safe-action/hooks";
 import type { getRoundWithProposal } from "@/server/queries/rounds";
-import { Trash2 } from "lucide-react";
+import { Trash2, X } from "lucide-react";
 import PinImage from "../PinImage";
 import VideoPlayer from "../VideoEmbedPlayer";
 import { env } from "~/env";
@@ -219,7 +219,31 @@ export default function ProposalEditor(props: {
 					),
 				}[props.round.type]
 			}
-
+			<div className="flex flex-col gap-2">
+				<div className="flex items-center justify-between">
+					<h2 className="font-luckiest-guy text-white text-2xl">Socials</h2>
+					<button
+						onClick={() =>
+							toast.custom((t) => (
+								<div className="flex animate-in fade-in-50 slide-in-from-top-4 items-center gap-3 border border-grey-600 rounded-xl p-2 pr-3 bg-grey-800">
+									<img
+										src="/logo/logo-square.png"
+										className="w-12 h-12 rounded-xl"
+									/>
+									<div className="flex flex-col">
+										<h2 className="text-white">New achievement unlocked</h2>
+										<p className="text-grey-200 text-sm">
+											Create your first proposal
+										</p>
+									</div>
+								</div>
+							))
+						}
+					>
+						test toast
+					</button>
+				</div>
+			</div>
 			<div className="flex flex-col gap-4">
 				<div className="flex flex-col gap-2">
 					<h2 className="font-luckiest-guy text-white text-2xl">Submit</h2>

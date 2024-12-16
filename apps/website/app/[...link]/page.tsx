@@ -31,7 +31,7 @@ export default async function LinkRoute(props: {
 		}
 
 		redirect(
-			`${url.origin}${url.pathname}${params.link.slice(1).join("/")}?${url.searchParams.toString()}`,
+			`${url.origin}${url.pathname}${params.link.slice(1).join("/")}${url.searchParams.toString() ? `?${url.searchParams.toString()}` : ""}`,
 			RedirectType.replace,
 		);
 	}

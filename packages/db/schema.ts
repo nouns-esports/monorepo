@@ -80,6 +80,31 @@ export const notifications = pgTable("notifications", {
 	read: boolean("read").notNull().default(false),
 });
 
+// // // XP is treated in the UI like a notification but uses the xp table instead
+// export const newNotifications = pgTable("new_notifications", {
+// 	id: serial("id").primaryKey(),
+// 	user: text("user").notNull(),
+// 	timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
+// 	layout: text("layout", {
+// 		enum: ["standard", "icon", "compact"], // etc...
+// 	}).notNull(),
+// 	image: text("image").notNull(),
+// 	title: text("title").notNull(),
+// 	description: text("description").notNull(),
+// 	url: text("url"),
+// 	read: boolean("read").notNull().default(false),
+// });
+
+// export const newNotificationsRelations = relations(
+// 	newNotifications,
+// 	({ one }) => ({
+// 		user: one(nexus, {
+// 			fields: [newNotifications.user],
+// 			references: [nexus.id],
+// 		}),
+// 	}),
+// );
+
 export const notificationsRelations = relations(notifications, ({ one }) => ({
 	user: one(nexus, {
 		fields: [notifications.user],
@@ -627,39 +652,6 @@ export const creationsRelations = relations(creations, ({ one }) => ({
 		references: [nexus.id],
 	}),
 }));
-
-// export const shops = pgTable("shops", {
-// 	id: text("id").primaryKey(),
-// 	name: text("name").notNull(),
-// });
-
-// export const shopsRelations = relations(shops, ({ many }) => ({
-// 	products: many(products),
-// }));
-
-// // These can be different than the actual product in the store
-// export const products = pgTable("products", {
-// 	id: text("id").primaryKey(),
-// 	shop: text("shop").notNull(),
-// 	title: text("title").notNull(),
-// 	description: text("description").notNull(),
-// 	sizes: text("sizes", { enum: ["XS", "S", "M", "L", "XL", "2XL"] })
-// 		.array()
-// 		.notNull()
-// 		.default([]),
-// 	variants: jsonb("variants")
-// 		.array()
-// 		.$type<Array<{ id: string; name: string; image: string; price: number }>>()
-// 		.notNull()
-// 		.default([]),
-// });
-
-// export const productsRelations = relations(products, ({ one }) => ({
-// 	shop: one(shops, {
-// 		fields: [products.shop],
-// 		references: [shops.id],
-// 	}),
-// }));
 
 // export const posts = pgTable("posts", {
 // 	id: serial("id").primaryKey(),
