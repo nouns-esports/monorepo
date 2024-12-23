@@ -76,6 +76,12 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
 	const user = await getAuthenticatedUser();
 	return (
 		<html lang="en" className="/scroll-smooth overflow-x-hidden scrollbar-main">
+			<head>
+				<meta
+					name="fc:frame"
+					content='{"version":"next","imageUrl":"https://nouns.gg/banner-red.png","button":{"title":"Launch","action":{"type":"launch_frame","name":"Nouns","url":"https://beta.nouns.gg","splashImageUrl":"https://nouns.gg/logo/logo-square.png","splashBackgroundColor":"#E93737"}}}'
+				/>
+			</head>
 			<body
 				className={`${cabin.variable} ${luckiestGuy.variable} ${bebasNeue.variable} ${londrinaSolid.variable} bg-black text-grey-200 font-cabin selection:text-white selection:bg-red flex flex-col items-center w-full h-full`}
 			>

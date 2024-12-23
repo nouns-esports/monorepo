@@ -7,6 +7,7 @@ import { useState } from "react";
 import { twMerge } from "tailwind-merge";
 import Link from "./Link";
 import { readNotifications } from "@/server/mutations/readNotifications";
+import { Toaster } from "./Toasts";
 
 export default function Notifications(props: {
 	notifications: Awaited<ReturnType<typeof getNotifications>>;
@@ -74,6 +75,8 @@ export default function Notifications(props: {
 					/>
 				)}
 			</div>
+			<Toaster />
+
 			{show ? (
 				<div
 					className={twMerge(

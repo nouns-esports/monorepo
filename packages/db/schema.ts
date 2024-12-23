@@ -80,7 +80,7 @@ export const notifications = pgTable("notifications", {
 	read: boolean("read").notNull().default(false),
 });
 
-// // // XP is treated in the UI like a notification but uses the xp table instead
+// // // XP is treated in the UI like a notification but uses the xp table insteadb
 // export const newNotifications = pgTable("new_notifications", {
 // 	id: serial("id").primaryKey(),
 // 	user: text("user").notNull(),
