@@ -31,12 +31,6 @@ export const placeRank = onlyUser.action(async ({ ctx }) => {
 	);
 
 	if (!response.ok) {
-		console.log(
-			"NOT IN SERVER APPEARANLTY",
-			ctx.user.discord.subject,
-			await response.json(),
-		);
-
 		throw new Error("User not in server");
 	}
 

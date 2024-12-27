@@ -1,24 +1,20 @@
+import { db, snapshots } from "~/packages/db/schema";
 import { privyClient } from ".";
 
 const users = await privyClient.getUsers();
+const now = new Date();
 
-for (let i = 0; i < users.length; i++) {
-	console.log(`Generating wallets ${i + 1}/${users.length}`);
-	const user = users[i];
-
-	try {
-		await privyClient.importUser({
-			linkedAccounts: user.linkedAccounts,
-			createEthereumWallet: true,
-			createEthereumSmartWallet: true,
-		});
-	} catch (e) {
-		console.error(
-			user.id,
-			user.linkedAccounts.map((a) => a.type),
-			e,
-		);
+await db.transaction(async (tx) => {
+	let count = 0;
+	for (const user of users) {
+		count++;
+		console.log(`User ${count}/${users.length}`);
+		if (user.linkedAccounts.some((account) => account.type === "wallet")) {
+			await tx.insert(snapshots).values({
+				user: user.id,
+				type: "cgx-airdrop",
+				timestamp: now,
+			});
+		}
 	}
-}
-
-console.log("done");
+});

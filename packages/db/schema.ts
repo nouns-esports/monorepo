@@ -37,6 +37,7 @@ export const snapshotTypes = {
 	"visit-link": "",
 	genesis: "Were included in the Genesis snapshot",
 	"check-in": "Checked in to an event",
+	"cgx-airdrop": "Were included in the CGX Airdrop",
 } as const;
 
 export const snapshots = pgTable("snapshots", {
