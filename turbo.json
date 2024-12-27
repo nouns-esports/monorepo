@@ -15,7 +15,8 @@
     "MATCHA_API_KEY",
     "NEXT_PUBLIC_ENVIRONMENT",
     "NEXT_PUBLIC_PRIVY_APP_ID",
-    "NEXT_PUBLIC_DOMAIN"
+    "NEXT_PUBLIC_DOMAIN",
+    "CGX_AIRDROP_URL"
   ],
   "tasks": {
     "build": {
