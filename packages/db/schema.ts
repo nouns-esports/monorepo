@@ -63,68 +63,17 @@ export const notifications = pgTable("notifications", {
 	id: serial("id").primaryKey(),
 	user: text("user").notNull(),
 	timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
-	type: text("type", {
-		enum: [
-			"round-started",
-			"round-voting-started",
-			"round-won",
-			"quest-created",
-			"event-started",
-			"nexus-rankup",
-		],
-	}).notNull(),
-	round: text("round"),
-	quest: text("quest"),
-	event: text("event"),
-	ranking: integer("ranking"),
+	image: text("image").notNull(),
+	title: text("title").notNull(),
+	description: text("description").notNull(),
+	url: text("url"),
 	read: boolean("read").notNull().default(false),
 });
-
-// // // XP is treated in the UI like a notification but uses the xp table insteadb
-// export const newNotifications = pgTable("new_notifications", {
-// 	id: serial("id").primaryKey(),
-// 	user: text("user").notNull(),
-// 	timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
-// 	layout: text("layout", {
-// 		enum: ["standard", "icon", "compact"], // etc...
-// 	}).notNull(),
-// 	image: text("image").notNull(),
-// 	title: text("title").notNull(),
-// 	description: text("description").notNull(),
-// 	url: text("url"),
-// 	read: boolean("read").notNull().default(false),
-// });
-
-// export const newNotificationsRelations = relations(
-// 	newNotifications,
-// 	({ one }) => ({
-// 		user: one(nexus, {
-// 			fields: [newNotifications.user],
-// 			references: [nexus.id],
-// 		}),
-// 	}),
-// );
 
 export const notificationsRelations = relations(notifications, ({ one }) => ({
 	user: one(nexus, {
 		fields: [notifications.user],
 		references: [nexus.id],
-	}),
-	round: one(rounds, {
-		fields: [notifications.round],
-		references: [rounds.id],
-	}),
-	quest: one(quests, {
-		fields: [notifications.quest],
-		references: [quests.id],
-	}),
-	event: one(events, {
-		fields: [notifications.event],
-		references: [events.id],
-	}),
-	ranking: one(rankings, {
-		fields: [notifications.ranking],
-		references: [rankings.id],
 	}),
 }));
 
@@ -176,7 +125,6 @@ export const eventsRelations = relations(events, ({ one, many }) => ({
 	}),
 	quests: many(quests),
 	rounds: many(rounds),
-	notifications: many(notifications),
 	attendees: many(attendees),
 	predictions: many(predictions),
 }));
@@ -375,7 +323,6 @@ export const roundsRelations = relations(rounds, ({ one, many }) => ({
 		fields: [rounds.minVoterRank],
 		references: [ranks.id],
 	}),
-	notifications: many(notifications),
 }));
 
 // add user column and update it when they claim the award
@@ -462,6 +409,7 @@ export const nexusRelations = relations(nexus, ({ one, many }) => ({
 		references: [ranks.id],
 	}),
 	creations: many(creations),
+	notifications: many(notifications),
 	// posts: many(posts),
 	// reactions: many(reactions),
 }));
@@ -528,7 +476,6 @@ export const questRelations = relations(quests, ({ one, many }) => ({
 		fields: [quests.event],
 		references: [events.id],
 	}),
-	notifications: many(notifications),
 }));
 
 export const xp = pgTable("xp", {
@@ -595,7 +542,6 @@ export const rankingsRelations = relations(rankings, ({ one, many }) => ({
 		fields: [rankings.rank],
 		references: [ranks.id],
 	}),
-	notifications: many(notifications),
 }));
 
 export const votes = pgTable("votes", {

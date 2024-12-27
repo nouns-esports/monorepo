@@ -8,6 +8,7 @@ import { create } from "zustand";
 type Item = {
 	id: string;
 	image: string;
+	title: string;
 	count: number;
 	price: string;
 };
@@ -58,11 +59,23 @@ export default function CartModal() {
 					<X className="w-4 h-4 text-grey-200" />
 				</button>
 			</div>
-			<div className="flex flex-col gap-4">
+			<div className="flex flex-col gap-4 max-h-80 overflow-y-auto custom-scrollbar">
 				{items.map((item) => (
 					<div key={item.id} className="flex items-center gap-4">
-						<img src={item.image} alt={item.id} className="w-16 h-16" />
-						<p>{item.count}</p>
+						<div className="flex items-center gap-2 bg-grey-600 rounded-lg p-2">
+							<img
+								src={item.image}
+								alt={item.id}
+								className="w-12 h-12 object-cover"
+							/>
+						</div>
+						<div className="flex flex-col gap-2">
+							<p className="text-white line-clamp-1">{item.title}</p>
+							<div className="flex items-center gap-2">
+								<p className="text-white">${item.price}</p>
+								<p className="text-grey-200">x{item.count}</p>
+							</div>
+						</div>
 					</div>
 				))}
 			</div>

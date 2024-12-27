@@ -2,6 +2,7 @@
 
 import Link from "./Link";
 import { useCartModal } from "./modals/CartModal";
+import { toast } from "./Toasts";
 
 export default function ProductCard(props: {
 	id: string;
@@ -31,6 +32,12 @@ export default function ProductCard(props: {
 						image: props.image,
 						count: 1,
 						price: props.price,
+						title: props.name,
+					});
+					toast.custom({
+						image: props.image,
+						title: props.name,
+						description: "Added to cart",
 					});
 				}}
 				className="flex justify-center items-center gap-2 w-full text-black bg-white hover:bg-white/70 font-semibold rounded-lg p-2.5 transition-colors"

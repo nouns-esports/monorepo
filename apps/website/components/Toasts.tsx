@@ -1,27 +1,47 @@
-export function Toaster() {
-	return (
-		<div className="absolute top-6 -right-4 pt-4 w-[300px] flex flex-col gap-2 items-end max-sm:fixed max-sm:top-0 max-sm:right-0 max-sm:w-full max-sm:px-4 max-sm:items-center">
-			<Toast
-				image="/logo/logo-square.png"
-				title="New achievement unlocked"
-				description="Create your first proposal"
-			/>
-		</div>
-	);
-}
+"use client";
 
-export function Toast(props: {
-	image: string;
-	title: string;
-	description: string;
-}) {
-	return (
-		<div className="flex w-fit animate-in fade-in-50 slide-in-from-top-4 items-center gap-3 border border-grey-600 rounded-xl p-2 pr-3 bg-grey-800">
-			<img src={props.image} className="w-12 h-12 rounded-xl" />
-			<div className="flex flex-col">
-				<h2 className="text-white">{props.title}</h2>
-				<p className="text-grey-200 text-sm">{props.description}</p>
+import { toast as hotToast } from "react-hot-toast";
+import { Level } from "./Level";
+import { Sparkles } from "lucide-react";
+
+export const toast = {
+	custom: (props: {
+		image: string;
+		title: string;
+		description: string;
+	}) =>
+		hotToast.custom((t: any) => (
+			<div className="flex w-72 animate-in fade-in-50 slide-in-from-top-4 items-center gap-3 border border-grey-600 rounded-xl p-2 pr-3 bg-grey-800">
+				<img src={props.image} className="w-12 h-12 rounded-xl" />
+				<div className="flex flex-col">
+					<h2 className="text-white line-clamp-1">{props.title}</h2>
+					<p className="text-grey-200 text-sm">{props.description}</p>
+				</div>
 			</div>
-		</div>
-	);
-}
+		)),
+	xp: (amount: number) =>
+		hotToast.custom((t: any) => (
+			<div className="flex flex-col w-80 animate-in fade-in-50 slide-in-from-top-4 gap-3 border border-grey-600 rounded-xl p-2 pr-3 bg-grey-800">
+				<div className="flex gap-2 justify-between items-center">
+					<p className="text-white">You earned XP!</p>
+					<p className="text-white flex items-center gap-1.5">
+						<Sparkles className="w-4 h-4 text-green" />
+						{amount}
+					</p>
+				</div>
+				<Level xp={amount} />
+			</div>
+		)),
+	error: (message: string) =>
+		hotToast.custom((t: any) => (
+			<div className="flex w-fit animate-in fade-in-50 slide-in-from-top-4 items-center gap-3 border border-grey-600 rounded-xl p-2 pr-3 bg-grey-800">
+				{message}
+			</div>
+		)),
+	success: (message: string) =>
+		hotToast.custom((t: any) => (
+			<div className="flex w-fit animate-in fade-in-50 slide-in-from-top-4 items-center gap-3 border border-grey-600 rounded-xl p-2 pr-3 bg-grey-800">
+				{message}
+			</div>
+		)),
+};

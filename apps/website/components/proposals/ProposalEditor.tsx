@@ -5,7 +5,6 @@ import TextInput from "../form/TextInput";
 import Button from "../Button";
 import { createProposal } from "@/server/mutations/createProposal";
 import { $generateHtmlFromNodes } from "@lexical/html";
-import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import LimitMeter from "../LimitMeter";
 import { updateProposal } from "@/server/mutations/updateProposal";
@@ -18,6 +17,7 @@ import PinImage from "../PinImage";
 import VideoPlayer from "../VideoEmbedPlayer";
 import { env } from "~/env";
 import { videoEmbedFromLink } from "@/utils/videoEmbedFromLink";
+import { toast } from "../Toasts";
 
 const Markdown = dynamic(() => import("../lexical/Markdown"), {
 	ssr: false,
@@ -222,28 +222,7 @@ export default function ProposalEditor(props: {
 			<div className="flex flex-col gap-2">
 				<div className="flex items-center justify-between">
 					<h2 className="font-luckiest-guy text-white text-2xl">Socials</h2>
-					<button
-						onClick={() =>
-							toast.custom((t) => (
-								<div className="flex w-full animate-in fade-in-50 slide-in-from-top-4 items-center gap-3 border border-grey-600 rounded-xl p-2 pr-3 bg-grey-800">
-									<img
-										src="/logo/logo-square.png"
-										className="w-12 h-12 rounded-xl"
-									/>
-									<div className="flex flex-col">
-										<h2 className="text-white text-nowrap">
-											New achievement unlocked
-										</h2>
-										<p className="text-grey-200 text-sm text-nowrap">
-											Create your first proposal
-										</p>
-									</div>
-								</div>
-							))
-						}
-					>
-						test toast
-					</button>
+					<button onClick={() => toast.xp(200)}>test toast</button>
 				</div>
 			</div>
 			<div className="flex flex-col gap-4">

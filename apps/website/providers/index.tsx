@@ -48,7 +48,7 @@ export default function Providers(props: {
 			<ReactQuery>
 				<Wagmi>
 					{props.children}
-					{/* <Toaster position="top-center" /> */}
+					<Toaster position="top-center" />
 				</Wagmi>
 			</ReactQuery>
 		</Privy>
