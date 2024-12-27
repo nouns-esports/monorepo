@@ -9,7 +9,13 @@ await db.transaction(async (tx) => {
 	for (const user of users) {
 		count++;
 		console.log(`User ${count}/${users.length}`);
-		if (user.linkedAccounts.some((account) => account.type === "wallet")) {
+		if (
+			user.linkedAccounts.some(
+				(account) =>
+					account.type === "wallet" && account.walletClientType !== "privy",
+			)
+		) {
+			console.log("User has wallet");
 			await tx.insert(snapshots).values({
 				user: user.id,
 				type: "cgx-airdrop",
