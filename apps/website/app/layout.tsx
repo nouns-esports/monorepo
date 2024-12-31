@@ -78,8 +78,21 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
 		<html lang="en" className="/scroll-smooth overflow-x-hidden scrollbar-main">
 			<head>
 				<meta
-					name="fc:frame"
-					content='{"version":"next","imageUrl":"https://nouns.gg/banner-red.png","button":{"title":"Launch","action":{"type":"launch_frame","name":"Nouns","url":"https://beta.nouns.gg","splashImageUrl":"https://nouns.gg/logo/logo-square.png","splashBackgroundColor":"#E93737"}}}'
+					property="fc:frame"
+					content='{
+						"version": "next",
+						"imageUrl": "https://nouns.gg/og-banner.webp",
+						"button": {
+							"title": "Launch",
+							"action": {
+								"type": "launch_frame",
+								"name": "Nouns",
+								"url": "https://nouns.gg",
+								"splashImageUrl": "https://nouns.gg/og-banner.webp",
+								"splashBackgroundColor": "#E93737"
+							}
+						}
+					}'
 				/>
 			</head>
 			<body
