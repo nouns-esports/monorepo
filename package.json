@@ -28,7 +28,7 @@
     "packages/*"
   ],
   "dependencies": {
-    "@farcaster/frame-sdk": "^0.0.20",
+    "@farcaster/frame-sdk": "^0.0.22",
     "@farcaster/hub-nodejs": "^0.12.7",
     "@lexical/headless": "^0.14.5",
     "@lexical/html": "^0.14.5",
