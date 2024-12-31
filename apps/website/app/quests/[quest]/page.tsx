@@ -103,6 +103,7 @@ export default async function Quest(props: {
 				<div className="flex flex-col gap-4">
 					<div className="bg-grey-800 rounded-xl overflow-hidden">
 						<img
+							alt={quest.name}
 							src={quest.image}
 							className="w-full h-48 object-cover object-center max-sm:h-32"
 						/>

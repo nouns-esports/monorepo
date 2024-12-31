@@ -2,7 +2,14 @@
 
 import { z } from "zod";
 import { onlyRanked } from ".";
-import { db, nexus, quests, seasons, xp } from "~/packages/db/schema";
+import {
+	db,
+	nexus,
+	notifications,
+	quests,
+	seasons,
+	xp,
+} from "~/packages/db/schema";
 import { and, desc, eq, gte, lte, sql } from "drizzle-orm";
 import { getAction } from "../queries/quests";
 import { revalidatePath } from "next/cache";
@@ -39,7 +46,7 @@ export const completeQuest = onlyRanked
 		}
 
 		if (quest.start && new Date(quest.start) > now) {
-			throw new Error("Quest hasnt started yet");
+			throw new Error("Quest hasn't started yet");
 		}
 
 		if (quest.end && new Date(quest.end) < now) {
@@ -84,6 +91,15 @@ export const completeQuest = onlyRanked
 		}
 
 		let newXP = 0;
+		const notification = {
+			user: ctx.user.id,
+			title: "You completed a quest!",
+			description: quest.name,
+			image: quest.image,
+			read: true,
+			url: `/quests/${quest.id}`,
+			timestamp: now,
+		};
 
 		await db.transaction(async (tx) => {
 			await tx.insert(xp).values({
@@ -93,6 +109,8 @@ export const completeQuest = onlyRanked
 				timestamp: now,
 				season: currentSeason.id,
 			});
+
+			await tx.insert(notifications).values(notification);
 
 			const updateXP = await tx
 				.update(nexus)
@@ -111,5 +129,5 @@ export const completeQuest = onlyRanked
 		revalidatePath("/nexus");
 		revalidatePath("/quests");
 
-		return newXP;
+		return { newXP, notification };
 	});

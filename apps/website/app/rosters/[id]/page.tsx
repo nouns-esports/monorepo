@@ -54,7 +54,11 @@ export default async function RosterPage(props: {
 	return (
 		<div className="flex flex-col gap-12 max-lg:gap-8 pt-36 max-xl:pt-28 max-sm:pt-24 px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
 			<div className="flex gap-4 items-center">
-				<img src={community.image} className="h-12 aspect-square rounded-lg" />
+				<img
+					alt={community.name}
+					src={community.image}
+					className="h-12 aspect-square rounded-lg"
+				/>
 				<h1 className="font-luckiest-guy text-white text-4xl">
 					{rosters.length > 1 ? community.name : rosters[0].name}
 				</h1>

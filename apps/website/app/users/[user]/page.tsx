@@ -37,6 +37,7 @@ export default async function User(props: {
 					<div className="flex justify-between gap-6 p-6 w-full rounded-xl bg-grey-800">
 						<div className="flex gap-4">
 							<img
+								alt={user.name}
 								src={user.image}
 								className="w-12 h-12 rounded-full max-sm:w-12 max-sm:h-12"
 							/>
@@ -47,6 +48,7 @@ export default async function User(props: {
 									</h1>
 									{user.rank ? (
 										<img
+											alt={user.rank.name}
 											src={user.rank.image}
 											className="h-6 w-6 object-contain"
 											title={user.rank.name}

@@ -85,6 +85,7 @@ export default function Menu() {
 								className="text-nowrap flex gap-4 items-center"
 							>
 								<img
+									alt="Nouns logo"
 									src="/logo/logo-square.png"
 									className="h-10 w-10 rounded-md"
 								/>
@@ -156,7 +157,7 @@ export default function Menu() {
 							</li>
 							{/* <li className="text-nowrap">
                 <Link href="/discord" className="flex items-center gap-4">
-                  <img src="/discord.jpg" className="h-10 w-10 rounded-md" />
+                  <img alt="Discord logo" src="/discord.jpg" className="h-10 w-10 rounded-md" />
                   <div>
                     <p className="font-bebas-neue text-lg">Discord</p>
                     <p className="text-grey-200">Join the Discord server</p>

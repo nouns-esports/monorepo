@@ -15,6 +15,7 @@ export const createNexus = onlyUser
 			image: z.string().optional(),
 			bio: z.string().optional(),
 			interests: z.array(z.string()).optional(),
+			canReceiveEmails: z.boolean().optional(),
 		}),
 	)
 	.action(async ({ parsedInput, ctx }) => {
@@ -96,6 +97,7 @@ export const createNexus = onlyUser
 				discord: ctx.user.discord?.username.split("#")[0],
 				username: ctx.user.farcaster?.username ?? undefined,
 				fid: ctx.user.farcaster?.fid ?? undefined,
+				canRecieveEmails: parsedInput.canReceiveEmails ?? false,
 			});
 		});
 

@@ -48,6 +48,7 @@ export const checkAchievements: Record<
 
 export const getAchievementsProgress = cache(
 	async (input: { user: AuthenticatedUser }) => {
+		//
 		const progress: Record<string, "claimed" | "completed" | "incomplete"> = {};
 
 		const claimRecords = await db.query.xp.findMany({

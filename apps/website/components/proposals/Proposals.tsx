@@ -328,6 +328,7 @@ export default function Proposals(props: {
 									{
 										markdown: proposal.image ? (
 											<img
+												alt={proposal.title}
 												src={`${proposal.image}?img-width=500&img-onerror=redirect`}
 												className={twMerge(
 													"flex w-full h-full object-cover overflow-hidden rounded-xl select-none",
@@ -392,12 +393,14 @@ export default function Proposals(props: {
 										),
 										image: (
 											<img
+												alt={proposal.title}
 												src={`${proposal.image}?img-width=500&img-onerror=redirect`}
 												className="flex w-full h-full object-cover overflow-hidden rounded-xl select-none"
 											/>
 										),
 										video: (
 											<img
+												alt={proposal.title}
 												src={`${proposal.image}?img-width=500&img-onerror=redirect`}
 												className="flex w-full h-full object-cover overflow-hidden rounded-xl select-none aspect-video"
 											/>
@@ -411,11 +414,13 @@ export default function Proposals(props: {
 											className="flex gap-2 items-center text-white"
 										>
 											<img
+												alt={proposal.user.name}
 												src={proposal.user.image}
 												className="h-6 w-6 rounded-full"
 											/>
 											{proposal.user.name}
 											<img
+												alt={proposal.user.rank?.name}
 												title={proposal.user.rank?.name}
 												src={proposal.user.rank?.image}
 												className="h-5 w-5 rounded-full object-contain"
@@ -463,7 +468,11 @@ export default function Proposals(props: {
 						))}
 					{props.round.proposals.length < 1 ? (
 						<div className="mt-4 flex gap-4 justify-center items-center">
-							<img src="/fire-sticker.png" alt="" className="h-32" />
+							<img
+								src="/fire-sticker.png"
+								alt="No proposals graphic"
+								className="h-32"
+							/>
 							<p className="text-grey-200 text-lg max-w-80">
 								There are no proposals yet.{" "}
 								{state === "Proposing" ? "Be the first to propose?" : ""}

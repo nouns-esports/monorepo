@@ -1,0 +1,1 @@
+ALTER TABLE "nexus" ADD COLUMN "can_recieve_emails" boolean DEFAULT false NOT NULL;

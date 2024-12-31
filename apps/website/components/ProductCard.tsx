@@ -18,12 +18,16 @@ export default function ProductCard(props: {
 			newTab
 			className="flex flex-col gap-4 rounded-xl bg-grey-800 hover:bg-grey-600 transition-colors p-4"
 		>
-			<img src={props.image} className="aspect-square w-full object-contain" />
+			<img
+				alt={props.name}
+				src={props.image}
+				className="aspect-square w-full object-contain"
+			/>
 			<div className="flex flex-col gap-2">
 				<h2 className="text-white">{props.name}</h2>
 				<p className="text-white">${props.price}</p>
 			</div>
-			<button
+			{/* <button
 				onClick={(e) => {
 					e.preventDefault();
 					e.stopPropagation();
@@ -43,7 +47,7 @@ export default function ProductCard(props: {
 				className="flex justify-center items-center gap-2 w-full text-black bg-white hover:bg-white/70 font-semibold rounded-lg p-2.5 transition-colors"
 			>
 				Add to Cart
-			</button>
+			</button> */}
 		</Link>
 	);
 }

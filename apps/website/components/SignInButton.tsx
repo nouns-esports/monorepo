@@ -42,6 +42,7 @@ export default function SignInButton(props: { user?: AuthenticatedUser }) {
 			</button>
 			{/* <div className="text-gold-800 font-bold flex items-center gap-1 pr-4">
 					<img
+						alt="Gold coin"
 						src="https://ipfs.nouns.gg/ipfs/QmWnuBw39Vc77gcBXEdxQLRUiWaM7pN9Bqk7cqZ8MiUB5w"
 						className="rounded-full h-5 w-5 shadow-xl"
 					/>

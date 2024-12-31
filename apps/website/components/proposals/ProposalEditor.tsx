@@ -222,7 +222,6 @@ export default function ProposalEditor(props: {
 			<div className="flex flex-col gap-2">
 				<div className="flex items-center justify-between">
 					<h2 className="font-luckiest-guy text-white text-2xl">Socials</h2>
-					<button onClick={() => toast.xp(200)}>test toast</button>
 				</div>
 			</div>
 			<div className="flex flex-col gap-4">

@@ -9,6 +9,7 @@ export default function Attribution(props: { id: string; creator: Nexus }) {
 			className="relative rounded-md w-full h-full flex drop-shadow-lg overflow-hidden bg-gradient-to-br from-[#F3B5FD] to-[#F66FD0] group/tag text-white font-semibold items-center"
 		>
 			<img
+				alt={props.creator.name}
 				src={props.creator.image}
 				draggable={false}
 				className="h-full select-none"

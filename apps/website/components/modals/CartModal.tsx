@@ -65,7 +65,7 @@ export default function CartModal() {
 						<div className="flex items-center gap-2 bg-grey-600 rounded-lg p-2">
 							<img
 								src={item.image}
-								alt={item.id}
+								alt={item.title}
 								className="w-12 h-12 object-cover"
 							/>
 						</div>

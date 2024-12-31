@@ -147,7 +147,8 @@ const config: Config = {
 						background: "#4D4D4D",
 						cursor: "grabbing",
 					},
-					paddingRight: "12px", // Increase right padding to accommodate the scrollbar
+
+					paddingRight: "12px", // Add padding
 				},
 				".scrollbar-main": {
 					"&::-webkit-scrollbar": {

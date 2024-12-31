@@ -397,6 +397,7 @@ export const nexus = pgTable("nexus", {
 	twitter: text("twitter"),
 	discord: text("discord"),
 	fid: integer("fid"),
+	canRecieveEmails: boolean("can_recieve_emails").notNull().default(false),
 });
 
 export const nexusRelations = relations(nexus, ({ one, many }) => ({
@@ -713,6 +714,32 @@ export const creationsRelations = relations(creations, ({ one }) => ({
 // 		fields: [embeds.url],
 // 		references: [links.url],
 // 	}),
+// }));
+
+// export const products = pgTable("products", {
+// 	id: text("id").primaryKey(),
+// 	shopifyId: text("shopify_id").notNull(),
+// 	name: text("name").notNull(),
+// 	image: text("image").notNull(),
+// 	price: numeric("price", { precision: 78 }).notNull(),
+// 	collection: text("collection"),
+// });
+
+// export const productsRelations = relations(products, ({ one }) => ({
+// 	collection: one(collections, {
+// 		fields: [products.collection],
+// 		references: [collections.id],
+// 	}),
+// }));
+
+// export const collections = pgTable("collections", {
+// 	id: text("id").primaryKey(),
+// 	name: text("name").notNull(),
+// 	image: text("image").notNull(),
+// });
+
+// export const collectionsRelations = relations(collections, ({ many }) => ({
+// 	products: many(products),
 // }));
 
 const schema = {

@@ -27,12 +27,11 @@ import { CaretDown, CaretUp } from "phosphor-react-sc";
 import Achievements from "@/components/Achievements";
 import { getAchievementsProgress } from "@/server/queries/achievements";
 import ProgressCircle from "@/components/ProgressCircle";
-import EarnedXPModal from "@/components/modals/EarnedXPModal";
 
 export default async function NexusPage(props: {
-  searchParams: Promise<{
-    privy_oauth_state?: string;
-  }>;
+	searchParams: Promise<{
+		privy_oauth_state?: string;
+	}>;
 }) {
 	const [user, ranks] = await Promise.all([
 		getAuthenticatedUser(),
@@ -83,6 +82,7 @@ export default async function NexusPage(props: {
 				<div className="flex items-center justify-between">
 					<div className="flex items-center gap-4 max-sm:gap-3">
 						<img
+							alt={user.nexus.name}
 							src={user.nexus.image}
 							className="w-10 h-10 max-sm:w-8 max-sm:h-8 rounded-full"
 						/>
@@ -120,6 +120,7 @@ export default async function NexusPage(props: {
 											{user.nexus.rank.name}
 										</p>
 										<img
+											alt={user.nexus.rank.name}
 											src={user.nexus.rank.image}
 											className="h-10 object-contain"
 										/>
@@ -140,7 +141,11 @@ export default async function NexusPage(props: {
 					) : (
 						<div className="bg-grey-800 col-span-2 max-lg:col-span-4 rounded-xl flex flex-col items-center justify-center p-4 gap-4 h-[400px]">
 							<div className="flex items-center gap-4">
-								<img src="/discord.jpg" className="w-10 h-10 rounded-md" />
+								<img
+									alt="Discord logo"
+									src="/discord.jpg"
+									className="w-10 h-10 rounded-md"
+								/>
 								<p className="text-white text-2xl font-bebas-neue leading-none">
 									You are not ranked
 								</p>
@@ -192,6 +197,7 @@ export default async function NexusPage(props: {
 											<p className="text-white w-6">{ranking.position}</p>
 											<div className="flex gap-2 items-center">
 												<img
+													alt={ranking.user.name}
 													src={ranking.user.image}
 													className="w-6 h-6 rounded-full object-cover"
 												/>
@@ -219,6 +225,7 @@ export default async function NexusPage(props: {
 												</div>
 											) : null}
 											<img
+												alt={ranking.rank.name}
 												title={ranking.rank.name}
 												className="w-6 h-6 object-contain"
 												src={ranking.rank.image}

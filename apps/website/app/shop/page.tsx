@@ -13,11 +13,13 @@ export default async function Shop() {
 				<div className="px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4 flex flex-col gap-16 max-sm:gap-8">
 					<div className="relative w-full aspect-[3/1] max-sm:aspect-auto max-md:h-64 max-sm:h-48 rounded-xl overflow-hidden">
 						<img
+							alt="DOPAMINE x NOUNS"
 							src="https://shop.nouns.gg/cdn/shop/files/DSC4949.png?v=1722017983"
 							className="w-full h-full object-cover brightness-75"
 						/>
 						<div className="absolute top-4 left-4 flex gap-4 items-center">
 							<img
+								alt="DOPAMINE x NOUNS"
 								src="https://shop.nouns.gg/cdn/shop/t/18/assets/logo.png?v=158144175520643272851725295698"
 								className="w-12 h-12"
 							/>

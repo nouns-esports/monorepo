@@ -54,6 +54,7 @@ export default async function Home() {
 					<div className="flex items-center justify-between px-4 pt-3">
 						<div className="flex items-center text-2xl font-luckiest-guy gap-3 text-white ">
 							<img
+								alt="Farcaster logo"
 								src="/farcaster.svg"
 								draggable={false}
 								className="w-6 h-6 select-none"

@@ -52,6 +52,8 @@ export async function getAuthenticatedUser() {
 
 		let smartWallet: string | undefined;
 
+		let email: string | undefined;
+
 		for (const { type, ...account } of JSON.parse(
 			payload.linked_accounts as any,
 		)) {
@@ -64,6 +66,7 @@ export async function getAuthenticatedUser() {
 			if (type === "wallet" && account.wallet_client_type !== "privy") {
 				wallets.push(account);
 			}
+			if (type === "email") email = account.address;
 		}
 
 		return {
@@ -73,6 +76,7 @@ export async function getAuthenticatedUser() {
 			farcaster,
 			wallets,
 			smartWallet,
+			email,
 			nexus: await db.query.nexus.findFirst({
 				where: eq(nexus.id, payload.sub),
 				with: {
