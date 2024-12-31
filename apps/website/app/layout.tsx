@@ -66,6 +66,22 @@ export const metadata = {
 		card: "summary_large_image",
 		images: ["/og-banner.webp"],
 	},
+	other: {
+		"fc:frame": JSON.stringify({
+			version: "next",
+			imageUrl: "https://nouns.gg/og-banner.webp",
+			button: {
+				title: "Launch",
+				action: {
+					type: "launch_frame",
+					name: "Nouns",
+					url: "https://nouns.gg",
+					splashImageUrl: "https://nouns.gg/og-banner.webp",
+					splashBackgroundColor: "#E93737",
+				},
+			},
+		}),
+	},
 } satisfies Metadata;
 
 export const viewport = {
@@ -76,25 +92,6 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
 	const user = await getAuthenticatedUser();
 	return (
 		<html lang="en" className="/scroll-smooth overflow-x-hidden scrollbar-main">
-			<head>
-				<meta
-					property="fc:frame"
-					content='{
-						"version": "next",
-						"imageUrl": "https://nouns.gg/og-banner.webp",
-						"button": {
-							"title": "Launch",
-							"action": {
-								"type": "launch_frame",
-								"name": "Nouns",
-								"url": "https://nouns.gg",
-								"splashImageUrl": "https://nouns.gg/og-banner.webp",
-								"splashBackgroundColor": "#E93737"
-							}
-						}
-					}'
-				/>
-			</head>
 			<body
 				className={`${cabin.variable} ${luckiestGuy.variable} ${bebasNeue.variable} ${londrinaSolid.variable} bg-black text-grey-200 font-cabin selection:text-white selection:bg-red flex flex-col items-center w-full h-full`}
 			>

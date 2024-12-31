@@ -1,6 +1,5 @@
 import Button from "@/components/Button";
 import { ToggleModal } from "@/components/Modal";
-import EarnedXPModal from "@/components/modals/EarnedXPModal";
 import { getEvent } from "@/server/queries/events";
 import { getStations } from "@/server/queries/stations";
 import { getAuthenticatedUser } from "@/server/queries/users";
@@ -100,17 +99,6 @@ export default async function Stations(props: {
 					})}
 				</div>
 			</div>
-			{searchParams.claimed ? (
-				<EarnedXPModal
-					from={searchParams.claimed.toString()}
-					xp={
-						user?.nexus && justClaimed
-							? user.nexus.xp + justClaimed.amount
-							: undefined
-					}
-					confetti
-				/>
-			) : null}
 		</>
 	);
 }
