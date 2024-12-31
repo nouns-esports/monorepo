@@ -39,10 +39,10 @@ const londrinaSolid = Londrina_Solid({
 
 export const metadata = {
 	title: {
-		default: "Nouns Esports",
-		template: "Nouns Esports - %s",
+		default: "Nouns",
+		template: "Nouns - %s",
 	},
-	description: "Leading the revolution in community driven esports!",
+	description: "Esports, powered by you!",
 	keywords: [
 		"esports",
 		"nouns",
