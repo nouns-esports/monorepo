@@ -7,7 +7,35 @@ import RoundCard from "@/components/RoundCard";
 import { getEvent } from "@/server/queries/events";
 import { getAuthenticatedUser } from "@/server/queries/users";
 import { CalendarDays, MapPinned } from "lucide-react";
+import type { Metadata } from "next";
+import { env } from "~/env";
 import { notFound } from "next/navigation";
+
+export async function generateMetadata(props: {
+	params: Promise<{ event: string }>;
+}): Promise<Metadata> {
+	const params = await props.params;
+	const event = await getEvent({ id: params.event });
+
+	if (!event) {
+		return notFound();
+	}
+
+	return {
+		title: event.name,
+		description: null,
+		metadataBase: new URL(env.NEXT_PUBLIC_DOMAIN),
+		openGraph: {
+			type: "website",
+			images: [event.image],
+		},
+		twitter: {
+			site: "@NounsEsports",
+			card: "summary_large_image",
+			images: [event.image],
+		},
+	};
+}
 
 export default async function EventPage(props: {
 	params: Promise<{ event: string }>;
@@ -73,7 +101,7 @@ export default async function EventPage(props: {
 						</div>
 					</div>
 				</div>
-				{event.rounds.length > 0 && (
+				{/* {event.rounds.length > 0 && (
 					<div className="flex flex-col gap-6">
 						<h2 className="text-white font-luckiest-guy text-3xl pl-32 max-2xl:pl-16 max-xl:pl-8 max-sm:pl-4">
 							Rounds
@@ -102,7 +130,7 @@ export default async function EventPage(props: {
 							))}
 						</div>
 					</div>
-				)}
+				)} */}
 				{event.quests.length > 0 && (
 					<div className="flex flex-col gap-6">
 						<h2 className="text-white font-luckiest-guy text-3xl pl-32 max-2xl:pl-16 max-xl:pl-8 max-sm:pl-4">
@@ -136,11 +164,11 @@ export default async function EventPage(props: {
 					</div>
 				)}
 				{event.predictions.length > 0 && (
-					<div className="flex flex-col gap-6">
+					<div id="predictions" className="flex flex-col gap-6">
 						<h2 className="text-white font-luckiest-guy text-3xl pl-32 max-2xl:pl-16 max-xl:pl-8 max-sm:pl-4">
 							Predictions
 						</h2>
-						<div className="grid grid-cols-4 max-2xl:grid-cols-3 max-lg:grid-cols-2 max-md:flex max-md:overflow-x-scroll max-md:scrollbar-hidden gap-4 px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
+						<div className="grid grid-cols-4 max-2xl:grid-cols-3 max-lg:grid-cols-2 max-md:flex max-md:flex-col gap-4 px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
 							{event.predictions.map((prediction) => (
 								<PredictionCard
 									key={prediction.id}
@@ -153,9 +181,10 @@ export default async function EventPage(props: {
 										(acc, outcome) => acc + outcome.totalBets,
 										0,
 									)}
+									closed={prediction.closed}
 									userBet={prediction.bets?.[0]}
 									user={user}
-									className="max-md:h-52 max-md:flex-shrink-0"
+									className="max-md:w-full max-md:flex-shrink-0"
 								/>
 							))}
 						</div>

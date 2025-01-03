@@ -23,12 +23,12 @@ export default async function User(props: {
 		return notFound();
 	}
 
-	const feed = user.fid
-		? await getFeed({
-				fid: user.fid,
-				viewerFid: authenticatedUser?.farcaster?.fid,
-			})
-		: [];
+	// const feed = user.fid
+	// 	? await getFeed({
+	// 			fid: user.fid,
+	// 			viewerFid: authenticatedUser?.farcaster?.fid,
+	// 		})
+	// 	: [];
 
 	return (
 		<>
@@ -63,16 +63,18 @@ export default async function User(props: {
 								</div>
 							</div>
 						</div>
-						<div className="max-sm:hidden">
-							<Button href="/nexus">View Nexus</Button>
-						</div>
+						{user.id === authenticatedUser?.id ? (
+							<div className="max-sm:hidden">
+								<Button href="/nexus">View Nexus</Button>
+							</div>
+						) : null}
 					</div>
-					<div className="flex flex-col gap-4">
+					{/* <div className="flex flex-col gap-4">
 						<h2 className="text-white text-2xl font-luckiest-guy">Posts</h2>
 						{feed.map((cast) => (
 							<CastCard key={cast.hash} cast={cast} />
 						))}
-					</div>
+					</div> */}
 				</div>
 			</div>
 		</>

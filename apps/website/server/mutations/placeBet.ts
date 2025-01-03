@@ -32,6 +32,10 @@ export const placeBet = onlyRanked
 			throw new Error("You have already placed a bet on this prediction");
 		}
 
+		if (prediction.closed) {
+			throw new Error("Prediction is closed");
+		}
+
 		await db.transaction(async (tx) => {
 			await tx.insert(bets).values({
 				user: ctx.user.id,

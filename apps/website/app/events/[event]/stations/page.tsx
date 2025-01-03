@@ -17,6 +17,8 @@ export default async function Stations(props: {
 	const params = await props.params;
 	const searchParams = await props.searchParams;
 
+	console.log("searchParams", searchParams);
+
 	const [user, stations, event] = await Promise.all([
 		getAuthenticatedUser(),
 		getStations({ event: params.event }),

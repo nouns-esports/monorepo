@@ -65,10 +65,7 @@ export default async function Quest(props: {
 	const active =
 		quest.active &&
 		(quest.start ? new Date(quest.start) < now : true) &&
-		(quest.end ? new Date(quest.end) > now : true) &&
-		(quest.event
-			? new Date(quest.event.start) < now && new Date(quest.event.end) > now
-			: true);
+		(quest.end ? new Date(quest.end) > now : true);
 
 	const claimed = !!quest.completed?.[0];
 

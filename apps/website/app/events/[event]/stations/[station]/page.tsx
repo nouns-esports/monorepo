@@ -3,6 +3,7 @@ import { getAuthenticatedUser } from "@/server/queries/users";
 import { redirect } from "next/navigation";
 import { and, desc, eq, gte, lte } from "drizzle-orm";
 import { getStation } from "@/server/queries/stations";
+import CheckInOnClient from "@/components/CheckInOnClient";
 
 export default async function Station(props: {
 	params: Promise<{ event: string; station: string }>;
@@ -20,15 +21,27 @@ export default async function Station(props: {
 		}),
 	]);
 
-	if (!user || !station || !currentSeason) {
+	if (!station?.event) {
+		redirect("/events");
+	}
+
+	if (!currentSeason) {
 		redirect(`/events/${params.event}/stations`);
+	}
+
+	if (!user) {
+		return <CheckInOnClient station={station} />;
 	}
 
 	const alreadyClaimed = await db.query.xp.findFirst({
 		where: and(eq(xp.user, user.id), eq(xp.station, Number(params.station))),
 	});
 
-	if (alreadyClaimed) return redirect(`/events/${params.event}/stations`);
+	if (alreadyClaimed) {
+		return redirect(
+			`/events/${params.event}/stations?claimed=${alreadyClaimed.id}`,
+		);
+	}
 
 	const [record] = await db
 		.insert(xp)
@@ -40,6 +53,8 @@ export default async function Station(props: {
 			amount: station.xp,
 		})
 		.returning({ id: xp.id });
+
+	console.log("claiming", record.id);
 
 	return redirect(`/events/${params.event}/stations?claimed=${record.id}`);
 }

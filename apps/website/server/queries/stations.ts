@@ -8,6 +8,9 @@ export const getStation = cache(
 	async (input: { id: number }) => {
 		return db.query.stations.findFirst({
 			where: eq(stations.id, input.id),
+			with: {
+				event: true,
+			},
 		});
 	},
 	["getStation"],

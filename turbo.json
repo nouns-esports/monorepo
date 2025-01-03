@@ -17,6 +17,7 @@
     "NEXT_PUBLIC_PRIVY_APP_ID",
     "NEXT_PUBLIC_DOMAIN",
     "SHOPIFY_STOREFRONT_PRIVATE_ACCESS_TOKEN"
+    "CGX_AIRDROP_URL"
   ],
   "tasks": {
     "build": {

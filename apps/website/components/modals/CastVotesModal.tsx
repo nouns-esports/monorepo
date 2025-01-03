@@ -5,7 +5,18 @@ import { Modal, useModal } from "../Modal";
 import { useEffect } from "react";
 import { toast } from "../Toasts";
 import { useAction } from "next-safe-action/hooks";
-import { ArrowRight, X } from "lucide-react";
+import { useRouter } from "next/navigation";
+import {
+	ArrowRight,
+	Check,
+	Plus,
+	RefreshCcw,
+	Save,
+	UserPen,
+	Vote,
+	X,
+} from "lucide-react";
+import { twMerge } from "tailwind-merge";
 import { castVotes } from "@/server/mutations/castVotes";
 import Link from "../Link";
 import { usePrivy } from "@privy-io/react-auth";
@@ -49,6 +60,7 @@ export default function CastVotesModal(props: {
 						className="w-96 rounded-xl"
 					/>
 					<Link
+						newTab
 						href={`https://warpcast.com/~/compose?embeds[]=${env.NEXT_PUBLIC_DOMAIN}/api/frames/rounds/${props.round}/votes/${user?.id}/`}
 						className="flex gap-1 items-center group hover:opacity-80 transition-opacity text-red"
 					>

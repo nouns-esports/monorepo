@@ -19,6 +19,7 @@ import { visitLink } from "../quests/online/visitLink";
 import { placeTrade } from "../quests/matcha/placeTrade";
 import { claimAchievement } from "../quests/achievements/claimAchievement";
 import { castVote } from "../quests/rounds/castVote";
+import { makePrediction } from "../quests/predictions/makePrediction";
 export const actions: Record<string, ReturnType<typeof createAction>> = {
 	// Discord
 	attendCall,
@@ -51,6 +52,9 @@ export const actions: Record<string, ReturnType<typeof createAction>> = {
 
 	// Rounds
 	castVote,
+
+	// Predictions
+	makePrediction,
 };
 
 export async function getAction(input: {

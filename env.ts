@@ -1,6 +1,7 @@
 import { createEnv } from "@t3-oss/env-nextjs";
 import { z } from "zod";
 
+// This will error if a variable is not set in the globalEnv property in turbo.json
 export const env = createEnv({
 	server: {
 		GOOGLE_API_KEY: z.string().min(1),
@@ -15,6 +16,7 @@ export const env = createEnv({
 		PINATA_JWT: z.string().min(1),
 		MATCHA_API_KEY: z.string().min(1),
 		SHOPIFY_STOREFRONT_PRIVATE_ACCESS_TOKEN: z.string().min(1),
+		CGX_AIRDROP_URL: z.string().min(1),
 	},
 	client: {
 		NEXT_PUBLIC_ENVIRONMENT: z.enum(["development", "production"]),

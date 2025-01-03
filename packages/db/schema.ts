@@ -37,6 +37,7 @@ export const snapshotTypes = {
 	"visit-link": "",
 	genesis: "Were included in the Genesis snapshot",
 	"check-in": "Checked in to an event",
+	"cgx-airdrop": "Were included in the CGX Airdrop",
 } as const;
 
 export const snapshots = pgTable("snapshots", {
@@ -151,6 +152,7 @@ export const predictions = pgTable("predictions", {
 	image: text("image").notNull(),
 	rules: jsonb("rules").notNull(),
 	xp: integer("xp").notNull().default(0),
+	closed: boolean("closed").notNull().default(false),
 });
 
 export const predictionsRelations = relations(predictions, ({ one, many }) => ({

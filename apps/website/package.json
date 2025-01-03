@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "bun --env-file=../../.env.development next dev --turbo",
-    "build": "bun --env-file=../../.env.production next build",
-    "start": "bun --env-file=../../.env.production next start"
+    "build": "bun --env-file=../../.env.production,../../.env next build",
+    "start": "bun --env-file=../../.env.production,../../.env next start"
   }
 }

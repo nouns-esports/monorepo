@@ -33,7 +33,9 @@ export default function ShareVotesModal(props: { round: string }) {
 				/>
 			</div>
 			<Link
-				href={`/chat?post=true&embeds[]=${env.NEXT_PUBLIC_DOMAIN}/api/frames/rounds/${props.round}/votes/${user?.id}/`}
+				newTab
+				// href={`/chat?post=true&embeds[]=${env.NEXT_PUBLIC_DOMAIN}/api/frames/rounds/${props.round}/votes/${user?.id}/`}
+				href={`https://warpcast.com/~/compose?embeds[]=${env.NEXT_PUBLIC_DOMAIN}/api/frames/rounds/${props.round}/votes/${user?.id}/`}
 				className="flex gap-1 items-center group hover:opacity-80 transition-opacity text-red"
 			>
 				Share this image
