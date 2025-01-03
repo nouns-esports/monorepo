@@ -99,12 +99,13 @@ export const communityRelations = relations(communities, ({ one, many }) => ({
 	}),
 }));
 
-// export const articles = pgTable("articles", {
-//   id: text("id").primaryKey(),
-//   title: text("title").notNull(),
-//   // content: jsonb
-//   createdAt: timestamp("createdAt", { mode: "date" }).notNull(),
-// });
+export const articles = pgTable("articles", {
+	id: text("id").primaryKey(),
+	title: text("title").notNull(),
+	image: text("image").notNull(),
+	content: jsonb("content").$type<Record<string, any>>().notNull(),
+	publishedAt: timestamp("publishedAt", { mode: "date" }).notNull(),
+});
 
 export const events = pgTable("events", {
 	id: text("id").primaryKey(),
@@ -789,6 +790,7 @@ const schema = {
 	outcomesRelations,
 	bets,
 	betsRelations,
+	articles,
 	// posts,
 	// postsRelations,
 	// reactions,
@@ -830,3 +832,4 @@ export type Prediction = typeof predictions.$inferSelect;
 export type Station = typeof stations.$inferSelect;
 export type Link = typeof links.$inferSelect;
 export type Attendee = typeof attendees.$inferSelect;
+export type Article = typeof articles.$inferSelect;

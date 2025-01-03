@@ -38,7 +38,7 @@ export default function NotificationsModal(props: {
 				</button>
 			</div>
 
-			<div className="flex flex-col max-h-[400px] overflow-y-auto custom-scrollbar">
+			<div className="flex flex-col gap-2 max-h-[400px] overflow-y-auto custom-scrollbar">
 				{props.notifications.map((notification) => {
 					const Component = notification.url ? Link : "div";
 
@@ -56,7 +56,7 @@ export default function NotificationsModal(props: {
 							<img
 								alt={notification.title}
 								src={notification.image}
-								className="w-12 h-12 rounded-xl"
+								className="w-12 h-12 rounded-xl object-cover"
 							/>
 							<div className="flex flex-col">
 								<h2 className="text-white">{notification.title}</h2>

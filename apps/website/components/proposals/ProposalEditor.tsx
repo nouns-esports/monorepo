@@ -219,11 +219,11 @@ export default function ProposalEditor(props: {
 					),
 				}[props.round.type]
 			}
-			<div className="flex flex-col gap-2">
+			{/* <div className="flex flex-col gap-2">
 				<div className="flex items-center justify-between">
 					<h2 className="font-luckiest-guy text-white text-2xl">Socials</h2>
 				</div>
-			</div>
+			</div> */}
 			<div className="flex flex-col gap-4">
 				<div className="flex flex-col gap-2">
 					<h2 className="font-luckiest-guy text-white text-2xl">Submit</h2>

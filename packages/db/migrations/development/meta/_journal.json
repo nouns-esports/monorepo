@@ -365,6 +365,13 @@
       "when": 1735580202931,
       "tag": "0051_good_goblin_queen",
       "breakpoints": true
+    },
+    {
+      "idx": 52,
+      "version": "7",
+      "when": 1735671964242,
+      "tag": "0052_stale_rogue",
+      "breakpoints": true
     }
   ]
 }
