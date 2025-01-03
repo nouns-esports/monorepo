@@ -55,7 +55,7 @@ export default function NotificationsModal(props: {
 						>
 							<img
 								alt={notification.title}
-								src={notification.image}
+								src={`${notification.image}?img-height=200&img-onerror=redirect`}
 								className="w-12 h-12 rounded-xl object-cover"
 							/>
 							<div className="flex flex-col">
