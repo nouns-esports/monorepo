@@ -184,7 +184,7 @@ export default async function Header() {
 											Events
 										</li>
 									</Link>
-									<Link href="/shop">
+									<Link href="https://shop.nouns.gg" newTab>
 										<li className="flex gap-2 items-center opacity-100 hover:opacity-80 transition-opacity relative z-[60]">
 											<ShoppingBag className="w-5 h-5" />
 											Shop
