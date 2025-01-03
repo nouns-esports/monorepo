@@ -15,18 +15,6 @@ import { relations } from "drizzle-orm";
 import { Pool } from "pg";
 import { env } from "~/env";
 
-// export const links = pgTable("links", {
-// 	id: serial("id").primaryKey(),
-// 	path: text("path").unique(),
-// 	url: text("url").notNull().unique(),
-// 	metadata: jsonb("metadata").$type<
-// 		| { type: "image" }
-// 		| { type: "video" }
-// 		| { type: "website"; image: string; title: string; description: string }
-// 		| { type: "frame" }
-// 	>(),
-// });
-
 export const links = pgTable("links", {
 	id: text("id").primaryKey(),
 	url: text("url").notNull(),
@@ -386,6 +374,7 @@ export const proposalsRelations = relations(proposals, ({ one, many }) => ({
 	}),
 }));
 
+// store shipping address in shopify customer object
 export const nexus = pgTable("nexus", {
 	id: text("id").primaryKey(),
 	username: text("username").unique(),
@@ -414,8 +403,6 @@ export const nexusRelations = relations(nexus, ({ one, many }) => ({
 	}),
 	creations: many(creations),
 	notifications: many(notifications),
-	// posts: many(posts),
-	// reactions: many(reactions),
 }));
 
 export const seasons = pgTable("seasons", {
@@ -603,147 +590,63 @@ export const creationsRelations = relations(creations, ({ one }) => ({
 	}),
 }));
 
-// export const posts = pgTable("posts", {
-// 	id: serial("id").primaryKey(),
-// 	hash: text("hash").unique(),
-// 	author: text("author").notNull(),
-// 	createdAt: timestamp("created_at", { mode: "date" }).notNull(),
-// 	channel: text("channel"),
-// 	parent: integer("parent"),
-// 	thread: integer("thread"),
-// 	upvotes: integer("upvotes").notNull().default(0),
-// 	reposts: integer("reposts").notNull().default(0),
-// 	comments: integer("comments").notNull().default(0),
-// });
+export const products = pgTable("products", {
+	id: text("id").primaryKey(),
+	shopifyId: text("shopify_id").notNull(),
+	name: text("name").notNull(),
+	image: text("image").notNull(),
+	price: numeric("price", { precision: 78 }).notNull(),
+	collection: text("collection"),
+});
 
-// export const postsRelations = relations(posts, ({ one, many }) => ({
-// 	// author: one(nexus, {
-// 	// 	fields: [posts.author],
-// 	// 	references: [nexus.fid],
-// 	// 	relationName: "author",
-// 	// }),
-// 	// nexusAuthor: one(nexus, {
-// 	// 	fields: [posts.author],
-// 	// 	references: [nexus.id],
-// 	// 	relationName: "nexusAuthor",
-// 	// }),
-// 	reactions: many(reactions),
-// 	parent: one(posts, {
-// 		fields: [posts.parent],
-// 		references: [posts.id],
-// 	}),
-// 	community: one(communities, {
-// 		fields: [posts.channel],
-// 		references: [communities.channel],
-// 	}),
-// 	thread: one(posts, {
-// 		fields: [posts.thread],
-// 		references: [posts.id],
-// 		relationName: "threadToChildren",
-// 	}),
-// 	children: many(posts, {
-// 		relationName: "threadToChildren",
-// 	}),
-// }));
+export const productsRelations = relations(products, ({ one }) => ({
+	collection: one(collections, {
+		fields: [products.collection],
+		references: [collections.id],
+	}),
+}));
 
-// export const reactions = pgTable(
-// 	"reactions",
-// 	{
-// 		id: serial("id").primaryKey(),
-// 		post: integer("post").notNull(),
-// 		user: text("user").notNull(),
-// 		type: text("type", { enum: ["like", "recast"] }).notNull(),
-// 		timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
-// 	},
-// 	(table) => ({
-// 		uniqueReaction: unique().on(table.post, table.user, table.type),
-// 	}),
-// );
+export const collections = pgTable("collections", {
+	id: text("id").primaryKey(),
+	name: text("name").notNull(),
+	image: text("image").notNull(),
+});
 
-// export const reactionsRelations = relations(reactions, ({ one }) => ({
-// 	post: one(posts, {
-// 		fields: [reactions.post],
-// 		references: [posts.id],
-// 	}),
-// 	user: one(nexus, {
-// 		fields: [reactions.user],
-// 		references: [nexus.fid],
-// 		relationName: "user",
-// 	}),
-// 	nexusUser: one(nexus, {
-// 		fields: [reactions.user],
-// 		references: [nexus.id],
-// 		relationName: "nexusUser",
-// 	}),
-// }));
+export const collectionsRelations = relations(collections, ({ many }) => ({
+	products: many(products),
+}));
 
-// export const mentions = pgTable("mentions", {
-// 	id: serial("id").primaryKey(),
-// 	position: smallint("position").notNull(),
-// 	post: integer("post"),
-// 	user: text("user"),
-// 	username: text("username"),
-// });
+export const tokens = pgTable("tokens", {
+	id: serial("id").primaryKey(),
+	address: text("address").notNull(),
+	chain: text("chain", { enum: ["base", "baseSepolia"] }).notNull(),
+	decimals: integer("decimals").notNull(),
+	name: text("name").notNull(),
+	symbol: text("symbol").notNull(),
+	image: text("image").notNull(),
+});
 
-// export const mentionsRelations = relations(mentions, ({ one }) => ({
-// 	post: one(posts, {
-// 		fields: [mentions.post],
-// 		references: [posts.id],
-// 	}),
-// 	user: one(nexus, {
-// 		fields: [mentions.user],
-// 		references: [nexus.fid],
-// 		relationName: "user",
-// 	}),
-// 	nexusUser: one(nexus, {
-// 		fields: [mentions.user],
-// 		references: [nexus.id],
-// 		relationName: "nexusUser",
-// 	}),
-// }));
+export const tokensRelations = relations(tokens, ({ many }) => ({
+	balances: many(balances),
+}));
 
-// export const embeds = pgTable("embeds", {
-// 	id: serial("id").primaryKey(),
-// 	post: integer("post"),
-// 	url: text("url"),
-// });
+export const balances = pgTable("balances", {
+	id: serial("id").primaryKey(),
+	user: text("user").notNull(),
+	token: text("token").notNull(),
+	amount: integer("amount").notNull(),
+});
 
-// export const embedsRelations = relations(embeds, ({ one }) => ({
-// 	post: one(posts, {
-// 		fields: [embeds.post],
-// 		references: [posts.id],
-// 	}),
-// 	cache: one(links, {
-// 		fields: [embeds.url],
-// 		references: [links.url],
-// 	}),
-// }));
-
-// export const products = pgTable("products", {
-// 	id: text("id").primaryKey(),
-// 	shopifyId: text("shopify_id").notNull(),
-// 	name: text("name").notNull(),
-// 	image: text("image").notNull(),
-// 	price: numeric("price", { precision: 78 }).notNull(),
-// 	collection: text("collection"),
-// });
-
-// export const productsRelations = relations(products, ({ one }) => ({
-// 	collection: one(collections, {
-// 		fields: [products.collection],
-// 		references: [collections.id],
-// 	}),
-// }));
-
-// export const collections = pgTable("collections", {
-// 	id: text("id").primaryKey(),
-// 	name: text("name").notNull(),
-// 	image: text("image").notNull(),
-// });
-
-// export const collectionsRelations = relations(collections, ({ many }) => ({
-// 	products: many(products),
-// }));
+export const balancesRelations = relations(balances, ({ one }) => ({
+	user: one(nexus, {
+		fields: [balances.user],
+		references: [nexus.id],
+	}),
+	token: one(tokens, {
+		fields: [balances.token],
+		references: [tokens.id],
+	}),
+}));
 
 const schema = {
 	communities,
@@ -793,14 +696,6 @@ const schema = {
 	bets,
 	betsRelations,
 	articles,
-	// posts,
-	// postsRelations,
-	// reactions,
-	// reactionsRelations,
-	// mentions,
-	// mentionsRelations,
-	// embeds,
-	// embedsRelations,
 };
 
 export const db = drizzle(
