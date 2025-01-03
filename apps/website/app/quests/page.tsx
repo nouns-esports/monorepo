@@ -22,6 +22,7 @@ export default async function Quests() {
 			{featuredEvent && (
 				<div className="relative w-full aspect-[3/1] max-sm:aspect-auto max-md:h-64 max-sm:h-48 rounded-xl overflow-hidden">
 					<img
+						alt={featuredEvent.name}
 						src={featuredEvent.image}
 						className="w-full h-full object-cover brightness-75"
 					/>

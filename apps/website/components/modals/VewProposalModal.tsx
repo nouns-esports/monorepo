@@ -69,6 +69,7 @@ export default function ViewProposalModal(props: {
 						),
 						image: (
 							<img
+								alt={props.proposal.title}
 								src={props.proposal.image ?? ""}
 								className="flex h-full object-contain rounded-xl"
 							/>
@@ -82,6 +83,7 @@ export default function ViewProposalModal(props: {
 					<div className="flex gap-4 items-center">
 						<div className="rounded-full flex items-center text-white gap-3 font-semibold text-xl">
 							<img
+								alt={props.proposal.user.name}
 								src={props.proposal.user.image}
 								className="rounded-full h-9 w-9"
 							/>
@@ -107,6 +109,7 @@ export default function ViewProposalModal(props: {
 									newTab
 								>
 									<img
+										alt="Farcaster logo"
 										src="/farcaster.svg"
 										className="w-5 h-5  hover:opacity-80 transition-opacity"
 									/>

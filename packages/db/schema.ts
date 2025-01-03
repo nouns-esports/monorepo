@@ -64,20 +64,10 @@ export const notifications = pgTable("notifications", {
 	id: serial("id").primaryKey(),
 	user: text("user").notNull(),
 	timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
-	type: text("type", {
-		enum: [
-			"round-started",
-			"round-voting-started",
-			"round-won",
-			"quest-created",
-			"event-started",
-			"nexus-rankup",
-		],
-	}).notNull(),
-	round: text("round"),
-	quest: text("quest"),
-	event: text("event"),
-	ranking: integer("ranking"),
+	image: text("image").notNull(),
+	title: text("title").notNull(),
+	description: text("description").notNull(),
+	url: text("url"),
 	read: boolean("read").notNull().default(false),
 });
 
@@ -85,22 +75,6 @@ export const notificationsRelations = relations(notifications, ({ one }) => ({
 	user: one(nexus, {
 		fields: [notifications.user],
 		references: [nexus.id],
-	}),
-	round: one(rounds, {
-		fields: [notifications.round],
-		references: [rounds.id],
-	}),
-	quest: one(quests, {
-		fields: [notifications.quest],
-		references: [quests.id],
-	}),
-	event: one(events, {
-		fields: [notifications.event],
-		references: [events.id],
-	}),
-	ranking: one(rankings, {
-		fields: [notifications.ranking],
-		references: [rankings.id],
 	}),
 }));
 
@@ -126,12 +100,13 @@ export const communityRelations = relations(communities, ({ one, many }) => ({
 	}),
 }));
 
-// export const articles = pgTable("articles", {
-//   id: text("id").primaryKey(),
-//   title: text("title").notNull(),
-//   // content: jsonb
-//   createdAt: timestamp("createdAt", { mode: "date" }).notNull(),
-// });
+export const articles = pgTable("articles", {
+	id: text("id").primaryKey(),
+	title: text("title").notNull(),
+	image: text("image").notNull(),
+	content: jsonb("content").$type<Record<string, any>>().notNull(),
+	publishedAt: timestamp("publishedAt", { mode: "date" }).notNull(),
+});
 
 export const events = pgTable("events", {
 	id: text("id").primaryKey(),
@@ -152,7 +127,6 @@ export const eventsRelations = relations(events, ({ one, many }) => ({
 	}),
 	quests: many(quests),
 	rounds: many(rounds),
-	notifications: many(notifications),
 	attendees: many(attendees),
 	predictions: many(predictions),
 }));
@@ -329,6 +303,7 @@ export const rounds = pgTable("rounds", {
 	end: timestamp("end", { mode: "date" }).notNull(),
 	minProposerRank: integer("min_proposer_rank"),
 	minVoterRank: integer("min_voter_rank"),
+	totalParticipants: integer("total_participants").notNull().default(0),
 });
 
 export const roundsRelations = relations(rounds, ({ one, many }) => ({
@@ -351,7 +326,6 @@ export const roundsRelations = relations(rounds, ({ one, many }) => ({
 		fields: [rounds.minVoterRank],
 		references: [ranks.id],
 	}),
-	notifications: many(notifications),
 }));
 
 // add user column and update it when they claim the award
@@ -426,6 +400,7 @@ export const nexus = pgTable("nexus", {
 	twitter: text("twitter"),
 	discord: text("discord"),
 	fid: integer("fid"),
+	canRecieveEmails: boolean("can_recieve_emails").notNull().default(false),
 });
 
 export const nexusRelations = relations(nexus, ({ one, many }) => ({
@@ -438,6 +413,7 @@ export const nexusRelations = relations(nexus, ({ one, many }) => ({
 		references: [ranks.id],
 	}),
 	creations: many(creations),
+	notifications: many(notifications),
 	// posts: many(posts),
 	// reactions: many(reactions),
 }));
@@ -504,7 +480,6 @@ export const questRelations = relations(quests, ({ one, many }) => ({
 		fields: [quests.event],
 		references: [events.id],
 	}),
-	notifications: many(notifications),
 }));
 
 export const xp = pgTable("xp", {
@@ -571,7 +546,6 @@ export const rankingsRelations = relations(rankings, ({ one, many }) => ({
 		fields: [rankings.rank],
 		references: [ranks.id],
 	}),
-	notifications: many(notifications),
 }));
 
 export const votes = pgTable("votes", {
@@ -745,6 +719,32 @@ export const creationsRelations = relations(creations, ({ one }) => ({
 // 	}),
 // }));
 
+// export const products = pgTable("products", {
+// 	id: text("id").primaryKey(),
+// 	shopifyId: text("shopify_id").notNull(),
+// 	name: text("name").notNull(),
+// 	image: text("image").notNull(),
+// 	price: numeric("price", { precision: 78 }).notNull(),
+// 	collection: text("collection"),
+// });
+
+// export const productsRelations = relations(products, ({ one }) => ({
+// 	collection: one(collections, {
+// 		fields: [products.collection],
+// 		references: [collections.id],
+// 	}),
+// }));
+
+// export const collections = pgTable("collections", {
+// 	id: text("id").primaryKey(),
+// 	name: text("name").notNull(),
+// 	image: text("image").notNull(),
+// });
+
+// export const collectionsRelations = relations(collections, ({ many }) => ({
+// 	products: many(products),
+// }));
+
 const schema = {
 	communities,
 	communityRelations,
@@ -792,6 +792,7 @@ const schema = {
 	outcomesRelations,
 	bets,
 	betsRelations,
+	articles,
 	// posts,
 	// postsRelations,
 	// reactions,
@@ -833,3 +834,4 @@ export type Prediction = typeof predictions.$inferSelect;
 export type Station = typeof stations.$inferSelect;
 export type Link = typeof links.$inferSelect;
 export type Attendee = typeof attendees.$inferSelect;
+export type Article = typeof articles.$inferSelect;

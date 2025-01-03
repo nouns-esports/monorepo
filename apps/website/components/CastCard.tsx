@@ -49,6 +49,7 @@ export default function CastCard(props: {
 				className="relative z-10 ml-2 w-12 h-12 flex-shrink-0 flex"
 			>
 				<img
+					alt={props.cast.author.display_name}
 					key={props.cast.author.pfp_url}
 					src={props.cast.author.pfp_url}
 					className="w-full h-full rounded-full object-cover object-center hover:brightness-75 transition-all"
@@ -74,6 +75,7 @@ export default function CastCard(props: {
 									className="flex relative z-10  items-center gap-1 bg-grey-600 hover:bg-grey-500 transition-colors rounded-full px-2 py-1"
 								>
 									<img
+										alt={props.community.name}
 										key={props.community.image}
 										src={props.community.image}
 										className="w-4 h-4 rounded-full object-cover object-center"
@@ -266,6 +268,7 @@ function WebsitePreview(props: {
 				className="relative z-10 h-24 border bg-black/20 hover:bg-grey-800 transition-colors border-grey-600 flex gap-3 rounded-xl p-2 group"
 			>
 				<img
+					alt={props.website.title}
 					key={props.website.image}
 					src={props.website.image}
 					className="h-full aspect-[4/3] rounded-xl group-hover:brightness-75 object-cover object-center transition-all"
@@ -290,6 +293,7 @@ function WebsitePreview(props: {
 			className="relative z-10 aspect-video bg-black flex flex-col rounded-xl overflow-hidden group"
 		>
 			<img
+				alt={props.website.title}
 				key={props.website.image}
 				src={props.website.image}
 				className="w-full h-full group-hover:brightness-75 object-cover object-center transition-all"
@@ -308,10 +312,12 @@ function CastImage(props: {
 	return (
 		<div className="relative z-10 flex items-center justify-center mb-1 border border-grey-600 w-full overflow-hidden rounded-xl">
 			<img
+				alt={props.image.url}
 				src={props.image.url}
 				className="blur-2xl brightness-[25%] absolute top-0 left-0 w-full object-cover h-full"
 			/>
 			<img
+				alt={props.image.url}
 				src={props.image.url}
 				style={{
 					height: props.image.height,
@@ -337,6 +343,7 @@ function QuoteCast(props: {
 				className="relative z-10 flex items-center gap-2 group w-fit"
 			>
 				<img
+					alt={props.quoteCast.cast.author.display_name}
 					src={props.quoteCast.cast.author.pfp_url}
 					className="w-4 h-4 rounded-full object-cover object-center group-hover:brightness-75 transition-all"
 				/>
@@ -358,6 +365,7 @@ function QuoteCast(props: {
 						)}
 					>
 						<img
+							alt={props.quoteCast.embeds.image.url}
 							src={props.quoteCast.embeds.image.url}
 							className="w-full h-full object-cover object-center"
 						/>

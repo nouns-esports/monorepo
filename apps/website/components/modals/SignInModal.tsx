@@ -10,7 +10,6 @@ import {
 	Edit,
 	Mail,
 	RefreshCcw,
-	Router,
 	X,
 } from "lucide-react";
 import { DiscordLogo, TwitterLogo, Wallet } from "phosphor-react-sc";
@@ -22,12 +21,11 @@ import {
 	usePrivy,
 } from "@privy-io/react-auth";
 import { usePrivyModalState } from "@/providers/Privy";
-import toast from "react-hot-toast";
+import { toast } from "../Toasts";
 import { pinImage } from "@/server/mutations/pinImage";
 import { useAction } from "next-safe-action/hooks";
 import type { AuthenticatedUser } from "@/server/queries/users";
 import { createNexus } from "@/server/mutations/createNexus";
-import { useRouter, useSearchParams } from "next/navigation";
 import Countdown from "../Countdown";
 
 export default function SignInModal(props: { user?: AuthenticatedUser }) {
@@ -41,6 +39,7 @@ export default function SignInModal(props: { user?: AuthenticatedUser }) {
 		5: "",
 		6: "",
 	});
+	const [canReceiveEmails, setCanReceiveEmails] = useState(false);
 
 	const code1 = useRef<HTMLInputElement>(null);
 	const code2 = useRef<HTMLInputElement>(null);
@@ -98,6 +97,7 @@ export default function SignInModal(props: { user?: AuthenticatedUser }) {
 			<div className="flex flex-col">
 				<div className="relative flex items-center justify-center flex-shrink-0 h-48 w-full">
 					<img
+						alt="Sign in banner"
 						src="https://ipfs.nouns.gg/ipfs/QmSGYg5t25SQDp1xBw5tqDrfsF62T2HHVZpH4VduaAwJkT"
 						className="w-full h-full object-cover brightness-75"
 						draggable={false}
@@ -178,6 +178,7 @@ export default function SignInModal(props: { user?: AuthenticatedUser }) {
 											className="flex items-center gap-2 w-full text-white font-semibold bg-farcaster rounded-lg p-2.5 hover:bg-farcaster/70 transition-colors"
 										>
 											<img
+												alt="Farcaster logo"
 												src="/farcaster.svg"
 												className="w-5 h-5 mr-0.5 ml-0.5 object-contain"
 											/>
@@ -237,6 +238,7 @@ export default function SignInModal(props: { user?: AuthenticatedUser }) {
 									<div className="flex flex-col gap-3">
 										<button className="flex items-center gap-2 w-full text-white bg-gradient-to-tr from-metamask-dark to-metamask-light font-semibold rounded-lg p-2.5 transition-colors">
 											<img
+												alt="Metamask logo"
 												src="/wallets/no-bg/metamask.svg"
 												className="w-5 h-5 mr-0.5 ml-0.5 object-contain rounded-md"
 											/>
@@ -244,6 +246,7 @@ export default function SignInModal(props: { user?: AuthenticatedUser }) {
 										</button>
 										<button className="flex items-center gap-2 w-full text-white bg-coinbase-wallet font-semibold rounded-lg p-2.5 transition-colors">
 											<img
+												alt="Coinbase wallet logo"
 												src="/wallets/no-bg/coinbase_wallet.svg"
 												className="w-5 h-5 mr-0.5 ml-0.5 object-contain rounded-md"
 											/>
@@ -254,6 +257,7 @@ export default function SignInModal(props: { user?: AuthenticatedUser }) {
 											className="flex items-center gap-2 w-full text-white bg-gradient-to-tr from-rainbow-dark to-rainbow-light font-semibold rounded-lg p-2.5 transition-colors"
 										>
 											<img
+												alt="Rainbow logo"
 												src="/wallets/no-bg/rainbow.svg"
 												className="w-5 h-5 mr-0.5 ml-0.5 object-contain rounded-md"
 											/>
@@ -261,6 +265,7 @@ export default function SignInModal(props: { user?: AuthenticatedUser }) {
 										</button>
 										<button className="flex items-center gap-2 w-full text-white bg-gradient-to-b from-wallet-connect-light to-wallet-connect-dark font-semibold rounded-lg p-2.5 transition-colors">
 											<img
+												alt="Wallet connect logo"
 												src="/wallets/no-bg/wallet_connect.svg"
 												className="w-5 h-5 mr-0.5 ml-0.5 object-contain rounded-md"
 											/>
@@ -371,6 +376,7 @@ export default function SignInModal(props: { user?: AuthenticatedUser }) {
 									>
 										{state.status === "submitting-code" ? (
 											<img
+												alt="loading spinner"
 												src="/spinner.svg"
 												className="h-[18px] animate-spin"
 											/>
@@ -438,6 +444,7 @@ export default function SignInModal(props: { user?: AuthenticatedUser }) {
 												style={{ display: "none" }}
 											/>
 											<img
+												alt="Update profile logo"
 												src={
 													image === ""
 														? `https://api.cloudnouns.com/v1/pfp?text=${props.user.id}&background=1`
@@ -466,6 +473,20 @@ export default function SignInModal(props: { user?: AuthenticatedUser }) {
 											rows={4}
 										/>
 									</div>
+									{props.user.email ? (
+										<div className="flex gap-2">
+											<input
+												type="checkbox"
+												checked={canReceiveEmails}
+												onChange={(e) => setCanReceiveEmails(e.target.checked)}
+												className="w-4 h-4 accent-red"
+											/>
+											<p className="text-sm text-white">
+												I want to receive promotional emails, rewards, and
+												updates from Nouns
+											</p>
+										</div>
+									) : null}
 									<button
 										onClick={async () => {
 											if (!props.user) return;
@@ -477,6 +498,7 @@ export default function SignInModal(props: { user?: AuthenticatedUser }) {
 														? `https://api.cloudnouns.com/v1/pfp?text=${props.user.id}&background=1`
 														: image,
 												bio,
+												canReceiveEmails,
 											});
 
 											if (result?.serverError) {
@@ -487,6 +509,7 @@ export default function SignInModal(props: { user?: AuthenticatedUser }) {
 									>
 										{createNexusAction.isPending ? (
 											<img
+												alt="loading spinner"
 												src="/spinner.svg"
 												className="h-[18px] animate-spin"
 											/>

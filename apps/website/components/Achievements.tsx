@@ -9,9 +9,7 @@ import { Sparkles } from "lucide-react";
 import { achievementTree, type AchievementTree } from "@/server/achievements";
 import { useAction } from "next-safe-action/hooks";
 import { claimAchievement } from "@/server/mutations/claimAchievement";
-import toast from "react-hot-toast";
-import { useModal } from "./Modal";
-import EarnedXPModal, { useXPModal } from "./modals/EarnedXPModal";
+import { toast } from "./Toasts";
 import { confetti } from "@/utils/confetti";
 import { useWindowSize } from "@uidotdev/usehooks";
 import { useMemo } from "react";
@@ -89,81 +87,78 @@ export default function Achievements(props: {
 	const mobile = useMemo(() => !!((width ?? 0) <= 600), [width]);
 
 	return (
-		<>
-			<motion.div
-				style={{
-					backgroundSize,
-					backgroundPositionX,
-					backgroundPositionY,
-				}}
-				// @ts-ignore
-				className="absolute top-0 left-0 w-full h-full flex items-center justify-center cursor-move bg-[url(/dots.svg)] bg-repeat touch-none"
-				// @ts-ignore
-				onPointerDown={(e) => {
-					controls.start(e);
-				}}
-				dragPropagation={false}
-				onMouseEnter={() =>
-					window.addEventListener("wheel", preventScroll, { passive: false })
+		<motion.div
+			style={{
+				backgroundSize,
+				backgroundPositionX,
+				backgroundPositionY,
+			}}
+			// @ts-ignore
+			className="absolute top-0 left-0 w-full h-full flex items-center justify-center cursor-move bg-[url(/dots.svg)] bg-repeat touch-none"
+			// @ts-ignore
+			onPointerDown={(e) => {
+				controls.start(e);
+			}}
+			dragPropagation={false}
+			onMouseEnter={() =>
+				window.addEventListener("wheel", preventScroll, { passive: false })
+			}
+			// @ts-ignore
+			onWheel={(e) => {
+				const newScale = scale.get() + (e.deltaY > 0 ? -0.05 : 0.05);
+				scale.set(Math.max(0.25, Math.min(newScale, 1)));
+			}}
+			onMouseLeave={() => window.removeEventListener("wheel", preventScroll)}
+			// @ts-ignore
+			onTouchStart={(e) => {
+				if (e.touches.length === 2) {
+					const initialDistance = Math.hypot(
+						e.touches[0].clientX - e.touches[1].clientX,
+						e.touches[0].clientY - e.touches[1].clientY,
+					);
+					const initialScale = scale.get();
+
+					const onTouchMove = (e: TouchEvent) => {
+						if (e.touches.length === 2) {
+							const distance = Math.hypot(
+								e.touches[0].clientX - e.touches[1].clientX,
+								e.touches[0].clientY - e.touches[1].clientY,
+							);
+							const newScale = (distance / initialDistance) * initialScale;
+							scale.set(Math.max(0.25, Math.min(newScale, 1)));
+						}
+					};
+
+					const onTouchEnd = () => {
+						document.removeEventListener("touchmove", onTouchMove);
+						document.removeEventListener("touchend", onTouchEnd);
+					};
+
+					document.addEventListener("touchmove", onTouchMove);
+					document.addEventListener("touchend", onTouchEnd);
 				}
-				// @ts-ignore
-				onWheel={(e) => {
-					const newScale = scale.get() + (e.deltaY > 0 ? -0.05 : 0.05);
-					scale.set(Math.max(0.25, Math.min(newScale, 1)));
+			}}
+		>
+			<motion.div
+				drag
+				dragMomentum={false}
+				dragControls={controls}
+				style={{ scale }}
+				onDrag={(event, info) => {
+					x.set(info.point.x);
+					y.set(info.point.y);
 				}}
-				onMouseLeave={() => window.removeEventListener("wheel", preventScroll)}
 				// @ts-ignore
-				onTouchStart={(e) => {
-					if (e.touches.length === 2) {
-						const initialDistance = Math.hypot(
-							e.touches[0].clientX - e.touches[1].clientX,
-							e.touches[0].clientY - e.touches[1].clientY,
-						);
-						const initialScale = scale.get();
-
-						const onTouchMove = (e: TouchEvent) => {
-							if (e.touches.length === 2) {
-								const distance = Math.hypot(
-									e.touches[0].clientX - e.touches[1].clientX,
-									e.touches[0].clientY - e.touches[1].clientY,
-								);
-								const newScale = (distance / initialDistance) * initialScale;
-								scale.set(Math.max(0.25, Math.min(newScale, 1)));
-							}
-						};
-
-						const onTouchEnd = () => {
-							document.removeEventListener("touchmove", onTouchMove);
-							document.removeEventListener("touchend", onTouchEnd);
-						};
-
-						document.addEventListener("touchmove", onTouchMove);
-						document.addEventListener("touchend", onTouchEnd);
-					}
-				}}
+				className="flex flex-col items-center flex-shrink-0"
 			>
-				<motion.div
-					drag
-					dragMomentum={false}
-					dragControls={controls}
-					style={{ scale }}
-					onDrag={(event, info) => {
-						x.set(info.point.x);
-						y.set(info.point.y);
-					}}
-					// @ts-ignore
-					className="flex flex-col items-center flex-shrink-0"
-				>
-					{render(achievementTree)}
-				</motion.div>
-				{width ? (
-					<div className="absolute bottom-2 left-3 flex items-center gap-2 text-sm text-white select-none">
-						{mobile ? "Touch to move" : "Use mouse to move"}
-					</div>
-				) : null}
+				{render(achievementTree)}
 			</motion.div>
-			<EarnedXPModal from="achievement" />
-		</>
+			{width ? (
+				<div className="absolute bottom-2 left-3 flex items-center gap-2 text-sm text-white select-none">
+					{mobile ? "Touch to move" : "Use mouse to move"}
+				</div>
+			) : null}
+		</motion.div>
 	);
 }
 
@@ -175,9 +170,6 @@ function Node(props: {
 }) {
 	const claimAchievementAction = useAction(claimAchievement);
 
-	const { setXP } = useXPModal();
-	const { open } = useModal("earned-xp-achievement");
-
 	return (
 		<>
 			{props.achievement.id !== "enterNexus" ? (
@@ -185,6 +177,7 @@ function Node(props: {
 			) : null}
 			<div className="relative group cursor-pointer">
 				<img
+					alt={props.achievement.name}
 					src={`${props.achievement.image}?img-height=100&img-onerror=redirect`}
 					draggable={false}
 					className={twMerge(
@@ -199,6 +192,7 @@ function Node(props: {
 				/>
 				<div className="absolute z-10 top-4 -left-4 rounded-xl drop-shadow-2xl h-[calc(100%_+_64px)] flex flex-col bg-grey-800 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto transform-gpu">
 					<img
+						alt={props.achievement.name}
 						src={`${props.achievement.image}?img-height=100&img-onerror=redirect`}
 						draggable={false}
 						className={twMerge(
@@ -248,9 +242,15 @@ function Node(props: {
 									return toast.error(result.serverError);
 								}
 
-								setXP(result?.data ?? 0);
+								if (result?.data) {
+									toast.xp({
+										total: result.data.newXP,
+										earned: props.achievement.xp,
+									});
+									toast.custom(result.data.notification);
+								}
+
 								confetti();
-								open();
 							}}
 							size="lg"
 						>

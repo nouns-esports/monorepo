@@ -3,7 +3,7 @@
 import { Modal, useModal } from "../Modal";
 import Button from "../Button";
 import { useState } from "react";
-import toast from "react-hot-toast";
+import { toast } from "../Toasts";
 import { pinImage } from "@/server/mutations/pinImage";
 import { useAction } from "next-safe-action/hooks";
 import { updateNexus } from "@/server/mutations/updateNexus";
@@ -25,6 +25,9 @@ export default function SettingsModal(props: { user: AuthenticatedUser }) {
 	const [image, setImage] = useState(props.user.nexus?.image);
 	const [name, setName] = useState(props.user.nexus?.name);
 	const [bio, setBio] = useState(props.user.nexus?.bio);
+	const [canRecieveEmails, setCanReceiveEmails] = useState(
+		props.user.nexus?.canRecieveEmails ?? false,
+	);
 
 	const [confirmDeleteAccount, setConfirmDeleteAccount] = useState(false);
 
@@ -72,7 +75,7 @@ export default function SettingsModal(props: { user: AuthenticatedUser }) {
 	return (
 		<Modal
 			id="settings"
-			className="p-4 flex flex-col min-w-96 min-h-[500px] gap-4"
+			className="p-4 flex flex-col w-full max-w-96 min-h-[500px] gap-4"
 		>
 			<div className="flex justify-between items-center">
 				<p className="text-white text-2xl font-bebas-neue leading-none">
@@ -138,6 +141,7 @@ export default function SettingsModal(props: { user: AuthenticatedUser }) {
 												style={{ display: "none" }}
 											/>
 											<img
+												alt="Edit profile logo"
 												src={
 													image === ""
 														? `https://api.cloudnouns.com/v1/pfp?text=${props.user.id}&background=1`
@@ -166,6 +170,20 @@ export default function SettingsModal(props: { user: AuthenticatedUser }) {
 											rows={4}
 										/>
 									</div>
+									{props.user.email ? (
+										<div className="flex gap-2">
+											<input
+												type="checkbox"
+												checked={canRecieveEmails}
+												onChange={(e) => setCanReceiveEmails(e.target.checked)}
+												className="w-4 h-4 accent-red"
+											/>
+											<p className="text-sm text-white">
+												I want to receive promotional emails, rewards, and
+												updates from Nouns
+											</p>
+										</div>
+									) : null}
 									<div className="flex items-center justify-between gap-4">
 										<button
 											onClick={() =>
@@ -173,12 +191,14 @@ export default function SettingsModal(props: { user: AuthenticatedUser }) {
 													name: name ?? undefined,
 													bio: bio ?? undefined,
 													image,
+													canRecieveEmails,
 												})
 											}
 											className="flex justify-center items-center gap-2 w-full text-black bg-white hover:bg-white/70 font-semibold rounded-lg p-2.5 transition-colors"
 										>
 											{updateNexusAction.isPending ? (
 												<img
+													alt="loading spinner"
 													src="/spinner.svg"
 													className="h-[18px] animate-spin"
 												/>
@@ -209,6 +229,7 @@ export default function SettingsModal(props: { user: AuthenticatedUser }) {
 								<div className="flex gap-2 justify-between items-center">
 									<div className="flex items-center gap-3">
 										<img
+											alt="Discord logo"
 											src="https://ipfs.nouns.gg/ipfs/QmPxubNKVTpAakwU9M9gLVhiqN7qaafabxbYH4jHKoG6aU"
 											className="h-10 w-10 rounded-md"
 										/>
@@ -234,6 +255,7 @@ export default function SettingsModal(props: { user: AuthenticatedUser }) {
 								<div className="flex gap-2 justify-between items-center">
 									<div className="flex items-center gap-3">
 										<img
+											alt="Warpcast logo"
 											src="https://ipfs.nouns.gg/ipfs/Qmcqq8J9wXCDTTbVmB8n5xSdGQ3Kna2K6dnTXriNs7MeHc"
 											className="h-10 w-10 rounded-md"
 										/>
@@ -262,6 +284,7 @@ export default function SettingsModal(props: { user: AuthenticatedUser }) {
 								<div className="flex gap-2 justify-between items-center">
 									<div className="flex items-center gap-3">
 										<img
+											alt="Twitter logo"
 											src="https://ipfs.nouns.gg/ipfs/QmUdf8usCZDwv8dkmqyc2maVwitevAHtKXGbTnUx8dEaz7"
 											className="h-10 w-10 rounded-md"
 										/>
@@ -291,6 +314,7 @@ export default function SettingsModal(props: { user: AuthenticatedUser }) {
 									<div className="flex gap-2 justify-between items-center">
 										<div className="flex items-center gap-3">
 											<img
+												alt="Nouns logo"
 												src="/logo/logo-square.svg"
 												className="h-10 w-10 rounded-md"
 											/>
@@ -336,6 +360,7 @@ export default function SettingsModal(props: { user: AuthenticatedUser }) {
 													className="flex items-center gap-2 group"
 												>
 													<img
+														alt={wallet.wallet_client_type}
 														src={
 															{
 																rainbow:

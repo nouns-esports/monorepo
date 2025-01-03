@@ -5,72 +5,64 @@ import Button from "./Button";
 import { useTransition } from "react";
 import { completeQuest } from "@/server/mutations/completeQuest";
 import { useAction } from "next-safe-action/hooks";
-import { toast } from "react-hot-toast";
-import EarnedXPModal, { useXPModal } from "./modals/EarnedXPModal";
+import { toast } from "./Toasts";
 import { useModal } from "./Modal";
 import { confetti } from "@/utils/confetti";
 
 export default function CheckQuest(props: {
-  user: boolean;
-  active: boolean;
-  quest: string;
-  xp: number;
-  claimed: boolean;
-  completed: boolean;
-  userXP: number;
+	user: boolean;
+	active: boolean;
+	quest: string;
+	xp: number;
+	claimed: boolean;
+	completed: boolean;
+	userXP: number;
 }) {
-  const router = useRouter();
+	const router = useRouter();
 
-  const [isPending, startTransition] = useTransition();
-  const completeQuestAction = useAction(completeQuest);
+	const [isPending, startTransition] = useTransition();
+	const completeQuestAction = useAction(completeQuest);
+	const signInModal = useModal("sign-in");
 
-  const xpModal = useModal(`earned-xp-quest-${props.quest}`);
-  const signInModal = useModal("sign-in");
+	return (
+		<Button
+			disabled={props.active ? props.claimed : true}
+			loading={isPending || completeQuestAction.isPending}
+			onClick={async () => {
+				if (!props.user) {
+					return signInModal.open();
+				}
 
-  const { setXP } = useXPModal();
+				if (!props.completed) {
+					return startTransition(() => router.refresh());
+				}
 
-  return (
-    <>
-      <Button
-        disabled={props.active ? props.claimed : true}
-        loading={isPending || completeQuestAction.isPending}
-        onClick={async () => {
-          if (!props.user) {
-            return signInModal.open();
-          }
+				if (!props.claimed) {
+					const result = await completeQuestAction.executeAsync({
+						quest: props.quest,
+					});
 
-          if (!props.completed) {
-            return startTransition(() => router.refresh());
-          }
+					if (result?.serverError) {
+						return toast.error(result.serverError);
+					}
 
-          if (!props.claimed) {
-            const result = await completeQuestAction.executeAsync({
-              quest: props.quest,
-            });
+					if (result?.data) {
+						toast.xp({ total: result.data.newXP, earned: props.xp });
+						toast.custom(result.data.notification);
+					}
 
-            if (result?.serverError) {
-              return toast.error(result.serverError);
-            }
-
-            setXP(result?.data ?? 0);
-            confetti();
-            xpModal.open();
-          }
-        }}
-        size="sm"
-      >
-        {props.user
-          ? props.completed
-            ? props.claimed
-              ? "Claimed"
-              : "Claim"
-            : "Check"
-          : "Sign in"}
-      </Button>
-      <EarnedXPModal
-        from={`quest-${props.quest}`}
-        redirect={{ link: "/quests", text: "View Quests" }}
-      />
-    </>
-  );
+					confetti();
+				}
+			}}
+			size="sm"
+		>
+			{props.user
+				? props.completed
+					? props.claimed
+						? "Claimed"
+						: "Claim"
+					: "Check"
+				: "Sign in"}
+		</Button>
+	);
 }

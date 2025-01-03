@@ -1,0 +1,16 @@
+{
+  "accountAssociation": {
+    "header": "",
+    "payload": "",
+    "signature": ""
+  },
+  "frame": {
+    "name": "Nouns",
+    "version": "0.0.1",
+    "iconUrl": "https://nouns.gg/logo/logo-square.png",
+    "homeUrl": "https://nouns.gg",
+    "splashImageUrl": "https://nouns.gg/logo/logo.png",
+    "splashBackgroundColor": "#040404",
+    "webhookUrl": "https://nouns.gg/api/webhooks/farcaster"
+  }
+}

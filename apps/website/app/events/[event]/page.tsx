@@ -58,6 +58,7 @@ export default async function EventPage(props: {
 				<div className="px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
 					<div className="flex max-lg:flex-col h-60 max-lg:h-auto gap-5 w-full bg-grey-800 rounded-xl p-4">
 						<img
+							alt={event.name}
 							src={event.image}
 							className="h-full max-lg:max-h-60 max-sm:w-full max-sm:max-h-none aspect-video rounded-xl object-cover"
 						/>
@@ -73,6 +74,7 @@ export default async function EventPage(props: {
 										className="bg-grey-500 hover:bg-grey-400 transition-colors py-2 pl-2 pr-3 flex-shrink-0 rounded-full flex text-white items-center gap-2 text-sm font-semibold w-fit whitespace-nowrap"
 									>
 										<img
+											alt={event.community.name ?? "Nouns Esports"}
 											src={event.community.image ?? "/logo/logo-square.png"}
 											className="w-5 h-5 rounded-full"
 										/>

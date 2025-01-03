@@ -5,7 +5,6 @@ import TextInput from "../form/TextInput";
 import Button from "../Button";
 import { createProposal } from "@/server/mutations/createProposal";
 import { $generateHtmlFromNodes } from "@lexical/html";
-import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import LimitMeter from "../LimitMeter";
 import { updateProposal } from "@/server/mutations/updateProposal";
@@ -13,11 +12,12 @@ import dynamic from "next/dynamic";
 import Shimmer from "../Shimmer";
 import { useAction } from "next-safe-action/hooks";
 import type { getRoundWithProposal } from "@/server/queries/rounds";
-import { Trash2 } from "lucide-react";
+import { Trash2, X } from "lucide-react";
 import PinImage from "../PinImage";
 import VideoPlayer from "../VideoEmbedPlayer";
 import { env } from "~/env";
 import { videoEmbedFromLink } from "@/utils/videoEmbedFromLink";
+import { toast } from "../Toasts";
 
 const Markdown = dynamic(() => import("../lexical/Markdown"), {
 	ssr: false,
@@ -219,7 +219,11 @@ export default function ProposalEditor(props: {
 					),
 				}[props.round.type]
 			}
-
+			{/* <div className="flex flex-col gap-2">
+				<div className="flex items-center justify-between">
+					<h2 className="font-luckiest-guy text-white text-2xl">Socials</h2>
+				</div>
+			</div> */}
 			<div className="flex flex-col gap-4">
 				<div className="flex flex-col gap-2">
 					<h2 className="font-luckiest-guy text-white text-2xl">Submit</h2>

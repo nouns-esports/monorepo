@@ -18,15 +18,19 @@ import { getQuests } from "@/server/queries/quests";
 import QuestCard from "@/components/QuestCard";
 import EventCard from "@/components/EventCard";
 import { ToggleModal } from "@/components/Modal";
+import { getArticles } from "@/server/queries/articles";
+import ArticleCard from "@/components/ArticleCard";
 
 export default async function Home() {
-	const [user, videos, trendingPosts, rounds, events] = await Promise.all([
-		getAuthenticatedUser(),
-		getVideos(),
-		getTrendingPosts(),
-		getRounds({ limit: 4 }),
-		getEvents({ limit: 3 }),
-	]);
+	const [user, videos, trendingPosts, rounds, events, articles] =
+		await Promise.all([
+			getAuthenticatedUser(),
+			getVideos(),
+			getTrendingPosts(),
+			getRounds({ limit: 4 }),
+			getEvents({ limit: 3 }),
+			getArticles(),
+		]);
 
 	const quests = await getQuests({
 		limit: 5,
@@ -48,6 +52,7 @@ export default async function Home() {
 					<div className="flex items-center justify-between px-4 pt-3">
 						<div className="flex items-center text-2xl font-luckiest-guy gap-3 text-white ">
 							<img
+								alt="Farcaster logo"
 								src="/farcaster.svg"
 								draggable={false}
 								className="w-6 h-6 select-none"
@@ -237,6 +242,24 @@ export default async function Home() {
 					))}
 				</ul>
 			</div>
+			{/* <div className="flex flex-col gap-4 px-32 max-2xl:px-16 max-xl:px-8 max-lg:px-0">
+				<div className="flex justify-between items-center max-lg:px-8 max-sm:px-4">
+					<h2 className="font-luckiest-guy text-white text-4xl max-sm:text-3xl">
+						Articles
+					</h2>
+				</div>
+				<ul className="flex gap-4 justify-between max-lg:w-full max-lg:overflow-x-scroll max-lg:px-8 max-sm:px-4 max-lg:scrollbar-hidden">
+					{articles.map((article) => (
+						<ArticleCard
+							key={article.id}
+							id={article.id}
+							title={article.title}
+							image={article.image}
+							className="max-w-96 max-md:w-96 max-md:h-auto max-md:flex-shrink-0"
+						/>
+					))}
+				</ul>
+			</div> */}
 			<div className="flex flex-col gap-4 px-32 max-2xl:px-16 max-xl:px-8 max-lg:px-0">
 				<h2 className="font-luckiest-guy text-white text-4xl max-lg:pl-8 max-sm:pl-4 max-sm:text-3xl">
 					Explore

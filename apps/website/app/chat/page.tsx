@@ -52,6 +52,7 @@ export default async function Chat(props: {
 							<div className="flex items-center gap-3">
 								{community ? (
 									<img
+										alt={community.name}
 										key={community.image}
 										src={community.image}
 										className="w-10 h-10 rounded-lg"
@@ -95,7 +96,11 @@ export default async function Chat(props: {
 									searchParams?.c === c.id && "bg-grey-600",
 								)}
 							>
-								<img src={c.image} className="w-6 h-6 rounded-md" />
+								<img
+									alt={c.name}
+									src={c.image}
+									className="w-6 h-6 rounded-md"
+								/>
 								{c.name}
 							</Link>
 						))}

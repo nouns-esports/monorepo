@@ -337,6 +337,41 @@
       "when": 1733354185790,
       "tag": "0047_brave_yellowjacket",
       "breakpoints": true
+    },
+    {
+      "idx": 48,
+      "version": "7",
+      "when": 1734045285657,
+      "tag": "0048_green_sir_ram",
+      "breakpoints": true
+    },
+    {
+      "idx": 49,
+      "version": "7",
+      "when": 1735285621116,
+      "tag": "0049_huge_thunderbolt_ross",
+      "breakpoints": true
+    },
+    {
+      "idx": 50,
+      "version": "7",
+      "when": 1735285680681,
+      "tag": "0050_wet_boomer",
+      "breakpoints": true
+    },
+    {
+      "idx": 51,
+      "version": "7",
+      "when": 1735580202931,
+      "tag": "0051_good_goblin_queen",
+      "breakpoints": true
+    },
+    {
+      "idx": 52,
+      "version": "7",
+      "when": 1735671964242,
+      "tag": "0052_stale_rogue",
+      "breakpoints": true
     }
   ]
 }

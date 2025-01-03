@@ -164,12 +164,6 @@ export default async function Round(props: {
 			},
 		})) satisfies Activity[];
 
-	const participants = new Set();
-
-	for (const votesAndProposals of [...round.proposals, ...round.votes]) {
-		participants.add(votesAndProposals.user?.id);
-	}
-
 	return (
 		<div className="relative flex flex-col justify-center gap-4 w-full pt-32 max-xl:pt-28 max-sm:pt-20 px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
 			<Link
@@ -183,6 +177,7 @@ export default async function Round(props: {
 				<div className="flex gap-4 h-[500px] max-xl:flex-col max-xl:h-auto">
 					<div className="bg-grey-800 flex flex-col w-full h-full rounded-xl overflow-hidden max-lg:max-h-[600px] max-sm:max-h-[500px]">
 						<img
+							alt={round.name}
 							src={`${round.image}?img-height=500&img-onerror=redirect`}
 							className="w-full h-48 object-cover object-center max-sm:h-32"
 						/>
@@ -197,6 +192,7 @@ export default async function Round(props: {
 									className="bg-grey-500 hover:bg-grey-400 transition-colors py-2 pl-2 pr-3 flex-shrink-0 rounded-full flex text-white items-center gap-2 text-sm font-semibold w-fit whitespace-nowrap"
 								>
 									<img
+										alt={round.community?.name ?? "Nouns Esports"}
 										src={round.community?.image ?? "/logo/logo-square.png"}
 										className="w-5 h-5 rounded-full"
 									/>
@@ -206,7 +202,7 @@ export default async function Round(props: {
 							<Markdown
 								markdown={round.content}
 								readOnly
-								className="overflow-y-auto h-full custom-scrollbar"
+								className="h-full overflow-y-auto custom-scrollbar"
 							/>
 						</div>
 					</div>
@@ -222,6 +218,7 @@ export default async function Round(props: {
 										>
 											<div className="flex gap-2 items-center">
 												<img
+													alt={award.asset.name}
 													src={award.asset.image}
 													title={award.asset.name}
 													className="w-7 h-7 rounded-md object-cover object-center"
@@ -265,7 +262,7 @@ export default async function Round(props: {
 										className="flex items-center gap-2 text-white pr-2"
 									>
 										<Users className="w-4 h-4" />
-										{participants.size}
+										{round.totalParticipants}
 									</div>
 								</div>
 								<div className="flex flex-col gap-3 h-full overflow-y-auto overflow-x-hidden custom-scrollbar">
@@ -335,6 +332,7 @@ export default async function Round(props: {
 																	className="text-white flex items-center gap-2 group hover:text-white/70 transition-all"
 																>
 																	<img
+																		alt={event.user.name}
 																		src={event.user.image}
 																		className={twMerge(
 																			"w-5 h-5 rounded-full object-cover group-hover:brightness-75 transition-all",
@@ -369,6 +367,7 @@ export default async function Round(props: {
 																className="text-white flex items-center gap-2 group hover:text-white/70 transition-all"
 															>
 																<img
+																	alt={event.user.name}
 																	src={event.user.image}
 																	className={twMerge(
 																		"w-5 h-5 rounded-full object-cover group-hover:brightness-75 transition-all",
@@ -391,6 +390,7 @@ export default async function Round(props: {
 																className="text-white flex items-center gap-1.5 group hover:text-white/70 transition-all"
 															>
 																<img
+																	alt={event.user.name}
 																	src={event.user.image}
 																	className={twMerge(
 																		"w-5 h-5 rounded-full object-cover group-hover:brightness-75 transition-all",
@@ -406,6 +406,7 @@ export default async function Round(props: {
 																className="text-white flex items-center gap-1.5 group hover:text-white/70 transition-all"
 															>
 																<img
+																	alt={event.for.user.name}
 																	src={event.for.user.image}
 																	className={twMerge(
 																		"w-5 h-5 rounded-full object-cover group-hover:brightness-75 transition-all",

@@ -28,6 +28,7 @@
     "packages/*"
   ],
   "dependencies": {
+    "@farcaster/frame-sdk": "^0.0.22",
     "@farcaster/hub-nodejs": "^0.12.7",
     "@lexical/headless": "^0.14.5",
     "@lexical/html": "^0.14.5",
@@ -38,9 +39,10 @@
     "@livepeer/react": "^4.2.7",
     "@neynar/nodejs-sdk": "^1.68.0",
     "@pinata/sdk": "^2.1.0",
-    "@privy-io/react-auth": "^1.95.2",
-    "@privy-io/server-auth": "^1.16.6",
+    "@privy-io/react-auth": "^1.96.2",
+    "@privy-io/server-auth": "^1.16.9",
     "@privy-io/wagmi": "^0.2.12",
+    "@shopify/storefront-api-client": "^1.0.3",
     "@t3-oss/env-nextjs": "^0.10.1",
     "@tailwindcss/typography": "^0.5.12",
     "@tiptap/extension-image": "^2.9.1",
@@ -82,6 +84,7 @@
     "tailwind-merge": "^2.4.0",
     "tailwindcss": "^3.4.3",
     "tailwindcss-animate": "^1.0.7",
+    "tiptap-markdown": "^0.8.10",
     "typescript": "^5.3.3",
     "viem": "^2.21.37",
     "wagmi": "^2.8.1",

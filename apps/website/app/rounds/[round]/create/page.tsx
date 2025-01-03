@@ -42,6 +42,7 @@ export default async function Create(props: {
 			<div className="flex gap-8 max-xl:flex-col">
 				<div className="bg-grey-800 rounded-xl overflow-hidden w-full h-fit">
 					<img
+						alt={round.name}
 						src={`${round.image}?img-height=500&img-onerror=redirect`}
 						className="w-full h-48 object-cover object-center max-sm:h-32"
 					/>

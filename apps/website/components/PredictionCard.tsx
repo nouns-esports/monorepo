@@ -42,6 +42,7 @@ export default function PredictionCard(props: {
 			<div className="flex justify-between gap-8 px-2 items-center">
 				<div className="flex items-center gap-4">
 					<img
+						alt={props.name}
 						src={props.image}
 						className="w-[44px] h-[44px] rounded-lg object-cover aspect-square"
 					/>

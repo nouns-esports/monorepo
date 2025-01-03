@@ -27,6 +27,7 @@ export default function ShareVotesModal(props: { round: string }) {
 			<div className="relative w-96 aspect-square">
 				<Shimmer className="absolute left-0 top-0 bg-grey-800" />
 				<img
+					alt={`${props.round} votes`}
 					src={`/api/frames/rounds/${props.round}/votes/${user?.id}/img`}
 					className="relative z-10 rounded-xl"
 				/>

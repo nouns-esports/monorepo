@@ -18,6 +18,7 @@ export default async function Footer() {
 							className="flex gap-3 group max-lg:justify-center items-center cursor-pointer select-none"
 						>
 							<img
+								alt="Nouns logo"
 								src="/logo/logo.svg"
 								draggable={false}
 								className="group-hover:rotate-[14deg] w-10 transition-transform duration-150 select-none"

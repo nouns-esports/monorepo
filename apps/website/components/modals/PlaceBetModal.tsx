@@ -6,7 +6,7 @@ import { create } from "zustand";
 import { useAction } from "next-safe-action/hooks";
 import { placeBet } from "@/server/mutations/placeBet";
 import { useEffect } from "react";
-import toast from "react-hot-toast";
+import { toast } from "../Toasts";
 
 export const usePlaceBetModal = create<{
 	prediction?: {
@@ -100,7 +100,11 @@ export default function PlaceBetModal() {
 				className="flex justify-center items-center gap-2 w-full text-black bg-white hover:bg-white/70 font-semibold rounded-lg p-2.5 transition-colors"
 			>
 				{isPending ? (
-					<img src="/spinner.svg" className="h-[18px] animate-spin" />
+					<img
+						alt="loading spinner"
+						src="/spinner.svg"
+						className="h-[18px] animate-spin"
+					/>
 				) : (
 					""
 				)}

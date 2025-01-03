@@ -11,6 +11,7 @@ import {
 	MessageCircle,
 	CalendarDays,
 	Settings2,
+	List,
 } from "lucide-react";
 import Banner from "./Banner";
 import Menu from "./Menu";
@@ -38,6 +39,7 @@ export default async function Header() {
 								className="pointer-events-auto flex gap-4 h-[2.85rem] max-sm:h-10 max-sm:gap-3 group items-center cursor-pointer select-none"
 							>
 								<img
+									alt="Nouns logo"
 									src="/logo/logo.svg"
 									draggable={false}
 									className="group-hover:rotate-[14deg] h-full transition-transform duration-150 select-none relative z-[60]"
@@ -56,6 +58,7 @@ export default async function Header() {
 												className="text-nowrap hover:bg-grey-500 transition-colors py-1.5 px-3 rounded-lg flex gap-4 items-center"
 											>
 												<img
+													alt="Nouns logo"
 													src="/logo/logo-square.png"
 													className="h-10 w-10 rounded-md"
 												/>
@@ -161,6 +164,7 @@ export default async function Header() {
 													className="flex items-center gap-4"
 												>
 													<img
+														alt="Discord logo"
 														src="/discord.jpg"
 														className="h-10 w-10 rounded-md"
 													/>
@@ -191,6 +195,9 @@ export default async function Header() {
 						</div>
 						<div className="pointer-events-auto flex gap-6 items-center relative z-[60]">
 							<div className="flex gap-4 items-center">
+								{/* <Link href="/leaderboard">
+									<List className="text-white w-6 h-6 hover:text-white/70 transition-colors" />
+								</Link> */}
 								<Notifications notifications={notifications} />
 								{user?.nexus?.admin ? (
 									<Link href="/admin">

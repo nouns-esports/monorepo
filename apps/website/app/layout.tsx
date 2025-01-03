@@ -39,10 +39,10 @@ const londrinaSolid = Londrina_Solid({
 
 export const metadata = {
 	title: {
-		default: "Nouns Esports",
-		template: "Nouns Esports - %s",
+		default: "Nouns",
+		template: "Nouns - %s",
 	},
-	description: "Leading the revolution in community driven esports!",
+	description: "Esports, powered by you!",
 	keywords: [
 		"esports",
 		"nouns",
@@ -65,6 +65,22 @@ export const metadata = {
 		site: "@NounsEsports",
 		card: "summary_large_image",
 		images: ["/og-banner.webp"],
+	},
+	other: {
+		"fc:frame": JSON.stringify({
+			version: "next",
+			imageUrl: "https://nouns.gg/og-banner.webp",
+			button: {
+				title: "Launch",
+				action: {
+					type: "launch_frame",
+					name: "Nouns",
+					url: "https://nouns.gg",
+					splashImageUrl: "https://nouns.gg/logo/logo.png",
+					splashBackgroundColor: "#040404",
+				},
+			},
+		}),
 	},
 } satisfies Metadata;
 

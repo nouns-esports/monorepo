@@ -1,13 +1,9 @@
 "use client";
 
 import type { Nexus, Proposal } from "~/packages/db/schema";
-import { Modal, ToggleModal, useModal } from "../Modal";
-import TextInput from "../form/TextInput";
-import TextArea from "../form/TextArea";
-import Button from "../Button";
-import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
-import { pinImage } from "@/server/mutations/pinImage";
+import { Modal, useModal } from "../Modal";
+import { useEffect } from "react";
+import { toast } from "../Toasts";
 import { useAction } from "next-safe-action/hooks";
 import { useRouter } from "next/navigation";
 import {
@@ -22,7 +18,6 @@ import {
 } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 import { castVotes } from "@/server/mutations/castVotes";
-import { confetti } from "@tsparticles/confetti";
 import Link from "../Link";
 import { usePrivy } from "@privy-io/react-auth";
 import { env } from "~/env";
@@ -60,6 +55,7 @@ export default function CastVotesModal(props: {
 						</button>
 					</div>
 					<img
+						alt={`${props.round} votes`}
 						src={`/api/frames/rounds/${props.round}/votes/${user?.id}/img`}
 						className="w-96 rounded-xl"
 					/>
@@ -110,7 +106,7 @@ export default function CastVotesModal(props: {
 											<div className="flex items-center gap-2">
 												<img
 													src={proposal.user.image}
-													alt=""
+													alt={proposal.user.name}
 													className="w-8 h-8 rounded-full"
 												/>
 												<p className="text-white text-lg font-bebas-neue leading-none">
@@ -149,7 +145,11 @@ export default function CastVotesModal(props: {
 						className="flex justify-center items-center gap-2 w-full text-black bg-white hover:bg-white/70 font-semibold rounded-lg p-2.5 transition-colors"
 					>
 						{isPending ? (
-							<img src="/spinner.svg" className="h-[18px] animate-spin" />
+							<img
+								alt="loading spinner"
+								src="/spinner.svg"
+								className="h-[18px] animate-spin"
+							/>
 						) : (
 							""
 						)}

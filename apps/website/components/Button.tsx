@@ -50,7 +50,11 @@ export default function Button(props: {
 				)}
 			>
 				{props.loading ? (
-					<img src="/spinner.svg" className="h-[18px] animate-spin" />
+					<img
+						alt="Loading spinner"
+						src="/spinner.svg"
+						className="h-[18px] animate-spin"
+					/>
 				) : (
 					""
 				)}
