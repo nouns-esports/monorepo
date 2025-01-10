@@ -46,7 +46,9 @@ export const discordSnapshot = createCommand({
 		if (!currentSeason) throw new Error("No season found");
 
 		await db.transaction(async (tx) => {
+			console.log("transacting");
 			for (const user of users) {
+				console.log("user", user);
 				const [snapshot] = await tx
 					.insert(snapshots)
 					.values({
