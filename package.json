@@ -28,6 +28,8 @@
     "packages/*"
   ],
   "dependencies": {
+    "@coinbase/cbpay-js": "^2.4.0",
+    "@coinbase/coinbase-sdk": "^0.13.0",
     "@farcaster/frame-sdk": "^0.0.22",
     "@farcaster/hub-nodejs": "^0.12.7",
     "@lexical/headless": "^0.14.5",
@@ -53,6 +55,7 @@
     "@tiptap/react": "^2.9.1",
     "@tiptap/starter-kit": "^2.9.1",
     "@tsparticles/confetti": "^3.5.0",
+    "@types/jsonwebtoken": "^9.0.7",
     "@types/node-cron": "^3.0.11",
     "@uidotdev/usehooks": "^2.4.1",
     "autoprefixer": "^10.4.17",
@@ -67,6 +70,7 @@
     "frog": "0.17.4",
     "hono": "^4.6.12",
     "jose": "^5.6.3",
+    "jsonwebtoken": "^9.0.2",
     "lexical": "^0.14.5",
     "lucide-react": "^0.407.0",
     "next": "15.0.3",

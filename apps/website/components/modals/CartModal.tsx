@@ -93,6 +93,7 @@ export default function CartModal() {
 			</div>
 			<Link
 				href="/shop/checkout"
+				newTab
 				className="flex justify-center items-center gap-2 w-full text-black bg-white hover:bg-white/70 font-semibold rounded-lg p-2.5 transition-colors"
 			>
 				Checkout

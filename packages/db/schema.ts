@@ -590,63 +590,63 @@ export const creationsRelations = relations(creations, ({ one }) => ({
 	}),
 }));
 
-export const products = pgTable("products", {
-	id: text("id").primaryKey(),
-	shopifyId: text("shopify_id").notNull(),
-	name: text("name").notNull(),
-	image: text("image").notNull(),
-	price: numeric("price", { precision: 78 }).notNull(),
-	collection: text("collection"),
-});
+// export const products = pgTable("products", {
+// 	id: text("id").primaryKey(),
+// 	shopifyId: text("shopify_id").notNull(),
+// 	name: text("name").notNull(),
+// 	image: text("image").notNull(),
+// 	price: numeric("price", { precision: 78 }).notNull(),
+// 	collection: text("collection"),
+// });
 
-export const productsRelations = relations(products, ({ one }) => ({
-	collection: one(collections, {
-		fields: [products.collection],
-		references: [collections.id],
-	}),
-}));
+// export const productsRelations = relations(products, ({ one }) => ({
+// 	collection: one(collections, {
+// 		fields: [products.collection],
+// 		references: [collections.id],
+// 	}),
+// }));
 
-export const collections = pgTable("collections", {
-	id: text("id").primaryKey(),
-	name: text("name").notNull(),
-	image: text("image").notNull(),
-});
+// export const collections = pgTable("collections", {
+// 	id: text("id").primaryKey(),
+// 	name: text("name").notNull(),
+// 	image: text("image").notNull(),
+// });
 
-export const collectionsRelations = relations(collections, ({ many }) => ({
-	products: many(products),
-}));
+// export const collectionsRelations = relations(collections, ({ many }) => ({
+// 	products: many(products),
+// }));
 
-export const tokens = pgTable("tokens", {
-	id: serial("id").primaryKey(),
-	address: text("address").notNull(),
-	chain: text("chain", { enum: ["base", "baseSepolia"] }).notNull(),
-	decimals: integer("decimals").notNull(),
-	name: text("name").notNull(),
-	symbol: text("symbol").notNull(),
-	image: text("image").notNull(),
-});
+// export const tokens = pgTable("tokens", {
+// 	id: serial("id").primaryKey(),
+// 	address: text("address").notNull(),
+// 	chain: text("chain", { enum: ["base", "baseSepolia"] }).notNull(),
+// 	decimals: integer("decimals").notNull(),
+// 	name: text("name").notNull(),
+// 	symbol: text("symbol").notNull(),
+// 	image: text("image").notNull(),
+// });
 
-export const tokensRelations = relations(tokens, ({ many }) => ({
-	balances: many(balances),
-}));
+// export const tokensRelations = relations(tokens, ({ many }) => ({
+// 	balances: many(balances),
+// }));
 
-export const balances = pgTable("balances", {
-	id: serial("id").primaryKey(),
-	user: text("user").notNull(),
-	token: text("token").notNull(),
-	amount: integer("amount").notNull(),
-});
+// export const balances = pgTable("balances", {
+// 	id: serial("id").primaryKey(),
+// 	user: text("user").notNull(),
+// 	token: text("token").notNull(),
+// 	amount: integer("amount").notNull(),
+// });
 
-export const balancesRelations = relations(balances, ({ one }) => ({
-	user: one(nexus, {
-		fields: [balances.user],
-		references: [nexus.id],
-	}),
-	token: one(tokens, {
-		fields: [balances.token],
-		references: [tokens.id],
-	}),
-}));
+// export const balancesRelations = relations(balances, ({ one }) => ({
+// 	user: one(nexus, {
+// 		fields: [balances.user],
+// 		references: [nexus.id],
+// 	}),
+// 	token: one(tokens, {
+// 		fields: [balances.token],
+// 		references: [tokens.id],
+// 	}),
+// }));
 
 const schema = {
 	communities,

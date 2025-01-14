@@ -64,7 +64,6 @@ export default async function Shop() {
 					</div>
 				</div>
 			</div>
-			<CartModal />
 		</>
 	);
 }

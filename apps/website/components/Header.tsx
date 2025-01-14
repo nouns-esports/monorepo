@@ -12,12 +12,17 @@ import {
 	CalendarDays,
 	Settings2,
 	List,
+	Plus,
+	ShoppingCart,
 } from "lucide-react";
 import Banner from "./Banner";
 import Menu from "./Menu";
 import { getRosters } from "@/server/queries/rosters";
 import { getNotifications } from "@/server/queries/notifications";
 import Notifications from "./Notifications";
+import GoldModal from "./modals/GoldModal";
+import { ToggleModal } from "./Modal";
+import CartModal from "./modals/CartModal";
 
 export default async function Header() {
 	const [user, rosters] = await Promise.all([
@@ -143,21 +148,28 @@ export default async function Header() {
 													</div>
 													<div>
 														<p className="font-bebas-neue text-lg">Quests</p>
-														<p className="text-grey-200">Level up your nexus</p>
+														<p className="text-grey-200">Level up your Nexus</p>
 													</div>
 												</Link>
 											</li>
-											{/* <li className="text-nowrap hover:bg-grey-500 transition-colors py-1.5 px-3 rounded-lg">
-												<Link href="/chat" className="flex items-center gap-4">
-													<div className="rounded-md w-10 h-10 flex overflow-hidden bg-green text-white items-center">
-														<MessageCircle className="w-full h-full p-2" />
+											<li className="text-nowrap hover:bg-grey-500 transition-colors py-1.5 px-3 rounded-lg">
+												<Link
+													href="/leaderboard"
+													className="flex items-center gap-4"
+												>
+													<div className="rounded-md w-10 h-10 flex overflow-hidden bg-pink text-white items-center">
+														<List className="w-full h-full p-2" />
 													</div>
 													<div>
-														<p className="font-bebas-neue text-lg">Chat</p>
-														<p className="text-grey-200">Join the discussion</p>
+														<p className="font-bebas-neue text-lg">
+															Leaderboard
+														</p>
+														<p className="text-grey-200">
+															Rankup and earn rewards
+														</p>
 													</div>
 												</Link>
-											</li> */}
+											</li>
 											<li className="text-nowrap hover:bg-grey-500 transition-colors py-1.5 px-3 rounded-lg">
 												<Link
 													href="/discord"
@@ -184,7 +196,7 @@ export default async function Header() {
 											Events
 										</li>
 									</Link>
-									<Link href="https://shop.nouns.gg" newTab>
+									<Link href="/shop">
 										<li className="flex gap-2 items-center opacity-100 hover:opacity-80 transition-opacity relative z-[60]">
 											<ShoppingBag className="w-5 h-5" />
 											Shop
@@ -194,22 +206,35 @@ export default async function Header() {
 							</nav>
 						</div>
 						<div className="pointer-events-auto flex gap-6 items-center relative z-[60]">
-							<div className="flex gap-4 items-center">
-								{/* <Link href="/leaderboard">
-									<List className="text-white w-6 h-6 hover:text-white/70 transition-colors" />
-								</Link> */}
+							<div className="flex items-center gap-4">
 								<Notifications notifications={notifications} />
-								{user?.nexus?.admin ? (
-									<Link href="/admin">
-										<Settings2 className="text-white w-6 h-6 hover:text-white/70 transition-colors" />
-									</Link>
-								) : null}
+								<ToggleModal id="cart">
+									<ShoppingCart className="w-[22px] h-[22px] text-white hover:text-grey-200 transition-colors" />
+								</ToggleModal>
 							</div>
-							<SignInButton user={user} />
+							<div className="flex items-center bg-[#4F3101] has-[.child:hover]:bg-[#623C00] transition-colors rounded-full cursor-pointer">
+								<ToggleModal
+									id="gold"
+									className="child pl-3 pr-4 h-10 flex gap-2 items-center justify-center"
+								>
+									<img
+										alt="Gold coin"
+										src="https://ipfs.nouns.gg/ipfs/bafkreiccw4et522umioskkazcvbdxg2xjjlatkxd4samkjspoosg2wldbu"
+										className="rounded-full h-5 w-5 shadow-xl select-none"
+										draggable={false}
+									/>
+									<p className="font-semibold text-[#FEBD1C] select-none">
+										100
+									</p>
+								</ToggleModal>
+								<SignInButton user={user} />
+							</div>
 						</div>
 					</div>
 				</div>
 			</header>
+			<GoldModal />
+			<CartModal />
 		</>
 	);
 }

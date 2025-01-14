@@ -17,15 +17,20 @@ export const env = createEnv({
 		MATCHA_API_KEY: z.string().min(1),
 		SHOPIFY_STOREFRONT_PRIVATE_ACCESS_TOKEN: z.string().min(1),
 		CGX_AIRDROP_URL: z.string().min(1),
+		USDC_ADDRESS: z.string().min(1),
+		CDP_API_KEY_NAME: z.string().min(1),
+		CDP_SECRET_KEY: z.string().min(1),
 	},
 	client: {
 		NEXT_PUBLIC_ENVIRONMENT: z.enum(["development", "production"]),
 		NEXT_PUBLIC_PRIVY_APP_ID: z.string().min(1),
 		NEXT_PUBLIC_DOMAIN: z.string().min(1),
+		NEXT_PUBLIC_CDP_PROJECT_ID: z.string().min(1),
 	},
 	experimental__runtimeEnv: {
 		NEXT_PUBLIC_ENVIRONMENT: process.env.NEXT_PUBLIC_ENVIRONMENT,
 		NEXT_PUBLIC_PRIVY_APP_ID: process.env.NEXT_PUBLIC_PRIVY_APP_ID,
 		NEXT_PUBLIC_DOMAIN: process.env.NEXT_PUBLIC_DOMAIN,
+		NEXT_PUBLIC_CDP_PROJECT_ID: process.env.NEXT_PUBLIC_CDP_PROJECT_ID,
 	},
 });
