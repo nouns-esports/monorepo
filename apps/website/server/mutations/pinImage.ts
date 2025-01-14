@@ -5,35 +5,35 @@ import { onlyUser } from ".";
 import { z } from "zod";
 
 export const pinImage = onlyUser
-  .schema(
-    z.object({
-      formData: z.any(),
-    })
-  )
-  .action(async ({ parsedInput }) => {
-    const image = parsedInput.formData.get("file") as File;
+	.schema(
+		z.object({
+			formData: z.any(),
+		}),
+	)
+	.action(async ({ parsedInput }) => {
+		const image = parsedInput.formData.get("file") as File;
 
-    // 25 MB in bytes
-    if (image.size > 25 * 1024 * 1024) {
-      throw new Error("Image is too large");
-    }
+		// 10 MB in bytes
+		if (image.size > 10 * 1024 * 1024) {
+			throw new Error("Image is too large");
+		}
 
-    const response = await fetch(
-      "https://api.pinata.cloud/pinning/pinFileToIPFS",
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${env.PINATA_JWT}`,
-        },
-        body: parsedInput.formData,
-      }
-    );
+		const response = await fetch(
+			"https://api.pinata.cloud/pinning/pinFileToIPFS",
+			{
+				method: "POST",
+				headers: {
+					Authorization: `Bearer ${env.PINATA_JWT}`,
+				},
+				body: parsedInput.formData,
+			},
+		);
 
-    const data = (await response.json()) as { IpfsHash: string };
+		const data = (await response.json()) as { IpfsHash: string };
 
-    if (!response.ok) {
-      throw new Error("Could not upload file");
-    }
+		if (!response.ok) {
+			throw new Error("Could not upload file");
+		}
 
-    return data.IpfsHash;
-  });
+		return data.IpfsHash;
+	});
