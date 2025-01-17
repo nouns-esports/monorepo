@@ -241,7 +241,7 @@ export default async function Home() {
 					))}
 				</ul>
 			</div>
-			<div className="flex flex-col gap-4 px-32 max-2xl:px-16 max-xl:px-8 max-lg:px-0">
+			{/* <div className="flex flex-col gap-4 px-32 max-2xl:px-16 max-xl:px-8 max-lg:px-0">
 				<div className="flex justify-between items-center max-lg:px-8 max-sm:px-4">
 					<h2 className="font-luckiest-guy text-white text-4xl max-sm:text-3xl">
 						Articles
@@ -272,7 +272,7 @@ export default async function Home() {
 					<div className="w-full" />
 					<div className="w-full" />
 				</ul>
-			</div>
+			</div> */}
 			<div className="flex flex-col gap-4 px-32 max-2xl:px-16 max-xl:px-8 max-lg:px-0">
 				<h2 className="font-luckiest-guy text-white text-4xl max-lg:pl-8 max-sm:pl-4 max-sm:text-3xl">
 					Explore
