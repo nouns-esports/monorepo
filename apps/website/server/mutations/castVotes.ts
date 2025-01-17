@@ -33,8 +33,8 @@ export const castVotes = onlyRanked
 
 		if (
 			round.minVoterRank &&
-			ctx.user.nexus?.rank?.place !== undefined &&
-			ctx.user.nexus?.rank?.place < round.minVoterRank.place
+			ctx.user.nexus?.rank &&
+			ctx.user.nexus.rank.place < round.minVoterRank.place
 		) {
 			throw new Error("You are not eligible to vote in this round");
 		}
