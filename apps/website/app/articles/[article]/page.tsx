@@ -1,23 +1,48 @@
+import Link from "@/components/Link";
 import MarkdownTipTap from "@/components/MarkdownTipTap";
 import { getArticle } from "@/server/queries/articles";
+import { getAuthenticatedUser } from "@/server/queries/users";
+import { ArrowLeft } from "lucide-react";
 import { notFound } from "next/navigation";
 
-export default async function ArticlePage() {
-	const article = await getArticle({ id: "enter-the-nexus" });
+export default async function ArticlePage(props: {
+	params: { article: string };
+}) {
+	const params = await props.params;
+
+	const [article, user] = await Promise.all([
+		getArticle({ id: params.article }),
+		getAuthenticatedUser(),
+	]);
 
 	if (!article) {
 		return notFound();
 	}
 
+	if (
+		article.id === "eurank-2024" &&
+		(!user ||
+			![
+				"did:privy:clx8g9mui0c1k10947grzks2a",
+				"did:privy:cm0u971uh00gxzujycovcgkzc",
+			].includes(user.id))
+	) {
+		return notFound();
+	}
+
 	return (
 		<div className="flex flex-col items-center gap-8 pt-32 max-xl:pt-28 max-sm:pt-20 px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
-			<div className="flex flex-col gap-4 max-w-3xl bg-grey-800 rounded-xl">
+			<div className="flex flex-col gap-4 max-w-3xl">
+				<Link href="/" className="text-red flex items-center gap-1 group w-fit">
+					<ArrowLeft className="w-5 h-5 text-red group-hover:-translate-x-1 transition-transform" />
+					Back to home
+				</Link>
 				<img
 					src={article.image}
 					alt={article.title}
-					className="aspect-video rounded-xl object-cover"
+					className="aspect-video rounded-xl object-cover max-h-64"
 				/>
-				<div className="flex flex-col gap-4 p-4">
+				<div className="flex flex-col gap-4">
 					<h1 className="text-4xl text-white font-luckiest-guy">
 						{article.title}
 					</h1>
