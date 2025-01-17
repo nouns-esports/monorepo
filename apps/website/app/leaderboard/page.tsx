@@ -1,24 +1,26 @@
 import Link from "@/components/Link";
-import { getLeaderboard } from "@/server/queries/rankings";
+import { getLeaderboard, getSeasons } from "@/server/queries/rankings";
 import { getAuthenticatedUser } from "@/server/queries/users";
 import { CaretUp, CaretDown } from "phosphor-react-sc";
 import Countdown from "@/components/Countdown";
 import { twMerge } from "tailwind-merge";
+import Tabs from "@/components/Tabs";
+import { nextFridayAt2pmCST } from "@/utils/nextFridayAt2pmCST";
 
-export default async function Leaderboard() {
+export default async function Leaderboard(props: {
+	searchParams: { season?: string };
+}) {
+	const searchParams = await props.searchParams;
+
 	const user = await getAuthenticatedUser();
 
-	const leaderboard = await getLeaderboard();
+	const seasons = await getSeasons();
 
-	const now = new Date();
-	const nextUpdate = new Date(now);
-	nextUpdate.setUTCHours(21, 0, 0, 0); // 3pm CST is 9pm UTC
-	if (nextUpdate <= now) {
-		nextUpdate.setDate(nextUpdate.getDate() + 1);
-	}
-	// Every hour
-	// nextUpdate.setMinutes(0, 0, 0);
-	// nextUpdate.setHours(nextUpdate.getHours() + 1);
+	const leaderboard = await getLeaderboard({
+		season: Number(searchParams.season ?? 1),
+	});
+
+	const nextUpdate = nextFridayAt2pmCST();
 
 	return (
 		<div className="flex flex-col items-center gap-16 pt-32 max-xl:pt-28 max-sm:pt-20 px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
@@ -35,16 +37,36 @@ export default async function Leaderboard() {
 							</p>
 						</div>
 					</div>
-					{/* <Tabs
-                            id="leaderboard"
-                            selected={props.searchParams.leaderboard ?? "global"}
-                            options={{
-                                global: "Global",
-                                friends: "Friends",
-                            }}
-                        /> */}
 				</div>
-				{/* Tabs for seasons */}
+				{/* <Tabs
+					id="type"
+					selected={"global"}
+					options={{
+						global: "Global",
+						friends: "Friends",
+					}}
+				/> */}
+				<div className="flex flex-col gap-4">
+					<ul className="flex gap-2 items-center">
+						{seasons.map((season, index) => (
+							<li
+								key={season.id}
+								className={twMerge(
+									"text-white text-sm bg-grey-800 px-4 py-2 rounded-lg",
+									((!searchParams.season && index === 0) ||
+										Number(searchParams.season) === season.id) &&
+										"bg-grey-500",
+								)}
+							>
+								<Link
+									href={`/leaderboard${index === 0 ? "" : `?season=${season.id}`}`}
+								>
+									Season {season.id}
+								</Link>
+							</li>
+						))}
+					</ul>
+				</div>
 				<div className="relative flex flex-col gap-2">
 					{leaderboard.map((ranking) => {
 						if (!ranking.user) return;

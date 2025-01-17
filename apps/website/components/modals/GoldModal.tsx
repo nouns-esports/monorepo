@@ -1,12 +1,11 @@
 import { X } from "lucide-react";
 import { Modal, ToggleModal } from "../Modal";
-import { generateOnRampURL } from "@coinbase/cbpay-js";
 import Link from "../Link";
 import { env } from "~/env";
-import { getQuote } from "@/server/queries/coinbase";
+import { getAuthenticatedUser } from "@/server/queries/users";
 
 export default async function GoldModal() {
-	const quote = await getQuote();
+	const user = await getAuthenticatedUser();
 
 	return (
 		<Modal id="gold" className="p-4 flex flex-col max-w-[500px] w-80 gap-8">
@@ -28,30 +27,36 @@ export default async function GoldModal() {
 					src="https://ipfs.nouns.gg/ipfs/bafkreiccw4et522umioskkazcvbdxg2xjjlatkxd4samkjspoosg2wldbu"
 					className="rounded-full h-10 w-10 shadow-xl"
 				/>
-				<p className="font-semibold text-4xl text-[#FEBD1C]">100</p>
+				<p className="font-semibold text-4xl text-[#FEBD1C]">
+					{user?.nexus?.gold ?? 0}
+				</p>
 			</div>
-			<Link
-				href={generateOnRampURL({
-					appId: env.NEXT_PUBLIC_CDP_PROJECT_ID,
-					destinationWallets: [
-						{
-							address: "0xE3ff24a97BFB65CAdEF30F6Ad19a6EA7E6F6149d",
-							blockchains: ["base"],
-						},
-					],
-					// defaultAsset: "2b92315d-eab7-5bef-84fa-089a131333f5",
-					assets: ["USDC"],
-					defaultAsset: "USDC",
-					defaultPaymentMethod: "CARD",
-					fiatCurrency: "USD",
-					presetFiatAmount: 10,
-					quoteId: quote,
-				})}
+			{/* <Link
+				href={
+					user?.smartWallet
+						? generateOnRampURL({
+								appId: env.NEXT_PUBLIC_CDP_PROJECT_ID,
+								destinationWallets: [
+									{
+										address: user?.smartWallet,
+										blockchains: ["base"],
+									},
+								],
+								// defaultAsset: "2b92315d-eab7-5bef-84fa-089a131333f5",
+								assets: ["USDC"],
+								defaultAsset: "USDC",
+								defaultPaymentMethod: "CARD",
+								fiatCurrency: "USD",
+								presetFiatAmount: 10,
+								quoteId: quote,
+							})
+						: ""
+				}
 				newTab
 				className="flex justify-center items-center gap-2 w-full text-black bg-white hover:bg-white/70 font-semibold rounded-lg p-2.5 transition-colors"
 			>
-				Buy
-			</Link>
+				{user?.smartWallet ? "Buy" : "Connect Wallet"}
+			</Link> */}
 		</Modal>
 	);
 }

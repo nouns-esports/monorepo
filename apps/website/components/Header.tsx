@@ -213,20 +213,22 @@ export default async function Header() {
 								</ToggleModal>
 							</div>
 							<div className="flex items-center bg-[#4F3101] has-[.child:hover]:bg-[#623C00] transition-colors rounded-full cursor-pointer">
-								<ToggleModal
-									id="gold"
-									className="child pl-3 pr-4 h-10 flex gap-2 items-center justify-center"
-								>
-									<img
-										alt="Gold coin"
-										src="https://ipfs.nouns.gg/ipfs/bafkreiccw4et522umioskkazcvbdxg2xjjlatkxd4samkjspoosg2wldbu"
-										className="rounded-full h-5 w-5 shadow-xl select-none"
-										draggable={false}
-									/>
-									<p className="font-semibold text-[#FEBD1C] select-none">
-										100
-									</p>
-								</ToggleModal>
+								{user?.nexus ? (
+									<ToggleModal
+										id="gold"
+										className="child pl-3 pr-4 h-10 flex gap-2 items-center justify-center"
+									>
+										<img
+											alt="Gold coin"
+											src="https://ipfs.nouns.gg/ipfs/bafkreiccw4et522umioskkazcvbdxg2xjjlatkxd4samkjspoosg2wldbu"
+											className="rounded-full h-5 w-5 shadow-xl select-none"
+											draggable={false}
+										/>
+										<p className="font-semibold text-[#FEBD1C] select-none">
+											{user?.nexus?.gold ?? 0}
+										</p>
+									</ToggleModal>
+								) : null}
 								<SignInButton user={user} />
 							</div>
 						</div>

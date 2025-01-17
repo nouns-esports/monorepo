@@ -1,55 +1,30 @@
-import { and, asc, desc, eq, lte, or } from "drizzle-orm";
+import { and, asc, desc, eq, lte, or, sql } from "drizzle-orm";
 import { unstable_cache as cache } from "next/cache";
 import { db, rankings, seasons } from "~/packages/db/schema";
 
 export const getLeaderboard = cache(
-	async (input?: { user?: string }) => {
-		const season = await db.query.seasons.findFirst({
-			orderBy: desc(seasons.start),
-			where: lte(seasons.start, new Date()),
+	async (input: { season: number }) => {
+		////
+		return db.query.rankings.findMany({
+			where: and(
+				eq(rankings.season, input.season),
+				eq(
+					rankings.timestamp,
+					db
+						.select({
+							timestamp: sql`max(${rankings.timestamp})`,
+						})
+						.from(rankings)
+						.where(eq(rankings.season, input.season)),
+				),
+			),
+			orderBy: desc(rankings.xp),
+			limit: 100,
 			with: {
-				rankings: {
-					orderBy: desc(rankings.timestamp),
-					limit: 1,
-				},
+				rank: true,
+				user: true,
 			},
 		});
-
-		if (!season || season.rankings.length < 1) {
-			return [];
-		}
-
-		const latestTimestamp = season.rankings[0].timestamp;
-
-		const [currentRankings, userRanking] = await Promise.all([
-			db.query.rankings.findMany({
-				where: eq(rankings.timestamp, latestTimestamp),
-				orderBy: desc(rankings.xp),
-				limit: 100,
-				with: {
-					rank: true,
-					user: true,
-				},
-			}),
-			input?.user
-				? db.query.rankings.findFirst({
-						where: and(
-							eq(rankings.user, input.user),
-							eq(rankings.timestamp, latestTimestamp),
-						),
-						with: {
-							rank: true,
-							user: true,
-						},
-					})
-				: undefined,
-		]);
-
-		if (!userRanking) {
-			return currentRankings;
-		}
-
-		return [...currentRankings, userRanking].toSorted((a, b) => b.xp - a.xp);
 	},
 	["getLeaderboard"],
 	{ tags: ["getLeaderboard"], revalidate: 60 * 10 },
@@ -77,4 +52,15 @@ export const getUserRankings = cache(
 	},
 	["getUserRankings"],
 	{ tags: ["getUserRankings"], revalidate: 60 * 10 },
+);
+
+export const getSeasons = cache(
+	async () => {
+		//
+		return await db.query.seasons.findMany({
+			orderBy: asc(seasons.id),
+		});
+	},
+	["getSeasons"],
+	{ tags: ["getSeasons"], revalidate: 60 * 10 },
 );

@@ -389,6 +389,7 @@ export const nexus = pgTable("nexus", {
 	twitter: text("twitter"),
 	discord: text("discord"),
 	fid: integer("fid"),
+	gold: integer("gold").notNull().default(0),
 	canRecieveEmails: boolean("can_recieve_emails").notNull().default(false),
 });
 
@@ -590,63 +591,60 @@ export const creationsRelations = relations(creations, ({ one }) => ({
 	}),
 }));
 
-// export const products = pgTable("products", {
-// 	id: text("id").primaryKey(),
-// 	shopifyId: text("shopify_id").notNull(),
-// 	name: text("name").notNull(),
-// 	image: text("image").notNull(),
-// 	price: numeric("price", { precision: 78 }).notNull(),
-// 	collection: text("collection"),
-// });
+export const products = pgTable("products", {
+	id: text("id").primaryKey(),
+	productId: integer("product_id").notNull(),
+	name: text("name").notNull(),
+	image: text("image").notNull(),
+	description: text("description").notNull(),
+	// Variants get periodically updated from Shopify, everything else is static
+	variants: jsonb("variants")
+		.array()
+		.$type<
+			Array<{
+				key: string; // Ex: Size, Color, etc.
+				value: string; // Ex: S, M, L, Red, Blue, etc.
+				variantId: number;
+				image: string;
+				name: string;
+				price: number;
+				inventory: number;
+			}>
+		>()
+		.notNull()
+		.default([]),
+	collection: text("collection"),
+});
 
-// export const productsRelations = relations(products, ({ one }) => ({
-// 	collection: one(collections, {
-// 		fields: [products.collection],
-// 		references: [collections.id],
-// 	}),
-// }));
+export const productsRelations = relations(products, ({ one }) => ({
+	collection: one(collections, {
+		fields: [products.collection],
+		references: [collections.id],
+	}),
+}));
 
-// export const collections = pgTable("collections", {
-// 	id: text("id").primaryKey(),
-// 	name: text("name").notNull(),
-// 	image: text("image").notNull(),
-// });
+export const variants = pgTable("variants", {
+	id: text("id").primaryKey(),
+	product: text("product").notNull(),
+	variantId: integer("variant_id").notNull(),
+	type: text("type", {
+		enum: ["size", "color"],
+	}).notNull(),
+	value: text("value").notNull(),
+	image: text("image").notNull(),
+	price: numeric("price", { precision: 78 }).notNull(),
+	inventory: integer("inventory").notNull(),
+});
 
-// export const collectionsRelations = relations(collections, ({ many }) => ({
-// 	products: many(products),
-// }));
+export const collections = pgTable("collections", {
+	id: text("id").primaryKey(),
+	name: text("name").notNull(),
+	image: text("image").notNull(),
+});
 
-// export const tokens = pgTable("tokens", {
-// 	id: serial("id").primaryKey(),
-// 	address: text("address").notNull(),
-// 	chain: text("chain", { enum: ["base", "baseSepolia"] }).notNull(),
-// 	decimals: integer("decimals").notNull(),
-// 	name: text("name").notNull(),
-// 	symbol: text("symbol").notNull(),
-// 	image: text("image").notNull(),
-// });
-
-// export const tokensRelations = relations(tokens, ({ many }) => ({
-// 	balances: many(balances),
-// }));
-
-// export const balances = pgTable("balances", {
-// 	id: serial("id").primaryKey(),
-// 	user: text("user").notNull(),
-// 	token: text("token").notNull(),
-// 	amount: integer("amount").notNull(),
-// });
-
-// export const balancesRelations = relations(balances, ({ one }) => ({
-// 	user: one(nexus, {
-// 		fields: [balances.user],
-// 		references: [nexus.id],
-// 	}),
-// 	token: one(tokens, {
-// 		fields: [balances.token],
-// 		references: [tokens.id],
-// 	}),
-// }));
+export const collectionsRelations = relations(collections, ({ many }) => ({
+	products: many(products),
+}));
 
 const schema = {
 	communities,

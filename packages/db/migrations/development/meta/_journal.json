@@ -372,6 +372,13 @@
       "when": 1735671964242,
       "tag": "0052_stale_rogue",
       "breakpoints": true
+    },
+    {
+      "idx": 53,
+      "version": "7",
+      "when": 1736892881198,
+      "tag": "0053_famous_korvac",
+      "breakpoints": true
     }
   ]
 }

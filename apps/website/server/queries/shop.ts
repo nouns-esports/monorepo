@@ -3,6 +3,15 @@
 import { unstable_cache as cache } from "next/cache";
 import { shopifyClient } from "../clients/shopify";
 
+export type Collection = {
+	id: string;
+	title: string;
+	description: string;
+	products: {
+		nodes: Product[];
+	};
+};
+
 export type Product = {
 	id: string;
 	title: string;
@@ -15,65 +24,58 @@ export type Product = {
 		};
 	};
 	images: {
-		edges: Array<{
-			node: {
-				url: string;
-				altText: string;
-			};
+		nodes: Array<{
+			url: string;
+			altText: string;
 		}>;
 	};
 	variants: {
-		edges: Array<{
-			node: {
-				id: string;
-				title: string;
-				price: {
-					amount: string;
-					currencyCode: string;
-				};
-				availableForSale: boolean;
-			};
-		}>;
+		nodes: Variant[];
 	};
+};
+
+export type Variant = {
+	id: string;
+	title: string;
+	price: {
+		amount: string;
+		currencyCode: string;
+	};
+	availableForSale: boolean;
 };
 
 export const getProducts = cache(
 	async () => {
+		////////
 		const products = await shopifyClient.request(
 			`query {
 				products(first: 100) {
-					edges {
-						node {
-							id
-							title
-							description
-							handle
-							priceRange {
-								minVariantPrice {
+					nodes {
+						id
+						title
+						description
+						handle
+						priceRange {
+							minVariantPrice {
+								amount
+								currencyCode
+							}
+						}
+						images(first: 1) {
+							nodes {
+								url
+								altText
+							}
+						}
+						variants(first: 100) {
+							nodes {
+								id
+								title
+								price {
 									amount
 									currencyCode
 								}
-							}
-							images(first: 1) {
-								edges {
-									node {
-										url
-										altText
-									}
-								}
-							}
-							variants(first: 100) {
-								edges {
-									node {
-										id
-										title
-										price {
-											amount
-											currencyCode
-										}
-										availableForSale
-									}
-								}
+								availableForSale
 							}
 						}
 					}
@@ -81,10 +83,8 @@ export const getProducts = cache(
 			}`,
 		);
 
-		if (products.data?.products?.edges) {
-			return products.data.products.edges as Array<{
-				node: Product;
-			}>;
+		if (products.data?.products?.nodes) {
+			return products.data.products.nodes as Product[];
 		}
 
 		return [];
@@ -94,10 +94,10 @@ export const getProducts = cache(
 );
 
 export const getProduct = cache(
-	async (id: string) => {
+	async (input: { handle: string }) => {
 		const product = await shopifyClient.request(
 			`query {
-				product(id: "${id}") {
+				product(handle: "${input.handle}") {
 					id
 					title
 					description
@@ -109,24 +109,20 @@ export const getProduct = cache(
 						}
 					}
 					images(first: 1) {
-						edges {
-							node {
-								url
-								altText
-							}
+						nodes {
+							url
+							altText
 						}
 					}
 					variants(first: 100) {
-						edges {
-							node {
-								id
-								title
-								price {
-									amount
-									currencyCode
-								}
-								availableForSale
+						nodes {
+							id
+							title
+							price {
+								amount
+								currencyCode
 							}
+							availableForSale
 						}
 					}
 				}
@@ -142,19 +138,55 @@ export const getProduct = cache(
 );
 
 export const getCollection = cache(
-	async (handle: string) => {
+	async (input: { handle: string }) => {
 		const collection = await shopifyClient.request(
 			`query {
-			collection(handle: "${handle}") {
-				id
-			}
-		}`,
+				collection(handle: "${input.handle}") {
+					id
+					title
+					description
+					products(first: 100) {
+						nodes {
+							id
+							title
+							description
+							handle
+							priceRange {
+								minVariantPrice {
+									amount
+									currencyCode
+								}
+							}
+							images(first: 1) {
+								nodes {
+									url
+									altText
+								}
+							}
+							variants(first: 100) {
+								nodes {
+									id
+									title
+									price {
+										amount
+										currencyCode
+									}
+									availableForSale
+								}
+							}
+						}
+					}
+				}
+			}`,
 		);
 
 		if (collection.data?.collection) {
-			return collection.data.collection as { products: Product[] };
+			console.log(collection.data.collection);
+			return collection.data.collection as Collection;
 		}
 	},
 	["getCollection"],
 	{ revalidate: 60 * 10 },
 );
+
+export const getOrders = cache(async (input: { email: string }) => {});
