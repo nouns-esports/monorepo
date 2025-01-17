@@ -85,16 +85,21 @@ export default function Proposals(props: {
 									<p className="text-red">
 										{
 											{
-												Upcoming: "",
 												Proposing: "Proposing",
 												Voting: "Voting",
-												Ended: "",
 											}[state]
 										}
 									</p>
 								</div>
 								<p className="text-white">
-									<Countdown date={props.round.end} />
+									<Countdown
+										date={
+											{
+												Proposing: props.round.votingStart,
+												Voting: props.round.end,
+											}[state]
+										}
+									/>
 								</p>
 							</div>
 						) : null}
