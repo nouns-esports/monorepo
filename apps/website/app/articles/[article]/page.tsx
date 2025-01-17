@@ -3,7 +3,36 @@ import MarkdownTipTap from "@/components/MarkdownTipTap";
 import { getArticle } from "@/server/queries/articles";
 import { getAuthenticatedUser } from "@/server/queries/users";
 import { ArrowLeft } from "lucide-react";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { env } from "~/env";
+
+export async function generateMetadata(props: {
+	params: Promise<{ article: string }>;
+}): Promise<Metadata> {
+	const params = await props.params;
+
+	const article = await getArticle({ id: params.article });
+
+	if (!article) {
+		return notFound();
+	}
+
+	return {
+		title: article.title,
+		description: null,
+		metadataBase: new URL(env.NEXT_PUBLIC_DOMAIN),
+		openGraph: {
+			type: "website",
+			images: [article.image],
+		},
+		twitter: {
+			site: "@NounsEsports",
+			card: "summary_large_image",
+			images: [article.image],
+		},
+	};
+}
 
 export default async function ArticlePage(props: {
 	params: Promise<{ article: string }>;
