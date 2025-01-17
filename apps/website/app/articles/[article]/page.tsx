@@ -6,7 +6,7 @@ import { ArrowLeft } from "lucide-react";
 import { notFound } from "next/navigation";
 
 export default async function ArticlePage(props: {
-	params: { article: string };
+	params: Promise<{ article: string }>;
 }) {
 	const params = await props.params;
 
