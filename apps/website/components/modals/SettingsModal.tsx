@@ -310,7 +310,7 @@ export default function SettingsModal(props: { user: AuthenticatedUser }) {
 										{props.user.twitter ? "Remove" : "Add"}
 									</Button>
 								</div>
-								{props.user.smartWallet ? (
+								{/* {props.user.smartWallet ? (
 									<div className="flex gap-2 justify-between items-center">
 										<div className="flex items-center gap-3">
 											<img
@@ -336,7 +336,7 @@ export default function SettingsModal(props: { user: AuthenticatedUser }) {
 											View
 										</Button>
 									</div>
-								) : null}
+								) : null} */}
 								<div className="flex flex-col gap-3">
 									<div className="flex items-center justify-between">
 										<p className="text-white font-semibold">External Wallets</p>
@@ -345,7 +345,7 @@ export default function SettingsModal(props: { user: AuthenticatedUser }) {
 											className="flex items-center gap-1 text-red hover:text-red/70 transition-colors"
 										>
 											<LinkIcon className="w-4 h-4" />
-											Verify
+											Add
 										</button>
 									</div>
 									<div className="flex flex-col gap-2">
