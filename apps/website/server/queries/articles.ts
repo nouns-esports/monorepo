@@ -19,6 +19,7 @@ export const getArticles = cache(
 		return db.query.articles.findMany({
 			where: lt(articles.publishedAt, new Date()),
 			orderBy: desc(articles.publishedAt),
+			limit: 4,
 		});
 	},
 	["articles"],
