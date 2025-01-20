@@ -56,6 +56,7 @@ export default async function ArticlePage(props: {
 				"did:privy:cm0u971uh00gxzujycovcgkzc",
 				"did:privy:clzipnabz023r3kppwk34w5qw",
 				"did:privy:clzigrp2u0bnt73v7seyd0gfl",
+				"did:privy:clzzr9beu04rp14cds53dnfai",
 			].includes(user.id))
 	) {
 		return notFound();
