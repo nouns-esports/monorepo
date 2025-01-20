@@ -1,0 +1,10 @@
+{
+  "name": "automations",
+  "type": "module",
+  "scripts": {
+    "test:refreshLeaderboard": "bun --env-file=../../.env.development ./scripts/refreshLeaderboard.ts",
+    "test:farcasterSnapshot": "bun --env-file=../../.env.development ./scripts/farcasterSnapshot.ts",
+    "start:refreshLeaderboard": "bun --env-file=../../.env.production ./scripts/refreshLeaderboard.ts",
+    "start:farcasterSnapshot": "bun --env-file=../../.env.production ./scripts/farcasterSnapshot.ts"
+  }
+}
