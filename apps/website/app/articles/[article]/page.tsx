@@ -62,7 +62,7 @@ export default async function ArticlePage(props: {
 	const now = new Date();
 
 	if (
-		article.publishedAt > now &&
+		new Date(article.publishedAt) > now &&
 		(!user || !article.editors.includes(user.id))
 	) {
 		return notFound();
