@@ -48,19 +48,19 @@ export default async function ArticlePage(props: {
 		return notFound();
 	}
 
-	if (
-		article.id === "eurank-2024" &&
-		(!user ||
-			![
-				"did:privy:clx8g9mui0c1k10947grzks2a",
-				"did:privy:cm0u971uh00gxzujycovcgkzc",
-				"did:privy:clzipnabz023r3kppwk34w5qw",
-				"did:privy:clzigrp2u0bnt73v7seyd0gfl",
-				"did:privy:clzzr9beu04rp14cds53dnfai",
-			].includes(user.id))
-	) {
-		return notFound();
-	}
+	// if (
+	// 	article.id === "eurank-2024" &&
+	// 	(!user ||
+	// 		![
+	// 			"did:privy:clx8g9mui0c1k10947grzks2a",
+	// 			"did:privy:cm0u971uh00gxzujycovcgkzc",
+	// 			"did:privy:clzipnabz023r3kppwk34w5qw",
+	// 			"did:privy:clzigrp2u0bnt73v7seyd0gfl",
+	// 			"did:privy:clzzr9beu04rp14cds53dnfai",
+	// 		].includes(user.id))
+	// ) {
+	// 	return notFound();
+	// }
 
 	return (
 		<div className="flex flex-col items-center gap-8 pt-32 max-xl:pt-28 max-sm:pt-20 px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
