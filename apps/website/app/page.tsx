@@ -269,9 +269,11 @@ export default async function Home() {
 							</Link>
 						</li>
 					))}
-					<div className="w-full" />
-					<div className="w-full" />
-					<div className="w-full" />
+					{Array.from({ length: Math.max(0, 4 - articles.length) }).map(
+						(_, i) => (
+							<li key={i} className="w-full" />
+						),
+					)}
 				</ul>
 			</div>
 			<div className="flex flex-col gap-4 px-32 max-2xl:px-16 max-xl:px-8 max-lg:px-0">
