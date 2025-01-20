@@ -1,5 +1,5 @@
 import { db, articles } from "~/packages/db/schema";
-import { eq } from "drizzle-orm";
+import { desc, eq, lt } from "drizzle-orm";
 import { unstable_cache as cache } from "next/cache";
 
 export const getArticle = cache(
@@ -16,7 +16,10 @@ export const getArticle = cache(
 export const getArticles = cache(
 	async () => {
 		//
-		return db.query.articles.findMany();
+		return db.query.articles.findMany({
+			where: lt(articles.publishedAt, new Date()),
+			orderBy: desc(articles.publishedAt),
+		});
 	},
 	["articles"],
 	{ tags: ["articles"], revalidate: 60 * 10 },
