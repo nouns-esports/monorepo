@@ -20,7 +20,7 @@ export async function generateMetadata(props: {
 
 	return {
 		title: article.title,
-		description: null,
+		description: "",
 		metadataBase: new URL(env.NEXT_PUBLIC_DOMAIN),
 		openGraph: {
 			type: "website",
