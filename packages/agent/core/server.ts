@@ -10,9 +10,13 @@ export async function startServer(options: { port: number }) {
 	if (runtime === "node") {
 		const { serve } = await import("@hono/node-server");
 
-		return serve({
+		const server = serve({
 			fetch: app.fetch,
 			port: options.port,
+		});
+
+		return await new Promise((resolve) => {
+			server.on("listening", () => resolve(server));
 		});
 	}
 

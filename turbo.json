@@ -21,7 +21,11 @@
     "USDC_ADDRESS",
     "NEXT_PUBLIC_CDP_PROJECT_ID",
     "CDP_API_KEY_NAME",
-    "CDP_SECRET_KEY"
+    "CDP_SECRET_KEY",
+    "ANTHROPIC_API_KEY",
+    "DASH_DISCORD_TOKEN",
+    "DASH_DISCORD_SECRET",
+    "DASH_DISCORD_CLIENT_ID"
   ],
   "tasks": {
     "build": {

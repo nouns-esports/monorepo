@@ -1,6 +1,6 @@
 import type { createPlugin } from "./createPlugin";
 import type { LanguageModelV1, tool } from "ai";
-
+import { generateText } from "ai";
 import figlet from "figlet";
 import kleur from "kleur";
 import { createSpinner } from "nanospinner";
@@ -37,13 +37,18 @@ export async function createAgent(config: {
 	state.success({
 		text: `Agent running on ${kleur.green(`http://localhost:${config.server?.port ?? 8787}`)}`,
 	});
-	state.start({ text: "Waiting for messages..." });
+	// state.start({ text: "Waiting for messages..." });
 
 	return {
-		memory: {
-			add: (text: string) => {},
+		generateText: async (prompt: string) => {
+			return generateText({
+				model: config.model,
+				prompt,
+				system:
+					`Your name is ${config.character.name} and you are ${config.character.bio}.` +
+					`Your lore: ${config.character.lore?.join(" ")}` +
+					`Your knowledge: ${config.character.knowledge?.join(" ")}`,
+			}).then((res) => res.text);
 		},
-		plugins: config.plugins,
-		tools: config.tools,
 	};
 }

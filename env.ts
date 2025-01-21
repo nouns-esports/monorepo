@@ -20,6 +20,10 @@ export const env = createEnv({
 		USDC_ADDRESS: z.string().min(1),
 		CDP_API_KEY_NAME: z.string().min(1),
 		CDP_SECRET_KEY: z.string().min(1),
+		ANTHROPIC_API_KEY: z.string().min(1),
+		DASH_DISCORD_TOKEN: z.string().min(1),
+		DASH_DISCORD_SECRET: z.string().min(1),
+		DASH_DISCORD_CLIENT_ID: z.string().min(1),
 	},
 	client: {
 		NEXT_PUBLIC_ENVIRONMENT: z.enum(["development", "production"]),
