@@ -198,7 +198,7 @@ export default async function Home() {
 							image={event.image}
 							start={event.start}
 							end={event.end}
-							className="max-md:w-96 max-md:h-auto max-md:flex-shrink-0"
+							className="max-xl:w-96 max-xl:h-auto max-xl:flex-shrink-0"
 						/>
 					))}
 				</div>
