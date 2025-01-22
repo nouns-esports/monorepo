@@ -1,5 +1,8 @@
-export function createPlugin<TConfig, TPlugin>(
-	create: () => (config: TConfig) => TPlugin,
+export function createPlugin<T>(
+	handler: (props: {
+		log: (message: string) => void;
+		generateReply: (prompt: string) => Promise<string>;
+	}) => Promise<T>,
 ) {
-	return create();
+	return { register: handler };
 }

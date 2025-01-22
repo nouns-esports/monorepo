@@ -11,7 +11,7 @@ export default async function GoldModal() {
 		<Modal id="gold" className="p-4 flex flex-col max-w-[500px] w-80 gap-8">
 			<div className="flex justify-between items-center">
 				<p className="text-white text-2xl font-bebas-neue leading-none">
-					Your Balance
+					Your Gold
 				</p>
 				<ToggleModal
 					id="gold"
@@ -31,32 +31,12 @@ export default async function GoldModal() {
 					{user?.nexus?.gold ?? 0}
 				</p>
 			</div>
-			{/* <Link
-				href={
-					user?.smartWallet
-						? generateOnRampURL({
-								appId: env.NEXT_PUBLIC_CDP_PROJECT_ID,
-								destinationWallets: [
-									{
-										address: user?.smartWallet,
-										blockchains: ["base"],
-									},
-								],
-								// defaultAsset: "2b92315d-eab7-5bef-84fa-089a131333f5",
-								assets: ["USDC"],
-								defaultAsset: "USDC",
-								defaultPaymentMethod: "CARD",
-								fiatCurrency: "USD",
-								presetFiatAmount: 10,
-								quoteId: quote,
-							})
-						: ""
-				}
-				newTab
+			<Link
+				href="/leaderboard"
 				className="flex justify-center items-center gap-2 w-full text-black bg-white hover:bg-white/70 font-semibold rounded-lg p-2.5 transition-colors"
 			>
-				{user?.smartWallet ? "Buy" : "Connect Wallet"}
-			</Link> */}
+				Earn More
+			</Link>
 		</Modal>
 	);
 }

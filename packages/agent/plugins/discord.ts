@@ -1,26 +1,30 @@
 import { Client as DiscordClient } from "discord.js";
 import { createPlugin } from "../core/createPlugin";
 
-export const discord = createPlugin(() => {
-	return (config: { token: string }) => {
+export function discordPlugin(config: { token: string }) {
+	return createPlugin(async ({ log, generateReply }) => {
 		const client = new DiscordClient({
 			intents: ["Guilds", "GuildMessages", "MessageContent", "GuildMembers"],
 		});
 
-		client.on("ready", () => {
-			console.log("Discord client is ready");
-		});
-
-		client.on("messageCreate", (message) => {
+		client.on("messageCreate", async (message) => {
 			if (message.author.bot) return;
 
 			if (message.mentions.users.first()?.bot) {
-				message.reply(
-					`Hello, ${message.author}! You mentioned me? How can I assist you?`,
-				);
+				message.reply(await generateReply(message.content));
 			}
 		});
 
-		client.login(config.token);
-	};
-});
+		await client.login(config.token);
+
+		await new Promise<void>((resolve) => {
+			client.on("ready", () => {
+				resolve();
+			});
+		});
+
+		return {
+			client,
+		};
+	});
+}

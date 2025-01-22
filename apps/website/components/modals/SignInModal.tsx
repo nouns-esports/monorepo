@@ -98,7 +98,7 @@ export default function SignInModal(props: { user?: AuthenticatedUser }) {
 				<div className="relative flex items-center justify-center flex-shrink-0 h-48 w-full">
 					<img
 						alt="Sign in banner"
-						src="https://ipfs.nouns.gg/ipfs/QmSGYg5t25SQDp1xBw5tqDrfsF62T2HHVZpH4VduaAwJkT"
+						src="https://ipfs.nouns.gg/ipfs/QmSGYg5t25SQDp1xBw5tqDrfsF62T2HHVZpH4VduaAwJkT?img-height=200&img-onerror=redirect"
 						className="w-full h-full object-cover brightness-75"
 						draggable={false}
 					/>

@@ -1,11 +1,27 @@
 import Button from "@/components/Button";
 import CartButton from "@/components/CartButton";
+import Link from "@/components/Link";
 import CartModal from "@/components/modals/CartModal";
 import ProductCard from "@/components/ProductCard";
 import { getProducts } from "@/server/queries/shop";
+import { twMerge } from "tailwind-merge";
 
-export default async function Shop() {
+export default async function Shop(props: {
+	searchParams: Promise<{ collection?: string }>;
+}) {
+	const searchParams = await props.searchParams;
+
 	const products = await getProducts();
+
+	const collections = products.reduce(
+		(acc, product) => {
+			if (!acc.some((c) => c.handle === product.collections.nodes[0].handle)) {
+				acc.push(product.collections.nodes[0]);
+			}
+			return acc;
+		},
+		[] as Array<{ title: string; handle: string }>,
+	);
 
 	return (
 		<div className="flex flex-col gap-16 pt-32 max-xl:pt-28 max-sm:pt-20">
@@ -27,36 +43,67 @@ export default async function Shop() {
 						</h2>
 					</div>
 					<div className="absolute bottom-4 left-4">
-						<Button href="/shop/dopamine-x-nouns">View Collection</Button>
+						<Button href="/shop?collection=dopamine-x-nouns#products">
+							View Collection
+						</Button>
 					</div>
 				</div>
-				<div className="flex flex-col gap-8 max-sm:gap-4">
+				<div id="products" className="flex flex-col gap-8 max-sm:gap-4">
 					<div className="flex justify-between items-center">
 						<h1 className="text-white font-luckiest-guy text-4xl">Products</h1>
 						<CartButton />
 					</div>
+					<ul className="flex gap-4">
+						<li>
+							<Link href="/shop">All</Link>
+						</li>
+						{collections.map((collection) => (
+							<li
+								key={collection.handle}
+								className={twMerge(
+									searchParams.collection === collection.handle
+										? "text-white"
+										: "text-grey-400",
+								)}
+							>
+								<Link
+									href={`/shop?collection=${collection.handle}`}
+									scroll={false}
+								>
+									{collection.title}
+								</Link>
+							</li>
+						))}
+					</ul>
 					<div className="grid grid-cols-4 gap-4 max-xl:grid-cols-3 max-lg:grid-cols-2 max-md:grid-cols-1">
-						{products.map((product) => {
-							if (!product.images.nodes[0]) return;
-							if (
-								!product.variants.nodes.some(
-									(variant) => variant.availableForSale,
-								)
-							) {
-								return;
-							}
+						{products
+							.filter((product) =>
+								searchParams.collection
+									? product.collections.nodes[0].handle ===
+										searchParams.collection
+									: true,
+							)
+							.map((product) => {
+								if (!product.images.nodes[0]) return;
+								if (
+									!product.variants.nodes.some(
+										(variant) => variant.availableForSale,
+									)
+								) {
+									return;
+								}
 
-							return (
-								<ProductCard
-									key={product.id}
-									id={product.id}
-									handle={product.handle}
-									image={product.images.nodes[0].url}
-									name={product.title}
-									price={product.variants.nodes[0].price.amount}
-								/>
-							);
-						})}
+								return (
+									<ProductCard
+										key={product.id}
+										id={product.id}
+										handle={product.handle}
+										image={product.images.nodes[0].url}
+										name={product.title}
+										price={product.variants.nodes[0].price.amount}
+									/>
+								);
+							})}
 					</div>
 				</div>
 			</div>

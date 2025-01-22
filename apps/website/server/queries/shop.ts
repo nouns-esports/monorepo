@@ -17,6 +17,14 @@ export type Product = {
 	title: string;
 	description: string;
 	handle: string;
+	collections: {
+		nodes: [
+			{
+				title: string;
+				handle: string;
+			},
+		];
+	};
 	priceRange: {
 		minVariantPrice: {
 			amount: string;
@@ -55,6 +63,12 @@ export const getProducts = cache(
 						title
 						description
 						handle
+						collections(first: 1) {
+							nodes {
+								title
+								handle
+							}
+						}
 						priceRange {
 							minVariantPrice {
 								amount

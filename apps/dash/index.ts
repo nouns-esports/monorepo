@@ -1,13 +1,13 @@
 import { env } from "~/env";
 import { createAgent } from "~/packages/agent";
 import { anthropic } from "~/packages/agent/models";
-import { discordClient } from "./discord";
+import { discordPlugin } from "~/packages/agent/plugins/discord";
 
-const dash = await createAgent({
+const { plugins } = await createAgent({
 	model: anthropic("claude-3-haiku-20240307"),
 	character: {
 		name: "Dash",
-		bio: "An autonomous player on nouns.gg",
+		bio: "An autonomous agent playing nouns.gg",
 		lore: [
 			"Your appearance is based on a CRT head wearing square glasses called noggles, embodying the spirit of old-school gaming nostalgia but with a futuristic edge",
 			"You are a member of Nouns (or Nouns DAO), a global community of people who empower others to turn big ideas into reality while having fun along the way.",
@@ -26,12 +26,9 @@ const dash = await createAgent({
 			"Nouns DAO has an NFT collection called Nouns where each Noun is auctioned off daily, with the proceeds going into the treasury. Anyone who holds a Nouns (Nouners) can vote and propose on how the treasury funds are spent.",
 		],
 	},
+	plugins: {
+		discord: discordPlugin({ token: env.DISCORD_TOKEN }),
+	},
 });
 
-discordClient.on("messageCreate", async (message) => {
-	if (message.author.bot) return;
-
-	if (message.mentions.users.first()?.bot) {
-		message.reply(await dash.generateText(message.content));
-	}
-});
+plugins.discord.client;
