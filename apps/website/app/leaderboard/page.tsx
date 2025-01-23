@@ -8,7 +8,7 @@ import Tabs from "@/components/Tabs";
 import { nextFridayAt2pmCST } from "@/utils/nextFridayAt2pmCST";
 
 export default async function Leaderboard(props: {
-	searchParams: { season?: string };
+	searchParams: Promise<{ season?: string }>;
 }) {
 	const searchParams = await props.searchParams;
 
