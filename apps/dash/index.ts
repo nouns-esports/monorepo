@@ -1,8 +1,13 @@
 import { createAgent } from "~/packages/agent";
 import { anthropic } from "~/packages/agent/models";
-import { discordClient } from "./clients/discord";
+import { Hono } from "hono";
+import { Client as DiscordClient } from "discord.js";
+import { env } from "~/env";
+// import { Scraper } from "agent-twitter-client";
+import { db, nexus } from "~/packages/db/schema";
+import { eq } from "drizzle-orm";
 
-export const agent = await createAgent({
+const agent = await createAgent({
 	model: anthropic("claude-3-haiku-20240307"),
 	character: {
 		name: "Dash",
@@ -21,7 +26,13 @@ export const agent = await createAgent({
 	},
 });
 
-discordClient.on("messageCreate", async (message) => {
+const discord = new DiscordClient({
+	intents: ["Guilds", "GuildMessages", "MessageContent", "GuildMembers"],
+});
+
+await discord.login(env.DASH_DISCORD_TOKEN);
+
+discord.on("messageCreate", async (message) => {
 	if (message.author.bot) return;
 
 	if (message.mentions.users.first()?.bot) {
@@ -36,3 +47,43 @@ discordClient.on("messageCreate", async (message) => {
 	// 	}
 	// }
 });
+
+// const twitter = new Scraper();
+// await twitter.login(env.TWITTER_USERNAME, env.TWITTER_PASSWORD);
+// await twitter.setCookies(JSON.parse(env.TWITTER_COOKIES));
+// Always reply to @nounsgg tweets
+// Regularly post and quote other tweets from selected accounts (hbox, aklo, mang0, etc...)
+
+const server = new Hono();
+
+server.get("/farcaster", async (c) => {
+	const cast: {
+		data: { author: { fid: number } };
+		text: string;
+		root_parent_url: string;
+		mentioned_profiles: Array<{ fid: number }>;
+	} = await c.req.json();
+
+	if (cast.root_parent_url !== "https://nouns.gg") return;
+
+	if (
+		!cast.mentioned_profiles.some(
+			(p) => p.fid === Number(env.DASH_FARCASTER_FID),
+		)
+	) {
+		return;
+	}
+
+	const user = await db.query.nexus.findFirst({
+		where: eq(nexus.fid, cast.data.author.fid),
+	});
+
+	if (!user) return;
+
+	console.log("Cast received", cast.data.author.fid, cast.text);
+});
+
+export default {
+	port: 3000,
+	fetch: server.fetch,
+};

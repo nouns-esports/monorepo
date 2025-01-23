@@ -28,6 +28,7 @@ export const env = createEnv({
 		TWITTER_PASSWORD: z.string().min(1),
 		TWITTER_EMAIL: z.string().min(1),
 		TWITTER_COOKIES: z.string().min(1),
+		DASH_FARCASTER_FID: z.string().min(1),
 	},
 	client: {
 		NEXT_PUBLIC_ENVIRONMENT: z.enum(["development", "production"]),
