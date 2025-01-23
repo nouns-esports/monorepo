@@ -66,13 +66,23 @@ server.get("/farcaster", async (c) => {
 
 	if (cast.root_parent_url !== "https://nouns.gg") return;
 
-	if (
-		!cast.mentioned_profiles.some(
-			(p) => p.fid === Number(env.DASH_FARCASTER_FID),
-		)
-	) {
+	if (cast.data.author.fid === Number(env.DASH_FARCASTER_FID)) {
 		return;
 	}
+
+	let mentioned = false;
+
+	for (const profile of cast.mentioned_profiles) {
+		if (profile.fid === Number(env.DASH_FARCASTER_FID)) {
+			mentioned = true;
+		}
+
+		if (profile.fid === 874542) {
+			return; // Clanker
+		}
+	}
+
+	if (!mentioned) return;
 
 	const user = await db.query.nexus.findFirst({
 		where: eq(nexus.fid, cast.data.author.fid),
