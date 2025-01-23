@@ -1,7 +1,7 @@
 import { getProduct } from "@/server/queries/shop";
 
 export default async function ProductPage(props: {
-	params: { product: string };
+	params: Promise<{ product: string }>;
 }) {
 	const params = await props.params;
 
