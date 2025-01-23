@@ -39,13 +39,13 @@ discord.on("messageCreate", async (message) => {
 		return message.reply(await agent.generateReply(message.content));
 	}
 
-	// if (Math.random() < 0.1) {
-	// 	const shouldReply = await agent.shouldReply(message.content);
+	if (Math.random() < 0.1) {
+		const shouldReply = await agent.shouldReply(message.content);
 
-	// 	if (shouldReply === "yes") {
-	// 		return message.reply(await agent.generateReply(message.content));
-	// 	}
-	// }
+		if (shouldReply === "yes") {
+			return message.reply(await agent.generateReply(message.content));
+		}
+	}
 });
 
 // const twitter = new Scraper();
