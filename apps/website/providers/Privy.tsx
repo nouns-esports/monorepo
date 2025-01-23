@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { create } from "zustand";
 import { SmartWalletsProvider } from "@privy-io/react-auth/smart-wallets";
+
 export const usePrivyModalState = create<{
 	loginMethods?: PrivyClientConfig["loginMethods"];
 	externalWallets?: PrivyClientConfig["externalWallets"];
