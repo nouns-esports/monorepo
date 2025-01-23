@@ -34,11 +34,19 @@ await discord.login(env.DASH_DISCORD_TOKEN);
 
 discord.on("messageCreate", async (message) => {
 	if (message.author.bot) return;
-	console.log(
-		"Category test",
-		// @ts-ignore
-		message.channel?.parentId,
-	);
+
+	if (
+		[
+			"967723008116531216", // Contributorsq
+			"1025265422746005504", // Teams
+			"967723007864893472", // Happening Now
+		].includes(
+			// @ts-ignore
+			message.channel?.parentId,
+		)
+	) {
+		return;
+	}
 
 	if (message.mentions.users.first()?.bot) {
 		return message.reply(await agent.generateReply(message.content));
