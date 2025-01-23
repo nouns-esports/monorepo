@@ -34,12 +34,21 @@ await discord.login(env.DASH_DISCORD_TOKEN);
 
 discord.on("messageCreate", async (message) => {
 	if (message.author.bot) return;
+	console.log(
+		"Category test",
+		// @ts-ignore
+		message.channel?.parentId,
+	);
 
 	if (message.mentions.users.first()?.bot) {
 		return message.reply(await agent.generateReply(message.content));
 	}
 
-	if (Math.random() < 0.1) {
+	if (
+		Math.random() < 0.1 ||
+		message.content.includes("dash") ||
+		message.content.includes("Dash")
+	) {
 		const shouldReply = await agent.shouldReply(message.content);
 
 		if (shouldReply === "yes") {
