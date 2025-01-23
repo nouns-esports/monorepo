@@ -2,7 +2,7 @@ import ProductCard from "@/components/ProductCard";
 import { getCollection } from "@/server/queries/shop";
 
 export default async function CollectionPage(props: {
-	params: { collection: string };
+	params: Promise<{ collection: string }>;
 }) {
 	const params = await props.params;
 
