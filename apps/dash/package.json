@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "start": "bun --env-file=../../.env.production index.ts",
-    "test": "bun --env-file=../../.env.development index.ts"
+    "test": "bun --env-file=../../.env.development index.ts",
+    "test:node": "npx --yes -p dotenv-cli -p tsx dotenv -e ../../.env.development -- tsx ./clients/twitter.ts"
   }
 }

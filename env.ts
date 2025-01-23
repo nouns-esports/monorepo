@@ -24,6 +24,10 @@ export const env = createEnv({
 		DASH_DISCORD_TOKEN: z.string().min(1),
 		DASH_DISCORD_SECRET: z.string().min(1),
 		DASH_DISCORD_CLIENT_ID: z.string().min(1),
+		TWITTER_USERNAME: z.string().min(1),
+		TWITTER_PASSWORD: z.string().min(1),
+		TWITTER_EMAIL: z.string().min(1),
+		TWITTER_COOKIES: z.string().min(1),
 	},
 	client: {
 		NEXT_PUBLIC_ENVIRONMENT: z.enum(["development", "production"]),

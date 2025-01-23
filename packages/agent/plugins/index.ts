@@ -1,1 +1,0 @@
-export { discord } from "./discord";
