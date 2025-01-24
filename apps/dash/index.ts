@@ -37,7 +37,7 @@ discord.on("messageCreate", async (message) => {
 
 	if (
 		[
-			// "967723008116531216", // Contributors
+			"967723008116531216", // Contributors
 			"1025265422746005504", // Teams
 			"967723007864893472", // Happening Now
 		].includes(
@@ -53,7 +53,7 @@ discord.on("messageCreate", async (message) => {
 	}
 
 	if (
-		Math.random() < 0.1 ||
+		Math.random() < 0.15 ||
 		message.content.includes("dash") ||
 		message.content.includes("Dash")
 	) {
@@ -87,27 +87,15 @@ server.get("/farcaster", async (c) => {
 		return;
 	}
 
-	let mentioned = false;
-
-	for (const profile of cast.mentioned_profiles) {
-		if (profile.fid === Number(env.DASH_FARCASTER_FID)) {
-			mentioned = true;
-		}
-
-		if (profile.fid === 874542) {
-			return; // Clanker
-		}
-	}
-
-	if (!mentioned) return;
-
 	const user = await db.query.nexus.findFirst({
 		where: eq(nexus.fid, cast.data.author.fid),
 	});
 
 	if (!user) return;
 
-	console.log("Cast received", cast.data.author.fid, cast.text);
+	const reply = await agent.generateReply(cast.text);
+
+	console.log("Cast received", reply, cast);
 });
 
 export default {
