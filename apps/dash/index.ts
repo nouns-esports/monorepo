@@ -115,7 +115,11 @@ server.post("/farcaster", async (c) => {
 	});
 
 	if (!user) {
-		console.log("User nexus not found", cast.data.author.fid);
+		console.log(
+			"User nexus not found",
+			cast.data.author.fid,
+			env.NEXT_PUBLIC_ENVIRONMENT,
+		);
 		return;
 	}
 
