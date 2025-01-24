@@ -82,6 +82,8 @@ server.post("/farcaster", async (c) => {
 		mentioned_profiles: Array<{ fid: number }>;
 	} = await c.req.json();
 
+	console.log("Webhook received", cast);
+
 	if (cast.root_parent_url !== "https://nouns.gg") {
 		console.log("Not right channel", cast.root_parent_url);
 		return;
