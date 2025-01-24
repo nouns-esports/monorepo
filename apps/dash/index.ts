@@ -74,6 +74,8 @@ discord.on("messageCreate", async (message) => {
 const server = new Hono();
 
 server.post("/farcaster", async (c) => {
+	console.log("Webhook received", c.req);
+
 	const cast: {
 		data: { author: { fid: number } };
 		text: string;
