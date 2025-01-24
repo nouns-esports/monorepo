@@ -14,8 +14,6 @@ export const discordSnapshot = createCommand({
 	],
 	onlyAdmin: true,
 	execute: async (interaction) => {
-		console.log("discordSnapshot", interaction);
-
 		if (!interaction) {
 			throw new Error("Can only be run from a Discord command");
 		}
@@ -48,7 +46,7 @@ export const discordSnapshot = createCommand({
 		await db.transaction(async (tx) => {
 			console.log("transacting");
 			for (const user of users) {
-				console.log("user", user);
+				console.log("user", user.name);
 				const [snapshot] = await tx
 					.insert(snapshots)
 					.values({
