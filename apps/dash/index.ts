@@ -75,35 +75,38 @@ const server = new Hono();
 
 server.post("/farcaster", async (c) => {
 	const cast: {
-		data: { author: { fid: number } };
-		text: string;
-		root_parent_url: string;
-		parent_url: string;
-		mentioned_profiles: Array<{ fid: number }>;
+		data: {
+			author: {
+				fid: number;
+			};
+			text: string;
+			parent_url: string;
+			mentioned_profiles: Array<{ fid: number }>;
+			channel: {
+				id: string;
+			};
+		};
 	} = await c.req.json();
 
-	console.log("Webhook received", cast);
+	if (cast.data.channel.id !== "nouns-esports") {
+		return;
+	}
 
-	if (cast.root_parent_url !== "https://nouns.gg") {
-		console.log("Not right channel", cast.root_parent_url);
+	if (cast.data.author.fid === Number(env.DASH_FARCASTER_FID)) {
 		return;
 	}
 
 	if (
-		cast.parent_url !== "https://nouns.gg" &&
-		!cast.mentioned_profiles.some(
+		cast.data.parent_url !== "https://nouns.gg" &&
+		!cast.data.mentioned_profiles.some(
 			(profile) => profile.fid === Number(env.DASH_FARCASTER_FID),
 		)
 	) {
 		console.log(
 			"Only responds to replies if mentioned",
-			cast.parent_url,
-			cast.mentioned_profiles,
+			cast.data.parent_url,
+			cast.data.mentioned_profiles,
 		);
-		return;
-	}
-
-	if (cast.data.author.fid === Number(env.DASH_FARCASTER_FID)) {
 		return;
 	}
 
@@ -116,7 +119,7 @@ server.post("/farcaster", async (c) => {
 		return;
 	}
 
-	const reply = await agent.generateReply(cast.text);
+	const reply = await agent.generateReply(cast.data.text);
 
 	console.log("Cast received", reply, cast);
 });
