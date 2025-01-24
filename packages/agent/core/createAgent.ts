@@ -46,7 +46,7 @@ export async function createAgent(config: Config) {
 			output: "enum",
 			enum: ["yes", "no"],
 			model: config.model,
-			prompt: `Decide if you should reply to this message: "${prompt}"`,
+			prompt: `Use your best judgement to decide if you should reply to this message: "${prompt}". You should not reply if it seems like they are responding to someone else and your input is not warranted.`,
 		}).then((res) => res.object);
 	}
 
