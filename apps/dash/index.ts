@@ -78,11 +78,26 @@ server.post("/farcaster", async (c) => {
 		data: { author: { fid: number } };
 		text: string;
 		root_parent_url: string;
+		parent_url: string;
 		mentioned_profiles: Array<{ fid: number }>;
 	} = await c.req.json();
 
 	if (cast.root_parent_url !== "https://nouns.gg") {
 		console.log("Not right channel", cast.root_parent_url);
+		return;
+	}
+
+	if (
+		cast.parent_url !== "https://nouns.gg" &&
+		!cast.mentioned_profiles.some(
+			(profile) => profile.fid === Number(env.DASH_FARCASTER_FID),
+		)
+	) {
+		console.log(
+			"Only responds to replies if mentioned",
+			cast.parent_url,
+			cast.mentioned_profiles,
+		);
 		return;
 	}
 
