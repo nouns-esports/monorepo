@@ -73,7 +73,7 @@ discord.on("messageCreate", async (message) => {
 
 const server = new Hono();
 
-server.get("/farcaster", async (c) => {
+server.post("/farcaster", async (c) => {
 	const cast: {
 		data: { author: { fid: number } };
 		text: string;
