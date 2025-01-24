@@ -74,8 +74,6 @@ discord.on("messageCreate", async (message) => {
 const server = new Hono();
 
 server.post("/farcaster", async (c) => {
-	console.log("Webhook received", c.req);
-
 	const cast: {
 		data: { author: { fid: number } };
 		text: string;
@@ -83,7 +81,10 @@ server.post("/farcaster", async (c) => {
 		mentioned_profiles: Array<{ fid: number }>;
 	} = await c.req.json();
 
-	if (cast.root_parent_url !== "https://nouns.gg") return;
+	if (cast.root_parent_url !== "https://nouns.gg") {
+		console.log("Not right channel", cast.root_parent_url);
+		return;
+	}
 
 	if (cast.data.author.fid === Number(env.DASH_FARCASTER_FID)) {
 		return;
@@ -93,7 +94,10 @@ server.post("/farcaster", async (c) => {
 		where: eq(nexus.fid, cast.data.author.fid),
 	});
 
-	if (!user) return;
+	if (!user) {
+		console.log("User nexus not found", cast.data.author.fid);
+		return;
+	}
 
 	const reply = await agent.generateReply(cast.text);
 
