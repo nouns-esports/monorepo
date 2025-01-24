@@ -37,7 +37,7 @@ discord.on("messageCreate", async (message) => {
 
 	if (
 		[
-			"967723008116531216", // Contributorsq
+			// "967723008116531216", // Contributors
 			"1025265422746005504", // Teams
 			"967723007864893472", // Happening Now
 		].includes(
