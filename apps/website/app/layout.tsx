@@ -64,7 +64,7 @@ export const metadata = {
 		],
 	},
 	twitter: {
-		site: "@NounsEsports",
+		site: "@NounsGG",
 		card: "summary_large_image",
 		images: [
 			"https://ipfs.nouns.gg/ipfs/bafybeiacesi66bkeebsnobdtuh5matcgi6qo5hqzxpk4jllkppvehmnsrq",
