@@ -60,21 +60,21 @@ export const metadata = {
 	openGraph: {
 		type: "website",
 		images: [
-			"https://ipfs.nouns.gg/ipfs/bafybeiacesi66bkeebsnobdtuh5matcgi6qo5hqzxpk4jllkppvehmnsrq",
+			"https://ipfs.nouns.gg/ipfs/bafybeih4hyyo6jakdqvg6xjc26pmh5kg5peqkig2wmjufzjbnum6oyb25y",
 		],
 	},
 	twitter: {
 		site: "@NounsGG",
 		card: "summary_large_image",
 		images: [
-			"https://ipfs.nouns.gg/ipfs/bafybeiacesi66bkeebsnobdtuh5matcgi6qo5hqzxpk4jllkppvehmnsrq",
+			"https://ipfs.nouns.gg/ipfs/bafybeih4hyyo6jakdqvg6xjc26pmh5kg5peqkig2wmjufzjbnum6oyb25y",
 		],
 	},
 	other: {
 		"fc:frame": JSON.stringify({
 			version: "next",
 			imageUrl:
-				"https://ipfs.nouns.gg/ipfs/bafybeiacesi66bkeebsnobdtuh5matcgi6qo5hqzxpk4jllkppvehmnsrqp",
+				"https://ipfs.nouns.gg/ipfs/bafybeih4hyyo6jakdqvg6xjc26pmh5kg5peqkig2wmjufzjbnum6oyb25y",
 			button: {
 				title: "Launch",
 				action: {
