@@ -59,17 +59,22 @@ export const metadata = {
 	metadataBase: new URL(env.NEXT_PUBLIC_DOMAIN),
 	openGraph: {
 		type: "website",
-		images: ["/og-banner.webp"],
+		images: [
+			"https://ipfs.nouns.gg/ipfs/bafybeiacesi66bkeebsnobdtuh5matcgi6qo5hqzxpk4jllkppvehmnsrq",
+		],
 	},
 	twitter: {
 		site: "@NounsEsports",
 		card: "summary_large_image",
-		images: ["/og-banner.webp"],
+		images: [
+			"https://ipfs.nouns.gg/ipfs/bafybeiacesi66bkeebsnobdtuh5matcgi6qo5hqzxpk4jllkppvehmnsrq",
+		],
 	},
 	other: {
 		"fc:frame": JSON.stringify({
 			version: "next",
-			imageUrl: "https://nouns.gg/og-banner.webp",
+			imageUrl:
+				"https://ipfs.nouns.gg/ipfs/bafybeiacesi66bkeebsnobdtuh5matcgi6qo5hqzxpk4jllkppvehmnsrqp",
 			button: {
 				title: "Launch",
 				action: {
