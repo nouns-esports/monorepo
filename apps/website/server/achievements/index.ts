@@ -167,8 +167,8 @@ export const achievements: Record<string, Achievement> = {
 			"https://ipfs.nouns.gg/ipfs/bafkreifq55jrxz7l5tpz76thnzo7ozzed6arpeza7wzl3zb2qcuyqtbms4",
 		xp: 5000,
 	},
-	lilNouner: {
-		id: "lilNouner",
+	lilnouner: {
+		id: "lilnouner",
 		name: "Lil Nouner",
 		description: "Acquire a Lil Noun",
 		image:
@@ -240,7 +240,7 @@ export const achievementTree: AchievementTree = {
 		},
 		{
 			...achievements.becomeDelegate,
-			next: [{ ...achievements.lilNouner }, { ...achievements.nouner }],
+			next: [{ ...achievements.lilnouner }, { ...achievements.nouner }],
 		},
 	],
 };

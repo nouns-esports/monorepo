@@ -13,8 +13,6 @@ export default async function lilnouner(user: AuthenticatedUser) {
 			args: [wallet.address as `0x${string}`],
 		});
 
-		console.log(user.id, wallet.address, balance);
-
 		if (balance > 0n) {
 			return true;
 		}
