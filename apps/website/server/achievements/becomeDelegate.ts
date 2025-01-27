@@ -44,6 +44,15 @@ export default async function becomeDelegate(user: AuthenticatedUser) {
 			}),
 		]);
 
+		console.log(
+			user.id,
+			wallet.address,
+			nounsBalance,
+			lilnounsBalance,
+			nounsCurrentVotes,
+			lilnounsCurrentVotes,
+		);
+
 		if (
 			nounsBalance > 0n ||
 			lilnounsBalance > 0n ||
