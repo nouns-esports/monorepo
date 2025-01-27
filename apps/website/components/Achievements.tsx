@@ -171,6 +171,10 @@ function Node(props: {
 }) {
 	const claimAchievementAction = useAction(claimAchievement);
 
+	if (props.achievement.id === "lilnouner") {
+		console.log(props.user?.id, props.state, props.locked);
+	}
+
 	return (
 		<>
 			{props.achievement.id !== "enterNexus" ? (
