@@ -20,6 +20,9 @@
       "correctness": {
         "useExhaustiveDependencies": "off",
         "useJsxKeyInIterable": "off"
+      },
+      "complexity": {
+        "useOptionalChain": "off"
       }
     }
   }

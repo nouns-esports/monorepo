@@ -30,6 +30,7 @@
   ],
   "dependencies": {
     "@ai-sdk/anthropic": "^1.1.0",
+    "@ai-sdk/deepseek": "^0.1.5",
     "@ai-sdk/openai": "^1.1.0",
     "@coinbase/cbpay-js": "^2.4.0",
     "@coinbase/coinbase-sdk": "^0.13.0",
@@ -63,7 +64,7 @@
     "@types/node-cron": "^3.0.11",
     "@uidotdev/usehooks": "^2.4.1",
     "agent-twitter-client": "^0.0.18",
-    "ai": "^4.1.0",
+    "ai": "^4.1.7",
     "autoprefixer": "^10.4.17",
     "cross-env": "^7.0.3",
     "discord.js": "^14.15.3",

@@ -6,18 +6,50 @@ import {
 } from "ai";
 import figlet from "figlet";
 import colors from "kleur";
+import type { createPlugin } from "./createPlugin";
+import { createServer } from "./createServer";
 
-export type Config = {
+export type Config<TPlugins> = {
 	model: LanguageModelV1;
 	character: {
 		name: string;
 		bio: string;
 		lore?: string[];
 	};
-	tools?: Record<string, typeof tool>;
+	plugins?: TPlugins;
+	onMessage?: (message: {
+		provider: keyof TPlugins;
+		context?: MessageContext;
+		// biome-ignore lint/suspicious/noConfusingVoidType: <explanation>
+	}) => Promise<string | string[] | void>;
+	memory?: any;
+	server?: {
+		port: number;
+	};
 };
 
-export async function createAgent(config: Config) {
+type MessageContext = {
+	id: string;
+	// This will likely need to be more robust. Differnt plugins might need access to different identifiers of an author (for example, backend id, username, display name, handle, etc...)
+	author: string;
+	room: string;
+	mentions?: string[];
+	embeds?: string[];
+};
+
+export type Interface = {
+	scheduleTask: () => void;
+	addTool: () => void;
+	addMemory: () => void;
+	generateReply: (
+		prompt: string,
+		context?: MessageContext,
+	) => ReturnType<typeof generateText>;
+};
+
+export async function createAgent<
+	TPlugins extends Record<string, ReturnType<typeof createPlugin>>,
+>(config: Config<TPlugins>) {
 	console.log(
 		figlet.textSync(config.character.name, {
 			font: "ANSI Shadow",
@@ -29,29 +61,75 @@ export async function createAgent(config: Config) {
 	);
 	console.log(colors.blue(config.character.bio));
 
-	async function generateReply(prompt: string) {
-		return generateText({
+	const { server, start } = await createServer(config);
+
+	async function scheduleTask() {}
+	async function addTool() {}
+	async function addMemory() {}
+	async function generateReply(prompt: string, context?: MessageContext) {
+		const developerContext = await config.onMessage?.({
+			provider: "discord",
+			context,
+		});
+
+		const reply = await generateText({
 			model: config.model,
 			prompt,
 			system:
-				"You are an agent with the following characteristics\n" +
+				"You are an agent with the following characteristics.\n" +
 				`Name: ${config.character.name}\n` +
 				`Bio: ${config.character.bio}\n` +
-				`Lore: ${config.character.lore?.join(" ")}\n`,
-		}).then((res) => res.text);
+				`Lore: ${config.character.lore?.join(" ")}\n` +
+				(context || developerContext
+					? "Additional context relevant to this prompt.\n"
+					: "") +
+				(context
+					? "Provider: discord\n" +
+						`Author: ${context.author}\n` +
+						`Room: ${context.room}\n`
+					: "") +
+				(developerContext
+					? Array.isArray(developerContext)
+						? developerContext.join("\n")
+						: developerContext
+					: ""),
+		});
+
+		return reply;
 	}
 
-	async function shouldReply(prompt: string) {
-		return generateObject({
-			output: "enum",
-			enum: ["yes", "no"],
-			model: config.model,
-			prompt: `Use your best judgement to decide if you should reply to this message: "${prompt}". You should not reply if it seems like they are responding to someone else and your input is not warranted.`,
-		}).then((res) => res.object);
+	const plugins = {} as {
+		[K in keyof TPlugins]: Awaited<ReturnType<TPlugins[K]>>;
+	};
+
+	if (config.plugins) {
+		for (const [id, register] of Object.entries(config.plugins)) {
+			const result = await register({
+				config,
+				server,
+				scheduleTask,
+				addTool,
+				addMemory,
+				generateReply,
+			});
+
+			plugins[id as keyof TPlugins] = result as Awaited<
+				ReturnType<TPlugins[keyof TPlugins]>
+			>;
+		}
 	}
+
+	// await start();
+	// console.log(
+	// 	`Server running at http://localhost:${config.server?.port ?? 8787}`,
+	// );
 
 	return {
+		server,
+		plugins,
+		scheduleTask,
+		addTool,
+		addMemory,
 		generateReply,
-		shouldReply,
 	};
 }

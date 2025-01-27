@@ -18,6 +18,7 @@ export const env = createEnv({
 		SHOPIFY_STOREFRONT_PRIVATE_ACCESS_TOKEN: z.string().min(1),
 		CGX_AIRDROP_URL: z.string().min(1),
 		ANTHROPIC_API_KEY: z.string().min(1),
+		DEEPSEEK_API_KEY: z.string().min(1),
 		DASH_DISCORD_TOKEN: z.string().min(1),
 		DASH_DISCORD_SECRET: z.string().min(1),
 		DASH_DISCORD_CLIENT_ID: z.string().min(1),
