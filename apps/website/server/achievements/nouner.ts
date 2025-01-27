@@ -13,7 +13,7 @@ export default async function nouner(user: AuthenticatedUser) {
 			args: [wallet.address as `0x${string}`],
 		});
 
-		if (balance > 1n) {
+		if (balance > 0n) {
 			return true;
 		}
 	}

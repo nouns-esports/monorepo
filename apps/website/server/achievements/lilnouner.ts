@@ -13,7 +13,7 @@ export default async function lilnouner(user: AuthenticatedUser) {
 			args: [wallet.address as `0x${string}`],
 		});
 
-		if (balance > 1n) {
+		if (balance > 0n) {
 			return true;
 		}
 	}
