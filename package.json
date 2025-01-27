@@ -6,6 +6,7 @@
     "build": "turbo build",
     "start:website": "turbo start --filter=website",
     "start:bot": "turbo start --filter=bot",
+    "start:dash": "turbo start --filter=dash",
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
@@ -28,6 +29,9 @@
     "packages/*"
   ],
   "dependencies": {
+    "@ai-sdk/anthropic": "^1.1.4",
+    "@ai-sdk/deepseek": "^0.1.5",
+    "@ai-sdk/openai": "^1.1.4",
     "@farcaster/frame-sdk": "^0.0.22",
     "@farcaster/hub-nodejs": "^0.12.7",
     "@lexical/headless": "^0.14.5",
@@ -56,6 +60,8 @@
     "@tsparticles/confetti": "^3.5.0",
     "@types/node-cron": "^3.0.11",
     "@uidotdev/usehooks": "^2.4.1",
+    "agent-twitter-client": "^0.0.18",
+    "ai": "^4.1.7",
     "autoprefixer": "^10.4.17",
     "cross-env": "^7.0.3",
     "discord.js": "^14.15.3",

@@ -14,11 +14,15 @@
       },
       "style": {
         "useNumberNamespace": "off",
-        "useNodejsImportProtocol": "off"
+        "useNodejsImportProtocol": "off",
+        "useTemplate": "off"
       },
       "correctness": {
         "useExhaustiveDependencies": "off",
         "useJsxKeyInIterable": "off"
+      },
+      "complexity": {
+        "useOptionalChain": "off"
       }
     }
   }
