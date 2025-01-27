@@ -18,6 +18,7 @@ export default function Achievements(props: {
 	user?: AuthenticatedUser;
 	achievementProgress: Record<string, "claimed" | "completed" | "incomplete">;
 }) {
+	console.log(props.achievementProgress);
 	const scale = useMotionValue(0.4);
 
 	const controls = useDragControls();
