@@ -79,7 +79,7 @@ export const metadata = {
 				title: "Launch",
 				action: {
 					type: "launch_frame",
-					name: "Nouns",
+					name: "Nouns GG",
 					url: "https://nouns.gg",
 					splashImageUrl: "https://nouns.gg/logo/logo.png",
 					splashBackgroundColor: "#040404",
