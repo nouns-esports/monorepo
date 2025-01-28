@@ -198,7 +198,9 @@ export default async function Header() {
 								{/* <Link href="/leaderboard">
 									<List className="text-white w-6 h-6 hover:text-white/70 transition-colors" />
 								</Link> */}
-								<Notifications notifications={notifications} />
+								{user?.nexus ? (
+									<Notifications notifications={notifications} />
+								) : null}
 								{user?.nexus?.admin ? (
 									<Link href="/admin">
 										<Settings2 className="text-white w-6 h-6 hover:text-white/70 transition-colors" />
