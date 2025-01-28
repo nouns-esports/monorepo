@@ -29,7 +29,7 @@ const agent = await createAgent({
 	},
 	plugins: {
 		discord: discordPlugin({
-			token: env.DISCORD_TOKEN,
+			token: env.DASH_DISCORD_TOKEN,
 		}),
 		// farcaster: farcasterPlugin({
 		// 	fid: Number(env.DASH_FARCASTER_FID),
