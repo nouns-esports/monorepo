@@ -101,12 +101,15 @@ function FramesV2(props: { children: React.ReactNode; user?: string }) {
 				const login = async () => {
 					const { default: frameSdk } = await import("@farcaster/frame-sdk");
 					const { nonce } = await initLoginToFrame();
-					const result = await frameSdk.actions.signIn({ nonce: nonce });
-
-					await loginToFrame({
-						message: result.message,
-						signature: result.signature,
-					});
+					try {
+						const result = await frameSdk.actions.signIn({ nonce: nonce });
+						await loginToFrame({
+							message: result.message,
+							signature: result.signature,
+						});
+					} catch (error) {
+						console.log("frame signin error", error);
+					}
 				};
 
 				login();
