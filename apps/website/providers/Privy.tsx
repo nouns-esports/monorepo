@@ -75,7 +75,7 @@ function FramesV2(props: { children: React.ReactNode; user?: string }) {
 	const { user, ready, authenticated } = usePrivy();
 	const { initLoginToFrame, loginToFrame } = useLoginToFrame();
 
-	const [context, setContext] = useState<any>();
+	const [context, setContext] = useState<Awaited<typeof frameSdk.context>>();
 	const [isSDKLoaded, setIsSDKLoaded] = useState(false);
 
 	const router = useRouter();
