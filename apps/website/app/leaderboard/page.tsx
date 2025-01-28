@@ -114,14 +114,18 @@ export default async function Leaderboard(props: {
 									) : null}
 								</div>
 								<div className="flex gap-8 items-center">
-									<div className="flex justify-center gap-2 items-center">
-										<img
-											alt="Gold coin"
-											src="https://ipfs.nouns.gg/ipfs/bafkreiccw4et522umioskkazcvbdxg2xjjlatkxd4samkjspoosg2wldbu"
-											className="rounded-full h-5 w-5 shadow-xl"
-										/>
-										<p className="font-semibold text-lg text-[#FEBD1C]">100</p>
-									</div>
+									{ranking.gold.length > 0 ? (
+										<div className="flex justify-center gap-2 items-center">
+											<img
+												alt="Gold coin"
+												src="https://ipfs.nouns.gg/ipfs/bafkreiccw4et522umioskkazcvbdxg2xjjlatkxd4samkjspoosg2wldbu"
+												className="rounded-full h-5 w-5 shadow-xl"
+											/>
+											<p className="font-semibold text-lg text-[#FEBD1C]">
+												{ranking.gold[0].amount}
+											</p>
+										</div>
+									) : null}
 									<img
 										alt={ranking.rank.name}
 										title={ranking.rank.name}

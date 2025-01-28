@@ -406,6 +406,30 @@ export const nexusRelations = relations(nexus, ({ one, many }) => ({
 	notifications: many(notifications),
 }));
 
+export const gold = pgTable("gold", {
+	id: serial("id").primaryKey(),
+	from: text("from"),
+	to: text("to").notNull(),
+	amount: integer("amount").notNull(),
+	timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
+	ranking: integer("ranking"),
+});
+
+export const goldRelations = relations(gold, ({ one }) => ({
+	from: one(nexus, {
+		fields: [gold.from],
+		references: [nexus.id],
+	}),
+	to: one(nexus, {
+		fields: [gold.to],
+		references: [nexus.id],
+	}),
+	ranking: one(rankings, {
+		fields: [gold.ranking],
+		references: [rankings.id],
+	}),
+}));
+
 export const seasons = pgTable("seasons", {
 	id: serial("id").primaryKey(),
 	start: timestamp("start", { mode: "date" }).notNull(),
@@ -534,6 +558,7 @@ export const rankingsRelations = relations(rankings, ({ one, many }) => ({
 		fields: [rankings.rank],
 		references: [ranks.id],
 	}),
+	gold: many(gold),
 }));
 
 export const votes = pgTable("votes", {
@@ -694,6 +719,8 @@ const schema = {
 	bets,
 	betsRelations,
 	articles,
+	gold,
+	goldRelations,
 };
 
 export const db = drizzle(
@@ -728,3 +755,4 @@ export type Station = typeof stations.$inferSelect;
 export type Link = typeof links.$inferSelect;
 export type Attendee = typeof attendees.$inferSelect;
 export type Article = typeof articles.$inferSelect;
+export type Gold = typeof gold.$inferSelect;

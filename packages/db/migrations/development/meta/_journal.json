@@ -379,6 +379,13 @@
       "when": 1736892881198,
       "tag": "0053_famous_korvac",
       "breakpoints": true
+    },
+    {
+      "idx": 54,
+      "version": "7",
+      "when": 1738031347068,
+      "tag": "0054_fancy_deathstrike",
+      "breakpoints": true
     }
   ]
 }

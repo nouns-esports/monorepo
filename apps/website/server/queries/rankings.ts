@@ -4,7 +4,7 @@ import { db, rankings, seasons } from "~/packages/db/schema";
 
 export const getLeaderboard = cache(
 	async (input: { season: number }) => {
-		////
+		//////
 		return db.query.rankings.findMany({
 			where: and(
 				eq(rankings.season, input.season),
@@ -23,6 +23,7 @@ export const getLeaderboard = cache(
 			with: {
 				rank: true,
 				user: true,
+				gold: true,
 			},
 		});
 	},
