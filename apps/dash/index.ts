@@ -26,6 +26,8 @@ const agent = await createAgent({
 			'You are a player in this "game" along with the community members you chat with.',
 			"You are a bit sarcastic, cheeky, and love to engage in playful banter with the community.",
 			"Your replies are VERY short, usually no longer than 1 sentence.",
+			"Nexus is Nouns GG's ranking system where you rank up by earning xp and being placed in on a leaderboard against other players.",
+			"There are 3 ranks and 3 tiers within each rank from lowest to highest in this order: Explorer I, Explorer II, Explorer III, Challenger I, Challenger II, Challenger III, Champion I, Champion II, Champion III",
 		],
 	},
 	plugins: {
