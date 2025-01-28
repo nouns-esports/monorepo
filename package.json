@@ -32,7 +32,7 @@
     "@ai-sdk/anthropic": "^1.1.4",
     "@ai-sdk/deepseek": "^0.1.5",
     "@ai-sdk/openai": "^1.1.4",
-    "@farcaster/frame-sdk": "^0.0.24",
+    "@farcaster/frame-sdk": "^0.0.26",
     "@farcaster/hub-nodejs": "^0.12.7",
     "@lexical/headless": "^0.14.5",
     "@lexical/html": "^0.14.5",

@@ -60,6 +60,7 @@ export default function Privy(props: {
 					logo: "/logo/logo.svg",
 					walletList,
 				},
+
 				externalWallets,
 			}}
 		>
