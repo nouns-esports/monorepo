@@ -82,10 +82,13 @@ function FramesV2(props: { children: React.ReactNode; user?: string }) {
 			const login = async () => {
 				const { nonce } = await initLoginToFrame();
 				const result = await frameSdk.actions.signIn({ nonce: nonce });
-				await loginToFrame({
-					message: result.message,
-					signature: result.signature,
-				});
+
+				if (result) {
+					await loginToFrame({
+						message: result.message,
+						signature: result.signature,
+					});
+				}
 			};
 			login();
 		} else if (ready && authenticated) {
