@@ -42,11 +42,9 @@ const agent = await createAgent({
 	onMessage: async ({ provider, context }) => {
 		if (!context) return;
 
-		console.log(context);
-
 		const user = await db.query.nexus.findFirst({
 			where: or(
-				eq(nexus.fid, Number(context.author)),
+				eq(nexus.fid, Number(context.author) || 0),
 				eq(nexus.twitter, context.author),
 				eq(nexus.discord, context.author),
 			),
