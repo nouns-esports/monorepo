@@ -5,14 +5,14 @@ import { env } from "~/env";
 export const viemPublicClients = {
 	base: createPublicClient({
 		chain: base,
-		transport: http(),
+		transport: http(env.INFURA_API_KEY),
 	}),
 	baseSepolia: createPublicClient({
 		chain: baseSepolia,
-		transport: http(),
+		transport: http(env.INFURA_API_KEY),
 	}),
 	mainnet: createPublicClient({
 		chain: mainnet,
-		transport: http(),
+		transport: http(env.INFURA_API_KEY),
 	}),
 } as const;

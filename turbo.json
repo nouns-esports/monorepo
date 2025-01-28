@@ -28,7 +28,8 @@
     "TWITTER_EMAIL",
     "TWITTER_COOKIES",
     "DASH_FARCASTER_FID",
-    "START_GG_ACCESS_TOKEN"
+    "START_GG_ACCESS_TOKEN",
+    "INFURA_API_KEY"
   ],
   "tasks": {
     "build": {
