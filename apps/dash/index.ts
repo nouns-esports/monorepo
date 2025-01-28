@@ -1,5 +1,5 @@
 import { createAgent } from "~/packages/agent";
-import { deepseek } from "~/packages/agent/models";
+import { anthropic, deepseek } from "~/packages/agent/models";
 import { env } from "~/env";
 import { db, nexus } from "~/packages/db/schema";
 import { eq, or } from "drizzle-orm";
@@ -10,7 +10,8 @@ import {
 } from "~/packages/agent/plugins";
 
 const agent = await createAgent({
-	model: deepseek("deepseek-reasoner"),
+	// model: deepseek("deepseek-reasoner"),
+	model: anthropic("claude-3-haiku-20240307"),
 	character: {
 		name: "Dash",
 		bio: "An autonomous agent playing nouns.gg",
@@ -72,8 +73,8 @@ const agent = await createAgent({
 
 		if (user.rank) {
 			return [
-				`You are talking to ${user.name} (username: ${user.username})`,
-				`They are ranked ${user.rank.name}, have ${user.xp} xp`,
+				`You are talking to ${user.name}`,
+				`They are ranked ${user.rank.name} and have ${user.xp} xp`,
 			];
 		}
 	},
