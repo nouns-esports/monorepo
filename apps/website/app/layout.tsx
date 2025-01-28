@@ -70,6 +70,28 @@ export const metadata = {
 			"https://ipfs.nouns.gg/ipfs/bafybeih4hyyo6jakdqvg6xjc26pmh5kg5peqkig2wmjufzjbnum6oyb25y",
 		],
 	},
+	icons: {
+		apple: [
+			{
+				url: "/logo/logo.png",
+				sizes: "180x180",
+				type: "image/png",
+			},
+		],
+		icon: [
+			{
+				url: "/logo/logo.png",
+				sizes: "32x32",
+				type: "image/png",
+			},
+			{
+				url: "/logo/logo.png",
+				sizes: "16x16",
+				type: "image/png",
+			},
+		],
+		shortcut: "/logo/logo.png",
+	},
 	other: {
 		"fc:frame": JSON.stringify({
 			version: "next",
