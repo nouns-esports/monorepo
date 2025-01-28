@@ -12,7 +12,7 @@ import { base, baseSepolia } from "viem/chains";
 import { useEffect, useState } from "react";
 import { create } from "zustand";
 import { SmartWalletsProvider } from "@privy-io/react-auth/smart-wallets";
-import { useLoginToFrame } from "@privy-io/react-auth/farcaster";
+// import { useLoginToFrame } from "@privy-io/react-auth/farcaster";
 // import frameSdk from "@farcaster/frame-sdk";
 import { useRouter } from "next/navigation";
 
@@ -100,12 +100,14 @@ function FramesV2(props: { children: React.ReactNode; user?: string }) {
 	// 		const login = async () => {
 	// 			const { nonce } = await initLoginToFrame();
 	// 			try {
+	// 				// Attempt to login to Frame (throws if not from a Warpcast frame)
 	// 				const result = await frameSdk.actions.signIn({ nonce: nonce });
 	// 				await loginToFrame({
 	// 					message: result.message,
 	// 					signature: result.signature,
 	// 				});
 	// 			} catch (error) {
+	// 				// Frame doesn't exist (this request isn't from inside of Warpcast)
 	// 				console.log("frame signin error", error);
 	// 			}
 	// 		};
