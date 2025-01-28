@@ -69,7 +69,7 @@ export default function AboutPage() {
 							<h3 className="text-white font-bebas-neue text-2xl">
 								Create a wallet
 							</h3>
-							<Link href="https://www.flow.com/wallet" className="text-red">
+							<Link newTab href="/rainbow" className="text-red">
 								Get Started
 							</Link>
 						</div>
@@ -87,6 +87,7 @@ export default function AboutPage() {
 							<Link
 								href="https://warpcast.com/~/channel/nouns-esports"
 								className="text-red"
+								newTab
 							>
 								Visit Warpcast
 							</Link>
@@ -102,7 +103,7 @@ export default function AboutPage() {
 							<h3 className="text-white font-bebas-neue text-2xl">
 								Join Flows
 							</h3>
-							<Link href="https://flows.wtf" className="text-red mr-2">
+							<Link href="https://flows.wtf" newTab className="text-red mr-2">
 								Visit Flows
 							</Link>
 						</div>
@@ -118,7 +119,7 @@ export default function AboutPage() {
 							<h3 className="text-white font-bebas-neue text-2xl">
 								Buy a Noun
 							</h3>
-							<Link href="https://nouns.wtf" className="text-red">
+							<Link href="https://nouns.wtf" newTab className="text-red">
 								Visit nouns.wtf
 							</Link>
 						</div>
