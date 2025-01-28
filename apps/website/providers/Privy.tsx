@@ -1,6 +1,7 @@
 "use client";
 
 import {
+	getAccessToken,
 	PrivyProvider,
 	usePrivy,
 	type PrivyClientConfig,
@@ -13,6 +14,7 @@ import { create } from "zustand";
 import { SmartWalletsProvider } from "@privy-io/react-auth/smart-wallets";
 import { useLoginToFrame } from "@privy-io/react-auth/farcaster";
 import frameSdk from "@farcaster/frame-sdk";
+import { useRouter } from "next/navigation";
 
 export const usePrivyModalState = create<{
 	loginMethods?: PrivyClientConfig["loginMethods"];
@@ -70,11 +72,27 @@ export default function Privy(props: {
 }
 
 function FramesV2(props: { children: React.ReactNode; user?: string }) {
-	const { ready, authenticated } = usePrivy();
+	const { user, ready, authenticated } = usePrivy();
 	const { initLoginToFrame, loginToFrame } = useLoginToFrame();
 
 	const [context, setContext] = useState<Awaited<typeof frameSdk.context>>();
 	const [isSDKLoaded, setIsSDKLoaded] = useState(false);
+
+	const router = useRouter();
+
+	useEffect(() => {
+		async function refresh() {
+			const token = await getAccessToken();
+
+			if (token) {
+				router.refresh();
+			}
+		}
+
+		if (ready && authenticated && !props.user) {
+			refresh();
+		}
+	}, [ready, authenticated, user]);
 
 	// Login to Frame with Privy automatically
 	useEffect(() => {
