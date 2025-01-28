@@ -42,6 +42,8 @@ const agent = await createAgent({
 	onMessage: async ({ provider, context }) => {
 		if (!context) return;
 
+		console.log(context);
+
 		const user = await db.query.nexus.findFirst({
 			where: or(
 				eq(nexus.fid, Number(context.author) || 0),
@@ -52,6 +54,8 @@ const agent = await createAgent({
 				rank: true,
 			},
 		});
+
+		console.log(user);
 
 		if (!user) return;
 
@@ -66,7 +70,7 @@ const agent = await createAgent({
 		// 	// Regularly post and quote other tweets from selected accounts (hbox, aklo, mang0, etc...)
 		// }
 
-		if (user && user.rank) {
+		if (user.rank) {
 			return [
 				`You are talking to ${user.name} (username: ${user.username})`,
 				`They are ranked ${user.rank.name}, have ${user.xp} xp`,

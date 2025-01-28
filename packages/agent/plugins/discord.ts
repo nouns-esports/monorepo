@@ -10,10 +10,13 @@ export function discordPlugin(options: { token: string }) {
 		await client.login(options.token);
 
 		client.on("messageCreate", async (message) => {
+			console.log("client.user", client.user);
 			if (message.author.bot) return;
 			if (!client.user) return;
 
 			const mentioned = message.mentions.has(client.user.id);
+
+			console.log("mentioned", mentioned);
 
 			if (mentioned) {
 				const reply = await generateReply(message.content, {
