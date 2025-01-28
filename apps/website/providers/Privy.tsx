@@ -75,7 +75,7 @@ function FramesV2(props: { children: React.ReactNode; user?: string }) {
 	const { user, ready, authenticated } = usePrivy();
 	const { initLoginToFrame, loginToFrame } = useLoginToFrame();
 
-	const [context, setContext] = useState<Awaited<typeof frameSdk.context>>();
+	const [context, setContext] = useState<any>();
 	const [isSDKLoaded, setIsSDKLoaded] = useState(false);
 
 	const router = useRouter();
@@ -94,43 +94,43 @@ function FramesV2(props: { children: React.ReactNode; user?: string }) {
 		}
 	}, [ready, authenticated, user]);
 
-	// Login to Frame with Privy automatically
-	useEffect(() => {
-		try {
-			if (ready && !authenticated) {
-				const login = async () => {
-					const { nonce } = await initLoginToFrame();
-					const result = await frameSdk.actions.signIn({ nonce: nonce });
+	// // Login to Frame with Privy automatically
+	// useEffect(() => {
+	// 	try {
+	// 		if (ready && !authenticated) {
+	// 			const login = async () => {
+	// 				const { nonce } = await initLoginToFrame();
+	// 				const result = await frameSdk.actions.signIn({ nonce: nonce });
 
-					await loginToFrame({
-						message: result.message,
-						signature: result.signature,
-					});
-				};
+	// 				await loginToFrame({
+	// 					message: result.message,
+	// 					signature: result.signature,
+	// 				});
+	// 			};
 
-				login();
-			} else if (ready && authenticated) {
-			}
-		} catch (error) {
-			console.log("Frames v2 error:", error);
-		}
-	}, [ready, authenticated]);
+	// 			login();
+	// 		} else if (ready && authenticated) {
+	// 		}
+	// 	} catch (error) {
+	// 		console.log("Frames v2 error:", error);
+	// 	}
+	// }, [ready, authenticated]);
 
-	// Initialize the frame SDK
-	useEffect(() => {
-		try {
-			const load = async () => {
-				setContext(await frameSdk.context);
-				frameSdk.actions.ready({});
-			};
-			if (frameSdk && !isSDKLoaded) {
-				setIsSDKLoaded(true);
-				load();
-			}
-		} catch (error) {
-			console.log("frames v2 error:", error);
-		}
-	}, [isSDKLoaded]);
+	// // Initialize the frame SDK
+	// useEffect(() => {
+	// 	try {
+	// 		const load = async () => {
+	// 			setContext(await frameSdk.context);
+	// 			frameSdk.actions.ready({});
+	// 		};
+	// 		if (frameSdk && !isSDKLoaded) {
+	// 			setIsSDKLoaded(true);
+	// 			load();
+	// 		}
+	// 	} catch (error) {
+	// 		console.log("frames v2 error:", error);
+	// 	}
+	// }, [isSDKLoaded]);
 
 	return props.children;
 }
