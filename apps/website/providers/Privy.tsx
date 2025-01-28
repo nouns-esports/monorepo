@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 import { create } from "zustand";
 import { SmartWalletsProvider } from "@privy-io/react-auth/smart-wallets";
 import { useLoginToFrame } from "@privy-io/react-auth/farcaster";
-// import frameSdk from "@farcaster/frame-sdk";
+import frameSdk from "@farcaster/frame-sdk";
 import { useRouter } from "next/navigation";
 
 export const usePrivyModalState = create<{
@@ -96,48 +96,34 @@ function FramesV2(props: { children: React.ReactNode; user?: string }) {
 
 	// Login to Frame with Privy automatically
 	useEffect(() => {
-		try {
-			if (ready && !authenticated) {
-				const login = async () => {
-					const { default: frameSdk } = await import("@farcaster/frame-sdk");
-					const { nonce } = await initLoginToFrame();
-					try {
-						const result = await frameSdk.actions.signIn({ nonce: nonce });
-						await loginToFrame({
-							message: result.message,
-							signature: result.signature,
-						});
-					} catch (error) {
-						console.log("frame signin error", error);
-					}
-				};
+		if (ready && !authenticated) {
+			const login = async () => {
+				const { nonce } = await initLoginToFrame();
+				try {
+					const result = await frameSdk.actions.signIn({ nonce: nonce });
+					await loginToFrame({
+						message: result.message,
+						signature: result.signature,
+					});
+				} catch (error) {
+					console.log("frame signin error", error);
+				}
+			};
 
-				login();
-			} else if (ready && authenticated) {
-			}
-		} catch (error) {
-			console.log("Frames v2 error:", error);
+			login();
+		} else if (ready && authenticated) {
 		}
 	}, [ready, authenticated]);
 
 	// Initialize the frame SDK
 	useEffect(() => {
-		try {
-			const load = async () => {
-				const { default: frameSdk } = await import("@farcaster/frame-sdk");
-
-				setContext(await frameSdk.context);
-				frameSdk.actions.ready({});
-			};
-			if (
-				// frameSdk &&
-				!isSDKLoaded
-			) {
-				setIsSDKLoaded(true);
-				load();
-			}
-		} catch (error) {
-			console.log("frames v2 error:", error);
+		const load = async () => {
+			setContext(await frameSdk.context);
+			frameSdk.actions.ready({});
+		};
+		if (frameSdk && !isSDKLoaded) {
+			setIsSDKLoaded(true);
+			load();
 		}
 	}, [isSDKLoaded]);
 
