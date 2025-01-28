@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 import { create } from "zustand";
 import { SmartWalletsProvider } from "@privy-io/react-auth/smart-wallets";
 import { useLoginToFrame } from "@privy-io/react-auth/farcaster";
-// import frameSdk from "@farcaster/frame-sdk";
+import frameSdk from "@farcaster/frame-sdk";
 import { useRouter } from "next/navigation";
 
 export const usePrivyModalState = create<{
@@ -73,10 +73,10 @@ export default function Privy(props: {
 
 function FramesV2(props: { children: React.ReactNode; user?: string }) {
 	const { user, ready, authenticated } = usePrivy();
-	// const { initLoginToFrame, loginToFrame } = useLoginToFrame();
+	const { initLoginToFrame, loginToFrame } = useLoginToFrame();
 
-	// const [context, setContext] = useState<Awaited<typeof frameSdk.context>>();
-	// const [isSDKLoaded, setIsSDKLoaded] = useState(false);
+	const [context, setContext] = useState<Awaited<typeof frameSdk.context>>();
+	const [isSDKLoaded, setIsSDKLoaded] = useState(false);
 
 	const router = useRouter();
 
@@ -100,36 +100,36 @@ function FramesV2(props: { children: React.ReactNode; user?: string }) {
 		// return () => clearInterval(intervalId);
 	}, [ready, authenticated, user]);
 
-	// // Login to Frame with Privy automatically
-	// useEffect(() => {
-	// 	if (ready && !authenticated) {
-	// 		const login = async () => {
-	// 			const { nonce } = await initLoginToFrame();
-	// 			const result = await frameSdk.actions.signIn({ nonce: nonce });
+	// Login to Frame with Privy automatically
+	useEffect(() => {
+		if (ready && !authenticated) {
+			const login = async () => {
+				const { nonce } = await initLoginToFrame();
+				const result = await frameSdk.actions.signIn({ nonce: nonce });
 
-	// 			if (result) {
-	// 				await loginToFrame({
-	// 					message: result.message,
-	// 					signature: result.signature,
-	// 				});
-	// 			}
-	// 		};
-	// 		login();
-	// 	} else if (ready && authenticated) {
-	// 	}
-	// }, [ready, authenticated]);
+				if (result) {
+					await loginToFrame({
+						message: result.message,
+						signature: result.signature,
+					});
+				}
+			};
+			login();
+		} else if (ready && authenticated) {
+		}
+	}, [ready, authenticated]);
 
-	// // Initialize the frame SDK
-	// useEffect(() => {
-	// 	const load = async () => {
-	// 		setContext(await frameSdk.context);
-	// 		frameSdk.actions.ready({});
-	// 	};
-	// 	if (frameSdk && !isSDKLoaded) {
-	// 		setIsSDKLoaded(true);
-	// 		load();
-	// 	}
-	// }, [isSDKLoaded]);
+	// Initialize the frame SDK
+	useEffect(() => {
+		const load = async () => {
+			setContext(await frameSdk.context);
+			frameSdk.actions.ready({});
+		};
+		if (frameSdk && !isSDKLoaded) {
+			setIsSDKLoaded(true);
+			load();
+		}
+	}, [isSDKLoaded]);
 
 	return props.children;
 }
