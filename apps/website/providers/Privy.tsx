@@ -96,35 +96,39 @@ function FramesV2(props: { children: React.ReactNode; user?: string }) {
 
 	// Login to Frame with Privy automatically
 	useEffect(() => {
-		if (ready && !authenticated) {
-			const login = async () => {
-				const { nonce } = await initLoginToFrame();
-				const result = await frameSdk.actions.signIn({ nonce: nonce });
+		try {
+			if (ready && !authenticated) {
+				const login = async () => {
+					const { nonce } = await initLoginToFrame();
+					const result = await frameSdk.actions.signIn({ nonce: nonce });
 
-				await loginToFrame({
-					message: result.message,
-					signature: result.signature,
-				});
-			};
+					await loginToFrame({
+						message: result.message,
+						signature: result.signature,
+					});
+				};
 
-			try {
 				login();
-			} catch (error) {
-				console.error("Frames v2 error:", error);
+			} else if (ready && authenticated) {
 			}
-		} else if (ready && authenticated) {
+		} catch (error) {
+			console.log("Frames v2 error:", error);
 		}
 	}, [ready, authenticated]);
 
 	// Initialize the frame SDK
 	useEffect(() => {
-		const load = async () => {
-			setContext(await frameSdk.context);
-			frameSdk.actions.ready({});
-		};
-		if (frameSdk && !isSDKLoaded) {
-			setIsSDKLoaded(true);
-			load();
+		try {
+			const load = async () => {
+				setContext(await frameSdk.context);
+				frameSdk.actions.ready({});
+			};
+			if (frameSdk && !isSDKLoaded) {
+				setIsSDKLoaded(true);
+				load();
+			}
+		} catch (error) {
+			console.log("frames v2 error:", error);
 		}
 	}, [isSDKLoaded]);
 
