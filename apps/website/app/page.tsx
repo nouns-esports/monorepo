@@ -453,6 +453,7 @@ export default async function Home() {
 				<div className="from-transparent to-black bg-gradient-to-r w-32 h-full right-0 bottom-0 absolute pointer-events-none max-[1920px]:hidden flex" />
 				<div className="from-transparent to-black bg-gradient-to-l w-32 h-full left-0 bottom-0 absolute pointer-events-none max-[1920px]:hidden flex" />
 			</div>
+			<Link href="/test">Test</Link>
 		</div>
 	);
 }
