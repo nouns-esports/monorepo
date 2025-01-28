@@ -108,7 +108,7 @@ function PrivySync(props: { children: React.ReactNode; user?: string }) {
 				});
 				const context = await frameSdk.context;
 				console.log(context);
-				await frameSdk.actions.ready();
+				await frameSdk.actions.ready({});
 			};
 			login();
 		}
