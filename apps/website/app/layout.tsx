@@ -73,24 +73,24 @@ export const metadata = {
 	icons: {
 		apple: [
 			{
-				url: "/logo/logo.png",
+				url: "/logo/logo-square.png",
 				sizes: "180x180",
 				type: "image/png",
 			},
 		],
 		icon: [
 			{
-				url: "/logo/logo.png",
+				url: "/logo/logo-square.png",
 				sizes: "32x32",
 				type: "image/png",
 			},
 			{
-				url: "/logo/logo.png",
+				url: "/logo/logo-square.png",
 				sizes: "16x16",
 				type: "image/png",
 			},
 		],
-		shortcut: "/logo/logo.png",
+		shortcut: "/logo/logo-square.png",
 	},
 	other: {
 		"fc:frame": JSON.stringify({
