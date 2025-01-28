@@ -80,17 +80,16 @@ export const metadata = {
 		],
 		icon: [
 			{
-				url: "/logo/logo-square.png",
+				url: "/logo/logo.png",
 				sizes: "32x32",
 				type: "image/png",
 			},
 			{
-				url: "/logo/logo-square.png",
+				url: "/logo/logo.png",
 				sizes: "16x16",
 				type: "image/png",
 			},
 		],
-		shortcut: "/logo/logo-square.png",
 	},
 	other: {
 		"fc:frame": JSON.stringify({
