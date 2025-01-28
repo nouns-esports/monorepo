@@ -2,14 +2,12 @@
 
 import {
 	PrivyProvider,
-	getAccessToken,
 	usePrivy,
 	type PrivyClientConfig,
 	type WalletListEntry,
 } from "@privy-io/react-auth";
 import { env } from "~/env";
 import { base, baseSepolia } from "viem/chains";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { create } from "zustand";
 import { SmartWalletsProvider } from "@privy-io/react-auth/smart-wallets";
