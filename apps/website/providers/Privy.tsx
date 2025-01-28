@@ -10,7 +10,7 @@ import {
 import { env } from "~/env";
 import { base, baseSepolia } from "viem/chains";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { create } from "zustand";
 import { SmartWalletsProvider } from "@privy-io/react-auth/smart-wallets";
 import { useLoginToFrame } from "@privy-io/react-auth/farcaster";
@@ -64,55 +64,47 @@ export default function Privy(props: {
 				externalWallets,
 			}}
 		>
-			<PrivySync>
+			<FramesV2>
 				<SmartWalletsProvider>{props.children}</SmartWalletsProvider>
-			</PrivySync>
+			</FramesV2>
 		</PrivyProvider>
 	);
 }
 
-function PrivySync(props: { children: React.ReactNode; user?: string }) {
-	const { user, ready, authenticated } = usePrivy();
+function FramesV2(props: { children: React.ReactNode; user?: string }) {
+	const { ready, authenticated } = usePrivy();
 	const { initLoginToFrame, loginToFrame } = useLoginToFrame();
 
-	const router = useRouter();
+	const [context, setContext] = useState<Awaited<typeof frameSdk.context>>();
+	const [isSDKLoaded, setIsSDKLoaded] = useState(false);
 
-	useEffect(() => {
-		async function refresh() {
-			const token = await getAccessToken();
-
-			if (token) {
-				router.refresh();
-			}
-		}
-
-		if (authenticated && !props.user) {
-			refresh();
-		}
-
-		const intervalId = setInterval(() => {
-			refresh();
-		}, 900_000);
-
-		return () => clearInterval(intervalId);
-	}, [authenticated, user]);
-
+	// Login to Frame with Privy automatically
 	useEffect(() => {
 		if (ready && !authenticated) {
 			const login = async () => {
 				const { nonce } = await initLoginToFrame();
-				const result = await frameSdk.actions.signIn({ nonce });
+				const result = await frameSdk.actions.signIn({ nonce: nonce });
 				await loginToFrame({
 					message: result.message,
 					signature: result.signature,
 				});
-				const context = await frameSdk.context;
-				console.log(context);
-				await frameSdk.actions.ready({});
 			};
 			login();
+		} else if (ready && authenticated) {
 		}
 	}, [ready, authenticated]);
+
+	// Initialize the frame SDK
+	useEffect(() => {
+		const load = async () => {
+			setContext(await frameSdk.context);
+			frameSdk.actions.ready({});
+		};
+		if (frameSdk && !isSDKLoaded) {
+			setIsSDKLoaded(true);
+			load();
+		}
+	}, [isSDKLoaded]);
 
 	return props.children;
 }
