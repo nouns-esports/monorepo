@@ -18,7 +18,6 @@ export default function Achievements(props: {
 	user?: AuthenticatedUser;
 	achievementProgress: Record<string, "claimed" | "completed" | "incomplete">;
 }) {
-	console.log(props.achievementProgress);
 	const scale = useMotionValue(0.4);
 
 	const controls = useDragControls();
@@ -170,10 +169,6 @@ function Node(props: {
 	locked?: boolean;
 }) {
 	const claimAchievementAction = useAction(claimAchievement);
-
-	if (props.achievement.id === "lilnouner") {
-		console.log(props.user?.id, props.state, props.locked);
-	}
 
 	return (
 		<>
