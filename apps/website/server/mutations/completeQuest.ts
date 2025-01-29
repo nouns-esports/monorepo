@@ -2,14 +2,7 @@
 
 import { z } from "zod";
 import { onlyRanked } from ".";
-import {
-	db,
-	nexus,
-	notifications,
-	quests,
-	seasons,
-	xp,
-} from "~/packages/db/schema";
+import { db, nexus, notifications, quests, xp } from "~/packages/db/schema";
 import { and, desc, eq, gte, lte, sql } from "drizzle-orm";
 import { getAction } from "../queries/quests";
 import { revalidatePath } from "next/cache";
@@ -81,15 +74,6 @@ export const completeQuest = onlyRanked
 			throw new Error("Not all actions completed");
 		}
 
-		const currentSeason = await db.query.seasons.findFirst({
-			where: and(lte(seasons.start, now), gte(seasons.end, now)),
-			orderBy: desc(seasons.start),
-		});
-
-		if (!currentSeason) {
-			throw new Error("Season not found");
-		}
-
 		let newXP = 0;
 		const notification = {
 			user: ctx.user.id,
@@ -107,7 +91,6 @@ export const completeQuest = onlyRanked
 				user: ctx.user.id,
 				amount: quest.xp,
 				timestamp: now,
-				season: currentSeason.id,
 			});
 
 			await tx.insert(notifications).values(notification);

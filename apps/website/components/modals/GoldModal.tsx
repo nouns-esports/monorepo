@@ -1,11 +1,21 @@
-import { X } from "lucide-react";
-import { Modal, ToggleModal } from "../Modal";
-import Link from "../Link";
-import { env } from "~/env";
-import { getAuthenticatedUser } from "@/server/queries/users";
+"use client";
 
-export default async function GoldModal() {
-	const user = await getAuthenticatedUser();
+import { X } from "lucide-react";
+import { Modal, ToggleModal, useModal } from "../Modal";
+import type { AuthenticatedUser } from "@/server/queries/users";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect } from "react";
+
+export default function GoldModal(props: { user: AuthenticatedUser }) {
+	const router = useRouter();
+	const pathname = usePathname();
+
+	const { isOpen, close } = useModal("gold");
+
+	useEffect(() => {
+		if (!isOpen) return;
+		close();
+	}, [isOpen, pathname, close]);
 
 	return (
 		<Modal id="gold" className="p-4 flex flex-col max-w-[500px] w-80 gap-8">
@@ -28,15 +38,19 @@ export default async function GoldModal() {
 					className="rounded-full h-10 w-10 shadow-xl"
 				/>
 				<p className="font-semibold text-4xl text-[#FEBD1C]">
-					{user?.nexus?.gold ?? 0}
+					{props.user?.nexus?.gold ?? 0}
 				</p>
 			</div>
-			<Link
-				href="/leaderboard"
+			<button
+				onClick={() => {
+					if (pathname === "/leaderboard") return close();
+
+					router.push("/leaderboard");
+				}}
 				className="flex justify-center items-center gap-2 w-full text-black bg-white hover:bg-white/70 font-semibold rounded-lg p-2.5 transition-colors"
 			>
 				Earn More
-			</Link>
+			</button>
 		</Modal>
 	);
 }

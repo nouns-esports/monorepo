@@ -385,7 +385,14 @@ export const nexus = pgTable("nexus", {
 	name: text("name").notNull().default(""),
 	bio: text("bio"),
 	interests: text("interests").array().notNull().default([]),
-	wallet: text("wallet"),
+	// wallets: jsonb("wallets")
+	// 	.$type<{
+	// 		address: string;
+	// 		type: string;
+	// 	}>()
+	// 	.array()
+	// 	.notNull()
+	// 	.default([]),
 	twitter: text("twitter"),
 	discord: text("discord"),
 	fid: integer("fid"),
@@ -430,18 +437,6 @@ export const goldRelations = relations(gold, ({ one }) => ({
 	}),
 }));
 
-export const seasons = pgTable("seasons", {
-	id: serial("id").primaryKey(),
-	start: timestamp("start", { mode: "date" }).notNull(),
-	end: timestamp("end", { mode: "date" }).notNull(),
-});
-
-export const seasonRelations = relations(seasons, ({ many }) => ({
-	ranks: many(ranks),
-	rankings: many(rankings),
-	xp: many(xp),
-}));
-
 export const ranks = pgTable("ranks", {
 	id: serial("id").primaryKey(),
 	name: text("name").notNull(),
@@ -449,15 +444,10 @@ export const ranks = pgTable("ranks", {
 	color: text("color").notNull().default(""),
 	place: smallint("place").notNull(),
 	percentile: numeric("percentile", { precision: 4, scale: 3 }).notNull(), // ex: 0.01 === 1%, 0.001 === 0.1%, 0.0001 === 0.01%
-	season: integer("season").notNull(),
 	votes: smallint("votes").notNull(),
 });
 
 export const ranksRelations = relations(ranks, ({ one, many }) => ({
-	season: one(seasons, {
-		fields: [ranks.season],
-		references: [seasons.id],
-	}),
 	nexus: many(nexus),
 }));
 
@@ -499,7 +489,6 @@ export const xp = pgTable("xp", {
 	user: text("user").notNull(),
 	amount: integer("amount").notNull(),
 	timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
-	season: integer("season").notNull(),
 	quest: text("quest"),
 	snapshot: integer("snapshot"),
 	achievement: text("achievement"),
@@ -511,10 +500,6 @@ export const xpRelations = relations(xp, ({ one }) => ({
 	user: one(nexus, {
 		fields: [xp.user],
 		references: [nexus.id],
-	}),
-	season: one(seasons, {
-		fields: [xp.season],
-		references: [seasons.id],
 	}),
 	quest: one(quests, {
 		fields: [xp.quest],
@@ -537,7 +522,6 @@ export const xpRelations = relations(xp, ({ one }) => ({
 export const rankings = pgTable("rankings", {
 	id: serial("id").primaryKey(),
 	user: text("user").notNull(),
-	season: integer("season").notNull(),
 	rank: integer("rank").notNull(),
 	xp: integer("xp").notNull(),
 	diff: integer("diff").notNull(),
@@ -549,10 +533,6 @@ export const rankingsRelations = relations(rankings, ({ one, many }) => ({
 	user: one(nexus, {
 		fields: [rankings.user],
 		references: [nexus.id],
-	}),
-	season: one(seasons, {
-		fields: [rankings.season],
-		references: [seasons.id],
 	}),
 	rank: one(ranks, {
 		fields: [rankings.rank],
@@ -693,8 +673,6 @@ const schema = {
 	eventsRelations,
 	creations,
 	creationsRelations,
-	seasons,
-	seasonRelations,
 	ranks,
 	ranksRelations,
 	quests,

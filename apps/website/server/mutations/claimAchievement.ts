@@ -8,7 +8,6 @@ import {
 	events,
 	nexus,
 	notifications,
-	seasons,
 	xp,
 	type Notification,
 } from "~/packages/db/schema";
@@ -33,21 +32,9 @@ export const claimAchievement = onlyRanked
 
 		const now = new Date();
 
-		const [alreadyClaimed, currentSeason] = await Promise.all([
-			db.query.xp.findFirst({
-				where: and(
-					eq(xp.user, ctx.user.id),
-					eq(xp.achievement, parsedInput.id),
-				),
-			}),
-			db.query.seasons.findFirst({
-				where: and(lte(seasons.start, now), gte(seasons.end, now)),
-			}),
-		]);
-
-		if (!currentSeason) {
-			throw new Error("No active season");
-		}
+		const alreadyClaimed = await db.query.xp.findFirst({
+			where: and(eq(xp.user, ctx.user.id), eq(xp.achievement, parsedInput.id)),
+		});
 
 		if (alreadyClaimed) {
 			throw new Error("Achievement already claimed");
@@ -73,7 +60,6 @@ export const claimAchievement = onlyRanked
 				user: ctx.user.id,
 				achievement: parsedInput.id,
 				amount: achievement.xp,
-				season: currentSeason.id,
 				timestamp: now,
 			});
 

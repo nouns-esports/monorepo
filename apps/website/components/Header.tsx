@@ -235,7 +235,7 @@ export default async function Header() {
 					</div>
 				</div>
 			</header>
-			<GoldModal />
+			{user ? <GoldModal user={user} /> : null}
 			<CartModal />
 		</>
 	);

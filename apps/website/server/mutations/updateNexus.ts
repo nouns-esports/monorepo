@@ -3,8 +3,8 @@
 import { z } from "zod";
 import { onlyUser } from ".";
 import { revalidatePath } from "next/cache";
-import { db, nexus, ranks, seasons } from "~/packages/db/schema";
-import { asc, desc, eq, lte, or } from "drizzle-orm";
+import { db, nexus } from "~/packages/db/schema";
+import { eq, or } from "drizzle-orm";
 
 export const updateNexus = onlyUser
 	.schema(

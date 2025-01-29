@@ -3,7 +3,7 @@
 import { z } from "zod";
 import { actionClient, onlyUser } from ".";
 import { revalidatePath } from "next/cache";
-import { db, nexus, rankings, ranks, seasons } from "~/packages/db/schema";
+import { db, nexus, rankings, ranks } from "~/packages/db/schema";
 import { and, asc, desc, gte, lte } from "drizzle-orm";
 import { env } from "~/env";
 import checkDiscordAccountAge from "@/utils/checkDiscordAccountAge";
@@ -27,27 +27,14 @@ export const createNexus = onlyUser
 			let rank: number | null = null;
 
 			if (ctx.user.discord) {
-				const currentSeason = await db.query.seasons.findFirst({
-					orderBy: desc(seasons.start),
-					where: lte(seasons.start, new Date()),
-					with: {
-						ranks: {
-							orderBy: asc(ranks.place),
-							limit: 1,
-						},
-						rankings: {
-							orderBy: [desc(rankings.timestamp), asc(rankings.xp)],
-							limit: 1,
-						},
-					},
-				});
-
-				if (!currentSeason) {
-					throw new Error("No active season found");
-				}
-
-				const lowestRank = currentSeason.ranks[0];
-				const lowestRanking = currentSeason.rankings[0];
+				const [lowestRank, lowestRanking] = await Promise.all([
+					db.query.ranks.findFirst({
+						orderBy: asc(ranks.place),
+					}),
+					db.query.rankings.findFirst({
+						orderBy: [desc(rankings.timestamp), asc(rankings.xp)],
+					}),
+				]);
 
 				if (!lowestRank) {
 					throw new Error("No ranks found");
@@ -72,7 +59,6 @@ export const createNexus = onlyUser
 				) {
 					rank = lowestRank.id;
 					await tx.insert(rankings).values({
-						season: currentSeason.id,
 						user: ctx.user.id,
 						position: lowestRanking.position + 1,
 						diff: 0,
