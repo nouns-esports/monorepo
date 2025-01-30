@@ -1,8 +1,9 @@
 import { revalidatePath } from "next/cache";
-import { NextResponse } from "next/server";
 
-export async function GET(props: { params: Promise<{ path: string }> }) {
-	const params = await props.params;
+export async function GET(
+	request: Request,
+	{ params }: { params: { path: string } },
+) {
 	revalidatePath(params.path);
-	return NextResponse.json({ revalidated: true });
+	return Response.json({ revalidated: true });
 }
