@@ -10,13 +10,6 @@ export default async function placeFirst(user: AuthenticatedUser) {
 			round: {
 				with: {
 					proposals: {
-						with: {
-							user: {
-								with: {
-									rank: true,
-								},
-							},
-						},
 						extras: {
 							totalVotes: sql<number>`(
                 SELECT SUM(v.count) AS total_votes
@@ -40,7 +33,9 @@ export default async function placeFirst(user: AuthenticatedUser) {
 			const votesDiff = b.totalVotes - a.totalVotes;
 
 			if (votesDiff === 0) {
-				return b.user.rank.place - a.user.rank.place;
+				return (
+					new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+				);
 			}
 
 			return votesDiff;

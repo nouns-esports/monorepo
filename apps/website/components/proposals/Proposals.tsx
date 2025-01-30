@@ -294,6 +294,15 @@ export default function Proposals(props: {
 								return (b.user?.rank?.place ?? 0) - (a.user?.rank?.place ?? 0);
 							}
 
+							const votesDiff = b.totalVotes - a.totalVotes;
+
+							if (votesDiff === 0) {
+								return (
+									new Date(a.createdAt).getTime() -
+									new Date(b.createdAt).getTime()
+								);
+							}
+
 							return b.totalVotes - a.totalVotes;
 						})
 						.map((proposal, index) => (

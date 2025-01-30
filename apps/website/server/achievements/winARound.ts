@@ -40,7 +40,9 @@ export default async function winARound(user: AuthenticatedUser) {
 			const votesDiff = b.totalVotes - a.totalVotes;
 
 			if (votesDiff === 0) {
-				return b.user.rank.place - a.user.rank.place;
+				return (
+					new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+				);
 			}
 
 			return votesDiff;
