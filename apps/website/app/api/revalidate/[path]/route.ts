@@ -2,8 +2,8 @@ import { revalidatePath } from "next/cache";
 
 export async function GET(
 	request: Request,
-	{ params }: { params: { path: string } },
+	{ params }: { params: Promise<{ path: string }> },
 ) {
-	revalidatePath(params.path);
+	revalidatePath((await params).path);
 	return Response.json({ revalidated: true });
 }

@@ -1,6 +1,6 @@
 import { env } from "../../../../env";
 
-export function GET() {
+export async function GET() {
 	return Response.json({
 		accountAssociation: {
 			header:
