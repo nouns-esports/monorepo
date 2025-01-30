@@ -128,7 +128,8 @@ function FramesV2(props: { children: React.ReactNode; user?: string }) {
 	return (
 		<>
 			<div className="text-white">CONTEXT: {JSON.stringify(context)}</div>
-			<div className="text-white">USER: {JSON.stringify(user?.id)}</div>
+			<div className="text-white">CLIENT USER: {JSON.stringify(user?.id)}</div>
+			<div className="text-white">SERVER USER: {props.user}</div>
 			<div className="text-white">ACCESS TOKEN: {accessTokenTest}</div>
 			{props.children}
 		</>
