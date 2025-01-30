@@ -76,12 +76,16 @@ function FramesV2(props: { children: React.ReactNode; user?: string }) {
 
 	const [context, setContext] = useState<Awaited<typeof frameSdk.context>>();
 	const [loaded, setLoaded] = useState(false);
+	const [accessTokenTest, setAccessTokenTest] = useState<string>("");
 
 	const router = useRouter();
 
 	useEffect(() => {
 		async function refresh() {
+			console.log("REFRESHING");
+			setAccessTokenTest("GOT TOKEN");
 			const token = await getAccessToken();
+			console.log("TOKEN", token);
 
 			if (token) {
 				router.refresh();
@@ -89,6 +93,7 @@ function FramesV2(props: { children: React.ReactNode; user?: string }) {
 		}
 
 		if (ready && authenticated && !props.user) {
+			console.log("PREFRESHING");
 			refresh();
 		}
 	}, [ready, authenticated, user]);
@@ -124,6 +129,7 @@ function FramesV2(props: { children: React.ReactNode; user?: string }) {
 		<>
 			<div className="text-white">CONTEXT: {JSON.stringify(context)}</div>
 			<div className="text-white">USER: {JSON.stringify(user?.id)}</div>
+			<div className="text-white">ACCESS TOKEN: {accessTokenTest}</div>
 			{props.children}
 		</>
 	);
