@@ -10,9 +10,11 @@ import {
 import { env } from "~/env";
 import { base, baseSepolia } from "viem/chains";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { create } from "zustand";
 import { SmartWalletsProvider } from "@privy-io/react-auth/smart-wallets";
+import { useLoginToFrame } from "@privy-io/react-auth/farcaster";
+import frameSdk from "@farcaster/frame-sdk";
 
 export const usePrivyModalState = create<{
 	loginMethods?: PrivyClientConfig["loginMethods"];
@@ -61,15 +63,19 @@ export default function Privy(props: {
 				externalWallets,
 			}}
 		>
-			<PrivySync>
+			<FramesV2>
 				<SmartWalletsProvider>{props.children}</SmartWalletsProvider>
-			</PrivySync>
+			</FramesV2>
 		</PrivyProvider>
 	);
 }
 
-function PrivySync(props: { children: React.ReactNode; user?: string }) {
-	const { user, authenticated } = usePrivy();
+function FramesV2(props: { children: React.ReactNode; user?: string }) {
+	const { user, ready, authenticated } = usePrivy();
+	const { initLoginToFrame, loginToFrame } = useLoginToFrame();
+
+	const [context, setContext] = useState<Awaited<typeof frameSdk.context>>();
+	const [isSDKLoaded, setIsSDKLoaded] = useState(false);
 
 	const router = useRouter();
 
@@ -82,16 +88,50 @@ function PrivySync(props: { children: React.ReactNode; user?: string }) {
 			}
 		}
 
-		if (authenticated && !props.user) {
+		if (ready && authenticated && !props.user) {
 			refresh();
 		}
+	}, [ready, authenticated, user]);
 
-		const intervalId = setInterval(() => {
-			refresh();
-		}, 900_000);
+	// Login to Frame with Privy automatically
+	useEffect(() => {
+		console.log("frame context", context);
+		if (ready && !authenticated) {
+			const login = async () => {
+				try {
+					const { nonce } = await initLoginToFrame();
+					// Attempt to login to Frame (throws if not from a Warpcast frame)
+					const result = await frameSdk.actions.signIn({ nonce: nonce });
+					await loginToFrame({
+						message: result.message,
+						signature: result.signature,
+					});
+				} catch (error) {
+					// Frame doesn't exist (this request isn't from inside of Warpcast)
+					console.log("frame signin error", error);
+				}
+			};
 
-		return () => clearInterval(intervalId);
-	}, [authenticated, user]);
+			login();
+		}
+	}, [ready, authenticated]);
 
-	return props.children;
+	// Initialize the frame SDK
+	useEffect(() => {
+		const load = async () => {
+			setContext(await frameSdk.context);
+			frameSdk.actions.ready({});
+		};
+		if (!isSDKLoaded) {
+			setIsSDKLoaded(true);
+			load();
+		}
+	}, [isSDKLoaded]);
+
+	return (
+		<>
+			<div className="text-white">CONTEXT: {JSON.stringify(context)}</div>
+			{props.children}
+		</>
+	);
 }

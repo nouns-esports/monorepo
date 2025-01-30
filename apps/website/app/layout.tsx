@@ -69,14 +69,16 @@ export const metadata = {
 	other: {
 		"fc:frame": JSON.stringify({
 			version: "next",
-			imageUrl: "https://nouns.gg/og-banner.webp",
+			imageUrl:
+				"https://ipfs.nouns.gg/ipfs/bafybeih4hyyo6jakdqvg6xjc26pmh5kg5peqkig2wmjufzjbnum6oyb25y",
 			button: {
 				title: "Launch",
 				action: {
 					type: "launch_frame",
-					name: "Nouns",
-					url: "https://nouns.gg",
-					splashImageUrl: "https://nouns.gg/logo/logo.png",
+					name: "Nouns GG",
+					url: env.NEXT_PUBLIC_DOMAIN,
+					splashImageUrl:
+						"https://ipfs.nouns.gg/ipfs/bafkreia2vysupa4ctmftg5ro73igggkq4fzgqjfjqdafntylwlnfclziey",
 					splashBackgroundColor: "#040404",
 				},
 			},
