@@ -35,7 +35,7 @@ export default function RankChart(props: {
 									: []),
 								...props.userRankings.map((ranking) => ({
 									name: new Date(ranking.timestamp).getTime(),
-									rank: ranking.rank.place,
+									rank: ranking.rank?.place ?? 0,
 								})),
 							]
 						: [
