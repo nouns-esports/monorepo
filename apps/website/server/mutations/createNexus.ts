@@ -27,21 +27,12 @@ export const createNexus = onlyUser
 			let rank: number | null = null;
 
 			if (ctx.user.discord) {
-				const [lowestRank, lowestRanking] = await Promise.all([
-					db.query.ranks.findFirst({
-						orderBy: asc(ranks.place),
-					}),
-					db.query.rankings.findFirst({
-						orderBy: [desc(rankings.timestamp), asc(rankings.xp)],
-					}),
-				]);
+				const lowestRank = await db.query.ranks.findFirst({
+					orderBy: asc(ranks.place),
+				});
 
 				if (!lowestRank) {
 					throw new Error("No ranks found");
-				}
-
-				if (!lowestRanking) {
-					throw new Error("Nobody is ranked");
 				}
 
 				const discordResponse = await fetch(
@@ -58,14 +49,6 @@ export const createNexus = onlyUser
 					checkDiscordAccountAge(ctx.user.discord.subject)
 				) {
 					rank = lowestRank.id;
-					await tx.insert(rankings).values({
-						user: ctx.user.id,
-						position: lowestRanking.position + 1,
-						diff: 0,
-						xp: 0,
-						timestamp: lowestRanking.timestamp,
-						rank: lowestRank.id,
-					});
 				}
 			}
 
@@ -78,7 +61,6 @@ export const createNexus = onlyUser
 					`https://api.cloudnouns.com/v1/pfp?text=${ctx.user.id}&background=1`,
 				bio: parsedInput.bio,
 				interests: parsedInput.interests,
-				wallet: ctx.user.smartWallet,
 				twitter: ctx.user.twitter?.username,
 				discord: ctx.user.discord?.username.split("#")[0],
 				username: ctx.user.farcaster?.username ?? undefined,

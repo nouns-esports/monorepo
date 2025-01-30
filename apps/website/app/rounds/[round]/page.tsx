@@ -6,7 +6,7 @@ import { twMerge } from "tailwind-merge";
 import { formatUnits } from "viem";
 import { getFrameMetadata, isFrameRequest } from "frog/next";
 import type { Metadata } from "next";
-import { getRound, getComments } from "@/server/queries/rounds";
+import { getRound } from "@/server/queries/rounds";
 import { getPriorVotes } from "@/server/queries/votes";
 import { numberToOrdinal } from "@/utils/numberToOrdinal";
 import { getAuthenticatedUser } from "@/server/queries/users";
@@ -102,7 +102,6 @@ export default async function Round(props: {
 	const [user, round] = await Promise.all([
 		getAuthenticatedUser(),
 		getRound({ id: params.round }),
-		// getComments({ round: params.round }),
 	]);
 
 	if (!round) {
@@ -115,18 +114,6 @@ export default async function Round(props: {
 				round: params.round,
 			})
 		: 0;
-
-	// const commentActivity = comments.map((comment) => ({
-	// 	type: "comment",
-	// 	timestamp: new Date(comment.timestamp),
-	// 	user: {
-	// 		id: comment.author.username,
-	// 		name: comment.author.display_name ?? "",
-	// 		image: comment.author.pfp_url ?? "",
-	// 	},
-	// 	text: comment.text,
-	// 	url: `/chat/${comment.hash}`,
-	// })) satisfies Activity[];
 
 	const proposalActivity = round.proposals
 		.filter((proposal) => proposal.user)
@@ -262,7 +249,7 @@ export default async function Round(props: {
 										className="flex items-center gap-2 text-white pr-2"
 									>
 										<Users className="w-4 h-4" />
-										{round.totalParticipants}
+										{Number(round.uniqueProposers) + Number(round.uniqueVoters)}
 									</div>
 								</div>
 								<div className="flex flex-col gap-3 h-full overflow-y-auto overflow-x-hidden custom-scrollbar">
@@ -301,7 +288,6 @@ export default async function Round(props: {
 												),
 												color: "text-red",
 											},
-											// ...commentActivity,
 											...proposalActivity,
 											...voteActivity,
 										] satisfies Activity[]
@@ -323,42 +309,6 @@ export default async function Round(props: {
 														</p>
 													</div>
 												) : null}
-												{/* {event.type === "comment" ? (
-													<div className="flex flex-col gap-0.5">
-														<div className="flex items-center justify-between">
-															<div className="flex items-center gap-2">
-																<Link
-																	href={`/users/${event.user.id}`}
-																	className="text-white flex items-center gap-2 group hover:text-white/70 transition-all"
-																>
-																	<img
-																		alt={event.user.name}
-																		src={event.user.image}
-																		className={twMerge(
-																			"w-5 h-5 rounded-full object-cover group-hover:brightness-75 transition-all",
-																		)}
-																	/>
-																	{event.user.name}
-																</Link>
-																<Link
-																	href={event.url}
-																	className="text-grey-200"
-																>
-																	commented
-																</Link>
-															</div>
-															<p className="text-grey-200 text-sm">
-																<Countup date={event.timestamp} />
-															</p>
-														</div>
-														<Link
-															href={event.url}
-															className="text-sm line-clamp-2 ml-7 hover:text-grey-200/70 transition-colors"
-														>
-															"{event.text}"
-														</Link>
-													</div>
-												) : null} */}
 												{event.type === "proposal" ? (
 													<div className="flex items-center justify-between">
 														<div className="flex items-center gap-2">

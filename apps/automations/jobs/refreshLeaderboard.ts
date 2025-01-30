@@ -1,57 +1,74 @@
 import { discordClient } from "../clients/discord";
 import { env } from "~/env";
 import { createJob } from "../createJob";
-import { previousFriday } from "date-fns";
-import { and, lt, eq, sql, asc, gt } from "drizzle-orm";
-import { db, rankings, xp } from "~/packages/db/schema";
+import { previousFriday, nextFriday, isFriday } from "date-fns";
+import { and, lt, eq, sql, asc, gt, desc } from "drizzle-orm";
+import { db, gold, nexus, rankings, xp } from "~/packages/db/schema";
+
+// Ranking System
+// Each week on friday at 1:30pm CST, the leaderboard is refreshed
+// The leaderboard is calculated by giving each user a score based on the sum xp earned within the period averaged with their score from the previous period
+//  - If a user scored 5k last period and 1k this period, their score would be 3k. If a user scored 1k last period and 0 this period, their score would be 500.
+//  - This degrades their score over time (at most -50% a period) and dampens the impact of volatile increases in scores in a given period
+// New users are given the lowest rank but won't be placed on the leaderboard until they earn xp
+// Users whos average score is 0, or whos previous score is < 100 & current score is 0 are excluded from the rank distribution and are assumed the lowest rank
+// Everyone else is placed in a rank based on their averaged score and the distribution of ranks
 
 export const refreshLeaderboard = createJob({
 	name: "Refresh Leaderboard",
-	cron: "50 13 * * *", // 1:50pm CST
+	cron: "30 13 * * 5", // 1:30pm CST every Friday
 	execute: async () => {
 		const now = new Date();
-		const lastFriday = previousFriday(now);
+		const timestamp = nextFriday(now);
 
-		const [previousLeaderboard, xpEarnedThisWeek] = await Promise.all([
+		const [leaderboard, ranks] = await Promise.all([
 			db.query.rankings.findMany({
-				where: and(
-					lt(rankings.timestamp, lastFriday),
-					eq(
-						rankings.timestamp,
-						db
-							.select({
-								timestamp: sql`max(${rankings.timestamp})`,
-							})
-							.from(rankings)
-							.where(lt(rankings.timestamp, lastFriday)),
-					),
-				),
-				orderBy: asc(rankings.position),
+				where: eq(rankings.timestamp, timestamp),
+				orderBy: desc(rankings.score),
 				columns: {
+					id: true,
 					user: true,
-					position: true,
+					score: true,
 				},
 			}),
-			db.query.xp.findMany({
-				where: and(gt(xp.timestamp, lastFriday), lt(xp.timestamp, now)),
-				columns: {
-					user: true,
-					amount: true,
-				},
-			}),
+			db.query.ranks.findMany(), // Add active column
 		]);
 
-		const records: Record<string, number | undefined> = {};
+		await db.transaction(async (tx) => {
+			for (const ranking of leaderboard) {
+				const rewardGold = await tx
+					.insert(gold)
+					.values({
+						amount: 100,
+						timestamp,
+						to: ranking.user,
+					})
+					.returning({
+						id: gold.id,
+					});
 
-		for (const xp of xpEarnedThisWeek) {
-			records[xp.user] = (records[xp.user] ?? 0) + xp.amount;
-		}
+				await tx
+					.update(rankings)
+					.set({
+						gold: rewardGold[0].id,
+						rank: 0,
+					})
 
-		const leaderboard = Object.entries(records)
-			.map(([user, xp]) => ({
-				user,
-				xp: xp ?? 0,
-			}))
-			.toSorted((a, b) => b.xp - a.xp);
+					.where(
+						and(
+							eq(rankings.user, ranking.user),
+							eq(rankings.timestamp, timestamp),
+						),
+					);
+
+				await tx
+					.update(nexus)
+					.set({
+						gold: 0,
+						rank: 0,
+					})
+					.where(eq(nexus.id, ranking.user));
+			}
+		});
 	},
 });

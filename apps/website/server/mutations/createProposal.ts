@@ -64,13 +64,6 @@ export const createProposal = onlyUser
 		}
 
 		await db.transaction(async (tx) => {
-			await tx
-				.update(rounds)
-				.set({
-					totalParticipants: sql`${rounds.totalParticipants} + 1`,
-				})
-				.where(eq(rounds.id, parsedInput.round));
-
 			await tx.insert(proposals).values([
 				{
 					title: parsedInput.title,

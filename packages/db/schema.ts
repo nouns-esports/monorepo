@@ -291,7 +291,6 @@ export const rounds = pgTable("rounds", {
 	end: timestamp("end", { mode: "date" }).notNull(),
 	minProposerRank: integer("min_proposer_rank"),
 	minVoterRank: integer("min_voter_rank"),
-	totalParticipants: integer("total_participants").notNull().default(0),
 });
 
 export const roundsRelations = relations(rounds, ({ one, many }) => ({
@@ -359,7 +358,6 @@ export const proposals = pgTable("proposals", {
 	createdAt: timestamp("created_at", { mode: "date" }).notNull(),
 	hidden: boolean("hidden").notNull().default(false),
 	published: boolean("published").notNull().default(true),
-	totalVotes: smallint("total_votes").notNull().default(0),
 });
 
 export const proposalsRelations = relations(proposals, ({ one, many }) => ({
@@ -494,6 +492,7 @@ export const xp = pgTable("xp", {
 	achievement: text("achievement"),
 	station: integer("station"),
 	prediction: text("prediction"),
+	vote: integer("vote"),
 });
 
 export const xpRelations = relations(xp, ({ one }) => ({
@@ -517,15 +516,18 @@ export const xpRelations = relations(xp, ({ one }) => ({
 		fields: [xp.prediction],
 		references: [predictions.id],
 	}),
+	vote: one(votes, {
+		fields: [xp.vote],
+		references: [votes.id],
+	}),
 }));
 
 export const rankings = pgTable("rankings", {
 	id: serial("id").primaryKey(),
 	user: text("user").notNull(),
-	rank: integer("rank").notNull(),
-	xp: integer("xp").notNull(),
-	diff: integer("diff").notNull(),
-	position: integer("position").notNull(),
+	rank: integer("rank"),
+	gold: integer("gold"),
+	score: integer("score").notNull(),
 	timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
 });
 
@@ -538,7 +540,10 @@ export const rankingsRelations = relations(rankings, ({ one, many }) => ({
 		fields: [rankings.rank],
 		references: [ranks.id],
 	}),
-	gold: many(gold),
+	gold: one(gold, {
+		fields: [rankings.gold],
+		references: [gold.id],
+	}),
 }));
 
 export const votes = pgTable("votes", {

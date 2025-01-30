@@ -33,23 +33,12 @@ export const placeRank = onlyUser.action(async ({ ctx }) => {
 		throw new Error("User not in server");
 	}
 
-	const now = new Date();
-
-	const [lowestRank, lowestRanking] = await Promise.all([
-		db.query.ranks.findFirst({
-			orderBy: asc(ranks.place),
-		}),
-		db.query.rankings.findFirst({
-			orderBy: [desc(rankings.timestamp), asc(rankings.xp)],
-		}),
-	]);
+	const lowestRank = await db.query.ranks.findFirst({
+		orderBy: asc(ranks.place),
+	});
 
 	if (!lowestRank) {
 		throw new Error("No ranks found");
-	}
-
-	if (!lowestRanking) {
-		throw new Error("Nobody is ranked");
 	}
 
 	await db.transaction(async (tx) => {
@@ -57,14 +46,6 @@ export const placeRank = onlyUser.action(async ({ ctx }) => {
 			.update(nexus)
 			.set({ rank: lowestRank.id })
 			.where(eq(nexus.id, ctx.user.id));
-		await tx.insert(rankings).values({
-			user: ctx.user.id,
-			timestamp: lowestRanking.timestamp,
-			position: lowestRanking.position + 1,
-			diff: 0,
-			xp: 0,
-			rank: lowestRank.id,
-		});
 	});
 
 	revalidatePath(`/users/${ctx.user.id}`);

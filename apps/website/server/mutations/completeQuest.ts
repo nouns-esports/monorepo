@@ -2,10 +2,18 @@
 
 import { z } from "zod";
 import { onlyRanked } from ".";
-import { db, nexus, notifications, quests, xp } from "~/packages/db/schema";
+import {
+	db,
+	nexus,
+	notifications,
+	quests,
+	rankings,
+	xp,
+} from "~/packages/db/schema";
 import { and, desc, eq, gte, lte, sql } from "drizzle-orm";
 import { getAction } from "../queries/quests";
 import { revalidatePath } from "next/cache";
+import { nextFriday } from "date-fns";
 
 export const completeQuest = onlyRanked
 	.schema(

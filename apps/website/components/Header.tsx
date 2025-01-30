@@ -216,7 +216,7 @@ export default async function Header() {
 								{user?.nexus ? (
 									<ToggleModal
 										id="gold"
-										className="child pl-3 pr-4 h-10 flex gap-2 items-center justify-center"
+										className="child pl-3 pr-4 h-10 flex gap-1.5 items-center justify-center"
 									>
 										<img
 											alt="Gold coin"

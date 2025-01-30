@@ -9,47 +9,69 @@ import Countdown from "@/components/Countdown";
 import { twMerge } from "tailwind-merge";
 import { nextFriday, previousFriday } from "date-fns";
 import DateComponent from "@/components/Date";
+import { ToggleModal } from "@/components/Modal";
+import { ArrowRight, Image, Sparkles, Trophy } from "lucide-react";
+import LastWeekPositionModal from "@/components/modals/LastWeekPositionModal";
+import Button from "@/components/Button";
 
-export default async function Leaderboard(props: {
-	searchParams: Promise<{ filter?: string }>;
-}) {
-	const searchParams = await props.searchParams;
-
+export default async function Leaderboard() {
 	const user = await getAuthenticatedUser();
 
 	const now = new Date();
 	const thisFriday = new Date(nextFriday(now).setHours(13, 0, 0, 0));
 	const lastFriday = new Date(previousFriday(now).setHours(13, 0, 0, 0));
 
-	const [leaderboard, leaderboardPosition] = await Promise.all([
+	const [leaderboard, userPosition, lastWeekUserPosition] = await Promise.all([
 		getLeaderboard({
-			date: searchParams.filter === "last-week" ? lastFriday : thisFriday,
+			date: thisFriday,
 		}),
 		user
 			? getLeaderboardPosition({
 					user: user.id,
-					date: searchParams.filter === "last-week" ? lastFriday : thisFriday,
+					date: thisFriday,
+				})
+			: undefined,
+		user
+			? getLeaderboardPosition({
+					user: user.id,
+					date: lastFriday,
 				})
 			: undefined,
 	]);
 
 	return (
-		<div className="flex flex-col items-center gap-16 pt-32 max-xl:pt-28 max-sm:pt-20 px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
-			<div className="flex flex-col w-full max-w-screen-md gap-4 p-4">
-				<div className="flex items-center justify-between">
-					<h2 className="text-white text-3xl font-luckiest-guy leading-none">
-						Leaderboard
-					</h2>
-					<div className="flex items-end flex-col gap-1">
-						<h2 className="">Pays out rewards in</h2>
-						<div className="flex items-center gap-2">
-							<p className="text-white">
-								<Countdown date={thisFriday} />
-							</p>
+		<>
+			<div className="flex flex-col items-center gap-16 pt-32 max-xl:pt-28 max-sm:pt-20 px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
+				<div className="flex flex-col w-full max-w-screen-md gap-4 p-4">
+					<div className="flex items-center justify-between">
+						<h2 className="text-white text-3xl font-luckiest-guy leading-none">
+							Leaderboard
+						</h2>
+						<div className="relative flex flex-shrink-0 gap-4 h-48 w-80 bg-red rounded-xl">
+							<div className="p-4 flex flex-col justify-center gap-4 h-full w-full">
+								<p className="font-bebas-neue text-white text-3xl leading-none w-40">
+									Rankup and earn Rewards
+								</p>
+								<p className="text-white text-sm leading-snug max-w-[180px]">
+									Help shape the future of Nouns Esports
+								</p>
+								<Button href="/nexus">Get Started</Button>
+							</div>
+							<img
+								src="/squirtles.png"
+								className="h-[calc(100%_+_8px)] absolute right-2 -top-4"
+							/>
 						</div>
+						{/* <div className="flex items-end bg-grey-800 rounded-xl p-2 px-4 gap-2">
+							<h2 className="">Updates in</h2>
+							<div className="flex items-center gap-2">
+								<p className="text-white">
+									<Countdown date={thisFriday} />
+								</p>
+							</div>
+						</div> */}
 					</div>
-				</div>
-				<div className="flex gap-2 items-center">
+					{/* <div className="flex gap-2 items-center">
 					<Link
 						href="/leaderboard"
 						className={twMerge(
@@ -70,45 +92,59 @@ export default async function Leaderboard(props: {
 					>
 						Last Week
 					</Link>
-				</div>
-				{leaderboardPosition ? (
-					<div className="flex flex-col gap-2">
-						<p className="text-white text-lg font-semibold">Your position</p>
-						<LeaderboardPosition
-							position={leaderboardPosition.position}
-							user={leaderboardPosition.user}
-							rank={leaderboardPosition.rank}
-							gold={leaderboardPosition.gold[0]?.amount ?? 0}
-							diff={leaderboardPosition.diff}
-						/>
-					</div>
-				) : null}
-				<div className="relative flex flex-col gap-2">
-					<p className="text-white text-lg font-semibold">Leaderboard</p>
-					{leaderboard.map((ranking) => {
-						if (!ranking.user) return;
-						if (!ranking.rank) return;
+				</div> */}
+					{userPosition ? (
+						<div className="flex flex-col gap-2">
+							<div className="flex gap-2 justify-between items-center">
+								<p className="text-white text-lg font-semibold">
+									Your position
+								</p>
+								<ToggleModal
+									id="last-week-position"
+									className="flex items-center gap-1.5 text-red"
+								>
+									<Image className="w-4 h-4" />
+									View Image
+								</ToggleModal>
+							</div>
 
-						return (
 							<LeaderboardPosition
-								key={ranking.id}
-								position={ranking.position}
-								user={ranking.user}
-								rank={ranking.rank}
-								gold={ranking.gold[0]?.amount ?? 0}
-								diff={ranking.diff}
+								position={userPosition.position}
+								user={userPosition.user}
+								rank={userPosition.rank}
+								gold={userPosition.gold?.amount ?? 0}
+								diff={userPosition.previousPosition - userPosition.position}
 							/>
-						);
-					})}
-				</div>
-				<div className="flex gap-2 items-center">
-					<p>Last updated on</p>
-					<p className="text-white whitespace-nowrap">
-						<DateComponent />
-					</p>
+						</div>
+					) : null}
+
+					<div className="relative flex flex-col gap-2">
+						<p className="text-white text-lg font-semibold">This Week</p>
+						{leaderboard.map((ranking, index) => {
+							if (!ranking.user) return;
+
+							const position = index + 1;
+
+							console.log(ranking.user.id, position, ranking.previousPosition);
+
+							return (
+								<LeaderboardPosition
+									key={ranking.id}
+									position={position}
+									user={ranking.user}
+									rank={ranking.rank}
+									gold={ranking.gold?.amount ?? 0}
+									diff={ranking.previousPosition - position}
+								/>
+							);
+						})}
+					</div>
 				</div>
 			</div>
-		</div>
+			{lastWeekUserPosition ? (
+				<LastWeekPositionModal ranking={lastWeekUserPosition} />
+			) : null}
+		</>
 	);
 }
 
@@ -124,7 +160,7 @@ function LeaderboardPosition(props: {
 		id: number;
 		name: string;
 		image: string;
-	};
+	} | null;
 	gold: number;
 	diff: number;
 }) {
@@ -162,7 +198,7 @@ function LeaderboardPosition(props: {
 			</div>
 			<div className="flex gap-8 items-center">
 				{props.gold > 0 ? (
-					<div className="flex justify-center gap-2 items-center">
+					<div className="flex justify-center gap-1.5 items-center">
 						<img
 							alt="Gold coin"
 							src="https://ipfs.nouns.gg/ipfs/bafkreiccw4et522umioskkazcvbdxg2xjjlatkxd4samkjspoosg2wldbu"
@@ -171,12 +207,14 @@ function LeaderboardPosition(props: {
 						<p className="font-semibold text-lg text-[#FEBD1C]">{props.gold}</p>
 					</div>
 				) : null}
-				<img
-					alt={props.rank.name}
-					title={props.rank.name}
-					className="w-6 h-6 object-contain"
-					src={props.rank.image}
-				/>
+				{props.rank ? (
+					<img
+						alt={props.rank.name}
+						title={props.rank.name}
+						className="w-6 h-6 object-contain"
+						src={props.rank.image}
+					/>
+				) : null}
 			</div>
 		</Link>
 	);

@@ -1,10 +1,19 @@
 "use server";
 
-import { db, votes, proposals, rounds } from "~/packages/db/schema";
-import { eq, sql } from "drizzle-orm";
+import {
+	db,
+	votes,
+	proposals,
+	rounds,
+	xp,
+	rankings,
+	nexus,
+} from "~/packages/db/schema";
+import { and, eq, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { onlyRanked } from ".";
+import { nextFriday } from "date-fns";
 
 export const castVotes = onlyRanked
 	.schema(
@@ -54,15 +63,6 @@ export const castVotes = onlyRanked
 		let votesUsed = round.votes.reduce((votes, vote) => votes + vote.count, 0);
 
 		await db.transaction(async (tx) => {
-			if (round.proposals.length === 0) {
-				await tx
-					.update(rounds)
-					.set({
-						totalParticipants: sql`${rounds.totalParticipants} + 1`,
-					})
-					.where(eq(rounds.id, round.id));
-			}
-
 			for (const vote of parsedInput.votes) {
 				if (vote.count === 0) continue;
 
@@ -71,17 +71,14 @@ export const castVotes = onlyRanked
 				});
 
 				if (!proposal) {
-					tx.rollback();
 					throw new Error("Proposal not found");
 				}
 
 				if (proposal.user === ctx.user.id) {
-					tx.rollback();
 					throw new Error("You cannot vote on your own proposal");
 				}
 
 				if (proposal.round !== parsedInput.round) {
-					tx.rollback();
 					throw new Error("You can only vote on proposals in the same round");
 				}
 
@@ -90,28 +87,40 @@ export const castVotes = onlyRanked
 				}
 
 				if (votesUsed + vote.count > ctx.user.nexus.rank.votes) {
-					tx.rollback();
 					throw new Error("You have used all your votes");
 				}
 
 				votesUsed += vote.count;
 
-				await tx.insert(votes).values([
-					{
+				// Insert the vote
+				const returnedVote = await tx
+					.insert(votes)
+
+					.values({
 						user: ctx.user.id,
 						proposal: vote.proposal,
 						round: round.id,
 						count: vote.count,
 						timestamp: now,
-					},
-				]);
+					})
+					.returning({ id: votes.id });
+
+				const earnedXP = 5 * vote.count;
+
+				// Award 5 xp per vote to the proposer
+				await tx.insert(xp).values({
+					user: proposal.user,
+					amount: earnedXP,
+					timestamp: now,
+					vote: returnedVote[0].id,
+				});
 
 				await tx
-					.update(proposals)
+					.update(nexus)
 					.set({
-						totalVotes: sql`${proposals.totalVotes} + ${vote.count}`,
+						xp: sql`${nexus.xp} + ${earnedXP}`,
 					})
-					.where(eq(proposals.id, vote.proposal));
+					.where(eq(nexus.id, proposal.user));
 			}
 		});
 
