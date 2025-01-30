@@ -14,6 +14,7 @@ import { db, gold, nexus, rankings, xp } from "~/packages/db/schema";
 // Users whos average score is 0, or whos previous score is < 100 & current score is 0 are excluded from the rank distribution and are assumed the lowest rank
 // Everyone else is placed in a rank based on their averaged score and the distribution of ranks
 
+// THOUGHT- why do we need to be specific about fridays? Couldn't we just say all xp earned within the last 7 days (or any defined period)
 export const refreshLeaderboard = createJob({
 	name: "Refresh Leaderboard",
 	cron: "30 13 * * 5", // 1:30pm CST every Friday
