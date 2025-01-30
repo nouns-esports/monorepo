@@ -70,14 +70,6 @@ export const POST = async (req: NextRequest) => {
 			verifiedPayload.type === "user.updated_account" ||
 			verifiedPayload.type === "user.linked_account"
 		) {
-			if (verifiedPayload.account.type === "wallet") {
-				await db
-					.update(nexus)
-					.set({
-						wallet: verifiedPayload.account.address,
-					})
-					.where(eq(nexus.id, verifiedPayload.user.id));
-			}
 			if (verifiedPayload.account.type === "twitter") {
 				await db
 					.update(nexus)
@@ -106,14 +98,6 @@ export const POST = async (req: NextRequest) => {
 		}
 
 		if (verifiedPayload.type === "user.unlinked_account") {
-			if (verifiedPayload.account.type === "wallet") {
-				await db
-					.update(nexus)
-					.set({
-						wallet: null,
-					})
-					.where(eq(nexus.id, verifiedPayload.user.id));
-			}
 			if (verifiedPayload.account.type === "twitter") {
 				await db
 					.update(nexus)
