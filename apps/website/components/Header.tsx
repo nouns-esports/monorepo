@@ -206,12 +206,7 @@ export default async function Header() {
 							</nav>
 						</div>
 						<div className="pointer-events-auto flex gap-6 items-center relative z-[60]">
-							<div className="flex items-center gap-4">
-								<Notifications notifications={notifications} />
-								<ToggleModal id="cart">
-									<ShoppingCart className="w-[22px] h-[22px] text-white hover:text-grey-200 transition-colors" />
-								</ToggleModal>
-							</div>
+							<Notifications notifications={notifications} />
 							<div className="flex items-center bg-[#4F3101] has-[.child:hover]:bg-[#623C00] transition-colors rounded-full cursor-pointer">
 								{user?.nexus ? (
 									<ToggleModal

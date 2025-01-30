@@ -77,21 +77,21 @@ function FramesV2(props: { children: React.ReactNode; user?: string }) {
 	const [context, setContext] = useState<Awaited<typeof frameSdk.context>>();
 	const [loaded, setLoaded] = useState(false);
 
-	// const router = useRouter();
+	const router = useRouter();
 
-	// useEffect(() => {
-	// 	async function refresh() {
-	// 		const token = await getAccessToken();
+	useEffect(() => {
+		async function refresh() {
+			const token = await getAccessToken();
 
-	// 		if (token) {
-	// 			router.refresh();
-	// 		}
-	// 	}
+			if (token) {
+				router.refresh();
+			}
+		}
 
-	// 	if (ready && authenticated && !props.user) {
-	// 		refresh();
-	// 	}
-	// }, [ready, authenticated, user]);
+		if (ready && authenticated && !props.user) {
+			refresh();
+		}
+	}, [ready, authenticated, user]);
 
 	useEffect(() => {
 		async function login() {
