@@ -71,7 +71,7 @@ export default function Privy(props: {
 }
 
 function FramesV2(props: { children: React.ReactNode; user?: string }) {
-	const { ready, authenticated } = usePrivy();
+	const { user, ready, authenticated } = usePrivy();
 	const { initLoginToFrame, loginToFrame } = useLoginToFrame();
 
 	const [context, setContext] = useState<Awaited<typeof frameSdk.context>>();
@@ -123,6 +123,7 @@ function FramesV2(props: { children: React.ReactNode; user?: string }) {
 	return (
 		<>
 			<div className="text-white">CONTEXT: {JSON.stringify(context)}</div>
+			<div className="text-white">USER: {JSON.stringify(user?.id)}</div>
 			{props.children}
 		</>
 	);
