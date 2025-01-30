@@ -71,62 +71,54 @@ export default function Privy(props: {
 }
 
 function FramesV2(props: { children: React.ReactNode; user?: string }) {
-	const { user, ready, authenticated } = usePrivy();
+	const { ready, authenticated } = usePrivy();
 	const { initLoginToFrame, loginToFrame } = useLoginToFrame();
 
 	const [context, setContext] = useState<Awaited<typeof frameSdk.context>>();
-	const [isSDKLoaded, setIsSDKLoaded] = useState(false);
+	const [loaded, setLoaded] = useState(false);
 
-	const router = useRouter();
+	// const router = useRouter();
+
+	// useEffect(() => {
+	// 	async function refresh() {
+	// 		const token = await getAccessToken();
+
+	// 		if (token) {
+	// 			router.refresh();
+	// 		}
+	// 	}
+
+	// 	if (ready && authenticated && !props.user) {
+	// 		refresh();
+	// 	}
+	// }, [ready, authenticated, user]);
 
 	useEffect(() => {
-		async function refresh() {
-			const token = await getAccessToken();
+		async function login() {
+			const { nonce } = await initLoginToFrame();
+			const result = await frameSdk.actions.signIn({ nonce: nonce });
 
-			if (token) {
-				router.refresh();
-			}
+			await loginToFrame({
+				message: result.message,
+				signature: result.signature,
+			});
+
+			frameSdk.actions.ready({});
 		}
 
-		if (ready && authenticated && !props.user) {
-			refresh();
-		}
-	}, [ready, authenticated, user]);
-
-	// Login to Frame with Privy automatically
-	useEffect(() => {
-		console.log("frame context", context);
-		if (ready && !authenticated) {
-			const login = async () => {
-				try {
-					const { nonce } = await initLoginToFrame();
-					// Attempt to login to Frame (throws if not from a Warpcast frame)
-					const result = await frameSdk.actions.signIn({ nonce: nonce });
-					await loginToFrame({
-						message: result.message,
-						signature: result.signature,
-					});
-				} catch (error) {
-					// Frame doesn't exist (this request isn't from inside of Warpcast)
-					console.log("frame signin error", error);
-				}
-			};
-
+		if (context && ready && !authenticated) {
 			login();
 		}
-	}, [ready, authenticated]);
+	}, [ready, authenticated, context]);
 
-	// Initialize the frame SDK
 	useEffect(() => {
-		const load = async () => {
+		async function load() {
 			setContext(await frameSdk.context);
-			frameSdk.actions.ready({});
-		};
-		if (!isSDKLoaded) {
-			setIsSDKLoaded(true);
-			load();
+			setLoaded(true);
 		}
-	}, [isSDKLoaded]);
+
+		if (!loaded) load();
+	}, [loaded]);
 
 	return (
 		<>
