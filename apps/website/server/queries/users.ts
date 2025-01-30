@@ -4,10 +4,14 @@ import { createPublicKey } from "crypto";
 import { eq, isNotNull, or } from "drizzle-orm";
 import { db, nexus, xp } from "~/packages/db/schema";
 import { unstable_cache as cache } from "next/cache";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 
 export async function getAuthenticatedUser() {
 	const token = (await cookies()).get("privy-id-token");
+
+	const headersList = await headers();
+
+	console.log("HEADERS", token, headersList.toJSON());
 
 	if (!token) return;
 
