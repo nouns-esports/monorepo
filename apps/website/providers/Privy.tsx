@@ -63,7 +63,7 @@ export default function Privy(props: {
 				externalWallets,
 			}}
 		>
-			<FramesV2>
+			<FramesV2 user={props.user}>
 				<SmartWalletsProvider>{props.children}</SmartWalletsProvider>
 			</FramesV2>
 		</PrivyProvider>
