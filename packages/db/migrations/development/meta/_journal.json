@@ -428,6 +428,20 @@
       "when": 1738210151246,
       "tag": "0060_broken_eternity",
       "breakpoints": true
+    },
+    {
+      "idx": 61,
+      "version": "7",
+      "when": 1738271603379,
+      "tag": "0061_spicy_skullbuster",
+      "breakpoints": true
+    },
+    {
+      "idx": 62,
+      "version": "7",
+      "when": 1738271669354,
+      "tag": "0062_pink_manta",
+      "breakpoints": true
     }
   ]
 }

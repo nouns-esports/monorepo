@@ -377,7 +377,7 @@ export const nexus = pgTable("nexus", {
 	id: text("id").primaryKey(),
 	username: text("username").unique(),
 	admin: boolean("admin").notNull().default(false),
-	rank: integer("rank"),
+	rank: integer("rank").notNull().default(1),
 	xp: integer("xp").notNull().default(0),
 	image: text("image").notNull().default(""),
 	name: text("name").notNull().default(""),
