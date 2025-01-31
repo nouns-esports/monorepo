@@ -1,8 +1,8 @@
 import { createAgent } from "~/packages/agent";
 import { anthropic, deepseek } from "~/packages/agent/models";
 import { env } from "~/env";
-import { db, nexus } from "~/packages/db/schema";
-import { eq, or } from "drizzle-orm";
+import { db, nexus, xp, seasons, snapshots } from "~/packages/db/schema";
+import { and, gte, lte, desc, eq, inArray, or } from "drizzle-orm";
 import {
 	// twitterPlugin,
 	discordPlugin,
@@ -88,64 +88,71 @@ agent.addTool({
 		"Take a snapshot and distribute xp to attendees of a weekly contributor call",
 	execute: async (context) => {
 		console.log("Tool run", context);
-		// if (context.author !== "samscolari") {
-		// 	return;
-		// }
+		if (context.author !== "samscolari") {
+			return;
+		}
 
-		// const now = new Date();
+		const now = new Date();
 
-		// const channel =
-		// 	env.NEXT_PUBLIC_ENVIRONMENT === "production"
-		// 		? "967723008116531219" // Contributor Voice
-		// 		: "917137278063759440"; // zx
+		const channel = await agent.plugins.discord.client.channels.fetch(
+			env.NEXT_PUBLIC_ENVIRONMENT === "production"
+				? "967723008116531219" // Contributor Voice
+				: "917137278063759440", // zx
+		);
 
-		// const [users, currentSeason] = await Promise.all([
-		// 	db.query.nexus.findMany({
-		// 		where: inArray(
-		// 			nexus.discord,
-		// 			interaction.channel.members.map(
-		// 				(guildMember) => guildMember.user.username,
-		// 			),
-		// 		),
-		// 	}),
-		// 	db.query.seasons.findFirst({
-		// 		where: and(lte(seasons.start, now), gte(seasons.end, now)),
-		// 		orderBy: desc(seasons.start),
-		// 	}),
-		// ]);
+		if (!channel) {
+			return;
+		}
 
-		// if (!currentSeason) throw new Error("No season found");
+		if (!channel.isVoiceBased()) {
+			return;
+		}
 
-		// await db.transaction(async (tx) => {
-		// 	console.log("transacting");
-		// 	for (const user of users) {
-		// 		console.log("user", user.name);
-		// 		const [snapshot] = await tx
-		// 			.insert(snapshots)
-		// 			.values({
-		// 				type: "discord-call",
-		// 				user: user.id,
-		// 				timestamp: now,
-		// 			})
-		// 			.returning({ id: snapshots.id });
+		const [users, currentSeason] = await Promise.all([
+			db.query.nexus.findMany({
+				where: inArray(
+					nexus.discord,
+					channel.members.map((guildMember) => guildMember.user.username),
+				),
+			}),
+			db.query.seasons.findFirst({
+				where: and(lte(seasons.start, now), gte(seasons.end, now)),
+				orderBy: desc(seasons.start),
+			}),
+		]);
 
-		// 		const amount = 300;
+		if (!currentSeason) throw new Error("No season found");
 
-		// 		await tx.insert(xp).values({
-		// 			user: user.id,
-		// 			amount,
-		// 			timestamp: now,
-		// 			snapshot: snapshot.id,
-		// 			season: currentSeason.id,
-		// 		});
+		await db.transaction(async (tx) => {
+			console.log("transacting");
+			for (const user of users) {
+				console.log("user", user.name);
+				const [snapshot] = await tx
+					.insert(snapshots)
+					.values({
+						type: "discord-call",
+						user: user.id,
+						timestamp: now,
+					})
+					.returning({ id: snapshots.id });
 
-		// 		await tx
-		// 			.update(nexus)
-		// 			.set({
-		// 				xp: user.xp + amount,
-		// 			})
-		// 			.where(eq(nexus.id, user.id));
-		// 	}
-		// });
+				const amount = 300;
+
+				await tx.insert(xp).values({
+					user: user.id,
+					amount,
+					timestamp: now,
+					snapshot: snapshot.id,
+					season: currentSeason.id,
+				});
+
+				await tx
+					.update(nexus)
+					.set({
+						xp: user.xp + amount,
+					})
+					.where(eq(nexus.id, user.id));
+			}
+		});
 	},
 });

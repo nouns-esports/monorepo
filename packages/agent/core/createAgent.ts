@@ -97,8 +97,6 @@ export async function createAgent<
 			context,
 		});
 
-		console.log("developerContext", developerContext);
-
 		const reply = await generateText({
 			model: config.model,
 			prompt,
@@ -136,8 +134,6 @@ export async function createAgent<
 			),
 			maxSteps: 10,
 		});
-
-		console.log("reply", reply);
 
 		return reply;
 	}
