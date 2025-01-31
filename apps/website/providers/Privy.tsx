@@ -93,7 +93,7 @@ function PrivySync(props: { children: React.ReactNode; user?: string }) {
 
 	return props.children;
 }
-
+//
 function FramesV2(props: { children: React.ReactNode; user?: string }) {
 	const { ready, authenticated } = usePrivy();
 
