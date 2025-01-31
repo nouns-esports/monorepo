@@ -1,5 +1,5 @@
 "use client";
-import frameSdk, { type FrameContext } from "@farcaster/frame-sdk";
+import frameSdk from "@farcaster/frame-sdk";
 import { useEffect, useState } from "react";
 
 export default function FarcasterProvider(props: {
