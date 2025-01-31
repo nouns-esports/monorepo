@@ -104,14 +104,19 @@ function FramesV2(props: { children: React.ReactNode; user?: string }) {
 
 	useEffect(() => {
 		async function login() {
+			console.log("initializing login to frame");
 			const { nonce } = await initLoginToFrame();
+			console.log("nonce", nonce);
 			const result = await frameSdk.actions.signIn({ nonce: nonce });
+			console.log("result", result);
 
+			console.log("logging in to frame");
 			await loginToFrame({
 				message: result.message,
 				signature: result.signature,
 			});
 
+			console.log("readying frame");
 			frameSdk.actions.ready({});
 		}
 
@@ -122,7 +127,9 @@ function FramesV2(props: { children: React.ReactNode; user?: string }) {
 
 	useEffect(() => {
 		async function load() {
+			console.log("loading frame context");
 			setContext(await frameSdk.context);
+			console.log("frame context loaded", context);
 			setLoaded(true);
 		}
 

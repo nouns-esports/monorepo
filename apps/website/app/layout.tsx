@@ -101,8 +101,9 @@ export const metadata = {
 				action: {
 					type: "launch_frame",
 					name: "Nouns GG",
-					url: "https://nouns.gg",
-					splashImageUrl: "https://nouns.gg/logo/logo.png",
+					url: env.NEXT_PUBLIC_DOMAIN,
+					splashImageUrl:
+						"https://ipfs.nouns.gg/ipfs/bafkreia2vysupa4ctmftg5ro73igggkq4fzgqjfjqdafntylwlnfclziey",
 					splashBackgroundColor: "#040404",
 				},
 			},
