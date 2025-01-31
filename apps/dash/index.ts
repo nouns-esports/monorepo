@@ -90,11 +90,8 @@ agent.addTool({
 
 		const now = new Date();
 
-		const channel = await agent.plugins.discord.client.channels.fetch(
-			env.NEXT_PUBLIC_ENVIRONMENT === "production"
-				? "967723008116531219" // Contributor Voice
-				: "917137278063759440", // zx
-		);
+		const channel =
+			await agent.plugins.discord.client.channels.fetch("917137278063759440");
 
 		if (!channel) {
 			return;
