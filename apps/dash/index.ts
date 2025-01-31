@@ -81,3 +81,70 @@ const agent = await createAgent({
 		}
 	},
 });
+
+agent.addTool({
+	description:
+		"Take a snapshot and distribute xp to attendees of a weekly contributor call",
+	execute: async (context) => {
+		console.log("Tool run", context);
+		// if (context.author !== "samscolari") {
+		// 	return;
+		// }
+
+		// const now = new Date();
+
+		// const channel =
+		// 	env.NEXT_PUBLIC_ENVIRONMENT === "production"
+		// 		? "967723008116531219" // Contributor Voice
+		// 		: "917137278063759440"; // zx
+
+		// const [users, currentSeason] = await Promise.all([
+		// 	db.query.nexus.findMany({
+		// 		where: inArray(
+		// 			nexus.discord,
+		// 			interaction.channel.members.map(
+		// 				(guildMember) => guildMember.user.username,
+		// 			),
+		// 		),
+		// 	}),
+		// 	db.query.seasons.findFirst({
+		// 		where: and(lte(seasons.start, now), gte(seasons.end, now)),
+		// 		orderBy: desc(seasons.start),
+		// 	}),
+		// ]);
+
+		// if (!currentSeason) throw new Error("No season found");
+
+		// await db.transaction(async (tx) => {
+		// 	console.log("transacting");
+		// 	for (const user of users) {
+		// 		console.log("user", user.name);
+		// 		const [snapshot] = await tx
+		// 			.insert(snapshots)
+		// 			.values({
+		// 				type: "discord-call",
+		// 				user: user.id,
+		// 				timestamp: now,
+		// 			})
+		// 			.returning({ id: snapshots.id });
+
+		// 		const amount = 300;
+
+		// 		await tx.insert(xp).values({
+		// 			user: user.id,
+		// 			amount,
+		// 			timestamp: now,
+		// 			snapshot: snapshot.id,
+		// 			season: currentSeason.id,
+		// 		});
+
+		// 		await tx
+		// 			.update(nexus)
+		// 			.set({
+		// 				xp: user.xp + amount,
+		// 			})
+		// 			.where(eq(nexus.id, user.id));
+		// 	}
+		// });
+	},
+});

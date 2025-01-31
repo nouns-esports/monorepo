@@ -1,13 +1,26 @@
 import {
+	type CoreTool,
 	generateObject,
 	generateText,
 	type LanguageModelV1,
-	type tool,
+	tool as vercelTool,
 } from "ai";
 import figlet from "figlet";
 import colors from "kleur";
 import type { createPlugin } from "./createPlugin";
 import { createServer } from "./createServer";
+import type { createTool } from "./createTool";
+import { z } from "zod";
+import { xp } from "~/packages/db/schema";
+import { snapshots } from "~/packages/db/schema";
+import { nexus, seasons } from "~/packages/db/schema";
+import { eq, lte } from "drizzle-orm";
+import { desc } from "drizzle-orm";
+import { and } from "drizzle-orm";
+import { inArray } from "drizzle-orm";
+import { db } from "~/packages/db/schema";
+import { gte } from "drizzle-orm";
+import { env } from "~/env";
 
 export type Config<TPlugins> = {
 	model: LanguageModelV1;
@@ -28,7 +41,7 @@ export type Config<TPlugins> = {
 	};
 };
 
-type MessageContext = {
+export type MessageContext = {
 	id: string;
 	// This will likely need to be more robust. Differnt plugins might need access to different identifiers of an author (for example, backend id, username, display name, handle, etc...)
 	author: string;
@@ -39,12 +52,17 @@ type MessageContext = {
 
 export type Interface = {
 	scheduleTask: () => void;
-	addTool: () => void;
+	// addTool: () => void;
 	addMemory: () => void;
 	generateReply: (
 		prompt: string,
-		context?: MessageContext,
+		context: MessageContext,
 	) => ReturnType<typeof generateText>;
+};
+
+export type Tool = {
+	description: string;
+	execute: (context: MessageContext) => Promise<void>;
 };
 
 export async function createAgent<
@@ -61,12 +79,18 @@ export async function createAgent<
 	);
 	console.log(colors.blue(config.character.bio));
 
+	const tools: Tool[] = [];
+
 	const { server, start } = await createServer(config);
 
 	async function scheduleTask() {}
-	async function addTool() {}
+	async function addTool(params: Tool) {
+		tools.push(params);
+	}
+
 	async function addMemory() {}
-	async function generateReply(prompt: string, context?: MessageContext) {
+
+	async function generateReply(prompt: string, context: MessageContext) {
 		const developerContext = await config.onMessage?.({
 			provider: "discord",
 			context,
@@ -95,6 +119,21 @@ export async function createAgent<
 						? developerContext.join("\n")
 						: developerContext
 					: ""),
+			tools: tools.reduce(
+				(obj, tool) => {
+					obj[tool.description] = vercelTool({
+						description: tool.description,
+						parameters: z.object({}),
+						execute: async (parameters) => {
+							await tool.execute(context);
+						},
+					});
+
+					return obj;
+				},
+				{} as Record<string, CoreTool<any, any>>,
+			),
+			maxSteps: 10,
 		});
 
 		console.log("reply", reply);
@@ -112,7 +151,7 @@ export async function createAgent<
 				config,
 				server,
 				scheduleTask,
-				addTool,
+				// addTool,
 				addMemory,
 				generateReply,
 			});
