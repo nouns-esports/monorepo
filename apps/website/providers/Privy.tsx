@@ -12,8 +12,8 @@ import { base, baseSepolia } from "viem/chains";
 import { useEffect, useState } from "react";
 import { create } from "zustand";
 import { SmartWalletsProvider } from "@privy-io/react-auth/smart-wallets";
-// import { useLoginToFrame } from "@privy-io/react-auth/farcaster";
-// import frameSdk from "@farcaster/frame-sdk";
+import { useLoginToFrame } from "@privy-io/react-auth/farcaster";
+import frameSdk from "@farcaster/frame-sdk";
 import { useRouter } from "next/navigation";
 
 export const usePrivyModalState = create<{
@@ -64,20 +64,17 @@ export default function Privy(props: {
 				externalWallets,
 			}}
 		>
-			<FramesV2>
-				<SmartWalletsProvider>{props.children}</SmartWalletsProvider>
-			</FramesV2>
+			<PrivySync user={props.user}>
+				<FramesV2 user={props.user}>
+					<SmartWalletsProvider>{props.children}</SmartWalletsProvider>
+				</FramesV2>
+			</PrivySync>
 		</PrivyProvider>
 	);
 }
 
-function FramesV2(props: { children: React.ReactNode; user?: string }) {
+function PrivySync(props: { children: React.ReactNode; user?: string }) {
 	const { user, ready, authenticated } = usePrivy();
-	// const { initLoginToFrame, loginToFrame } = useLoginToFrame();
-
-	// const [context, setContext] = useState<Awaited<typeof frameSdk.context>>();
-	// const [isSDKLoaded, setIsSDKLoaded] = useState(false);
-
 	const router = useRouter();
 
 	useEffect(() => {
@@ -94,40 +91,43 @@ function FramesV2(props: { children: React.ReactNode; user?: string }) {
 		}
 	}, [ready, authenticated, user]);
 
-	// // Login to Frame with Privy automatically
-	// useEffect(() => {
-	// 	if (ready && !authenticated) {
-	// 		const login = async () => {
-	// 			try {
-	// 				const { nonce } = await initLoginToFrame();
-	// 				// Attempt to login to Frame (throws if not from a Warpcast frame)
-	// 				const result = await frameSdk.actions.signIn({ nonce: nonce });
-	// 				await loginToFrame({
-	// 					message: result.message,
-	// 					signature: result.signature,
-	// 				});
-	// 			} catch (error) {
-	// 				// Frame doesn't exist (this request isn't from inside of Warpcast)
-	// 				console.log("frame signin error", error);
-	// 			}
-	// 		};
+	return props.children;
+}
 
-	// 		login();
-	// 	} else if (ready && authenticated) {
-	// 	}
-	// }, [ready, authenticated]);
+function FramesV2(props: { children: React.ReactNode; user?: string }) {
+	const { ready, authenticated } = usePrivy();
 
-	// // Initialize the frame SDK
-	// useEffect(() => {
-	// 	const load = async () => {
-	// 		setContext(await frameSdk.context);
-	// 		frameSdk.actions.ready({});
-	// 	};
-	// 	if (frameSdk && !isSDKLoaded) {
-	// 		setIsSDKLoaded(true);
-	// 		load();
-	// 	}
-	// }, [isSDKLoaded]);
+	const { initLoginToFrame, loginToFrame } = useLoginToFrame();
+
+	const [context, setContext] = useState<Awaited<typeof frameSdk.context>>();
+	const [loaded, setLoaded] = useState(false);
+
+	useEffect(() => {
+		async function login() {
+			const { nonce } = await initLoginToFrame();
+			const result = await frameSdk.actions.signIn({ nonce: nonce });
+
+			await loginToFrame({
+				message: result.message,
+				signature: result.signature,
+			});
+
+			frameSdk.actions.ready({});
+		}
+
+		if (context && ready && !authenticated) {
+			login();
+		}
+	}, [ready, authenticated, context]);
+
+	useEffect(() => {
+		async function load() {
+			setContext(await frameSdk.context);
+			setLoaded(true);
+		}
+
+		if (!loaded) load();
+	}, [loaded]);
 
 	return props.children;
 }
