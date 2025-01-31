@@ -1,20 +1,20 @@
 "use client";
 
 import {
-	PrivyProvider,
 	getAccessToken,
+	PrivyProvider,
 	usePrivy,
 	type PrivyClientConfig,
 	type WalletListEntry,
 } from "@privy-io/react-auth";
 import { env } from "~/env";
 import { base, baseSepolia } from "viem/chains";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { create } from "zustand";
 import { SmartWalletsProvider } from "@privy-io/react-auth/smart-wallets";
 import { useLoginToFrame } from "@privy-io/react-auth/farcaster";
 import frameSdk from "@farcaster/frame-sdk";
+import { useRouter } from "next/navigation";
 
 export const usePrivyModalState = create<{
 	loginMethods?: PrivyClientConfig["loginMethods"];
@@ -60,32 +60,26 @@ export default function Privy(props: {
 					logo: "/logo/logo.svg",
 					walletList,
 				},
+
 				externalWallets,
 			}}
 		>
-			<FramesV2 user={props.user}>
-				<SmartWalletsProvider>{props.children}</SmartWalletsProvider>
-			</FramesV2>
+			<PrivySync user={props.user}>
+				<FramesV2 user={props.user}>
+					<SmartWalletsProvider>{props.children}</SmartWalletsProvider>
+				</FramesV2>
+			</PrivySync>
 		</PrivyProvider>
 	);
 }
 
-function FramesV2(props: { children: React.ReactNode; user?: string }) {
+function PrivySync(props: { children: React.ReactNode; user?: string }) {
 	const { user, ready, authenticated } = usePrivy();
-	const { initLoginToFrame, loginToFrame } = useLoginToFrame();
-
-	const [context, setContext] = useState<Awaited<typeof frameSdk.context>>();
-	const [loaded, setLoaded] = useState(false);
-	const [accessTokenTest, setAccessTokenTest] = useState<string>("");
-
 	const router = useRouter();
 
 	useEffect(() => {
 		async function refresh() {
-			console.log("REFRESHING");
-			setAccessTokenTest("GOT TOKEN");
 			const token = await getAccessToken();
-			console.log("TOKEN", token);
 
 			if (token) {
 				router.refresh();
@@ -93,10 +87,20 @@ function FramesV2(props: { children: React.ReactNode; user?: string }) {
 		}
 
 		if (ready && authenticated && !props.user) {
-			console.log("PREFRESHING");
 			refresh();
 		}
 	}, [ready, authenticated, user]);
+
+	return props.children;
+}
+
+function FramesV2(props: { children: React.ReactNode; user?: string }) {
+	const { ready, authenticated } = usePrivy();
+
+	const { initLoginToFrame, loginToFrame } = useLoginToFrame();
+
+	const [context, setContext] = useState<Awaited<typeof frameSdk.context>>();
+	const [loaded, setLoaded] = useState(false);
 
 	useEffect(() => {
 		async function login() {
@@ -125,13 +129,5 @@ function FramesV2(props: { children: React.ReactNode; user?: string }) {
 		if (!loaded) load();
 	}, [loaded]);
 
-	return (
-		<>
-			<div className="text-white">CONTEXT: {JSON.stringify(context)}</div>
-			<div className="text-white">CLIENT USER: {JSON.stringify(user?.id)}</div>
-			<div className="text-white">SERVER USER: {props.user}</div>
-			<div className="text-white">ACCESS TOKEN: {accessTokenTest}</div>
-			{props.children}
-		</>
-	);
+	return props.children;
 }
