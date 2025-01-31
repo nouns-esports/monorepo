@@ -61,6 +61,7 @@ export type Interface = {
 };
 
 export type Tool = {
+	name: string;
 	description: string;
 	execute: (context: MessageContext) => Promise<void>;
 };
@@ -121,7 +122,7 @@ export async function createAgent<
 					: ""),
 			tools: tools.reduce(
 				(obj, tool) => {
-					obj[tool.description] = vercelTool({
+					obj[tool.name] = vercelTool({
 						description: tool.description,
 						parameters: z.object({}),
 						execute: async (parameters) => {

@@ -83,6 +83,7 @@ const agent = await createAgent({
 });
 
 agent.addTool({
+	name: "awardXP",
 	description:
 		"Take a snapshot and distribute xp to attendees of a weekly contributor call",
 	execute: async (context) => {
