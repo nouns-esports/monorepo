@@ -117,7 +117,7 @@ function FramesV2(props: { children: React.ReactNode; user?: string }) {
 			});
 
 			console.log("readying frame");
-			frameSdk.actions.ready({});
+			await frameSdk.actions.ready();
 		}
 
 		if (context && ready && !authenticated) {
