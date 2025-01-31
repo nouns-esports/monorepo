@@ -11,7 +11,11 @@ export async function getAuthenticatedUser() {
 
 	const headersList = await headers();
 
-	console.log("HEADERS", token, headersList.entries().toArray());
+	console.log("TOKEN", token);
+	console.log("HEADERS");
+	headersList.forEach((value, key) => {
+		console.log(key, value);
+	});
 
 	if (!token) return;
 
