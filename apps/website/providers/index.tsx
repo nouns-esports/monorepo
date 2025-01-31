@@ -7,6 +7,7 @@ import Wagmi from "./Wagmi";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { create } from "zustand";
+import Farcaster from "./Farcaster";
 
 const useFromExternalStore = create<{
 	initialPath?: string;
@@ -44,12 +45,14 @@ export default function Providers(props: {
 
 	return (
 		<Privy user={props.user}>
-			<ReactQuery>
-				<Wagmi>
-					{props.children}
-					<Toaster position="top-center" />
-				</Wagmi>
-			</ReactQuery>
+			<Farcaster>
+				<ReactQuery>
+					<Wagmi>
+						{props.children}
+						<Toaster position="top-center" />
+					</Wagmi>
+				</ReactQuery>
+			</Farcaster>
 		</Privy>
 	);
 }

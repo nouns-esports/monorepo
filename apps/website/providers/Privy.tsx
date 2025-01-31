@@ -65,7 +65,7 @@ export default function Privy(props: {
 			}}
 		>
 			<PrivySync user={props.user}>
-				<FramesV2 user={props.user}>
+				<FramesV2>
 					<SmartWalletsProvider>{props.children}</SmartWalletsProvider>
 				</FramesV2>
 			</PrivySync>
@@ -94,7 +94,7 @@ function PrivySync(props: { children: React.ReactNode; user?: string }) {
 	return props.children;
 }
 
-function FramesV2(props: { children: React.ReactNode; user?: string }) {
+function FramesV2(props: { children: React.ReactNode }) {
 	const { ready, authenticated } = usePrivy();
 
 	const { initLoginToFrame, loginToFrame } = useLoginToFrame();
