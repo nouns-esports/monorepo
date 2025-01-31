@@ -91,7 +91,7 @@ agent.addTool({
 		const now = new Date();
 
 		const channel =
-			await agent.plugins.discord.client.channels.fetch("917137278063759440");
+			await agent.plugins.discord.client.channels.fetch("967723008116531219");
 
 		if (!channel) {
 			return;
