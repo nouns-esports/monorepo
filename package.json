@@ -5,8 +5,6 @@
     "dev": "turbo dev",
     "build": "turbo build",
     "start:website": "turbo start --filter=website",
-    "start:bot": "turbo start --filter=bot",
-    "start:dash": "turbo start --filter=dash",
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
