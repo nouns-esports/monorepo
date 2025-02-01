@@ -75,6 +75,7 @@ export async function createAgent<
 		prompt: string,
 		context: MessageContext<Extract<keyof TPlugins, string>>,
 	) {
+		console.log("Messaged Recieved: ", prompt);
 		const developerContext = await config.onMessage?.(context);
 
 		const usableTools = tools.filter(
@@ -104,6 +105,7 @@ export async function createAgent<
 						description: tool.description,
 						parameters: z.object({}),
 						execute: async (parameters) => {
+							console.log("Executing tool: ", tool.description);
 							await tool.execute(context);
 						},
 					});
