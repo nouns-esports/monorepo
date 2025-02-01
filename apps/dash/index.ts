@@ -9,7 +9,7 @@ import {
 	// farcasterPlugin,
 } from "~/packages/agent/plugins";
 
-const agent = await createAgent({
+export const agent = await createAgent({
 	// model: deepseek("deepseek-reasoner"),
 	model: anthropic("claude-3-haiku-20240307"),
 	character: {
@@ -21,11 +21,12 @@ const agent = await createAgent({
 			"Nouns is an NFT project where one Noun is auctioned off daily with the proceeds going into the treasury governed by other holders (or Nouners).",
 			"Each Noun is a pixelated character with randomly generated places and things as traits, each wearing a pair of square glasses called noggles (or ⌐◨-◨).",
 			"You are a Noun with a CRT head trait, reminiscent of the culture of Super Smash Bros Melee where they play using CRT TVs.",
+			"While Nouns GG is a part of Nouns, it's not to be confused with Nouns in conversation. The people you conversate may not be Nouners, but are all part of the Nouns community.",
 			"Even though your identity is rooted in Melee, you are open to learning about new games, expanding your knowledge to include titles like Dota 2, and CS:GO.",
 			'Nouns GG is a "game" focused on community driven esports, letting the community vote on who and what we fund.',
 			'You are a player in this "game" along with the community members you chat with.',
 			"You are a bit sarcastic, cheeky, and love to engage in playful banter with the community.",
-			"Your replies are VERY short, usually no longer than 1 sentence.",
+			"Your replies are VERY short, usually no longer than 1 sentence, and you do not speak in the third person (e.g. '*takes off glasses*, *nods*, *appears shocked*')",
 			"Nexus is Nouns GG's ranking system where you rank up by earning xp and being placed in on a leaderboard against other players.",
 			"There are 3 ranks and 3 tiers within each rank from lowest to highest in this order: Explorer I, Explorer II, Explorer III, Challenger I, Challenger II, Challenger III, Champion I, Champion II, Champion III",
 		],
@@ -70,82 +71,10 @@ const agent = await createAgent({
 		// }
 
 		if (user.rank) {
-			return [
-				`You are talking to ${user.name}`,
-				`They are ranked ${user.rank.name} and have ${user.xp} xp`,
-			];
+			return (
+				`You are talking to ${user.name}\n` +
+				`They are ranked ${user.rank.name} and have ${user.xp} xp`
+			);
 		}
-	},
-});
-
-agent.addTool({
-	name: "awardXP",
-	description:
-		"Take a snapshot and distribute xp to attendees of a weekly contributor call",
-	execute: async (context) => {
-		console.log("Tool run", context);
-		if (context.author !== "samscolari") {
-			return;
-		}
-
-		const now = new Date();
-
-		const channel =
-			await agent.plugins.discord.client.channels.fetch("967723008116531219");
-
-		if (!channel) {
-			return;
-		}
-
-		if (!channel.isVoiceBased()) {
-			return;
-		}
-
-		const [users, currentSeason] = await Promise.all([
-			db.query.nexus.findMany({
-				where: inArray(
-					nexus.discord,
-					channel.members.map((guildMember) => guildMember.user.username),
-				),
-			}),
-			db.query.seasons.findFirst({
-				where: and(lte(seasons.start, now), gte(seasons.end, now)),
-				orderBy: desc(seasons.start),
-			}),
-		]);
-
-		if (!currentSeason) throw new Error("No season found");
-
-		await db.transaction(async (tx) => {
-			console.log("transacting");
-			for (const user of users) {
-				console.log("user", user.name);
-				const [snapshot] = await tx
-					.insert(snapshots)
-					.values({
-						type: "discord-call",
-						user: user.id,
-						timestamp: now,
-					})
-					.returning({ id: snapshots.id });
-
-				const amount = 300;
-
-				await tx.insert(xp).values({
-					user: user.id,
-					amount,
-					timestamp: now,
-					snapshot: snapshot.id,
-					season: currentSeason.id,
-				});
-
-				await tx
-					.update(nexus)
-					.set({
-						xp: user.xp + amount,
-					})
-					.where(eq(nexus.id, user.id));
-			}
-		});
 	},
 });

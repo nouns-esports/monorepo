@@ -3,7 +3,8 @@
     "rules": {
       "suspicious": {
         "noExplicitAny": "off",
-        "noArrayIndexKey": "off"
+        "noArrayIndexKey": "off",
+        "noConfusingVoidType": "off"
       },
       "a11y": {
         "useIframeTitle": "off",

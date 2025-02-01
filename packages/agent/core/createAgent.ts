@@ -9,18 +9,7 @@ import figlet from "figlet";
 import colors from "kleur";
 import type { createPlugin } from "./createPlugin";
 import { createServer } from "./createServer";
-import type { createTool } from "./createTool";
 import { z } from "zod";
-import { xp } from "~/packages/db/schema";
-import { snapshots } from "~/packages/db/schema";
-import { nexus, seasons } from "~/packages/db/schema";
-import { eq, lte } from "drizzle-orm";
-import { desc } from "drizzle-orm";
-import { and } from "drizzle-orm";
-import { inArray } from "drizzle-orm";
-import { db } from "~/packages/db/schema";
-import { gte } from "drizzle-orm";
-import { env } from "~/env";
 
 export type Config<TPlugins> = {
 	model: LanguageModelV1;
@@ -32,17 +21,17 @@ export type Config<TPlugins> = {
 	plugins?: TPlugins;
 	onMessage?: (message: {
 		provider: keyof TPlugins;
-		context?: MessageContext;
-		// biome-ignore lint/suspicious/noConfusingVoidType: <explanation>
-	}) => Promise<string | string[] | void>;
+		context?: MessageContext<Extract<keyof TPlugins, string>>;
+	}) => Promise<string | void>;
 	memory?: any;
 	server?: {
 		port: number;
 	};
 };
 
-export type MessageContext = {
+export type MessageContext<TProvider extends string> = {
 	id: string;
+	provider: TProvider;
 	// This will likely need to be more robust. Differnt plugins might need access to different identifiers of an author (for example, backend id, username, display name, handle, etc...)
 	author: string;
 	room: string;
@@ -50,20 +39,10 @@ export type MessageContext = {
 	embeds?: string[];
 };
 
-export type Interface = {
-	scheduleTask: () => void;
-	// addTool: () => void;
-	addMemory: () => void;
-	generateReply: (
-		prompt: string,
-		context: MessageContext,
-	) => ReturnType<typeof generateText>;
-};
-
-export type Tool = {
-	name: string;
+export type Tool<TProvider extends string> = {
 	description: string;
-	execute: (context: MessageContext) => Promise<void>;
+	providers?: TProvider[];
+	execute: (context: MessageContext<TProvider>) => Promise<any>;
 };
 
 export async function createAgent<
@@ -80,22 +59,27 @@ export async function createAgent<
 	);
 	console.log(colors.blue(config.character.bio));
 
-	const tools: Tool[] = [];
+	const tools: Tool<Extract<keyof TPlugins, string>>[] = [];
 
 	const { server, start } = await createServer(config);
 
 	async function scheduleTask() {}
-	async function addTool(params: Tool) {
+
+	function addTool(params: Tool<Extract<keyof TPlugins, string>>) {
 		tools.push(params);
 	}
 
 	async function addMemory() {}
 
-	async function generateReply(prompt: string, context: MessageContext) {
-		const developerContext = await config.onMessage?.({
-			provider: "discord",
-			context,
-		});
+	async function generateReply(
+		prompt: string,
+		context: MessageContext<Extract<keyof TPlugins, string>>,
+	) {
+		const developerContext = await config.onMessage?.(context);
+
+		const usableTools = tools.filter(
+			(tool) => !tool.providers || tool.providers.includes(context.provider),
+		);
 
 		const reply = await generateText({
 			model: config.model,
@@ -105,22 +89,18 @@ export async function createAgent<
 				`Name: ${config.character.name}\n` +
 				`Bio: ${config.character.bio}\n` +
 				`Lore: ${config.character.lore?.join(" ")}\n` +
-				(context || developerContext
-					? "Additional context relevant to this prompt.\n"
-					: "") +
-				(context
-					? "Provider: discord\n" +
-						`Author: ${context.author}\n` +
-						`Room: ${context.room}\n`
-					: "") +
+				"Additional context relevant to this prompt.\n" +
+				`Provider: ${context.provider}\n` +
+				`Author: ${context.author}\n` +
+				`Room: ${context.room}\n` +
 				(developerContext
 					? Array.isArray(developerContext)
 						? developerContext.join("\n")
 						: developerContext
 					: ""),
-			tools: tools.reduce(
-				(obj, tool) => {
-					obj[tool.name] = vercelTool({
+			tools: usableTools.reduce(
+				(obj, tool, index) => {
+					obj[index] = vercelTool({
 						description: tool.description,
 						parameters: z.object({}),
 						execute: async (parameters) => {
@@ -148,9 +128,17 @@ export async function createAgent<
 				config,
 				server,
 				scheduleTask,
-				// addTool,
+				addTool: (params) =>
+					addTool({
+						...params,
+						providers: [id as Extract<keyof TPlugins, string>],
+					}),
 				addMemory,
-				generateReply,
+				generateReply: (prompt, context) =>
+					generateReply(prompt, {
+						...context,
+						provider: id as Extract<keyof TPlugins, string>,
+					}),
 			});
 
 			plugins[id as keyof TPlugins] = result as Awaited<
@@ -170,6 +158,5 @@ export async function createAgent<
 		scheduleTask,
 		addTool,
 		addMemory,
-		generateReply,
 	};
 }

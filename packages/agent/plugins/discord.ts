@@ -15,8 +15,6 @@ export function discordPlugin(options: { token: string }) {
 
 			const mentioned = message.mentions.has(client.user.id);
 
-			console.log("mentioned", mentioned);
-
 			if (mentioned) {
 				const reply = await generateReply(message.content, {
 					id: message.id,
