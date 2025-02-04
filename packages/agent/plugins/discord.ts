@@ -32,6 +32,8 @@ export function discordPlugin(options: { token: string }) {
 				} catch (error) {
 					if (error instanceof ToolExecutionError) {
 						response = error.message;
+					} else if (error instanceof Error) {
+						response = error.message;
 					} else {
 						response =
 							"Sorry, something went wrong and I couldn't complete your task.";
