@@ -15,17 +15,23 @@ agent.addTool({
 			),
 		update: z.object({
 			name: z.string().optional().describe("The new name/title of the round"),
-			// start: z.date().optional().describe("The date and time the round starts"),
-			// votingStart: z
-			// 	.date()
-			// 	.optional()
-			// 	.describe("The date and time the round voting starts"),
-			// end: z.date().optional().describe("The date and time the round ends"),
-			// community: z
-			// 	.string()
-			// 	.optional()
-			// 	.describe("The community the round belongs to"),
-			// event: z.string().optional().describe("The event the round belongs to"),
+			start: z
+				.date()
+				.optional()
+				.describe("The date and time the round starts in UTC"),
+			votingStart: z
+				.date()
+				.optional()
+				.describe("The date and time the round voting starts in UTC"),
+			end: z
+				.date()
+				.optional()
+				.describe("The date and time the round ends in UTC"),
+			community: z
+				.string()
+				.optional()
+				.describe("The community the round belongs to"),
+			event: z.string().optional().describe("The event the round belongs to"),
 			featured: z
 				.boolean()
 				.optional()
@@ -63,6 +69,47 @@ agent.addTool({
 				await tx
 					.update(rounds)
 					.set({ name: parameters.update.name })
+					.where(eq(rounds.id, round.id));
+			}
+
+			if (parameters.update.start !== undefined) {
+				console.log("Date start: ", new Date(parameters.update.start));
+				// await tx
+				// 	.update(rounds)
+				// 	.set({ start: new Date(parameters.update.start) })
+				// 	.where(eq(rounds.id, round.id));
+			}
+
+			if (parameters.update.votingStart !== undefined) {
+				console.log(
+					"Date voting start: ",
+					new Date(parameters.update.votingStart),
+				);
+				// await tx
+				// 	.update(rounds)
+				// 	.set({ votingStart: new Date(parameters.update.votingStart) })
+				// 	.where(eq(rounds.id, round.id));
+			}
+
+			if (parameters.update.end !== undefined) {
+				console.log("Date end: ", new Date(parameters.update.end));
+				// await tx
+				// 	.update(rounds)
+				// 	.set({ end: new Date(parameters.update.end) })
+				// 	.where(eq(rounds.id, round.id));
+			}
+
+			if (parameters.update.community !== undefined) {
+				await tx
+					.update(rounds)
+					.set({ community: parameters.update.community })
+					.where(eq(rounds.id, round.id));
+			}
+
+			if (parameters.update.event !== undefined) {
+				await tx
+					.update(rounds)
+					.set({ event: parameters.update.event })
 					.where(eq(rounds.id, round.id));
 			}
 
