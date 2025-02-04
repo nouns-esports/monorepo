@@ -112,7 +112,7 @@ export async function createAgent<
 				(obj, tool, index) => {
 					obj[index] = vercelTool({
 						description: tool.description,
-						parameters: tool.parameters ?? z.undefined(),
+						parameters: tool.parameters ?? z.object({}),
 						execute: async (parameters) => {
 							console.log("Executing tool: ", tool.description);
 							await tool.execute({ parameters, context });
