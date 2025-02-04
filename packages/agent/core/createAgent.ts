@@ -92,8 +92,10 @@ export async function createAgent<
 			prompt,
 			system:
 				"Determine which tools (if any) are relevant to this prompt\n" +
-				`Tools: \n${tools.map((tool, index) => `${index}: ${tool.description}`).join("\n")}` +
-				"Only select relevant tools if you are very confident they are to be used and its perfectly ok if you don't select any\n",
+				"Don't choose any tools unless the prompt conveys an intent for you to do some task as in 'can you do this?' or 'Do this thing'\n" +
+				"Be very thoughtful in this selection because even if the prompt mentions tools, they might not actually want you to execute one (ex: 'What tools do you have?'\n" +
+				"Only select relevant tools if you are exteremly confident they are to be used and its perfectly ok if you don't select any\n" +
+				`Tools: \n${tools.map((tool, index) => `${index}: ${tool.description}`).join("\n")}`,
 			schema: z.object({
 				tools: z
 					.array(z.number())
