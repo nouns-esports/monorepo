@@ -79,3 +79,7 @@ export const agent = await createAgent({
 		}
 	},
 });
+
+// Import tools
+import "./tools/awardContributorCallXP";
+import "./tools/updateRound";
