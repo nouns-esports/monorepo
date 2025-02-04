@@ -4,7 +4,8 @@ import { eq } from "drizzle-orm";
 import { z } from "zod";
 
 agent.addTool({
-	description: "Updates a round",
+	description:
+		"Takes a nouns.gg round id and updates any specified parameters on it",
 	providers: ["discord"],
 	parameters: z.object({
 		round: z
@@ -58,14 +59,14 @@ agent.addTool({
 		}
 
 		await db.transaction(async (tx) => {
-			if (parameters.update.name) {
+			if (parameters.update.name !== undefined) {
 				await tx
 					.update(rounds)
 					.set({ name: parameters.update.name })
 					.where(eq(rounds.id, round.id));
 			}
 
-			if (parameters.update.featured) {
+			if (parameters.update.featured !== undefined) {
 				await tx
 					.update(rounds)
 					.set({ featured: parameters.update.featured })

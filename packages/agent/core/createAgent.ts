@@ -87,9 +87,21 @@ export async function createAgent<
 		console.log("Messaged Recieved: ", prompt);
 		const developerContext = await config.onMessage?.(context);
 
-		const usableTools = tools.filter(
-			(tool) => !tool.providers || tool.providers.includes(context.provider),
-		);
+		const activeTools = await generateObject({
+			model: config.model,
+			prompt,
+			system:
+				"Determine which tools (if any) are relevant to this prompt\n" +
+				`Tools: \n${tools.map((tool, index) => `${index}: ${tool.description}`).join("\n")}` +
+				"Only select relevant tools if you are very confident they are to be used and its perfectly ok if you don't select any\n",
+			schema: z.object({
+				tools: z
+					.array(z.number())
+					.describe("The indexes of the relevant tools if any"),
+			}),
+		});
+
+		console.log("Active Tools: ", activeTools.object.tools);
 
 		const reply = await generateText({
 			model: config.model,
@@ -103,26 +115,24 @@ export async function createAgent<
 				`Provider: ${context.provider}\n` +
 				`Author: ${context.author}\n` +
 				`Room: ${context.room}\n` +
-				(developerContext
-					? Array.isArray(developerContext)
-						? developerContext.join("\n")
-						: developerContext
-					: ""),
-			tools: usableTools.reduce(
-				(obj, tool, index) => {
-					obj[index] = vercelTool({
-						description: tool.description,
-						parameters: tool.parameters ?? z.object({}),
-						execute: async (parameters) => {
-							console.log("Executing tool: ", tool.description);
-							await tool.execute({ parameters, context });
-						},
-					});
+				(developerContext ?? ""),
+			tools: tools
+				.filter((_, index) => activeTools.object.tools.includes(index))
+				.reduce(
+					(obj, tool, index) => {
+						obj[index] = vercelTool({
+							description: tool.description,
+							parameters: tool.parameters ?? z.object({}),
+							execute: async (parameters) => {
+								console.log("Executing tool: ", tool.description);
+								await tool.execute({ parameters, context });
+							},
+						});
 
-					return obj;
-				},
-				{} as Record<string, CoreTool<any, any>>,
-			),
+						return obj;
+					},
+					{} as Record<string, CoreTool<any, any>>,
+				),
 			maxSteps: 10,
 		});
 

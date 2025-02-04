@@ -8,3 +8,5 @@
 // }
 
 // Tools need to be wrapped in some kind of createTool function so they can be imported from other files
+
+// ACTUALLY MAYBE, TOP LEVEL TOOLS SHOULD JUST BE LIKE PLUGINS
