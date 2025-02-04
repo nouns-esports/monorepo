@@ -3,6 +3,7 @@ import {
 	generateObject,
 	generateText,
 	type LanguageModelV1,
+	ToolExecutionError,
 	tool as vercelTool,
 } from "ai";
 import figlet from "figlet";
@@ -39,10 +40,16 @@ export type MessageContext<TProvider extends string> = {
 	embeds?: string[];
 };
 
-export type Tool<TProvider extends string> = {
+export type Tool<TProvider extends string, TParameters> = {
 	description: string;
 	providers?: TProvider[];
-	execute: (context: MessageContext<TProvider>) => Promise<any>;
+	parameters?: TParameters;
+	execute: (props: {
+		parameters: z.infer<
+			TParameters extends z.ZodType ? TParameters : z.ZodSchema
+		>;
+		context: MessageContext<TProvider>;
+	}) => Promise<any>;
 };
 
 export async function createAgent<
@@ -59,13 +66,15 @@ export async function createAgent<
 	);
 	console.log(colors.blue(config.character.bio));
 
-	const tools: Tool<Extract<keyof TPlugins, string>>[] = [];
+	const tools: Tool<Extract<keyof TPlugins, string>, z.ZodSchema>[] = [];
 
 	const { server, start } = await createServer(config);
 
 	async function scheduleTask() {}
 
-	function addTool(params: Tool<Extract<keyof TPlugins, string>>) {
+	function addTool<TParameters extends z.ZodSchema>(
+		params: Tool<Extract<keyof TPlugins, string>, TParameters>,
+	) {
 		tools.push(params);
 	}
 
@@ -103,10 +112,10 @@ export async function createAgent<
 				(obj, tool, index) => {
 					obj[index] = vercelTool({
 						description: tool.description,
-						parameters: z.object({}),
+						parameters: tool.parameters ?? z.undefined(),
 						execute: async (parameters) => {
 							console.log("Executing tool: ", tool.description);
-							await tool.execute(context);
+							await tool.execute({ parameters, context });
 						},
 					});
 

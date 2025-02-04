@@ -1,3 +1,4 @@
+import { ToolExecutionError } from "ai";
 import { createPlugin } from "../core/createPlugin";
 import { Client } from "discord.js";
 
@@ -16,15 +17,28 @@ export function discordPlugin(options: { token: string }) {
 			const mentioned = message.mentions.has(client.user.id);
 
 			if (mentioned) {
-				const reply = await generateReply(message.content, {
-					id: message.id,
-					author: message.author.username,
-					room: message.channel.id,
-					mentions: message.mentions.users.map((user) => user.username),
-					embeds: [],
-				});
+				let response: string | undefined;
 
-				await message.reply(reply.text);
+				try {
+					const reply = await generateReply(message.content, {
+						id: message.id,
+						author: message.author.username,
+						room: message.channel.id,
+						mentions: message.mentions.users.map((user) => user.username),
+						embeds: [],
+					});
+
+					response = reply.text;
+				} catch (error) {
+					if (error instanceof ToolExecutionError) {
+						response = error.message;
+					} else {
+						response =
+							"Sorry, something went wrong and I couldn't complete your task.";
+					}
+				}
+
+				await message.reply(response);
 			}
 		});
 

@@ -6,7 +6,7 @@ agent.addTool({
 	description:
 		"Takes a snapshot and distributes xp to attendees of a weekly contributor voice call",
 	providers: ["discord"],
-	execute: async (context) => {
+	execute: async ({ parameters, context }) => {
 		if (
 			![
 				"samscolari",
@@ -16,7 +16,7 @@ agent.addTool({
 				"patyiutazza",
 			].includes(context.author)
 		) {
-			return "ERROR: User is not authorized to take this action";
+			throw new Error("You are not authorized to take xp snapshots");
 		}
 
 		const now = new Date();
@@ -25,11 +25,11 @@ agent.addTool({
 			await agent.plugins.discord.client.channels.fetch("967723008116531219");
 
 		if (!channel) {
-			return "ERROR: Voice channel could not be found";
+			throw new Error("I couldn't find that voice channel");
 		}
 
 		if (!channel.isVoiceBased()) {
-			return "ERROR: Channel must be a voice channel";
+			throw new Error("I can only take xp snapshots from voice channels");
 		}
 
 		const members = channel.members.map(
@@ -37,7 +37,7 @@ agent.addTool({
 		);
 
 		if (members.length === 0) {
-			return "ERROR: There are no members currently in the voice channel";
+			throw new Error("Nobody is in the contributor voice channel right now");
 		}
 
 		const [users, currentSeason] = await Promise.all([
@@ -50,8 +50,14 @@ agent.addTool({
 			}),
 		]);
 
+		if (users.length === 0) {
+			throw new Error(
+				"I couldn't find any nouns.gg accounts associated with anyone in the contributor voice channel",
+			);
+		}
+
 		if (!currentSeason) {
-			return "ERROR: There is not an ongoing season";
+			throw new Error("There is not an ongoing season");
 		}
 
 		await db.transaction(async (tx) => {
