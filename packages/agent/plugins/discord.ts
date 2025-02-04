@@ -40,6 +40,8 @@ export function discordPlugin(options: { token: string }) {
 					}
 				}
 
+				console.log("Response: ", response);
+
 				await message.reply(response);
 			}
 		});
