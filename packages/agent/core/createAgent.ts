@@ -117,9 +117,11 @@ export async function createAgent<
 				`Provider: ${context.provider}\n` +
 				`Author: ${context.author}\n` +
 				`Room: ${context.room}\n` +
+				`Current Time: ${new Date().toISOString()}\n` +
 				(developerContext ?? ""),
 			tools: tools
 				.filter((_, index) => activeTools.object.tools.includes(index))
+
 				.reduce(
 					(obj, tool, index) => {
 						obj[index] = vercelTool({

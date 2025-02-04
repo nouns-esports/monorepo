@@ -16,17 +16,19 @@ agent.addTool({
 		update: z.object({
 			name: z.string().optional().describe("The new name/title of the round"),
 			start: z
-				.date()
+				.string()
 				.optional()
-				.describe("The date and time the round starts in UTC"),
+				.describe("The new date and time the round starts in an ISO string"),
 			votingStart: z
-				.date()
+				.string()
 				.optional()
-				.describe("The date and time the round voting starts in UTC"),
+				.describe(
+					"The new date and time the round voting starts in an ISO string",
+				),
 			end: z
-				.date()
+				.string()
 				.optional()
-				.describe("The date and time the round ends in UTC"),
+				.describe("The new date and time the round ends in an ISO string"),
 			community: z
 				.string()
 				.optional()
