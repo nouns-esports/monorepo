@@ -91,6 +91,8 @@ export async function createAgent<
 			(tool) => !tool.providers || tool.providers.includes(context.provider),
 		);
 
+		console.log("Usable tools: ", usableTools);
+
 		const reply = await generateText({
 			model: config.model,
 			prompt,
