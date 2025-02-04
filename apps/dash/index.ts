@@ -11,7 +11,7 @@ import {
 
 export const agent = await createAgent({
 	// model: deepseek("deepseek-reasoner"),
-	model: anthropic("claude-3-haiku-20240307"),
+	model: anthropic("claude-3-5-sonnet-20241022"),
 	character: {
 		name: "Dash",
 		bio: "An autonomous agent playing nouns.gg",
