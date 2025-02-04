@@ -1,6 +1,6 @@
-import { agent } from "../";
 import { db, nexus, xp, seasons, snapshots } from "~/packages/db/schema";
 import { and, gte, lte, desc, eq, inArray, or } from "drizzle-orm";
+import { agent } from "..";
 
 agent.addTool({
 	description:

@@ -80,6 +80,6 @@ export const agent = await createAgent({
 	},
 });
 
-// Import tools
-import "./tools/awardContributorCallXP";
-import "./tools/updateRound";
+// Dynamically import tools after the agent is created
+await import("./tools/awardContributorCallXP");
+await import("./tools/updateRound");
