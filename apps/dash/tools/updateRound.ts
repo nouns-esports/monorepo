@@ -76,39 +76,31 @@ agent.addTool({
 			}
 
 			if (parameters.update.start !== undefined) {
-				console.log(
-					"Date start: ",
-					new Date(parameters.update.start),
-					new TZDate(new Date(parameters.update.start), "-05:00"),
-				);
-				// await tx
-				// 	.update(rounds)
-				// 	.set({ start: new Date(parameters.update.start) })
-				// 	.where(eq(rounds.id, round.id));
+				await tx
+					.update(rounds)
+					.set({
+						start: new TZDate(new Date(parameters.update.start), "+05:00"),
+					})
+					.where(eq(rounds.id, round.id));
 			}
 
 			if (parameters.update.votingStart !== undefined) {
-				console.log(
-					"Date voting start: ",
-					new Date(parameters.update.votingStart),
-					new TZDate(new Date(parameters.update.votingStart), "-05:00"),
-				);
-				// await tx
-				// 	.update(rounds)
-				// 	.set({ votingStart: new Date(parameters.update.votingStart) })
-				// 	.where(eq(rounds.id, round.id));
+				await tx
+					.update(rounds)
+					.set({
+						votingStart: new TZDate(
+							new Date(parameters.update.votingStart),
+							"+05:00",
+						),
+					})
+					.where(eq(rounds.id, round.id));
 			}
 
 			if (parameters.update.end !== undefined) {
-				console.log(
-					"Date end: ",
-					new Date(parameters.update.end),
-					new TZDate(new Date(parameters.update.end), "-05:00"),
-				);
-				// await tx
-				// 	.update(rounds)
-				// 	.set({ end: new Date(parameters.update.end) })
-				// 	.where(eq(rounds.id, round.id));
+				await tx
+					.update(rounds)
+					.set({ end: new TZDate(new Date(parameters.update.end), "+05:00") })
+					.where(eq(rounds.id, round.id));
 			}
 
 			if (parameters.update.community !== undefined) {
