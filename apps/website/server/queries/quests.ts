@@ -21,6 +21,8 @@ import { claimAchievement } from "../quests/achievements/claimAchievement";
 import { castVote } from "../quests/rounds/castVote";
 import { makePrediction } from "../quests/predictions/makePrediction";
 import { signup } from "../quests/events/signup";
+import { holdERC721 } from "../quests/onchain/holdERC721";
+import { becomeDelegate } from "../quests/onchain/becomeDelegate";
 
 export const actions: Record<string, ReturnType<typeof createAction>> = {
 	// Discord
@@ -60,6 +62,10 @@ export const actions: Record<string, ReturnType<typeof createAction>> = {
 
 	// Events
 	signup,
+
+	// Onchain
+	holdERC721,
+	becomeDelegate,
 };
 
 export async function getAction(input: {
