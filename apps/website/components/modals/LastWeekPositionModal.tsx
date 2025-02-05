@@ -20,7 +20,7 @@ export default function LastWeekPositionModal(props: {
 		>
 			<div className="flex justify-between items-center">
 				<p className="text-white text-2xl font-bebas-neue leading-none">
-					Your Position
+					Your Ranking
 				</p>
 				<ToggleModal
 					id="last-week-position"

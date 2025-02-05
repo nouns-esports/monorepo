@@ -1,15 +1,14 @@
-import { and, asc, desc, eq, inArray, lt, lte, sql } from "drizzle-orm";
+import { and, asc, desc, eq, sql } from "drizzle-orm";
 import { unstable_cache as cache } from "next/cache";
-import { db, rankings, rankingsRelations } from "~/packages/db/schema";
+import { db, rankings } from "~/packages/db/schema";
 
 export const getLeaderboard = cache(
-	async (input: { date: Date }) => {
-		//
-		const previousWeek = new Date(
-			input.date.getTime() - 7 * 24 * 60 * 60 * 1000,
-		);
+	async () => {
 		return db.query.rankings.findMany({
-			where: eq(rankings.timestamp, input.date),
+			where: eq(
+				rankings.timestamp,
+				sql`(SELECT MAX(timestamp) FROM ${rankings})`,
+			),
 			orderBy: desc(rankings.score),
 			limit: 100,
 			with: {
@@ -25,100 +24,30 @@ export const getLeaderboard = cache(
 								"user",
 								ROW_NUMBER() OVER (ORDER BY score DESC) AS rank_index
 							FROM ${rankings}
-							WHERE timestamp = ${previousWeek.toISOString()}
+							WHERE timestamp = (
+								SELECT timestamp 
+								FROM ${rankings} 
+								WHERE timestamp < (SELECT MAX(timestamp) FROM ${rankings})
+								ORDER BY timestamp DESC 
+								LIMIT 1
+							)
 						) AS ranked
 						WHERE ranked."user" = rankings."user"
 					)
 				`.as("previousPosition"),
 			},
 		});
-
-		// const users = leaderboard
-		// 	.filter((ranking) => ranking.user)
-		// 	.map((ranking) => ranking.user.id);
-
-		// const previousWeek = new Date(
-		// 	input.date.getTime() - 7 * 24 * 60 * 60 * 1000,
-		// );
-		// //
-		// const lastPositions = await db.execute(sql`
-		// 	WITH ranked_rankings AS (
-		// 		SELECT
-		// 			"user",
-		// 			xp,
-		// 			ROW_NUMBER() OVER (ORDER BY xp DESC) AS position
-		// 		FROM public.rankings
-		// 		WHERE timestamp = ${previousWeek.toISOString()}
-		// 	)
-		// 	SELECT
-		// 		"user",
-		// 		position
-		// 	FROM ranked_rankings
-		// 	WHERE "user" IN (
-		// 		'did:privy:cm31utuiv05nfxzwomufqozl9',
-		// 		'did:privy:cm1zpxncy033o6mxlikplbvyp',
-		// 		'did:privy:cm1z9eo1i04rtibtgjidkc68y',
-		// 		'did:privy:cm1z7hte1066va88rz77hubji'
-		// 	);
-		// `);
-
-		// console.log(lastPositions.rows);
-		// return {
-		// 	leaderboard,
-		// 	lastPositions,
-		// };
 	},
 	["getLeaderboard"],
 	{ tags: ["getLeaderboard"], revalidate: 60 * 10 },
 );
-// Working SQL
-// WITH previous_rankings AS (
-//     SELECT
-//         "user",
-//         xp,
-//         RANK() OVER (ORDER BY xp DESC) AS lastPosition
-//     FROM public.rankings
-//     WHERE "timestamp" = '2025-01-24T19:00:00.000Z'
-// ),
-// current_rankings AS (
-//     SELECT
-//         *
-//     FROM public.rankings
-//     WHERE "timestamp" = '2025-01-31T19:00:00.000Z'
-// )
-// SELECT
-//     c.*,
-//     p.lastPosition
-// FROM current_rankings c
-// LEFT JOIN previous_rankings p
-//     ON c."user" = p."user"
-// ORDER BY c.xp DESC
-// LIMIT 100;
-
-// lastPosition parts (that work)
-// WITH ranked_rankings AS (
-// 	SELECT
-// 	  "user",
-// 	  xp,
-// 	  ROW_NUMBER() OVER (ORDER BY xp DESC) AS rank_index
-// 	FROM public.rankings
-// 	WHERE timestamp = '2025-01-24T19:00:00.000Z'
-//   )
-//   SELECT rank_index
-//   FROM ranked_rankings
-//   WHERE "user" = 'did:privy:cm31utuiv05nfxzwomufqozl9';
 
 export const getLeaderboardPosition = cache(
-	async (input: { user: string; date: Date }) => {
-		////
-		const previousWeek = new Date(
-			input.date.getTime() - 7 * 24 * 60 * 60 * 1000,
-		);
-
+	async (input: { user: string }) => {
 		return db.query.rankings.findFirst({
 			where: and(
 				eq(rankings.user, input.user),
-				eq(rankings.timestamp, input.date),
+				eq(rankings.timestamp, sql`(SELECT MAX(timestamp) FROM ${rankings})`),
 			),
 			orderBy: desc(rankings.score),
 			with: {
@@ -133,7 +62,7 @@ export const getLeaderboardPosition = cache(
 							"user",
 							ROW_NUMBER() OVER (ORDER BY score DESC) AS rank_index
 						FROM ${rankings}
-						WHERE timestamp = ${input.date.toISOString()}
+						WHERE timestamp = (SELECT MAX(timestamp) FROM ${rankings})
 					) AS ranked
 					WHERE ranked."user" = rankings."user"
 				)`.as("position"),
@@ -143,7 +72,13 @@ export const getLeaderboardPosition = cache(
 							"user",
 							ROW_NUMBER() OVER (ORDER BY score DESC) AS rank_index
 						FROM ${rankings}
-						WHERE timestamp = ${previousWeek.toISOString()}
+						WHERE timestamp = (
+							SELECT timestamp 
+							FROM ${rankings} 
+							WHERE timestamp < (SELECT MAX(timestamp) FROM ${rankings})
+							ORDER BY timestamp DESC 
+							LIMIT 1
+						)
 					) AS ranked
 					WHERE ranked."user" = rankings."user"
 				)`.as("previousPosition"),

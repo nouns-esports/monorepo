@@ -7,34 +7,20 @@ import { getAuthenticatedUser } from "@/server/queries/users";
 import { CaretUp, CaretDown } from "phosphor-react-sc";
 import Countdown from "@/components/Countdown";
 import { twMerge } from "tailwind-merge";
-import { nextFriday, previousFriday } from "date-fns";
 import DateComponent from "@/components/Date";
 import { ToggleModal } from "@/components/Modal";
-import { ArrowRight, Image, Sparkles, Trophy } from "lucide-react";
+import { Image } from "lucide-react";
 import LastWeekPositionModal from "@/components/modals/LastWeekPositionModal";
 import Button from "@/components/Button";
 
 export default async function Leaderboard() {
 	const user = await getAuthenticatedUser();
 
-	const now = new Date();
-	const thisFriday = new Date(nextFriday(now).setHours(13, 0, 0, 0));
-	const lastFriday = new Date(previousFriday(now).setHours(13, 0, 0, 0));
-
-	const [leaderboard, userPosition, lastWeekUserPosition] = await Promise.all([
-		getLeaderboard({
-			date: thisFriday,
-		}),
+	const [leaderboard, userPosition] = await Promise.all([
+		getLeaderboard(),
 		user
 			? getLeaderboardPosition({
 					user: user.id,
-					date: thisFriday,
-				})
-			: undefined,
-		user
-			? getLeaderboardPosition({
-					user: user.id,
-					date: lastFriday,
 				})
 			: undefined,
 	]);
@@ -125,8 +111,6 @@ export default async function Leaderboard() {
 
 							const position = index + 1;
 
-							console.log(ranking.user.id, position, ranking.previousPosition);
-
 							return (
 								<LeaderboardPosition
 									key={ranking.id}
@@ -141,9 +125,7 @@ export default async function Leaderboard() {
 					</div>
 				</div>
 			</div>
-			{lastWeekUserPosition ? (
-				<LastWeekPositionModal ranking={lastWeekUserPosition} />
-			) : null}
+			{userPosition ? <LastWeekPositionModal ranking={userPosition} /> : null}
 		</>
 	);
 }

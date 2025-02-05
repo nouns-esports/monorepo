@@ -443,6 +443,7 @@ export const ranks = pgTable("ranks", {
 	place: smallint("place").notNull(),
 	percentile: numeric("percentile", { precision: 4, scale: 3 }).notNull(), // ex: 0.01 === 1%, 0.001 === 0.1%, 0.0001 === 0.01%
 	votes: smallint("votes").notNull(),
+	active: boolean("active").notNull().default(true),
 });
 
 export const ranksRelations = relations(ranks, ({ one, many }) => ({
@@ -525,7 +526,7 @@ export const xpRelations = relations(xp, ({ one }) => ({
 export const rankings = pgTable("rankings", {
 	id: serial("id").primaryKey(),
 	user: text("user").notNull(),
-	rank: integer("rank"),
+	rank: integer("rank").notNull(),
 	gold: integer("gold"),
 	score: integer("score").notNull(),
 	timestamp: timestamp("timestamp", { mode: "date" }).notNull(),

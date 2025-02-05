@@ -42,7 +42,7 @@ export default async function Footer() {
 					<Group title="Get Involved">
 						<Item href="/rounds">Rounds</Item>
 						<Item href="/quests">Quests</Item>
-						<Item href="/chat">Chat</Item>
+						<Item href="/discord">Discord</Item>
 					</Group>
 					<Group title="Resources">
 						<Item href="/privacy" newTab>

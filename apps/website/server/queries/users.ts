@@ -9,17 +9,6 @@ import { cookies, headers } from "next/headers";
 export async function getAuthenticatedUser() {
 	const token = (await cookies()).get("privy-id-token");
 
-	const headersList = await headers();
-	const cookiesList = await cookies();
-
-	headersList.forEach(async (value, key) => {
-		console.log("Header: ", key, value);
-	});
-
-	cookiesList.getAll().forEach(async (value, key) => {
-		console.log("Cookie: ", key, value);
-	});
-
 	if (!token) return;
 
 	try {
