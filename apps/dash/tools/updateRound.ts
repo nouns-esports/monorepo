@@ -79,7 +79,7 @@ agent.addTool({
 				console.log(
 					"Date start: ",
 					new Date(parameters.update.start),
-					new TZDate(new Date(parameters.update.start), "UTC"),
+					new TZDate(new Date(parameters.update.start), "-05:00"),
 				);
 				// await tx
 				// 	.update(rounds)
@@ -91,7 +91,7 @@ agent.addTool({
 				console.log(
 					"Date voting start: ",
 					new Date(parameters.update.votingStart),
-					new TZDate(new Date(parameters.update.votingStart), "UTC"),
+					new TZDate(new Date(parameters.update.votingStart), "-05:00"),
 				);
 				// await tx
 				// 	.update(rounds)
@@ -103,7 +103,7 @@ agent.addTool({
 				console.log(
 					"Date end: ",
 					new Date(parameters.update.end),
-					new TZDate(new Date(parameters.update.end), "UTC"),
+					new TZDate(new Date(parameters.update.end), "-05:00"),
 				);
 				// await tx
 				// 	.update(rounds)
