@@ -151,30 +151,6 @@ export const achievements: Record<string, Achievement> = {
 			"https://ipfs.nouns.gg/ipfs/QmZ9h5CSssYyVqmDA8r4zVFyXY4KkK9EdhCxfhJEPiv7Rx",
 		xp: 250,
 	},
-	// becomeDelegate: {
-	// 	id: "becomeDelegate",
-	// 	name: "Become a Delegate",
-	// 	description: "Recieve a delegation from a Nouner or Lil Nouner",
-	// 	image:
-	// 		"https://ipfs.nouns.gg/ipfs/bafkreidl5ypura76bc3p5jfs3mqtsrpsvza6by4w275afcxqze6amqllii",
-	// 	xp: 500,
-	// },
-	// nouner: {
-	// 	id: "nouner",
-	// 	name: "Nouner",
-	// 	description: "Acquire a Noun",
-	// 	image:
-	// 		"https://ipfs.nouns.gg/ipfs/bafkreifq55jrxz7l5tpz76thnzo7ozzed6arpeza7wzl3zb2qcuyqtbms4",
-	// 	xp: 5000,
-	// },
-	// lilnouner: {
-	// 	id: "lilnouner",
-	// 	name: "Lil Nouner",
-	// 	description: "Acquire a Lil Noun",
-	// 	image:
-	// 		"https://ipfs.nouns.gg/ipfs/bafkreicjvhkrfzasct63n323662ydo4rskmkuyoyho2dzbxhbwgtf2smhq",
-	// 	xp: 1000,
-	// },
 };
 
 export type AchievementTree = Achievement & {
@@ -237,10 +213,6 @@ export const achievementTree: AchievementTree = {
 		},
 		{
 			...achievements.completeQuest,
-		},
-		{
-			...achievements.becomeDelegate,
-			next: [{ ...achievements.lilnouner }, { ...achievements.nouner }],
 		},
 	],
 };
