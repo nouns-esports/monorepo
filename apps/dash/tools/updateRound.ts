@@ -120,5 +120,10 @@ agent.addTool({
 					.where(eq(rounds.id, round.id));
 			}
 		});
+
+		await Promise.all([
+			fetch("https://nouns.gg/api/revalidate?path=/"),
+			fetch("https://nouns.gg/api/revalidate?path=/rounds"),
+		]);
 	},
 });
