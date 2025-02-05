@@ -11,6 +11,7 @@ import colors from "kleur";
 import type { createPlugin } from "./createPlugin";
 import { createServer } from "./createServer";
 import { z } from "zod";
+import { TZDate } from "@date-fns/tz";
 
 export type Config<TPlugins> = {
 	model: LanguageModelV1;
@@ -105,6 +106,8 @@ export async function createAgent<
 
 		console.log("Active Tools: ", activeTools.object.tools);
 
+		const date = new TZDate(new Date(), "America/New_York");
+
 		const reply = await generateText({
 			model: config.model,
 			prompt,
@@ -117,7 +120,7 @@ export async function createAgent<
 				`Provider: ${context.provider}\n` +
 				`Author: ${context.author}\n` +
 				`Room: ${context.room}\n` +
-				`Current Time: ${new Date().toISOString()}\n` +
+				`Current Time: ${date.toLocaleDateString("en-US", { weekday: "short" })} ${date.toISOString()}\n` +
 				(developerContext ?? ""),
 			tools: tools
 				.filter((_, index) => activeTools.object.tools.includes(index))
