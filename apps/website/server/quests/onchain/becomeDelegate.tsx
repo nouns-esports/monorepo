@@ -20,7 +20,7 @@ export const becomeDelegate = createAction<{
 		url: actionInputs.url,
 		check: async (user) => {
 			for (const wallet of user.wallets) {
-				const [currentVotes] = await Promise.all([
+				const [currentVotes, balance] = await Promise.all([
 					viemPublicClients.mainnet.readContract({
 						address: actionInputs.contract as `0x${string}`,
 						abi: parseAbi([
@@ -29,9 +29,17 @@ export const becomeDelegate = createAction<{
 						functionName: "getCurrentVotes",
 						args: [wallet.address as `0x${string}`],
 					}),
+					viemPublicClients.mainnet.readContract({
+						address: actionInputs.contract as `0x${string}`,
+						abi: parseAbi([
+							"function balanceOf(address) external view returns (uint256)",
+						]),
+						functionName: "balanceOf",
+						args: [wallet.address as `0x${string}`],
+					}),
 				]);
 
-				if (currentVotes > 0n) {
+				if (currentVotes > 0n || balance > 0n) {
 					return true;
 				}
 			}
