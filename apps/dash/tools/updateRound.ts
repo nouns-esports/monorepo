@@ -2,6 +2,7 @@ import { agent } from "../";
 import { db, rounds } from "~/packages/db/schema";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
+import { TZDate } from "@date-fns/tz";
 
 agent.addTool({
 	description:
@@ -75,7 +76,10 @@ agent.addTool({
 			}
 
 			if (parameters.update.start !== undefined) {
-				console.log("Date start: ", new Date(parameters.update.start));
+				console.log(
+					"Date start: ",
+					new TZDate(new Date(parameters.update.start), "America/New_York"),
+				);
 				// await tx
 				// 	.update(rounds)
 				// 	.set({ start: new Date(parameters.update.start) })
@@ -85,7 +89,10 @@ agent.addTool({
 			if (parameters.update.votingStart !== undefined) {
 				console.log(
 					"Date voting start: ",
-					new Date(parameters.update.votingStart),
+					new TZDate(
+						new Date(parameters.update.votingStart),
+						"America/New_York",
+					),
 				);
 				// await tx
 				// 	.update(rounds)
@@ -94,7 +101,10 @@ agent.addTool({
 			}
 
 			if (parameters.update.end !== undefined) {
-				console.log("Date end: ", new Date(parameters.update.end));
+				console.log(
+					"Date end: ",
+					new TZDate(new Date(parameters.update.end), "America/New_York"),
+				);
 				// await tx
 				// 	.update(rounds)
 				// 	.set({ end: new Date(parameters.update.end) })
