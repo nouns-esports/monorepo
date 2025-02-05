@@ -78,6 +78,7 @@ agent.addTool({
 			if (parameters.update.start !== undefined) {
 				console.log(
 					"Date start: ",
+					new Date(parameters.update.start),
 					new TZDate(new Date(parameters.update.start), "UTC"),
 				);
 				// await tx
@@ -89,6 +90,7 @@ agent.addTool({
 			if (parameters.update.votingStart !== undefined) {
 				console.log(
 					"Date voting start: ",
+					new Date(parameters.update.votingStart),
 					new TZDate(new Date(parameters.update.votingStart), "UTC"),
 				);
 				// await tx
@@ -100,6 +102,7 @@ agent.addTool({
 			if (parameters.update.end !== undefined) {
 				console.log(
 					"Date end: ",
+					new Date(parameters.update.end),
 					new TZDate(new Date(parameters.update.end), "UTC"),
 				);
 				// await tx
