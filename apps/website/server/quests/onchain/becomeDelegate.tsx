@@ -3,11 +3,11 @@ import createAction from "../createAction";
 import { parseAbi } from "viem";
 
 export const becomeDelegate = createAction<{
-	dao?: string;
+	contract?: string;
 	url?: string;
 	tokenName?: string;
 }>(async (actionInputs) => {
-	if (!actionInputs.dao) {
+	if (!actionInputs.contract) {
 		throw new Error("DAO Contract Address is required");
 	}
 
@@ -22,7 +22,7 @@ export const becomeDelegate = createAction<{
 			for (const wallet of user.wallets) {
 				const [currentVotes] = await Promise.all([
 					viemPublicClients.mainnet.readContract({
-						address: actionInputs.dao as `0x${string}`,
+						address: actionInputs.contract as `0x${string}`,
 						abi: parseAbi([
 							"function getCurrentVotes(address) external view returns (uint96)",
 						]),
