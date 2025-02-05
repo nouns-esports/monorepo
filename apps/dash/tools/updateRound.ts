@@ -2,7 +2,6 @@ import { agent } from "../";
 import { db, rounds } from "~/packages/db/schema";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
-import { TZDate } from "@date-fns/tz";
 
 agent.addTool({
 	description:
@@ -79,7 +78,7 @@ agent.addTool({
 				await tx
 					.update(rounds)
 					.set({
-						start: new TZDate(new Date(parameters.update.start), "+05:00"),
+						start: new Date(parameters.update.start),
 					})
 					.where(eq(rounds.id, round.id));
 			}
@@ -88,10 +87,7 @@ agent.addTool({
 				await tx
 					.update(rounds)
 					.set({
-						votingStart: new TZDate(
-							new Date(parameters.update.votingStart),
-							"+05:00",
-						),
+						votingStart: new Date(parameters.update.votingStart),
 					})
 					.where(eq(rounds.id, round.id));
 			}
@@ -99,7 +95,7 @@ agent.addTool({
 			if (parameters.update.end !== undefined) {
 				await tx
 					.update(rounds)
-					.set({ end: new TZDate(new Date(parameters.update.end), "+05:00") })
+					.set({ end: new Date(parameters.update.end) })
 					.where(eq(rounds.id, round.id));
 			}
 
