@@ -21,9 +21,6 @@ import reachExplorer from "../achievements/reachExplorer";
 import tenVoters from "../achievements/tenVoters";
 import winARound from "../achievements/winARound";
 import joinServer from "../achievements/joinServer";
-import becomeDelegate from "../achievements/becomeDelegate";
-import lilnouner from "../achievements/lilnouner";
-import nouner from "../achievements/nouner";
 
 export const checkAchievements: Record<
 	string,
@@ -47,9 +44,6 @@ export const checkAchievements: Record<
 	reachExplorer,
 	tenVoters,
 	winARound,
-	becomeDelegate,
-	lilnouner,
-	nouner,
 };
 
 export const getAchievementsProgress = cache(
