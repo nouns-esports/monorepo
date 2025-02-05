@@ -4,7 +4,6 @@ import { ArrowLeft } from "phosphor-react-sc";
 import Proposals from "@/components/proposals/Proposals";
 import { twMerge } from "tailwind-merge";
 import { formatUnits } from "viem";
-import { getFrameMetadata, isFrameRequest } from "frog/next";
 import type { Metadata } from "next";
 import { getRound } from "@/server/queries/rounds";
 import { getPriorVotes } from "@/server/queries/votes";
@@ -40,9 +39,6 @@ export async function generateMetadata(props: {
 			card: "summary_large_image",
 			images: [round.image],
 		},
-		other: await getFrameMetadata(
-			`${env.NEXT_PUBLIC_DOMAIN}/api/frames/rounds/${params.round}`,
-		),
 	};
 }
 
@@ -96,8 +92,6 @@ export default async function Round(props: {
 	params: Promise<{ round: string }>;
 	searchParams: Promise<{ p?: string }>;
 }) {
-	if (isFrameRequest(await headers())) return null;
-
 	const params = await props.params;
 	const [user, round] = await Promise.all([
 		getAuthenticatedUser(),

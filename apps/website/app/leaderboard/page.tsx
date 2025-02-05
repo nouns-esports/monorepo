@@ -10,7 +10,7 @@ import { twMerge } from "tailwind-merge";
 import DateComponent from "@/components/Date";
 import { ToggleModal } from "@/components/Modal";
 import { Image } from "lucide-react";
-import LastWeekPositionModal from "@/components/modals/LastWeekPositionModal";
+import ShareRankingModal from "@/components/modals/ShareRankingModal";
 import Button from "@/components/Button";
 
 export default async function Leaderboard() {
@@ -86,7 +86,7 @@ export default async function Leaderboard() {
 									Your position
 								</p>
 								<ToggleModal
-									id="last-week-position"
+									id="share-ranking"
 									className="flex items-center gap-1.5 text-red"
 								>
 									<Image className="w-4 h-4" />
@@ -125,7 +125,7 @@ export default async function Leaderboard() {
 					</div>
 				</div>
 			</div>
-			{userPosition ? <LastWeekPositionModal ranking={userPosition} /> : null}
+			{userPosition ? <ShareRankingModal ranking={userPosition} /> : null}
 		</>
 	);
 }

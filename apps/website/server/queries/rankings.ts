@@ -4,6 +4,8 @@ import { db, rankings } from "~/packages/db/schema";
 
 export const getLeaderboard = cache(
 	async () => {
+		// SALT
+		///////
 		return db.query.rankings.findMany({
 			where: eq(
 				rankings.timestamp,
@@ -44,9 +46,12 @@ export const getLeaderboard = cache(
 
 export const getLeaderboardPosition = cache(
 	async (input: { user: string }) => {
+		// SALT
+		///////
 		return db.query.rankings.findFirst({
 			where: and(
 				eq(rankings.user, input.user),
+
 				eq(rankings.timestamp, sql`(SELECT MAX(timestamp) FROM ${rankings})`),
 			),
 			orderBy: desc(rankings.score),

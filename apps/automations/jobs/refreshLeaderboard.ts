@@ -4,7 +4,7 @@ import { and, lt, eq, sql, asc, gt, desc } from "drizzle-orm";
 import { db, gold, nexus, rankings, xp, ranks } from "~/packages/db/schema";
 
 // Ranking System
-// Each week on friday at 1:30pm CST, the leaderboard is refreshed
+// Each week on friday at 1:50pm CST, the leaderboard is refreshed
 // The leaderboard is calculated by giving each user a score based on the sum xp earned within the period averaged with their score from the previous period
 //  - If a user scored 5k last period and 1k this period, their score would be 3k. If a user scored 1k last period and 0 this period, their score would be 500.
 //  - This degrades their score over time (at most -50% a period) and dampens the impact of volatile increases in scores in a given period
@@ -17,6 +17,8 @@ export const refreshLeaderboard = createJob({
 	cron: "50 13 * * 5", // 1:50pm CST every Friday
 	execute: async () => {
 		const now = new Date();
+
+		console.log("Starting leaderboard refresh");
 
 		const [currentLeaderboard, xpEarned, activeRanks] = await Promise.all([
 			// The most recent leaderboard
@@ -43,15 +45,28 @@ export const refreshLeaderboard = createJob({
 			// All active ranks
 			db.query.ranks.findMany({
 				where: eq(ranks.active, true),
-				orderBy: asc(ranks.place),
+				orderBy: desc(ranks.place),
 			}),
 		]);
 
+		console.log("ranks", activeRanks);
+
 		const xpEarnedByUsers: Record<string, number> = {};
+
+		console.log("Calculating xp earned by users");
 
 		for (const xp of xpEarned) {
 			xpEarnedByUsers[xp.user] = (xpEarnedByUsers[xp.user] ?? 0) + xp.amount;
 		}
+
+		// Make sure we tally all users from the previous leaderboard
+		for (const ranking of currentLeaderboard) {
+			if (xpEarnedByUsers[ranking.user] === undefined) {
+				xpEarnedByUsers[ranking.user] = 0;
+			}
+		}
+
+		console.log("Calculating new leaderboard");
 
 		const leaderboard = Object.entries(xpEarnedByUsers)
 			.map(([user, xp]) => {
@@ -75,40 +90,58 @@ export const refreshLeaderboard = createJob({
 			})
 			.toSorted((a, b) => b.score - a.score);
 
-		const potOfGold = 10_000; // $100
-		const usersEligibleForGold = leaderboard.filter(
-			(user) => user.score >= 100,
-		).length;
+		console.log("leaderboard", leaderboard);
+
+		// const potOfGold = 10_000; // $100
+		// const usersEligibleForGold = leaderboard.filter(
+		// 	(user) => user.score >= 100,
+		// ).length;
 
 		await db.transaction(async (tx) => {
+			// const eligibleForRank = leaderboard.filter((user) => user.score >= 100);
+			// const ineligibleForRank = leaderboard.filter((user) => user.score < 100);
+
+			// Institute this later when theres enough ways to regularly earn xp
+			// If the users score dropped below 100, set their rank to the lowest and skip
+			// for (const ranking of ineligibleForRank) {
+
+			// 	console.log("skipping and setting rank to lowest", leaderboard[i].user);
+			// 	await tx
+			// 		.update(nexus)
+			// 		.set({
+			// 			rank: activeRanks[0].id,
+			// 		})
+			// 		.where(eq(nexus.id, leaderboard[i].user));
+			// 	continue;
+			// }
+
 			for (let i = 0; i < leaderboard.length; i++) {
-				// If the users score dropped below 100, set their rank to the lowest and skip
-				if (leaderboard[i].score < 100) {
-					await tx
-						.update(nexus)
-						.set({
-							rank: activeRanks[0].id,
-						})
-						.where(eq(nexus.id, leaderboard[i].user));
-					continue;
+				const percentile = i / leaderboard.length;
+
+				let rank = activeRanks[0]; // Default to highest rank
+				let percentileSum = 0;
+
+				for (const possibleRank of activeRanks) {
+					percentileSum += Number(possibleRank.percentile);
+					if (percentile <= percentileSum) {
+						rank = possibleRank;
+						break;
+					}
 				}
 
-				const percentile = (i + 1) / leaderboard.length;
-
-				const rank =
-					activeRanks.find((r) => percentile <= Number(r.percentile)) ??
-					activeRanks[0];
+				console.log("setting rank", leaderboard[i].score, rank.name);
 
 				await tx
 					.update(nexus)
+
 					.set({
 						rank: rank.id,
 					})
 					.where(eq(nexus.id, leaderboard[i].user));
 
-				let goldRecord: number | undefined;
+				// let goldRecord: number | undefined;
 
-				// if (eligible) {
+				// if (eligibleForGold) {
 				// 	const earnedGold = await tx
 				// 		.insert(gold)
 				// 		.values({
@@ -123,10 +156,10 @@ export const refreshLeaderboard = createJob({
 
 				await tx.insert(rankings).values({
 					rank: rank.id,
-					gold: goldRecord,
+					// gold: goldRecord,
 					timestamp: now,
 					user: leaderboard[i].user,
-					score: leaderboard[i].score,
+					score: Math.floor(leaderboard[i].score),
 				});
 			}
 		});
