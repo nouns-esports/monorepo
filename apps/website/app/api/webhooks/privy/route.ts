@@ -23,7 +23,7 @@ type AccountType =
 			fid: number;
 	  };
 
-export const POST = async (req: NextRequest) => {
+export async function POST(req: NextRequest) {
 	const id = req.headers.get("svix-id") ?? "";
 	const timestamp = req.headers.get("svix-timestamp") ?? "";
 	const signature = req.headers.get("svix-signature") ?? "";
@@ -131,4 +131,4 @@ export const POST = async (req: NextRequest) => {
 	}
 
 	return NextResponse.json({ message: "error" }, { status: 500 });
-};
+}

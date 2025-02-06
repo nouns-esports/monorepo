@@ -15,7 +15,7 @@ export const env = createEnv({
 		DISCORD_CLIENT_ID: z.string().min(1),
 		PINATA_JWT: z.string().min(1),
 		MATCHA_API_KEY: z.string().min(1),
-		SHOPIFY_STOREFRONT_PRIVATE_ACCESS_TOKEN: z.string().min(1),
+		SHOPIFY_ADMIN_API_ACCESS_TOKEN: z.string().min(1),
 		CGX_AIRDROP_URL: z.string().min(1),
 		ANTHROPIC_API_KEY: z.string().min(1),
 		DEEPSEEK_API_KEY: z.string().min(1),

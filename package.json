@@ -49,7 +49,7 @@
     "@resvg/resvg-js": "^2.6.2",
     "@resvg/resvg-wasm": "^2.6.2",
     "@rumess/react-flip-countdown": "^1.2.6",
-    "@shopify/storefront-api-client": "^1.0.3",
+    "@shopify/admin-api-client": "^1.0.5",
     "@t3-oss/env-nextjs": "^0.10.1",
     "@tailwindcss/typography": "^0.5.12",
     "@tiptap/extension-image": "^2.9.1",

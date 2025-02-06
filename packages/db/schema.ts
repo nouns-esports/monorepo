@@ -284,7 +284,7 @@ export const rounds = pgTable("rounds", {
 		.notNull()
 		.default("markdown"),
 	featured: boolean("featured").notNull().default(false),
-	content: text("content").notNull(),
+	content: text("content").notNull(), // use markdown instead
 	// add description - tiptap for migration
 	start: timestamp("start", { mode: "date" }).notNull(),
 	votingStart: timestamp("voting_start", { mode: "date" }).notNull(),
@@ -409,6 +409,7 @@ export const nexusRelations = relations(nexus, ({ one, many }) => ({
 	}),
 	creations: many(creations),
 	notifications: many(notifications),
+	orders: many(orders),
 }));
 
 export const gold = pgTable("gold", {
@@ -604,22 +605,21 @@ export const creationsRelations = relations(creations, ({ one }) => ({
 
 export const products = pgTable("products", {
 	id: text("id").primaryKey(),
-	productId: integer("product_id").notNull(),
+	shopifyId: text("shopify_id").notNull(),
 	name: text("name").notNull(),
 	image: text("image").notNull(),
 	description: text("description").notNull(),
-	// Variants get periodically updated from Shopify, everything else is static
 	variants: jsonb("variants")
 		.array()
 		.$type<
 			Array<{
 				key: string; // Ex: Size, Color, etc.
 				value: string; // Ex: S, M, L, Red, Blue, etc.
-				variantId: number;
+				shopifyId: string;
 				image: string;
 				name: string;
-				price: number;
-				inventory: number;
+				price: number; // Replicated from Shopify
+				inventory: number; // Replicated from Shopify
 			}>
 		>()
 		.notNull()
@@ -627,25 +627,12 @@ export const products = pgTable("products", {
 	collection: text("collection"),
 });
 
-export const productsRelations = relations(products, ({ one }) => ({
+export const productsRelations = relations(products, ({ one, many }) => ({
 	collection: one(collections, {
 		fields: [products.collection],
 		references: [collections.id],
 	}),
 }));
-
-export const variants = pgTable("variants", {
-	id: text("id").primaryKey(),
-	product: text("product").notNull(),
-	variantId: integer("variant_id").notNull(),
-	type: text("type", {
-		enum: ["size", "color"],
-	}).notNull(),
-	value: text("value").notNull(),
-	image: text("image").notNull(),
-	price: numeric("price", { precision: 78 }).notNull(),
-	inventory: integer("inventory").notNull(),
-});
 
 export const collections = pgTable("collections", {
 	id: text("id").primaryKey(),
@@ -655,6 +642,31 @@ export const collections = pgTable("collections", {
 
 export const collectionsRelations = relations(collections, ({ many }) => ({
 	products: many(products),
+}));
+
+export const orders = pgTable("orders", {
+	id: text("id").primaryKey(),
+	shopifyId: text("shopify_id").notNull(),
+	customer: text("customer").notNull(),
+	createdAt: timestamp("created_at", { mode: "date" }).notNull(),
+	items: jsonb("items")
+		.array()
+		.$type<
+			Array<{
+				shopifyId: string;
+				quantity: number;
+				price: number;
+			}>
+		>()
+		.notNull()
+		.default([]),
+});
+
+export const ordersRelations = relations(orders, ({ one }) => ({
+	customer: one(nexus, {
+		fields: [orders.customer],
+		references: [nexus.id],
+	}),
 }));
 
 const schema = {
@@ -705,6 +717,12 @@ const schema = {
 	articles,
 	gold,
 	goldRelations,
+	products,
+	productsRelations,
+	collections,
+	collectionsRelations,
+	orders,
+	ordersRelations,
 };
 
 export const db = drizzle(
