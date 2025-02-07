@@ -32,6 +32,8 @@ agent.addTool({
 			throw new Error("I can only take xp snapshots from voice channels");
 		}
 
+		console.log(channel.members);
+
 		const members = channel.members.map(
 			(guildMember) => guildMember.user.username,
 		);
