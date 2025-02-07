@@ -1,6 +1,7 @@
 import { db, nexus, xp, seasons, snapshots } from "~/packages/db/schema";
 import { and, gte, lte, desc, eq, inArray, or } from "drizzle-orm";
 import { agent } from "..";
+import { isToday } from "date-fns";
 
 agent.addTool({
 	description:
@@ -21,8 +22,19 @@ agent.addTool({
 
 		const now = new Date();
 
-		const channel =
-			await agent.plugins.discord.client.channels.fetch("967723008116531219");
+		const latestSnapshot = await db.query.snapshots.findFirst({
+			where: eq(snapshots.type, "discord-call"),
+			orderBy: desc(snapshots.timestamp),
+		});
+
+		if (latestSnapshot && isToday(latestSnapshot.timestamp)) {
+			throw new Error("A snapshot has already been taken today");
+		}
+
+		const channel = await agent.plugins.discord.client.channels.fetch(
+			"967723008116531219",
+			{ force: true },
+		);
 
 		if (!channel) {
 			throw new Error("I couldn't find that voice channel");
@@ -31,8 +43,6 @@ agent.addTool({
 		if (!channel.isVoiceBased()) {
 			throw new Error("I can only take xp snapshots from voice channels");
 		}
-
-		console.log(channel.members);
 
 		const members = channel.members.map(
 			(guildMember) => guildMember.user.username,
