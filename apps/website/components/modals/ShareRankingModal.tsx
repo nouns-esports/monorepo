@@ -8,6 +8,7 @@ import { twMerge } from "tailwind-merge";
 import { CaretDown } from "phosphor-react-sc";
 import { CaretUp } from "phosphor-react-sc";
 import Link from "../Link";
+import Shimmer from "../Shimmer";
 
 export default function ShareRankingModal(props: {
 	ranking: NonNullable<Awaited<ReturnType<typeof getLeaderboardPosition>>>;
@@ -30,10 +31,14 @@ export default function ShareRankingModal(props: {
 					<X className="w-4 h-4 text-grey-200" />
 				</ToggleModal>
 			</div>
-			<img
-				src={`/api/images/rankings?user=${props.ranking.user.id}`}
-				className="w-full rounded-xl"
-			/>
+			<div className="relative w-full aspect-[2/1]">
+				<Shimmer className="absolute left-0 top-0 bg-grey-800" />
+				<img
+					alt={`${props.ranking.user.name} ranking`}
+					src={`/api/images/rankings?user=${props.ranking.user.id}`}
+					className="absolute z-10 w-full rounded-xl"
+				/>
+			</div>
 			<Link
 				newTab
 				href={`/api/images/rankings?user=${props.ranking.user.id}`}

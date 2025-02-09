@@ -410,6 +410,7 @@ export const nexusRelations = relations(nexus, ({ one, many }) => ({
 	creations: many(creations),
 	notifications: many(notifications),
 	orders: many(orders),
+	carts: many(carts),
 }));
 
 export const gold = pgTable("gold", {
@@ -607,7 +608,6 @@ export const products = pgTable("products", {
 	id: text("id").primaryKey(),
 	shopifyId: text("shopify_id").notNull(),
 	name: text("name").notNull(),
-	image: text("image").notNull(),
 	description: text("description").notNull(),
 	variants: jsonb("variants")
 		.array()
@@ -616,8 +616,7 @@ export const products = pgTable("products", {
 				key: string; // Ex: Size, Color, etc.
 				value: string; // Ex: S, M, L, Red, Blue, etc.
 				shopifyId: string;
-				image: string;
-				name: string;
+				images: string[];
 				price: number; // Replicated from Shopify
 				inventory: number; // Replicated from Shopify
 			}>
@@ -626,6 +625,20 @@ export const products = pgTable("products", {
 		.default([]),
 	collection: text("collection"),
 });
+
+('{\n  "shopifyId": "gid://shopify/Variant/49592108187949",\n  "price": 75,\n  \n}');
+
+const example = {
+	key: "Size",
+	value: "S",
+	shopifyId: "gid://shopify/Variant/49592108187949",
+	images: [
+		"https://ipfs.nouns.gg/ipfs/bafybeibkgnoq3iymnvjtbjmlwgpmqscyekwmlpbxozvrnfsndzi3wgfdgq",
+		"https://ipfs.nouns.gg/ipfs/bafkreialdgrza5bkasezzy23xfwqew4xxx7a53lxfkczyf62glymam7vju",
+	],
+	price: 75,
+	inventory: 1,
+};
 
 export const productsRelations = relations(products, ({ one, many }) => ({
 	collection: one(collections, {
@@ -638,10 +651,30 @@ export const collections = pgTable("collections", {
 	id: text("id").primaryKey(),
 	name: text("name").notNull(),
 	image: text("image").notNull(),
+	featured: boolean("featured").notNull().default(false),
 });
 
 export const collectionsRelations = relations(collections, ({ many }) => ({
 	products: many(products),
+}));
+
+export const carts = pgTable("carts", {
+	id: serial("id").primaryKey(),
+	user: text("user").notNull(),
+	product: text("product").notNull(),
+	variant: text("variant").notNull(),
+	quantity: integer("quantity").notNull(),
+});
+
+export const cartsRelations = relations(carts, ({ one }) => ({
+	user: one(nexus, {
+		fields: [carts.user],
+		references: [nexus.id],
+	}),
+	product: one(products, {
+		fields: [carts.product],
+		references: [products.id],
+	}),
 }));
 
 export const orders = pgTable("orders", {
@@ -721,6 +754,8 @@ const schema = {
 	productsRelations,
 	collections,
 	collectionsRelations,
+	carts,
+	cartsRelations,
 	orders,
 	ordersRelations,
 };

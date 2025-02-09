@@ -1,32 +1,46 @@
 "use client";
 
+import type { getProduct } from "@/server/queries/shop";
 import Link from "./Link";
 import { useCartModal } from "./modals/CartModal";
 import { toast } from "./Toasts";
+import { useState } from "react";
 
 export default function ProductCard(props: {
-	id: string;
-	handle: string;
-	image: string;
-	name: string;
-	price: string;
+	product: NonNullable<Awaited<ReturnType<typeof getProduct>>>;
 }) {
+	const coverVariant = props.product.variants.find(
+		(variant) => variant.images.length > 0,
+	);
+
+	if (!coverVariant) {
+		console.error("No cover variant found");
+		return null;
+	}
+
+	const [image, setImage] = useState(coverVariant.images[0]);
+
 	const { addItem } = useCartModal();
+
 	return (
 		<Link
-			href={`/shop/products/${props.handle}`}
+			href={`/shop/products/${props.product.id}`}
 			newTab
 			className="flex flex-col gap-4 rounded-xl bg-grey-800 hover:bg-grey-600 transition-colors p-4"
 		>
 			<img
-				alt={props.name}
-				src={props.image}
+				alt={props.product.name}
+				src={image}
 				className="aspect-square w-full object-contain"
 			/>
+
 			<div className="flex flex-col gap-2">
-				<h2 className="text-white">{props.name}</h2>
+				<h2 className="text-white">{props.product.name}</h2>
 				<div className="flex gap-2.5 items-center">
-					<p className="text-white">${Number(props.price).toFixed(0)}</p>
+					<p className="text-white">
+						${Number(props.product.variants[0]?.price).toFixed(0)}
+					</p>
+
 					<div className="w-0.5 h-4 bg-grey-500 rounded-full" />
 					<div className="flex items-center gap-1.5">
 						<img
@@ -35,7 +49,7 @@ export default function ProductCard(props: {
 							className="w-5 h-5"
 						/>
 						<p className="text-[#FEBD1C] font-semibold">
-							{Number(props.price) * 100}
+							{Number(props.product.variants[0]?.price) * 100}
 						</p>
 					</div>
 				</div>
@@ -52,8 +66,8 @@ export default function ProductCard(props: {
 					// 	title: props.name,
 					// });
 					toast.custom({
-						image: props.image,
-						title: props.name,
+						image: image,
+						title: props.product.name,
 						description: "Added to cart",
 					});
 				}}

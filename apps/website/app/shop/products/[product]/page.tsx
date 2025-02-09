@@ -5,11 +5,11 @@ export default async function ProductPage(props: {
 }) {
 	const params = await props.params;
 
-	const product = await getProduct({ handle: params.product });
+	const product = await getProduct({ id: params.product });
 
 	if (!product) {
 		return <div>Product not found</div>;
 	}
 
-	return <div>{product.title}</div>;
+	return <div>{product.name}</div>;
 }

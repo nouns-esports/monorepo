@@ -6,7 +6,7 @@ export default async function CollectionPage(props: {
 }) {
 	const params = await props.params;
 
-	const collection = await getCollection({ handle: params.collection });
+	const collection = await getCollection({ id: params.collection });
 
 	if (!collection) {
 		return <div>Collection not found</div>;
@@ -18,30 +18,12 @@ export default async function CollectionPage(props: {
 				<div className="flex flex-col gap-8 max-sm:gap-4">
 					<div className="flex justify-between items-center">
 						<h1 className="text-white font-luckiest-guy text-4xl">
-							{collection.title}
+							{collection.name}
 						</h1>
 					</div>
 					<div className="grid grid-cols-4 gap-4 max-xl:grid-cols-3 max-lg:grid-cols-2 max-md:grid-cols-1">
-						{collection.products.nodes.map((product) => {
-							if (!product.images.nodes[0]) return;
-							if (
-								!product.variants.nodes.some(
-									(variant) => variant.availableForSale,
-								)
-							) {
-								return;
-							}
-
-							return (
-								<ProductCard
-									key={product.id}
-									id={product.id}
-									handle={product.handle}
-									image={product.images.nodes[0].url}
-									name={product.title}
-									price={product.variants.nodes[0].price.amount}
-								/>
-							);
+						{collection.products.map((product) => {
+							return <ProductCard key={product.id} product={product} />;
 						})}
 					</div>
 				</div>

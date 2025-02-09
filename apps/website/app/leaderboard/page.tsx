@@ -12,6 +12,7 @@ import { ToggleModal } from "@/components/Modal";
 import { Image } from "lucide-react";
 import ShareRankingModal from "@/components/modals/ShareRankingModal";
 import Button from "@/components/Button";
+import { nextFriday } from "date-fns";
 
 export default async function Leaderboard() {
 	const user = await getAuthenticatedUser();
@@ -28,13 +29,30 @@ export default async function Leaderboard() {
 	return (
 		<>
 			<div className="flex flex-col items-center gap-16 pt-32 max-xl:pt-28 max-sm:pt-20 px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
-				<div className="flex flex-col w-full max-w-screen-md gap-4 p-4">
-					<div className="flex items-center justify-between">
-						<h2 className="text-white text-3xl font-luckiest-guy leading-none">
-							Leaderboard
-						</h2>
-						<div className="relative flex flex-shrink-0 gap-4 h-48 w-80 bg-red rounded-xl">
+				<div className="flex flex-col w-full max-w-screen-md gap-8 p-4">
+					<div className="flex gap-16 items-center justify-between">
+						<div className="flex flex-col gap-2">
+							<h2 className="text-white text-3xl font-luckiest-guy leading-none">
+								Leaderboard
+							</h2>
+							<p className="max-w-lg">
+								Earn xp as you engage with the Nouns community and compete with
+								other players for the top ranks! The most engaged players earn
+								gold to spend on exclusive items and experiences in the shop.
+							</p>
+						</div>
+						<div className="flex flex-col bg-grey-800 rounded-xl p-2 px-4 gap-2">
+							<h2 className="text-nowrap">Updates in</h2>
+							<div className="flex items-center gap-2 text-nowrap">
+								<p className="text-white">
+									<Countdown date={nextFriday(new Date())} />
+								</p>
+							</div>
+						</div>
+
+						{/* <div className="relative flex flex-shrink-0 gap-4 h-48 w-80 bg-red rounded-xl">
 							<div className="p-4 flex flex-col justify-center gap-4 h-full w-full">
+
 								<p className="font-bebas-neue text-white text-3xl leading-none w-40">
 									Rankup and earn Rewards
 								</p>
@@ -47,7 +65,7 @@ export default async function Leaderboard() {
 								src="/squirtles.png"
 								className="h-[calc(100%_+_8px)] absolute right-2 -top-4"
 							/>
-						</div>
+						</div> */}
 						{/* <div className="flex items-end bg-grey-800 rounded-xl p-2 px-4 gap-2">
 							<h2 className="">Updates in</h2>
 							<div className="flex items-center gap-2">
