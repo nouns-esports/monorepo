@@ -10,6 +10,7 @@ import {
 	integer,
 	jsonb,
 	unique,
+	bigint,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { Pool } from "pg";
@@ -606,7 +607,7 @@ export const creationsRelations = relations(creations, ({ one }) => ({
 
 export const products = pgTable("products", {
 	id: text("id").primaryKey(),
-	shopifyId: text("shopify_id").notNull(),
+	shopifyId: bigint("shopify_id", { mode: "number" }).notNull(),
 	name: text("name").notNull(),
 	description: text("description").notNull(),
 	variants: jsonb("variants")
@@ -614,8 +615,9 @@ export const products = pgTable("products", {
 		.$type<
 			Array<{
 				key: string; // Ex: Size, Color, etc.
-				value: string; // Ex: S, M, L, Red, Blue, etc.
-				shopifyId: string;
+				value: string; // Ex: S, M, L, #000000, #FFFFFF, etc.
+				name?: string; // Ex: Small, Medium, Large, Black, White, etc.
+				shopifyId: number;
 				images: string[];
 				price: number; // Replicated from Shopify
 				inventory: number; // Replicated from Shopify
@@ -625,20 +627,6 @@ export const products = pgTable("products", {
 		.default([]),
 	collection: text("collection"),
 });
-
-('{\n  "shopifyId": "gid://shopify/Variant/49592108187949",\n  "price": 75,\n  \n}');
-
-const example = {
-	key: "Size",
-	value: "S",
-	shopifyId: "gid://shopify/Variant/49592108187949",
-	images: [
-		"https://ipfs.nouns.gg/ipfs/bafybeibkgnoq3iymnvjtbjmlwgpmqscyekwmlpbxozvrnfsndzi3wgfdgq",
-		"https://ipfs.nouns.gg/ipfs/bafkreialdgrza5bkasezzy23xfwqew4xxx7a53lxfkczyf62glymam7vju",
-	],
-	price: 75,
-	inventory: 1,
-};
 
 export const productsRelations = relations(products, ({ one, many }) => ({
 	collection: one(collections, {
@@ -679,7 +667,7 @@ export const cartsRelations = relations(carts, ({ one }) => ({
 
 export const orders = pgTable("orders", {
 	id: text("id").primaryKey(),
-	shopifyId: text("shopify_id").notNull(),
+	shopifyId: bigint("shopify_id", { mode: "number" }).notNull(),
 	customer: text("customer").notNull(),
 	createdAt: timestamp("created_at", { mode: "date" }).notNull(),
 	items: jsonb("items")

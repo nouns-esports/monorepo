@@ -30,12 +30,7 @@ export default async function Shop(props: {
 							className="w-full h-full object-cover brightness-75"
 						/>
 						<div className="absolute top-4 left-4 flex gap-4 items-center">
-							{/* <img
-								alt={featuredCollection.name}
-								src="https://shop.nouns.gg/cdn/shop/t/18/assets/logo.png?v=158144175520643272851725295698"
-								className="w-12 h-12"
-							/> */}
-							<h2 className="text-4xl text-[#C9F301] font-luckiest-guy max-md:text-3xl">
+							<h2 className="text-4xl text-white font-luckiest-guy max-md:text-3xl">
 								{featuredCollection.name}
 							</h2>
 						</div>
@@ -58,6 +53,7 @@ export default async function Shop(props: {
 								key={collection.id}
 								id={collection.id}
 								selected={searchParams.collection === collection.id}
+								new={collection.id === "dopamine"}
 							>
 								{collection.name}
 							</CategoryTag>
@@ -78,6 +74,7 @@ function CategoryTag(props: {
 	id?: string;
 	selected: boolean;
 	children: string;
+	new?: boolean;
 }) {
 	return (
 		<li
@@ -89,8 +86,12 @@ function CategoryTag(props: {
 			<Link
 				href={`/shop${props.id ? `?collection=${props.id}` : ""}`}
 				scroll={false}
+				className="flex items-center gap-2"
 			>
 				{props.children}
+				{props.new ? (
+					<small className="text-white bg-red px-1 rounded-md">New</small>
+				) : null}
 			</Link>
 		</li>
 	);

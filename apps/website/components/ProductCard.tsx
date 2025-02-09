@@ -22,6 +22,8 @@ export default function ProductCard(props: {
 
 	const { addItem } = useCartModal();
 
+	const price = Number(props.product.variants[0]?.price);
+
 	return (
 		<Link
 			href={`/shop/products/${props.product.id}`}
@@ -30,7 +32,7 @@ export default function ProductCard(props: {
 		>
 			<img
 				alt={props.product.name}
-				src={image}
+				src={`${image}?img-width=500&img-onerror=redirect`}
 				className="aspect-square w-full object-contain"
 			/>
 
@@ -38,7 +40,7 @@ export default function ProductCard(props: {
 				<h2 className="text-white">{props.product.name}</h2>
 				<div className="flex gap-2.5 items-center">
 					<p className="text-white">
-						${Number(props.product.variants[0]?.price).toFixed(0)}
+						${Number.isInteger(price) ? price : price.toFixed(2)}
 					</p>
 
 					<div className="w-0.5 h-4 bg-grey-500 rounded-full" />
@@ -48,9 +50,7 @@ export default function ProductCard(props: {
 							alt="Gold"
 							className="w-5 h-5"
 						/>
-						<p className="text-[#FEBD1C] font-semibold">
-							{Number(props.product.variants[0]?.price) * 100}
-						</p>
+						<p className="text-[#FEBD1C] font-semibold">{price * 100}</p>
 					</div>
 				</div>
 			</div>
