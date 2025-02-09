@@ -78,11 +78,9 @@ export const claimAchievement = onlyRanked
 			newXP = updateXP[0].xp;
 		});
 
-		revalidatePath(`/users/${ctx.user.id}`);
-		if (ctx.user.nexus?.discord) {
-			revalidatePath(`/users/${ctx.user.nexus.discord}`);
-		}
-		revalidatePath("/nexus");
+		if (ctx.user.farcaster?.username) {
+			revalidatePath(`/users/${ctx.user.farcaster.username}`);
+		} else revalidatePath(`/users/${ctx.user.id}`);
 
 		return { newXP, notification };
 	});

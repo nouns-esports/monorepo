@@ -86,7 +86,9 @@ export default async function User(props: {
 							</div>
 						</div>
 						<div className="flex flex-col gap-4 h-60 w-full">
-							<RankChart userRankings={userRankings} ranks={ranks} />
+							{user.rank !== null && userRankings.length > 0 ? (
+								<RankChart userRankings={userRankings} ranks={ranks} />
+							) : null}
 							<Level xp={user.xp} />
 						</div>
 					</div>

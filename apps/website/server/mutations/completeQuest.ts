@@ -13,7 +13,6 @@ import {
 import { and, desc, eq, gte, lte, sql } from "drizzle-orm";
 import { getAction } from "../queries/quests";
 import { revalidatePath } from "next/cache";
-import { nextFriday } from "date-fns";
 
 export const completeQuest = onlyRanked
 	.schema(
@@ -117,8 +116,11 @@ export const completeQuest = onlyRanked
 		});
 
 		revalidatePath(`/quests/${quest.id}`);
-		revalidatePath("/nexus");
 		revalidatePath("/quests");
+
+		if (ctx.user.farcaster?.username) {
+			revalidatePath(`/users/${ctx.user.farcaster.username}`);
+		} else revalidatePath(`/users/${ctx.user.id}`);
 
 		return { newXP, notification };
 	});

@@ -1,5 +1,5 @@
 import Link from "@/components/Link";
-import { getAuthenticatedUser } from "@/server/queries/users";
+import { getAuthenticatedUser, isInServer } from "@/server/queries/users";
 import SignInButton from "./SignInButton";
 import {
 	Shapes,
@@ -23,6 +23,7 @@ import Notifications from "./Notifications";
 import GoldModal from "./modals/GoldModal";
 import { ToggleModal } from "./Modal";
 import CartModal from "./modals/CartModal";
+import EnterNexusModal from "./modals/EnterNexusModal";
 
 export default async function Header() {
 	const [user, rosters] = await Promise.all([
@@ -31,6 +32,10 @@ export default async function Header() {
 	]);
 
 	const notifications = user ? await getNotifications({ user: user.id }) : [];
+
+	const inServer = user?.discord?.subject
+		? await isInServer({ subject: user.discord.subject })
+		: false;
 
 	return (
 		<>
@@ -237,6 +242,12 @@ export default async function Header() {
 			</header>
 			{user ? <GoldModal user={user} /> : null}
 			<CartModal />
+			{!user?.nexus?.rank ? (
+				<EnterNexusModal
+					linkedFarcaster={!!user?.farcaster?.fid}
+					inServer={inServer}
+				/>
+			) : null}
 		</>
 	);
 }

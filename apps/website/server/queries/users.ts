@@ -93,15 +93,25 @@ export type AuthenticatedUser = NonNullable<
 	Awaited<ReturnType<typeof getAuthenticatedUser>>
 >;
 
+export const isInServer = async (input: { subject: string }) => {
+	if (!input.subject) return false;
+
+	return (
+		await fetch(
+			`https://discord.com/api/guilds/${env.DISCORD_GUILD_ID}/members/${input.subject}`,
+			{
+				headers: {
+					Authorization: `Bot ${env.DISCORD_TOKEN}`,
+				},
+			},
+		)
+	).ok;
+};
+
 export const getUser = cache(
 	async (input: { user: string }) => {
-		//////
 		return db.query.nexus.findFirst({
-			where: or(
-				eq(nexus.id, input.user),
-				eq(nexus.discord, input.user.split("#")[0]),
-				eq(nexus.username, input.user),
-			),
+			where: or(eq(nexus.id, input.user), eq(nexus.username, input.user)),
 			with: {
 				rank: true,
 			},

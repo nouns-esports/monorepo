@@ -1,19 +1,10 @@
 "use server";
 
-import {
-	db,
-	votes,
-	proposals,
-	rounds,
-	xp,
-	rankings,
-	nexus,
-} from "~/packages/db/schema";
-import { and, eq, sql } from "drizzle-orm";
+import { db, votes, proposals, rounds, xp, nexus } from "~/packages/db/schema";
+import { eq, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { onlyRanked } from ".";
-import { nextFriday } from "date-fns";
 
 export const castVotes = onlyRanked
 	.schema(

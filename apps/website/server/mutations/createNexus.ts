@@ -26,28 +26,27 @@ export const createNexus = onlyUser
 		await db.transaction(async (tx) => {
 			let rank: number | null = null;
 
-			if (ctx.user.discord) {
-				const lowestRank = await db.query.ranks.findFirst({
-					orderBy: asc(ranks.place),
-				});
+			const lowestRank = await tx.query.ranks.findFirst({
+				orderBy: asc(ranks.place),
+			});
 
-				if (!lowestRank) {
-					throw new Error("No ranks found");
+			if (lowestRank) {
+				if (ctx.user.discord?.subject) {
+					if (checkDiscordAccountAge(ctx.user.discord.subject)) {
+						const response = await fetch(
+							`https://discord.com/api/guilds/${env.DISCORD_GUILD_ID}/members/${ctx.user.discord.subject}`,
+							{
+								headers: {
+									Authorization: `Bot ${env.DISCORD_TOKEN}`,
+								},
+							},
+						);
+
+						if (response.ok) rank = lowestRank.id;
+					}
 				}
 
-				const discordResponse = await fetch(
-					`https://discord.com/api/guilds/${env.DISCORD_GUILD_ID}/members/${ctx.user.discord.subject}`,
-					{
-						headers: {
-							Authorization: `Bot ${env.DISCORD_TOKEN}`,
-						},
-					},
-				);
-
-				if (
-					discordResponse.ok &&
-					checkDiscordAccountAge(ctx.user.discord.subject)
-				) {
+				if (ctx.user.farcaster?.fid) {
 					rank = lowestRank.id;
 				}
 			}
@@ -69,5 +68,7 @@ export const createNexus = onlyUser
 			});
 		});
 
-		revalidatePath("/nexus");
+		if (ctx.user.farcaster?.username) {
+			revalidatePath(`/users/${ctx.user.farcaster.username}`);
+		} else revalidatePath(`/users/${ctx.user.id}`);
 	});

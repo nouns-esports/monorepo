@@ -5,6 +5,7 @@ import type { AuthenticatedUser } from "@/server/queries/users";
 import { useModal } from "./Modal";
 import SignInModal from "./modals/SignInModal";
 import { twMerge } from "tailwind-merge";
+import EnterNexusModal from "./modals/EnterNexusModal";
 
 export default function SignInButton(props: { user?: AuthenticatedUser }) {
 	const router = useRouter();
@@ -50,7 +51,6 @@ export default function SignInButton(props: { user?: AuthenticatedUser }) {
 					"Sign in"
 				)}
 			</button>
-
 			{!props.user?.nexus ? <SignInModal user={props.user} /> : null}
 		</>
 	);
