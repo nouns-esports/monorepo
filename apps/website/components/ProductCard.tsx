@@ -2,10 +2,11 @@
 
 import type { getProduct } from "@/server/queries/shop";
 import Link from "./Link";
-import { useCartModal } from "./modals/CartModal";
 import { toast } from "./Toasts";
 import { useState } from "react";
-
+import { useAction } from "next-safe-action/hooks";
+import { addToCart } from "@/server/mutations/addToCard";
+import { useRouter } from "next/navigation";
 export default function ProductCard(props: {
 	product: NonNullable<Awaited<ReturnType<typeof getProduct>>>;
 }) {
@@ -20,9 +21,11 @@ export default function ProductCard(props: {
 
 	const [image, setImage] = useState(coverVariant.images[0]);
 
-	const { addItem } = useCartModal();
-
 	const price = Number(props.product.variants[0]?.price);
+
+	const addToCartAction = useAction(addToCart);
+
+	const router = useRouter();
 
 	return (
 		<Link
@@ -50,29 +53,42 @@ export default function ProductCard(props: {
 							alt="Gold"
 							className="w-5 h-5"
 						/>
-						<p className="text-[#FEBD1C] font-semibold">{price * 100}</p>
+						<p className="text-[#FEBD1C] font-semibold">
+							{(price * 100).toLocaleString()}
+						</p>
 					</div>
 				</div>
 			</div>
 			<button
-				onClick={(e) => {
+				disabled={addToCartAction.isPending}
+				onClick={async (e) => {
 					e.preventDefault();
 					e.stopPropagation();
-					// addItem({
-					// 	id: props.id,
-					// 	image: props.image,
-					// 	count: 1,
-					// 	price: props.price,
-					// 	title: props.name,
-					// });
+
+					await addToCartAction.executeAsync({
+						product: props.product.id,
+						variant: props.product.variants[0].shopifyId,
+						quantity: 1,
+					});
+
 					toast.custom({
 						image: image,
 						title: props.product.name,
 						description: "Added to cart",
+						objectFit: "contain",
 					});
+
+					router.refresh();
 				}}
 				className="flex justify-center items-center gap-2 w-full text-black bg-white hover:bg-white/70 font-semibold rounded-lg p-2.5 transition-colors"
 			>
+				{addToCartAction.isPending ? (
+					<img
+						alt="loading spinner"
+						src="/spinner.svg"
+						className="h-[18px] animate-spin"
+					/>
+				) : null}
 				Add to Cart
 			</button>
 		</Link>

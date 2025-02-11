@@ -17,6 +17,7 @@ import ProgressCircle from "@/components/ProgressCircle";
 import Achievements from "@/components/Achievements";
 import { getAchievementsProgress } from "@/server/queries/achievements";
 import UserStatsModal from "@/components/modals/UserStatsModal";
+import { twMerge } from "tailwind-merge";
 
 export default async function User(props: {
 	params: Promise<{ user: string }>;
@@ -45,7 +46,7 @@ export default async function User(props: {
 				<div className="max-w-2xl w-full flex flex-col gap-4">
 					<div className="flex flex-col gap-4 px-6 pt-6 pb-4 w-full rounded-xl bg-grey-800">
 						<div className="flex justify-between gap-6">
-							<div className="flex gap-4">
+							<div className="flex items-center gap-4">
 								<img
 									alt={user.name}
 									src={user.image}
@@ -63,11 +64,9 @@ export default async function User(props: {
 												className="h-6 w-6 object-contain"
 												title={user.rank.name}
 											/>
-										) : (
-											""
-										)}
+										) : null}
 									</div>
-									<p>{user.bio}</p>
+									{user.bio ? <p className="line-clamp-1">{user.bio}</p> : null}
 								</div>
 							</div>
 							<div className="flex items-center gap-4">
@@ -85,9 +84,20 @@ export default async function User(props: {
 								) : null}
 							</div>
 						</div>
-						<div className="flex flex-col gap-4 h-60 w-full">
+						<div
+							className={twMerge(
+								"flex flex-col gap-4  w-full",
+								((user.rank !== null && userRankings.length > 0) ||
+									user.id === authenticatedUser?.id) &&
+									"h-60",
+							)}
+						>
 							{user.rank !== null && userRankings.length > 0 ? (
 								<RankChart userRankings={userRankings} ranks={ranks} />
+							) : user.id === authenticatedUser?.id ? (
+								<div className="bg-black/30 border-grey-600 border w-full h-full rounded-xl flex items-center justify-center">
+									Enter the nexus
+								</div>
 							) : null}
 							<Level xp={user.xp} />
 						</div>

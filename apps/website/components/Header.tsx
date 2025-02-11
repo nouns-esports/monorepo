@@ -24,6 +24,7 @@ import GoldModal from "./modals/GoldModal";
 import { ToggleModal } from "./Modal";
 import CartModal from "./modals/CartModal";
 import EnterNexusModal from "./modals/EnterNexusModal";
+import { getCart } from "@/server/queries/shop";
 
 export default async function Header() {
 	const [user, rosters] = await Promise.all([
@@ -33,9 +34,10 @@ export default async function Header() {
 
 	const notifications = user ? await getNotifications({ user: user.id }) : [];
 
-	const inServer = user?.discord?.subject
-		? await isInServer({ subject: user.discord.subject })
-		: false;
+	const inServer =
+		!user?.nexus?.rank && user?.discord?.subject
+			? await isInServer({ subject: user.discord.subject })
+			: false;
 
 	return (
 		<>
@@ -241,7 +243,7 @@ export default async function Header() {
 				</div>
 			</header>
 			{user ? <GoldModal user={user} /> : null}
-			<CartModal />
+			{user?.nexus?.carts ? <CartModal cart={user.nexus.carts} /> : null}
 			{!user?.nexus?.rank ? (
 				<EnterNexusModal
 					linkedFarcaster={!!user?.farcaster?.fid}

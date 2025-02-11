@@ -1,5 +1,5 @@
 import Button from "@/components/Button";
-import CartButton from "@/components/CartButton";
+// import CartButton from "@/components/CartButton";
 import Link from "@/components/Link";
 import CartModal from "@/components/modals/CartModal";
 import ProductCard from "@/components/ProductCard";
@@ -44,7 +44,7 @@ export default async function Shop(props: {
 				<div className="flex flex-col gap-8 max-sm:gap-4">
 					<div className="flex justify-between items-center">
 						<h1 className="text-white font-luckiest-guy text-4xl">Products</h1>
-						<CartButton />
+						{/* <CartButton /> */}
 					</div>
 					<ul className="flex gap-2">
 						<CategoryTag selected={!searchParams.collection}>All</CategoryTag>

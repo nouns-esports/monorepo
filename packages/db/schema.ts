@@ -373,7 +373,6 @@ export const proposalsRelations = relations(proposals, ({ one, many }) => ({
 	}),
 }));
 
-// store shipping address in shopify customer object
 export const nexus = pgTable("nexus", {
 	id: text("id").primaryKey(),
 	username: text("username").unique(),
@@ -417,10 +416,11 @@ export const nexusRelations = relations(nexus, ({ one, many }) => ({
 export const gold = pgTable("gold", {
 	id: serial("id").primaryKey(),
 	from: text("from"),
-	to: text("to").notNull(),
+	to: text("to"),
 	amount: integer("amount").notNull(),
 	timestamp: timestamp("timestamp", { mode: "date" }).notNull(),
 	ranking: integer("ranking"),
+	order: bigint("order", { mode: "number" }),
 });
 
 export const goldRelations = relations(gold, ({ one }) => ({
@@ -650,7 +650,7 @@ export const carts = pgTable("carts", {
 	id: serial("id").primaryKey(),
 	user: text("user").notNull(),
 	product: text("product").notNull(),
-	variant: text("variant").notNull(),
+	variant: bigint("variant", { mode: "number" }).notNull(),
 	quantity: integer("quantity").notNull(),
 });
 

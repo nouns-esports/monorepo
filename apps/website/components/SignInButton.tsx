@@ -5,7 +5,6 @@ import type { AuthenticatedUser } from "@/server/queries/users";
 import { useModal } from "./Modal";
 import SignInModal from "./modals/SignInModal";
 import { twMerge } from "tailwind-merge";
-import EnterNexusModal from "./modals/EnterNexusModal";
 
 export default function SignInButton(props: { user?: AuthenticatedUser }) {
 	const router = useRouter();
@@ -15,9 +14,9 @@ export default function SignInButton(props: { user?: AuthenticatedUser }) {
 		<>
 			<button
 				onClick={() => {
-					if (props.user?.nexus) {
+					if (props.user) {
 						return router.push(
-							`/users/${props.user.discord?.username.replace("#0", "") ?? props.user.id}`,
+							`/users/${props.user.farcaster?.username ?? props.user.id}`,
 						);
 					}
 

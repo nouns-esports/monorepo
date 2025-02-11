@@ -15,7 +15,7 @@ export default function GoldModal(props: { user: AuthenticatedUser }) {
 	useEffect(() => {
 		if (!isOpen) return;
 		close();
-	}, [isOpen, pathname, close]);
+	}, [isOpen]);
 
 	return (
 		<Modal id="gold" className="p-4 flex flex-col max-w-[500px] w-80 gap-8">
