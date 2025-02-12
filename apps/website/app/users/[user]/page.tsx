@@ -12,12 +12,13 @@ import RankChart from "@/components/RankChart";
 import { getCurrentRanks } from "@/server/queries/ranks";
 import { getUserRankings } from "@/server/queries/rankings";
 import DateComponent from "@/components/Date";
-import { BarChart, Sparkles } from "lucide-react";
+import { BarChart, Sparkles, Trophy } from "lucide-react";
 import ProgressCircle from "@/components/ProgressCircle";
 import Achievements from "@/components/Achievements";
 import { getAchievementsProgress } from "@/server/queries/achievements";
 import UserStatsModal from "@/components/modals/UserStatsModal";
 import { twMerge } from "tailwind-merge";
+import AchievementsModal from "@/components/modals/AchievementsModal";
 
 export default async function User(props: {
 	params: Promise<{ user: string }>;
@@ -34,10 +35,12 @@ export default async function User(props: {
 		return notFound();
 	}
 
-	const [userRankings, userStats] = await Promise.all([
+	const [userRankings, userStats, achievementProgress] = await Promise.all([
 		getUserRankings({ user: user.id }),
 		getUserStats({ user: user.id }),
-		// getAchievementsProgress({ user: authenticatedUser }),
+		authenticatedUser
+			? getAchievementsProgress({ user: authenticatedUser })
+			: undefined,
 	]);
 
 	return (
@@ -70,13 +73,15 @@ export default async function User(props: {
 								</div>
 							</div>
 							<div className="flex items-center gap-4">
-								<ToggleModal
-									id="user-stats"
-									className="flex items-center gap-1 text-red hover:text-red/80 transition-colors"
-								>
-									<BarChart className="w-4 h-4" />
-									Stats
-								</ToggleModal>
+								{user.id !== authenticatedUser?.id ? (
+									<ToggleModal
+										id="user-stats"
+										className="flex items-center gap-1.5 text-red hover:text-red/80 transition-colors"
+									>
+										<BarChart className="w-4 h-4" />
+										Stats
+									</ToggleModal>
+								) : null}
 								{user.id === authenticatedUser?.id ? (
 									<ToggleModal id="settings">
 										<Button size="sm">Settings</Button>
@@ -102,12 +107,32 @@ export default async function User(props: {
 							<Level xp={user.xp} />
 						</div>
 					</div>
-					<div className="flex flex-col gap-4">
+					{user.id === authenticatedUser?.id ? (
+						<div className="flex items-center gap-4">
+							<ToggleModal
+								id="achievements"
+								className="flex justify-center items-center gap-2 text-red hover:bg-grey-600 transition-colors bg-grey-800 rounded-xl w-full h-full p-4"
+							>
+								<Trophy className="w-4 h-4" />
+								Achievements
+							</ToggleModal>
+
+							<ToggleModal
+								id="user-stats"
+								className="flex justify-center items-center gap-2 text-red hover:bg-grey-600 transition-colors bg-grey-800 rounded-xl w-full h-full p-4"
+							>
+								<BarChart className="w-4 h-4" />
+								Stats
+							</ToggleModal>
+						</div>
+					) : null}
+					{/* <div className="flex flex-col gap-4">
 						<h2 className="text-white text-3xl font-luckiest-guy leading-none">
 							Activity
 						</h2>
-						{/* Casts, Proposals creations, votes, quest completions, etc. (with filters) */}
-					</div>
+						Casts, Proposals creations, votes, quest completions, etc. (with filters)
+					</div> 
+					*/}
 
 					{/* <div className="bg-grey-800 relative rounded-xl flex flex-col gap-4 p-4 h-[400px] col-span-2 max-lg:col-span-4">
 						<div className="flex items-center justify-between">
@@ -138,6 +163,12 @@ export default async function User(props: {
 			</div>
 			{authenticatedUser && <SettingsModal user={authenticatedUser} />}
 			<UserStatsModal user={user} stats={userStats} />
+			{achievementProgress && authenticatedUser && (
+				<AchievementsModal
+					user={authenticatedUser}
+					achievementProgress={achievementProgress}
+				/>
+			)}
 		</>
 	);
 }

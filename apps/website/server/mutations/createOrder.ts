@@ -3,7 +3,7 @@
 import { onlyUser } from ".";
 import { z } from "zod";
 import { shopifyClient } from "../clients/shopify";
-import { carts, db, gold, nexus } from "~/packages/db/schema";
+import { carts, db, gold, nexus, xp } from "~/packages/db/schema";
 import { eq, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
@@ -131,25 +131,36 @@ export const createOrder = onlyUser
 						throw new Error("Error creating draft order discount");
 					}
 
-					// Deduct the gold from the user
+					// Deduct the gold and add xp to the user
 					await tx
 						.update(nexus)
 						.set({
 							gold: sql`${nexus.gold} - ${parsedInput.goldApplied}`,
+							xp: sql`${nexus.xp} + ${parsedInput.goldApplied}`,
 						})
 						.where(eq(nexus.id, ctx.user.id));
+
+					const orderId = Number(draftOrder.id.split("DraftOrder/")[1]);
 
 					// Save a history of the gold transaction
 					await tx.insert(gold).values({
 						amount: parsedInput.goldApplied,
-						order: Number(draftOrder.id.split("DraftOrder/")[1]),
+						order: orderId,
 						from: ctx.user.id,
 						to: null,
 						timestamp: now,
 					});
+
+					// Save a history of the xp reward
+					await tx.insert(xp).values({
+						amount: parsedInput.goldApplied,
+						// order: orderId,
+						user: ctx.user.id,
+						timestamp: now,
+					});
 				}
 
-				if (parsedInput.goldApplied === 100) {
+				if (parsedInput.goldApplied === 0) {
 					// If its the total we need to submit the order
 				}
 

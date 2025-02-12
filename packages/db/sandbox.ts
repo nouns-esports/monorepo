@@ -1,5 +1,3 @@
-import { db, products } from "./schema";
-
 // await db.insert(products).values([
 // 	{
 // 		id: "cloud-hoodie-vintage-black",
@@ -1233,23 +1231,23 @@ import { db, products } from "./schema";
 // 	},
 // ]);
 
-await db.insert(products).values({
-	id: "test",
-	shopifyId: 9932067438893,
-	name: "Test",
-	description: "",
-	collection: null,
-	variants: [
-		{
-			key: "",
-			value: "",
-			// Double check this for single variant
-			shopifyId: 9932067438893,
-			images: [
-				"https://ipfs.nouns.gg/ipfs/bafkreihrlnm24yfbi3bqgmwlr2ejcm6qbdm3pj6gvblb2grrlpogsvm6o4",
-			],
-			price: 0,
-			inventory: 100,
-		},
-	],
-});
+// await db.insert(products).values({
+// 	id: "test",
+// 	shopifyId: 9932067438893,
+// 	name: "Test",
+// 	description: "",
+// 	collection: null,
+// 	variants: [
+// 		{
+// 			key: "",
+// 			value: "",
+// 			// Double check this for single variant
+// 			shopifyId: 9932067438893,
+// 			images: [
+// 				"https://ipfs.nouns.gg/ipfs/bafkreihrlnm24yfbi3bqgmwlr2ejcm6qbdm3pj6gvblb2grrlpogsvm6o4",
+// 			],
+// 			price: 0,
+// 			inventory: 100,
+// 		},
+// 	],
+// });

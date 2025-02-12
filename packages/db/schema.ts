@@ -292,6 +292,8 @@ export const rounds = pgTable("rounds", {
 	end: timestamp("end", { mode: "date" }).notNull(),
 	minProposerRank: integer("min_proposer_rank"),
 	minVoterRank: integer("min_voter_rank"),
+	// proposerCredential: text("proposer_credential").notNull().default("nexus"),
+	// voterCredential: text("voter_credential").notNull().default("nexus"),
 });
 
 export const roundsRelations = relations(rounds, ({ one, many }) => ({
@@ -610,17 +612,15 @@ export const products = pgTable("products", {
 	shopifyId: bigint("shopify_id", { mode: "number" }).notNull(),
 	name: text("name").notNull(),
 	description: text("description").notNull(),
+	images: text("images").array().notNull().default([]),
 	variants: jsonb("variants")
 		.array()
 		.$type<
 			Array<{
-				key: string; // Ex: Size, Color, etc.
-				value: string; // Ex: S, M, L, #000000, #FFFFFF, etc.
-				name?: string; // Ex: Small, Medium, Large, Black, White, etc.
 				shopifyId: number;
-				images: string[];
-				price: number; // Replicated from Shopify
-				inventory: number; // Replicated from Shopify
+				size?: "s" | "m" | "l" | "xl" | "2xl";
+				price: number;
+				inventory: number;
 			}>
 		>()
 		.notNull()
@@ -689,6 +689,29 @@ export const ordersRelations = relations(orders, ({ one }) => ({
 		references: [nexus.id],
 	}),
 }));
+
+// Ranks should be soulbound ERC1155 tokens managed by us where the art shows their dynamic ranking image (maybe like a badge that shows stats also)
+// export const delegates = pgTable("delegates", {
+// 	id: serial("id").primaryKey(),
+// 	from: text("from").notNull(),
+// 	to: text("to").notNull(),
+// 	round: text("round"),
+// });
+
+// export const delegatesRelations = relations(delegates, ({ one }) => ({
+// 	from: one(nexus, {
+// 		fields: [delegates.from],
+// 		references: [nexus.id],
+// 	}),
+// 	to: one(nexus, {
+// 		fields: [delegates.to],
+// 		references: [nexus.id],
+// 	}),
+// 	round: one(rounds, {
+// 		fields: [delegates.round],
+// 		references: [rounds.id],
+// 	}),
+// }));
 
 const schema = {
 	communities,

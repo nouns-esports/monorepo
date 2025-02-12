@@ -73,7 +73,6 @@ export async function getAuthenticatedUser() {
 					discord: fullPrivyUser.discord?.username?.split("#")[0],
 					username: fullPrivyUser.farcaster?.username ?? undefined,
 					fid: fullPrivyUser.farcaster?.fid ?? undefined,
-
 					canRecieveEmails: false,
 				});
 

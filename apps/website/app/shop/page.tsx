@@ -1,8 +1,10 @@
 import Button from "@/components/Button";
 // import CartButton from "@/components/CartButton";
 import Link from "@/components/Link";
+import { ToggleModal } from "@/components/Modal";
 import CartModal from "@/components/modals/CartModal";
 import ProductCard from "@/components/ProductCard";
+import { getAuthenticatedUser } from "@/server/queries/users";
 import { getCollections, getProducts } from "@/server/queries/shop";
 import { twMerge } from "tailwind-merge";
 
@@ -11,9 +13,11 @@ export default async function Shop(props: {
 }) {
 	const searchParams = await props.searchParams;
 
-	const products = await getProducts({ collection: searchParams.collection });
-
-	const collections = await getCollections();
+	const [user, products, collections] = await Promise.all([
+		getAuthenticatedUser(),
+		getProducts({ collection: searchParams.collection }),
+		getCollections(),
+	]);
 
 	const featuredCollection = collections.find(
 		(collection) => collection.featured,
@@ -41,24 +45,33 @@ export default async function Shop(props: {
 						</div>
 					</div>
 				) : null}
-				<div className="flex flex-col gap-8 max-sm:gap-4">
+				<div className="flex flex-col gap-6">
 					<div className="flex justify-between items-center">
 						<h1 className="text-white font-luckiest-guy text-4xl">Products</h1>
-						{/* <CartButton /> */}
+						<ToggleModal id="cart" className="max-sm:flex hidden">
+							<Button>View Cart</Button>
+						</ToggleModal>
 					</div>
-					<ul className="flex gap-2">
-						<CategoryTag selected={!searchParams.collection}>All</CategoryTag>
-						{collections.map((collection) => (
-							<CategoryTag
-								key={collection.id}
-								id={collection.id}
-								selected={searchParams.collection === collection.id}
-								new={collection.id === "dopamine"}
-							>
-								{collection.name}
-							</CategoryTag>
-						))}
-					</ul>
+
+					<div className="flex justify-between items-center">
+						<ul className="flex gap-2 w-full max-sm:overflow-x-auto">
+							<CategoryTag selected={!searchParams.collection}>All</CategoryTag>
+							{collections.map((collection) => (
+								<CategoryTag
+									key={collection.id}
+									id={collection.id}
+									selected={searchParams.collection === collection.id}
+									new={collection.id === "dopamine"}
+								>
+									{collection.name}
+								</CategoryTag>
+							))}
+						</ul>
+						<ToggleModal id="cart" className="max-sm:hidden">
+							<Button>View Cart</Button>
+						</ToggleModal>
+					</div>
+
 					<div className="grid grid-cols-4 gap-4 max-xl:grid-cols-3 max-lg:grid-cols-2 max-md:grid-cols-1">
 						{products.map((product) => (
 							<ProductCard key={product.id} product={product} />
@@ -79,7 +92,7 @@ function CategoryTag(props: {
 	return (
 		<li
 			className={twMerge(
-				"bg-grey-800 text-grey-200 rounded-md px-3 py-1 font-semibold hover:bg-grey-600 hover:text-white transition-colors",
+				"bg-grey-800 text-grey-200 rounded-md px-3 py-1 font-semibold hover:bg-grey-600 hover:text-white transition-colors whitespace-nowrap",
 				props.selected ? "text-white bg-grey-600" : "",
 			)}
 		>

@@ -40,7 +40,7 @@ export default function SignInButton(props: { user?: AuthenticatedUser }) {
 							<img
 								src={props.user.nexus.rank.image}
 								alt={props.user.nexus.rank.name}
-								className="w-5 h-5 object-contain"
+								className="w-5 h-5 object-contain max-[425px]:hidden"
 							/>
 						) : (
 							""

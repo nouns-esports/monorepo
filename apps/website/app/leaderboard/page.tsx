@@ -7,11 +7,9 @@ import { getAuthenticatedUser } from "@/server/queries/users";
 import { CaretUp, CaretDown } from "phosphor-react-sc";
 import Countdown from "@/components/Countdown";
 import { twMerge } from "tailwind-merge";
-import DateComponent from "@/components/Date";
 import { ToggleModal } from "@/components/Modal";
 import { Image } from "lucide-react";
 import ShareRankingModal from "@/components/modals/ShareRankingModal";
-import Button from "@/components/Button";
 import { nextFriday } from "date-fns";
 
 export default async function Leaderboard() {
@@ -30,7 +28,7 @@ export default async function Leaderboard() {
 		<>
 			<div className="flex flex-col items-center gap-16 pt-32 max-xl:pt-28 max-sm:pt-20 px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
 				<div className="flex flex-col w-full max-w-screen-md gap-8 p-4">
-					<div className="flex gap-16 items-center justify-between">
+					<div className="flex gap-8 items-center justify-between max-sm:gap-4 max-sm:flex-col max-sm:items-start">
 						<div className="flex flex-col gap-2">
 							<h2 className="text-white text-3xl font-luckiest-guy leading-none">
 								Leaderboard
@@ -41,62 +39,18 @@ export default async function Leaderboard() {
 								gold to spend on exclusive items and experiences in the shop.
 							</p>
 						</div>
-						<div className="flex flex-col bg-grey-800 rounded-xl p-2 px-4 gap-2">
-							<h2 className="text-nowrap">Updates in</h2>
+						<div className="flex flex-col items-center bg-grey-800 rounded-xl p-2 px-4 gap-2 max-sm:flex-row">
+							<h2 className="text-nowrap text-red flex items-center gap-1.5">
+								<div className="w-2 h-2 bg-red rounded-full animate-pulse" />
+								Updates in
+							</h2>
 							<div className="flex items-center gap-2 text-nowrap">
 								<p className="text-white">
 									<Countdown date={nextFriday(new Date())} />
 								</p>
 							</div>
 						</div>
-
-						{/* <div className="relative flex flex-shrink-0 gap-4 h-48 w-80 bg-red rounded-xl">
-							<div className="p-4 flex flex-col justify-center gap-4 h-full w-full">
-
-								<p className="font-bebas-neue text-white text-3xl leading-none w-40">
-									Rankup and earn Rewards
-								</p>
-								<p className="text-white text-sm leading-snug max-w-[180px]">
-									Help shape the future of Nouns Esports
-								</p>
-								<Button href="/nexus">Get Started</Button>
-							</div>
-							<img
-								src="/squirtles.png"
-								className="h-[calc(100%_+_8px)] absolute right-2 -top-4"
-							/>
-						</div> */}
-						{/* <div className="flex items-end bg-grey-800 rounded-xl p-2 px-4 gap-2">
-							<h2 className="">Updates in</h2>
-							<div className="flex items-center gap-2">
-								<p className="text-white">
-									<Countdown date={thisFriday} />
-								</p>
-							</div>
-						</div> */}
 					</div>
-					{/* <div className="flex gap-2 items-center">
-					<Link
-						href="/leaderboard"
-						className={twMerge(
-							"text-white text-sm px-4 py-2 rounded-lg hover:bg-grey-500 transition-colors",
-							!searchParams.filter ? "bg-grey-500" : "bg-grey-800",
-						)}
-					>
-						Current
-					</Link>
-					<Link
-						href="/leaderboard?filter=last-week"
-						className={twMerge(
-							"text-white text-sm px-4 py-2 rounded-lg hover:bg-grey-500 transition-colors",
-							searchParams.filter === "last-week"
-								? "bg-grey-500"
-								: "bg-grey-800",
-						)}
-					>
-						Last Week
-					</Link>
-				</div> */}
 					{userPosition ? (
 						<div className="flex flex-col gap-2">
 							<div className="flex gap-2 justify-between items-center">

@@ -14,8 +14,11 @@ export default function GoldModal(props: { user: AuthenticatedUser }) {
 
 	useEffect(() => {
 		if (!isOpen) return;
-		close();
-	}, [isOpen]);
+
+		if (pathname === "/leaderboard") {
+			close();
+		}
+	}, [isOpen, pathname]);
 
 	return (
 		<Modal id="gold" className="p-4 flex flex-col max-w-[500px] w-80 gap-8">
