@@ -42,7 +42,7 @@ export default function Checkout(props: {
 	return (
 		<>
 			<div className="flex flex-col gap-8 bg-grey-800 rounded-xl p-4 h-min">
-				<div className="flex flex-col gap-4">
+				<div className="flex flex-col gap-4 min-w-64">
 					<h1 className="text-white text-2xl font-bebas-neue leading-none">
 						Your Cart
 					</h1>

@@ -1,19 +1,22 @@
 "use client";
 
-import { LoaderCircle, Trash2, X } from "lucide-react";
+import { LoaderCircle, Trash2, TriangleAlert, X } from "lucide-react";
 import { Modal, useModal } from "../Modal";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useAction } from "next-safe-action/hooks";
 import { removeFromCart } from "@/server/mutations/removeFromCart";
 import { addToCart } from "@/server/mutations/addToCard";
 import { twMerge } from "tailwind-merge";
 import type { AuthenticatedUser } from "@/server/queries/users";
+import { checkCart } from "@/server/queries/shop";
+import { toast } from "../Toasts";
+import { useEffect } from "react";
 
 export default function CartModal(props: {
 	user: string;
 	cart: NonNullable<AuthenticatedUser["nexus"]>["carts"];
 }) {
-	const { close } = useModal("cart");
+	const { isOpen, close } = useModal("cart");
 
 	const router = useRouter();
 
@@ -30,8 +33,26 @@ export default function CartModal(props: {
 	const removeFromCartAction = useAction(removeFromCart);
 	const addToCartAction = useAction(addToCart);
 
+	const issues = props.cart.some((item) => {
+		const variant = item.product.variants.find(
+			(variant) => variant.shopifyId === item.variant,
+		);
+
+		if (!variant) return false;
+
+		return item.quantity > variant.inventory;
+	});
+
+	const pathname = usePathname();
+
+	useEffect(() => {
+		if (isOpen && pathname === "/shop/checkout") {
+			close();
+		}
+	}, [isOpen, pathname, close]);
+
 	return (
-		<Modal id="cart" className="p-4 flex flex-col min-w-80 gap-6">
+		<Modal id="cart" className="p-4 flex flex-col max-w-96 w-full gap-6">
 			<div className="flex justify-between items-center">
 				<p className="text-white text-2xl font-bebas-neue leading-none">
 					Your cart
@@ -68,55 +89,98 @@ export default function CartModal(props: {
 											<p className="text-white line-clamp-1">
 												{item.product.name}
 											</p>
+											{item.quantity <= variant.inventory ? (
+												<button
+													onClick={async () => {
+														await removeFromCartAction.executeAsync({
+															product: item.product.id,
+															variant: item.variant,
+															quantity: item.quantity,
+														});
+
+														router.refresh();
+													}}
+												>
+													<Trash2 className="w-4 h-4 text-red hover:text-red/70 transition-colors" />
+												</button>
+											) : null}
+										</div>
+										{item.quantity <= variant.inventory ? (
+											<div className="flex items-center gap-4">
+												<p className="text-white">${variant?.price}</p>
+												<div className="flex items-center gap-2">
+													<button
+														onClick={async () => {
+															await removeFromCartAction.executeAsync({
+																product: item.product.id,
+																variant: item.variant,
+																quantity: 1,
+															});
+
+															router.refresh();
+														}}
+														className="w-4 h-4 bg-grey-600 hover:bg-grey-500 transition-colors rounded-full flex items-center justify-center"
+													>
+														-
+													</button>
+													<p className="text-white">{item.quantity}</p>
+													<button
+														disabled={variant.inventory < item.quantity + 1}
+														onClick={async () => {
+															if (variant.inventory < item.quantity + 1) {
+																return;
+															}
+
+															await addToCartAction.executeAsync({
+																product: item.product.id,
+																variant: item.variant,
+																quantity: 1,
+															});
+
+															router.refresh();
+														}}
+														className={twMerge(
+															"w-4 h-4 bg-grey-600 hover:bg-grey-500 transition-colors rounded-full flex items-center justify-center",
+															variant.inventory < item.quantity + 1 &&
+																"cursor-not-allowed opacity-50",
+														)}
+													>
+														+
+													</button>
+												</div>
+												<p>{variant.size?.toUpperCase()}</p>
+											</div>
+										) : (
 											<button
 												onClick={async () => {
+													if (variant.inventory > 0) {
+														await removeFromCartAction.executeAsync({
+															product: item.product.id,
+															variant: item.variant,
+															quantity:
+																item.quantity -
+																(item.quantity - variant.inventory),
+														});
+
+														return router.refresh();
+													}
+
 													await removeFromCartAction.executeAsync({
-														product: item.product,
+														product: item.product.id,
 														variant: item.variant,
 														quantity: item.quantity,
 													});
 
 													router.refresh();
 												}}
+												className="text-red hover:text-red/70 transition-colors w-min whitespace-nowrap flex items-center gap-1.5"
 											>
-												<Trash2 className="w-4 h-4 text-red hover:text-red/70 transition-colors" />
+												<TriangleAlert className="w-4 h-4" />
+												{variant.inventory > 0
+													? "Update quantity"
+													: "Remove from cart"}
 											</button>
-										</div>
-										<div className="flex items-center gap-4">
-											<p className="text-white">${variant?.price}</p>
-											<div className="flex items-center gap-2">
-												<button
-													onClick={async () => {
-														await removeFromCartAction.executeAsync({
-															product: item.product,
-															variant: item.variant,
-															quantity: 1,
-														});
-
-														router.refresh();
-													}}
-													className="w-4 h-4 bg-grey-600 hover:bg-grey-500 transition-colors rounded-full flex items-center justify-center"
-												>
-													-
-												</button>
-												<p className="text-white">{item.quantity}</p>
-												<button
-													onClick={async () => {
-														await addToCartAction.executeAsync({
-															product: item.product,
-															variant: item.variant,
-															quantity: 1,
-														});
-
-														router.refresh();
-													}}
-													className="w-4 h-4 bg-grey-600 hover:bg-grey-500 transition-colors rounded-full flex items-center justify-center"
-												>
-													+
-												</button>
-											</div>
-											<p>{variant.size?.toUpperCase()}</p>
-										</div>
+										)}
 									</div>
 								</div>
 							);
@@ -150,32 +214,61 @@ export default function CartModal(props: {
 					</div>
 				</div>
 			) : null}
-			<button
-				disabled={addToCartAction.isPending || removeFromCartAction.isPending}
-				onClick={() => {
-					if (addToCartAction.isPending || removeFromCartAction.isPending) {
-						return;
+			<div className="flex flex-col gap-2">
+				<button
+					disabled={
+						addToCartAction.isPending ||
+						removeFromCartAction.isPending ||
+						issues
 					}
+					onClick={async () => {
+						if (
+							addToCartAction.isPending ||
+							removeFromCartAction.isPending ||
+							issues
+						) {
+							return;
+						}
 
-					if (props.cart.length > 0) {
-						// Revalidate inventory - if issues reconcile else redirect
-						return window.open("/shop/checkout", "_blank");
-					}
+						if (props.cart.length > 0) {
+							// Revalidate inventory - if issues reconcile else redirect
+							const valid = await checkCart({ user: props.user });
 
-					router.push("/shop");
-					close();
-				}}
-				className={twMerge(
-					"flex justify-center items-center gap-2 w-full text-black bg-white hover:bg-white/70 font-semibold rounded-lg p-2.5 transition-colors",
-					(addToCartAction.isPending || removeFromCartAction.isPending) &&
-						"pointer-events-none opacity-50",
-				)}
-			>
-				{addToCartAction.isPending || removeFromCartAction.isPending ? (
-					<LoaderCircle className="w-4 h-4 animate-spin" />
+							if (valid) {
+								return router.push("/shop/checkout");
+							}
+
+							router.refresh();
+
+							toast.error("There was an issue some items in your cart");
+						}
+
+						router.push("/shop");
+						close();
+					}}
+					className={twMerge(
+						"flex justify-center items-center gap-2 w-full text-black bg-white hover:bg-white/70 font-semibold rounded-lg p-2.5 transition-colors",
+						(addToCartAction.isPending ||
+							removeFromCartAction.isPending ||
+							issues) &&
+							"pointer-events-none opacity-50",
+					)}
+				>
+					{addToCartAction.isPending || removeFromCartAction.isPending ? (
+						<img
+							alt="Loading spinner"
+							src="/spinner.svg"
+							className="h-[18px] animate-spin"
+						/>
+					) : null}
+					{props.cart.length > 0 ? "Checkout" : "Visit Shop"}
+				</button>
+				{issues ? (
+					<small className="text-red text-sm w-full text-center">
+						Inventory has changed with some items in your cart
+					</small>
 				) : null}
-				{props.cart.length > 0 ? "Checkout" : "Visit Shop"}
-			</button>
+			</div>
 		</Modal>
 	);
 }

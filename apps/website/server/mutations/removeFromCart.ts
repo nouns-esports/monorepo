@@ -6,7 +6,6 @@ import { carts, db } from "~/packages/db/schema";
 import { and, eq } from "drizzle-orm";
 
 export const removeFromCart = onlyUser
-
 	.schema(
 		z.object({
 			product: z.string(),
@@ -27,7 +26,7 @@ export const removeFromCart = onlyUser
 			throw new Error("Item not in cart");
 		}
 
-		if (parsedInput.quantity >= existingCartItem.quantity) {
+		if (existingCartItem.quantity - parsedInput.quantity < 1) {
 			await db.delete(carts).where(eq(carts.id, existingCartItem.id));
 		} else {
 			await db
