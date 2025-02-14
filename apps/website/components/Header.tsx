@@ -231,7 +231,11 @@ export default async function Header() {
 											draggable={false}
 										/>
 										<p className="font-semibold text-[#FEBD1C] select-none">
-											{user?.nexus?.gold ?? 0}
+											{user?.nexus?.gold
+												? user.nexus.gold >= 1000
+													? `${(user.nexus.gold / 1000).toFixed(1)}k`
+													: user.nexus.gold
+												: 0}
 										</p>
 									</ToggleModal>
 								) : null}

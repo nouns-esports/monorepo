@@ -1,24 +1,8 @@
-// Reconsile cart with inventory
-
-import CheckoutPayButton from "@/components/CheckoutPayButton";
-import TextInput from "@/components/form/TextInput";
-import { ToggleModal } from "@/components/Modal";
 import LinkEmailModal from "@/components/modals/LinkEmailModal";
-import RedeemGold from "@/components/Checkout";
 import { getAuthenticatedUser } from "@/server/queries/users";
-import { Check, Link } from "lucide-react";
 import { redirect } from "next/navigation";
 import Checkout from "@/components/Checkout";
-
-// Link email
-
-// Enter shipping info
-
-// Estimate order cost
-
-// Choose gold redemption
-
-// Submit order and wipe cart (if 100% gold finalize, else redirect to payment with applied discount)
+import { Country, State } from "country-state-city";
 
 export default async function CheckoutPage() {
 	const user = await getAuthenticatedUser();
@@ -30,7 +14,19 @@ export default async function CheckoutPage() {
 	return (
 		<>
 			<div className="flex justify-center gap-4 pt-32 max-xl:pt-28 max-sm:pt-20 px-32 max-2xl:px-16 max-xl:px-8 max-sm:px-4">
-				<Checkout user={user} />
+				<Checkout
+					user={user}
+					countries={Country.getAllCountries().map((country) => ({
+						name: country.name,
+						code: country.isoCode,
+						provinces: State.getStatesOfCountry(country.isoCode).map(
+							(state) => ({
+								name: state.name,
+								code: state.isoCode,
+							}),
+						),
+					}))}
+				/>
 			</div>
 			<LinkEmailModal />
 		</>

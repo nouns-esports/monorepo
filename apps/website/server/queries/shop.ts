@@ -140,17 +140,69 @@ export async function checkCart(input: { user: string }) {
 }
 
 export async function estimateOrderCost(input: {
-	items: Array<{ product: string; variant: number; quantity: number }>;
+	items: Array<{ variant: number; quantity: number }>;
 	shipping: {
 		address1: string;
-		address2: string;
+		address2?: string;
 		city: string;
 		province: string;
 		country: string;
-		zip: string;
+		zip?: string;
 	};
-	appliedGold: number;
 }) {
-	// call draftOrderCalculate
-	return 100;
+	const response = await shopifyClient.request(
+		`mutation($input: DraftOrderInput!) {
+			draftOrderCalculate(input: $input) {
+				calculatedDraftOrder {
+					totalTaxSet {
+						presentmentMoney {
+							amount
+						}
+					}
+					availableShippingRates {
+						price {
+							amount
+						}
+					}
+				}
+			}
+		}`,
+		{
+			variables: {
+				input: {
+					shippingAddress: {
+						address1: input.shipping.address1,
+						address2: input.shipping.address2,
+						city: input.shipping.city,
+						provinceCode: input.shipping.province,
+						countryCode: input.shipping.country,
+						zip: input.shipping.zip,
+					},
+
+					lineItems: input.items.map((item) => ({
+						variantId: `gid://shopify/ProductVariant/${item.variant}`,
+						quantity: item.quantity,
+					})),
+				},
+			},
+		},
+	);
+
+	if (response.data?.draftOrderCalculate?.calculatedDraftOrder) {
+		return {
+			tax: Number(
+				response.data?.draftOrderCalculate?.calculatedDraftOrder.totalTaxSet
+					.presentmentMoney.amount,
+			),
+			shipping: Number(
+				response.data?.draftOrderCalculate?.calculatedDraftOrder
+					.availableShippingRates?.[0].price.amount,
+			),
+		};
+	}
+
+	return {
+		tax: 0,
+		shipping: 0,
+	};
 }

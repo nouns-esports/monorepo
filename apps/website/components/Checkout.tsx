@@ -1,43 +1,136 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import TextInput from "./form/TextInput";
 import { ToggleModal } from "./Modal";
-import { Check, Link } from "lucide-react";
+import { Asterisk, Check, ChevronDown, Link } from "lucide-react";
 import type { AuthenticatedUser } from "@/server/queries/users";
+import ReactSlider from "react-slider";
+import { twMerge } from "tailwind-merge";
+import {
+	Combobox,
+	ComboboxButton,
+	ComboboxInput,
+	ComboboxOption,
+	ComboboxOptions,
+} from "@headlessui/react";
+import { useQuery } from "@tanstack/react-query";
+import { estimateOrderCost } from "@/server/queries/shop";
+import { useDebounce } from "@uidotdev/usehooks";
 
 export default function Checkout(props: {
 	user: AuthenticatedUser;
+	countries: Array<{
+		code: string;
+		name: string;
+		provinces: Array<{
+			code: string;
+			name: string;
+		}>;
+	}>;
 }) {
-	const items =
-		props.user.nexus?.carts.map((item) => {
-			const variant =
-				item.product.variants.find(
-					(variant) => variant.shopifyId === item.variant,
-				) ?? item.product.variants[0];
+	if (!props.user.nexus) {
+		throw new Error("User has no nexus");
+	}
 
-			return {
-				product: item.product.id,
-				variant: item.variant,
-				image: item.product.images[0],
-				title: item.product.name,
-				quantity: item.quantity,
-				price: variant.price,
-			};
-		}) ?? [];
+	const subtotal = props.user.nexus.carts.reduce((acc, item) => {
+		const variant = item.product.variants.find(
+			(variant) => variant.shopifyId === item.variant,
+		);
 
-	const subtotal = items.reduce(
-		(acc, item) => acc + Number(item.price) * item.quantity,
-		0,
-	);
+		if (!variant) return acc;
 
-	const tax = 5;
-	const shipping = 10;
+		return acc + Number(variant.price) * item.quantity;
+	}, 0);
+
+	const [firstName, setFirstName] = useState("");
+	const [lastName, setLastName] = useState("");
+	const [address, setAddress] = useState("");
+	const [address2, setAddress2] = useState("");
+	const [city, setCity] = useState("");
+	const [province, setProvince] = useState("");
+	const [zip, setZip] = useState("");
+	const [country, setCountry] = useState("");
+
+	const [countryQuery, setCountryQuery] = useState("");
+	const [provinceQuery, setProvinceQuery] = useState("");
 
 	const [goldUsed, setGoldUsed] = useState(0);
 
-	const total = subtotal + tax + shipping;
-	const totalWithDiscount = subtotal + tax + shipping - goldUsed / 100;
+	const validShippingAddress = useMemo(() => {
+		return (
+			lastName.length > 0 &&
+			address.length > 0 &&
+			country.length > 0 &&
+			province.length > 0 &&
+			city.length > 0 &&
+			(!requiresPostalCode.includes(country) || zip.length > 0)
+		);
+	}, [lastName, address, city, province, zip, country]);
+
+	const shouldSimulateOrder = useDebounce(
+		{
+			validShippingAddress,
+			nexusExists: !!props.user.nexus,
+			cartLength: props.user.nexus?.carts.length ?? 0,
+			lastName,
+			address,
+			city,
+			province,
+			country,
+			zip,
+		},
+		1000,
+	);
+
+	const { data: simulatedOrder, isLoading } = useQuery({
+		queryKey: ["simulatedOrder", shouldSimulateOrder],
+		queryFn: async () => {
+			if (
+				!props.user.nexus ||
+				!validShippingAddress ||
+				props.user.nexus.carts.length === 0
+			) {
+				return { tax: 0, shipping: 0 };
+			}
+
+			const result = await estimateOrderCost({
+				items: props.user.nexus.carts.map((cart) => ({
+					variant: cart.variant,
+					quantity: cart.quantity,
+				})),
+				shipping: {
+					address1: address,
+					address2: address2,
+					city: city,
+					province: province,
+					country: country,
+					zip: zip,
+				},
+			});
+
+			return result;
+		},
+	});
+
+	const total = useMemo(() => {
+		return (
+			subtotal + (simulatedOrder?.tax ?? 0) + (simulatedOrder?.shipping ?? 0)
+		);
+	}, [subtotal, simulatedOrder]);
+
+	const totalWithDiscount = useMemo(() => {
+		return (
+			subtotal +
+			(simulatedOrder?.tax ?? 0) +
+			(simulatedOrder?.shipping ?? 0) -
+			goldUsed / 100
+		);
+	}, [subtotal, simulatedOrder, goldUsed]);
+
+	const canCheckout = useMemo(() => {
+		return props.user.email?.address && validShippingAddress;
+	}, [props.user.email, validShippingAddress]);
 
 	return (
 		<>
@@ -47,35 +140,54 @@ export default function Checkout(props: {
 						Your Cart
 					</h1>
 					<div className="flex flex-col gap-4">
-						{items.map((item) => (
-							<div key={item.product} className="flex items-center gap-4">
-								<div className="flex items-center gap-2 bg-grey-600 rounded-lg p-2 w-16 h-16 aspect-square">
-									<img
-										src={`${item.image}?img-height=100&img-onerror=redirect`}
-										alt={item.title}
-										className="w-full h-full object-contain"
-									/>
-								</div>
-								<div className="flex flex-col gap-2 w-full">
-									<p className="text-white line-clamp-1">{item.title}</p>
-									<div className="flex items-center gap-2">
-										<p className="text-white">${item.price}</p>
-										<p className="text-grey-200">x{item.quantity}</p>
+						{props.user.nexus.carts
+							.toSorted((a, b) => a.product.name.localeCompare(b.product.name))
+							.map((item) => {
+								const variant = item.product.variants.find(
+									(variant) => variant.shopifyId === item.variant,
+								);
+
+								if (!variant) return;
+
+								return (
+									<div key={item.product} className="flex items-center gap-4">
+										<div className="flex items-center gap-2 bg-grey-600 rounded-lg p-2 w-16 h-16 aspect-square">
+											<img
+												src={`${item.product.images[0]}?img-height=100&img-onerror=redirect`}
+												alt={item.product.name}
+												className="w-full h-full object-contain rounded-md"
+											/>
+										</div>
+										<div className="flex flex-col gap-2 w-full">
+											<p className="text-white line-clamp-1">
+												{item.product.name}
+											</p>
+											<div className="flex items-center gap-2">
+												<p className="text-white">
+													${variant.price.toFixed(2)}
+												</p>
+												<p className="text-grey-200">x{item.quantity}</p>
+											</div>
+										</div>
 									</div>
-								</div>
-							</div>
-						))}
+								);
+							})}
 					</div>
 				</div>
 				<div className="flex flex-col gap-4">
 					<div className="flex flex-col gap-1">
-						<div className="flex justify-between items-center">
-							<p className="text-sm">Tax</p> <p className="text-sm">$5</p>
-						</div>
-						<div className="flex justify-between items-center">
-							<p className="text-sm">Shipping</p>
-							<p className="text-sm">$10</p>
-						</div>
+						{simulatedOrder?.tax && simulatedOrder.tax > 0 ? (
+							<div className="flex justify-between items-center">
+								<p className="text-sm">Tax</p>
+								<p className="text-sm">${simulatedOrder.tax.toFixed(2)}</p>
+							</div>
+						) : null}
+						{simulatedOrder?.shipping && simulatedOrder.shipping > 0 ? (
+							<div className="flex justify-between items-center">
+								<p className="text-sm">Shipping</p>
+								<p className="text-sm">${simulatedOrder.shipping.toFixed(2)}</p>
+							</div>
+						) : null}
 						{goldUsed > 0 ? (
 							<div className="flex justify-between items-center">
 								<p className="text-sm text-gold-500">Gold Used</p>
@@ -100,7 +212,10 @@ export default function Checkout(props: {
 						</div>
 					</div>
 					<button
+						disabled={!canCheckout || isLoading || !simulatedOrder}
 						onClick={async () => {
+							if (!canCheckout || isLoading || !simulatedOrder) return;
+
 							// await createOrderAction.executeAsync({
 							// 	shipping: {
 							// 		firstName: "John",
@@ -115,20 +230,48 @@ export default function Checkout(props: {
 							// 	goldApplied: 0,
 							// });
 						}}
-						className="flex justify-center items-center gap-2 w-full text-black bg-white hover:bg-white/70 font-semibold rounded-lg p-2.5 transition-colors"
+						className={twMerge(
+							"flex justify-center items-center gap-2 w-full text-black bg-white hover:bg-white/70 font-semibold rounded-lg p-2.5 transition-colors",
+							!canCheckout || isLoading
+								? "opacity-50 cursor-not-allowed hover:bg-white"
+								: "",
+						)}
 					>
-						{totalWithDiscount <= 0 ? "Place Order" : "Continue to payment"}
+						{isLoading ? (
+							<img
+								alt="loading spinner"
+								src="/spinner.svg"
+								className="h-[18px] animate-spin"
+							/>
+						) : (
+							""
+						)}
+						Complete Order
 					</button>
 				</div>
 			</div>
 			<div className="w-full max-w-lg flex flex-col gap-4">
 				<div className="w-full flex flex-col gap-4 bg-grey-800 rounded-xl p-4">
-					<h1 className="text-white text-2xl font-bebas-neue leading-none">
-						Email
-					</h1>
+					<div className="flex justify-between items-center">
+						<h1 className="text-white text-2xl font-bebas-neue leading-none">
+							Email
+						</h1>
+						<p
+							className={twMerge(
+								"text-sm flex items-center gap-0.5",
+								props.user.email?.address ? "text-green" : "text-red",
+							)}
+						>
+							{props.user.email?.address ? (
+								<Check className="w-4 h-4" />
+							) : (
+								<Asterisk className="w-4 h-4" />
+							)}
+							Required
+						</p>
+					</div>
 					{props.user.email ? (
-						<p className="text-green flex items-center gap-1">
-							<Check className="w-4 h-4" />
+						<p className="flex items-center gap-1">
 							{props.user.email.address}
 						</p>
 					) : (
@@ -142,46 +285,392 @@ export default function Checkout(props: {
 					)}
 				</div>
 				<div className=" w-full flex flex-col gap-4 bg-grey-800 rounded-xl p-4">
-					<h1 className="text-white text-2xl font-bebas-neue leading-none">
-						Shipping
-					</h1>
+					<div className="flex justify-between items-center">
+						<h1 className="text-white text-2xl font-bebas-neue leading-none">
+							Shipping
+						</h1>
+						<p
+							className={twMerge(
+								"text-sm flex items-center gap-0.5",
+								validShippingAddress ? "text-green" : "text-red",
+							)}
+						>
+							{validShippingAddress ? (
+								<Check className="w-4 h-4" />
+							) : (
+								<Asterisk className="w-4 h-4" />
+							)}
+							Required
+						</p>
+					</div>
 					<div className="flex flex-col gap-4">
 						<div className="flex items-center gap-2">
-							<TextInput label="First Name" placeholder="John" />
-							<TextInput label="Last Name" placeholder="Doe" />
+							<div className="flex flex-col gap-2 w-full">
+								<label htmlFor="firstName" className="text-white font-lg ">
+									First Name
+								</label>
+								<input
+									name="firstName"
+									type="text"
+									value={firstName}
+									onChange={(e) => setFirstName(e.target.value)}
+									placeholder="Tyler"
+									className="bg-black/15 rounded-xl text-white placeholder-grey-400 py-2 px-3 outline-none border-grey-600 border-[1px]"
+								/>
+							</div>
+							<div className="flex flex-col gap-2 w-full">
+								<label htmlFor="lastName" className="text-white font-lg ">
+									Last Name
+								</label>
+								<input
+									name="lastName"
+									type="text"
+									value={lastName}
+									onChange={(e) => setLastName(e.target.value)}
+									placeholder="Durden"
+									className="bg-black/15 rounded-xl text-white placeholder-grey-400 py-2 px-3 outline-none border-grey-600 border-[1px]"
+								/>
+							</div>
 						</div>
 						<div className="flex items-center gap-2">
-							<TextInput label="Address" placeholder="123 Main St" />
-							<TextInput
-								label="Address 2"
-								placeholder="Apt 1"
-								className="w-40 flex-shrink-0"
-							/>
+							<div className="flex flex-col gap-2 w-full">
+								<label htmlFor="address" className="text-white font-lg ">
+									Address
+								</label>
+								<input
+									name="address"
+									type="text"
+									value={address}
+									onChange={(e) => setAddress(e.target.value)}
+									placeholder="537 Paper Street"
+									className="bg-black/15 rounded-xl text-white placeholder-grey-400 py-2 px-3 outline-none border-grey-600 border-[1px]"
+								/>
+							</div>
+							<div className="flex flex-col gap-2 w-full">
+								<label htmlFor="address2" className="text-white font-lg">
+									Apt, Suite, Building
+								</label>
+								<input
+									name="address2"
+									type="text"
+									value={address2}
+									onChange={(e) => setAddress2(e.target.value)}
+									placeholder="Apt 1"
+									className="bg-black/15 rounded-xl text-white placeholder-grey-400 py-2 px-3 outline-none border-grey-600 border-[1px]"
+								/>
+							</div>
 						</div>
 						<div className="flex items-center gap-2">
-							<TextInput label="City" placeholder="Anytown" />
-							<TextInput label="State" placeholder="CA" />
+							<div className="flex flex-col gap-2 w-full">
+								<label htmlFor="country" className="text-white font-lg ">
+									Country
+								</label>
+								<Combobox
+									value={country}
+									onChange={(value) => setCountry(value ?? "")}
+								>
+									<div className="relative z-10">
+										<ComboboxInput
+											name="country"
+											placeholder="Select"
+											className={twMerge(
+												"w-full bg-black/15 rounded-xl text-white py-2 placeholder:text-grey-400 px-3 outline-none border-grey-600 border-[1px]",
+												country === "" && "text-grey-400",
+											)}
+											displayValue={(code: string) =>
+												props.countries.find((c) => c.code === code)?.name || ""
+											}
+											onChange={(e) => setCountryQuery(e.target.value)}
+										/>
+										<ComboboxButton className="absolute z-50 inset-y-0 right-0 flex items-center pr-2">
+											<ChevronDown
+												className="h-5 w-5 text-gray-400"
+												aria-hidden="true"
+											/>
+										</ComboboxButton>
+										<ComboboxOptions className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md border-grey-600 border-[1px] bg-grey-800 shadow-lg custom-scrollbar">
+											{props.countries
+												.filter((country) =>
+													country.name
+														.toLowerCase()
+														.includes(countryQuery.toLowerCase()),
+												)
+												.map((country) => (
+													<ComboboxOption
+														key={country.code}
+														value={country.code}
+														className={({ active }) =>
+															"relative select-none py-2 pl-10 pr-4 hover:bg-grey-600 cursor-pointer"
+														}
+													>
+														{country.name}
+													</ComboboxOption>
+												))}
+										</ComboboxOptions>
+									</div>
+								</Combobox>
+							</div>
+							{(
+								props.countries.find((c) => c.code === country)?.provinces ?? []
+							).length > 0 ? (
+								<div className="flex flex-col gap-2 w-full">
+									<label htmlFor="province" className="text-white font-lg">
+										{country === "" ||
+										["US", "AU", "IN", "BR", "MX", "NG"].includes(country)
+											? "State"
+											: ["CA", "CN", "PK", "ZA", "NL", "TR"].includes(country)
+												? "Province"
+												: "State/Province/Region"}
+									</label>
+									<Combobox
+										value={province}
+										onChange={(value) => setProvince(value ?? "")}
+									>
+										<div className="relative z-20">
+											<ComboboxInput
+												name="province"
+												disabled={country === ""}
+												placeholder={
+													country === "" ? "Select a country" : "Select"
+												}
+												className={twMerge(
+													"w-full bg-black/15 rounded-xl text-white py-2 placeholder:text-grey-400 px-3 outline-none border-grey-600 border-[1px]",
+													province === "" && "text-grey-400",
+												)}
+												displayValue={(code: string) =>
+													props.countries
+														.find((c) => c.code === country)
+														?.provinces.find((p) => p.code === code)?.name || ""
+												}
+												onChange={(e) => setProvinceQuery(e.target.value)}
+											/>
+											{country !== "" ? (
+												<ComboboxButton className="absolute z-50 inset-y-0 right-0 flex items-center pr-2">
+													<ChevronDown
+														className="h-5 w-5 text-gray-400"
+														aria-hidden="true"
+													/>
+												</ComboboxButton>
+											) : null}
+											<ComboboxOptions className="absolute mt-1 max-h-60 w-full overflow-auto border-grey-600 border-[1px] rounded-md bg-grey-800 py-1 shadow-lg custom-scrollbar">
+												{props.countries
+													.find((c) => c.code === country)
+													?.provinces.filter((province) =>
+														province.name
+															.toLowerCase()
+															.includes(provinceQuery.toLowerCase()),
+													)
+													.map((province) => (
+														<ComboboxOption
+															key={province.code}
+															value={province.code}
+															className={({ active }) =>
+																"relative select-none py-2 pl-10 pr-4 hover:bg-grey-600 cursor-pointer"
+															}
+														>
+															{province.name}
+														</ComboboxOption>
+													))}
+											</ComboboxOptions>
+										</div>
+									</Combobox>
+								</div>
+							) : null}
 						</div>
 						<div className="flex items-center gap-2">
-							<TextInput label="Zip" placeholder="12345" />
-							<TextInput label="Country" placeholder="United States" />
+							<div className="flex flex-col gap-2 w-full">
+								<label htmlFor="city" className="text-white font-lg">
+									City
+								</label>
+								<input
+									name="city"
+									type="text"
+									value={city}
+									onChange={(e) => setCity(e.target.value)}
+									placeholder="Bradford"
+									className="bg-black/15 rounded-xl text-white placeholder-grey-400 py-2 px-3 outline-none border-grey-600 border-[1px]"
+								/>
+							</div>
+							{requiresPostalCode.includes(country) ? (
+								<div className="flex flex-col gap-2 w-full">
+									<label htmlFor="zip" className="text-white font-lg ">
+										{country === "US" ? "Zip" : "Postal Code"}
+									</label>
+									<input
+										name="zip"
+										type="text"
+										value={zip}
+										onChange={(e) => setZip(e.target.value)}
+										placeholder="19808"
+										className="bg-black/15 rounded-xl text-white placeholder-grey-400 py-2 px-3 outline-none border-grey-600 border-[1px]"
+									/>
+								</div>
+							) : null}
 						</div>
 					</div>
 				</div>
-				<div className="w-full flex flex-col gap-4 bg-grey-800 rounded-xl p-4">
-					<h1 className="text-white text-2xl font-bebas-neue leading-none">
-						Redeem Gold
-					</h1>
-					<input
+				{props.user.nexus?.gold ? (
+					<div className="w-full flex flex-col gap-4 bg-grey-800 rounded-xl p-4">
+						<div className="flex justify-between items-center">
+							<h1 className="text-white text-2xl font-bebas-neue leading-none">
+								Redeem Gold
+							</h1>
+							<p className="text-sm text-white">
+								{goldUsed} /{" "}
+								{props.user.nexus.gold >= total * 100
+									? total * 100
+									: props.user.nexus.gold}
+							</p>
+						</div>
+						<ReactSlider
+							className="h-8 flex items-center"
+							thumbClassName="h-8 w-8 rounded-full bg-contain bg-no-repeat bg-center cursor-pointer outline-none"
+							trackClassName="h-2 rounded-full bg-black/25"
+							value={goldUsed}
+							onChange={(value) => setGoldUsed(value)}
+							min={0}
+							max={
+								props.user.nexus.gold >= total * 100
+									? total * 100
+									: props.user.nexus.gold
+							}
+							renderTrack={(props, state) => (
+								<div
+									{...props}
+									key={props.key}
+									className={`${props.className} ${
+										state.index === 0 ? "bg-gold-500" : ""
+									}`}
+								/>
+							)}
+							renderThumb={(props) => (
+								<div
+									{...props}
+									key={props.key}
+									style={{
+										...props.style,
+										backgroundImage: `url('https://ipfs.nouns.gg/ipfs/bafkreiccw4et522umioskkazcvbdxg2xjjlatkxd4samkjspoosg2wldbu')`,
+									}}
+								/>
+							)}
+						/>
+						{/* <input
 						type="range"
 						onChange={(e) => setGoldUsed(Number(e.target.value))}
 						min={0}
 						max={props.user.nexus?.gold ?? 0}
 						value={goldUsed}
-						className="accent-gold-500"
-					/>
-				</div>
+						className="appearance-none bg-transparent [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-runnable-track]:bg-black/25 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-[32px] [&::-webkit-slider-thumb]:w-[32px] [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[url('https://ipfs.nouns.gg/ipfs/bafkreiccw4et522umioskkazcvbdxg2xjjlatkxd4samkjspoosg2wldbu')] [&::-webkit-slider-thumb]:bg-contain [&::-webkit-slider-thumb]:bg-no-repeat [&::-webkit-slider-thumb]:bg-center"
+					/> */}
+					</div>
+				) : null}
 			</div>
 		</>
 	);
 }
+
+const requiresPostalCode = [
+	"DZ",
+	"AR",
+	"AM",
+	"AU",
+	"AT",
+	"AZ",
+	"A2",
+	"BD",
+	"BY",
+	"BE",
+	"BA",
+	"BR",
+	"BN",
+	"BG",
+	"CA",
+	"IC",
+	"CN",
+	"CO",
+	"HR",
+	"CY",
+	"CZ",
+	"DK",
+	"EC",
+	"EN",
+	"EE",
+	"FO",
+	"FI",
+	"FR",
+	"GE",
+	"DE",
+	"GR",
+	"GL",
+	"GU",
+	"GG",
+	"HO",
+	"HU",
+	"IN",
+	"ID",
+	"IL",
+	"IT",
+	"JP",
+	"JE",
+	"KZ",
+	"KR",
+	"KO",
+	"KG",
+	"LV",
+	"LI",
+	"LT",
+	"LU",
+	"MK",
+	"MG",
+	"M3",
+	"MY",
+	"MH",
+	"MQ",
+	"YT",
+	"MX",
+	"MN",
+	"ME",
+	"NL",
+	"NZ",
+	"NB",
+	"NO",
+	"PK",
+	"PH",
+	"PL",
+	"PO",
+	"PT",
+	"PR",
+	"RE",
+	"RU",
+	"SA",
+	"SF",
+	"CS",
+	"SG",
+	"SK",
+	"SI",
+	"ZA",
+	"ES",
+	"LK",
+	"SX",
+	"UV",
+	"VL",
+	"SE",
+	"CH",
+	"TW",
+	"TJ",
+	"TH",
+	"TU",
+	"TN",
+	"TR",
+	"TM",
+	"VI",
+	"UA",
+	"GB",
+	"US",
+	"UY",
+	"UZ",
+	"VA",
+	"VN",
+	"WL",
+	"YA",
+];

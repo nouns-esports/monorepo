@@ -48,9 +48,15 @@ export default async function Shop(props: {
 				<div className="flex flex-col gap-6">
 					<div className="flex justify-between items-center">
 						<h1 className="text-white font-luckiest-guy text-4xl">Products</h1>
-						<ToggleModal id="cart" className="max-sm:flex hidden">
-							<Button>View Cart</Button>
-						</ToggleModal>
+						{user?.nexus ? (
+							<ToggleModal id="cart" className="max-sm:flex hidden">
+								<Button>View Cart</Button>
+							</ToggleModal>
+						) : (
+							<ToggleModal id="sign-in" className="max-sm:flex hidden">
+								<Button>Sign in</Button>
+							</ToggleModal>
+						)}
 					</div>
 
 					<div className="flex justify-between items-center">
@@ -67,9 +73,15 @@ export default async function Shop(props: {
 								</CategoryTag>
 							))}
 						</ul>
-						<ToggleModal id="cart" className="max-sm:hidden">
-							<Button>View Cart</Button>
-						</ToggleModal>
+						{user?.nexus ? (
+							<ToggleModal id="cart" className="max-sm:hidden">
+								<Button>View Cart</Button>
+							</ToggleModal>
+						) : (
+							<ToggleModal id="sign-in" className="max-sm:hidden">
+								<Button>Sign in</Button>
+							</ToggleModal>
+						)}
 					</div>
 
 					<div className="grid grid-cols-4 gap-4 max-xl:grid-cols-3 max-lg:grid-cols-2 max-md:grid-cols-1">

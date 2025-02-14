@@ -22,7 +22,7 @@ export default function ProductCard(props: {
 			<img
 				alt={props.product.name}
 				src={`${props.product.images[0]}?img-width=500&img-onerror=redirect`}
-				className="aspect-square w-full object-contain"
+				className="aspect-square w-full object-contain rounded-lg"
 			/>
 			<div className="flex flex-col gap-2">
 				<h2 className="text-white">{props.product.name}</h2>
